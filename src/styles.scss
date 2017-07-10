@@ -1,5 +1,8 @@
-/* You can add global styles to this file, and also import other style files */
+@charset 'utf-8';
 
-body {
-    background: #0f0;
-}
+// Libraries
+@import '~normalize.css/normalize';
+
+// Defaults
+@import './defaults/colors';
+@import './defaults/tags';
