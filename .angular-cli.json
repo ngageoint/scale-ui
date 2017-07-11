@@ -51,6 +51,7 @@
     }
   },
   "defaults": {
+    "lintFix": true,
     "styleExt": "scss",
     "component": {
     }

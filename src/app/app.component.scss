@@ -1,7 +1,16 @@
 @import '../defaults/colors.scss';
 
 .app {
-    background: $clr-gray-15;
+    background: $clr-gray-98;
+    display: flex;
     height: 100%;
     min-height: 100%;
+}
+
+app-sidebar {
+    padding: 1.0em 2.0em;
+}
+
+app-content {
+    flex: 1;
 }
