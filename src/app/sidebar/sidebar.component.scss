@@ -1,3 +1,35 @@
+@import '../../defaults/colors';
+
 
 .sidebar {
+
+    a {
+        color: $clr-gray-45;
+        display: block;
+        padding: 1.0em 2.0em;
+        text-decoration: none;
+
+        &:hover {
+            background: rgba($clr-black, 0.05);
+            color: $clr-black;
+        }
+    }
+
+    li {
+
+        display: block;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+}
+
+.sidebar__logo {
+    padding: 1.0em;
+    width: 97px;
+
+    svg {
+    }
 }
