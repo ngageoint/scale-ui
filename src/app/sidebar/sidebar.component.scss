@@ -2,6 +2,7 @@
 
 
 .sidebar {
+    text-align: center;
 
     a {
         color: $clr-gray-45;
@@ -28,7 +29,6 @@
 
 .sidebar__logo {
     padding: 1.0em;
-    width: 97px;
 
     svg {
     }
