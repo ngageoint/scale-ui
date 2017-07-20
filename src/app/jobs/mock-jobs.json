@@ -1,0 +1,107 @@
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "job_type": {
+                "id": 1,
+                "name": "landsat8-parse",
+                "version": "1.0.0",
+                "title": "Landsat 8 Parse",
+                "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
+                "is_system": false,
+                "is_long_running": false,
+                "is_active": true,
+                "is_operational": true,
+                "is_paused": false,
+                "icon_code": "f248"
+            },
+            "job_type_rev": {
+                "id": 56,
+                "job_type": {
+                    "id": 1
+                },
+                "revision_num": 4
+            },
+            "event": {
+                "id": 70,
+                "type": "STRIKE_TRANSFER",
+                "occurred": "2016-04-27T19:11:57Z"
+            },
+            "error": null,
+            "status": "COMPLETED",
+            "priority": 1,
+            "num_exes": 1,
+            "timeout": 100,
+            "max_tries": 3,
+            "cpus_required": 5.5,
+            "mem_required": 4096.0,
+            "disk_in_required": 79.8,
+            "disk_out_required": 51.3,
+            "is_superseded": false,
+            "root_superseded_job": null,
+            "superseded_job": null,
+            "superseded_by_job": null,
+            "delete_superseded": false,
+            "created": "2016-04-29T15:33:13Z",
+            "queued": "2016-04-29T15:42:05Z",
+            "started": "2016-04-29T15:46:20Z",
+            "ended": "2016-04-29T15:56:11Z",
+            "last_status_change": "2016-04-29T15:56:11Z",
+            "superseded": null,
+            "last_modified": "2016-04-29T15:56:11Z"
+        },
+        {
+            "id": 2,
+            "job_type": {
+                "id": 2,
+                "name": "sam",
+                "version": "1.0",
+                "title": "Spectral Angle Mapper",
+                "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
+                "is_system": false,
+                "is_long_running": false,
+                "is_active": true,
+                "is_operational": true,
+                "is_paused": false,
+                "icon_code": "f0e7"
+            },
+            "job_type_rev": {
+                "id": 67,
+                "job_type": {
+                    "id": 2
+                },
+                "revision_num": 10
+            },
+            "event": {
+                "id": 99,
+                "type": "STRIKE_TRANSFER",
+                "occurred": "2016-05-05T13:33:01Z"
+            },
+            "error": null,
+            "status": "QUEUED",
+            "priority": 16,
+            "num_exes": 56,
+            "timeout": 200,
+            "max_tries": 3,
+            "cpus_required": 5.5,
+            "mem_required": 4096.0,
+            "disk_in_required": 79.8,
+            "disk_out_required": 51.3,
+            "is_superseded": false,
+            "root_superseded_job": null,
+            "superseded_job": null,
+            "superseded_by_job": null,
+            "delete_superseded": false,
+            "created": "2016-04-29T15:33:13Z",
+            "queued": "2016-04-29T15:42:05Z",
+            "started": "2016-04-29T15:46:20Z",
+            "ended": "2016-04-29T15:56:11Z",
+            "last_status_change": "2016-04-29T15:56:11Z",
+            "superseded": null,
+            "last_modified": "2016-04-29T15:56:11Z"
+        }
+    ]
+}
