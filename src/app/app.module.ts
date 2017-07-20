@@ -4,23 +4,22 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { DashboardComponent } from './screens/dashboard/dashboard.component';
-import { ProcessingComponent } from './screens/processing/processing.component';
 
 import { AppRoutingModule } from './app-routing.module';
+import { ProcessingModule } from './processing/processing.module';
 import { LogoComponent } from './logo/logo.component';
-
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         SidebarComponent,
-        DashboardComponent,
-        ProcessingComponent,
-        LogoComponent
+        LogoComponent,
+        DashboardComponent
     ],
     imports: [
         AppRoutingModule,
+        ProcessingModule,
         BrowserModule,
         HttpModule
     ],
