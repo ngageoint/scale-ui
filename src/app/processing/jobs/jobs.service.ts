@@ -11,7 +11,7 @@ export class JobService {
         private http: Http
     ) { }
     getJobs(): Promise<Job[]> {
-        return this.http.get('./mock-jobs.json')
+        return this.http.get('./assets/mock-jobs.json')
             .toPromise()
             .then(response => response.json().results as Job[])
             .catch(this.handleError);
