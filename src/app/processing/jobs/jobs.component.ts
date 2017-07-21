@@ -1,7 +1,5 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 
-import { DataTableModule, SharedModule } from 'primeng/primeng';
-
 import { JobService } from './jobs.service';
 import { Job } from './job';
 
@@ -12,6 +10,7 @@ import { Job } from './job';
 })
 export class JobsComponent implements OnInit {
     jobs: Job[];
+    statusValues: ['Running', 'Completed'];
 
     constructor(private jobService: JobService) {}
 

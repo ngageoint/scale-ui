@@ -1,3 +1,21 @@
-<p>
-  jobs works!
-</p>
+<i class="fa fa-search" style="margin:4px 4px 0 0"></i>
+<input #gb type="text" pInputText size="50" placeholder="Global Filter">
+<p-dataTable [value]="jobs" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt>
+    <p-header>Jobs</p-header>
+    <p-column field="job_type" header="Job Type" [filter]="true" filterPlaceholder="Search">
+        <ng-template let-col let-job="rowData" pTemplate="body">
+            <span>{{job.job_type.title}} {{job.job_type.version}}</span>
+        </ng-template>
+    </p-column>
+    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals">
+        <ng-template pTemplate="filter" let-col>
+            <ng-template pTemplate="filter" let-col>
+                <p-dropdown [options]="statusValues" [style]="{'width':'100%'}"
+                            (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)"
+                            styleClass="ui-column-filter"></p-dropdown>
+            </ng-template>
+        </ng-template>
+    </p-column>
+    <p-column field="created" header="Created"></p-column>
+    <p-column field="last_modified" header="Last Modified"></p-column>
+</p-dataTable>
