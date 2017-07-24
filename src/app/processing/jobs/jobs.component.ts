@@ -27,7 +27,7 @@ export class JobsComponent implements OnInit {
     ) {}
 
     private updateData() {
-        this.jobService.getJobs(this.gridOptions).then(jobs => this.jobs = jobs);
+        this.jobService.getJobs(this.gridOptions.sortField, this.gridOptions.sortOrder).then(jobs => this.jobs = jobs);
     }
     onSort(e: { field: string, order: number }) {
         this.gridOptions.sortField = e.field;
