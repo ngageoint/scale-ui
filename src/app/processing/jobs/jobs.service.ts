@@ -10,15 +10,17 @@ export class JobService {
     constructor(
         private http: Http
     ) { }
-    getJobs(): Promise<Job[]> {
+    getJobs(params: object): Promise<Job[]> {
         return this.http.get('./assets/mock-jobs.json')
             .toPromise()
             .then(response => response.json().results as Job[])
             .catch(this.handleError);
     }
-    getJob(id: number): Promise<Job> {
-        return this.getJobs()
-            .then(jobs => jobs.find(job => job.id === id));
+    getJob(id: number): Promise<Job[]> {
+        return this.http.get('./assets/mock-jobs.json')
+            .toPromise()
+            .then(response => response.json().results as Job[])
+            .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {

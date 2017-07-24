@@ -1,13 +1,16 @@
-<i class="fa fa-search" style="margin:4px 4px 0 0"></i>
-<input #gb type="text" pInputText size="50" placeholder="Global Filter">
-<p-dataTable [value]="jobs" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt>
-    <p-header>Jobs</p-header>
-    <p-column field="job_type" header="Job Type" [filter]="true" filterPlaceholder="Search">
+<h2>Jobs</h2>
+<!--<i class="fa fa-search" style="margin:4px 4px 0 0"></i>-->
+<!--<input #gb type="text" pInputText size="50" placeholder="Global Filter">-->
+<p-dataTable [value]="jobs" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt (onPage)="onPage($event)" (onSort)="onSort($event)"
+             (onFilter)="onFilter($event)" sortField="{{gridOptions.sortField}}" sortOrder="{{gridOptions.sortOrder}}">
+    <!--<p-header>Jobs</p-header>-->
+    <p-column field="job_type.title" header="Job Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
+              [sortable]="true">
         <ng-template let-col let-job="rowData" pTemplate="body">
             <span>{{job.job_type.title}} {{job.job_type.version}}</span>
         </ng-template>
     </p-column>
-    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals">
+    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter" let-col>
             <ng-template pTemplate="filter" let-col>
                 <p-dropdown [options]="statusValues" [style]="{'width':'100%'}"
@@ -16,6 +19,6 @@
             </ng-template>
         </ng-template>
     </p-column>
-    <p-column field="created" header="Created"></p-column>
-    <p-column field="last_modified" header="Last Modified"></p-column>
+    <p-column field="created" header="Created" [sortable]="true"></p-column>
+    <p-column field="last_modified" header="Last Modified" [sortable]="true"></p-column>
 </p-dataTable>
