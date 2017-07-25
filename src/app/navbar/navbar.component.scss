@@ -1,0 +1,30 @@
+@import '../../defaults/colors';
+
+
+.navbar {
+    align-items: stretch;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navbar__item {
+    display: flex;
+    justify-content: center;
+
+    a {
+        color: $clr-gray-75;
+        padding: 2.0em 1.0em;
+        text-decoration: none;
+
+        &:hover {
+            background: rgba($clr-white, 0.05);
+            color: $clr-white;
+        }
+    }
+}
+
+.navbar__logo {
+    height: 42px;
+    padding: 1.0em;
+    width: 42px;
+}

@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
-import { SidebarComponent } from './sidebar/sidebar.component';
+import { NavbarComponent } from './navbar/navbar.component';
 
 import { AppRoutingModule } from './app-routing.module';
 import { ProcessingModule } from './processing/processing.module';
@@ -13,7 +13,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 @NgModule({
     declarations: [
         AppComponent,
-        SidebarComponent,
+        NavbarComponent,
         LogoComponent,
         DashboardComponent
     ],
