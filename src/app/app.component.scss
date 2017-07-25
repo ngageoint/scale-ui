@@ -4,14 +4,12 @@
     background: $clr-light;
     color: $clr-dark;
     display: flex;
+    flex-direction: column;
     height: 100%;
     min-height: 100%;
 
     .content {
+        background: $clr-white;
         flex: 1;
     }
-}
-
-app-sidebar {
-    border-right: 1px solid $clr-gray-90;
 }

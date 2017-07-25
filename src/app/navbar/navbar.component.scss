@@ -1,0 +1,36 @@
+@import '../../defaults/colors';
+
+$navbar-transition: all 0.35s ease-out;
+
+.navbar {
+    align-items: stretch;
+    background: $clr-navbar-dark;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.navbar__item {
+    display: flex;
+    justify-content: center;
+
+    a {
+        color: $clr-gray-75;
+        padding: 2.0em 1.0em;
+        text-decoration: none;
+        text-shadow: 0 2px 0 $clr-navbar-dark;
+        transition: $navbar-transition;
+
+        &:hover {
+            //background: rgba($clr-white, 0.05);
+            background: $clr-navbar-light;
+            color: $clr-white;
+        }
+    }
+}
+
+.navbar__logo {
+    color: $clr-scale-blue1;
+    margin-right: 1.0em;
+    padding: 0.5em 1.25em;
+    text-align: center;
+}
