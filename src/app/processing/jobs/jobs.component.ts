@@ -1,8 +1,16 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 
 import { JobService } from './jobs.service';
-import { Job } from './job';
+import { Job } from './job.model';
+import { JobsDatatableOptions } from './jobs-datatable-options.model';
+import { UPDATE_DATATABLE } from './jobs-datatable.actions';
+
+interface DatatableState {
+    jobsDatatableOptions: JobsDatatableOptions
+}
 
 @Component({
     selector: 'app-jobs',
@@ -10,63 +18,59 @@ import { Job } from './job';
     styleUrls: ['./jobs.component.scss']
 })
 export class JobsComponent implements OnInit {
+    datatableOptionsState: Observable<JobsDatatableOptions>;
+    datatableOptions: JobsDatatableOptions;
     jobs: Job[];
     statusValues: ['Running', 'Completed'];
-    gridOptions = {
-        first: 0,
-        rows: 10,
-        sortField: 'last_modified',
-        sortOrder: -1, // descending
-        filters: {}
-    };
 
     constructor(
         private jobService: JobService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
-    ) {}
+        private activatedRoute: ActivatedRoute,
+        private store: Store<DatatableState>
+    ) {
+        this.datatableOptionsState = store.select<JobsDatatableOptions>(s => s.jobsDatatableOptions);
+    }
 
     private updateData() {
-        this.jobService.getJobs(this.gridOptions.sortField, this.gridOptions.sortOrder).then(jobs => this.jobs = jobs);
+        // console.log(this.datatableOptions);
+        this.jobService.getJobs(this.datatableOptions).then(jobs => this.jobs = jobs);
     }
     onSort(e: { field: string, order: number }) {
-        this.gridOptions.sortField = e.field;
-        this.gridOptions.sortOrder = e.order;
-        this.gridOptions.first = 0;
         this.router.navigate(['/processing/jobs'], {
             queryParams: {
-                sortField: this.gridOptions.sortField, sortOrder: this.gridOptions.sortOrder
+                sortField: e.field,
+                sortOrder: e.order,
+                first: 0
             }
         });
-        // console.log(this.gridOptions);
-        // this.localStorageService.set('my-grid-options', this.gridOptions);
     }
     onPage(e: { first: number, rows: number }) {
-        this.gridOptions.rows = e.rows;
-        this.gridOptions.first = e.first;
         this.router.navigate(['/processing/jobs'], {
             queryParams: {
-                page: this.gridOptions.rows
+                page: e.first
             }
         });
-        // console.log(this.gridOptions);
-        // this.localStorageService.set('my-grid-options', this.gridOptions);
     }
     onFilter(e: { filters: object }) {
-        this.gridOptions.filters = e.filters;
-        this.updateData();
-        // console.log(this.gridOptions);
+        this.router.navigate(['/processing/jobs'], {
+            queryParams: {
+                filters: e.filters
+            }
+        });
     }
     ngOnInit() {
-        this.activatedRoute.queryParams.subscribe((params: Params) => {
-            this.gridOptions.first = params.first || null;
-            this.gridOptions.rows = params.rows || null;
-            this.gridOptions.sortField = params.sortField || null;
-            this.gridOptions.sortOrder = params.sortOrder || null;
-            this.gridOptions.filters = params.filters || null;
-            console.log(this.gridOptions);
+        this.datatableOptionsState.subscribe((state) => {
+            this.datatableOptions = state;
         });
-        this.updateData();
+        this.activatedRoute.queryParams.subscribe((params: Params) => {
+            this.store.dispatch({
+                type: UPDATE_DATATABLE,
+                payload: params
+            });
+            this.updateData();
+        });
+        // this.updateData();
     }
 
 }
