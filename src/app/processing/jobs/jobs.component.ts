@@ -38,31 +38,34 @@ export class JobsComponent implements OnInit {
     }
     onSort(e: { field: string, order: number }) {
         this.router.navigate(['/processing/jobs'], {
-            queryParams: {
+            queryParams: Object.assign(this.datatableOptions, {
                 sortField: e.field,
                 sortOrder: e.order,
                 first: 0
-            }
+            })
         });
     }
     onPage(e: { first: number, rows: number }) {
         this.router.navigate(['/processing/jobs'], {
-            queryParams: {
+            queryParams: Object.assign(this.datatableOptions, {
                 page: e.first
-            }
+            })
         });
     }
     onFilter(e: { filters: object }) {
+        console.log(e.filters);
         this.router.navigate(['/processing/jobs'], {
-            queryParams: {
+            queryParams: Object.assign(this.datatableOptions, {
                 filters: e.filters
-            }
+            })
         });
     }
     ngOnInit() {
+        // set initial state
         this.datatableOptionsState.subscribe((state) => {
             this.datatableOptions = state;
         });
+        // subscribe to query params to update state
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             this.store.dispatch({
                 type: UPDATE_DATATABLE,
