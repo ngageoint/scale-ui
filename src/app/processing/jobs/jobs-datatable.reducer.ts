@@ -5,10 +5,10 @@ export type Action = JobsDatatableActions.All;
 
 export function jobsDatatableReducer(state: JobsDatatableOptions = initialJobsDatatableOptions, action: Action) {
     switch (action.type) {
-        case JobsDatatableActions.UPDATE_DATATABLE: {
+        case JobsDatatableActions.UPDATE_JOBS_DATATABLE: {
             return Object.assign({}, state, action.payload);
         }
-        case JobsDatatableActions.RESET: {
+        case JobsDatatableActions.RESET_JOBS_DATATABLE: {
             return Object.assign({}, state, initialJobsDatatableOptions);
         }
         default: {

@@ -14,6 +14,9 @@ import { JobService } from './processing/jobs/jobs.service';
 import { jobsDatatableReducer } from './processing/jobs/jobs-datatable.reducer';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { RecipesComponent } from './processing/recipes/recipes.component';
+import { RecipeService } from './processing/recipes/recipes.service';
+import { recipesDatatableReducer } from './processing/recipes/recipes-datatable.reducer';
 
 
 @NgModule({
@@ -24,7 +27,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         JobsComponent,
         LogoComponent,
         DashboardComponent,
-        SubnavComponent
+        SubnavComponent,
+        RecipesComponent
     ],
     imports: [
         AppRoutingModule,
@@ -32,14 +36,20 @@ import { DashboardComponent } from './dashboard/dashboard.component';
         HttpModule,
         DataTableModule,
         DropdownModule,
-        StoreModule.forRoot({ jobsDatatableOptions: jobsDatatableReducer })
+        StoreModule.forRoot(
+            {
+                jobsDatatableOptions: jobsDatatableReducer,
+                recipesDatatableOptions: recipesDatatableReducer
+            }
+        )
     ],
     exports: [
         DataTableModule,
         DropdownModule
     ],
     providers: [
-        JobService
+        JobService,
+        RecipeService
     ],
     bootstrap: [AppComponent]
 })

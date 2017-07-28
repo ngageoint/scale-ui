@@ -3,41 +3,40 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
-import { JobService } from './jobs.service';
-import { Job } from './job.model';
-import { JobsDatatableOptions } from './jobs-datatable-options.model';
-import { UPDATE_JOBS_DATATABLE } from './jobs-datatable.actions';
+import { RecipeService } from './recipes.service';
+import { Recipe } from './recipe.model';
+import { RecipesDatatableOptions } from './recipes-datatable-options.model';
+import { UPDATE_RECIPES_DATATABLE } from './recipes-datatable.actions';
 
 interface DatatableState {
-    jobsDatatableOptions: JobsDatatableOptions
+    recipesDatatableOptions: RecipesDatatableOptions
 }
 
 @Component({
-    selector: 'app-jobs',
-    templateUrl: './jobs.component.html',
-    styleUrls: ['./jobs.component.scss']
+  selector: 'app-recipes',
+  templateUrl: './recipes.component.html',
+  styleUrls: ['./recipes.component.scss']
 })
-export class JobsComponent implements OnInit {
-    datatableOptionsState: Observable<JobsDatatableOptions>;
-    datatableOptions: JobsDatatableOptions;
-    jobs: Job[];
-    statusValues: ['Running', 'Completed'];
+export class RecipesComponent implements OnInit {
+    datatableOptionsState: Observable<RecipesDatatableOptions>;
+    datatableOptions: RecipesDatatableOptions;
+    recipes: Recipe[];
 
     constructor(
-        private jobService: JobService,
+        private recipeService: RecipeService,
         private router: Router,
         private activatedRoute: ActivatedRoute,
         private store: Store<DatatableState>
     ) {
-        this.datatableOptionsState = store.select<JobsDatatableOptions>(s => s.jobsDatatableOptions);
+        this.datatableOptionsState = store.select<RecipesDatatableOptions>(s => s.recipesDatatableOptions);
     }
 
     private updateData() {
         // console.log(this.datatableOptions);
-        this.jobService.getJobs(this.datatableOptions).then(jobs => this.jobs = jobs);
+        this.recipeService.getRecipes(this.datatableOptions).then(recipes => this.recipes = recipes);
     }
     onSort(e: { field: string, order: number }) {
-        this.router.navigate(['/processing/jobs'], {
+        this.router.navigate(['/processing/recipes'], {
             queryParams: Object.assign(this.datatableOptions, {
                 sortField: e.field,
                 sortOrder: e.order,
@@ -46,7 +45,7 @@ export class JobsComponent implements OnInit {
         });
     }
     onPage(e: { first: number, rows: number }) {
-        this.router.navigate(['/processing/jobs'], {
+        this.router.navigate(['/processing/recipes'], {
             queryParams: Object.assign(this.datatableOptions, {
                 page: e.first
             })
@@ -54,7 +53,7 @@ export class JobsComponent implements OnInit {
     }
     onFilter(e: { filters: object }) {
         console.log(e.filters);
-        this.router.navigate(['/processing/jobs'], {
+        this.router.navigate(['/processing/recipes'], {
             queryParams: Object.assign(this.datatableOptions, {
                 filters: e.filters
             })
@@ -68,7 +67,7 @@ export class JobsComponent implements OnInit {
         // subscribe to query params to update state
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             this.store.dispatch({
-                type: UPDATE_JOBS_DATATABLE,
+                type: UPDATE_RECIPES_DATATABLE,
                 payload: params
             });
             this.updateData();

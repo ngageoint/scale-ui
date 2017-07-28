@@ -19,12 +19,18 @@ export class Job {
         public superseded_job: object,
         public superseded_by_job: object,
         public delete_superseded: boolean,
-        public created: string,
-        public queued: string,
-        public started: string,
-        public ended: string,
-        public last_status_change: string,
-        public superseded: string,
-        public last_modified: string
+        public created: Date,
+        public queued: Date,
+        public started: Date,
+        public ended: Date,
+        public last_status_change: Date,
+        public superseded: Date,
+        public last_modified: Date,
+        public data: object,
+        public results: object,
+        public recipes: Array<object>,
+        public job_exes: Array<object>,
+        public inputs: Array<object>,
+        public outputs: Array<object>
     ) {}
 }

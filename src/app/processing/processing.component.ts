@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { JobsDatatableOptions } from './jobs/jobs-datatable-options.model';
+import { RecipesDatatableOptions } from './recipes/recipes-datatable-options.model';
 import { Observable } from 'rxjs/Observable';
 
 interface DatatableState {
-    jobsDatatableOptions: JobsDatatableOptions
+    jobsDatatableOptions: JobsDatatableOptions,
+    recipesDatatableOptions: RecipesDatatableOptions
 }
 
 @Component({
@@ -13,16 +15,22 @@ interface DatatableState {
   styleUrls: ['./processing.component.scss']
 })
 export class ProcessingComponent implements OnInit {
-    datatableOptionsState: Observable<JobsDatatableOptions>;
-    datatableOptions: JobsDatatableOptions;
+    jobsDatatableOptionsState: Observable<JobsDatatableOptions>;
+    jobsDatatableOptions: JobsDatatableOptions;
+    recipesDatatableOptionsState: Observable<RecipesDatatableOptions>;
+    recipesDatatableOptions: RecipesDatatableOptions;
     constructor(
         private store: Store<DatatableState>
     ) {
-        this.datatableOptionsState = store.select<JobsDatatableOptions>(s => s.jobsDatatableOptions);
+        this.jobsDatatableOptionsState = store.select<JobsDatatableOptions>(s => s.jobsDatatableOptions);
+        this.recipesDatatableOptionsState = store.select<RecipesDatatableOptions>(s => s.recipesDatatableOptions);
     }
     ngOnInit() {
-        this.datatableOptionsState.subscribe((state) => {
-            this.datatableOptions = state;
+        this.jobsDatatableOptionsState.subscribe((state) => {
+            this.jobsDatatableOptions = state;
+        });
+        this.recipesDatatableOptionsState.subscribe((state) => {
+            this.recipesDatatableOptions = state;
         });
     }
 }
