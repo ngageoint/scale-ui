@@ -1,10 +1,19 @@
+@import '../navbar.component.scss';
 @import '../../../defaults/colors';
 
+
 .subnav {
-    background: $clr-gray-75;
+    background: $clr-gray-85;
+    background-image: linear-gradient(to bottom, $clr-gray-90, $clr-gray-80);
+    border-bottom: 1px solid $clr-gray-90;
+    box-shadow: $navshadow;
+    left: 0;
     min-height: 250px;
+    position: absolute;
+    right: 0;
+    top: $navbar-height - 1px;
 }
 
 .hidden {
-    display: none;
+    top: -1000px;
 }

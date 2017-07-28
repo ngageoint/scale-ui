@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-subnav',
-  templateUrl: './subnav.component.html',
-  styleUrls: ['./subnav.component.scss']
+    selector: 'app-subnav',
+    templateUrl: './subnav.component.html',
+    styleUrls: ['./subnav.component.scss']
 })
 export class SubnavComponent implements OnInit {
 
-  constructor() { }
+    @Input() sectionId: string
+    constructor() { }
 
-  ngOnInit() {
-  }
+    ngOnInit() {
+    }
 
+    getSectionStyles(section) {
+        let className = "subnav hidden";
+        if (section === this.sectionId) {
+            className = "subnav";
+        }
+        //console.log(`Subnav ${section} is "${className}" for sectionId ${this.sectionId}`);
+        return className;
+    }
 }

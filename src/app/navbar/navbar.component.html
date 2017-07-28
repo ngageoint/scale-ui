@@ -1,21 +1,31 @@
-<div class="navbar">
+<div class="navbar-ctr">
+    <div class="navbar" (click)="selectNavItem($event, null)">
 
-    <div class="navbar__logo">
-        <a routerLink="/">
-            <app-logo></app-logo>
-            <div>Scale</div>
-        </a>
-    </div>
+        <div class="navbar__logo">
+            <a routerLink="/">
+                <app-logo></app-logo>
+                <div>Scale</div>
+            </a>
+        </div>
 
-    <div class="navbar__item">
-        <a routerLink="/dashboard" routerLinkActive="active">
+        <div class="navbar__item">
+            <a (click)="selectNavItem($event, 'dashboard')">
             Dashboard
         </a>
-    </div>
-    <div class="navbar__item">
-        <a routerLink="/processing" routerLinkActive="active">
+        </div>
+        <div class="navbar__item">
+            <a (click)="selectNavItem($event, 'processing')">
             Processing
         </a>
+        </div>
     </div>
 </div>
-<app-subnav></app-subnav>
+<app-subnav [sectionId]="selectedId"></app-subnav>
+
+<!--
+// job types === algorithms
+Jobs - crud job types
+Recipes - arrange job types (algorithms)
+Data - search for products, source files
+Metrics - dashboard
+-->

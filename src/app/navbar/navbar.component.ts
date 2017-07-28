@@ -8,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
+    selectedId = null;
+
     constructor() { }
 
     ngOnInit() {
     }
 
+    selectNavItem(event, itemId) {
+        event.stopPropagation();
+        if (this.selectedId === itemId) {
+            // close it
+            this.selectedId = null;
+        }
+        else {
+            this.selectedId = itemId;
+        }
+    }
 }
