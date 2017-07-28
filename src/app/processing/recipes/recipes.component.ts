@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { RecipeService } from './recipes.service';
 import { Recipe } from './recipe.model';
 import { RecipesDatatableOptions } from './recipes-datatable-options.model';
-import { UPDATE_DATATABLE } from './recipes-datatable.actions';
+import { UPDATE_RECIPES_DATATABLE } from './recipes-datatable.actions';
 
 interface DatatableState {
     recipesDatatableOptions: RecipesDatatableOptions
@@ -67,7 +67,7 @@ export class RecipesComponent implements OnInit {
         // subscribe to query params to update state
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             this.store.dispatch({
-                type: UPDATE_DATATABLE,
+                type: UPDATE_RECIPES_DATATABLE,
                 payload: params
             });
             this.updateData();

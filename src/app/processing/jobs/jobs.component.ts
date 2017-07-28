@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { JobService } from './jobs.service';
 import { Job } from './job.model';
 import { JobsDatatableOptions } from './jobs-datatable-options.model';
-import { UPDATE_DATATABLE } from './jobs-datatable.actions';
+import { UPDATE_JOBS_DATATABLE } from './jobs-datatable.actions';
 
 interface DatatableState {
     jobsDatatableOptions: JobsDatatableOptions
@@ -68,7 +68,7 @@ export class JobsComponent implements OnInit {
         // subscribe to query params to update state
         this.activatedRoute.queryParams.subscribe((params: Params) => {
             this.store.dispatch({
-                type: UPDATE_DATATABLE,
+                type: UPDATE_JOBS_DATATABLE,
                 payload: params
             });
             this.updateData();

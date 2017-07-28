@@ -5,10 +5,10 @@ export type Action = RecipesDatatableActions.All;
 
 export function recipesDatatableReducer(state: RecipesDatatableOptions = initialRecipesDatatableOptions, action: Action) {
     switch (action.type) {
-        case RecipesDatatableActions.UPDATE_DATATABLE: {
+        case RecipesDatatableActions.UPDATE_RECIPES_DATATABLE: {
             return Object.assign({}, state, action.payload);
         }
-        case RecipesDatatableActions.RESET: {
+        case RecipesDatatableActions.RESET_RECIPES_DATATABLE: {
             return Object.assign({}, state, initialRecipesDatatableOptions);
         }
         default: {

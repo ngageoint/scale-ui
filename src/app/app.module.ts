@@ -36,8 +36,12 @@ import { recipesDatatableReducer } from './processing/recipes/recipes-datatable.
         HttpModule,
         DataTableModule,
         DropdownModule,
-        StoreModule.forRoot({ jobsDatatableOptions: jobsDatatableReducer }),
-        StoreModule.forRoot({ recipesDatatableOptions: recipesDatatableReducer })
+        StoreModule.forRoot(
+            {
+                jobsDatatableOptions: jobsDatatableReducer,
+                recipesDatatableOptions: recipesDatatableReducer
+            }
+        )
     ],
     exports: [
         DataTableModule,
