@@ -8,6 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class SubnavComponent implements OnInit {
 
     @Input() sectionId: string
+    @Input() onNavigate: Function
     constructor() { }
 
     ngOnInit() {
@@ -20,5 +21,10 @@ export class SubnavComponent implements OnInit {
         }
         //console.log(`Subnav ${section} is "${className}" for sectionId ${this.sectionId}`);
         return className;
+    }
+
+    navigate() {
+        // call passed in (navbar) onNavigate method
+        this.onNavigate();
     }
 }

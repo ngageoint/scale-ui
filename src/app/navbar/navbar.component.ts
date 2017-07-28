@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 
 
 @Component({
@@ -10,7 +10,7 @@ export class NavbarComponent implements OnInit {
 
     selectedId = null;
 
-    constructor() { }
+    constructor(private changeDetector: ChangeDetectorRef) { }
 
     ngOnInit() {
     }
@@ -24,5 +24,10 @@ export class NavbarComponent implements OnInit {
         else {
             this.selectedId = itemId;
         }
+    }
+
+    onNavigate() {
+        // close the subnav
+        this.selectedId = null;
     }
 }
