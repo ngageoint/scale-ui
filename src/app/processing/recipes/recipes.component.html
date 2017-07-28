@@ -1,0 +1,19 @@
+<h2>Recipes</h2>
+<!--<i class="fa fa-search" style="margin:4px 4px 0 0"></i>-->
+<!--<input #gb type="text" pInputText size="50" placeholder="Global Filter">-->
+<p-dataTable [value]="recipes" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt (onPage)="onPage($event)" (onSort)="onSort($event)"
+             (onFilter)="onFilter($event)" sortField="{{datatableOptions.sortField}}" sortOrder="{{datatableOptions.sortOrder}}">
+    <!--<p-header>Jobs</p-header>-->
+    <p-column field="recipe_type.title" header="Recipe Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
+              [sortable]="true">
+        <ng-template let-col let-recipe="rowData" pTemplate="body">
+            <span>{{recipe.recipe_type.title}} {{recipe.recipe_type.version}}</span>
+        </ng-template>
+    </p-column>
+    <p-column field="created" header="Created (Z)" [sortable]="true">
+        <ng-template let-col let-recipe="rowData" pTemplate="body">
+            <span>{{recipe.created}}</span> <!--TODO: format datetime values -->
+        </ng-template>
+    </p-column>
+    <p-column field="last_modified" header="Last Modified (Z)" [sortable]="true"></p-column>
+</p-dataTable>
