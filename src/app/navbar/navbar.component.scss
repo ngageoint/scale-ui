@@ -28,7 +28,7 @@ $navshadow: 0 0 0.5em $clr-black;
     justify-content: center;
 
     a {
-        color: $clr-gray-75;
+        color: $clr-gray-85;
         padding: 2.0em 1.0em;
         text-align: center;
         text-decoration: none;
@@ -80,13 +80,14 @@ $navshadow: 0 0 0.5em $clr-black;
 }
 
 .navbar__logo {
-    color: $clr-scale-blue1;
+    color: $clr-white;
     margin-right: 1.0em;
     padding: 0.5em 1.25em;
     text-align: center;
 
     a {
-        color: $clr-scale-blue1;
+        color: $clr-white;
         text-decoration: none;
+        text-shadow: none;
     }
 }
