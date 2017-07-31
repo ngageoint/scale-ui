@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
-import { JobService } from './jobs.service';
+import { JobService } from './job.service';
 import { Job } from './job.model';
 import { JobsDatatableOptions } from './jobs-datatable-options.model';
 import { DatatableService } from '../../services/datatable.service';
