@@ -8,12 +8,12 @@
             </a>
         </div>
 
-        <div class="navbar__item">
+        <div [class]="getNavItemStyles('dashboard')">
             <a (click)="selectNavItem($event, 'dashboard')">
             Dashboard
         </a>
         </div>
-        <div class="navbar__item">
+        <div [class]="getNavItemStyles('processing')">
             <a (click)="selectNavItem($event, 'processing')">
             Processing
         </a>
