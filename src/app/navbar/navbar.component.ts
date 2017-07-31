@@ -36,5 +36,6 @@ export class NavbarComponent implements OnInit {
     onNavigate() {
         // close the subnav
         this.selectedId = null;
+        this.changeDetector.detectChanges();
     }
 }
