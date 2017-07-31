@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
     selector: 'app-subnav',
@@ -8,7 +8,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class SubnavComponent implements OnInit {
 
     @Input() sectionId: string;
-    @Input() onNavigate: Function;
+    @Output() onNavigate = new EventEmitter();
     constructor() { }
 
     ngOnInit() {
@@ -29,7 +29,6 @@ export class SubnavComponent implements OnInit {
     }
 
     navigate() {
-        // call passed in (navbar) onNavigate method
-        this.onNavigate();
+        this.onNavigate.emit();
     }
 }

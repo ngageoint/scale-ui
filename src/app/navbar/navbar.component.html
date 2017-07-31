@@ -20,7 +20,7 @@
         </div>
     </div>
 </div>
-<app-subnav [sectionId]="selectedId" [onNavigate]="onNavigate"></app-subnav>
+<app-subnav [sectionId]="selectedId" (onNavigate)="onNavigate($event)"></app-subnav>
 
 <!--
 // job types === algorithms
