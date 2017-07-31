@@ -12,8 +12,19 @@
             Processing
         </div>
         <div class="subnav__links">
-            <a class="subnav__link" routerLink="/processing/jobs" [queryParams]="jobsDatatableOptions" (click)="navigate()">Jobs</a>
-            <a class="subnav__link" routerLink="/processing/recipes" [queryParams]="recipesDatatableOptions" (click)="navigate()">Recipes</a>
+            <ul>
+                <li><a class="subnav__link"
+                    routerLink="/processing/jobs"
+                    [queryParams]="jobsDatatableOptions"
+                    (click)="navigate()">Jobs</a>
+                </li>
+
+                <li><a class="subnav__link"
+                    routerLink="/processing/recipes"
+                    [queryParams]="recipesDatatableOptions"
+                    (click)="navigate()">Recipes</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>
