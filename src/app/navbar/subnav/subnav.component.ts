@@ -15,12 +15,17 @@ export class SubnavComponent implements OnInit {
     }
 
     getSectionStyles(section) {
-        let className = 'subnav hidden';
         if (section === this.sectionId) {
-            className = 'subnav';
+            return 'subnav'; // show it
         }
-        // console.log(`Subnav ${section} is "${className}" for sectionId ${this.sectionId}`);
-        return className;
+        return 'subnav hidden'; // hide it
+    }
+
+    getSubnavStyles() {
+        if (this.sectionId) {
+            return 'subnav-ctr';
+        }
+        return 'subnav-ctr hidden';
     }
 
     navigate() {

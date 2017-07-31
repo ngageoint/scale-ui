@@ -1,14 +1,16 @@
-<div [class]="getSectionStyles('dashboard')">
-    <div class="subnav__header">
-        Dashboard
+<div [class]="getSubnavStyles()">
+    <div [class]="getSectionStyles('dashboard')">
+        <div class="subnav__header">
+            Dashboard
+        </div>
     </div>
-</div>
-<div [class]="getSectionStyles('processing')">
-    <div class="subnav__header">
-        Processing
-    </div>
-    <div class="subnav__links">
-        <a class="subnav__link" routerLink="/processing/jobs" [queryParams]="jobsDatatableOptions" (click)="navigate()">Jobs</a>
-        <a class="subnav__link" routerLink="/processing/recipes" [queryParams]="recipesDatatableOptions" (click)="navigate()">Recipes</a>
+    <div [class]="getSectionStyles('processing')">
+        <div class="subnav__header">
+            Processing
+        </div>
+        <div class="subnav__links">
+            <a class="subnav__link" routerLink="/processing/jobs" [queryParams]="jobsDatatableOptions" (click)="navigate()">Jobs</a>
+            <a class="subnav__link" routerLink="/processing/recipes" [queryParams]="recipesDatatableOptions" (click)="navigate()">Recipes</a>
+        </div>
     </div>
 </div>

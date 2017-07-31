@@ -7,7 +7,7 @@
     background-image: linear-gradient(to bottom, $clr-gray-90, $clr-gray-80);
     border-bottom: 1px solid $clr-gray-90;
     color: $clr-black;
-    
+
     .subnav__link {
         background: $clr-gray-85;
         color: $clr-highlight;
@@ -20,7 +20,7 @@
 
 .blue-subnav {
     background: $clr-scale-blue2;
-    //background-image: linear-gradient(to bottom, $clr-scale-blue1, $clr-scale-blue2);
+    background-image: linear-gradient(to bottom, $clr-scale-blue2, darken($clr-scale-blue2, 3%));
     border-bottom: 1px solid $clr-gray-90;
     color: $clr-white;
 
@@ -39,12 +39,7 @@
 
     box-shadow: $navshadow;
     display: flex;
-    left: 0;
     min-height: 250px;
-    position: absolute;
-    right: 0;
-    top: $navbar-height - 1px;
-    z-index: 100;
 
     .subnav__header {
         font-size: 32px;
@@ -69,5 +64,18 @@
 }
 
 .subnav.hidden {
+    display: none;
+}
+
+.subnav-ctr {
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: $navbar-height - 1px;
+    transition: all 0.35s ease-out;
+    z-index: 100;
+}
+
+.subnav-ctr.hidden {
     top: -1000px;
 }
