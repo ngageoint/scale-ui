@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { RecipeService } from './recipes.service';
 import { Recipe } from './recipe.model';
-import { initialRecipesDatatableOptions, RecipesDatatableOptions } from './recipes-datatable-options.model';
+import { RecipesDatatableOptions } from './recipes-datatable-options.model';
 import { DatatableService } from '../../services/datatable.service';
 
 @Component({
@@ -17,10 +17,10 @@ export class RecipesComponent implements OnInit {
     recipes: Recipe[];
 
     constructor(
+        private datatableService: DatatableService,
         private recipeService: RecipeService,
         private router: Router,
-        private activatedRoute: ActivatedRoute,
-        private datatableService: DatatableService
+        private activatedRoute: ActivatedRoute
     ) { }
 
     private updateData() {
@@ -29,10 +29,12 @@ export class RecipesComponent implements OnInit {
     private updateOptions() {
         this.datatableService.setRecipesDatatableOptions(this.datatableOptions);
 
-        // update querystring to trigger data update
+        // update querystring
         this.router.navigate(['/processing/recipes'], {
             queryParams: this.datatableOptions
         });
+
+        this.updateData();
     }
     onSort(e: { field: string, order: number }) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -56,24 +58,17 @@ export class RecipesComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        // set initial state and subscribe to query params
-        this.activatedRoute.queryParams.subscribe((params: Params) => {
-            if (!this.datatableOptions) {
-                if (Object.keys(params).length > 0) {
-                    this.datatableOptions = {
-                        first: parseInt(params.first, 10),
-                        rows: parseInt(params.rows, 10),
-                        sortField: params.sortField,
-                        sortOrder: parseInt(params.sortOrder, 10),
-                        filters: params.filters
-                    };
-                    this.datatableService.setRecipesDatatableOptions(this.datatableOptions);
-                } else {
-                    this.datatableOptions = initialRecipesDatatableOptions;
-                }
-            }
-            this.updateOptions();
-            this.updateData();
-        });
+        this.datatableOptions = this.datatableService.getRecipesDatatableOptions();
+        const params = this.activatedRoute.snapshot.queryParams;
+        if (Object.keys(params).length > 0) {
+            this.datatableOptions = {
+                first: parseInt(params.first, 10),
+                rows: parseInt(params.rows, 10),
+                sortField: params.sortField,
+                sortOrder: parseInt(params.sortOrder, 10),
+                filters: params.filters
+            };
+        }
+        this.updateOptions();
     }
 }

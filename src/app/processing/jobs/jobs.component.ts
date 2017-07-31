@@ -3,7 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { JobService } from './jobs.service';
 import { Job } from './job.model';
-import { initialJobsDatatableOptions, JobsDatatableOptions } from './jobs-datatable-options.model';
+import { JobsDatatableOptions } from './jobs-datatable-options.model';
 import { DatatableService } from '../../services/datatable.service';
 
 @Component({
@@ -30,14 +30,15 @@ export class JobsComponent implements OnInit {
     private updateOptions() {
         this.datatableService.setJobsDatatableOptions(this.datatableOptions);
 
-        // update querystring to trigger data update
+        // update querystring
         this.router.navigate(['/processing/jobs'], {
             queryParams: this.datatableOptions
         });
+
+        this.updateData();
     }
 
     onSort(e: { field: string, order: number }) {
-        // update datatable options
         this.datatableOptions = Object.assign(this.datatableOptions, {
             sortField: e.field,
             sortOrder: e.order,
@@ -46,7 +47,6 @@ export class JobsComponent implements OnInit {
         this.updateOptions();
     }
     onPage(e: { first: number, rows: number }) {
-        // update datatable options
         this.datatableOptions = Object.assign(this.datatableOptions, {
             page: e.first
         });
@@ -60,24 +60,17 @@ export class JobsComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        // set initial state and subscribe to query params
-        this.activatedRoute.queryParams.subscribe((params: Params) => {
-            if (!this.datatableOptions) {
-                if (Object.keys(params).length > 0) {
-                    this.datatableOptions = {
-                        first: parseInt(params.first, 10),
-                        rows: parseInt(params.rows, 10),
-                        sortField: params.sortField,
-                        sortOrder: parseInt(params.sortOrder, 10),
-                        filters: params.filters
-                    };
-                    this.datatableService.setJobsDatatableOptions(this.datatableOptions);
-                } else {
-                    this.datatableOptions = initialJobsDatatableOptions;
-                }
-            }
-            this.updateOptions();
-            this.updateData();
-        });
+        this.datatableOptions = this.datatableService.getJobsDatatableOptions();
+        const params = this.activatedRoute.snapshot.queryParams;
+        if (Object.keys(params).length > 0) {
+            this.datatableOptions = {
+                first: parseInt(params.first, 10),
+                rows: parseInt(params.rows, 10),
+                sortField: params.sortField,
+                sortOrder: parseInt(params.sortOrder, 10),
+                filters: params.filters
+            };
+        }
+        this.updateOptions();
     }
 }
