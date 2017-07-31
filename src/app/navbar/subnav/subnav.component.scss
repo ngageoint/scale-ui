@@ -23,13 +23,15 @@
     background-image: linear-gradient(to bottom, $clr-scale-blue2, darken($clr-scale-blue2, 3%));
     border-bottom: 1px solid $clr-gray-90;
     color: $clr-white;
+    text-shadow: 0 1px 0 $clr-black;
 
     .subnav__link {
-        background: $clr-gray-85;
-        color: $clr-highlight;
+        border-left: 3px solid $clr-navbar-dark;
+        color: $clr-white;
+        text-decoration: none;
 
         &:hover {
-            background: $clr-white;
+            background: rgba($clr-white, 0.05);
         }
     }
 }
@@ -40,23 +42,31 @@
     box-shadow: $navshadow;
     display: flex;
     min-height: 250px;
+    padding: 2.0em 1.5em;
 
     .subnav__header {
         font-size: 32px;
         font-weight: bold;
-        padding: 2.0em 1.0em;
-        width: 23%;
+        width: 32%;
     }
 
     .subnav__links {
+        display: flex;
         flex: 1;
-        padding: 2.0em 1.0em;
+        flex-direction: column;
+        padding: 0;
+
+        ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
     }
 
     .subnav__link {
-        border-radius: 0.25em;
-        margin: 0.5em 0;
-        padding: 0.5em 1.5em;
+        display: inline-block;
+        margin-bottom: 0.35em;
+        padding: 0.5em;
 
         &:hover {
         }
