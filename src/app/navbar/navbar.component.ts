@@ -26,6 +26,13 @@ export class NavbarComponent implements OnInit {
         }
     }
 
+    getNavItemStyles(itemId) {
+        if (this.selectedId === itemId) {
+            return 'navbar__item-selected';
+        }
+        return 'navbar__item';
+    }
+
     onNavigate() {
         // close the subnav
         this.selectedId = null;
