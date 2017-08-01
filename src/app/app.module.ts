@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { DataTableModule, DropdownModule, DataListModule } from 'primeng/primeng';
+import { DataTableModule, DropdownModule } from 'primeng/primeng';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -36,13 +36,11 @@ import { JobTypeService } from './processing/job-types/job-type.service';
         BrowserModule,
         HttpModule,
         DataTableModule,
-        DropdownModule,
-        DataListModule
+        DropdownModule
     ],
     exports: [
         DataTableModule,
-        DropdownModule,
-        DataListModule
+        DropdownModule
     ],
     providers: [
         JobService,

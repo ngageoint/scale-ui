@@ -3,27 +3,23 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { JobType } from './job-type.model';
+import { ApiResults } from '../../api-results.model';
 
 @Injectable()
 export class JobTypeService {
     constructor(
         private http: Http
     ) { }
-    getJobTypes(): Promise<JobType[]> {
-        // let sortStr = sortOrder < 0 ? '-' + sortField : sortField;
-        // return this.http.get('http://scale.dcos.aisohio.net/service/scale/api/v5/jobs/?ended=2017-07-24T23:59:59.999Z&order=' +
-        //         sortStr +
-        //         '&page=1&page_size=25&started=2017-07-17T00:00:00.000Z')
+    getJobTypes(params: object): Promise<ApiResults> {
         return this.http.get('./assets/mock-job-types.json')
             .toPromise()
-            .then(response => response.json().results as JobType[])
+            .then(response => response.json() as ApiResults)
             .catch(this.handleError);
     }
-    getJobType(id: number): Promise<JobType[]> {
+    getJobType(id: number): Promise<ApiResults> {
         return this.http.get('./assets/mock-job-types.json')
             .toPromise()
-            .then(response => response.json().results as JobType[])
+            .then(response => response.json().results as ApiResults)
             .catch(this.handleError);
     }
 

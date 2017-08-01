@@ -1,5 +1,18 @@
-<p-dataList [value]="jobTypes">
-    <ng-template let-jobType pTemplate="item">
-        {{jobType.title}}
-    </ng-template>
-</p-dataList>
+<div class="ui-g">
+    <div class="ui-g-12 ui-md-6">
+        <div class="ui-g-5">
+            <p-dataTable [value]="jobTypes" [rows]="10" [paginator]="true" #dt (onPage)="onPage($event)"
+                         (onSort)="onSort($event)" (onFilter)="onFilter($event)" sortField="{{datatableOptions.sortField}}"
+                         sortOrder="{{datatableOptions.sortOrder}}">
+                <p-column field="title" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search" [sortable]="true">
+                    <ng-template let-col let-jobType="rowData" pTemplate="body">
+                        <span>{{jobType.title}} {{jobType.version}}</span>
+                    </ng-template>
+                </p-column>
+            </p-dataTable>
+        </div>
+        <div class="ui-g-7">
+            <h2>Select a Job Type to view its details</h2>
+        </div>
+    </div>
+</div>

@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'processing', component: ProcessingComponent },
     { path: 'processing/jobs', component: JobsComponent },
-    { path: 'processing/jobTypes', component: JobTypesComponent },
+    { path: 'processing/job-types', component: JobTypesComponent },
     { path: 'processing/recipes', component: RecipesComponent }
 ];
 

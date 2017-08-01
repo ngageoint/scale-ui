@@ -25,7 +25,7 @@ export class JobsComponent implements OnInit {
     ) { }
 
     private updateData() {
-        this.jobService.getJobs(this.datatableOptions).then(jobs => this.jobs = jobs);
+        this.jobService.getJobs(this.datatableOptions).then(data => this.jobs = data.results as Job[]);
     }
     private updateOptions() {
         this.datatableService.setJobsDatatableOptions(this.datatableOptions);
@@ -40,20 +40,21 @@ export class JobsComponent implements OnInit {
 
     onSort(e: { field: string, order: number }) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            rows: 10,
             sortField: e.field,
-            sortOrder: e.order,
-            first: 0
+            sortOrder: e.order
         });
         this.updateOptions();
     }
     onPage(e: { first: number, rows: number }) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            page: e.first
+            first: e.first,
+            rows: e.rows
         });
         this.updateOptions();
     }
     onFilter(e: { filters: object }) {
-        console.log(e.filters);
         this.datatableOptions = Object.assign(this.datatableOptions, {
             filters: e.filters
         });
@@ -68,7 +69,17 @@ export class JobsComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                filters: params.filters
+                filters: params.filters,
+                started: params.started,
+                ended: params.ended,
+                status: params.status,
+                job_id: params.job_id,
+                job_type_id: params.job_type_id,
+                job_type_name: params.job_type_name,
+                job_type_category: params.job_type_category,
+                batch_id: params.batch_id,
+                error_category: params.error_category,
+                include_superseded: params.include_superseded
             };
         }
         this.updateOptions();

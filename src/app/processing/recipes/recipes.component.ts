@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/primeng';
 
 import { RecipeService } from './recipes.service';
 import { Recipe } from './recipe.model';
@@ -15,6 +16,7 @@ import { DatatableService } from '../../services/datatable.service';
 export class RecipesComponent implements OnInit {
     datatableOptions: RecipesDatatableOptions;
     recipes: Recipe[];
+    count: number;
 
     constructor(
         private datatableService: DatatableService,
@@ -24,7 +26,10 @@ export class RecipesComponent implements OnInit {
     ) { }
 
     private updateData() {
-        this.recipeService.getRecipes(this.datatableOptions).then(recipes => this.recipes = recipes);
+        this.recipeService.getRecipes(this.datatableOptions).then(data => {
+            this.count = data.count;
+            this.recipes = data.results as Recipe[];
+        });
     }
     private updateOptions() {
         this.datatableService.setRecipesDatatableOptions(this.datatableOptions);
@@ -36,24 +41,19 @@ export class RecipesComponent implements OnInit {
 
         this.updateData();
     }
-    onSort(e: { field: string, order: number }) {
+    loadData(e: LazyLoadEvent) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            sortField: e.field,
-            sortOrder: e.order,
-            first: 0
-        });
-        this.updateOptions();
-    }
-    onPage(e: { first: number, rows: number }) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            page: e.first
-        });
-        this.updateOptions();
-    }
-    onFilter(e: { filters: object }) {
-        console.log(e.filters);
-        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: e.first,
+            rows: e.rows,
+            sortField: e.sortField,
+            sortOrder: e.sortOrder,
             filters: e.filters
+        });
+        this.updateOptions();
+    }
+    onFilter(e: {filters: object, filteredValue: object[]}) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            filters: e.filters['recipe_type.title']['value']
         });
         this.updateOptions();
     }
@@ -66,9 +66,14 @@ export class RecipesComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                filters: params.filters
+                filters: params.filters,
+                started: params.started,
+                ended: params.ended,
+                type_id: params.type_id,
+                type_name: params.type_name,
+                batch_id: params.batch_id,
+                include_superseded: params.include_superseded
             };
         }
-        this.updateOptions();
     }
 }

@@ -1,9 +1,7 @@
 <h2>Jobs</h2>
-<!--<i class="fa fa-search" style="margin:4px 4px 0 0"></i>-->
-<!--<input #gb type="text" pInputText size="50" placeholder="Global Filter">-->
-<p-dataTable [value]="jobs" [rows]="10" [paginator]="true" [globalFilter]="gb" #dt (onPage)="onPage($event)" (onSort)="onSort($event)"
-             (onFilter)="onFilter($event)" sortField="{{datatableOptions.sortField}}" sortOrder="{{datatableOptions.sortOrder}}">
-    <!--<p-header>Jobs</p-header>-->
+    <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [paginator]="true" [sortField]="datatableOptions.sortField"
+                 [sortOrder]="datatableOptions.sortOrder" (onPage)="onPage($event)" (onSort)="onSort($event)"
+                 (onFilter)="onFilter($event)">
     <p-column field="job_type.title" header="Job Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
               [sortable]="true">
         <ng-template let-col let-job="rowData" pTemplate="body">
