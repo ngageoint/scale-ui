@@ -1,7 +1,8 @@
 @import '../../defaults/colors';
 
+
 $navbar-transition: all 0.35s ease-out;
-$navbar-height: 85px;
+$navbar-height: 47px;
 $navshadow: 0 0 0.5em $clr-black;
 
 .navbar-ctr {
@@ -29,7 +30,7 @@ $navshadow: 0 0 0.5em $clr-black;
 
     a {
         color: $clr-gray-85;
-        padding: 2.0em 1.0em;
+        padding: 1.0em 1.0em;
         text-align: center;
         text-decoration: none;
         text-shadow: 0 1px 0 $clr-navbar-dark;
