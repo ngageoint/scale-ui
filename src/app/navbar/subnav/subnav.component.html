@@ -1,12 +1,5 @@
 <div [class]="getSubnavStyles()">
-    <div [class]="getSectionStyles('dashboard')">
-        <div class="subnav__header">
-            Dashboard
-        </div>
-        <div class="subnav__links">
-            <a class="subnav__link" routerLink="/dashboard" (click)="navigate()">Home</a>
-        </div>
-    </div>
+    <!-- Processing -->
     <div [class]="getSectionStyles('processing')">
         <div class="subnav__header">
             Processing
@@ -25,6 +18,15 @@
                     (click)="navigate()">Recipes</a>
                 </li>
             </ul>
+        </div>
+    </div>
+
+    <!-- Data -->
+    <div [class]="getSectionStyles('data')">
+        <div class="subnav__header">
+            Data
+        </div>
+        <div class="subnav__links">
         </div>
     </div>
 </div>

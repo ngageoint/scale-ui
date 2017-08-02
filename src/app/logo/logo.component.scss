@@ -6,4 +6,8 @@
     stroke: $clr-gray-85;
     stroke-width: 0;
     width: 82px;
+
+    &:hover {
+        fill: $clr-highlight;
+    }
 }
