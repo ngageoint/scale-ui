@@ -1,7 +1,11 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
-import { DataTableModule, DropdownModule } from 'primeng/primeng';
+
+// Prime NG
+import { DataTableModule } from 'primeng/components/datatable/datatable';
+import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { ChartModule } from 'primeng/components/chart/chart';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +39,8 @@ import { JobTypeService } from './processing/job-types/job-type.service';
         AppRoutingModule,
         BrowserModule,
         HttpModule,
+        // Prime NG
+        ChartModule,
         DataTableModule,
         DropdownModule
     ],

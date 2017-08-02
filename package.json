@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
+    "api": "node api/ApiServer.js",
     "start": "ng serve --host 0.0.0.0 --port 8080 --disable-host-check",
     "build": "ng build",
     "test": "ng test",
@@ -11,12 +12,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AppliedIS/scale.ui.next.git"
+    "url": "git+https://github.com/AppliedIS/scale-nxt.git"
   },
   "bugs": {
-    "url": "https://github.com/AppliedIS/scale.ui.next/issues"
+    "url": "https://github.com/AppliedIS/scale-nxt/issues"
   },
-  "homepage": "https://github.com/AppliedIS/scale.ui.next#readme",
+  "homepage": "https://github.com/AppliedIS/scale-nxt#readme",
   "private": true,
   "dependencies": {
     "@angular/animations": "^4.3.1",
@@ -29,6 +30,7 @@
     "@angular/platform-browser-dynamic": "^4.0.0",
     "@angular/router": "^4.0.0",
     "@ngrx/store": "^4.0.0",
+    "chart.js": "^2.6.0",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "normalize.css": "^7.0.0",
@@ -44,6 +46,7 @@
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
     "codelyzer": "~3.0.1",
+    "hapi": "^16.5.0",
     "jasmine-core": "~2.6.2",
     "jasmine-spec-reporter": "~4.1.0",
     "karma": "~1.7.0",
