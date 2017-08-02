@@ -7,22 +7,11 @@
             </a>
         </div>
 
-        <div [class]="getNavItemStyles('jobs')">
-            <a (click)="selectNavItem($event, 'jobs')">Jobs</a>
-        </div>
-        <div [class]="getNavItemStyles('recipes')">
-            <a (click)="selectNavItem($event, 'recipes')">Recipes</a>
+        <div [class]="getNavItemStyles('processing')">
+            <a (click)="selectNavItem($event, 'processing')">Processing</a>
         </div>
         <div [class]="getNavItemStyles('data')">
             <a (click)="selectNavItem($event, 'data')">Data</a>
-        </div>
-        <div [class]="getNavItemStyles('metrics')">
-            <a (click)="selectNavItem($event, 'metrics')">Metrics</a>
-        </div>
-        <div [class]="getNavItemStyles('processing')">
-            <a (click)="selectNavItem($event, 'processing')">
-                Processing
-            </a>
         </div>
     </div>
 </div>
