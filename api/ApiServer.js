@@ -1,19 +1,16 @@
 const Hapi = require('hapi');
 const env = process.env;
 
+const router = require('./router');
+
+
 const server = new Hapi.Server();
 server.connection({
     port: 8081,
     host: env.IP || 'localhost'
 });
 
-server.route({
-    method: 'GET',
-    path: '/',
-    handler: function (request, reply) {
-        reply('Hello, world!');
-    }
-});
+router.init(server);
 
 server.start((err) => {
     if (err) {
