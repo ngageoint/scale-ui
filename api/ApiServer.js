@@ -1,9 +1,10 @@
 const Hapi = require('hapi');
+const env = process.env;
 
 const server = new Hapi.Server();
 server.connection({
     port: 8081,
-    host: '0.0.0.0'
+    host: env.IP || 'localhost'
 });
 
 server.route({
