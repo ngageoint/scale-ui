@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { ChartModule } from 'primeng/components/chart/chart';
+import { PaginatorModule } from 'primeng/components/paginator/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -43,11 +44,13 @@ import { JobTypeService } from './processing/job-types/job-type.service';
         // Prime NG
         ChartModule,
         DataTableModule,
-        DropdownModule
+        DropdownModule,
+        PaginatorModule
     ],
     exports: [
         DataTableModule,
-        DropdownModule
+        DropdownModule,
+        PaginatorModule
     ],
     providers: [
         JobService,
