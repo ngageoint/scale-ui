@@ -29,20 +29,20 @@ export class DashboardComponent implements OnInit {
             this.data = {
                 labels: labels,
                 datasets: [{
+                    label: 'Running',
+                    data: running,
+                    fill: false,
+                    borderColor: '#ADB229'
+                }, {
                     label: 'Pending',
                     data: pending,
                     fill: false,
-                    borderColor: '#058DC7'
+                    borderColor: '#48ACFF'
                 }, {
                     label: 'Queue',
                     data: queue,
                     fill: false,
-                    borderColor: '#50B432'
-                }, {
-                    label: 'Running',
-                    data: running,
-                    fill: false,
-                    borderColor: '#ED561B'
+                    borderColor: '#FF6761'
                 }]
             };
         });
