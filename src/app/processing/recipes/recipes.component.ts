@@ -16,6 +16,7 @@ import { DatatableService } from '../../services/datatable.service';
 export class RecipesComponent implements OnInit {
     datatableOptions: RecipesDatatableOptions;
     recipes: Recipe[];
+    first: number;
     count: number;
 
     constructor(
@@ -41,13 +42,20 @@ export class RecipesComponent implements OnInit {
 
         this.updateData();
     }
-    loadData(e: LazyLoadEvent) {
+
+    onSort(e: { field: string, order: number }) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            rows: 10,
+            sortField: e.field,
+            sortOrder: e.order
+        });
+        this.updateOptions();
+    }
+    paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
-            rows: e.rows,
-            sortField: e.sortField,
-            sortOrder: e.sortOrder,
-            filters: e.filters
+            rows: parseInt(e.rows, 10)
         });
         this.updateOptions();
     }
@@ -58,7 +66,6 @@ export class RecipesComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        this.datatableOptions = this.datatableService.getRecipesDatatableOptions();
         const params = this.activatedRoute.snapshot.queryParams;
         if (Object.keys(params).length > 0) {
             this.datatableOptions = {
@@ -74,6 +81,9 @@ export class RecipesComponent implements OnInit {
                 batch_id: params.batch_id,
                 include_superseded: params.include_superseded
             };
+        } else {
+            this.datatableOptions = this.datatableService.getRecipesDatatableOptions();
         }
+        this.updateOptions();
     }
 }

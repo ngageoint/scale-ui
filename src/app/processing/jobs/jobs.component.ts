@@ -16,6 +16,8 @@ export class JobsComponent implements OnInit {
     datatableOptions: JobsDatatableOptions;
     jobs: Job[];
     statusValues: ['Running', 'Completed'];
+    first: number;
+    count: number;
 
     constructor(
         private datatableService: DatatableService,
@@ -25,7 +27,10 @@ export class JobsComponent implements OnInit {
     ) { }
 
     private updateData() {
-        this.jobService.getJobs(this.datatableOptions).then(data => this.jobs = data.results as Job[]);
+        this.jobService.getJobs(this.datatableOptions).then(data => {
+            this.count = data.count;
+            this.jobs = data.results as Job[];
+        });
     }
     private updateOptions() {
         this.datatableService.setJobsDatatableOptions(this.datatableOptions);
@@ -47,10 +52,10 @@ export class JobsComponent implements OnInit {
         });
         this.updateOptions();
     }
-    onPage(e: { first: number, rows: number }) {
+    paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
-            rows: e.rows
+            rows: parseInt(e.rows, 10)
         });
         this.updateOptions();
     }
@@ -61,7 +66,6 @@ export class JobsComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        this.datatableOptions = this.datatableService.getJobsDatatableOptions();
         const params = this.activatedRoute.snapshot.queryParams;
         if (Object.keys(params).length > 0) {
             this.datatableOptions = {
@@ -81,6 +85,8 @@ export class JobsComponent implements OnInit {
                 error_category: params.error_category,
                 include_superseded: params.include_superseded
             };
+        } else {
+            this.datatableOptions = this.datatableService.getJobsDatatableOptions();
         }
         this.updateOptions();
     }
