@@ -1,4 +1,5 @@
 const hello = require('./handlers/hello');
+const jobLoad = require('./handlers/jobload');
 
 
 module.exports = {
@@ -8,5 +9,11 @@ module.exports = {
             path: '/hello',
             handler: hello
         });
+
+        server.route({
+            method: 'GET',
+            path: '/load/job',
+            handler: jobLoad
+        })
     }
 }
