@@ -16,6 +16,7 @@ import { JobsComponent } from './processing/jobs/jobs.component';
 import { JobService } from './processing/jobs/job.service';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { DashboardService } from './dashboard/dashboard.service';
 import { RecipesComponent } from './processing/recipes/recipes.component';
 import { RecipeService } from './processing/recipes/recipes.service';
 import { DatatableService } from './services/datatable.service';
@@ -52,7 +53,8 @@ import { JobTypeService } from './processing/job-types/job-type.service';
         JobService,
         JobTypeService,
         RecipeService,
-        DatatableService
+        DatatableService,
+        DashboardService
     ],
     bootstrap: [AppComponent]
 })
