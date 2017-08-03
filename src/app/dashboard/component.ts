@@ -1,25 +1,25 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DashboardService } from './dashboard.service';
+import { DashboardApiService } from './api.service';
 
 
 @Component({
     selector: 'app-dashboard',
-    templateUrl: './dashboard.component.html',
-    styleUrls: ['./dashboard.component.scss']
+    templateUrl: './component.html',
+    styleUrls: ['./component.scss']
 })
 export class DashboardComponent implements OnInit {
 
     data: any;
 
-    constructor(private dashboardService: DashboardService) {
+    constructor(private dashboardApiService: DashboardApiService) {
 
-        this.dashboardService.getJobLoad().then(data => {
-            let results = data.results;
-            let labels = [];
-            let pending = [];
-            let queue = [];
-            let running = [];
+        this.dashboardApiService.getJobLoad().then(data => {
+            const results = data.results;
+            const labels = [];
+            const pending = [];
+            const queue = [];
+            const running = [];
             results.forEach(result => {
                 labels.push(result['time']);
                 pending.push(result['pending_count']);

@@ -7,7 +7,7 @@ import { ApiResults } from '../api-results.model';
 
 
 @Injectable()
-export class DashboardService {
+export class DashboardApiService {
 
     constructor(private http: Http) {
     }

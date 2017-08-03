@@ -16,8 +16,8 @@ import { JobsComponent } from './processing/jobs/component';
 import { JobsApiService } from './processing/jobs/api.service';
 import { JobsDatatableService } from './processing/jobs/datatable.service';
 import { LogoComponent } from './logo/logo.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DashboardService } from './dashboard/dashboard.service';
+import { DashboardComponent } from './dashboard/component';
+import { DashboardApiService } from './dashboard/api.service';
 import { RecipesComponent } from './processing/recipes/component';
 import { RecipesApiService } from './processing/recipes/api.service';
 import { RecipesDatatableService } from './processing/recipes/datatable.service';
@@ -59,7 +59,7 @@ import { JobTypesDatatableService } from './processing/job-types/datatable.servi
         JobTypesDatatableService,
         RecipesApiService,
         RecipesDatatableService,
-        DashboardService
+        DashboardApiService
     ],
     bootstrap: [AppComponent]
 })
