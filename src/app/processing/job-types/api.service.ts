@@ -6,7 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { ApiResults } from '../../api-results.model';
 
 @Injectable()
-export class JobTypeService {
+export class JobTypesApiService {
     constructor(
         private http: Http
     ) { }

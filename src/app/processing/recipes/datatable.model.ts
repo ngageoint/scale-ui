@@ -1,4 +1,4 @@
-export class RecipesDatatableOptions {
+export class RecipesDatatable {
     constructor(
         public first: number,
         public rows: number,
@@ -14,7 +14,7 @@ export class RecipesDatatableOptions {
     ) {}
 }
 
-export const initialRecipesDatatableOptions: RecipesDatatableOptions = {
+export const initialRecipesDatatable: RecipesDatatable = {
     first: 0,
     rows: 10,
     sortField: 'last_modified',

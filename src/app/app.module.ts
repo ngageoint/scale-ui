@@ -12,23 +12,23 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
-import { ProcessingComponent } from './processing/processing.component';
-import { JobsComponent } from './processing/jobs/jobs.component';
-import { JobService } from './processing/jobs/job.service';
+import { JobsComponent } from './processing/jobs/component';
+import { JobsApiService } from './processing/jobs/api.service';
+import { JobsDatatableService } from './processing/jobs/datatable.service';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { RecipesComponent } from './processing/recipes/recipes.component';
-import { RecipeService } from './processing/recipes/recipes.service';
-import { DatatableService } from './services/datatable.service';
-import { JobTypesComponent } from './processing/job-types/job-types.component';
-import { JobTypeService } from './processing/job-types/job-type.service';
+import { RecipesComponent } from './processing/recipes/component';
+import { RecipesApiService } from './processing/recipes/api.service';
+import { RecipesDatatableService } from './processing/recipes/datatable.service';
+import { JobTypesComponent } from './processing/job-types/component';
+import { JobTypesApiService } from './processing/job-types/api.service';
+import { JobTypesDatatableService } from './processing/job-types/datatable.service';
 
 
 @NgModule({
     declarations: [
         AppComponent,
         NavbarComponent,
-        ProcessingComponent,
         JobsComponent,
         LogoComponent,
         DashboardComponent,
@@ -52,10 +52,12 @@ import { JobTypeService } from './processing/job-types/job-type.service';
         PaginatorModule
     ],
     providers: [
-        JobService,
-        JobTypeService,
-        RecipeService,
-        DatatableService
+        JobsApiService,
+        JobsDatatableService,
+        JobTypesApiService,
+        JobTypesDatatableService,
+        RecipesApiService,
+        RecipesDatatableService
     ],
     bootstrap: [AppComponent]
 })

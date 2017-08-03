@@ -1,32 +1,32 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { JobTypeService } from './job-type.service';
-import { JobType } from './job-type.model';
-import { JobTypesDatatableOptions } from './job-types-datatable-options.model';
-import { DatatableService } from '../../services/datatable.service';
+import { JobTypesApiService } from './api.service';
+import { JobType } from './api.model';
+import { JobTypesDatatable } from './datatable.model';
+import { JobTypesDatatableService } from './datatable.service';
 
 @Component({
     selector: 'app-job-types',
-    templateUrl: './job-types.component.html',
-    styleUrls: ['./job-types.component.scss']
+    templateUrl: './component.html',
+    styleUrls: ['./component.scss']
 })
 export class JobTypesComponent implements OnInit {
-    datatableOptions: JobTypesDatatableOptions;
+    datatableOptions: JobTypesDatatable;
     jobTypes: JobType[];
 
     constructor(
-        private datatableService: DatatableService,
-        private jobTypeService: JobTypeService,
+        private jobTypesDatatableService: JobTypesDatatableService,
+        private jobTypesApiService: JobTypesApiService,
         private router: Router,
         private activatedRoute: ActivatedRoute
     ) { }
 
     private updateData() {
-        this.jobTypeService.getJobTypes(this.datatableOptions).then(data => this.jobTypes = data.results as JobType[]);
+        this.jobTypesApiService.getJobTypes(this.datatableOptions).then(data => this.jobTypes = data.results as JobType[]);
     }
     private updateOptions() {
-        this.datatableService.setJobTypesDatatableOptions(this.datatableOptions);
+        this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
 
         // update querystring
         this.router.navigate(['/processing/job-types'], {
@@ -59,7 +59,7 @@ export class JobTypesComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.datatableOptions = this.datatableService.getJobTypesDatatableOptions();
+        this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
         const params = this.activatedRoute.snapshot.queryParams;
         if (Object.keys(params).length > 0) {
             this.datatableOptions = {

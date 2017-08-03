@@ -1,39 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent } from 'primeng/primeng';
 
-import { RecipeService } from './recipes.service';
-import { Recipe } from './recipe.model';
-import { RecipesDatatableOptions } from './recipes-datatable-options.model';
-import { DatatableService } from '../../services/datatable.service';
+import { RecipesApiService } from './api.service';
+import { Recipe } from './api.model';
+import { RecipesDatatable } from './datatable.model';
+import { RecipesDatatableService } from './datatable.service';
 
 @Component({
     selector: 'app-recipes',
-    templateUrl: './recipes.component.html',
-    styleUrls: ['./recipes.component.scss']
+    templateUrl: './component.html',
+    styleUrls: ['./component.scss']
 })
 
 export class RecipesComponent implements OnInit {
-    datatableOptions: RecipesDatatableOptions;
+    datatableOptions: RecipesDatatable;
     recipes: Recipe[];
     first: number;
     count: number;
 
     constructor(
-        private datatableService: DatatableService,
-        private recipeService: RecipeService,
+        private recipesDatatableService: RecipesDatatableService,
+        private recipesApiService: RecipesApiService,
         private router: Router,
         private activatedRoute: ActivatedRoute
     ) { }
 
     private updateData() {
-        this.recipeService.getRecipes(this.datatableOptions).then(data => {
+        this.recipesApiService.getRecipes(this.datatableOptions).then(data => {
             this.count = data.count;
             this.recipes = data.results as Recipe[];
         });
     }
     private updateOptions() {
-        this.datatableService.setRecipesDatatableOptions(this.datatableOptions);
+        this.recipesDatatableService.setRecipesDatatableOptions(this.datatableOptions);
 
         // update querystring
         this.router.navigate(['/processing/recipes'], {
@@ -82,7 +81,7 @@ export class RecipesComponent implements OnInit {
                 include_superseded: params.include_superseded
             };
         } else {
-            this.datatableOptions = this.datatableService.getRecipesDatatableOptions();
+            this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
         }
         this.updateOptions();
     }

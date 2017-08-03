@@ -1,4 +1,4 @@
-export class JobsDatatableOptions {
+export class JobsDatatable {
     constructor(
         public first: number,
         public rows: number,
@@ -18,7 +18,7 @@ export class JobsDatatableOptions {
     ) {}
 }
 
-export const initialJobsDatatableOptions: JobsDatatableOptions = {
+export const initialJobsDatatable: JobsDatatable = {
     first: 0,
     rows: 10,
     sortField: 'last_modified',

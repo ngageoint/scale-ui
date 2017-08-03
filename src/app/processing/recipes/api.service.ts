@@ -4,14 +4,14 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../../api-results.model';
-import { RecipesDatatableOptions } from './recipes-datatable-options.model';
+import { RecipesDatatable } from './datatable.model';
 
 @Injectable()
-export class RecipeService {
+export class RecipesApiService {
     constructor(
         private http: Http
     ) { }
-    getRecipes(params: RecipesDatatableOptions): Promise<ApiResults> {
+    getRecipes(params: RecipesDatatable): Promise<ApiResults> {
         // const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         // const page = (params.first / params.rows) + 1;
         // return this.http.get('http://scale.dcos.aisohio.net/service/scale/api/v5/jobs/?&order=' + sortStr + '&page=' + page +
