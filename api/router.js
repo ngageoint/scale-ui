@@ -6,13 +6,13 @@ module.exports = {
     init: function(server) {
         server.route({
             method: 'GET',
-            path: '/hello',
+            path: '/mocks/hello',
             handler: hello
         });
 
         server.route({
             method: 'GET',
-            path: '/load/job',
+            path: '/mocks/jobload',
             handler: jobLoad
         })
     }

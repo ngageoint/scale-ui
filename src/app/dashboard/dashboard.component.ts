@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { DashboardService } from './dashboard.service';
+
 
 @Component({
     selector: 'app-dashboard',
@@ -10,21 +12,40 @@ export class DashboardComponent implements OnInit {
 
     data: any;
 
-    constructor() {
-        this.data = {
-            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-            datasets: [{
-                label: 'First Dataset',
-                data: [65, 59, 80, 81, 56, 55, 40],
-                fill: false,
-                borderColor: '#4bc0c0'
-            }, {
-                label: 'Second Dataset',
-                data: [28, 48, 40, 19, 86, 27, 90],
-                fill: false,
-                borderColor: '#565656'
-            }]
-        };
+    constructor(private dashboardService: DashboardService) {
+
+        this.dashboardService.getJobLoad().then(data => {
+            let results = data.results;
+            let labels = [];
+            let pending = [];
+            let queue = [];
+            let running = [];
+            results.forEach(result => {
+                labels.push(result['time']);
+                pending.push(result['pending_count']);
+                queue.push(result['queue_count']);
+                running.push(result['running_count']);
+            });
+            this.data = {
+                labels: labels,
+                datasets: [{
+                    label: 'Pending',
+                    data: pending,
+                    fill: false,
+                    borderColor: '#058DC7'
+                }, {
+                    label: 'Queue',
+                    data: queue,
+                    fill: false,
+                    borderColor: '#50B432'
+                }, {
+                    label: 'Running',
+                    data: running,
+                    fill: false,
+                    borderColor: '#ED561B'
+                }]
+            };
+        });
     }
 
     ngOnInit() {
