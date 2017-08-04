@@ -60,8 +60,11 @@ export class JobTypesComponent implements OnInit {
 
     ngOnInit() {
         this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
-        const params = this.activatedRoute.snapshot.queryParams;
-        if (Object.keys(params).length > 0) {
+
+        if (this.activatedRoute.snapshot &&
+            Object.keys(this.activatedRoute.snapshot.queryParams).length > 0) {
+
+            const params = this.activatedRoute.snapshot.queryParams;
             this.datatableOptions = {
                 first: parseInt(params.first, 10),
                 rows: parseInt(params.rows, 10),
