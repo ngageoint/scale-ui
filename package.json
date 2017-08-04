@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "api": "nodemon --watch api api/ApiServer.js",
-    "start": "npm-run-all --parallel ngserve api",
+    "start": "npm-run-all --parallel ngserve api test lint",
     "ngserve": "ng serve --host 0.0.0.0 --port 8080 --disable-host-check --proxy-config proxy.conf.json",
     "build": "ng build",
     "test": "ng test",
