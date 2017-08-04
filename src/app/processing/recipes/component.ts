@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/primeng';
 
 import { RecipesApiService } from './api.service';
 import { Recipe } from './api.model';
@@ -17,13 +18,16 @@ export class RecipesComponent implements OnInit {
     recipes: Recipe[];
     first: number;
     count: number;
+    isInitialized: boolean;
 
     constructor(
         private recipesDatatableService: RecipesDatatableService,
         private recipesApiService: RecipesApiService,
         private router: Router,
         private activatedRoute: ActivatedRoute
-    ) { }
+    ) {
+        this.isInitialized = false;
+    }
 
     private updateData() {
         this.recipesApiService.getRecipes(this.datatableOptions).then(data => {
@@ -42,15 +46,6 @@ export class RecipesComponent implements OnInit {
         this.updateData();
     }
 
-    onSort(e: { field: string, order: number }) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            rows: 10,
-            sortField: e.field,
-            sortOrder: e.order
-        });
-        this.updateOptions();
-    }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
@@ -58,11 +53,20 @@ export class RecipesComponent implements OnInit {
         });
         this.updateOptions();
     }
-    onFilter(e: {filters: object, filteredValue: object[]}) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            filters: e.filters['recipe_type.title']['value']
-        });
-        this.updateOptions();
+    onLazyLoad(e: LazyLoadEvent) {
+        // let ngOnInit handle loading data to ensure query params are respected
+        if (this.isInitialized) {
+            this.datatableOptions = Object.assign(this.datatableOptions, {
+                first: 0,
+                sortField: e.sortField,
+                sortOrder: e.sortOrder,
+                filters: e.filters
+            });
+            this.updateOptions();
+        } else {
+            // data was just loaded by ngOnInit, so set flag to true
+            this.isInitialized = true;
+        }
     }
     ngOnInit() {
         const params = this.activatedRoute.snapshot.queryParams;
