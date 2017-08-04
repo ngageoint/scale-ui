@@ -12,17 +12,21 @@ export class RecipesApiService {
         private http: Http
     ) { }
     getRecipes(params: RecipesDatatable): Promise<ApiResults> {
-        // const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        // const page = (params.first / params.rows) + 1;
-        // return this.http.get('http://scale.dcos.aisohio.net/service/scale/api/v5/jobs/?&order=' + sortStr + '&page=' + page +
-        //     '&page_size=' + params.rows + '&started=2017-07-17T00:00:00.000Zended=2017-07-24T23:59:59.999Z')
-        return this.http.get('./assets/mock-recipes.json')
+        const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+        const page = (params.first / params.rows) + 1;
+        const urlParams = {
+            order: sortStr,
+            page: page,
+            started: params.started,
+            ended: params.ended,
+            type_id: params.type_id,
+            type_name: params.type_name,
+            batch_id: params.batch_id,
+            include_superseded: params.include_superseded
+        };
+        return this.http.get('/mocks/recipes', { params: urlParams })
           .toPromise()
-          .then(response => {
-              const r = response.json();
-              r.results = r.results.slice(params.first, params.first + params.rows);
-              return r as ApiResults;
-          })
+          .then(response => response.json() as ApiResults)
           .catch(this.handleError);
     }
     getRecipe(id: number): Promise<ApiResults> {

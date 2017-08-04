@@ -1,6 +1,6 @@
 <h2>Recipes</h2>
 <p-dataTable [value]="recipes" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
-             [sortOrder]="datatableOptions.sortOrder" (onSort)="onSort($event)" (onFilter)="onFilter($event)">
+             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
     <p-column field="recipe_type.title" header="Recipe Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
               [sortable]="true">
         <ng-template let-col let-recipe="rowData" pTemplate="body">
