@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { LazyLoadEvent } from 'primeng/primeng';
 
 import { JobTypesApiService } from './api.service';
 import { JobType } from './api.model';
@@ -11,19 +12,28 @@ import { JobTypesDatatableService } from './datatable.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
+
 export class JobTypesComponent implements OnInit {
     datatableOptions: JobTypesDatatable;
     jobTypes: JobType[];
+    first: number;
+    count: number;
+    isInitialized: boolean;
 
     constructor(
         private jobTypesDatatableService: JobTypesDatatableService,
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
         private activatedRoute: ActivatedRoute
-    ) { }
+    ) {
+        this.isInitialized = false;
+    }
 
     private updateData() {
-        this.jobTypesApiService.getJobTypes(this.datatableOptions).then(data => this.jobTypes = data.results as JobType[]);
+        this.jobTypesApiService.getJobTypes(this.datatableOptions).then(data => {
+            this.count = data.count;
+            this.jobTypes = data.results as JobType[];
+        });
     }
     private updateOptions() {
         this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
@@ -36,31 +46,29 @@ export class JobTypesComponent implements OnInit {
         this.updateData();
     }
 
-    onSort(e: { field: string, order: number }) {
+    paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            sortField: e.field,
-            sortOrder: e.order,
-            first: 0
+            first: e.first,
+            rows: parseInt(e.rows, 10)
         });
         this.updateOptions();
     }
-    onPage(e: { first: number, rows: number }) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            page: e.first
-        });
-        this.updateOptions();
+    onLazyLoad(e: LazyLoadEvent) {
+        // let ngOnInit handle loading data to ensure query params are respected
+        if (this.isInitialized) {
+            this.datatableOptions = Object.assign(this.datatableOptions, {
+                first: 0,
+                sortField: e.sortField,
+                sortOrder: e.sortOrder,
+                filters: e.filters
+            });
+            this.updateOptions();
+        } else {
+            // data was just loaded by ngOnInit, so set flag to true
+            this.isInitialized = true;
+        }
     }
-    onFilter(e: { filters: object }) {
-        console.log(e.filters);
-        // this.datatableOptions = Object.assign(this.datatableOptions, {
-        //     filters: e.filters
-        // });
-        // this.updateOptions();
-    }
-
     ngOnInit() {
-        this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
-
         if (this.activatedRoute.snapshot &&
             Object.keys(this.activatedRoute.snapshot.queryParams).length > 0) {
 
@@ -70,8 +78,16 @@ export class JobTypesComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                filters: params.filters
+                filters: params.filters,
+                started: params.started,
+                ended: params.ended,
+                name: params.name,
+                category: params.category,
+                is_active: params.is_active,
+                is_operational: params.is_operational
             };
+        } else {
+            this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
         }
         this.updateOptions();
     }

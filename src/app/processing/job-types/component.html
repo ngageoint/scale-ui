@@ -1,15 +1,15 @@
 <div class="ui-g">
     <div class="ui-g-12 ui-md-6">
         <div class="ui-g-5">
-            <p-dataTable [value]="jobTypes" [rows]="10" [paginator]="true" #dt (onPage)="onPage($event)"
-                         (onSort)="onSort($event)" (onFilter)="onFilter($event)" sortField="{{datatableOptions.sortField}}"
-                         sortOrder="{{datatableOptions.sortOrder}}">
+            <p-dataTable [value]="jobTypes" [rows]="10" [sortField]="datatableOptions.sortField"
+                         [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
                 <p-column field="title" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search" [sortable]="true">
                     <ng-template let-col let-jobType="rowData" pTemplate="body">
                         <span>{{jobType.title}} {{jobType.version}}</span>
                     </ng-template>
                 </p-column>
             </p-dataTable>
+            <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
         </div>
         <div class="ui-g-7">
             <h2>Select an algorithm to view its details</h2>

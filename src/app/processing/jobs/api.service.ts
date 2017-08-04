@@ -12,11 +12,24 @@ export class JobsApiService {
         private http: Http
     ) { }
     getJobs(params: JobsDatatable): Promise<ApiResults> {
-        // let sortStr = sortOrder < 0 ? '-' + sortField : sortField;
-        // return this.http.get('http://scale.dcos.aisohio.net/service/scale/api/v5/jobs/?ended=2017-07-24T23:59:59.999Z&order=' +
-        //         sortStr +
-        //         '&page=1&page_size=25&started=2017-07-17T00:00:00.000Z')
-        return this.http.get('./assets/mock-jobs.json')
+        const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+        const page = (params.first / params.rows) + 1;
+        const queryParams = {
+            order: sortStr,
+            page: page,
+            page_size: params.rows,
+            started: params.started,
+            ended: params.ended,
+            status: params.status,
+            job_id: params.job_id,
+            job_type_id: params.job_type_id,
+            job_type_name: params.job_type_name,
+            job_type_category: params.job_type_category,
+            batch_id: params.batch_id,
+            error_category: params.error_category,
+            include_superseded: params.include_superseded
+        };
+        return this.http.get('/mocks/jobs', { params: queryParams })
             .toPromise()
             .then(response => response.json() as ApiResults)
             .catch(this.handleError);

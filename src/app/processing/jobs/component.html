@@ -1,6 +1,6 @@
 <h2>Jobs</h2>
-    <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
-                 [sortOrder]="datatableOptions.sortOrder" (onSort)="onSort($event)" (onFilter)="onFilter($event)">
+<p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
+             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
     <p-column field="job_type.title" header="Job Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
               [sortable]="true">
         <ng-template let-col let-job="rowData" pTemplate="body">
@@ -10,9 +10,7 @@
     <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter" let-col>
             <ng-template pTemplate="filter" let-col>
-                <p-dropdown [options]="statusValues" [style]="{'width':'100%'}"
-                            (onChange)="dt.filter($event.value,col.field,col.filterMatchMode)"
-                            styleClass="ui-column-filter"></p-dropdown>
+                <p-dropdown [options]="statusValues" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
             </ng-template>
         </ng-template>
     </p-column>

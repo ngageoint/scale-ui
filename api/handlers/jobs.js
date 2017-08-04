@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const recipes = require('../data/recipes.json');
+const jobs = require('../data/jobs.json');
 
 module.exports = function (request, reply) {
-    var data = _.clone(recipes);
+    var data = _.clone(jobs);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
         if (params.order) {

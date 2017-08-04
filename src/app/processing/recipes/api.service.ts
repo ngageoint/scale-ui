@@ -8,15 +8,16 @@ import { RecipesDatatable } from './datatable.model';
 
 @Injectable()
 export class RecipesApiService {
-    constructor(
-        private http: Http
-    ) { }
+    constructor(private http: Http) {
+    }
+
     getRecipes(params: RecipesDatatable): Promise<ApiResults> {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = (params.first / params.rows) + 1;
-        const urlParams = {
+        const queryParams = {
             order: sortStr,
             page: page,
+            page_size: params.rows,
             started: params.started,
             ended: params.ended,
             type_id: params.type_id,
@@ -24,16 +25,17 @@ export class RecipesApiService {
             batch_id: params.batch_id,
             include_superseded: params.include_superseded
         };
-        return this.http.get('/mocks/recipes', { params: urlParams })
-          .toPromise()
-          .then(response => response.json() as ApiResults)
-          .catch(this.handleError);
+        return this.http.get('/mocks/recipes', { params: queryParams })
+            .toPromise()
+            .then(response => response.json() as ApiResults)
+            .catch(this.handleError);
     }
+
     getRecipe(id: number): Promise<ApiResults> {
         return this.http.get('./assets/mock-recipes.json')
-          .toPromise()
-          .then(response => response.json() as ApiResults)
-          .catch(this.handleError);
+            .toPromise()
+            .then(response => response.json() as ApiResults)
+            .catch(this.handleError);
     }
 
     private handleError(error: any): Promise<any> {
