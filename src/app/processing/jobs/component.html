@@ -1,17 +1,17 @@
 <h2>Jobs</h2>
 <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
-    <p-column field="job_type.title" header="Job Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
-              [sortable]="true">
+    <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
+        <ng-template pTemplate="filter" let-col>
+            <p-dropdown [options]="jobTypeNames" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
+        </ng-template>
         <ng-template let-col let-job="rowData" pTemplate="body">
             <span>{{job.job_type.title}} {{job.job_type.version}}</span>
         </ng-template>
     </p-column>
     <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter" let-col>
-            <ng-template pTemplate="filter" let-col>
-                <p-dropdown [options]="statusValues" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
-            </ng-template>
+            <p-dropdown [options]="statusValues" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
         </ng-template>
     </p-column>
     <p-column field="created" header="Created" [sortable]="true"></p-column>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
+import * as _ from 'lodash';
 
 import { JobsApiService } from './api.service';
 import { Job } from './api.model';
@@ -16,6 +17,7 @@ import { JobsDatatableService } from './datatable.service';
 export class JobsComponent implements OnInit {
     datatableOptions: JobsDatatable;
     jobs: Job[];
+    jobTypeNames: string[];
     statusValues: ['Running', 'Completed'];
     first: number;
     count: number;
@@ -34,6 +36,8 @@ export class JobsComponent implements OnInit {
         this.jobsApiService.getJobs(this.datatableOptions).then(data => {
             this.count = data.count;
             this.jobs = data.results as Job[];
+            this.jobTypeNames = _.map(this.jobs, 'job_type.name');
+            console.log(this.jobTypeNames);
         });
     }
     private updateOptions() {
@@ -60,8 +64,8 @@ export class JobsComponent implements OnInit {
             this.datatableOptions = Object.assign(this.datatableOptions, {
                 first: 0,
                 sortField: e.sortField,
-                sortOrder: e.sortOrder,
-                filters: e.filters
+                sortOrder: e.sortOrder
+                // job_type_name: e.filters['job_type.name']['value']
             });
             this.updateOptions();
         } else {
@@ -79,7 +83,6 @@ export class JobsComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                filters: params.filters,
                 started: params.started,
                 ended: params.ended,
                 status: params.status,
