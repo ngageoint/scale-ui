@@ -19,7 +19,7 @@ export class RecipesApiService {
         return this.http.get('./assets/mock-recipes.json')
           .toPromise()
           .then(response => {
-              let r = response.json();
+              const r = response.json();
               r.results = r.results.slice(params.first, params.first + params.rows);
               return r as ApiResults;
           })

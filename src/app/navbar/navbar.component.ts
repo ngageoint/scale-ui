@@ -21,8 +21,7 @@ export class NavbarComponent implements OnInit {
         if (this.selectedId === itemId) {
             // close it
             this.selectedId = null;
-        }
-        else {
+        } else {
             this.selectedId = itemId;
         }
     }
