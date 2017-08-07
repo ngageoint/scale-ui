@@ -11,20 +11,23 @@ export class JobTypesApiService {
     constructor( private http: Http) {
     }
 
-    getJobTypes(params: JobTypesDatatable): Promise<ApiResults> {
-        const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        const page = (params.first / params.rows) + 1;
-        const queryParams = {
-            order: sortStr,
-            page: page,
-            page_size: params.rows,
-            started: params.started,
-            ended: params.ended,
-            name: params.name,
-            category: params.category,
-            is_active: params.is_active,
-            is_operational: params.is_operational
-        };
+    getJobTypes(params?: JobTypesDatatable): Promise<ApiResults> {
+        let queryParams = {};
+        if (params) {
+            const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            queryParams = {
+                order: sortStr,
+                page: page,
+                page_size: params.rows,
+                started: params.started,
+                ended: params.ended,
+                name: params.name,
+                category: params.category,
+                is_active: params.is_active,
+                is_operational: params.is_operational
+            };
+        }
         return this.http.get('/mocks/job-types', { params: queryParams })
             .toPromise()
             .then(response => response.json() as ApiResults)

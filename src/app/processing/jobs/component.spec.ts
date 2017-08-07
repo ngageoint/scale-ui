@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { JobsApiService } from './api.service';
+import { JobTypesApiService } from '../job-types/api.service';
 import { JobsDatatableService } from './datatable.service';
 import { JobsComponent } from './component';
 
@@ -17,7 +18,7 @@ describe('JobsComponent', () => {
             declarations: [JobsComponent],
             imports: [HttpModule],
             providers: [
-                JobsApiService, JobsDatatableService,
+                JobsApiService, JobsDatatableService, JobTypesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
