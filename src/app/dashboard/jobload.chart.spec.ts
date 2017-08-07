@@ -9,12 +9,12 @@ const testApiData = {
         pending_count: 24,
         queued_count: 73,
         running_count: 76,
-        time: "2017-07-31T00:00:00.000Z"
+        time: '2017-07-31T00:00:00.000Z'
     }, {
         pending_count: 24,
         queued_count: 73,
         running_count: 76,
-        time: "2017-07-31T01:00:00.000Z"
+        time: '2017-07-31T01:00:00.000Z'
     }]
 };
 
