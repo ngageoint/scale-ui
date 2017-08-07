@@ -1,6 +1,5 @@
 
 
-
 export class JobLoadChart {
 
     public static options = {
