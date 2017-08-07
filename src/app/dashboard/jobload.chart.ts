@@ -1,10 +1,26 @@
+import * as moment from 'moment';
 
 
 export class JobLoadChart {
 
     public static options = {
+        elements: {
+            line: {
+                borderWidth: 1
+            },
+            point: {
+                radius: 1,
+                hitRadius: 1,
+                hoverRadius: 4
+            }
+        },
         legend: {
             position: 'bottom'
+        },
+        scales: {
+            xAxes: [{
+                display: false
+            }]
         }
     }
 
@@ -14,8 +30,11 @@ export class JobLoadChart {
         const pending = [];
         const queue = [];
         const running = [];
+
         results.forEach(result => {
-            labels.push(result['time']);
+            const tIn = result['time'];
+            const t = moment(tIn).format('YYYY-MM-DD HH:mm');
+            labels.push(t);
             pending.push(result['pending_count']);
             queue.push(result['queue_count']);
             running.push(result['running_count']);
