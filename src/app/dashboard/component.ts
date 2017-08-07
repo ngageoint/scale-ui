@@ -11,6 +11,7 @@ import { DashboardApiService } from './api.service';
 export class DashboardComponent implements OnInit {
 
     data: any;
+    options: any;
 
     constructor(private dashboardApiService: DashboardApiService) {
 
@@ -44,6 +45,11 @@ export class DashboardComponent implements OnInit {
                     fill: false,
                     borderColor: '#FF6761'
                 }]
+            };
+            this.options = {
+                legend: {
+                    position: 'bottom'
+                }
             };
         });
     }
