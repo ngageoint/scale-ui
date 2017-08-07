@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormsModule } from '@angular/forms';
 
 // Prime NG
 import { DataTableModule } from 'primeng/components/datatable/datatable';
@@ -43,6 +44,7 @@ import { JobTypesDatatableService } from './processing/job-types/datatable.servi
         BrowserModule,
         HttpModule,
         BrowserAnimationsModule,
+        FormsModule,
         // Prime NG
         ChartModule,
         DataTableModule,

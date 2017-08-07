@@ -3,7 +3,12 @@
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
     <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="jobTypeNames" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
+            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange($event)" [style]="{'width':'100%'}"
+                        styleClass="ui-column-filter">
+                <ng-template let-jobType p-template="item">
+                    {{ jobType.label }}
+                </ng-template>
+            </p-dropdown>
         </ng-template>
         <ng-template let-col let-job="rowData" pTemplate="body">
             <span>{{job.job_type.title}} {{job.job_type.version}}</span>
