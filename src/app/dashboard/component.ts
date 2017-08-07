@@ -47,11 +47,6 @@ export class DashboardComponent implements OnInit {
                 }]
             };
             this.options = {
-                title: {
-                    display: true,
-                    text: 'Job Load',
-                    fontSize: 16
-                },
                 legend: {
                     position: 'bottom'
                 }

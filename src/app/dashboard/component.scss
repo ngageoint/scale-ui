@@ -1,0 +1,17 @@
+@import '../../defaults/colors';
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.dashboard__item {
+    background: $clr-white;
+    background-image: linear-gradient(to bottom, $clr-white, $clr-gray-98);
+    border-radius: 0.25em;
+    box-shadow: 0 0 0.5em $clr-gray-70;
+    flex: 1;
+    margin: 0.5em;
+    min-height: 400px;
+    padding: 0.5em 1.0em;
+}
