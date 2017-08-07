@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 
 import { DashboardApiService } from './api.service';
+import { JobLoadChart } from './jobload.chart';
 
 
 @Component({
@@ -10,51 +12,17 @@ import { DashboardApiService } from './api.service';
 })
 export class DashboardComponent implements OnInit {
 
-    data: any;
-    options: any;
+    private jobloadChart: any;
 
     constructor(private dashboardApiService: DashboardApiService) {
-
-        this.dashboardApiService.getJobLoad().then(data => {
-            const results = data.results;
-            const labels = [];
-            const pending = [];
-            const queue = [];
-            const running = [];
-            results.forEach(result => {
-                labels.push(result['time']);
-                pending.push(result['pending_count']);
-                queue.push(result['queue_count']);
-                running.push(result['running_count']);
-            });
-            this.data = {
-                labels: labels,
-                datasets: [{
-                    label: 'Running',
-                    data: running,
-                    fill: false,
-                    borderColor: '#ADB229'
-                }, {
-                    label: 'Pending',
-                    data: pending,
-                    fill: false,
-                    borderColor: '#48ACFF'
-                }, {
-                    label: 'Queue',
-                    data: queue,
-                    fill: false,
-                    borderColor: '#FF6761'
-                }]
-            };
-            this.options = {
-                legend: {
-                    position: 'bottom'
-                }
-            };
-        });
+        this.jobloadChart = {};
     }
 
     ngOnInit() {
+        this.dashboardApiService.getJobLoad().then(data => {
+            this.jobloadChart.data = JobLoadChart.convertApiData(data);
+            this.jobloadChart.options = JobLoadChart.options;
+        });
     }
 
 }
