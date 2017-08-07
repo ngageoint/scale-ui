@@ -3,6 +3,12 @@
 
 export class JobLoadChart {
 
+    public static options = {
+        legend: {
+            position: 'bottom'
+        }
+    }
+
     public static convertApiData(data) {
         const results = data.results;
         const labels = [];
@@ -15,7 +21,7 @@ export class JobLoadChart {
             queue.push(result['queue_count']);
             running.push(result['running_count']);
         });
-        
+
         const out = {
             labels: labels,
             datasets: [{
@@ -36,12 +42,6 @@ export class JobLoadChart {
             }]
         };
         return out;
-    }
-
-    public static options = {
-        legend: {
-            position: 'bottom'
-        }
     }
 
 }
