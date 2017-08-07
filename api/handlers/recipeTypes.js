@@ -1,15 +1,10 @@
 const _ = require('lodash');
-const recipes = require('../data/recipes.json');
+const recipeTypes = require('../data/recipe-types.json');
 
 module.exports = function (request, reply) {
-    var data = _.clone(recipes);
+    var data = _.clone(recipeTypes);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
-        if (params.type_name) {
-            data.results = _.filter(data.results, function (r) {
-                return r.recipe_type.name.toLowerCase().includes(params.type_name);
-            });
-        }
         if (params.order) {
             if (_.startsWith(params.order, '-')) {
                 data.results = _.orderBy(data.results, [_.trimStart(params.order, '-')], ['desc']);

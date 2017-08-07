@@ -3,32 +3,32 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { RecipesApiService } from './api.service';
-import { RecipesDatatableService} from './datatable.service';
-import { RecipeTypesApiService } from '../recipe-types/api.service';
-import { RecipesComponent } from './component';
+import { RecipeTypesApiService } from './api.service';
+import { RecipeTypesDatatableService } from './datatable.service';
+import { RecipeTypesComponent } from './component';
 
-describe('RecipesComponent', () => {
-    let component: RecipesComponent;
-    let fixture: ComponentFixture<RecipesComponent>;
+
+describe('RecipeTypesComponent', () => {
+    let component: RecipeTypesComponent;
+    let fixture: ComponentFixture<RecipeTypesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RecipesComponent],
+            declarations: [RecipeTypesComponent],
             imports: [HttpModule],
             providers: [
-                RecipesApiService, RecipesDatatableService, RecipeTypesApiService,
+                RecipeTypesApiService, RecipeTypesDatatableService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
-        .compileComponents();
+            .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RecipesComponent);
+        fixture = TestBed.createComponent(RecipeTypesComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

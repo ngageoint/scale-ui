@@ -1,8 +1,15 @@
 <h2>Recipes</h2>
 <p-dataTable [value]="recipes" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
-    <p-column field="recipe_type.title" header="Recipe Type" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search"
-              [sortable]="true">
+    <p-column field="type.name" header="Recipe Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
+        <ng-template pTemplate="filter" let-col>
+            <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType" (onChange)="onChange($event)"
+                        [style]="{'width':'100%'}" styleClass="ui-column-filter">
+                <ng-template let-recipeType p-template="item">
+                    {{ recipeType.label }}
+                </ng-template>
+            </p-dropdown>
+        </ng-template>
         <ng-template let-col let-recipe="rowData" pTemplate="body">
             <span>{{recipe.recipe_type.title}} {{recipe.recipe_type.version}}</span>
         </ng-template>

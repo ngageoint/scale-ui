@@ -44,7 +44,9 @@ export class JobsComponent implements OnInit {
         });
     }
     private updateOptions() {
-        this.datatableOptions = _.pickBy(this.datatableOptions);
+        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
 
         // update querystring
@@ -56,7 +58,6 @@ export class JobsComponent implements OnInit {
     }
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().then(data => {
-            this.count = data.count;
             this.jobTypes = data.results as JobType[];
             const self = this;
             const selectItems = [];
@@ -92,7 +93,6 @@ export class JobsComponent implements OnInit {
                 first: 0,
                 sortField: e.sortField,
                 sortOrder: e.sortOrder
-                // job_type_name: e.filters['job_type.name']['value']
             });
             this.updateOptions();
         } else {

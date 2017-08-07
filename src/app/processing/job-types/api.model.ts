@@ -29,9 +29,9 @@ export class JobType {
         public shared_mem_required: number,
         public disk_out_const_required: number,
         public disk_out_mult_required: number,
-        public created: Date,
-        public archived: Date,
-        public paused: Date,
-        public last_modified: Date
+        public created: string,
+        public archived: string,
+        public paused: string,
+        public last_modified: string
     ) {}
 }

@@ -5,13 +5,15 @@ import { DashboardComponent } from './dashboard/component';
 import { JobsComponent } from './processing/jobs/component';
 import { RecipesComponent } from './processing/recipes/component';
 import { JobTypesComponent } from './processing/job-types/component';
+import { RecipeTypesComponent } from './processing/recipe-types/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
     { path: 'processing/jobs', component: JobsComponent },
     { path: 'processing/job-types', component: JobTypesComponent },
-    { path: 'processing/recipes', component: RecipesComponent }
+    { path: 'processing/recipes', component: RecipesComponent },
+    { path: 'processing/recipe-types', component: RecipeTypesComponent }
 ];
 
 @NgModule({

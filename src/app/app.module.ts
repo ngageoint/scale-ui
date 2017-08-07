@@ -26,6 +26,9 @@ import { RecipesDatatableService } from './processing/recipes/datatable.service'
 import { JobTypesComponent } from './processing/job-types/component';
 import { JobTypesApiService } from './processing/job-types/api.service';
 import { JobTypesDatatableService } from './processing/job-types/datatable.service';
+import { RecipeTypesComponent } from './processing/recipe-types/component';
+import { RecipeTypesApiService } from './processing/recipe-types/api.service';
+import { RecipeTypesDatatableService } from './processing/recipe-types/datatable.service';
 
 
 @NgModule({
@@ -37,7 +40,8 @@ import { JobTypesDatatableService } from './processing/job-types/datatable.servi
         DashboardComponent,
         SubnavComponent,
         RecipesComponent,
-        JobTypesComponent
+        JobTypesComponent,
+        RecipeTypesComponent
     ],
     imports: [
         AppRoutingModule,
@@ -63,7 +67,9 @@ import { JobTypesDatatableService } from './processing/job-types/datatable.servi
         JobTypesDatatableService,
         RecipesApiService,
         RecipesDatatableService,
-        DashboardApiService
+        DashboardApiService,
+        RecipeTypesApiService,
+        RecipeTypesDatatableService
     ],
     bootstrap: [AppComponent]
 })

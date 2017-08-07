@@ -8,12 +8,12 @@ import { RecipesDatatable } from './datatable.model';
 
 @Injectable()
 export class RecipesApiService {
-    constructor(private http: Http) {
-    }
-
+    constructor(
+        private http: Http
+    ) { }
     getRecipes(params: RecipesDatatable): Promise<ApiResults> {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        const page = (params.first / params.rows) + 1;
+        const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         const queryParams = {
             order: sortStr,
             page: page,

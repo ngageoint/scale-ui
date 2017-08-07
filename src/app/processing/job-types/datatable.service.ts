@@ -4,7 +4,7 @@ import { initialJobTypesDatatable, JobTypesDatatable } from './datatable.model';
 
 @Injectable()
 export class JobTypesDatatableService {
-    jobTypesDatatable: JobTypesDatatable
+    jobTypesDatatable: JobTypesDatatable;
 
     constructor() {
         this.jobTypesDatatable = initialJobTypesDatatable;

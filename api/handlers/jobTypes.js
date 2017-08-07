@@ -12,6 +12,7 @@ module.exports = function (request, reply) {
                 data.results = _.orderBy(data.results, [params.order], ['asc']);
             }
         }
+        data.count = data.results.length;
         if (params.page && params.page_size) {
             var pagedResults = _.chunk(data.results, params.page_size);
             data.results = pagedResults[params.page - 1];

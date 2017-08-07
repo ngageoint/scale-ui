@@ -1,11 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import * as _ from 'lodash';
 
 import { RecipesApiService } from './api.service';
 import { Recipe } from './api.model';
+import { RecipeType } from '../recipe-types/api.model';
 import { RecipesDatatable } from './datatable.model';
 import { RecipesDatatableService } from './datatable.service';
+import { RecipeTypesApiService } from '../recipe-types/api.service';
 
 @Component({
     selector: 'app-recipes',
@@ -16,6 +19,9 @@ import { RecipesDatatableService } from './datatable.service';
 export class RecipesComponent implements OnInit {
     datatableOptions: RecipesDatatable;
     recipes: Recipe[];
+    recipeTypes: RecipeType[];
+    recipeTypeOptions: SelectItem[];
+    selectedRecipeType: string;
     first: number;
     count: number;
     isInitialized: boolean;
@@ -23,6 +29,7 @@ export class RecipesComponent implements OnInit {
     constructor(
         private recipesDatatableService: RecipesDatatableService,
         private recipesApiService: RecipesApiService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private activatedRoute: ActivatedRoute
     ) {
@@ -36,6 +43,9 @@ export class RecipesComponent implements OnInit {
         });
     }
     private updateOptions() {
+        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
         this.recipesDatatableService.setRecipesDatatableOptions(this.datatableOptions);
 
         // update querystring
@@ -44,6 +54,28 @@ export class RecipesComponent implements OnInit {
         });
 
         this.updateData();
+    }
+    private getRecipeTypes() {
+        this.recipeTypesApiService.getRecipeTypes().then(data => {
+            this.recipeTypes = data.results as RecipeType[];
+            const self = this;
+            const selectItems = [];
+            _.forEach(this.recipeTypes, function (recipeType) {
+                selectItems.push({
+                    label: recipeType.title + ' ' + recipeType.version,
+                    value: recipeType.name
+                });
+                if (self.datatableOptions.type_name === recipeType.name) {
+                    self.selectedRecipeType = recipeType.name;
+                }
+            });
+            this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
+            this.recipeTypeOptions.unshift({
+                label: 'All',
+                value: ''
+            });
+            this.updateOptions();
+        });
     }
 
     paginate(e) {
@@ -59,14 +91,20 @@ export class RecipesComponent implements OnInit {
             this.datatableOptions = Object.assign(this.datatableOptions, {
                 first: 0,
                 sortField: e.sortField,
-                sortOrder: e.sortOrder,
-                filters: e.filters
+                sortOrder: e.sortOrder
             });
             this.updateOptions();
         } else {
             // data was just loaded by ngOnInit, so set flag to true
             this.isInitialized = true;
         }
+    }
+    onChange(e) {
+        e.originalEvent.preventDefault();
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            type_name: e.value
+        });
+        this.updateOptions();
     }
     ngOnInit() {
         if (this.activatedRoute.snapshot &&
@@ -78,7 +116,6 @@ export class RecipesComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                filters: params.filters,
                 started: params.started,
                 ended: params.ended,
                 type_id: params.type_id,
@@ -89,6 +126,6 @@ export class RecipesComponent implements OnInit {
         } else {
             this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
         }
-        this.updateOptions();
+        this.getRecipeTypes();
     }
 }

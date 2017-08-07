@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
 
-import { JobTypesApiService } from './api.service';
-import { JobType } from './api.model';
-import { JobTypesDatatable } from './datatable.model';
-import { JobTypesDatatableService } from './datatable.service';
+import { RecipeTypesApiService } from './api.service';
+import { RecipeType } from './api.model';
+import { RecipeTypesDatatable } from './datatable.model';
+import { RecipeTypesDatatableService } from './datatable.service';
 
 @Component({
     selector: 'app-job-types',
@@ -13,16 +13,16 @@ import { JobTypesDatatableService } from './datatable.service';
     styleUrls: ['./component.scss']
 })
 
-export class JobTypesComponent implements OnInit {
-    datatableOptions: JobTypesDatatable;
-    jobTypes: JobType[];
+export class RecipeTypesComponent implements OnInit {
+    datatableOptions: RecipeTypesDatatable;
+    recipeTypes: RecipeType[];
     first: number;
     count: number;
     isInitialized: boolean;
 
     constructor(
-        private jobTypesDatatableService: JobTypesDatatableService,
-        private jobTypesApiService: JobTypesApiService,
+        private recipeTypesDatatableService: RecipeTypesDatatableService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private activatedRoute: ActivatedRoute
     ) {
@@ -30,16 +30,16 @@ export class JobTypesComponent implements OnInit {
     }
 
     private updateData() {
-        this.jobTypesApiService.getJobTypes(this.datatableOptions).then(data => {
+        this.recipeTypesApiService.getRecipeTypes(this.datatableOptions).then(data => {
             this.count = data.count;
-            this.jobTypes = data.results as JobType[];
+            this.recipeTypes = data.results as RecipeType[];
         });
     }
     private updateOptions() {
-        this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
+        this.recipeTypesDatatableService.setRecipeTypesDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/processing/job-types'], {
+        this.router.navigate(['/processing/recipe-types'], {
             queryParams: this.datatableOptions
         });
 
@@ -78,14 +78,10 @@ export class JobTypesComponent implements OnInit {
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
                 started: params.started,
-                ended: params.ended,
-                name: params.name,
-                category: params.category,
-                is_active: params.is_active,
-                is_operational: params.is_operational
+                ended: params.ended
             };
         } else {
-            this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
+            this.datatableOptions = this.recipeTypesDatatableService.getRecipeTypesDatatableOptions();
         }
         this.updateOptions();
     }
