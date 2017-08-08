@@ -1,0 +1,9 @@
+@import '../../../../defaults/colors';
+
+
+.healthbar {
+    background-color: $clr-gray-40;
+    border-radius: 1.5px;
+    height: 50%;
+    margin: 3px 0;
+}
