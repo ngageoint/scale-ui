@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../../api-results.model';
 import { RecipesDatatable } from './datatable.model';
+import { Recipe } from './api.model';
 
 @Injectable()
 export class RecipesApiService {
@@ -31,10 +32,10 @@ export class RecipesApiService {
             .catch(this.handleError);
     }
 
-    getRecipe(id: number): Promise<ApiResults> {
-        return this.http.get('./assets/mock-recipes.json')
+    getRecipe(id: number): Promise<Recipe> {
+        return this.http.get('/mocks/recipes/' + id)
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => response.json() as Recipe)
             .catch(this.handleError);
     }
 

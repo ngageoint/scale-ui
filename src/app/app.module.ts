@@ -32,6 +32,7 @@ import { RecipeTypesDatatableService } from './processing/recipe-types/datatable
 import { StatusComponent } from './navbar/status/status.component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
 import { JobDetailsComponent } from './processing/jobs/details.component';
+import { RecipeDetailsComponent } from './processing/recipes/details.component';
 
 
 @NgModule({
@@ -47,7 +48,8 @@ import { JobDetailsComponent } from './processing/jobs/details.component';
         RecipeTypesComponent,
         StatusComponent,
         HealthbarComponent,
-        JobDetailsComponent
+        JobDetailsComponent,
+        RecipeDetailsComponent
     ],
     imports: [
         AppRoutingModule,

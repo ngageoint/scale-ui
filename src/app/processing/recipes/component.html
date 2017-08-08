@@ -1,7 +1,10 @@
 <h2>Recipes</h2>
 <p-dataTable [value]="recipes" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
-             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
-    <p-column field="type.name" header="Recipe Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
+             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [responsive]="true"
+             resizableColumns="true" selectionMode="single" [(selection)]="selectedRecipe"
+             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
+    <p-column field="type.name" header="Recipe Type" [filter]="true" filterMatchMode="equals" [sortable]="true"
+              [style]="{'overflow':'visible'}">
         <ng-template pTemplate="filter" let-col>
             <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType" (onChange)="onChange($event)"
                         [style]="{'width':'100%'}" styleClass="ui-column-filter">

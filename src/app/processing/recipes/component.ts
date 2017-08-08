@@ -21,6 +21,7 @@ export class RecipesComponent implements OnInit {
     recipes: Recipe[];
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
+    selectedRecipe: Recipe;
     selectedRecipeType: string;
     first: number;
     count: number;
@@ -105,6 +106,9 @@ export class RecipesComponent implements OnInit {
             type_name: e.value
         });
         this.updateOptions();
+    }
+    onRowSelect(e) {
+        this.router.navigate(['/processing/recipes/' + e.data.id]);
     }
     ngOnInit() {
         if (this.route.snapshot &&
