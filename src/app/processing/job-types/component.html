@@ -3,7 +3,7 @@
         <div class="ui-g-5">
             <p-dataTable [value]="jobTypes" [rows]="10" [sortField]="datatableOptions.sortField"
                          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
-                         [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
+                         [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
                 <p-column field="title" [sortable]="true">
                     <ng-template let-col let-jobType="rowData" pTemplate="body">
                         <span>{{jobType.title}} {{jobType.version}}</span>

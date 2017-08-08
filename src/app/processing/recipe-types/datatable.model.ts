@@ -4,6 +4,7 @@ export class RecipeTypesDatatable {
         public rows: number,
         public sortField: string,
         public sortOrder: number,
+        public id: number,
         public started: Date,
         public ended: Date
     ) {}
@@ -14,6 +15,7 @@ export const initialRecipeTypesDatatable: RecipeTypesDatatable = {
     rows: 10,
     sortField: 'title',
     sortOrder: 1,
+    id: null,
     started: null,
     ended: null
 };

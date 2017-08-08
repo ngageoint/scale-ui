@@ -16,6 +16,8 @@ import { RecipeTypesDatatableService } from './datatable.service';
 export class RecipeTypesComponent implements OnInit {
     datatableOptions: RecipeTypesDatatable;
     recipeTypes: RecipeType[];
+    selectedRecipeType: RecipeType;
+    selectedRecipeTypeKeys: string[];
     first: number;
     count: number;
     isInitialized: boolean;
@@ -45,6 +47,12 @@ export class RecipeTypesComponent implements OnInit {
 
         this.updateData();
     }
+    private getRecipeTypeDetail(id: number) {
+        this.recipeTypesApiService.getRecipeType(id).then(data => {
+            this.selectedRecipeType = data as RecipeType;
+            this.selectedRecipeTypeKeys = Object.keys(this.selectedRecipeType);
+        });
+    }
 
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -67,6 +75,16 @@ export class RecipeTypesComponent implements OnInit {
             this.isInitialized = true;
         }
     }
+    onRowSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            id: e.data.id
+        });
+        this.recipeTypesDatatableService.setRecipeTypesDatatableOptions(this.datatableOptions);
+        this.router.navigate(['/processing/recipe-types'], {
+            queryParams: this.datatableOptions
+        });
+        this.getRecipeTypeDetail(e.data.id);
+    }
     ngOnInit() {
         if (this.route.snapshot &&
             Object.keys(this.route.snapshot.queryParams).length > 0) {
@@ -77,6 +95,7 @@ export class RecipeTypesComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
+                id: params.id,
                 started: params.started,
                 ended: params.ended
             };
@@ -84,5 +103,8 @@ export class RecipeTypesComponent implements OnInit {
             this.datatableOptions = this.recipeTypesDatatableService.getRecipeTypesDatatableOptions();
         }
         this.updateOptions();
+        if (this.datatableOptions.id) {
+            this.getRecipeTypeDetail(this.datatableOptions.id);
+        }
     }
 }

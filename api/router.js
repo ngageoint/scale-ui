@@ -7,6 +7,7 @@ const jobs = require('./handlers/jobs');
 const jobTypes = require('./handlers/jobTypes');
 const jobDetails = require('./handlers/jobDetails');
 const jobTypeDetails = require('./handlers/jobTypeDetails');
+const recipeTypeDetails = require('./handlers/recipeTypeDetails');
 
 module.exports = {
     init: function(server) {
@@ -38,6 +39,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/recipes/{id}',
             handler: recipeDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/recipe-types/{id}',
+            handler: recipeTypeDetails
         });
 
         server.route({
