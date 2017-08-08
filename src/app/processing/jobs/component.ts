@@ -21,6 +21,7 @@ export class JobsComponent implements OnInit {
     jobs: Job[];
     jobTypes: JobType[];
     jobTypeOptions: SelectItem[];
+    selectedJob: Job;
     selectedJobType: string;
     statusValues: ['Running', 'Completed'];
     first: number;
@@ -32,7 +33,7 @@ export class JobsComponent implements OnInit {
         private jobsApiService: JobsApiService,
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private route: ActivatedRoute
     ) {
         this.isInitialized = false;
     }
@@ -107,11 +108,14 @@ export class JobsComponent implements OnInit {
         });
         this.updateOptions();
     }
+    onRowSelect(e) {
+        this.router.navigate(['/processing/jobs/' + e.data.id]);
+    }
     ngOnInit() {
-        if (this.activatedRoute.snapshot &&
-            Object.keys(this.activatedRoute.snapshot.queryParams).length > 0) {
+        if (this.route.snapshot &&
+            Object.keys(this.route.snapshot.queryParams).length > 0) {
 
-            const params = this.activatedRoute.snapshot.queryParams;
+            const params = this.route.snapshot.queryParams;
             this.datatableOptions = {
                 first: parseInt(params.first, 10),
                 rows: parseInt(params.rows, 10),

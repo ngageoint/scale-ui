@@ -1,6 +1,8 @@
 <h2>Jobs</h2>
 <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
-             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
+             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
+             [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
+             (onRowSelect)="onRowSelect($event)">
     <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter" let-col>
             <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange($event)" [style]="{'width':'100%'}"

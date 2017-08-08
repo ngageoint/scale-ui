@@ -1,0 +1,7 @@
+<h2>Job Details</h2>
+<a routerLink="/processing/jobs">&lt; Jobs List</a>
+<ul>
+    <li *ngFor="let key of jobKeys">
+        {{key}}: {{job[key]}}
+    </li>
+</ul>

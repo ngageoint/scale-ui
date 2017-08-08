@@ -4,6 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../../api-results.model';
+import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
 
 @Injectable()
@@ -34,10 +35,10 @@ export class JobsApiService {
             .then(response => response.json() as ApiResults)
             .catch(this.handleError);
     }
-    getJob(id: number): Promise<ApiResults> {
-        return this.http.get('./assets/mock-jobs.json')
+    getJob(id: number): Promise<Job> {
+        return this.http.get('/mocks/jobs/' + id)
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => response.json() as Job)
             .catch(this.handleError);
     }
 
