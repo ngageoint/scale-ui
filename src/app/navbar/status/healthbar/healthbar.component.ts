@@ -12,7 +12,6 @@ export class HealthbarComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log('Percentage: ' + this.percentage);
     }
 
     getBarClass() {
