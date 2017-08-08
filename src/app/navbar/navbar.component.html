@@ -13,9 +13,10 @@
         <div [class]="getNavItemStyles('data')">
             <a (click)="selectNavItem($event, 'data')">Data</a>
         </div>
-    </div>
-    <div class="navbar__status">
-        <app-status></app-status>
+
+        <span class="navbar__status">
+            <app-status></app-status>
+        </span>
     </div>
 </div>
 <app-subnav [sectionId]="selectedId" (onNavigate)="onNavigate($event)"></app-subnav>
