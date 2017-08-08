@@ -4,23 +4,23 @@
 $navbar-transition: all 0.35s ease-out;
 $navbar-height: 47px;
 $navshadow: 0 0 0.5em $clr-black;
-
 $navbar-status-width: 250px;
 
+
 .navbar-ctr {
-    background: $clr-navbar-dark;
-    box-shadow: $navshadow;
     height: $navbar-height;
 }
 
 .navbar {
     align-items: stretch;
+    background: $clr-navbar-dark;
+    box-shadow: $navshadow;
     display: flex;
     height: $navbar-height;
     justify-content: flex-start;
     left: 0;
     position: absolute;
-    right: $navbar-status-width;
+    right: 0;
     top: 0;
     z-index: 1001;
 }
@@ -45,7 +45,7 @@ $navbar-status-width: 250px;
         }
     }
 
-    &:last-child {
+    &:last-of-type {
         border-right: 1px solid $clr-navbar-light;
     }
 }
