@@ -18,10 +18,12 @@ export class JobDetailsComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-        this.jobsApiService.getJob(id).then(data => {
-            this.job = data as Job;
-            this.jobKeys = Object.keys(this.job);
-        });
+        if (this.route.snapshot) {
+            const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+            this.jobsApiService.getJob(id).then(data => {
+                this.job = data as Job;
+                this.jobKeys = Object.keys(this.job);
+            });
+        }
     }
 }
