@@ -2,8 +2,9 @@
     <div class="ui-g-12 ui-md-6">
         <div class="ui-g-5">
             <p-dataTable [value]="jobTypes" [rows]="10" [sortField]="datatableOptions.sortField"
-                         [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
-                <p-column field="title" [filter]="true" filterMatchMode="contains" filterPlaceholder="Search" [sortable]="true">
+                         [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
+                         [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
+                <p-column field="title" [sortable]="true">
                     <ng-template let-col let-jobType="rowData" pTemplate="body">
                         <span>{{jobType.title}} {{jobType.version}}</span>
                     </ng-template>
@@ -12,7 +13,15 @@
             <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
         </div>
         <div class="ui-g-7">
-            <h2>Select an algorithm to view its details</h2>
+            <h2 *ngIf="!selectedJobType">Select an algorithm to view its details</h2>
+            <div *ngIf="selectedJobType">
+                <h2>{{selectedJobType.title}} {{selectedJobType.version}}</h2>
+                <ul>
+                    <li *ngFor="let key of selectedJobTypeKeys">
+                        {{key}}: {{selectedJobType[key]}}
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
 </div>

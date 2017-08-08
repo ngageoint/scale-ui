@@ -16,6 +16,8 @@ import { JobTypesDatatableService } from './datatable.service';
 export class JobTypesComponent implements OnInit {
     datatableOptions: JobTypesDatatable;
     jobTypes: JobType[];
+    selectedJobType: JobType;
+    selectedJobTypeKeys: string[];
     first: number;
     count: number;
     isInitialized: boolean;
@@ -45,6 +47,12 @@ export class JobTypesComponent implements OnInit {
 
         this.updateData();
     }
+    private getJobTypeDetail(id: number) {
+        this.jobTypesApiService.getJobType(id).then(data => {
+            this.selectedJobType = data as JobType;
+            this.selectedJobTypeKeys = Object.keys(this.selectedJobType);
+        });
+    }
 
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -67,6 +75,16 @@ export class JobTypesComponent implements OnInit {
             this.isInitialized = true;
         }
     }
+    onRowSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            id: e.data.id
+        });
+        this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
+        this.router.navigate(['/processing/job-types'], {
+            queryParams: this.datatableOptions
+        });
+        this.getJobTypeDetail(e.data.id);
+    }
     ngOnInit() {
         if (this.route.snapshot &&
             Object.keys(this.route.snapshot.queryParams).length > 0) {
@@ -77,6 +95,7 @@ export class JobTypesComponent implements OnInit {
                 rows: parseInt(params.rows, 10),
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
+                id: params.id,
                 started: params.started,
                 ended: params.ended,
                 name: params.name,
@@ -88,5 +107,8 @@ export class JobTypesComponent implements OnInit {
             this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
         }
         this.updateOptions();
+        if (this.datatableOptions.id) {
+            this.getJobTypeDetail(this.datatableOptions.id);
+        }
     }
 }
