@@ -7,3 +7,20 @@
     height: 50%;
     margin: 3px 0;
 }
+
+.healthbar__status {
+    border-radius: 1.5px;
+    height: 100%;
+}
+
+.healthbar__status-good {
+    background: #00A43C;
+}
+
+.healthbar__status-warn {
+    background: #FACA4F;
+}
+
+.healthbar__status-error {
+    background: #EC324B;
+}
