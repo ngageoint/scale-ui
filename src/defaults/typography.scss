@@ -18,6 +18,7 @@ $font-weight-normal: 300;
 $font-weight-bold: 700;
 
 body {
+    color: $clr-navbar-dark;
     font-family: $fontstack-body;
     font-size: 15px;
     font-weight: $font-weight-light;
@@ -30,6 +31,7 @@ h3,
 h4,
 h5,
 h6 {
+    color: $clr-navbar-dark;
     font-family: $fontstack-headings;
     font-weight: $font-weight-bold;
     line-height: 1.35em;
