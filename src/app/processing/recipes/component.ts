@@ -31,7 +31,7 @@ export class RecipesComponent implements OnInit {
         private recipesApiService: RecipesApiService,
         private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
-        private activatedRoute: ActivatedRoute
+        private route: ActivatedRoute
     ) {
         this.isInitialized = false;
     }
@@ -107,10 +107,10 @@ export class RecipesComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        if (this.activatedRoute.snapshot &&
-            Object.keys(this.activatedRoute.snapshot.queryParams).length > 0) {
+        if (this.route.snapshot &&
+            Object.keys(this.route.snapshot.queryParams).length > 0) {
 
-            const params = this.activatedRoute.snapshot.queryParams;
+            const params = this.route.snapshot.queryParams;
             this.datatableOptions = {
                 first: parseInt(params.first, 10),
                 rows: parseInt(params.rows, 10),
