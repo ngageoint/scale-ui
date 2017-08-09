@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-    private selectedId = 'configuration';
+    private selectedId = null;
 
     constructor() {
     }
