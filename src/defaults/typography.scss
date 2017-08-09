@@ -14,14 +14,14 @@ $fontstack-body: $roboto;
 $fontstack-headings: $roboto-condensed;
 
 $font-weight-light: 100;
-$font-weight-normal: 300;
+$font-weight-normal: 400;
 $font-weight-bold: 700;
 
 body {
     color: $clr-navbar-dark;
     font-family: $fontstack-body;
     font-size: 15px;
-    font-weight: $font-weight-light;
+    font-weight: $font-weight-normal;
     line-height: 1.45em;
 }
 
