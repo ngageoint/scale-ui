@@ -2,7 +2,7 @@
 
 
 $navbar-transition: all 0.35s ease-out;
-$navbar-height: 47px;
+$navbar-height: 50px;
 $navshadow: 0 0 0.5em $clr-black;
 $navbar-status-width: 250px;
 
@@ -29,6 +29,7 @@ $navbar-status-width: 250px;
     border-left: 1px solid $clr-navbar-light;
     display: flex;
     justify-content: center;
+    user-select: none;
 
     a {
         color: $clr-gray-85;
@@ -50,35 +51,19 @@ $navbar-status-width: 250px;
     }
 }
 
-.gray-navitem {
-    background: $clr-gray-90;
-    color: $clr-black;
-    text-shadow: 0 1px 0 $clr-white;
-
-    &:hover {
-        background: $clr-gray-90;
-        color: $clr-black;
-        text-shadow: 0 1px 0 $clr-white;
-    }
-}
-
-.blue-navitem {
-    background: $clr-scale-blue2;
-    color: $clr-white;
-    text-shadow: 0 1px 0 $clr-black;
-
-    &:hover {
-        background: $clr-scale-blue2;
-        color: $clr-white;
-        text-shadow: 0 1px 0 $clr-black;
-    }
-}
-
 .navbar__item-selected {
     @extend .navbar__item;
 
     a {
-        @extend .blue-navitem;
+        background: $clr-scale-blue2;
+        color: $clr-white;
+        text-shadow: 0 1px 0 $clr-black;
+
+        &:hover {
+            background: $clr-scale-blue2;
+            color: $clr-white;
+            text-shadow: 0 1px 0 $clr-black;
+        }
     }
 }
 

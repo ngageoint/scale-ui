@@ -2,26 +2,11 @@
 @import '../../../defaults/colors';
 
 
-.gray-subnav {
-    background: $clr-gray-85;
-    background-image: linear-gradient(to bottom, $clr-gray-90, $clr-gray-80);
-    border-bottom: 1px solid $clr-gray-90;
-    color: $clr-black;
-
-    .subnav__link {
-        background: $clr-gray-85;
-        color: $clr-highlight;
-
-        &:hover {
-            background: $clr-white;
-        }
-    }
-}
-
 .blue-subnav {
     background: $clr-scale-blue2;
     background-image: linear-gradient(to bottom, $clr-scale-blue2, darken($clr-scale-blue2, 3%));
     border-bottom: 1px solid $clr-gray-90;
+    box-shadow: $navshadow;
     color: $clr-white;
     text-shadow: 0 1px 0 $clr-black;
 
@@ -39,14 +24,15 @@
 .subnav {
     @extend .blue-subnav;
 
-    box-shadow: $navshadow;
     display: flex;
     min-height: 250px;
     padding: 2.0em 1.5em;
 
     .subnav__header {
-        font-size: 32px;
+        font-size: 27px;
         font-weight: bold;
+        line-height: 1.25em;
+        text-shadow: 1px 1px 7px darken($clr-highlight, 45%);
         width: 32%;
     }
 
@@ -67,9 +53,6 @@
         display: inline-block;
         margin-bottom: 0.35em;
         padding: 0.5em;
-
-        &:hover {
-        }
     }
 }
 
