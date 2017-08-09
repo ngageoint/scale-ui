@@ -1,6 +1,7 @@
 @import '../navbar.component.scss';
 @import '../../../defaults/colors';
 
+
 .status {
     color: $clr-gray-80;
     height: $navbar-height;
@@ -11,12 +12,12 @@
 
     .status__item-name {
         display: inline;
-        flex: 1;
         font-size: 10px;
         font-weight: bold;
         line-height: 14px;
         padding: 0;
         text-align: right;
+        width: 50px;
     }
 
     .status__item-value {
