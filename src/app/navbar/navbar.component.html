@@ -7,11 +7,14 @@
             </a>
         </div>
 
-        <div [class]="getNavItemStyles('processing')">
-            <a (click)="selectNavItem($event, 'processing')">Processing</a>
+        <div [class]="getNavItemStyles('configuration')">
+            <a (click)="selectNavItem($event, 'configuration')">Configuration</a>
         </div>
         <div [class]="getNavItemStyles('data')">
             <a (click)="selectNavItem($event, 'data')">Data</a>
+        </div>
+        <div [class]="getNavItemStyles('status')">
+            <a (click)="selectNavItem($event, 'status')">System Status</a>
         </div>
 
         <span class="navbar__status">
