@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 
 import { DashboardApiService } from './api.service';
-import { JobLoadChart } from './jobload.chart';
+import { DashboardDatatableService } from './datatable.service';
+import { JobType } from './api.model';
 
 
 @Component({
@@ -12,17 +13,25 @@ import { JobLoadChart } from './jobload.chart';
 })
 export class DashboardComponent implements OnInit {
 
-    private jobloadChart: any;
+    private jobTypes: JobType[];
+    private count: number;
 
-    constructor(private dashboardApiService: DashboardApiService) {
-        this.jobloadChart = {};
+    constructor(
+        private dashboardApiService: DashboardApiService,
+        private dashboardDatatableService: DashboardDatatableService
+    ) {
+
     }
 
     ngOnInit() {
-        this.dashboardApiService.getJobLoad().then(data => {
-            this.jobloadChart.data = JobLoadChart.convertApiData(data);
-            this.jobloadChart.options = JobLoadChart.options;
-        });
+        this.updateData();
     }
 
+    private updateData() {
+        this.dashboardApiService.getJobTypes().then(data => {
+            console.log('Got api data: ' + JSON.stringify(data));
+            this.count = data.count;
+            this.jobTypes = data.results as JobType[];
+        });
+    }
 }
