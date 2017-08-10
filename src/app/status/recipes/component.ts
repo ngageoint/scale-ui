@@ -3,35 +3,34 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 
-import { JobsApiService } from './api.service';
-import { Job } from './api.model';
-import { JobsDatatable } from './datatable.model';
-import { JobsDatatableService } from './datatable.service';
-import { JobTypesApiService } from '../job-types/api.service';
-import { JobType } from '../job-types/api.model';
+import { RecipesApiService } from './api.service';
+import { Recipe } from './api.model';
+import { RecipeType } from '../../configuration/recipe-types/api.model';
+import { RecipesDatatable } from './datatable.model';
+import { RecipesDatatableService } from './datatable.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
 @Component({
-    selector: 'app-jobs',
+    selector: 'app-recipes',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
 
-export class JobsComponent implements OnInit {
-    datatableOptions: JobsDatatable;
-    jobs: Job[];
-    jobTypes: JobType[];
-    jobTypeOptions: SelectItem[];
-    selectedJob: Job;
-    selectedJobType: string;
-    statusValues: ['Running', 'Completed'];
+export class RecipesComponent implements OnInit {
+    datatableOptions: RecipesDatatable;
+    recipes: Recipe[];
+    recipeTypes: RecipeType[];
+    recipeTypeOptions: SelectItem[];
+    selectedRecipe: Recipe;
+    selectedRecipeType: string;
     first: number;
     count: number;
     isInitialized: boolean;
 
     constructor(
-        private jobsDatatableService: JobsDatatableService,
-        private jobsApiService: JobsApiService,
-        private jobTypesApiService: JobTypesApiService,
+        private recipesDatatableService: RecipesDatatableService,
+        private recipesApiService: RecipesApiService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -39,40 +38,40 @@ export class JobsComponent implements OnInit {
     }
 
     private updateData() {
-        this.jobsApiService.getJobs(this.datatableOptions).then(data => {
+        this.recipesApiService.getRecipes(this.datatableOptions).then(data => {
             this.count = data.count;
-            this.jobs = data.results as Job[];
+            this.recipes = data.results as Recipe[];
         });
     }
     private updateOptions() {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
+        this.recipesDatatableService.setRecipesDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/processing/jobs'], {
+        this.router.navigate(['/processing/recipes'], {
             queryParams: this.datatableOptions
         });
 
         this.updateData();
     }
-    private getJobTypes() {
-        this.jobTypesApiService.getJobTypes().then(data => {
-            this.jobTypes = data.results as JobType[];
+    private getRecipeTypes() {
+        this.recipeTypesApiService.getRecipeTypes().then(data => {
+            this.recipeTypes = data.results as RecipeType[];
             const self = this;
             const selectItems = [];
-            _.forEach(this.jobTypes, function (jobType) {
+            _.forEach(this.recipeTypes, function (recipeType) {
                 selectItems.push({
-                    label: jobType.title + ' ' + jobType.version,
-                    value: jobType.name
+                    label: recipeType.title + ' ' + recipeType.version,
+                    value: recipeType.name
                 });
-                if (self.datatableOptions.job_type_name === jobType.name) {
-                    self.selectedJobType = jobType.name;
+                if (self.datatableOptions.type_name === recipeType.name) {
+                    self.selectedRecipeType = recipeType.name;
                 }
             });
-            this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
-            this.jobTypeOptions.unshift({
+            this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
+            this.recipeTypeOptions.unshift({
                 label: 'All',
                 value: ''
             });
@@ -104,12 +103,12 @@ export class JobsComponent implements OnInit {
     onChange(e) {
         e.originalEvent.preventDefault();
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            job_type_name: e.value
+            type_name: e.value
         });
         this.updateOptions();
     }
     onRowSelect(e) {
-        this.router.navigate(['/processing/jobs/' + e.data.id]);
+        this.router.navigate(['/processing/recipes/' + e.data.id]);
     }
     ngOnInit() {
         if (this.route.snapshot &&
@@ -123,18 +122,14 @@ export class JobsComponent implements OnInit {
                 sortOrder: parseInt(params.sortOrder, 10),
                 started: params.started,
                 ended: params.ended,
-                status: params.status,
-                job_id: params.job_id,
-                job_type_id: params.job_type_id,
-                job_type_name: params.job_type_name,
-                job_type_category: params.job_type_category,
+                type_id: params.type_id,
+                type_name: params.type_name,
                 batch_id: params.batch_id,
-                error_category: params.error_category,
                 include_superseded: params.include_superseded
             };
         } else {
-            this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
+            this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
         }
-        this.getJobTypes();
+        this.getRecipeTypes();
     }
 }

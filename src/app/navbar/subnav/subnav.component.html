@@ -7,22 +7,12 @@
         <div class="subnav__links">
             <ul>
                 <li><a class="subnav__link"
-                    routerLink="/processing/jobs"
-                    (click)="navigate()">Jobs</a>
-                </li>
-
-                <li><a class="subnav__link"
-                       routerLink="/processing/job-types"
+                       routerLink="/configuration/job-types"
                        (click)="navigate()">Job Types</a>
                 </li>
 
                 <li><a class="subnav__link"
-                    routerLink="/processing/recipes"
-                    (click)="navigate()">Recipes</a>
-                </li>
-
-                <li><a class="subnav__link"
-                       routerLink="/processing/recipe-types"
+                       routerLink="/configuration/recipe-types"
                        (click)="navigate()">Recipe Types</a>
                 </li>
             </ul>
@@ -44,6 +34,17 @@
             System Status
         </div>
         <div class="subnav__links">
+            <ul>
+                <li><a class="subnav__link"
+                    routerLink="/status/jobs"
+                    (click)="navigate()">Jobs</a>
+                </li>
+
+                <li><a class="subnav__link"
+                    routerLink="/status/recipes"
+                    (click)="navigate()">Recipes</a>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

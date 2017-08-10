@@ -3,21 +3,22 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { RecipesApiService } from './api.service';
-import { RecipesDatatableService} from './datatable.service';
-import { RecipeTypesApiService } from '../recipe-types/api.service';
-import { RecipesComponent } from './component';
+import { JobsApiService } from './api.service';
+import { JobTypesApiService } from '../../configuration/job-types/api.service';
+import { JobsDatatableService } from './datatable.service';
+import { JobsComponent } from './component';
 
-describe('RecipesComponent', () => {
-    let component: RecipesComponent;
-    let fixture: ComponentFixture<RecipesComponent>;
+
+describe('JobsComponent', () => {
+    let component: JobsComponent;
+    let fixture: ComponentFixture<JobsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RecipesComponent],
+            declarations: [JobsComponent],
             imports: [HttpModule],
             providers: [
-                RecipesApiService, RecipesDatatableService, RecipeTypesApiService,
+                JobsApiService, JobsDatatableService, JobTypesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
@@ -28,7 +29,7 @@ describe('RecipesComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RecipesComponent);
+        fixture = TestBed.createComponent(JobsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
