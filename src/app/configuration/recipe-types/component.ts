@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
+import { TreeNode } from 'primeng/primeng';
+import * as _ from 'lodash';
 
 import { RecipeTypesApiService } from './api.service';
 import { RecipeType } from './api.model';
@@ -16,6 +18,7 @@ import { RecipeTypesDatatableService } from './datatable.service';
 export class RecipeTypesComponent implements OnInit {
     datatableOptions: RecipeTypesDatatable;
     recipeTypes: RecipeType[];
+    recipeTypeData: TreeNode[];
     selectedRecipeType: RecipeType;
     selectedRecipeTypeKeys: string[];
     first: number;
@@ -41,7 +44,7 @@ export class RecipeTypesComponent implements OnInit {
         this.recipeTypesDatatableService.setRecipeTypesDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/processing/recipe-types'], {
+        this.router.navigate(['/configuration/recipe-types'], {
             queryParams: this.datatableOptions
         });
 
@@ -51,6 +54,41 @@ export class RecipeTypesComponent implements OnInit {
         this.recipeTypesApiService.getRecipeType(id).then(data => {
             this.selectedRecipeType = data as RecipeType;
             this.selectedRecipeTypeKeys = Object.keys(this.selectedRecipeType);
+
+            this.recipeTypeData = [{
+                label: 'Start',
+                expanded: true,
+                children: []
+            }];
+
+            _.forEach(this.selectedRecipeType.definition.jobs, (job) => {
+                if (job.dependencies.length === 0) {
+                    this.recipeTypeData[0].children.push({
+                        label: job.name,
+                        expanded: true,
+                        children: []
+                    });
+                } else {
+                    // recursively find parent jobs
+                    const filter = (collection, dependencyName, jobName) => {
+                        _.forEach(collection, (item) => {
+                            if (item.label === dependencyName) {
+                                item.children.push({
+                                    label: jobName,
+                                    expanded: true,
+                                    children: []
+                                 });
+                                return false;
+                            } else {
+                                filter(item.children, dependencyName, jobName);
+                            }
+                        });
+                    };
+                    _.forEach(job.dependencies, (dependency) => {
+                        filter(this.recipeTypeData[0].children, dependency.name, job.name);
+                    });
+                }
+            });
         });
     }
 
@@ -80,7 +118,7 @@ export class RecipeTypesComponent implements OnInit {
             id: e.data.id
         });
         this.recipeTypesDatatableService.setRecipeTypesDatatableOptions(this.datatableOptions);
-        this.router.navigate(['/processing/recipe-types'], {
+        this.router.navigate(['/configuration/recipe-types'], {
             queryParams: this.datatableOptions
         });
         this.getRecipeTypeDetail(e.data.id);

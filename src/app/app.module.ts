@@ -2,13 +2,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Prime NG
 import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { ChartModule } from 'primeng/components/chart/chart';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
+import { TreeModule } from 'primeng/components/tree/tree';
+import { OrganizationChartModule } from 'primeng/primeng';
+import { InputTextModule } from 'primeng/components/inputtext/inputtext';
+import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
+import { PanelModule } from 'primeng/components/panel/panel';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -28,6 +33,7 @@ import { RecipesDatatableService } from './status/recipes/datatable.service';
 import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesApiService } from './configuration/job-types/api.service';
 import { JobTypesDatatableService } from './configuration/job-types/datatable.service';
+import { JobTypesImportComponent } from './configuration/job-types/import.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { RecipeTypesApiService } from './configuration/recipe-types/api.service';
 import { RecipeTypesDatatableService } from './configuration/recipe-types/datatable.service';
@@ -50,7 +56,8 @@ import { HealthbarComponent } from './navbar/status/healthbar/healthbar.componen
         StatusComponent,
         HealthbarComponent,
         JobDetailsComponent,
-        RecipeDetailsComponent
+        RecipeDetailsComponent,
+        JobTypesImportComponent
     ],
     imports: [
         AppRoutingModule,
@@ -58,11 +65,17 @@ import { HealthbarComponent } from './navbar/status/healthbar/healthbar.componen
         HttpModule,
         BrowserAnimationsModule,
         FormsModule,
+        ReactiveFormsModule,
         // Prime NG
         ChartModule,
         DataTableModule,
         DropdownModule,
-        PaginatorModule
+        PaginatorModule,
+        TreeModule,
+        OrganizationChartModule,
+        InputTextModule,
+        InputTextareaModule,
+        PanelModule
     ],
     exports: [
         DataTableModule,

@@ -1,4 +1,5 @@
 import { JobType } from '../job-types/api.model';
+import { RecipeTypeDefinition } from './definition.model';
 
 export class RecipeType {
     constructor(
@@ -8,7 +9,7 @@ export class RecipeType {
         public title: string,
         public description: string,
         public is_active: boolean,
-        public definition: object,
+        public definition: RecipeTypeDefinition,
         public revision_num: number,
         public created: string,
         public last_modified: string,
@@ -17,3 +18,4 @@ export class RecipeType {
         public job_types: JobType[]
     ) {}
 }
+
