@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit {
 
     private updateData() {
         this.dashboardApiService.getJobTypes().then(data => {
-            console.log('Got api data: ' + JSON.stringify(data));
             this.count = data.count;
             this.jobTypes = data.results as JobType[];
         });
