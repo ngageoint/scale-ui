@@ -1,0 +1,39 @@
+<h2>Import Algorithm</h2>
+<form [formGroup]="importForm" (ngSubmit)="importForm.value">
+    <p-panel [header]="jobType.title">
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="name">Name *:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText type="text" id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
+                        <i class="fa fa-close"></i>
+                        Name is required
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="name">Title:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText type="text" id="title" formControlName="title" [(ngModel)]="jobType.title"/>
+                </div>
+                <div class="ui-grid-col-4"></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="name">Description:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <textarea pInputTextarea type="text" id="description" formControlName="description" [(ngModel)]="jobType.description"></textarea>
+                </div>
+                <div class="ui-grid-col-4"></div>
+            </div>
+        </div>
+    </p-panel>
+</form>
