@@ -1,11 +1,11 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
+import { FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { JobTypesApiService } from './api.service';
 import { JobTypesImportComponent } from './import.component';
-import { JobType } from './api.model';
 
 
 describe('JobTypesImportComponent', () => {
@@ -14,10 +14,10 @@ describe('JobTypesImportComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [JobTypesImportComponent, JobType],
+            declarations: [JobTypesImportComponent],
             imports: [HttpModule],
             providers: [
-                JobTypesApiService,
+                JobTypesApiService, FormBuilder,
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

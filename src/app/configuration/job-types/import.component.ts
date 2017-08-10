@@ -33,7 +33,7 @@ export class JobTypesImportComponent implements OnInit {
     onSubmit(value: string) {
         this.submitted = true;
         this.msgs = [];
-        this.msgs.push({severity:'info', summary:'Success', detail:'Form Submitted'});
+        this.msgs.push({severity: 'info', summary: 'Success', detail: 'Form Submitted'});
     }
     get diagnostic() { return JSON.stringify(this.importForm.value); }
 }

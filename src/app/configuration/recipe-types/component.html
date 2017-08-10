@@ -1,6 +1,6 @@
-<div class="ui-g">
-    <div class="ui-g-12 ui-md-6">
-        <div class="ui-g-5">
+<div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-3">
             <p-dataTable [value]="recipeTypes" [rows]="10" [sortField]="datatableOptions.sortField"
                          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
                          [(selection)]="selectedRecipeType" (onRowSelect)="onRowSelect($event)">
@@ -12,15 +12,17 @@
             </p-dataTable>
             <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
         </div>
-        <div class="ui-g-7">
+        <div class="ui-grid-col-9">
             <h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>
             <div *ngIf="selectedRecipeType">
-                <h2>{{selectedRecipeType.title}} {{selectedRecipeType.version}}</h2>
-                <ul>
-                    <li *ngFor="let key of selectedRecipeTypeKeys">
-                        {{key}}: {{selectedRecipeType[key]}}
-                    </li>
-                </ul>
+                <h2>{{selectedRecipeType.title}} v{{selectedRecipeType.version}}</h2>
+                <p-tree [value]="recipeTypeData" layout="horizontal"></p-tree>
+                <!--<p-organizationChart [value]="recipeTypeData"></p-organizationChart>-->
+                <!--<ul>-->
+                <!--<li *ngFor="let key of selectedRecipeTypeKeys">-->
+                <!--{{key}}: {{selectedRecipeType[key]}}-->
+                <!--</li>-->
+                <!--</ul>-->
             </div>
         </div>
     </div>

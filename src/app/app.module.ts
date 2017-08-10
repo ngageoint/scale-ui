@@ -9,6 +9,8 @@ import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { ChartModule } from 'primeng/components/chart/chart';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
+import { TreeModule } from 'primeng/components/tree/tree';
+import { OrganizationChartModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
 import { PanelModule } from 'primeng/components/panel/panel';
@@ -68,6 +70,8 @@ import { HealthbarComponent } from './navbar/status/healthbar/healthbar.componen
         DataTableModule,
         DropdownModule,
         PaginatorModule,
+        TreeModule,
+        OrganizationChartModule,
         InputTextModule,
         InputTextareaModule,
         PanelModule

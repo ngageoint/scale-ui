@@ -41,7 +41,7 @@ export class JobTypesComponent implements OnInit {
         this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/processing/job-types'], {
+        this.router.navigate(['/configuration/job-types'], {
             queryParams: this.datatableOptions
         });
 
@@ -80,7 +80,7 @@ export class JobTypesComponent implements OnInit {
             id: e.data.id
         });
         this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
-        this.router.navigate(['/processing/job-types'], {
+        this.router.navigate(['/configuration/job-types'], {
             queryParams: this.datatableOptions
         });
         this.getJobTypeDetail(e.data.id);
