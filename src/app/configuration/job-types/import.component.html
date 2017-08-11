@@ -1,7 +1,18 @@
 <h2>Import Algorithm</h2>
 <form [formGroup]="importForm" (ngSubmit)="importForm.value">
-    <p-panel [header]="jobType.title">
-        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+    <p-panel>
+        <p-header>
+            <div class="ui-helper-clearfix">
+                <span class="ui-panel-title">{{jobType.title}}</span>
+                <div style="float: right">
+                    <label for="json">JSON Mode</label>
+                    <p-inputSwitch inputId="json" [(ngModel)]="jsonMode" (onChange)="onToggleJson($event)"
+                                   formControlName="json"></p-inputSwitch>
+                </div>
+                <!--<p-splitButton [style]="{'float':'right'}" label="Save" icon="fa-check" (onClick)="save()" [model]="items"></p-splitButton>-->
+            </div>
+        </p-header>
+        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" *ngIf="!jsonMode">
             <div class="ui-grid-row">
                 <div class="ui-grid-col-2">
                     <label for="name">Name *:</label>
@@ -10,7 +21,8 @@
                     <input pInputText id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
                 </div>
                 <div class="ui-grid-col-4">
-                    <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
+                    <div class="ui-message ui-messages-error ui-corner-all"
+                         *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
                         <i class="fa fa-close"></i>
                         Name is required
                     </div>
@@ -27,10 +39,26 @@
             </div>
             <div class="ui-grid-row">
                 <div class="ui-grid-col-2">
+                    <label for="name">Version *:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText id="version" formControlName="version" placeholder="Required" [(ngModel)]="jobType.version"/>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-error ui-corner-all"
+                         *ngIf="!importForm.controls['version'].valid && importForm.controls['version'].dirty">
+                        <i class="fa fa-close"></i>
+                        Version is required
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
                     <label for="name">Description:</label>
                 </div>
                 <div class="ui-grid-col-6">
-                    <textarea pInputTextarea type="text" id="description" formControlName="description" [(ngModel)]="jobType.description"></textarea>
+                    <textarea pInputTextarea type="text" id="description" rows="6" formControlName="description"
+                              [(ngModel)]="jobType.description"></textarea>
                 </div>
                 <div class="ui-grid-col-4"></div>
             </div>
@@ -57,16 +85,100 @@
                     <label for="icon">Icon:</label>
                 </div>
                 <div class="ui-grid-col-6">
-                    <p-dropdown id="icon" formControlName="icon" [options]="icons" [(ngModel)]="selectedIcon" [style]="{'width':'150px'}"
-                                filter="filter">
+                    <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
+                               [style]="{'max-height':'250px'}">
                         <ng-template let-icon pTemplate="item">
-                            <div class="ui-helper-clearfix" style="position: relative; height: 25px;">
-                                <span class="fa {{icon.label}}"></span>
+                            <div class="ui-helper-clearfix">
+                                <span class="fa fa-fw {{icon.label}}"></span> {{icon.label}}
                             </div>
                         </ng-template>
-                    </p-dropdown>
+                    </p-listbox>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-info ui-corner-all">
+                        <span class="fa fa-info-circle"></span> An icon used to distinguish the algorithm in the Scale user interface
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="docker-image">Docker Image:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText id="docker-image" formControlName="docker-image" [(ngModel)]="jobType.docker_image"/>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-info ui-corner-all">
+                        <span class="fa fa-info-circle"></span> The Docker image containing the code to run for this
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="name">Timeout:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-spinner size="30" id="timeout" formControlName="timeout" [(ngModel)]="jobType.timeout" [min]="0"></p-spinner>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-info ui-corner-all">
+                        <span class="fa fa-info-circle"></span> The maximum amount of time to run before being killed (in seconds)
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="max-tries">Max Tries:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-spinner size="30" id="max-tries" formControlName="max-tries" [(ngModel)]="jobType.max_tries" [min]="0"></p-spinner>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-info ui-corner-all">
+                        <span class="fa fa-info-circle"></span> The maximum number of times to try executing the algorithm in case of errors
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="cpus">CPUs:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-spinner size="30" id="cpus" formControlName="cpus" [(ngModel)]="jobType.cpus_required" [min]="0"
+                               [step]="0.25"></p-spinner>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-info ui-corner-all">
+                        <span class="fa fa-info-circle"></span> The number of CPUs needed
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="memory">Memory:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-spinner size="30" id="memory" formControlName="memory" [(ngModel)]="jobType.mem_required" [min]="0"
+                               [step]="100"></p-spinner>
+                </div>
+                <div class="ui-grid-col-4">
+                    <div class="ui-message ui-messages-info ui-corner-all">
+                        <span class="fa fa-info-circle"></span> A constant amount of memory in MiB required
+                    </div>
+                </div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2"></div>
+                <div class="ui-grid-col-6">
+                    <button pButton type="submit" label="Submit" [disabled]="!importForm.valid"
+                            (click)="onSubmit(importForm.value)"></button>
                 </div>
                 <div class="ui-grid-col-4"></div>
+            </div>
+            <div style="text-align:center;margin-top:20px" *ngIf="submitted">
+                Form Submitted
+                <br>
+                {{diagnostic}}
             </div>
         </div>
     </p-panel>

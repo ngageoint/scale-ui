@@ -10,10 +10,13 @@ import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { ChartModule } from 'primeng/components/chart/chart';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
 import { TreeModule } from 'primeng/components/tree/tree';
-import { OrganizationChartModule } from 'primeng/primeng';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
 import { PanelModule } from 'primeng/components/panel/panel';
+import { ButtonModule } from 'primeng/components/button/button';
+import { SpinnerModule } from 'primeng/components/spinner/spinner';
+import { ListboxModule } from 'primeng/components/listbox/listbox';
+import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -72,10 +75,13 @@ import { HealthbarComponent } from './navbar/status/healthbar/healthbar.componen
         DropdownModule,
         PaginatorModule,
         TreeModule,
-        OrganizationChartModule,
         InputTextModule,
         InputTextareaModule,
-        PanelModule
+        PanelModule,
+        ButtonModule,
+        SpinnerModule,
+        ListboxModule,
+        InputSwitchModule
     ],
     exports: [
         DataTableModule,

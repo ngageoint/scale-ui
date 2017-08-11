@@ -12,12 +12,12 @@ import { JobTypesApiService } from './api.service';
     styleUrls: ['./import.component.scss']
 })
 export class JobTypesImportComponent implements OnInit {
+    jsonMode: boolean;
     msgs: Message[] = [];
     jobType: JobType;
     importForm: FormGroup;
     submitted: boolean;
     icons: SelectItem[];
-    selectedIcon: SelectItem;
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
@@ -26,15 +26,25 @@ export class JobTypesImportComponent implements OnInit {
     }
     ngOnInit() {
         this.importForm = this.fb.group({
+            'json': new FormControl(''),
             'name': new FormControl('', Validators.required),
             'title': new FormControl(''),
             'version': new FormControl('', Validators.required),
             'description': new FormControl(''),
             'author-name': new FormControl(''),
             'author-url': new FormControl(''),
-            'icon': new FormControl('')
+            'icon': new FormControl(''),
+            'docker-image': new FormControl(''),
+            'timeout': new FormControl(''),
+            'max-tries': new FormControl(''),
+            'cpus': new FormControl(''),
+            'memory': new FormControl('')
         });
         this.jobTypesApiService.getIcons().then(icons => this.icons = icons);
+    }
+    onToggleJson(e) {
+        this.jsonMode = e.checked;
+        console.log(this.jsonMode);
     }
     onSubmit(value: string) {
         this.submitted = true;
