@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Message } from 'primeng/primeng';
+import { Message, SelectItem } from 'primeng/primeng';
 
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
@@ -16,6 +16,8 @@ export class JobTypesImportComponent implements OnInit {
     jobType: JobType;
     importForm: FormGroup;
     submitted: boolean;
+    icons: SelectItem[];
+    selectedIcon: SelectItem;
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
@@ -27,8 +29,12 @@ export class JobTypesImportComponent implements OnInit {
             'name': new FormControl('', Validators.required),
             'title': new FormControl(''),
             'version': new FormControl('', Validators.required),
-            'description': new FormControl('')
+            'description': new FormControl(''),
+            'author-name': new FormControl(''),
+            'author-url': new FormControl(''),
+            'icon': new FormControl('')
         });
+        this.jobTypesApiService.getIcons().then(icons => this.icons = icons);
     }
     onSubmit(value: string) {
         this.submitted = true;

@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { ApiResults } from '../../api-results.model';
 import { JobTypesDatatable } from './datatable.model';
 import { JobType } from './api.model';
+import { SelectItem } from 'primeng/primeng';
 
 @Injectable()
 export class JobTypesApiService {
@@ -39,6 +40,13 @@ export class JobTypesApiService {
         return this.http.get('/mocks/job-types/' + id)
             .toPromise()
             .then(response => response.json() as JobType)
+            .catch(this.handleError);
+    }
+
+    getIcons(): Promise<SelectItem[]> {
+        return this.http.get('/assets/font-awesome.json')
+            .toPromise()
+            .then(response => response.json() as SelectItem[])
             .catch(this.handleError);
     }
 

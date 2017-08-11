@@ -7,7 +7,7 @@
                     <label for="name">Name *:</label>
                 </div>
                 <div class="ui-grid-col-6">
-                    <input pInputText type="text" id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
+                    <input pInputText id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
                 </div>
                 <div class="ui-grid-col-4">
                     <div class="ui-message ui-messages-error ui-corner-all" *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
@@ -21,7 +21,7 @@
                     <label for="name">Title:</label>
                 </div>
                 <div class="ui-grid-col-6">
-                    <input pInputText type="text" id="title" formControlName="title" [(ngModel)]="jobType.title"/>
+                    <input pInputText id="title" formControlName="title" [(ngModel)]="jobType.title"/>
                 </div>
                 <div class="ui-grid-col-4"></div>
             </div>
@@ -31,6 +31,40 @@
                 </div>
                 <div class="ui-grid-col-6">
                     <textarea pInputTextarea type="text" id="description" formControlName="description" [(ngModel)]="jobType.description"></textarea>
+                </div>
+                <div class="ui-grid-col-4"></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="author-name">Author Name:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText id="author-name" formControlName="author-name" [(ngModel)]="jobType.author_name"/>
+                </div>
+                <div class="ui-grid-col-4"></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="author-url">Author URL:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <input pInputText id="author-url" formControlName="author-url" [(ngModel)]="jobType.author_url"/>
+                </div>
+                <div class="ui-grid-col-4"></div>
+            </div>
+            <div class="ui-grid-row">
+                <div class="ui-grid-col-2">
+                    <label for="icon">Icon:</label>
+                </div>
+                <div class="ui-grid-col-6">
+                    <p-dropdown id="icon" formControlName="icon" [options]="icons" [(ngModel)]="selectedIcon" [style]="{'width':'150px'}"
+                                filter="filter">
+                        <ng-template let-icon pTemplate="item">
+                            <div class="ui-helper-clearfix" style="position: relative; height: 25px;">
+                                <span class="fa {{icon.label}}"></span>
+                            </div>
+                        </ng-template>
+                    </p-dropdown>
                 </div>
                 <div class="ui-grid-col-4"></div>
             </div>
