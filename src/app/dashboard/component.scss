@@ -2,7 +2,14 @@
 
 .dashboard {
     display: flex;
-    flex-wrap: wrap;
+
+    .algpicker {
+        width: 25%;
+    }
+
+    .charts {
+        flex: 1;
+    }
 }
 
 .dashboard__item {

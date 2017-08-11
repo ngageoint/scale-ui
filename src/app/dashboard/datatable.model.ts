@@ -3,8 +3,6 @@ export class DashboardDatatable {
     constructor(
         public first: number,
         public rows: number,
-        public sortField: string,
-        public sortOrder: number,
         public id: number,
         public started: string,
         public ended: string,
@@ -18,8 +16,6 @@ export class DashboardDatatable {
 export const initialDatatable: DashboardDatatable = {
     first: 0,
     rows: 10,
-    sortField: 'title',
-    sortOrder: 1,
     id: null,
     started: null,
     ended: null,
