@@ -1,16 +1,24 @@
 <div class="dashboard">
 
     <div class="algpicker">
-        <h2>Algorithms</h2>
+        <h2>Favorites</h2>
         <p-dataTable [value]="jobTypes" selectionMode="multi"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
-
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
                     <span>{{jobType.title}} {{jobType.version}}</span>
                 </ng-template>
             </p-column>
+        </p-dataTable>
 
+        <h2>All Algorithms</h2>
+        <p-dataTable [value]="jobTypes" selectionMode="multi"
+            [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
+            <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
+                <ng-template let-col let-jobType="rowData" pTemplate="body">
+                    <span>{{jobType.title}} {{jobType.version}}</span>
+                </ng-template>
+            </p-column>
         </p-dataTable>
     </div>
 

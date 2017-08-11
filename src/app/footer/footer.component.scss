@@ -1,0 +1,8 @@
+@import '../../defaults/colors';
+
+.footer {
+    background: $clr-navbar-dark;
+    box-shadow: 0 0 0.5em $clr-black;
+    margin-top: 2.0em;
+    min-height: 350px;
+}
