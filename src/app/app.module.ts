@@ -18,6 +18,8 @@ import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { ListboxModule } from 'primeng/components/listbox/listbox';
 import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
 
+import { CodemirrorModule } from 'ng2-codemirror';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -69,6 +71,7 @@ import { HealthbarComponent } from './navbar/status/healthbar/healthbar.componen
         BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
+        CodemirrorModule,
         // Prime NG
         ChartModule,
         DataTableModule,

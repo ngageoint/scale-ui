@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Message, SelectItem } from 'primeng/primeng';
+import * as beautify from 'js-beautify';
 
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
@@ -13,6 +14,8 @@ import { JobTypesApiService } from './api.service';
 })
 export class JobTypesImportComponent implements OnInit {
     jsonMode: boolean;
+    jobTypeJson: string;
+    jsonConfig: object;
     msgs: Message[] = [];
     jobType: JobType;
     importForm: FormGroup;
@@ -23,10 +26,18 @@ export class JobTypesImportComponent implements OnInit {
         private fb: FormBuilder
     ) {
         this.jobType = new JobType('untitled-algorithm', '1.0', {}, 'Untitled Algorithm');
+        this.jsonConfig = {
+            mode: {name: 'application/json', json: true},
+            indentUnit: 4,
+            lineNumbers: true,
+            allowDropFileTypes: ['application/json'],
+            viewportMargin: Infinity
+        };
     }
     ngOnInit() {
         this.importForm = this.fb.group({
             'json': new FormControl(''),
+            'json-editor': new FormControl(''),
             'name': new FormControl('', Validators.required),
             'title': new FormControl(''),
             'version': new FormControl('', Validators.required),
@@ -44,7 +55,11 @@ export class JobTypesImportComponent implements OnInit {
     }
     onToggleJson(e) {
         this.jsonMode = e.checked;
-        console.log(this.jsonMode);
+        if (this.jsonMode) {
+            this.jobTypeJson = beautify(JSON.stringify(this.jobType));
+        } else {
+            this.jobType = JSON.parse(this.jobTypeJson);
+        }
     }
     onSubmit(value: string) {
         this.submitted = true;
