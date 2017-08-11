@@ -80,6 +80,6 @@ export class JobType {
         this.errors = this.errors || null;
         this.job_counts_6h = this.job_counts_6h || null;
         this.job_counts_12h = this.job_counts_12h || null;
-        this.job_counts_24h= this.job_counts_24h || null;
+        this.job_counts_24h = this.job_counts_24h || null;
     }
 }
