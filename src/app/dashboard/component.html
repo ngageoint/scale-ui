@@ -2,7 +2,7 @@
 
     <div class="algpicker">
         <h2>Favorites</h2>
-        <p-dataTable [value]="jobTypes" selectionMode="multi"
+        <p-dataTable [value]="favoriteJobTypes" selectionMode="multi"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
@@ -12,7 +12,7 @@
         </p-dataTable>
 
         <h2>All Algorithms</h2>
-        <p-dataTable [value]="jobTypes" selectionMode="multi"
+        <p-dataTable [value]="allJobTypes" selectionMode="multi"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">

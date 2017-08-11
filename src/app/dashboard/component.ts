@@ -13,24 +13,22 @@ import { JobType } from './api.model';
 })
 export class DashboardComponent implements OnInit {
 
-    private jobTypes: JobType[];
-    private count: number;
+    private allJobTypes: JobType[];
+    private favoriteJobTypes: JobType[];
 
     constructor(
         private dashboardApiService: DashboardApiService,
         private dashboardDatatableService: DashboardDatatableService
     ) {
-
     }
 
     ngOnInit() {
-        this.updateData();
+        this.refreshAllJobTypes();
     }
 
-    private updateData() {
+    private refreshAllJobTypes() {
         this.dashboardApiService.getJobTypes().then(data => {
-            this.count = data.count;
-            this.jobTypes = data.results as JobType[];
+            this.allJobTypes = data.results as JobType[];
         });
     }
 }
