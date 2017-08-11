@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Message, SelectItem } from 'primeng/primeng';
+import { Message } from 'primeng/primeng';
 import * as beautify from 'js-beautify';
 
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
+import * as iconData from './font-awesome.json';
 
 @Component({
     selector: 'app-job-types-import',
@@ -20,9 +21,9 @@ export class JobTypesImportComponent implements OnInit {
     jobType: JobType;
     importForm: FormGroup;
     submitted: boolean;
-    icons: SelectItem[];
+    icons: any;
     constructor(
-        private jobTypesApiService: JobTypesApiService,
+        // private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
     ) {
         this.jobType = new JobType('untitled-algorithm', '1.0', {}, 'Untitled Algorithm');
@@ -33,6 +34,7 @@ export class JobTypesImportComponent implements OnInit {
             allowDropFileTypes: ['application/json'],
             viewportMargin: Infinity
         };
+        this.icons = iconData;
     }
     ngOnInit() {
         this.importForm = this.fb.group({
@@ -51,7 +53,7 @@ export class JobTypesImportComponent implements OnInit {
             'cpus': new FormControl(''),
             'memory': new FormControl('')
         });
-        this.jobTypesApiService.getIcons().then(icons => this.icons = icons);
+        // this.jobTypesApiService.getIcons().then(icons => this.icons = icons);
     }
     onToggleJson(e) {
         this.jsonMode = e.checked;
