@@ -2,10 +2,10 @@
 
     <div class="algpicker">
         <h2>Algorithms</h2>
-        <p-dataTable [value]="jobTypes" sortField="name" selectionMode="multi"
+        <p-dataTable [value]="jobTypes" selectionMode="multi"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
 
-            <p-column field="name" sortable="false">
+            <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
                     <span>{{jobType.title}} {{jobType.version}}</span>
                 </ng-template>
