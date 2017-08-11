@@ -26,6 +26,7 @@ import { JobDetailsComponent } from './status/jobs/details.component';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/component';
 import { DashboardApiService } from './dashboard/api.service';
+import { DashboardDatatableService } from './dashboard/datatable.service';
 import { RecipesComponent } from './status/recipes/component';
 import { RecipesApiService } from './status/recipes/api.service';
 import { RecipesDatatableService } from './status/recipes/datatable.service';
@@ -89,6 +90,7 @@ import { HealthbarComponent } from './navbar/status/healthbar/healthbar.componen
         RecipesApiService,
         RecipesDatatableService,
         DashboardApiService,
+        DashboardDatatableService,
         RecipeTypesApiService,
         RecipeTypesDatatableService
     ],
