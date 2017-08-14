@@ -1,27 +1,29 @@
 <div class="dashboard">
-
     <div class="algpicker">
+
         <h2>Favorites</h2>
         <p-dataTable [value]="favoriteJobTypes" selectionMode="multi"
             emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access."
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
-                    <span>{{jobType.title}} {{jobType.version}}</span>
+                    <app-jobtypeitem [jobType]="jobType"></app-jobtypeitem>
                 </ng-template>
             </p-column>
         </p-dataTable>
+
 
         <h2>All Algorithms</h2>
         <p-dataTable [value]="allJobTypes" selectionMode="multi"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
-                    <span>{{jobType.title}} {{jobType.version}}</span>
+                    <app-jobtypeitem [jobType]="jobType"></app-jobtypeitem>
                 </ng-template>
             </p-column>
         </p-dataTable>
-    </div>
+
+    </div> <!-- algpicker -->
 
     <div class="charts">
     </div>

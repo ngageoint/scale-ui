@@ -1,0 +1,17 @@
+import { Component, Input, OnInit } from '@angular/core';
+
+
+@Component({
+    selector: 'app-jobtypeitem',
+    templateUrl: './jobtypeitem.component.html',
+    styleUrls: ['./jobtypeitem.component.scss']
+})
+export class JobtypeitemComponent implements OnInit {
+
+    @Input() jobType: any;
+    constructor() { }
+
+    ngOnInit() {
+    }
+
+}
