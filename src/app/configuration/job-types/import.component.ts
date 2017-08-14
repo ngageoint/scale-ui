@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Message } from 'primeng/primeng';
+import { Message, MenuItem } from 'primeng/primeng';
 import * as beautify from 'js-beautify';
 
 import { JobType } from './api.model';
@@ -15,6 +15,7 @@ import * as iconData from './font-awesome.json';
 })
 export class JobTypesImportComponent implements OnInit {
     jsonMode: boolean;
+    jsonModeBtnClass: string;
     jobTypeJson: string;
     jsonConfig: object;
     msgs: Message[] = [];
@@ -22,6 +23,8 @@ export class JobTypesImportComponent implements OnInit {
     importForm: FormGroup;
     submitted: boolean;
     icons: any;
+    items: MenuItem[];
+    currentStepIdx: number;
     constructor(
         // private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
@@ -53,15 +56,33 @@ export class JobTypesImportComponent implements OnInit {
             'cpus': new FormControl(''),
             'memory': new FormControl('')
         });
-        // this.jobTypesApiService.getIcons().then(icons => this.icons = icons);
+        this.items = [
+            { label: 'General Information' },
+            { label: 'Algorithm Interface' },
+            { label: 'Validate and Import' }
+        ];
+        this.jsonModeBtnClass = 'ui-button-secondary';
+        this.currentStepIdx = 0;
     }
-    onToggleJson(e) {
-        this.jsonMode = e.checked;
+    onModeClick() {
+        this.jsonMode = !this.jsonMode;
         if (this.jsonMode) {
+            this.jsonModeBtnClass = 'ui-button-primary';
             this.jobTypeJson = beautify(JSON.stringify(this.jobType));
         } else {
-            this.jobType = JSON.parse(this.jobTypeJson);
+            this.jsonModeBtnClass = 'ui-button-secondary';
+            this.msgs = [];
+            try {
+                this.jobType = JSON.parse(this.jobTypeJson);
+            } catch (error) {
+                this.msgs.push({severity: 'error', summary: 'Error:', detail: error.message});
+                this.jsonMode = true;
+                this.jsonModeBtnClass = 'ui-button-primary';
+            }
         }
+    }
+    handleStepChange(index) {
+        this.currentStepIdx = index;
     }
     onSubmit(value: string) {
         this.submitted = true;

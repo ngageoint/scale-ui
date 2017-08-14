@@ -6,6 +6,10 @@
     }
 }
 
-:host /deep/ .CodeMirror {
-    height: auto;
+.ui-panel-title {
+    font-weight: bold;
+}
+
+.mode-button {
+    float: right;
 }

@@ -17,6 +17,8 @@ import { ButtonModule } from 'primeng/components/button/button';
 import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { ListboxModule } from 'primeng/components/listbox/listbox';
 import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
+import { StepsModule } from 'primeng/components/steps/steps';
+import { MessagesModule } from 'primeng/components/messages/messages';
 
 import { CodemirrorModule } from 'ng2-codemirror';
 
@@ -86,7 +88,9 @@ import { FooterComponent } from './footer/footer.component';
         ButtonModule,
         SpinnerModule,
         ListboxModule,
-        InputSwitchModule
+        InputSwitchModule,
+        StepsModule,
+        MessagesModule
     ],
     exports: [
         DataTableModule,

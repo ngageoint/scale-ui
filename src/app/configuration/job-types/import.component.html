@@ -4,20 +4,20 @@
         <p-header>
             <div class="ui-helper-clearfix">
                 <span class="ui-panel-title">{{jobType.title}}</span>
-                <div style="float: right">
-                    <label for="json">JSON Mode</label>
-                    <p-inputSwitch inputId="json" [(ngModel)]="jsonMode" (onChange)="onToggleJson($event)"
-                                   formControlName="json"></p-inputSwitch>
-                </div>
-                <!--<p-splitButton [style]="{'float':'right'}" label="Save" icon="fa-check" (onClick)="save()" [model]="items"></p-splitButton>-->
+                <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa-code"
+                        iconPos="left" (click)="onModeClick()"></button>
             </div>
         </p-header>
-        <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" *ngIf="jsonMode">
+        <p-messages [(value)]="msgs"></p-messages>
+        <div *ngIf="jsonMode">
             <codemirror [(ngModel)]="jobTypeJson" formControlName="json-editor" [config]="jsonConfig"></codemirror>
         </div>
         <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" *ngIf="!jsonMode">
             <div class="ui-grid-row">
-                <div class="ui-grid-col-10">
+                <div class="ui-grid-col-2">
+                    <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
+                </div>
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 0">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-2">
                             <label for="name">Name *:</label>
@@ -57,8 +57,8 @@
                             <label for="name">Description:</label>
                         </div>
                         <div class="ui-grid-col-10">
-                            <textarea pInputTextarea type="text" id="description" rows="6" formControlName="description"
-                                      [(ngModel)]="jobType.description"></textarea>
+                        <textarea pInputTextarea type="text" id="description" rows="6" formControlName="description"
+                                  [(ngModel)]="jobType.description"></textarea>
                         </div>
                     </div>
                     <div class="ui-grid-row">
@@ -83,10 +83,10 @@
                         </div>
                         <div class="ui-grid-col-10">
                             <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
-                                       [style]="{'max-height':'250px'}">
+                                       [style]="{'max-height':'150px'}">
                                 <ng-template let-icon pTemplate="item">
                                     <div class="ui-helper-clearfix">
-                                        <span class="fa fa-fw {{icon.label}}"></span> {{icon.label}}
+                                        <span class="fa fa-fw {{icon.label}}"></span> {{icon.label.replace('fa-','')}}
                                     </div>
                                 </ng-template>
                             </p-listbox>
@@ -134,21 +134,24 @@
                                        [step]="100"></p-spinner>
                         </div>
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2"></div>
-                        <div class="ui-grid-col-10">
-                            <button pButton type="submit" label="Submit" [disabled]="!importForm.valid"
-                                    (click)="onSubmit(importForm.value)"></button>
-                        </div>
-                    </div>
-                    <div style="text-align:center;margin-top:20px" *ngIf="submitted">
-                        Form Submitted
-                        <br>
-                        {{diagnostic}}
-                    </div>
+                    <!--<div class="ui-grid-row">-->
+                    <!--<div class="ui-grid-col-2"></div>-->
+                    <!--<div class="ui-grid-col-10">-->
+                    <!--<button pButton type="submit" label="Submit" [disabled]="!importForm.valid"-->
+                    <!--(click)="onSubmit(importForm.value)"></button>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--<div style="text-align:center;margin-top:20px" *ngIf="submitted">-->
+                    <!--Form Submitted-->
+                    <!--<br>-->
+                    <!--{{diagnostic}}-->
+                    <!--</div>-->
                 </div>
-                <div class="ui-grid-col-10">
-
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 1">
+                    Interface
+                </div>
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 2">
+                    Validate and Import
                 </div>
             </div>
         </div>
