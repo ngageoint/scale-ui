@@ -48,6 +48,7 @@ import { RecipeDetailsComponent } from './status/recipes/details.component';
 import { StatusComponent } from './navbar/status/status.component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
 import { FooterComponent } from './footer/footer.component';
+import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.component';
 
 
 @NgModule({
@@ -66,7 +67,8 @@ import { FooterComponent } from './footer/footer.component';
         JobDetailsComponent,
         RecipeDetailsComponent,
         JobTypesImportComponent,
-        FooterComponent
+        FooterComponent,
+        JobtypeitemComponent
     ],
     imports: [
         AppRoutingModule,
