@@ -3,6 +3,7 @@
     <div class="algpicker">
         <h2>Favorites</h2>
         <p-dataTable [value]="favoriteJobTypes" selectionMode="multi"
+            emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access."
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
