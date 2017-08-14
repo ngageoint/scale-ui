@@ -1,8 +1,10 @@
+import { JobTypeInterface } from './interface.model';
+
 export class JobType {
     constructor(
         public name: string,
         public version: string,
-        public job_type_interface: object, // api model property is just 'interface'
+        public job_type_interface: JobTypeInterface, // api model property is just 'interface'
         public title?: string,
         public id?: number,
         public description?: string,

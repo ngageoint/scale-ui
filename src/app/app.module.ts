@@ -19,6 +19,7 @@ import { ListboxModule } from 'primeng/components/listbox/listbox';
 import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
 import { StepsModule } from 'primeng/components/steps/steps';
 import { MessagesModule } from 'primeng/components/messages/messages';
+import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 
 import { CodemirrorModule } from 'ng2-codemirror';
 
@@ -92,7 +93,8 @@ import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.compon
         ListboxModule,
         InputSwitchModule,
         StepsModule,
-        MessagesModule
+        MessagesModule,
+        CheckboxModule
     ],
     exports: [
         DataTableModule,

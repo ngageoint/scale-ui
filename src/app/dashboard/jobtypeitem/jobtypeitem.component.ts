@@ -9,7 +9,9 @@ import { Component, Input, OnInit } from '@angular/core';
 export class JobtypeitemComponent implements OnInit {
 
     @Input() jobType: any;
-    constructor() { }
+    constructor() {
+        this.jobType = {};
+    }
 
     ngOnInit() {
     }

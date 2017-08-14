@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Message, MenuItem } from 'primeng/primeng';
+import { Message, MenuItem, SelectItem } from 'primeng/primeng';
 import * as beautify from 'js-beautify';
 
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import * as iconData from './font-awesome.json';
+import { JobTypeInterface } from './interface.model';
+import { InterfaceEnvVar } from './interface.envvar.model';
+import { InterfaceMount } from './interface.mount.model';
 
 @Component({
     selector: 'app-job-types-import',
@@ -18,6 +21,7 @@ export class JobTypesImportComponent implements OnInit {
     jsonModeBtnClass: string;
     jobTypeJson: string;
     jsonConfig: object;
+    jsonConfigReadOnly: object;
     msgs: Message[] = [];
     jobType: JobType;
     importForm: FormGroup;
@@ -25,11 +29,19 @@ export class JobTypesImportComponent implements OnInit {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
+    interfaceEnvVarsForm: FormGroup;
+    interfaceEnvVar: InterfaceEnvVar;
+    interfaceEnvVarJson: string;
+    interfaceMountsForm: FormGroup;
+    interfaceMount: InterfaceMount;
+    interfaceMountsJson: string;
+    interfaceMountModeOptions: SelectItem[];
     constructor(
         // private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
     ) {
-        this.jobType = new JobType('untitled-algorithm', '1.0', {}, 'Untitled Algorithm');
+        this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''),
+            'Untitled Algorithm');
         this.jsonConfig = {
             mode: {name: 'application/json', json: true},
             indentUnit: 4,
@@ -37,7 +49,28 @@ export class JobTypesImportComponent implements OnInit {
             allowDropFileTypes: ['application/json'],
             viewportMargin: Infinity
         };
+        this.jsonConfigReadOnly = {
+            mode: {name: 'application/json', json: true},
+            indentUnit: 4,
+            lineNumbers: true,
+            readOnly: 'nocursor',
+            viewportMargin: Infinity
+        };
         this.icons = iconData;
+        this.jsonModeBtnClass = 'ui-button-secondary';
+        this.currentStepIdx = 0;
+        this.interfaceEnvVar = new InterfaceEnvVar('', '');
+        this.interfaceMount = new InterfaceMount('', '');
+        this.interfaceMountModeOptions = [
+            {
+                label: 'Read Only',
+                value: 'ro'
+            },
+            {
+                label: 'Read/Write',
+                value: 'rw'
+            }
+        ];
     }
     ngOnInit() {
         this.importForm = this.fb.group({
@@ -54,15 +87,28 @@ export class JobTypesImportComponent implements OnInit {
             'timeout': new FormControl(''),
             'max-tries': new FormControl(''),
             'cpus': new FormControl(''),
-            'memory': new FormControl('')
+            'memory': new FormControl(''),
+            'interface-version': new FormControl(''),
+            'interface-command': new FormControl('', Validators.required),
+            'interface-command-arguments': new FormControl('')
+        });
+        this.interfaceEnvVarsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'value': new FormControl('', Validators.required),
+            'json-editor': new FormControl('')
+        });
+        this.interfaceMountsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'path': new FormControl('', Validators.required),
+            'required': new FormControl(''),
+            'mode': new FormControl(''),
+            'json-editor': new FormControl('')
         });
         this.items = [
             { label: 'General Information' },
             { label: 'Algorithm Interface' },
             { label: 'Validate and Import' }
         ];
-        this.jsonModeBtnClass = 'ui-button-secondary';
-        this.currentStepIdx = 0;
     }
     onModeClick() {
         this.jsonMode = !this.jsonMode;
@@ -83,6 +129,24 @@ export class JobTypesImportComponent implements OnInit {
     }
     handleStepChange(index) {
         this.currentStepIdx = index;
+    }
+    onInterfaceEnvVarsFormSubmit(envVar: InterfaceEnvVar) {
+        this.jobType.job_type_interface.env_vars.push({
+            name: envVar.name,
+            value: envVar.value
+        });
+        this.interfaceEnvVarsForm.reset();
+        this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
+    }
+    onInterfaceMountsFormSubmit(mount: InterfaceMount) {
+        this.jobType.job_type_interface.mounts.push({
+            name: mount.name,
+            path: mount.path,
+            required: mount.required,
+            mode: mount.mode
+        });
+        this.interfaceMountsForm.reset();
+        this.interfaceMountsJson = beautify(JSON.stringify(this.jobType.job_type_interface.mounts));
     }
     onSubmit(value: string) {
         this.submitted = true;
