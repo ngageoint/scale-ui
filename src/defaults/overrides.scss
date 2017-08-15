@@ -15,3 +15,7 @@
 .CodeMirror {
     height: auto;
 }
+
+.nopadding .ui-datatable-data > tr > td {
+    padding: 0;
+}

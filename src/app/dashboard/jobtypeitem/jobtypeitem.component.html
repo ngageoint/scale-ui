@@ -1,6 +1,9 @@
 
 <!-- <span>{{this.jobType.title}} {{this.jobType.version}}</span> -->
 <div class="jti">
+    <div class="jti__status">
+        <i [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i>
+    </div>
     <div class="jti__info">
         <div class="jti__meta">
             <div class="jti__heading">{{ this.jobType.title }}</div>
@@ -9,11 +12,9 @@
             </div>
         </div>
         <div class="jti__toolbar">
-            <div class="jti__btn">View</div>
+            <div class="jti__btn">Details</div>
             <div class="jti__btn">Jobs</div>
             <div class="jti__btn"><i class="fa fa-star-o"></i></div>
         </div>
-    </div>
-    <div class="jti__status">
     </div>
 </div>

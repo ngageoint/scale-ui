@@ -16,4 +16,7 @@ export class JobtypeitemComponent implements OnInit {
     ngOnInit() {
     }
 
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
 }

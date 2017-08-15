@@ -14,7 +14,7 @@
 
 
         <h2>All Algorithms</h2>
-        <p-dataTable [value]="allJobTypes" selectionMode="multi"
+        <p-dataTable [value]="allJobTypes" selectionMode="multi" styleClass="nopadding"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-jobType="rowData" pTemplate="body">
