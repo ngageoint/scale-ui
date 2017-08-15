@@ -10,6 +10,7 @@ import * as iconData from './font-awesome.json';
 import { JobTypeInterface } from './interface.model';
 import { InterfaceEnvVar } from './interface.envvar.model';
 import { InterfaceMount } from './interface.mount.model';
+import { InterfaceSetting } from './interface.setting.model';
 
 @Component({
     selector: 'app-job-types-import',
@@ -36,6 +37,9 @@ export class JobTypesImportComponent implements OnInit {
     interfaceMount: InterfaceMount;
     interfaceMountsJson: string;
     interfaceMountModeOptions: SelectItem[];
+    interfaceSettingsForm: FormGroup;
+    interfaceSetting: InterfaceSetting;
+    interfaceSettingsJson: string;
     constructor(
         // private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
@@ -71,6 +75,7 @@ export class JobTypesImportComponent implements OnInit {
                 value: 'rw'
             }
         ];
+        this.interfaceSetting = new InterfaceSetting('');
     }
     ngOnInit() {
         this.importForm = this.fb.group({
@@ -104,6 +109,12 @@ export class JobTypesImportComponent implements OnInit {
             'mode': new FormControl(''),
             'json-editor': new FormControl('')
         });
+        this.interfaceSettingsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'required': new FormControl(''),
+            'secret': new FormControl(''),
+            'json-editor': new FormControl('')
+        });
         this.items = [
             { label: 'General Information' },
             { label: 'Algorithm Interface' },
@@ -120,6 +131,9 @@ export class JobTypesImportComponent implements OnInit {
             this.msgs = [];
             try {
                 this.jobType = JSON.parse(this.jobTypeJson);
+                this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
+                this.interfaceMountsJson = beautify(JSON.stringify(this.jobType.job_type_interface.mounts));
+                this.interfaceSettingsJson = beautify(JSON.stringify(this.jobType.job_type_interface.settings));
             } catch (error) {
                 this.msgs.push({severity: 'error', summary: 'Error:', detail: error.message});
                 this.jsonMode = true;
@@ -147,6 +161,15 @@ export class JobTypesImportComponent implements OnInit {
         });
         this.interfaceMountsForm.reset();
         this.interfaceMountsJson = beautify(JSON.stringify(this.jobType.job_type_interface.mounts));
+    }
+    onInterfaceSettingsFormSubmit(setting: InterfaceSetting) {
+        this.jobType.job_type_interface.settings.push({
+            name: setting.name,
+            required: setting.required,
+            secret: setting.secret
+        });
+        this.interfaceSettingsForm.reset();
+        this.interfaceSettingsJson = beautify(JSON.stringify(this.jobType.job_type_interface.settings));
     }
     onSubmit(value: string) {
         this.submitted = true;

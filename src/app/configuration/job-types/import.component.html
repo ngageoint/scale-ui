@@ -311,6 +311,64 @@
                             </form>
                         </div>
                     </div>
+                    <div class="ui-grid-row">
+                        <div class="ui-grid-col-12">
+                            <form [formGroup]="interfaceSettingsForm" (ngSubmit)="interfaceSettingsForm.value">
+                                <p-panel>
+                                    <p-header>
+                                        <div class="ui-helper-clearfix">
+                                            <span class="ui-panel-title">Settings</span>
+                                        </div>
+                                    </p-header>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="mount-name">Name:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="setting-name" formControlName="name" placeholder="Name is Required"
+                                                   [(ngModel)]="interfaceSetting.name"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceSettingsForm.controls['name'].valid && interfaceSettingsForm.controls['name'].dirty">
+                                                <i class="fa fa-close"></i>
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceSetting.required" formControlName="required"
+                                                        binary="true" label="Required"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceSetting.secret" formControlName="secret"
+                                                        binary="true" label="Secret"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceSettingsForm.valid"
+                                                    (click)="onInterfaceSettingsFormSubmit(interfaceSettingsForm.value)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="interfaceSettingsJson">
+                                                Current Settings
+                                                <codemirror [(ngModel)]="interfaceSettingsJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </p-panel>
+                            </form>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 2">
                     Validate and Import
