@@ -1,0 +1,45 @@
+@import '../../../defaults/colors';
+
+.jti {
+    display: flex;
+}
+
+.jti__info {
+    flex: 1;
+}
+
+.jti__heading {
+    font-weight: bold;
+}
+
+.jti__meta {
+}
+
+.jti__subheading {
+    color: $clr-gray-60;
+    font-size: 0.75em;
+    font-weight: normal;
+}
+
+.jti__toolbar {
+
+    .jti__btn {
+        border: 1px solid $clr-gray-75;
+        border-bottom: none;
+        border-radius: 0.35em 0.35em 0 0;
+        color: $clr-gray-60;
+        display: inline-block;
+        font-size: 0.80em;
+        margin: 0 0.5em;
+        padding: 0 0.5em;
+
+        &:hover {
+            background: $clr-gray-85;
+            color: $clr-black;
+        }
+    }
+}
+
+.jti__status {
+    width: 64px;
+}
