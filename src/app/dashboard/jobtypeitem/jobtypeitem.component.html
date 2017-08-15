@@ -1,2 +1,19 @@
 
-<span>{{this.jobType.title}} {{this.jobType.version}}</span>
+<!-- <span>{{this.jobType.title}} {{this.jobType.version}}</span> -->
+<div class="jti">
+    <div class="jti__info">
+        <div class="jti__meta">
+            <div class="jti__heading">{{ this.jobType.title }}</div>
+            <div class="jti__subheading">
+                Version {{ this.jobType.version }}
+            </div>
+        </div>
+        <div class="jti__toolbar">
+            <div class="jti__btn">View</div>
+            <div class="jti__btn">Jobs</div>
+            <div class="jti__btn"><i class="fa fa-star-o"></i></div>
+        </div>
+    </div>
+    <div class="jti__status">
+    </div>
+</div>
