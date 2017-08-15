@@ -20,6 +20,8 @@ import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
 import { StepsModule } from 'primeng/components/steps/steps';
 import { MessagesModule } from 'primeng/components/messages/messages';
 import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
+import { ChipsModule } from 'primeng/components/chips/chips';
+import { AccordionModule } from 'primeng/components/accordion/accordion';
 
 import { CodemirrorModule } from 'ng2-codemirror';
 
@@ -94,7 +96,9 @@ import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.compon
         InputSwitchModule,
         StepsModule,
         MessagesModule,
-        CheckboxModule
+        CheckboxModule,
+        ChipsModule,
+        AccordionModule
     ],
     exports: [
         DataTableModule,
