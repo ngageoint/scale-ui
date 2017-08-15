@@ -3,7 +3,7 @@
     <p-panel>
         <p-header>
             <div class="ui-helper-clearfix">
-                <span class="ui-panel-title">{{jobType.title}}</span>
+                <span class="ui-panel-title algorithm-title">{{jobType.title}}</span>
                 <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa-code"
                         iconPos="left" (click)="onModeClick()"></button>
             </div>
@@ -178,12 +178,7 @@
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
                             <form [formGroup]="interfaceEnvVarsForm" (ngSubmit)="interfaceEnvVarsForm.value">
-                                <p-panel>
-                                    <p-header>
-                                        <div class="ui-helper-clearfix">
-                                            <span class="ui-panel-title">Environment Variables</span>
-                                        </div>
-                                    </p-header>
+                                <p-panel [toggleable]="true" collapsed="true" header="Environment Variables">
                                     <div class="ui-grid-row">
                                         <div class="ui-grid-col-2">
                                             <label for="env-var-name">Name *:</label>
@@ -236,12 +231,7 @@
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
                             <form [formGroup]="interfaceMountsForm" (ngSubmit)="interfaceMountsForm.value">
-                                <p-panel>
-                                    <p-header>
-                                        <div class="ui-helper-clearfix">
-                                            <span class="ui-panel-title">Mounts</span>
-                                        </div>
-                                    </p-header>
+                                <p-panel [toggleable]="true" collapsed="true" header="Mounts">
                                     <div class="ui-grid-row">
                                         <div class="ui-grid-col-2">
                                             <label for="mount-name">Name:</label>
@@ -314,12 +304,7 @@
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-12">
                             <form [formGroup]="interfaceSettingsForm" (ngSubmit)="interfaceSettingsForm.value">
-                                <p-panel>
-                                    <p-header>
-                                        <div class="ui-helper-clearfix">
-                                            <span class="ui-panel-title">Settings</span>
-                                        </div>
-                                    </p-header>
+                                <p-panel [toggleable]="true" collapsed="true" header="Settings">
                                     <div class="ui-grid-row">
                                         <div class="ui-grid-col-2">
                                             <label for="mount-name">Name:</label>
