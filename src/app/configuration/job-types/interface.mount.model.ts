@@ -7,7 +7,7 @@ export class InterfaceMount {
     ) {
         this.name = this.name || null;
         this.path = this.path || null;
-        this.required = this.required || true;
-        this.mode = this.mode || 'ro';
+        this.required = this.required || null;
+        this.mode = this.mode || null;
     }
 }

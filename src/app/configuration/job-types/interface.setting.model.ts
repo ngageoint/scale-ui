@@ -5,7 +5,7 @@ export class InterfaceSetting {
         public secret?: boolean
     ) {
         this.name = this.name || null;
-        this.required = this.required || true;
-        this.secret = this.secret || false;
+        this.required = this.required || null;
+        this.secret = this.secret || null;
     }
 }
