@@ -13,6 +13,7 @@
 }
 
 .jti__meta {
+    padding: 0.5em;
 }
 
 .jti__subheading {
@@ -22,6 +23,7 @@
 }
 
 .jti__toolbar {
+    padding: 0 0.5em;
 
     .jti__btn {
         border: 1px solid $clr-gray-75;
@@ -30,7 +32,7 @@
         color: $clr-gray-60;
         display: inline-block;
         font-size: 0.80em;
-        margin: 0 0.5em;
+        margin-right: 0.25em;
         padding: 0 0.5em;
 
         &:hover {
@@ -41,5 +43,15 @@
 }
 
 .jti__status {
+    background: $clr-navbar-light;
+    color: $clr-white;
+    padding-top: 32px;
+    text-align: center;
     width: 64px;
+
+    i {
+        font-family: 'FontAwesome';
+        font-size: 32px;
+        font-style: normal;
+    }
 }
