@@ -16,3 +16,12 @@
 .mode-button {
     float: right;
 }
+
+.import-form-button {
+    width: auto;
+    margin-left: 10px;
+}
+
+:host /deep/ .ui-button-text {
+    padding-left: 2em !important;
+}

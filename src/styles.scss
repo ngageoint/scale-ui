@@ -12,3 +12,13 @@
 @import './defaults/overrides';
 
 // Components & Pages loaded separately
+
+.text-center {
+    text-align: center;
+}
+
+.list-unstyled {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}

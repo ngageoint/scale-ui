@@ -160,17 +160,21 @@
                                    [(ngModel)]="jobType.job_type_interface.command"/>
                             <div class="ui-message ui-messages-error ui-corner-all"
                                  *ngIf="!importForm.controls['interface-command'].valid && importForm.controls['interface-command'].dirty">
-                                Interface Command is required
+                                Command is required
                             </div>
                         </div>
                     </div>
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-2">
-                            <label for="name">Command Arguments:</label>
+                            <label for="name">Command Arguments *:</label>
                         </div>
                         <div class="ui-grid-col-10">
                             <input pInputText id="interface-command-arguments" formControlName="interface-command-arguments"
-                                   [(ngModel)]="jobType.job_type_interface.command_arguments"/>
+                                   placeholder="Command Arguments are Required" [(ngModel)]="jobType.job_type_interface.command_arguments"/>
+                            <div class="ui-message ui-messages-error ui-corner-all"
+                                 *ngIf="!importForm.controls['interface-command-arguments'].valid && importForm.controls['interface-command-arguments'].dirty">
+                                Command Arguments are required
+                            </div>
                         </div>
                     </div>
                     <p-accordion multiple="true" (onOpen)="onAccordionOpen($event)" (onClose)="onAccordionClose($event)" [activeIndex]="activeIndex">
@@ -480,7 +484,31 @@
                     </p-accordion>
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 2">
-                    Validate and Import
+                    <h2>
+                        <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
+                           [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{jobType.title}} v{{jobType.version}}
+                        <button class="import-form-button ui-button-secondary" pButton icon="fa-check" label="Validate"
+                                (click)="onValidate()"></button>
+                    </h2>
+                    <ul class="list-unstyled">
+                        <li><b>Name:</b> {{jobType.name}}</li>
+                        <li *ngIf="jobType.description"><b>Description:</b> {{jobType.description}}</li>
+                        <li *ngIf="jobType.author_name"><b>Author Name:</b> {{jobType.author_name}}</li>
+                        <li *ngIf="jobType.author_url"><b>Author URL:</b> {{jobType.author_url}}</li>
+                        <li *ngIf="jobType.docker_image"><b>Docker Image:</b> {{jobType.docker_image}}</li>
+                        <li *ngIf="jobType.timeout"><b>Timeout:</b> {{jobType.timeout}}</li>
+                        <li *ngIf="jobType.max_tries"><b>Max Tries:</b> {{jobType.max_tries}}</li>
+                        <li *ngIf="jobType.cpus_required"><b>CPUs:</b> {{jobType.cpus_required}}</li>
+                        <li *ngIf="jobType.mem_required"><b>Memory:</b> {{jobType.mem_required}}</li>
+                    </ul>
+                    <!--<div class="ui-grid-row">-->
+                        <!--<div class="ui-grid-col-2">-->
+                            <!--<button class="import-form-btn" pButton icon="fa-check" label="Validate"></button>-->
+                        <!--</div>-->
+                        <!--<div class="ui-grid-col-2">-->
+                            <!--<button class="import-form-btn" pButton icon="fa-arrow-circle-o-up" label="Import"></button>-->
+                        <!--</div>-->
+                    <!--</div>-->
                 </div>
             </div>
         </div>

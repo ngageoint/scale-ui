@@ -29,6 +29,7 @@ export class JobTypesImportComponent implements OnInit {
     msgs: Message[] = [];
     jobType: JobType;
     importForm: FormGroup;
+    validated: boolean;
     submitted: boolean;
     icons: any;
     items: MenuItem[];
@@ -53,9 +54,72 @@ export class JobTypesImportComponent implements OnInit {
     interfaceOutputsJson: string;
     interfaceOutputTypeOptions: SelectItem[];
     constructor(
-        // private jobTypesApiService: JobTypesApiService,
+        private jobTypesApiService: JobTypesApiService,
         private fb: FormBuilder
     ) {
+        this.importForm = this.fb.group({
+            'json-editor': new FormControl(''),
+            'name': new FormControl('', Validators.required),
+            'title': new FormControl(''),
+            'version': new FormControl('', Validators.required),
+            'description': new FormControl(''),
+            'author_name': new FormControl(''),
+            'author_url': new FormControl(''),
+            'icon': new FormControl(''),
+            'docker_image': new FormControl(''),
+            'timeout': new FormControl(''),
+            'max_tries': new FormControl(''),
+            'cpus': new FormControl(''),
+            'memory': new FormControl(''),
+            'interface-version': new FormControl(''),
+            'interface-command': new FormControl('', Validators.required),
+            'interface-command-arguments': new FormControl('', Validators.required)
+        });
+        this.interfaceEnvVarsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'value': new FormControl('', Validators.required),
+            'json-editor': new FormControl('')
+        });
+        this.interfaceMountsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'path': new FormControl('', Validators.required),
+            'required': new FormControl(''),
+            'mode': new FormControl(''),
+            'json-editor': new FormControl('')
+        });
+        this.interfaceSettingsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'required': new FormControl(''),
+            'secret': new FormControl(''),
+            'json-editor': new FormControl('')
+        });
+        this.interfaceInputsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'type': new FormControl('', Validators.required),
+            'media_types': new FormControl(''),
+            'partial': new FormControl(''),
+            'required': new FormControl(''),
+            'json-editor': new FormControl('')
+        });
+        this.interfaceOutputsForm = this.fb.group({
+            'name': new FormControl('', Validators.required),
+            'type': new FormControl('', Validators.required),
+            'media_types': new FormControl(''),
+            'required': new FormControl(''),
+            'json-editor': new FormControl('')
+        });
+        this.items = [
+            {
+                label: 'General Information'
+            },
+            {
+                label: 'Algorithm Interface'
+            },
+            {
+                label: 'Validate and Import',
+                disabled: this.importForm.valid
+            }
+        ];
         this.activeIndex = [];
         this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''),
             'Untitled Algorithm');
@@ -75,7 +139,7 @@ export class JobTypesImportComponent implements OnInit {
         };
         this.icons = iconData;
         this.jsonModeBtnClass = 'ui-button-secondary';
-        this.currentStepIdx = 0;
+        this.currentStepIdx = 2;
         this.interfaceEnvVar = new InterfaceEnvVar('', '');
         this.interfaceMount = new InterfaceMount('', '');
         this.interfaceMountModeOptions = [
@@ -114,71 +178,38 @@ export class JobTypesImportComponent implements OnInit {
                 label: 'Files',
                 value: 'files'
             }
-        ]
+        ];
+        this.importForm.valueChanges.subscribe(data => {
+            // this.items[2].disabled = !this.importForm.valid;
+        });
     }
     private stripObject(obj: object) {
-        return _.pickBy(obj, (d) => {
-            return d !== null && typeof d !== 'undefined' && d !== '';
+        const strippedObj = _.clone(obj);
+        obj = _.pickBy(obj, (value, key) => {
+            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+                const childObj = _.pickBy(obj[key], (v) => {
+                    return v !== null && typeof v !== 'undefined' && v !== '' && v.length > 0;
+                });
+                if (_.keys(childObj).length > 0) {
+                    strippedObj[key] = childObj;
+                } else {
+                    delete strippedObj[key];
+                }
+            } else {
+                if (value !== null && typeof value !== 'undefined' && value !== '' && value.length > 0) {
+                    strippedObj[key] = value;
+                } else {
+                    delete strippedObj[key];
+                }
+            }
         });
+        return strippedObj;
     }
-    ngOnInit() {
-        this.importForm = this.fb.group({
-            'json': new FormControl(''),
-            'json-editor': new FormControl(''),
-            'name': new FormControl('', Validators.required),
-            'title': new FormControl(''),
-            'version': new FormControl('', Validators.required),
-            'description': new FormControl(''),
-            'author_name': new FormControl(''),
-            'author_url': new FormControl(''),
-            'icon': new FormControl(''),
-            'docker_image': new FormControl(''),
-            'timeout': new FormControl(''),
-            'max_tries': new FormControl(''),
-            'cpus': new FormControl(''),
-            'memory': new FormControl(''),
-            'interface-version': new FormControl(''),
-            'interface-command': new FormControl('', Validators.required),
-            'interface-command-arguments': new FormControl('')
-        });
-        this.interfaceEnvVarsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'value': new FormControl('', Validators.required),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceMountsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'path': new FormControl('', Validators.required),
-            'required': new FormControl(''),
-            'mode': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceSettingsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'required': new FormControl(''),
-            'secret': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceInputsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'type': new FormControl('', Validators.required),
-            'media_types': new FormControl(''),
-            'partial': new FormControl(''),
-            'required': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceOutputsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'type': new FormControl('', Validators.required),
-            'media_types': new FormControl(''),
-            'required': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.items = [
-            { label: 'General Information' },
-            { label: 'Algorithm Interface' },
-            { label: 'Validate and Import' }
-        ];
+
+    ngOnInit() {}
+
+    getUnicode(code) {
+        return `&#x${code};`;
     }
     onAccordionOpen(e) {
         this.activeIndex.push(e.index);
@@ -281,6 +312,18 @@ export class JobTypesImportComponent implements OnInit {
         this.jobType.job_type_interface.output_data.push(newOutput);
         this.interfaceOutputsForm.reset();
         this.interfaceOutputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.output_data));
+    }
+    onValidate() {
+        this.msgs = [];
+
+        // remove falsey values
+        const cleanJobType = this.stripObject(this.jobType);
+        console.log(cleanJobType);
+
+        // // perform validation
+        // this.jobTypesApiService.validateJobType(cleanJobType).then(result => {
+        //     console.log(result);
+        // });
     }
     onSubmit(value: string) {
         this.submitted = true;
