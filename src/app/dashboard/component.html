@@ -1,24 +1,24 @@
 <div class="dashboard">
     <div class="algpicker">
 
-        <h2>Favorites</h2>
+        <h2>Favorites ({{ this.favoriteJobTypes.length }})</h2>
         <p-dataTable [value]="favoriteJobTypes" selectionMode="multi"
             emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access."
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
-            <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
-                <ng-template let-col let-jobType="rowData" pTemplate="body">
-                    <app-jobtypeitem [jobType]="jobType"></app-jobtypeitem>
+            <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <app-jobtypeitem [jobType]="item.job_type"></app-jobtypeitem>
                 </ng-template>
             </p-column>
         </p-dataTable>
 
 
-        <h2>All Algorithms</h2>
+        <h2>All Algorithms ({{ this.allJobTypes.length }})</h2>
         <p-dataTable [value]="allJobTypes" selectionMode="multi" styleClass="nopadding"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
-            <p-column field="name" [sortable]="false" [filter]="true" filterMatchMode="contains">
-                <ng-template let-col let-jobType="rowData" pTemplate="body">
-                    <app-jobtypeitem [jobType]="jobType"></app-jobtypeitem>
+            <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
+                <ng-template let-col let-item="rowData" pTemplate="body">
+                    <app-jobtypeitem [jobType]="item.job_type"></app-jobtypeitem>
                 </ng-template>
             </p-column>
         </p-dataTable>

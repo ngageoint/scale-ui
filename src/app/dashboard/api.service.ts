@@ -12,8 +12,8 @@ export class DashboardApiService {
     constructor( private http: Http) {
     }
 
-    getJobTypes(): Promise<ApiResults> {
-        return this.http.get('/mocks/job-types')
+    getJobTypesAndStatus(): Promise<ApiResults> {
+        return this.http.get('/mocks/job-types/status')
             .toPromise()
             .then(response => response.json() as ApiResults)
             .catch(this.handleError);

@@ -20,6 +20,8 @@ export class DashboardComponent implements OnInit {
         private dashboardApiService: DashboardApiService,
         private dashboardDatatableService: DashboardDatatableService
     ) {
+        this.allJobTypes = [];
+        this.favoriteJobTypes = [];
     }
 
     ngOnInit() {
@@ -27,7 +29,7 @@ export class DashboardComponent implements OnInit {
     }
 
     private refreshAllJobTypes() {
-        this.dashboardApiService.getJobTypes().then(data => {
+        this.dashboardApiService.getJobTypesAndStatus().then(data => {
             this.allJobTypes = data.results as JobType[];
             console.log(`Job: ${JSON.stringify(data.results[0])}`);
         });
