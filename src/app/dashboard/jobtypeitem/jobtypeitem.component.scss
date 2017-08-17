@@ -56,6 +56,21 @@
     width: 64px;
 }
 
+.jti__status-good {
+    @extend .jti__status;
+    background: $clr-status-good;
+}
+
+.jti__status-warn {
+    @extend .jti__status;
+    background: $clr-status-warn;
+}
+
+.jti__status-error {
+    @extend .jti__status;
+    background: $clr-status-error;
+}
+
 .jti__status-icon {
     font-family: 'FontAwesome';
     font-size: 32px;
