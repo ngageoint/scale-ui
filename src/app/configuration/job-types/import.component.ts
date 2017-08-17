@@ -8,12 +8,11 @@ import * as _ from 'lodash';
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import * as iconData from './font-awesome.json';
-import { JobTypeInterface } from './interface.model';
-import { InterfaceEnvVar } from './interface.envvar.model';
-import { InterfaceMount } from './interface.mount.model';
-import { InterfaceSetting } from './interface.setting.model';
-import { InterfaceInput } from './interface.input.model';
-import { InterfaceOutput } from './interface.output.model';
+import { InterfaceEnvVar, InterfaceInput, InterfaceMount, InterfaceOutput, InterfaceSetting, JobTypeInterface } from './interface.model';
+import { Trigger, TriggerConfiguration, TriggerData } from './trigger.model';
+import { ErrorMapping } from './error.mapping.model';
+import { WorkspacesApiService } from '../workspaces/api.service';
+import { Workspace } from '../workspaces/api.model';
 
 @Component({
     selector: 'app-job-types-import',
@@ -27,6 +26,7 @@ export class JobTypesImportComponent implements OnInit {
     jsonConfig: object;
     jsonConfigReadOnly: object;
     msgs: Message[] = [];
+    workspaces: SelectItem[];
     jobType: JobType;
     importForm: FormGroup;
     validated: boolean;
@@ -34,7 +34,15 @@ export class JobTypesImportComponent implements OnInit {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
-    activeIndex: number[];
+    activeGeneralIndex: number[];
+    activeInterfaceIndex: number[];
+    triggerForm: FormGroup;
+    trigger: Trigger;
+    triggerJson: string;
+    triggerTypeOptions: SelectItem[];
+    errorMappingForm: FormGroup;
+    errorMapping: ErrorMapping;
+    errorMappingJson: string;
     interfaceEnvVarsForm: FormGroup;
     interfaceEnvVar: InterfaceEnvVar;
     interfaceEnvVarJson: string;
@@ -50,11 +58,12 @@ export class JobTypesImportComponent implements OnInit {
     interfaceInputsJson: string;
     interfaceInputTypeOptions: SelectItem[];
     interfaceOutputsForm: FormGroup;
-    interfaceOutput: InterfaceInput;
+    interfaceOutput: InterfaceOutput;
     interfaceOutputsJson: string;
     interfaceOutputTypeOptions: SelectItem[];
     constructor(
         private jobTypesApiService: JobTypesApiService,
+        private workspacesApiService: WorkspacesApiService,
         private fb: FormBuilder
     ) {
         this.importForm = this.fb.group({
@@ -73,7 +82,17 @@ export class JobTypesImportComponent implements OnInit {
             'memory': new FormControl(''),
             'interface-version': new FormControl(''),
             'interface-command': new FormControl('', Validators.required),
-            'interface-command-arguments': new FormControl('', Validators.required)
+            'interface-command_arguments': new FormControl('', Validators.required)
+        });
+        this.triggerForm = this.fb.group({
+            'type': new FormControl('', Validators.required),
+            'is_active': new FormControl(''),
+            'version': new FormControl(''),
+            'media_type': new FormControl(''),
+            'data_types': new FormControl(''),
+            'input_data_name': new FormControl('', Validators.required),
+            'workspace_name': new FormControl('', Validators.required),
+            'json-editor': new FormControl('')
         });
         this.interfaceEnvVarsForm = this.fb.group({
             'name': new FormControl('', Validators.required),
@@ -113,14 +132,22 @@ export class JobTypesImportComponent implements OnInit {
                 label: 'General Information'
             },
             {
-                label: 'Algorithm Interface'
+                label: 'Configuration'
+            },
+            {
+                label: 'Interface'
+            },
+            {
+                label: 'Custom Resources'
             },
             {
                 label: 'Validate and Import',
                 disabled: this.importForm.valid
             }
         ];
-        this.activeIndex = [];
+        this.workspaces = [];
+        this.activeGeneralIndex = [];
+        this.activeInterfaceIndex = [];
         this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''),
             'Untitled Algorithm');
         this.jsonConfig = {
@@ -139,7 +166,18 @@ export class JobTypesImportComponent implements OnInit {
         };
         this.icons = iconData;
         this.jsonModeBtnClass = 'ui-button-secondary';
-        this.currentStepIdx = 2;
+        this.currentStepIdx = 0;
+        this.trigger = new Trigger('', new TriggerConfiguration(new TriggerData('', '')));
+        this.triggerTypeOptions = [
+            {
+                label: 'Parse',
+                value: 'PARSE'
+            },
+            {
+                label: 'Ingest',
+                value: 'INGEST'
+            }
+        ];
         this.interfaceEnvVar = new InterfaceEnvVar('', '');
         this.interfaceMount = new InterfaceMount('', '');
         this.interfaceMountModeOptions = [
@@ -179,24 +217,24 @@ export class JobTypesImportComponent implements OnInit {
                 value: 'files'
             }
         ];
-        this.importForm.valueChanges.subscribe(data => {
-            // this.items[2].disabled = !this.importForm.valid;
+        this.importForm.valueChanges.subscribe(() => {
+            this.items[4].disabled = !this.importForm.valid;
         });
     }
     private stripObject(obj: object) {
-        const strippedObj = _.clone(obj);
+        const strippedObj = _.cloneDeep(obj);
         obj = _.pickBy(obj, (value, key) => {
             if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                const childObj = _.pickBy(obj[key], (v) => {
-                    return v !== null && typeof v !== 'undefined' && v !== '' && v.length > 0;
-                });
+                const childObj = this.stripObject(value);
                 if (_.keys(childObj).length > 0) {
                     strippedObj[key] = childObj;
                 } else {
                     delete strippedObj[key];
                 }
             } else {
-                if (value !== null && typeof value !== 'undefined' && value !== '' && value.length > 0) {
+                if (value !== null && typeof value !== 'undefined' && value !== '' && !Array.isArray(value)) {
+                    strippedObj[key] = value;
+                } else if (Array.isArray(value) && value.length > 0) {
                     strippedObj[key] = value;
                 } else {
                     delete strippedObj[key];
@@ -205,19 +243,40 @@ export class JobTypesImportComponent implements OnInit {
         });
         return strippedObj;
     }
+    private getWorkspaces() {
+        this.workspacesApiService.getWorkspaces().then(data => {
+            _.forEach(data.results, (workspace) => {
+                this.workspaces.push({
+                    label: workspace.title,
+                    value: workspace.name
+                });
+            });
+        });
+    }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.getWorkspaces();
+    }
 
     getUnicode(code) {
         return `&#x${code};`;
     }
-    onAccordionOpen(e) {
-        this.activeIndex.push(e.index);
+    onGeneralAccordionOpen(e) {
+        this.activeGeneralIndex.push(e.index);
     }
-    onAccordionClose(e) {
-        const idx = this.activeIndex.indexOf(e.index);
+    onGeneralAccordionClose(e) {
+        const idx = this.activeGeneralIndex.indexOf(e.index);
         if (idx > -1) {
-            this.activeIndex.splice(idx, 1);
+            this.activeGeneralIndex.splice(idx, 1);
+        }
+    }
+    onInterfaceAccordionOpen(e) {
+        this.activeInterfaceIndex.push(e.index);
+    }
+    onInterfaceAccordionClose(e) {
+        const idx = this.activeInterfaceIndex.indexOf(e.index);
+        if (idx > -1) {
+            this.activeInterfaceIndex.splice(idx, 1);
         }
     }
     onModeClick() {
@@ -230,6 +289,9 @@ export class JobTypesImportComponent implements OnInit {
             this.msgs = [];
             try {
                 this.jobType = JSON.parse(this.jobTypeJson);
+                if (this.jobType.trigger_rule) {
+                    this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
+                }
                 if (this.jobType.job_type_interface.env_vars && this.jobType.job_type_interface.env_vars.length > 0) {
                     this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
                 }
@@ -254,6 +316,14 @@ export class JobTypesImportComponent implements OnInit {
     }
     handleStepChange(index) {
         this.currentStepIdx = index;
+    }
+    onTriggerFormSubmit() {
+        this.jobType.trigger_rule = this.stripObject(this.trigger);
+        this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
+    }
+    onTriggerDelete() {
+        this.triggerForm.reset();
+        this.jobType.trigger_rule = null;
     }
     onInterfaceEnvVarsFormSubmit(envVar: InterfaceEnvVar) {
         let newEnvVar = {
@@ -318,12 +388,11 @@ export class JobTypesImportComponent implements OnInit {
 
         // remove falsey values
         const cleanJobType = this.stripObject(this.jobType);
-        console.log(cleanJobType);
 
-        // // perform validation
-        // this.jobTypesApiService.validateJobType(cleanJobType).then(result => {
-        //     console.log(result);
-        // });
+        // perform validation
+        this.jobTypesApiService.validateJobType(cleanJobType).then(result => {
+            console.log(result);
+        });
     }
     onSubmit(value: string) {
         this.submitted = true;

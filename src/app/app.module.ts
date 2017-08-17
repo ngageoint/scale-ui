@@ -52,6 +52,8 @@ import { StatusComponent } from './navbar/status/status.component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.component';
+import { WorkspacesComponent } from './configuration/workspaces/component';
+import { WorkspacesApiService } from './configuration/workspaces/api.service';
 
 
 @NgModule({
@@ -71,7 +73,8 @@ import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.compon
         RecipeDetailsComponent,
         JobTypesImportComponent,
         FooterComponent,
-        JobtypeitemComponent
+        JobtypeitemComponent,
+        WorkspacesComponent
     ],
     imports: [
         AppRoutingModule,
@@ -115,7 +118,8 @@ import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.compon
         DashboardApiService,
         DashboardDatatableService,
         RecipeTypesApiService,
-        RecipeTypesDatatableService
+        RecipeTypesDatatableService,
+        WorkspacesApiService
     ],
     bootstrap: [AppComponent]
 })

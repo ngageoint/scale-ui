@@ -1,4 +1,5 @@
 import { JobTypeInterface } from './interface.model';
+import { Trigger } from './trigger.model';
 
 export class JobType {
     constructor(
@@ -37,7 +38,7 @@ export class JobType {
         public last_modified?: string,
         public custom_resources?: object,
         public error_mapping?: object,
-        public trigger_rule?: object,
+        public trigger_rule?: Trigger,
         public errors?: object[],
         public job_counts_6h?: object[],
         public job_counts_12h?: object[],

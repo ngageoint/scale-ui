@@ -18,472 +18,589 @@
                     <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 0">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Name *:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
-                                Name is required
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="name">Name *:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
+                                <div class="ui-message ui-messages-error ui-corner-all"
+                                     *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
+                                    Name is required
+                                </div>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <label for="name">Title:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="title" formControlName="title" [(ngModel)]="jobType.title"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Title:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="title" formControlName="title" [(ngModel)]="jobType.title"/>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Version *:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="version" formControlName="version" placeholder="Required" [(ngModel)]="jobType.version"/>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!importForm.controls['version'].valid && importForm.controls['version'].dirty">
-                                Version is required
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="name">Version *:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="version" formControlName="version" placeholder="Required" [(ngModel)]="jobType.version"/>
+                                <div class="ui-message ui-messages-error ui-corner-all"
+                                     *ngIf="!importForm.controls['version'].valid && importForm.controls['version'].dirty">
+                                    Version is required
+                                </div>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <label for="docker-image">Docker Image:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="docker-image" formControlName="docker_image" [(ngModel)]="jobType.docker_image"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Description:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                        <textarea pInputTextarea type="text" id="description" rows="6" formControlName="description"
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="name">Description:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                        <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
                                   [(ngModel)]="jobType.description"></textarea>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <label>Icon:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
+                                           [style]="{'max-height':'150px'}">
+                                    <ng-template let-icon pTemplate="item">
+                                        <div class="ui-helper-clearfix">
+                                            <span class="fa fa-fw {{icon.label}}"></span> {{icon.label.replace('fa-','')}}
+                                        </div>
+                                    </ng-template>
+                                </p-listbox>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="author-name">Author Name:</label>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="author-name">Author Name:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="author-name" formControlName="author_name" [(ngModel)]="jobType.author_name"/>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <label for="author-url">Author URL:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <input pInputText id="author-url" formControlName="author_url" [(ngModel)]="jobType.author_url"/>
+                            </div>
                         </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="author-name" formControlName="author_name" [(ngModel)]="jobType.author_name"/>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="name">Timeout (seconds):</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-spinner size="30" id="timeout" formControlName="timeout" [(ngModel)]="jobType.timeout" [min]="0"></p-spinner>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <label for="max-tries">Max Tries:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-spinner size="30" id="max-tries" formControlName="max_tries" [(ngModel)]="jobType.max_tries"
+                                           [min]="0"></p-spinner>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="author-url">Author URL:</label>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="cpus">CPUs:</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-spinner size="30" id="cpus" formControlName="cpus" [(ngModel)]="jobType.cpus_required" [min]="0"
+                                           [step]="0.25"></p-spinner>
+                            </div>
+                            <div class="ui-grid-col-2">
+                                <label for="memory">Memory (MiB):</label>
+                            </div>
+                            <div class="ui-grid-col-4">
+                                <p-spinner size="30" id="memory" formControlName="memory" [(ngModel)]="jobType.mem_required" [min]="0"
+                                           [step]="100"></p-spinner>
+                            </div>
                         </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="author-url" formControlName="author_url" [(ngModel)]="jobType.author_url"/>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="icon">Icon:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
-                                       [style]="{'max-height':'150px'}">
-                                <ng-template let-icon pTemplate="item">
-                                    <div class="ui-helper-clearfix">
-                                        <span class="fa fa-fw {{icon.label}}"></span> {{icon.label.replace('fa-','')}}
+                        <p-accordion multiple="true" (onOpen)="onGeneralAccordionOpen($event)" (onClose)="onGeneralAccordionClose($event)"
+                                     [activeIndex]="activeGeneralIndex">
+                            <p-accordionTab header="Trigger Rule">
+                                <form [formGroup]="triggerForm" (ngSubmit)="triggerForm.value">
+                                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2">
+                                                <label>Type *:</label>
+                                            </div>
+                                            <div class="ui-grid-col-10">
+                                                <p-dropdown [options]="triggerTypeOptions" [(ngModel)]="trigger.type"
+                                                            formControlName="type" placeholder="Select..." autoWidth="false"
+                                                            [style]="{'width': '25%'}">
+                                                    <ng-template let-type p-template="item">
+                                                        {{ type.label }}
+                                                    </ng-template>
+                                                </p-dropdown>
+                                                <div class="ui-message ui-messages-error ui-corner-all"
+                                                     *ngIf="!triggerForm.controls['type'].valid && triggerForm.controls['type'].dirty">
+                                                    Type is Required
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2">
+                                                <label for="trigger-version">Trigger Version:</label>
+                                            </div>
+                                            <div class="ui-grid-col-10">
+                                                <input pInputText id="trigger-version" formControlName="version"
+                                                       [(ngModel)]="trigger.configuration.version"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2">
+                                                <label for="trigger-media_type">Media Type:</label>
+                                            </div>
+                                            <div class="ui-grid-col-10">
+                                                <input pInputText id="trigger-media_type" formControlName="media_type"
+                                                       [(ngModel)]="trigger.configuration.condition.media_type"/>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2">
+                                                <label>Data Types:</label>
+                                            </div>
+                                            <div class="ui-grid-col-10">
+                                                <p-chips [(ngModel)]="trigger.configuration.condition.data_types"
+                                                         formControlName="data_types"></p-chips>
+                                                Enter data type and press 'Enter/Return'
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2">
+                                                <label for="trigger-input_data_name">Input Data Name *:</label>
+                                            </div>
+                                            <div class="ui-grid-col-10">
+                                                <input pInputText id="trigger-input_data_name" formControlName="input_data_name"
+                                                       [(ngModel)]="trigger.configuration.data.input_data_name"/>
+                                                <div class="ui-message ui-messages-error ui-corner-all"
+                                                     *ngIf="!triggerForm.controls['input_data_name'].valid && triggerForm.controls['input_data_name'].dirty">
+                                                    Input Data Name is Required
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2">
+                                                <label>Workspace *:</label>
+                                            </div>
+                                            <div class="ui-grid-col-10">
+                                                <p-dropdown [options]="workspaces"
+                                                            [(ngModel)]="trigger.configuration.data.workspace_name"
+                                                            formControlName="workspace_name" placeholder="Select..." autoWidth="false"
+                                                            [style]="{'width': '25%'}">
+                                                    <ng-template let-type p-template="item">
+                                                        {{ type.label }}
+                                                    </ng-template>
+                                                </p-dropdown>
+                                                <div class="ui-message ui-messages-error ui-corner-all"
+                                                     *ngIf="!triggerForm.controls['workspace_name'].valid && triggerForm.controls['workspace_name'].dirty">
+                                                    Workspace Name is Required
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2"></div>
+                                            <div class="ui-grid-col-10">
+                                                <p-checkbox [(ngModel)]="trigger.is_active" formControlName="is_active"
+                                                            binary="true" label="Active"></p-checkbox>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2"></div>
+                                            <div class="ui-grid-col-1">
+                                                <button pButton icon="fa-save" label="Save" [disabled]="!triggerForm.valid"
+                                                        (click)="onTriggerFormSubmit()"></button>
+                                            </div>
+                                            <div class="ui-grid-col-1" *ngIf="jobType.trigger_rule">
+                                                <button pButton icon="fa-remove" label="Delete" [disabled]="!triggerForm.valid"
+                                                        (click)="onTriggerDelete()" class="ui-button-danger"></button>
+                                            </div>
+                                        </div>
+                                        <div class="ui-grid-row">
+                                            <div class="ui-grid-col-2"></div>
+                                            <div class="ui-grid-col-10">
+                                                <div *ngIf="triggerJson && triggerJson !== ''">
+                                                    Current Trigger Rule
+                                                    <codemirror [(ngModel)]="triggerJson" formControlName="json-editor"
+                                                                [config]="jsonConfigReadOnly"></codemirror>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                </ng-template>
-                            </p-listbox>
-                        </div>
+                                </form>
+                            </p-accordionTab>
+                            <p-accordionTab header="Error Mapping">
+                                Error mapping
+                            </p-accordionTab>
+                        </p-accordion>
+                        <!--<div class="ui-grid-row">-->
+                        <!--<div class="ui-grid-col-2"></div>-->
+                        <!--<div class="ui-grid-col-10">-->
+                        <!--<button pButton type="submit" label="Submit" [disabled]="!importForm.valid"-->
+                        <!--(click)="onSubmit(importForm.value)"></button>-->
+                        <!--</div>-->
+                        <!--</div>-->
                     </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="docker-image">Docker Image:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="docker-image" formControlName="docker_image" [(ngModel)]="jobType.docker_image"/>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Timeout (seconds):</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <p-spinner size="30" id="timeout" formControlName="timeout" [(ngModel)]="jobType.timeout" [min]="0"></p-spinner>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="max-tries">Max Tries:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <p-spinner size="30" id="max-tries" formControlName="max_tries" [(ngModel)]="jobType.max_tries"
-                                       [min]="0"></p-spinner>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="cpus">CPUs:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <p-spinner size="30" id="cpus" formControlName="cpus" [(ngModel)]="jobType.cpus_required" [min]="0"
-                                       [step]="0.25"></p-spinner>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="memory">Memory (MiB):</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <p-spinner size="30" id="memory" formControlName="memory" [(ngModel)]="jobType.mem_required" [min]="0"
-                                       [step]="100"></p-spinner>
-                        </div>
-                    </div>
-                    <!--<div class="ui-grid-row">-->
-                    <!--<div class="ui-grid-col-2"></div>-->
-                    <!--<div class="ui-grid-col-10">-->
-                    <!--<button pButton type="submit" label="Submit" [disabled]="!importForm.valid"-->
-                    <!--(click)="onSubmit(importForm.value)"></button>-->
-                    <!--</div>-->
-                    <!--</div>-->
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 1">
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="interface-version">Version:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="interface-version" formControlName="interface-version"
-                                   [(ngModel)]="jobType.job_type_interface.version"/>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Command *:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="interface-command" formControlName="interface-command" placeholder="Command is Required"
-                                   [(ngModel)]="jobType.job_type_interface.command"/>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!importForm.controls['interface-command'].valid && importForm.controls['interface-command'].dirty">
-                                Command is required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-grid-row">
-                        <div class="ui-grid-col-2">
-                            <label for="name">Command Arguments *:</label>
-                        </div>
-                        <div class="ui-grid-col-10">
-                            <input pInputText id="interface-command-arguments" formControlName="interface-command-arguments"
-                                   placeholder="Command Arguments are Required" [(ngModel)]="jobType.job_type_interface.command_arguments"/>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!importForm.controls['interface-command-arguments'].valid && importForm.controls['interface-command-arguments'].dirty">
-                                Command Arguments are required
-                            </div>
-                        </div>
-                    </div>
-                    <p-accordion multiple="true" (onOpen)="onAccordionOpen($event)" (onClose)="onAccordionClose($event)" [activeIndex]="activeIndex">
-                        <p-accordionTab header="Environment Variables">
-                            <form [formGroup]="interfaceEnvVarsForm" (ngSubmit)="interfaceEnvVarsForm.value">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="env-var-name">Name *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="env-var-name" formControlName="name" placeholder="Name is Required"
-                                               [(ngModel)]="interfaceEnvVar.name"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceEnvVarsForm.controls['name'].valid && interfaceEnvVarsForm.controls['name'].dirty">
-                                            Name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="env-var-value">Value *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="env-var-value" formControlName="value" placeholder="Value is Required"
-                                               [(ngModel)]="interfaceEnvVar.value"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceEnvVarsForm.controls['value'].valid && interfaceEnvVarsForm.controls['value'].dirty">
-                                            Value is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-1">
-                                        <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceEnvVarsForm.valid"
-                                                (click)="onInterfaceEnvVarsFormSubmit(interfaceEnvVarsForm.value)"></button>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <div *ngIf="interfaceEnvVarJson && interfaceEnvVarJson !== ''">
-                                            Current Environment Variables
-                                            <codemirror [(ngModel)]="interfaceEnvVarJson" formControlName="json-editor"
-                                                        [config]="jsonConfigReadOnly"></codemirror>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </p-accordionTab>
-                        <p-accordionTab header="Mounts">
-                            <form [formGroup]="interfaceMountsForm" (ngSubmit)="interfaceMountsForm.value">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="mount-name">Name:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="mount-name" formControlName="name" placeholder="Name is Required"
-                                               [(ngModel)]="interfaceMount.name"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceMountsForm.controls['name'].valid && interfaceMountsForm.controls['name'].dirty">
-                                            Name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="mount-path">Path *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="mount-path" formControlName="path" placeholder="Path is Required"
-                                               [(ngModel)]="interfaceMount.path"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceMountsForm.controls['path'].valid && interfaceMountsForm.controls['path'].dirty">
-                                            Path is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Mode</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-dropdown [options]="interfaceMountModeOptions" [(ngModel)]="interfaceMount.mode"
-                                                    formControlName="mode" placeholder="Select...">
-                                            <ng-template let-mode p-template="item">
-                                                {{ mode.label }}
-                                            </ng-template>
-                                        </p-dropdown>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="interfaceMount.required" formControlName="required"
-                                                    binary="true" label="Required"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-1">
-                                        <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceMountsForm.valid"
-                                                (click)="onInterfaceMountsFormSubmit(interfaceMountsForm.value)"></button>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <div *ngIf="interfaceMountsJson && interfaceMountsJson !== ''">
-                                            Current Mounts
-                                            <codemirror [(ngModel)]="interfaceMountsJson" formControlName="json-editor"
-                                                        [config]="jsonConfigReadOnly"></codemirror>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </p-accordionTab>
-                        <p-accordionTab header="Settings">
-                            <form [formGroup]="interfaceSettingsForm" (ngSubmit)="interfaceSettingsForm.value">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="setting-name">Name *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="setting-name" formControlName="name" placeholder="Name is Required"
-                                               [(ngModel)]="interfaceSetting.name"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceSettingsForm.controls['name'].valid && interfaceSettingsForm.controls['name'].dirty">
-                                            Name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="interfaceSetting.required" formControlName="required"
-                                                    binary="true" label="Required"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="interfaceSetting.secret" formControlName="secret"
-                                                    binary="true" label="Secret"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-1">
-                                        <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceSettingsForm.valid"
-                                                (click)="onInterfaceSettingsFormSubmit(interfaceSettingsForm.value)"></button>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <div *ngIf="interfaceSettingsJson && interfaceSettingsJson !== ''">
-                                            Current Settings
-                                            <codemirror [(ngModel)]="interfaceSettingsJson" formControlName="json-editor"
-                                                        [config]="jsonConfigReadOnly"></codemirror>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </p-accordionTab>
-                        <p-accordionTab header="Inputs">
-                            <form [formGroup]="interfaceInputsForm" (ngSubmit)="interfaceInputsForm.value">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="input-name">Name *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="input-name" formControlName="name" placeholder="Name is Required"
-                                               [(ngModel)]="interfaceInput.name"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceInputsForm.controls['name'].valid && interfaceInputsForm.controls['name'].dirty">
-                                            Name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Type *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-dropdown [options]="interfaceInputTypeOptions" [(ngModel)]="interfaceInput.type"
-                                                    formControlName="type" placeholder="Select...">
-                                            <ng-template let-type p-template="item">
-                                                {{ type.label }}
-                                            </ng-template>
-                                        </p-dropdown>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceInputsForm.controls['type'].valid && interfaceInputsForm.controls['type'].dirty">
-                                            Type is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row" *ngIf="interfaceInput.type === 'file' || interfaceInput.type === 'files'">
-                                    <div class="ui-grid-col-2">
-                                        <label>Media Types:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-chips [(ngModel)]="interfaceInput.media_types" formControlName="media_types"></p-chips>
-                                        Enter media type and press the 'Enter/Return'
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row" *ngIf="interfaceInput.type === 'file' || interfaceInput.type === 'files'">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="interfaceInput.partial" formControlName="partial"
-                                                    binary="true" label="Partial"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="interfaceInput.required" formControlName="required"
-                                                    binary="true" label="Required"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-1">
-                                        <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceInputsForm.valid"
-                                                (click)="onInterfaceInputsFormSubmit(interfaceInputsForm.value)"></button>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <div *ngIf="interfaceInputsJson && interfaceInputsJson !== ''">
-                                            Current Inputs
-                                            <codemirror [(ngModel)]="interfaceInputsJson" formControlName="json-editor"
-                                                        [config]="jsonConfigReadOnly"></codemirror>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </p-accordionTab>
-                        <p-accordionTab header="Outputs">
-                            <form [formGroup]="interfaceOutputsForm" (ngSubmit)="interfaceOutputsForm.value">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="output-name">Name *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="output-name" formControlName="name" placeholder="Name is Required"
-                                               [(ngModel)]="interfaceOutput.name"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceOutputsForm.controls['name'].valid && interfaceOutputsForm.controls['name'].dirty">
-                                            Name is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Type *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-dropdown [options]="interfaceOutputTypeOptions" [(ngModel)]="interfaceOutput.type"
-                                                    formControlName="type" placeholder="Select...">
-                                            <ng-template let-type p-template="item">
-                                                {{ type.label }}
-                                            </ng-template>
-                                        </p-dropdown>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!interfaceOutputsForm.controls['type'].valid && interfaceOutputsForm.controls['type'].dirty">
-                                            Type is required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Media Types:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-chips [(ngModel)]="interfaceOutput.media_types" formControlName="media_types"></p-chips>
-                                        Enter media type and press the 'Enter/Return' key
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="interfaceOutput.required" formControlName="required"
-                                                    binary="true" label="Required"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-1">
-                                        <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceOutputsForm.valid"
-                                                (click)="onInterfaceOutputsFormSubmit(interfaceOutputsForm.value)"></button>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <div *ngIf="interfaceOutputsJson && interfaceOutputsJson !== ''">
-                                            Current Outputs
-                                            <codemirror [(ngModel)]="interfaceOutputsJson" formControlName="json-editor"
-                                                        [config]="jsonConfigReadOnly"></codemirror>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </p-accordionTab>
-                    </p-accordion>
+                    Configuration
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 2">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="interface-version">Interface Version:</label>
+                            </div>
+                            <div class="ui-grid-col-10">
+                                <input pInputText id="interface-version" formControlName="interface-version"
+                                       [(ngModel)]="jobType.job_type_interface.version"/>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="name">Command *:</label>
+                            </div>
+                            <div class="ui-grid-col-10">
+                                <input pInputText id="interface-command" formControlName="interface-command" placeholder="Command is Required"
+                                       [(ngModel)]="jobType.job_type_interface.command"/>
+                                <div class="ui-message ui-messages-error ui-corner-all"
+                                     *ngIf="!importForm.controls['interface-command'].valid && importForm.controls['interface-command'].dirty">
+                                    Command is required
+                                </div>
+                            </div>
+                        </div>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="name">Command Arguments *:</label>
+                            </div>
+                            <div class="ui-grid-col-10">
+                                <input pInputText id="interface-command_arguments" formControlName="interface-command_arguments"
+                                       placeholder="Command Arguments are Required" [(ngModel)]="jobType.job_type_interface.command_arguments"/>
+                                <div class="ui-message ui-messages-error ui-corner-all"
+                                     *ngIf="!importForm.controls['interface-command_arguments'].valid && importForm.controls['interface-command_arguments'].dirty">
+                                    Command Arguments are required
+                                </div>
+                            </div>
+                        </div>
+                        <p-accordion multiple="true" (onOpen)="onInterfaceAccordionOpen($event)" (onClose)="onInterfaceAccordionClose($event)"
+                                     [activeIndex]="activeInterfaceIndex">
+                            <p-accordionTab header="Environment Variables">
+                                <form [formGroup]="interfaceEnvVarsForm" (ngSubmit)="interfaceEnvVarsForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="env-var-name">Name *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="env-var-name" formControlName="name" placeholder="Name is Required"
+                                                   [(ngModel)]="interfaceEnvVar.name"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceEnvVarsForm.controls['name'].valid && interfaceEnvVarsForm.controls['name'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="env-var-value">Value *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="env-var-value" formControlName="value" placeholder="Value is Required"
+                                                   [(ngModel)]="interfaceEnvVar.value"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceEnvVarsForm.controls['value'].valid && interfaceEnvVarsForm.controls['value'].dirty">
+                                                Value is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceEnvVarsForm.valid"
+                                                    (click)="onInterfaceEnvVarsFormSubmit(interfaceEnvVarsForm.value)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="interfaceEnvVarJson && interfaceEnvVarJson !== ''">
+                                                Current Environment Variables
+                                                <codemirror [(ngModel)]="interfaceEnvVarJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </p-accordionTab>
+                            <p-accordionTab header="Mounts">
+                                <form [formGroup]="interfaceMountsForm" (ngSubmit)="interfaceMountsForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="mount-name">Name *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="mount-name" formControlName="name" placeholder="Name is Required"
+                                                   [(ngModel)]="interfaceMount.name"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceMountsForm.controls['name'].valid && interfaceMountsForm.controls['name'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="mount-path">Path *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="mount-path" formControlName="path" placeholder="Path is Required"
+                                                   [(ngModel)]="interfaceMount.path"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceMountsForm.controls['path'].valid && interfaceMountsForm.controls['path'].dirty">
+                                                Path is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label>Mode</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <p-dropdown [options]="interfaceMountModeOptions" [(ngModel)]="interfaceMount.mode"
+                                                        formControlName="mode" placeholder="Select...">
+                                                <ng-template let-mode p-template="item">
+                                                    {{ mode.label }}
+                                                </ng-template>
+                                            </p-dropdown>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceMount.required" formControlName="required"
+                                                        binary="true" label="Required"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceMountsForm.valid"
+                                                    (click)="onInterfaceMountsFormSubmit(interfaceMountsForm.value)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="interfaceMountsJson && interfaceMountsJson !== ''">
+                                                Current Mounts
+                                                <codemirror [(ngModel)]="interfaceMountsJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </p-accordionTab>
+                            <p-accordionTab header="Settings">
+                                <form [formGroup]="interfaceSettingsForm" (ngSubmit)="interfaceSettingsForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="setting-name">Name *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="setting-name" formControlName="name" placeholder="Name is Required"
+                                                   [(ngModel)]="interfaceSetting.name"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceSettingsForm.controls['name'].valid && interfaceSettingsForm.controls['name'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceSetting.required" formControlName="required"
+                                                        binary="true" label="Required"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceSetting.secret" formControlName="secret"
+                                                        binary="true" label="Secret"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceSettingsForm.valid"
+                                                    (click)="onInterfaceSettingsFormSubmit(interfaceSettingsForm.value)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="interfaceSettingsJson && interfaceSettingsJson !== ''">
+                                                Current Settings
+                                                <codemirror [(ngModel)]="interfaceSettingsJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </p-accordionTab>
+                            <p-accordionTab header="Inputs">
+                                <form [formGroup]="interfaceInputsForm" (ngSubmit)="interfaceInputsForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="input-name">Name *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="input-name" formControlName="name" placeholder="Name is Required"
+                                                   [(ngModel)]="interfaceInput.name"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceInputsForm.controls['name'].valid && interfaceInputsForm.controls['name'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label>Type *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <p-dropdown [options]="interfaceInputTypeOptions" [(ngModel)]="interfaceInput.type"
+                                                        formControlName="type" placeholder="Select...">
+                                                <ng-template let-type p-template="item">
+                                                    {{ type.label }}
+                                                </ng-template>
+                                            </p-dropdown>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceInputsForm.controls['type'].valid && interfaceInputsForm.controls['type'].dirty">
+                                                Type is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row" *ngIf="interfaceInput.type === 'file' || interfaceInput.type === 'files'">
+                                        <div class="ui-grid-col-2">
+                                            <label>Media Types:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <p-chips [(ngModel)]="interfaceInput.media_types" formControlName="media_types"></p-chips>
+                                            Enter media type and press 'Enter/Return'
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row" *ngIf="interfaceInput.type === 'file' || interfaceInput.type === 'files'">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceInput.partial" formControlName="partial"
+                                                        binary="true" label="Partial"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceInput.required" formControlName="required"
+                                                        binary="true" label="Required"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceInputsForm.valid"
+                                                    (click)="onInterfaceInputsFormSubmit(interfaceInputsForm.value)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="interfaceInputsJson && interfaceInputsJson !== ''">
+                                                Current Inputs
+                                                <codemirror [(ngModel)]="interfaceInputsJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </p-accordionTab>
+                            <p-accordionTab header="Outputs">
+                                <form [formGroup]="interfaceOutputsForm" (ngSubmit)="interfaceOutputsForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="output-name">Name *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="output-name" formControlName="name" placeholder="Name is Required"
+                                                   [(ngModel)]="interfaceOutput.name"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceOutputsForm.controls['name'].valid && interfaceOutputsForm.controls['name'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label>Type *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <p-dropdown [options]="interfaceOutputTypeOptions" [(ngModel)]="interfaceOutput.type"
+                                                        formControlName="type" placeholder="Select...">
+                                                <ng-template let-type p-template="item">
+                                                    {{ type.label }}
+                                                </ng-template>
+                                            </p-dropdown>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!interfaceOutputsForm.controls['type'].valid && interfaceOutputsForm.controls['type'].dirty">
+                                                Type is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label>Media Types:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <p-chips [(ngModel)]="interfaceOutput.media_types" formControlName="media_types"></p-chips>
+                                            Enter media type and press 'Enter/Return'
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <p-checkbox [(ngModel)]="interfaceOutput.required" formControlName="required"
+                                                        binary="true" label="Required"></p-checkbox>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-plus" label="Add" [disabled]="!interfaceOutputsForm.valid"
+                                                    (click)="onInterfaceOutputsFormSubmit(interfaceOutputsForm.value)"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="interfaceOutputsJson && interfaceOutputsJson !== ''">
+                                                Current Outputs
+                                                <codemirror [(ngModel)]="interfaceOutputsJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </p-accordionTab>
+                        </p-accordion>
+                    </div>
+                </div>
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 3">
+                    Custom Resources
+                </div>
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 4">
                     <h2>
                         <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
                            [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{jobType.title}} v{{jobType.version}}

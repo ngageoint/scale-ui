@@ -1,34 +1,33 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
-import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { JobTypesApiService } from './api.service';
-import { JobTypesImportComponent } from './import.component';
-import { WorkspacesApiService } from '../workspaces/api.service';
+import { WorkspacesApiService } from './api.service';
+import { WorkspacesComponent } from './component';
 
 
-describe('JobTypesImportComponent', () => {
-    let component: JobTypesImportComponent;
-    let fixture: ComponentFixture<JobTypesImportComponent>;
+describe('WorkspacesComponent', () => {
+    let component: WorkspacesComponent;
+    let fixture: ComponentFixture<WorkspacesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [JobTypesImportComponent],
+            declarations: [WorkspacesComponent],
             imports: [HttpModule],
             providers: [
-                JobTypesApiService, WorkspacesApiService, FormBuilder,
+                WorkspacesApiService,
+                {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
-        .compileComponents();
+            .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(JobTypesImportComponent);
+        fixture = TestBed.createComponent(WorkspacesComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
