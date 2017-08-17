@@ -1,5 +1,11 @@
 @import '../../../defaults/colors';
 
+@keyframes spin {
+    to {
+        transform: rotate(1440deg);
+    }
+}
+
 .jti {
     display: flex;
 }
@@ -45,13 +51,34 @@
 .jti__status {
     background: $clr-navbar-light;
     color: $clr-white;
-    padding-top: 32px;
+    position: relative;
     text-align: center;
     width: 64px;
+}
 
-    i {
-        font-family: 'FontAwesome';
-        font-size: 32px;
-        font-style: normal;
-    }
+.jti__status-icon {
+    font-family: 'FontAwesome';
+    font-size: 32px;
+    font-style: normal;
+    left: 12px;
+    position: absolute;
+    right: 12px;
+    top: 24px;
+}
+
+.jti__status-isrunning {
+    animation: spin 2s infinite cubic-bezier(0.6, 0.2, 0.4, 0.8);
+    font-size: 7px;
+    line-height: 7px;
+    position: absolute;
+    right: 3px;
+    top: 3px;
+}
+
+.jti__status-runningcount {
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    text-align: center;
 }

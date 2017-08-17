@@ -8,9 +8,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class JobtypeitemComponent implements OnInit {
 
-    @Input() jobType: any;
+    @Input() item: any;
     constructor() {
-        this.jobType = {};
+        this.item = {};
     }
 
     ngOnInit() {
@@ -18,5 +18,18 @@ export class JobtypeitemComponent implements OnInit {
 
     getUnicode(code) {
         return `&#x${code};`;
+    }
+
+    getRunningCount() {
+        const counts = this.item.job_counts;
+        if (!counts || counts.length < 1) {
+            return 0;
+        }
+        for (let i = 0; i < counts.length; i++) {
+            if (counts[i].status === 'RUNNING') {
+                return counts[i].count;
+            }
+        }
+        return 0;
     }
 }
