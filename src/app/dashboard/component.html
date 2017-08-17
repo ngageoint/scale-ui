@@ -7,7 +7,7 @@
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-item="rowData" pTemplate="body">
-                    <app-jobtypeitem [jobType]="item.job_type"></app-jobtypeitem>
+                    <app-jobtypeitem [item]="item"></app-jobtypeitem>
                 </ng-template>
             </p-column>
         </p-dataTable>
@@ -18,7 +18,7 @@
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-item="rowData" pTemplate="body">
-                    <app-jobtypeitem [jobType]="item.job_type"></app-jobtypeitem>
+                    <app-jobtypeitem [item]="item"></app-jobtypeitem>
                 </ng-template>
             </p-column>
         </p-dataTable>

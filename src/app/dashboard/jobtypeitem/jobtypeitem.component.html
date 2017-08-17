@@ -1,14 +1,16 @@
 
 <!-- <span>{{this.jobType.title}} {{this.jobType.version}}</span> -->
 <div class="jti">
-    <div class="jti__status">
-        <i [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i>
+    <div [class]="getStatusClass()">
+        <i *ngIf="this.getRunningCount() > 0" class="jti__status-isrunning fa fa-circle-o-notch"></i>
+        <i class="jti__status-icon" [innerHTML]="this.getUnicode(this.item.job_type.icon_code)"></i>
+        <span class="jti__status-runningcount">{{ getRunningCount() }}</span>
     </div>
     <div class="jti__info">
         <div class="jti__meta">
-            <div class="jti__heading">{{ this.jobType.title }}</div>
+            <div class="jti__heading">{{ this.item.job_type.title }}</div>
             <div class="jti__subheading">
-                Version {{ this.jobType.version }}
+                Version {{ this.item.job_type.version }}
             </div>
         </div>
         <div class="jti__toolbar">

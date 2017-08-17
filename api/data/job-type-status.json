@@ -76,7 +76,7 @@
                 },
                 {
                     "status": "COMPLETED",
-                    "count": 875,
+                    "count": 75,
                     "most_recent": "2015-08-31T21:51:12.674Z",
                     "category": null
                 }
@@ -106,8 +106,14 @@
                     "category": null
                 },
                 {
+                    "status": "FAILED",
+                    "count": 25,
+                    "most_recent": "2015-08-31T22:09:12.674Z",
+                    "category": "DATA"
+                },
+                {
                     "status": "COMPLETED",
-                    "count": 287,
+                    "count": 75,
                     "most_recent": "2015-08-31T21:51:12.674Z",
                     "category": null
                 }

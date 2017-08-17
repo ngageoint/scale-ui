@@ -13,8 +13,8 @@ import { JobType } from './api.model';
 })
 export class DashboardComponent implements OnInit {
 
-    private allJobTypes: JobType[];
-    private favoriteJobTypes: JobType[];
+    private allJobTypes: any[];
+    private favoriteJobTypes: any[];
 
     constructor(
         private dashboardApiService: DashboardApiService,
@@ -30,8 +30,7 @@ export class DashboardComponent implements OnInit {
 
     private refreshAllJobTypes() {
         this.dashboardApiService.getJobTypesAndStatus().then(data => {
-            this.allJobTypes = data.results as JobType[];
-            console.log(`Job: ${JSON.stringify(data.results[0])}`);
+            this.allJobTypes = data.results as any[];
         });
     }
 }
