@@ -47,7 +47,7 @@ export class JobtypeitemComponent implements OnInit {
             }
         }
 
-        let total = failed + completed;
+        const total = failed + completed;
         let successRate = 100;
 
         if (failed > 0) {
