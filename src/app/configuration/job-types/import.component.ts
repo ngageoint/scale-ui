@@ -325,63 +325,30 @@ export class JobTypesImportComponent implements OnInit {
         this.triggerForm.reset();
         this.jobType.trigger_rule = null;
     }
-    onInterfaceEnvVarsFormSubmit(envVar: InterfaceEnvVar) {
-        let newEnvVar = {
-            name: envVar.name,
-            value: envVar.value
-        };
-        newEnvVar = this.stripObject(newEnvVar);
-        this.jobType.job_type_interface.env_vars.push(newEnvVar);
-        this.interfaceEnvVarsForm.reset();
+    onInterfaceEnvVarsFormSubmit() {
+        this.jobType.job_type_interface.env_vars.push(this.stripObject(this.interfaceEnvVar));
         this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
+        this.interfaceEnvVarsForm.reset();
     }
-    onInterfaceMountsFormSubmit(mount: InterfaceMount) {
-        let newMount = {
-            name: mount.name,
-            path: mount.path,
-            required: mount.required,
-            mode: mount.mode
-        };
-        newMount = this.stripObject(newMount);
-        this.jobType.job_type_interface.mounts.push(newMount);
-        this.interfaceMountsForm.reset();
+    onInterfaceMountsFormSubmit() {
+        this.jobType.job_type_interface.mounts.push(this.stripObject(this.interfaceMount));
         this.interfaceMountsJson = beautify(JSON.stringify(this.jobType.job_type_interface.mounts));
+        this.interfaceMountsForm.reset();
     }
-    onInterfaceSettingsFormSubmit(setting: InterfaceSetting) {
-        let newSetting = {
-            name: setting.name,
-            required: setting.required,
-            secret: setting.secret
-        };
-        newSetting = this.stripObject(newSetting);
-        this.jobType.job_type_interface.settings.push(newSetting);
-        this.interfaceSettingsForm.reset();
+    onInterfaceSettingsFormSubmit() {
+        this.jobType.job_type_interface.settings.push(this.stripObject(this.interfaceSetting));
         this.interfaceSettingsJson = beautify(JSON.stringify(this.jobType.job_type_interface.settings));
+        this.interfaceSettingsForm.reset();
     }
-    onInterfaceInputsFormSubmit(input: InterfaceInput) {
-        let newInput = {
-            name: input.name,
-            type: input.type,
-            required: input.required,
-            partial: input.partial,
-            media_types: input.media_types
-        };
-        newInput = this.stripObject(newInput);
-        this.jobType.job_type_interface.input_data.push(newInput);
-        this.interfaceInputsForm.reset();
+    onInterfaceInputsFormSubmit() {
+        this.jobType.job_type_interface.input_data.push(this.stripObject(this.interfaceInput));
         this.interfaceInputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.input_data));
+        this.interfaceInputsForm.reset();
     }
-    onInterfaceOutputsFormSubmit(output: InterfaceOutput) {
-        let newOutput = {
-            name: output.name,
-            type: output.type,
-            required: output.required,
-            media_types: output.media_types
-        };
-        newOutput = this.stripObject(newOutput);
-        this.jobType.job_type_interface.output_data.push(newOutput);
-        this.interfaceOutputsForm.reset();
+    onInterfaceOutputsFormSubmit() {
+        this.jobType.job_type_interface.output_data.push(this.stripObject(this.interfaceOutput));
         this.interfaceOutputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.output_data));
+        this.interfaceOutputsForm.reset();
     }
     onValidate() {
         this.msgs = [];
