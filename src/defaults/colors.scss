@@ -40,7 +40,11 @@ $clr-navbar-light: #2E3F50;
 $clr-navbar-dark: #22292E;
 $clr-navbar-hover: #293134;
 
-$clr-status-good: darken(#76a269, 30%);
-$clr-status-warn: darken(#da932e, 10%);
-$clr-status-error: darken(#d66e5b, 20%);
+$clr-status-good: #354131; //desaturate(darken(#76a269, 30%), 10%);
+$clr-status-warn: #9a733b; //desaturate(darken(#da932e, 10%), 25%);
+$clr-status-error: #934638; //desaturate(darken(#d66e5b, 20%), 15%);
 $clr-status-unknown: $clr-gray-30;
+
+// $base-color: #934638;
+// $clr-status-red1: adjust-hue($base-color, 15%);
+// $clr-status-red2: adjust-hue($base-color, 30%);
