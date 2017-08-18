@@ -10,6 +10,8 @@ export class ErrordialsComponent implements OnInit {
     private jobType: any;
     private data: any;
     private chartConfig: any;
+    private totalJobs: number;
+    private failedJobs: number;
 
     constructor() {
         // this should be passed in
@@ -53,14 +55,19 @@ export class ErrordialsComponent implements OnInit {
     ngOnInit() {
 
         const portions = {};
+        let failures = 0;
+        let total = 0;
         for (let i = 0; i < this.jobType.job_counts.length; i++) {
             const count = this.jobType.job_counts[i];
             if (count.status === 'RUNNING') {
                 continue; // skip it
             } else if (count.status === 'COMPLETED') {
                 portions['COMPLETED'] = count.count;
+                total += count.count;
             } else if (count.status === 'FAILED') {
                 portions[count.category] = count.count;
+                total += count.count;
+                failures += count.count;
             }
         }
 
@@ -70,6 +77,8 @@ export class ErrordialsComponent implements OnInit {
             values.push(portions[labels[i]]);
         }
 
+        this.totalJobs = total;
+        this.failedJobs = failures;
         this.data = {
             labels: labels,
             datasets: [{
