@@ -11,6 +11,7 @@ import * as iconData from './font-awesome.json';
 import { InterfaceEnvVar, InterfaceInput, InterfaceMount, InterfaceOutput, InterfaceSetting, JobTypeInterface } from './interface.model';
 import { Trigger, TriggerConfiguration, TriggerData } from './trigger.model';
 import { WorkspacesApiService } from '../workspaces/api.service';
+import { CustomResources } from './custom.resources.model';
 
 @Component({
     selector: 'app-job-types-import',
@@ -32,7 +33,6 @@ export class JobTypesImportComponent implements OnInit {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
-    activeGeneralIndex: number[];
     activeInterfaceIndex: number[];
     triggerForm: FormGroup;
     trigger: Trigger;
@@ -59,6 +59,9 @@ export class JobTypesImportComponent implements OnInit {
     interfaceOutput: InterfaceOutput;
     interfaceOutputsJson: string;
     interfaceOutputTypeOptions: SelectItem[];
+    customResourcesForm: FormGroup;
+    customResources: any;
+    customResourcesJson: string;
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private workspacesApiService: WorkspacesApiService,
@@ -81,7 +84,8 @@ export class JobTypesImportComponent implements OnInit {
             'interface-version': new FormControl(''),
             'interface-command': new FormControl('', Validators.required),
             'interface-command_arguments': new FormControl('', Validators.required),
-            'error-mapping-version': new FormControl('')
+            'error-mapping-version': new FormControl(''),
+            'custom-resources-version': new FormControl('')
         });
         this.triggerForm = this.fb.group({
             'type': new FormControl('', Validators.required),
@@ -131,12 +135,20 @@ export class JobTypesImportComponent implements OnInit {
             'required': new FormControl(''),
             'json-editor': new FormControl('')
         });
+        this.customResourcesForm = this.fb.group({
+            'key': new FormControl('', Validators.required),
+            'value': new FormControl('', Validators.required),
+            'json-editor': new FormControl('')
+        });
         this.items = [
             {
                 label: 'General Information'
             },
             {
-                label: 'Configuration'
+                label: 'Trigger'
+            },
+            {
+                label: 'Error Mapping'
             },
             {
                 label: 'Interface'
@@ -150,7 +162,6 @@ export class JobTypesImportComponent implements OnInit {
             }
         ];
         this.workspaces = [];
-        this.activeGeneralIndex = [];
         this.activeInterfaceIndex = [];
         this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''), 'Untitled Algorithm');
         this.jsonConfig = {
@@ -221,8 +232,10 @@ export class JobTypesImportComponent implements OnInit {
                 value: 'files'
             }
         ];
+        this.customResources = new CustomResources();
         this.importForm.valueChanges.subscribe(() => {
-            this.items[4].disabled = !this.importForm.valid;
+            // only enable 'Validate and Import' when the form is valid
+            this.items[this.items.length - 1].disabled = !this.importForm.valid;
         });
     }
     private stripObject(obj: object) {
@@ -264,15 +277,6 @@ export class JobTypesImportComponent implements OnInit {
 
     getUnicode(code) {
         return `&#x${code};`;
-    }
-    onGeneralAccordionOpen(e) {
-        this.activeGeneralIndex.push(e.index);
-    }
-    onGeneralAccordionClose(e) {
-        const idx = this.activeGeneralIndex.indexOf(e.index);
-        if (idx > -1) {
-            this.activeGeneralIndex.splice(idx, 1);
-        }
     }
     onInterfaceAccordionOpen(e) {
         this.activeInterfaceIndex.push(e.index);
@@ -362,6 +366,12 @@ export class JobTypesImportComponent implements OnInit {
         this.jobType.job_type_interface.output_data.push(this.stripObject(this.interfaceOutput));
         this.interfaceOutputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.output_data));
         this.interfaceOutputsForm.reset();
+    }
+    onCustomResourcesFormSubmit() {
+        this.jobType.custom_resources.resources[this.customResources.key] = this.customResources.value;
+        this.jobType.custom_resources.resources = this.stripObject(this.jobType.custom_resources.resources);
+        this.customResourcesJson = beautify(JSON.stringify(this.jobType.custom_resources.resources));
+        this.customResourcesForm.reset();
     }
     onValidate() {
         this.msgs = [];
