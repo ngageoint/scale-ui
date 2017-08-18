@@ -15,6 +15,7 @@
 
         <h2>All Algorithms ({{ this.allJobTypes.length }})</h2>
         <p-dataTable [value]="allJobTypes" selectionMode="multi" styleClass="nopadding"
+            [scrollable]="true" scrollHeight="500px"
             [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
             <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-item="rowData" pTemplate="body">
