@@ -7,9 +7,14 @@
         padding-top: 0;
         width: 30%;
 
-        h3 {
-            margin-top: 0;
+        h3,
+        h4 {
+            margin: 0.25em 0;
             text-align: center;
+        }
+
+        h4 {
+            font-weight: normal;
         }
     }
 }
