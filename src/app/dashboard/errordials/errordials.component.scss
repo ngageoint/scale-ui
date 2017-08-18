@@ -1,0 +1,15 @@
+
+.errordials {
+    display: flex;
+
+    .errordial {
+        padding: 1.0em;
+        padding-top: 0;
+        width: 30%;
+
+        h3 {
+            margin-top: 0;
+            text-align: center;
+        }
+    }
+}

@@ -31,6 +31,9 @@ export class DashboardComponent implements OnInit {
     private refreshAllJobTypes() {
         this.dashboardApiService.getJobTypesAndStatus().then(data => {
             this.allJobTypes = data.results as any[];
+            // this.allJobTypes.forEach(jt => {
+            //     console.log(JSON.stringify(jt));
+            // });
         });
     }
 }

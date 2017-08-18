@@ -54,6 +54,7 @@ import { FooterComponent } from './footer/footer.component';
 import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.component';
 import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
+import { ErrordialsComponent } from './dashboard/errordials/errordials.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { WorkspacesApiService } from './configuration/workspaces/api.service';
         JobTypesImportComponent,
         FooterComponent,
         JobtypeitemComponent,
-        WorkspacesComponent
+        WorkspacesComponent,
+        ErrordialsComponent
     ],
     imports: [
         AppRoutingModule,
