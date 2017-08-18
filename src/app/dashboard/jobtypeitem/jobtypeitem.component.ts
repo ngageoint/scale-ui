@@ -40,7 +40,6 @@ export class JobtypeitemComponent implements OnInit {
 
     getStatusClass() {
         const counts = this.item.job_counts;
-        console.log('Counts: ' + JSON.stringify(counts));
         if (!counts || !counts.length || counts.length < 1) {
             return 'jti__status-unknown';
         }
