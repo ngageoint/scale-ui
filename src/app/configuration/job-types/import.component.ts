@@ -10,9 +10,7 @@ import { JobTypesApiService } from './api.service';
 import * as iconData from './font-awesome.json';
 import { InterfaceEnvVar, InterfaceInput, InterfaceMount, InterfaceOutput, InterfaceSetting, JobTypeInterface } from './interface.model';
 import { Trigger, TriggerConfiguration, TriggerData } from './trigger.model';
-import { ErrorMapping } from './error.mapping.model';
 import { WorkspacesApiService } from '../workspaces/api.service';
-import { Workspace } from '../workspaces/api.model';
 
 @Component({
     selector: 'app-job-types-import',
@@ -41,7 +39,7 @@ export class JobTypesImportComponent implements OnInit {
     triggerJson: string;
     triggerTypeOptions: SelectItem[];
     errorMappingForm: FormGroup;
-    errorMapping: ErrorMapping;
+    errorMappingExitCode: any;
     errorMappingJson: string;
     interfaceEnvVarsForm: FormGroup;
     interfaceEnvVar: InterfaceEnvVar;
@@ -82,7 +80,8 @@ export class JobTypesImportComponent implements OnInit {
             'memory': new FormControl(''),
             'interface-version': new FormControl(''),
             'interface-command': new FormControl('', Validators.required),
-            'interface-command_arguments': new FormControl('', Validators.required)
+            'interface-command_arguments': new FormControl('', Validators.required),
+            'error-mapping-version': new FormControl('')
         });
         this.triggerForm = this.fb.group({
             'type': new FormControl('', Validators.required),
@@ -92,6 +91,11 @@ export class JobTypesImportComponent implements OnInit {
             'data_types': new FormControl(''),
             'input_data_name': new FormControl('', Validators.required),
             'workspace_name': new FormControl('', Validators.required),
+            'json-editor': new FormControl('')
+        });
+        this.errorMappingForm = this.fb.group({
+            'key': new FormControl('', Validators.required),
+            'value': new FormControl('', Validators.required),
             'json-editor': new FormControl('')
         });
         this.interfaceEnvVarsForm = this.fb.group({
@@ -148,8 +152,7 @@ export class JobTypesImportComponent implements OnInit {
         this.workspaces = [];
         this.activeGeneralIndex = [];
         this.activeInterfaceIndex = [];
-        this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''),
-            'Untitled Algorithm');
+        this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''), 'Untitled Algorithm');
         this.jsonConfig = {
             mode: {name: 'application/json', json: true},
             indentUnit: 4,
@@ -178,6 +181,7 @@ export class JobTypesImportComponent implements OnInit {
                 value: 'INGEST'
             }
         ];
+        this.errorMappingExitCode = {};
         this.interfaceEnvVar = new InterfaceEnvVar('', '');
         this.interfaceMount = new InterfaceMount('', '');
         this.interfaceMountModeOptions = [
@@ -223,7 +227,7 @@ export class JobTypesImportComponent implements OnInit {
     }
     private stripObject(obj: object) {
         const strippedObj = _.cloneDeep(obj);
-        obj = _.pickBy(obj, (value, key) => {
+        _.pickBy(obj, (value, key) => {
             if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                 const childObj = this.stripObject(value);
                 if (_.keys(childObj).length > 0) {
@@ -292,6 +296,9 @@ export class JobTypesImportComponent implements OnInit {
                 if (this.jobType.trigger_rule) {
                     this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
                 }
+                if (this.jobType.error_mapping) {
+                    this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
+                }
                 if (this.jobType.job_type_interface.env_vars && this.jobType.job_type_interface.env_vars.length > 0) {
                     this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
                 }
@@ -320,6 +327,12 @@ export class JobTypesImportComponent implements OnInit {
     onTriggerFormSubmit() {
         this.jobType.trigger_rule = this.stripObject(this.trigger);
         this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
+    }
+    onErrorMappingFormSubmit() {
+        this.jobType.error_mapping.exit_codes[this.errorMappingExitCode.key] = this.errorMappingExitCode.value;
+        this.jobType.error_mapping.exit_codes = this.stripObject(this.jobType.error_mapping.exit_codes);
+        this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
+        this.errorMappingForm.reset();
     }
     onTriggerDelete() {
         this.triggerForm.reset();

@@ -237,7 +237,62 @@
                                 </form>
                             </p-accordionTab>
                             <p-accordionTab header="Error Mapping">
-                                Error mapping
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label for="error-mapping-version">Error Mapping Version:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <input pInputText id="error-mapping-version" formControlName="error-mapping-version"
+                                               [(ngModel)]="jobType.error_mapping.version"/>
+                                    </div>
+                                </div>
+                                <hr />
+                                <h3>Exit Codes</h3>
+                                <form [formGroup]="errorMappingForm" (ngSubmit)="errorMappingForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="error-mapping-key">Key *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="error-mapping-key" formControlName="key" placeholder="Key is Required"
+                                                   [(ngModel)]="errorMappingExitCode.key"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!errorMappingForm.controls['key'].valid && errorMappingForm.controls['key'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="env-var-value">Value *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="error-mapping-value" formControlName="value"
+                                                   placeholder="Value is Required" [(ngModel)]="errorMappingExitCode.value"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!errorMappingForm.controls['value'].valid && errorMappingForm.controls['value'].dirty">
+                                                Value is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-save" label="Save" [disabled]="!errorMappingForm.valid"
+                                                    (click)="onErrorMappingFormSubmit()"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="errorMappingJson && errorMappingJson !== ''">
+                                                Current Exit Codes
+                                                <codemirror [(ngModel)]="errorMappingJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
                             </p-accordionTab>
                         </p-accordion>
                         <!--<div class="ui-grid-row">-->
