@@ -1,6 +1,7 @@
 import { JobTypeInterface } from './interface.model';
 import { Trigger } from './trigger.model';
 import { ErrorMapping } from './error.mapping.model';
+import { CustomResources } from './custom.resources.model';
 
 export class JobType {
     constructor(
@@ -37,7 +38,7 @@ export class JobType {
         public archived?: string,
         public paused?: string,
         public last_modified?: string,
-        public custom_resources?: object,
+        public custom_resources?: CustomResources,
         public error_mapping?: ErrorMapping,
         public trigger_rule?: Trigger,
         public errors?: object[],
@@ -78,7 +79,7 @@ export class JobType {
         this.archived = this.archived || null;
         this.paused = this.paused || null;
         this.last_modified = this.last_modified || null;
-        this.custom_resources = this.custom_resources || null;
+        this.custom_resources = this.custom_resources || new CustomResources();
         this.error_mapping = this.error_mapping || new ErrorMapping();
         this.trigger_rule = this.trigger_rule || null;
         this.errors = this.errors || null;
