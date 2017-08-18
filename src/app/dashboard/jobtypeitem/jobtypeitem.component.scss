@@ -71,6 +71,11 @@
     background: $clr-status-error;
 }
 
+.jti__status-unknown {
+    @extend .jti__status;
+    background: $clr-status-unknown;
+}
+
 .jti__status-icon {
     font-family: 'FontAwesome';
     font-size: 32px;
