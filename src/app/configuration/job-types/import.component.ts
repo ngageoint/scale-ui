@@ -319,12 +319,22 @@ export class JobTypesImportComponent implements OnInit {
                 if (this.jobType.job_type_interface.output_data && this.jobType.job_type_interface.output_data.length > 0) {
                     this.interfaceOutputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.output_data));
                 }
+                if (this.jobType.custom_resources) {
+                    this.customResourcesJson = beautify(JSON.stringify(this.jobType.custom_resources.resources));
+                }
             } catch (error) {
                 this.msgs.push({severity: 'error', summary: 'Error:', detail: error.message});
                 this.jsonMode = true;
                 this.jsonModeBtnClass = 'ui-button-primary';
             }
         }
+    }
+    formatCode(data) {
+        return beautify(JSON.stringify(data), { indent_size: 4 });
+    }
+    deleteItem(value) {
+        // TODO: make this generic
+        _.remove(this.jobType.job_type_interface.env_vars, value);
     }
     handleStepChange(index) {
         this.currentStepIdx = index;

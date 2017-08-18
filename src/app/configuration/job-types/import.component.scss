@@ -17,20 +17,25 @@
     float: right;
 }
 
-.import-form-button {
-    width: auto;
-    margin-left: 10px;
+.validate-and-import {
+    .ui-button {
+        width: auto;
+        min-width: 175px;
+    }
 }
 
-:host /deep/ .ui-button-text {
-    padding-left: 2em !important;
-}
-
-.help {
-    width: 100%;
+.code {
     padding: 5px;
     margin: 10px 0;
     background: #fafafa;
     border: 1px solid #ccc;
     border-radius: 4px;
+
+    .ui-button {
+        width: auto;
+    }
+
+    pre {
+        margin: 0;
+    }
 }

@@ -208,11 +208,18 @@
                                     <div class="ui-grid-row">
                                         <div class="ui-grid-col-2"></div>
                                         <div class="ui-grid-col-10">
-                                            <div *ngIf="interfaceEnvVarJson && interfaceEnvVarJson !== ''">
-                                                Current Environment Variables
-                                                <codemirror [(ngModel)]="interfaceEnvVarJson" formControlName="json-editor"
-                                                            [config]="jsonConfigReadOnly"></codemirror>
-                                            </div>
+                                            <!--<div *ngIf="interfaceEnvVarJson && interfaceEnvVarJson !== ''">-->
+                                                <!--Current Environment Variables-->
+                                                <!--<codemirror [(ngModel)]="interfaceEnvVarJson" formControlName="json-editor"-->
+                                                            <!--[config]="jsonConfigReadOnly"></codemirror>-->
+                                            <!--</div>-->
+                                            <ul class="list-unstyled">
+                                                <li class="code" *ngFor="let envVar of jobType.job_type_interface.env_vars">
+                                                    <button pButton icon="fa-remove" class="ui-button-danger pull-right"
+                                                            (click)="deleteItem(envVar)"></button>
+                                                    <pre><code>{{formatCode(envVar)}}</code></pre>
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                 </form>
@@ -664,14 +671,12 @@
                                    [(ngModel)]="jobType.custom_resources.version"/>
                         </div>
                     </div>
-                    <div class="help">
-                        <p>Arbitrary resource names are supported, but there a few pre-defined types:</p>
-                        <ul>
-                            <li><code>cpus:</code> The number of CPUs</li>
-                            <li><code>mem:</code> The amount of memory in MiB</li>
-                            <li><code>disk:</code> The amount of local disk space in MiB</li>
-                        </ul>
-                    </div>
+                    <p>Arbitrary resource names are supported, but there a few pre-defined types:</p>
+                    <ul>
+                        <li><code>cpus:</code> The number of CPUs</li>
+                        <li><code>mem:</code> The amount of memory in MiB</li>
+                        <li><code>disk:</code> The amount of local disk space in MiB</li>
+                    </ul>
                     <form [formGroup]="customResourcesForm" (ngSubmit)="customResourcesForm.value">
                         <div class="ui-grid-row">
                             <div class="ui-grid-col-2">
@@ -719,17 +724,17 @@
                         </div>
                     </form>
                 </div>
-                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 5">
+                <div class="ui-grid-col-10 validate-and-import" *ngIf="currentStepIdx === 5">
                     <h3>
                         <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
                            [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{jobType.title}} v{{jobType.version}}
-                        <button class="import-form-button ui-button-secondary" pButton icon="fa-check" label="Validate"
-                                (click)="onValidate()" *ngIf="!validated"></button>
-                        <button class="import-form-button ui-button-primary" pButton icon="fa-chevron-down" label="Import"
-                                (click)="onSubmit()" *ngIf="validated && !submitted"></button>
-                        <button class="import-form-button ui-button-success" pButton icon="fa-arrow-circle-right" label="View Algorithm"
-                                *ngIf="submitted"></button>
                     </h3>
+                    <button class="ui-button-secondary" pButton icon="fa-check" label="Validate"
+                            (click)="onValidate()" *ngIf="!validated"></button>
+                    <button class="ui-button-primary" pButton icon="fa-chevron-down" label="Import"
+                            (click)="onSubmit()" *ngIf="validated && !submitted"></button>
+                    <button class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Algorithm"
+                            *ngIf="submitted"></button>
                     <ul class="list-unstyled">
                         <li><b>Name:</b> {{jobType.name}}</li>
                         <li *ngIf="jobType.description"><b>Description:</b> {{jobType.description}}</li>
