@@ -42,10 +42,10 @@ export class JobTypesApiService {
             .catch(this.handleError);
     }
 
-    validateJobType(jobType: JobType): Promise<ApiResults> {
+    validateJobType(jobType: JobType): Promise<any> {
         return this.http.post('/mocks/job-types/validate', jobType)
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => response.json())
             .catch(this.handleError);
     }
 

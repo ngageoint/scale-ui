@@ -133,184 +133,6 @@
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 1">
                     <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
-                        <form [formGroup]="triggerForm" (ngSubmit)="triggerForm.value">
-                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Type *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-dropdown [options]="triggerTypeOptions" [(ngModel)]="trigger.type"
-                                                    formControlName="type" placeholder="Select..." autoWidth="false"
-                                                    [style]="{'width': '25%'}">
-                                            <ng-template let-type p-template="item">
-                                                {{ type.label }}
-                                            </ng-template>
-                                        </p-dropdown>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!triggerForm.controls['type'].valid && triggerForm.controls['type'].dirty">
-                                            Type is Required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="trigger-version">Version:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="trigger-version" formControlName="version"
-                                               [(ngModel)]="trigger.configuration.version"/>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="trigger-media_type">Media Type:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="trigger-media_type" formControlName="media_type"
-                                               [(ngModel)]="trigger.configuration.condition.media_type"/>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Data Types:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-chips [(ngModel)]="trigger.configuration.condition.data_types"
-                                                 formControlName="data_types"></p-chips>
-                                        Enter data type and press 'Enter/Return'
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label for="trigger-input_data_name">Input Data Name *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <input pInputText id="trigger-input_data_name" formControlName="input_data_name"
-                                               [(ngModel)]="trigger.configuration.data.input_data_name"/>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!triggerForm.controls['input_data_name'].valid && triggerForm.controls['input_data_name'].dirty">
-                                            Input Data Name is Required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2">
-                                        <label>Workspace *:</label>
-                                    </div>
-                                    <div class="ui-grid-col-10">
-                                        <p-dropdown [options]="workspaces"
-                                                    [(ngModel)]="trigger.configuration.data.workspace_name"
-                                                    formControlName="workspace_name" placeholder="Select..." autoWidth="false"
-                                                    [style]="{'width': '25%'}">
-                                            <ng-template let-type p-template="item">
-                                                {{ type.label }}
-                                            </ng-template>
-                                        </p-dropdown>
-                                        <div class="ui-message ui-messages-error ui-corner-all"
-                                             *ngIf="!triggerForm.controls['workspace_name'].valid && triggerForm.controls['workspace_name'].dirty">
-                                            Workspace Name is Required
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <p-checkbox [(ngModel)]="trigger.is_active" formControlName="is_active"
-                                                    binary="true" label="Active"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-1">
-                                        <button pButton icon="fa-save" label="Save" [disabled]="!triggerForm.valid"
-                                                (click)="onTriggerFormSubmit()"></button>
-                                    </div>
-                                    <div class="ui-grid-col-1" *ngIf="jobType.trigger_rule">
-                                        <button pButton icon="fa-remove" label="Delete" [disabled]="!triggerForm.valid"
-                                                (click)="onTriggerDelete()" class="ui-button-danger"></button>
-                                    </div>
-                                </div>
-                                <div class="ui-grid-row">
-                                    <div class="ui-grid-col-2"></div>
-                                    <div class="ui-grid-col-10">
-                                        <div *ngIf="triggerJson && triggerJson !== ''">
-                                            Current Trigger Rule
-                                            <codemirror [(ngModel)]="triggerJson" formControlName="json-editor"
-                                                        [config]="jsonConfigReadOnly"></codemirror>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 2">
-                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-2">
-                                <label for="error-mapping-version">Version:</label>
-                            </div>
-                            <div class="ui-grid-col-10">
-                                <input pInputText id="error-mapping-version" formControlName="error-mapping-version"
-                                       [(ngModel)]="jobType.error_mapping.version"/>
-                            </div>
-                        </div>
-                        <hr />
-                        <h3>Exit Codes</h3>
-                        <div class="ui-grid-row">
-                            <div class="ui-grid-col-12">
-                                <form [formGroup]="errorMappingForm" (ngSubmit)="errorMappingForm.value">
-                                    <div class="ui-grid-row">
-                                        <div class="ui-grid-col-2">
-                                            <label for="error-mapping-key">Key *:</label>
-                                        </div>
-                                        <div class="ui-grid-col-10">
-                                            <input pInputText id="error-mapping-key" formControlName="key" placeholder="Key is Required"
-                                                   [(ngModel)]="errorMappingExitCode.key"/>
-                                            <div class="ui-message ui-messages-error ui-corner-all"
-                                                 *ngIf="!errorMappingForm.controls['key'].valid && errorMappingForm.controls['key'].dirty">
-                                                Name is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="ui-grid-row">
-                                        <div class="ui-grid-col-2">
-                                            <label for="error-mapping-value">Value *:</label>
-                                        </div>
-                                        <div class="ui-grid-col-10">
-                                            <input pInputText id="error-mapping-value" formControlName="value"
-                                                   placeholder="Value is Required" [(ngModel)]="errorMappingExitCode.value"/>
-                                            <div class="ui-message ui-messages-error ui-corner-all"
-                                                 *ngIf="!errorMappingForm.controls['value'].valid && errorMappingForm.controls['value'].dirty">
-                                                Value is required
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="ui-grid-row">
-                                        <div class="ui-grid-col-2"></div>
-                                        <div class="ui-grid-col-1">
-                                            <button pButton icon="fa-save" label="Save" [disabled]="!errorMappingForm.valid"
-                                                    (click)="onErrorMappingFormSubmit()"></button>
-                                        </div>
-                                    </div>
-                                    <div class="ui-grid-row">
-                                        <div class="ui-grid-col-2"></div>
-                                        <div class="ui-grid-col-10">
-                                            <div *ngIf="errorMappingJson && errorMappingJson !== ''">
-                                                Current Exit Codes
-                                                <codemirror [(ngModel)]="errorMappingJson" formControlName="json-editor"
-                                                            [config]="jsonConfigReadOnly"></codemirror>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 3">
-                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
                         <div class="ui-grid-row">
                             <div class="ui-grid-col-2">
                                 <label for="interface-version">Interface Version:</label>
@@ -654,6 +476,184 @@
                         </p-accordion>
                     </div>
                 </div>
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 2">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                        <form [formGroup]="triggerForm" (ngSubmit)="triggerForm.value">
+                            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label>Type *:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <p-dropdown [options]="triggerTypeOptions" [(ngModel)]="trigger.type"
+                                                    formControlName="type" placeholder="Select..." autoWidth="false"
+                                                    [style]="{'width': '25%'}">
+                                            <ng-template let-type p-template="item">
+                                                {{ type.label }}
+                                            </ng-template>
+                                        </p-dropdown>
+                                        <div class="ui-message ui-messages-error ui-corner-all"
+                                             *ngIf="!triggerForm.controls['type'].valid && triggerForm.controls['type'].dirty">
+                                            Type is Required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label for="trigger-version">Version:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <input pInputText id="trigger-version" formControlName="version"
+                                               [(ngModel)]="trigger.configuration.version"/>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label for="trigger-media_type">Media Type:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <input pInputText id="trigger-media_type" formControlName="media_type"
+                                               [(ngModel)]="trigger.configuration.condition.media_type"/>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label>Data Types:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <p-chips [(ngModel)]="trigger.configuration.condition.data_types"
+                                                 formControlName="data_types"></p-chips>
+                                        Enter data type and press 'Enter/Return'
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label for="trigger-input_data_name">Input Data Name *:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <input pInputText id="trigger-input_data_name" formControlName="input_data_name"
+                                               [(ngModel)]="trigger.configuration.data.input_data_name"/>
+                                        <div class="ui-message ui-messages-error ui-corner-all"
+                                             *ngIf="!triggerForm.controls['input_data_name'].valid && triggerForm.controls['input_data_name'].dirty">
+                                            Input Data Name is Required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2">
+                                        <label>Workspace *:</label>
+                                    </div>
+                                    <div class="ui-grid-col-10">
+                                        <p-dropdown [options]="workspaces"
+                                                    [(ngModel)]="trigger.configuration.data.workspace_name"
+                                                    formControlName="workspace_name" placeholder="Select..." autoWidth="false"
+                                                    [style]="{'width': '25%'}">
+                                            <ng-template let-type p-template="item">
+                                                {{ type.label }}
+                                            </ng-template>
+                                        </p-dropdown>
+                                        <div class="ui-message ui-messages-error ui-corner-all"
+                                             *ngIf="!triggerForm.controls['workspace_name'].valid && triggerForm.controls['workspace_name'].dirty">
+                                            Workspace Name is Required
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2"></div>
+                                    <div class="ui-grid-col-10">
+                                        <p-checkbox [(ngModel)]="trigger.is_active" formControlName="is_active"
+                                                    binary="true" label="Active"></p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2"></div>
+                                    <div class="ui-grid-col-1">
+                                        <button pButton icon="fa-save" label="Save" [disabled]="!triggerForm.valid"
+                                                (click)="onTriggerFormSubmit()"></button>
+                                    </div>
+                                    <div class="ui-grid-col-1" *ngIf="jobType.trigger_rule">
+                                        <button pButton icon="fa-remove" label="Delete" [disabled]="!triggerForm.valid"
+                                                (click)="onTriggerDelete()" class="ui-button-danger"></button>
+                                    </div>
+                                </div>
+                                <div class="ui-grid-row">
+                                    <div class="ui-grid-col-2"></div>
+                                    <div class="ui-grid-col-10">
+                                        <div *ngIf="triggerJson && triggerJson !== ''">
+                                            Current Trigger Rule
+                                            <codemirror [(ngModel)]="triggerJson" formControlName="json-editor"
+                                                        [config]="jsonConfigReadOnly"></codemirror>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="ui-grid-col-10" *ngIf="currentStepIdx === 3">
+                    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-2">
+                                <label for="error-mapping-version">Version:</label>
+                            </div>
+                            <div class="ui-grid-col-10">
+                                <input pInputText id="error-mapping-version" formControlName="error-mapping-version"
+                                       [(ngModel)]="jobType.error_mapping.version"/>
+                            </div>
+                        </div>
+                        <hr />
+                        <h3>Exit Codes</h3>
+                        <div class="ui-grid-row">
+                            <div class="ui-grid-col-12">
+                                <form [formGroup]="errorMappingForm" (ngSubmit)="errorMappingForm.value">
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="error-mapping-key">Key *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="error-mapping-key" formControlName="key" placeholder="Key is Required"
+                                                   [(ngModel)]="errorMappingExitCode.key"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!errorMappingForm.controls['key'].valid && errorMappingForm.controls['key'].dirty">
+                                                Name is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2">
+                                            <label for="error-mapping-value">Value *:</label>
+                                        </div>
+                                        <div class="ui-grid-col-10">
+                                            <input pInputText id="error-mapping-value" formControlName="value"
+                                                   placeholder="Value is Required" [(ngModel)]="errorMappingExitCode.value"/>
+                                            <div class="ui-message ui-messages-error ui-corner-all"
+                                                 *ngIf="!errorMappingForm.controls['value'].valid && errorMappingForm.controls['value'].dirty">
+                                                Value is required
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-1">
+                                            <button pButton icon="fa-save" label="Save" [disabled]="!errorMappingForm.valid"
+                                                    (click)="onErrorMappingFormSubmit()"></button>
+                                        </div>
+                                    </div>
+                                    <div class="ui-grid-row">
+                                        <div class="ui-grid-col-2"></div>
+                                        <div class="ui-grid-col-10">
+                                            <div *ngIf="errorMappingJson && errorMappingJson !== ''">
+                                                Current Exit Codes
+                                                <codemirror [(ngModel)]="errorMappingJson" formControlName="json-editor"
+                                                            [config]="jsonConfigReadOnly"></codemirror>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 4">
                     <div class="ui-grid-row">
                         <div class="ui-grid-col-2">
@@ -720,12 +720,16 @@
                     </form>
                 </div>
                 <div class="ui-grid-col-10" *ngIf="currentStepIdx === 5">
-                    <h2>
+                    <h3>
                         <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
                            [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{jobType.title}} v{{jobType.version}}
                         <button class="import-form-button ui-button-secondary" pButton icon="fa-check" label="Validate"
-                                (click)="onValidate()"></button>
-                    </h2>
+                                (click)="onValidate()" *ngIf="!validated"></button>
+                        <button class="import-form-button ui-button-primary" pButton icon="fa-chevron-down" label="Import"
+                                (click)="onSubmit()" *ngIf="validated && !submitted"></button>
+                        <button class="import-form-button ui-button-success" pButton icon="fa-arrow-circle-right" label="View Algorithm"
+                                *ngIf="submitted"></button>
+                    </h3>
                     <ul class="list-unstyled">
                         <li><b>Name:</b> {{jobType.name}}</li>
                         <li *ngIf="jobType.description"><b>Description:</b> {{jobType.description}}</li>

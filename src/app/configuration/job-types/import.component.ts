@@ -27,6 +27,7 @@ export class JobTypesImportComponent implements OnInit {
     msgs: Message[] = [];
     workspaces: SelectItem[];
     jobType: JobType;
+    cleanJobType: JobType;
     importForm: FormGroup;
     validated: boolean;
     submitted: boolean;
@@ -145,13 +146,13 @@ export class JobTypesImportComponent implements OnInit {
                 label: 'General Information'
             },
             {
+                label: 'Interface'
+            },
+            {
                 label: 'Trigger'
             },
             {
                 label: 'Error Mapping'
-            },
-            {
-                label: 'Interface'
             },
             {
                 label: 'Custom Resources'
@@ -377,17 +378,31 @@ export class JobTypesImportComponent implements OnInit {
         this.msgs = [];
 
         // remove falsey values
-        const cleanJobType = this.stripObject(this.jobType);
+        this.cleanJobType = this.stripObject(this.jobType);
+
+        this.cleanJobType['interface'] = this.cleanJobType.job_type_interface;
+        delete this.cleanJobType.job_type_interface;
 
         // perform validation
-        this.jobTypesApiService.validateJobType(cleanJobType).then(result => {
-            console.log(result);
+        this.jobTypesApiService.validateJobType(this.cleanJobType).then(result => {
+            if (result.warnings.length > 0) {
+                this.validated = false;
+                _.forEach(result.warnings, (warning) => {
+                    this.msgs.push({severity: 'error', summary: warning.id, detail: warning.details});
+                });
+            } else {
+                this.validated = true;
+                this.msgs.push({severity: 'info', summary: 'Validation Successful', detail: 'Algorithm is valid and ready for import.'});
+            }
         });
     }
-    onSubmit(value: string) {
+    onSubmit() {
         this.submitted = true;
         this.msgs = [];
-        this.msgs.push({severity: 'info', summary: 'Success', detail: 'Form Submitted'});
+        this.msgs.push({severity: 'success', summary: 'Success', detail: 'Form Submitted'});
+        _.forEach(this.items, (item) => {
+            item.disabled = true;
+        });
     }
-    get diagnostic() { return JSON.stringify(this.importForm.value); }
+    get diagnostic() { return JSON.stringify(this.cleanJobType); }
 }

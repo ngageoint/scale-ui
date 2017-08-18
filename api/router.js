@@ -5,6 +5,7 @@ const recipeTypes = require('./handlers/recipeTypes');
 const recipeDetails = require('./handlers/recipeDetails');
 const jobs = require('./handlers/jobs');
 const jobTypes = require('./handlers/jobTypes');
+const jobTypesValidate = require('./handlers/jobTypesValidate');
 const jobTypesStatus = require('./handlers/jobTypesStatus');
 const jobDetails = require('./handlers/jobDetails');
 const jobTypeDetails = require('./handlers/jobTypeDetails');
@@ -65,6 +66,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/job-types',
             handler: jobTypes
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/job-types/validate',
+            handler: jobTypesValidate
         });
 
         server.route({
