@@ -10,7 +10,12 @@ export class JobtypeitemComponent implements OnInit {
 
     @Input() item: any;
     constructor() {
-        this.item = {};
+        this.item = {
+            job_type: {
+                icon_code: ''
+            },
+            job_counts: []
+        };
     }
 
     ngOnInit() {
@@ -35,6 +40,10 @@ export class JobtypeitemComponent implements OnInit {
 
     getStatusClass() {
         const counts = this.item.job_counts;
+        console.log('Counts: ' + JSON.stringify(counts));
+        if (!counts || !counts.length || counts.length < 1) {
+            return 'jti__status-unknown';
+        }
 
         let failed = 0;
         let completed = 0;

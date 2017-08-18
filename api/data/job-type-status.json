@@ -136,12 +136,7 @@
                 "is_paused": false,
                 "icon_code": "f185"
             },
-            "job_counts": [{
-                "status": "COMPLETED",
-                "count": 657,
-                "most_recent": "2015-08-31T21:51:12.674Z",
-                "category": null
-            }]
+            "job_counts": []
         },
         {
             "job_type": {
