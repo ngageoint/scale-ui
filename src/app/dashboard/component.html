@@ -2,9 +2,8 @@
     <div class="algpicker">
 
         <h2>Favorites ({{ this.favoriteJobTypes.length }})</h2>
-        <p-dataTable [value]="favoriteJobTypes" selectionMode="multi"
-            emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access."
-            [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
+        <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding"
+            emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
             <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-item="rowData" pTemplate="body">
                     <app-jobtypeitem [item]="item"></app-jobtypeitem>
@@ -14,9 +13,8 @@
 
 
         <h2>All Algorithms ({{ this.allJobTypes.length }})</h2>
-        <p-dataTable [value]="allJobTypes" selectionMode="multi" styleClass="nopadding"
-            [scrollable]="true" scrollHeight="500px"
-            [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
+        <p-dataTable [value]="allJobTypes" styleClass="nopadding"
+            [scrollable]="true" scrollHeight="500px">
             <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                 <ng-template let-col let-item="rowData" pTemplate="body">
                     <app-jobtypeitem [item]="item"></app-jobtypeitem>
