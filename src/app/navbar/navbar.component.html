@@ -13,8 +13,8 @@
         <div [class]="getNavItemStyles('data')">
             <a (click)="selectNavItem($event, 'data')">Data</a>
         </div>
-        <div [class]="getNavItemStyles('status')">
-            <a (click)="selectNavItem($event, 'status')">System Status</a>
+        <div [class]="getNavItemStyles('processing')">
+            <a (click)="selectNavItem($event, 'processing')">Processing</a>
         </div>
 
         <span class="navbar__status">
@@ -23,11 +23,3 @@
     </div>
 </div>
 <app-subnav [sectionId]="selectedId" (onNavigate)="onNavigate($event)"></app-subnav>
-
-<!--
-// job types === algorithms
-Jobs - crud job types
-Recipes - arrange job types (algorithms)
-Data - search for products, source files
-Metrics - dashboard
--->
