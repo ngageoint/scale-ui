@@ -84,10 +84,10 @@ export class ErrordialsComponent implements OnInit {
             datasets: [{
                 data: values,
                 backgroundColor: [
-                    '#354131',  // completed
-                    '#934638',  // data
-                    '#935D38',  // algorithm
-                    '#937438'   // system
+                    '#4c5e47',  // completed
+                    '#984233',  // data
+                    '#985b33',  // algorithm
+                    '#987533'   // system
                 ],
                 hoverBackgroundColor: []
             }]
