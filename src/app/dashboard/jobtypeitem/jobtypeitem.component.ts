@@ -1,5 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
+import { DashboardFavoritesService } from '../favorites.service';
+
 
 @Component({
     selector: 'app-jobtypeitem',
@@ -9,7 +11,7 @@ import { Component, Input, OnInit } from '@angular/core';
 export class JobtypeitemComponent implements OnInit {
 
     @Input() item: any;
-    constructor() {
+    constructor(private favoritesService: DashboardFavoritesService) {
         this.item = {
             job_type: {
                 icon_code: ''
@@ -71,5 +73,9 @@ export class JobtypeitemComponent implements OnInit {
         }
 
         return cssClass;
+    }
+
+    setAsFavorite($event) {
+        this.favoritesService.addToFavorites(this.item.job_type);
     }
 }

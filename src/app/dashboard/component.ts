@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ChangeDetectorRef } from '@angular/core';
 
 import { DashboardApiService } from './api.service';
+import { DashboardFavoritesService } from './favorites.service';
 
 
 @Component({
@@ -15,7 +16,8 @@ export class DashboardComponent implements OnInit {
     private favoriteJobTypes: any[];
 
     constructor(
-        private dashboardApiService: DashboardApiService
+        private apiService: DashboardApiService,
+        private favoritesService: DashboardFavoritesService
     ) {
         this.allJobTypes = [];
         this.favoriteJobTypes = [];
@@ -26,7 +28,7 @@ export class DashboardComponent implements OnInit {
     }
 
     private refreshAllJobTypes() {
-        this.dashboardApiService.getJobTypesAndStatus().then(data => {
+        this.apiService.getJobTypesAndStatus().then(data => {
             this.allJobTypes = data.results as any[];
             // this.allJobTypes.forEach(jt => {
             //     console.log(JSON.stringify(jt));

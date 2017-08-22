@@ -36,6 +36,7 @@ import { JobDetailsComponent } from './status/jobs/details.component';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/component';
 import { DashboardApiService } from './dashboard/api.service';
+import { DashboardFavoritesService } from './dashboard/favorites.service';
 import { RecipesComponent } from './status/recipes/component';
 import { RecipesApiService } from './status/recipes/api.service';
 import { RecipesDatatableService } from './status/recipes/datatable.service';
@@ -117,6 +118,7 @@ import { ErrordialsComponent } from './dashboard/errordials/errordials.component
         RecipesApiService,
         RecipesDatatableService,
         DashboardApiService,
+        DashboardFavoritesService,
         RecipeTypesApiService,
         RecipeTypesDatatableService,
         WorkspacesApiService
