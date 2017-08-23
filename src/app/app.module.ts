@@ -27,6 +27,7 @@ import { CodemirrorModule } from 'ng2-codemirror';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ColorService } from './color.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { JobsComponent } from './status/jobs/component';
@@ -119,6 +120,7 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
         JobTypesDatatableService,
         RecipesApiService,
         RecipesDatatableService,
+        ColorService,
         DashboardApiService,
         DashboardFavoritesService,
         RecipeTypesApiService,

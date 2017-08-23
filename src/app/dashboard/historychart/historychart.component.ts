@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ColorService } from '../../color.service';
+
+
 @Component({
     selector: 'app-historychart',
     templateUrl: './historychart.component.html',
@@ -9,24 +12,26 @@ export class HistorychartComponent implements OnInit {
 
     private data: any;
     private options: any;
-    constructor() {
+    constructor(
+        private colorService: ColorService
+    ) {
         this.data = {
             labels: ['08/16/2017', '08/17/2017', '08/18/2017', '08/19/2017', '08/20/2017', '08/21/2017', '08/22/2017'],
             datasets: [{
                 label: 'Completed',
-                backgroundColor: '#4c5e47',
+                backgroundColor: colorService.COMPLETED,
                 data: [165, 159, 180, 181, 156, 155, 140]
             }, {
                 label: 'Data',
-                backgroundColor: '#984233',
+                backgroundColor: colorService.ERROR_DATA,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }, {
                 label: 'Algorithm',
-                backgroundColor: '#985b33',
+                backgroundColor: colorService.ERROR_ALGORITHM,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }, {
                 label: 'System',
-                backgroundColor: '#987533',
+                backgroundColor: colorService.ERROR_SYSTEM,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }]
         }

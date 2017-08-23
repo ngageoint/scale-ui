@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ColorService } from '../../color.service';
+
 
 @Component({
     selector: 'app-errordials',
@@ -13,7 +15,9 @@ export class ErrordialsComponent implements OnInit {
     private totalJobs: number;
     private failedJobs: number;
 
-    constructor() {
+    constructor(
+        private colorService:ColorService
+    ) {
         // this should be passed in
         this.jobType = {
             'job_type': {
@@ -84,10 +88,10 @@ export class ErrordialsComponent implements OnInit {
             datasets: [{
                 data: values,
                 backgroundColor: [
-                    '#4c5e47',  // completed
-                    '#984233',  // data
-                    '#985b33',  // algorithm
-                    '#987533'   // system
+                    this.colorService.COMPLETED,  // completed
+                    this.colorService.ERROR_DATA,  // data
+                    this.colorService.ERROR_ALGORITHM,  // algorithm
+                    this.colorService.ERROR_SYSTEM   // system
                 ],
                 hoverBackgroundColor: []
             }]
