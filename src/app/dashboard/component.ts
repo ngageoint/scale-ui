@@ -25,11 +25,9 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
         this.refreshAllJobTypes();
-        this.favoritesService.favoritesUpdated.subscribe(
-            (lang) => {
-                this.refreshAllJobTypes();
-            }
-        );
+        this.favoritesService.favoritesUpdated.subscribe(() => {
+            this.refreshAllJobTypes();
+        });
     }
 
     private refreshAllJobTypes() {
