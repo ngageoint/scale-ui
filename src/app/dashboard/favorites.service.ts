@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
+
 
 @Injectable()
 export class DashboardFavoritesService {
 
     private FAVORITES_KEY = 'scale.dashboard.favorites';
-    private favorites: number[];
+    public favorites: number[] = [];
 
+    @Output() favoritesUpdated = new EventEmitter();
     constructor() {
-        this.favorites = [];
         this.refreshFavorites();
     }
 
@@ -19,7 +20,6 @@ export class DashboardFavoritesService {
     }
 
     toggleFavorite(jobType) {
-        console.log(`Adding ${jobType.id} - ${jobType.title} to favorites...`);
         const idx = this.favorites.indexOf(jobType.id);
         if (idx > -1) {
             // remove it
@@ -28,11 +28,15 @@ export class DashboardFavoritesService {
             // add it
             this.favorites.push(jobType.id);
         }
-        console.log('Favorites: ' + JSON.stringify(this.favorites));
+        this.favoritesUpdated.emit();
         this.saveFavorites();
     }
 
     refreshFavorites() {
+        const val = localStorage.getItem(this.FAVORITES_KEY);
+        if (val) {
+            this.favorites = JSON.parse(val);
+        }
     }
 
     saveFavorites() {

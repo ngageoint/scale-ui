@@ -25,14 +25,24 @@ export class DashboardComponent implements OnInit {
 
     ngOnInit() {
         this.refreshAllJobTypes();
+        this.favoritesService.favoritesUpdated.subscribe(
+            (lang) => {
+                this.refreshAllJobTypes();
+            }
+        );
     }
 
     private refreshAllJobTypes() {
         this.apiService.getJobTypesAndStatus().then(data => {
             this.allJobTypes = data.results as any[];
-            // this.allJobTypes.forEach(jt => {
-            //     console.log(JSON.stringify(jt));
-            // });
+            let favs = [];
+            this.allJobTypes.forEach(jt => {
+                //console.log(JSON.stringify(jt));
+                if (this.favoritesService.isFavorite(jt.job_type.id)) {
+                    favs.push(jt);
+                }
+            });
+            this.favoriteJobTypes = favs;
         });
     }
 }
