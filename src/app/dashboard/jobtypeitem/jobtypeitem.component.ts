@@ -75,7 +75,14 @@ export class JobtypeitemComponent implements OnInit {
         return cssClass;
     }
 
-    setAsFavorite($event) {
-        this.favoritesService.addToFavorites(this.item.job_type);
+    getFavoriteBtnClass() {
+        if (this.favoritesService.isFavorite(this.item.job_type.id)) {
+            return 'fa fa-star';
+        }
+        return 'fa fa-star-o';
+    }
+
+    toggleFavorite($event) {
+        this.favoritesService.toggleFavorite(this.item.job_type);
     }
 }
