@@ -22,8 +22,10 @@ import { MessagesModule } from 'primeng/components/messages/messages';
 import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 import { ChipsModule } from 'primeng/components/chips/chips';
 import { AccordionModule } from 'primeng/components/accordion/accordion';
+import { TooltipModule } from 'primeng/components/tooltip/tooltip';
 
 import { CodemirrorModule } from 'ng2-codemirror';
+import { NgxChartsDagModule } from '@swimlane/ngx-charts-dag';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -88,6 +90,7 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
         FormsModule,
         ReactiveFormsModule,
         CodemirrorModule,
+        NgxChartsDagModule,
         // Prime NG
         ChartModule,
         DataTableModule,
@@ -105,7 +108,8 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
         MessagesModule,
         CheckboxModule,
         ChipsModule,
-        AccordionModule
+        AccordionModule,
+        TooltipModule
     ],
     exports: [
         DataTableModule,
