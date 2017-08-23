@@ -35,9 +35,8 @@ export class DashboardComponent implements OnInit {
     private refreshAllJobTypes() {
         this.apiService.getJobTypesAndStatus().then(data => {
             this.allJobTypes = data.results as any[];
-            let favs = [];
+            const favs = [];
             this.allJobTypes.forEach(jt => {
-                //console.log(JSON.stringify(jt));
                 if (this.favoritesService.isFavorite(jt.job_type.id)) {
                     favs.push(jt);
                 }
