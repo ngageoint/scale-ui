@@ -55,6 +55,7 @@ import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.compon
 import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
 import { ErrordialsComponent } from './dashboard/errordials/errordials.component';
+import { HistorychartComponent } from './dashboard/historychart/historychart.component';
 
 
 @NgModule({
@@ -76,7 +77,8 @@ import { ErrordialsComponent } from './dashboard/errordials/errordials.component
         FooterComponent,
         JobtypeitemComponent,
         WorkspacesComponent,
-        ErrordialsComponent
+        ErrordialsComponent,
+        HistorychartComponent
     ],
     imports: [
         AppRoutingModule,
