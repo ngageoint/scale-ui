@@ -4,7 +4,6 @@ import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
 import * as shape from 'd3-shape';
 import { colorSets } from '@swimlane/ngx-charts-dag/release/utils';
-// import { id as ngxId } from '@swimlane/ngx-charts-dag/release/utils/id';
 
 import { RecipeTypesApiService } from './api.service';
 import { RecipeType } from './api.model';
@@ -42,51 +41,6 @@ export class RecipeTypesComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
-        // this.graph = {
-        //     links: [{
-        //         source: 'start',
-        //         target: '1'
-        //     }, {
-        //         source: 'start',
-        //         target: '2'
-        //     }, {
-        //         source: '1',
-        //         target: '3'
-        //     }, {
-        //         source: '2',
-        //         target: '4'
-        //     }, {
-        //         source: '2',
-        //         target: '6'
-        //     }, {
-        //         source: '3',
-        //         target: '5'
-        //     }],
-        //     nodes: [{
-        //         id: 'start',
-        //         label: 'start'
-        //     }, {
-        //         id: '1',
-        //         label: 'Query ThreatConnect',
-        //         rank: 'first'
-        //     }, {
-        //         id: '2',
-        //         label: 'Query XForce',
-        //         rank: 'first'
-        //     }, {
-        //         id: '3',
-        //         label: 'Format Results'
-        //     }, {
-        //         id: '4',
-        //         label: 'Search Splunk'
-        //     }, {
-        //         id: '5',
-        //         label: 'Block LDAP'
-        //     }, {
-        //         id: '6',
-        //         label: 'Email Results'
-        //     }]
-        // };
         this.graph = {
             nodes: [],
             links: []
