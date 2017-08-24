@@ -20,18 +20,22 @@ export class HistorychartComponent implements OnInit {
             datasets: [{
                 label: 'Completed',
                 backgroundColor: colorService.COMPLETED,
+                borderWidth: 0,
                 data: [165, 159, 180, 181, 156, 155, 140]
             }, {
                 label: 'Data',
                 backgroundColor: colorService.ERROR_DATA,
+                borderWidth: 0,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }, {
                 label: 'Algorithm',
                 backgroundColor: colorService.ERROR_ALGORITHM,
+                borderWidth: 0,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }, {
                 label: 'System',
                 backgroundColor: colorService.ERROR_SYSTEM,
+                borderWidth: 0,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }]
         }

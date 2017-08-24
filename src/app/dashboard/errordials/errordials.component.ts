@@ -103,6 +103,11 @@ export class ErrordialsComponent implements OnInit {
             legend: {
                 display: false,
                 position: 'bottom'
+            },
+            elements: {
+                arc: {
+                    borderWidth: 0.5
+                }
             }
         };
     }
