@@ -12,7 +12,7 @@
         </p-dataTable>
 
 
-        <h2>All Algorithms ({{ this.allJobTypes.length }})</h2>
+        <h2>All Jobs ({{ this.allJobTypes.length }})</h2>
         <p-dataTable [value]="allJobTypes" styleClass="nopadding"
             [scrollable]="true" scrollHeight="500px">
             <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
