@@ -16,7 +16,7 @@ export class ErrordialsComponent implements OnInit {
     private failedJobs: number;
 
     constructor(
-        private colorService:ColorService
+        private colorService: ColorService
     ) {
         // this should be passed in
         this.jobType = {

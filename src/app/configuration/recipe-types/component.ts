@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
-import { TreeNode } from 'primeng/primeng';
 import * as _ from 'lodash';
+import * as shape from 'd3-shape';
+import { colorSets } from '@swimlane/ngx-charts-dag/release/utils';
 
 import { RecipeTypesApiService } from './api.service';
 import { RecipeType } from './api.model';
@@ -18,12 +19,20 @@ import { RecipeTypesDatatableService } from './datatable.service';
 export class RecipeTypesComponent implements OnInit {
     datatableOptions: RecipeTypesDatatable;
     recipeTypes: RecipeType[];
-    recipeTypeData: TreeNode[];
     selectedRecipeType: RecipeType;
     selectedRecipeTypeKeys: string[];
     first: number;
     count: number;
     isInitialized: boolean;
+    // ngx-charts-dag
+    graph: { links: any[], nodes: any[] };
+    view: any[];
+    width: number;
+    height: number;
+    showLegend = false;
+    orientation: string; // LR, RL, TB, BT
+    curve: any;
+    colorScheme: any;
 
     constructor(
         private recipeTypesDatatableService: RecipeTypesDatatableService,
@@ -32,6 +41,17 @@ export class RecipeTypesComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
+        this.graph = {
+            nodes: [],
+            links: []
+        };
+        this.width = 700;
+        this.height = 300;
+        this.orientation = 'LR';
+        this.curve = shape.curveLinear;
+        this.colorScheme = colorSets.find(s => s.name === 'picnic');
+        this.view = [this.width, this.height];
+        this.showLegend = false;
     }
 
     private updateData() {
@@ -55,43 +75,46 @@ export class RecipeTypesComponent implements OnInit {
             this.selectedRecipeType = data as RecipeType;
             this.selectedRecipeTypeKeys = Object.keys(this.selectedRecipeType);
 
-            this.recipeTypeData = [{
-                label: 'Start',
-                expanded: true,
-                children: []
-            }];
+            this.graph = {
+                nodes: [{
+                    id: 'start',
+                    label: 'Start'
+                }],
+                links: []
+            };
 
             _.forEach(this.selectedRecipeType.definition.jobs, (job) => {
-                if (job.dependencies.length === 0) {
-                    this.recipeTypeData[0].children.push({
-                        label: job.name,
-                        expanded: true,
-                        children: []
-                    });
-                } else {
-                    // recursively find parent jobs
-                    const filter = (collection, dependencyName, jobName) => {
-                        _.forEach(collection, (item) => {
-                            if (item.label === dependencyName) {
-                                item.children.push({
-                                    label: jobName,
-                                    expanded: true,
-                                    children: []
-                                 });
-                                return false;
-                            } else {
-                                filter(item.children, dependencyName, jobName);
-                            }
+                this.graph.nodes.push({
+                    id: _.camelCase(job.name),
+                    label: job.job_type.name + ' v' + job.job_type.version,
+                    job_type: job.job_type,
+                    dependencies: job.dependencies,
+                });
+            });
+
+            _.forEach(this.graph.nodes, (node) => {
+                if (node.id !== 'start') {
+                    if (node.dependencies.length === 0) {
+                        this.graph.links.push({
+                            source: 'start',
+                            target: node.id
                         });
-                    };
-                    _.forEach(job.dependencies, (dependency) => {
-                        filter(this.recipeTypeData[0].children, dependency.name, job.name);
-                    });
+                    } else {
+                        _.forEach(node.dependencies, (dependency) => {
+                            this.graph.links.push({
+                                source: _.camelCase(dependency.name),
+                                target: node.id
+                            });
+                        });
+                    }
                 }
             });
         });
     }
 
+    select(e) {
+        console.log(e);
+    }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
