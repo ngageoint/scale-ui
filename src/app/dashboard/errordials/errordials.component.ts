@@ -106,7 +106,7 @@ export class ErrordialsComponent implements OnInit {
             },
             elements: {
                 arc: {
-                    borderWidth: 0.5
+                    borderWidth: 0
                 }
             }
         };
