@@ -75,35 +75,45 @@ export class RecipeTypesComponent implements OnInit {
             this.selectedRecipeType = data as RecipeType;
             this.selectedRecipeTypeKeys = Object.keys(this.selectedRecipeType);
 
+            // build nodes and links for DAG
             this.graph = {
                 nodes: [{
                     id: 'start',
-                    label: 'Start'
+                    label: 'Start',
+                    name: 'start',
+                    job_type: null,
+                    dependencies: [],
+                    visible: true
                 }],
                 links: []
             };
 
             _.forEach(this.selectedRecipeType.definition.jobs, (job) => {
                 this.graph.nodes.push({
-                    id: _.camelCase(job.name),
+                    id: _.camelCase(job.name), // id can't have dashes or anything
                     label: job.job_type.name + ' v' + job.job_type.version,
+                    name: job.name,
                     job_type: job.job_type,
                     dependencies: job.dependencies,
+                    visible: true
                 });
             });
 
             _.forEach(this.graph.nodes, (node) => {
-                if (node.id !== 'start') {
+                if (node.id !== 'start' && node.id !== 'end') {
                     if (node.dependencies.length === 0) {
+                        // job has no dependencies, so link it to start
                         this.graph.links.push({
                             source: 'start',
-                            target: node.id
+                            target: node.id,
+                            node: node
                         });
                     } else {
                         _.forEach(node.dependencies, (dependency) => {
                             this.graph.links.push({
                                 source: _.camelCase(dependency.name),
-                                target: node.id
+                                target: node.id,
+                                node: node
                             });
                         });
                     }
@@ -113,7 +123,28 @@ export class RecipeTypesComponent implements OnInit {
     }
 
     select(e) {
-        console.log(e);
+        let childNodes = [];
+
+        const findChildNodes = (collection, id) => {
+            _.forEach(collection, (item) => {
+                if (item.source === id) {
+                    childNodes.push(item.node);
+                    findChildNodes(this.graph.links, item.node.id);
+                }
+            });
+        };
+        findChildNodes(this.graph.links, e.id);
+
+        childNodes = _.uniqBy(childNodes, 'id');
+
+        _.forEach(childNodes, (node) => {
+            node.visible = !node.visible;
+        });
+
+        this.graph.nodes = _.unionBy(this.graph.nodes, childNodes, 'id');
+    }
+    getUnicode(code) {
+        return `&#x${code};`;
     }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
