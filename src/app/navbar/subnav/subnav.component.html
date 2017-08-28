@@ -1,4 +1,40 @@
 <div [class]="getSubnavStyles()">
+
+    <!-- Processing -->
+    <div [class]="getSectionStyles('processing')">
+        <div class="subnav__header subnav__header-processing">
+            <h2>Processing</h2>
+        </div>
+        <div class="subnav__links">
+            <h2>Current Status</h2>
+            <ul>
+                <li><a class="subnav__link"
+                    routerLink="/status/jobs"
+                    (click)="navigate()">View by Jobs</a>
+                </li>
+
+                <li><a class="subnav__link"
+                    routerLink="/status/recipes"
+                    (click)="navigate()">View by Recipes</a>
+                </li>
+            </ul>
+        </div>
+        <div class="subnav__links">
+            <h2>Historical Search</h2>
+        </div>
+    </div>
+
+
+    <!-- Data -->
+    <div [class]="getSectionStyles('data')">
+        <div class="subnav__header subnav__header-data">
+            <h2>Data</h2>
+        </div>
+        <div class="subnav__links">
+        </div>
+    </div>
+
+
     <!-- Configuration -->
     <div [class]="getSectionStyles('configuration')">
         <div class="subnav__header subnav__header-configuration">
@@ -19,35 +55,6 @@
                 <li><a class="subnav__link"
                        routerLink="/configuration/recipe-types"
                        (click)="navigate()">Recipe Types</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Data -->
-    <div [class]="getSectionStyles('data')">
-        <div class="subnav__header subnav__header-data">
-            <h2>Data</h2>
-        </div>
-        <div class="subnav__links">
-        </div>
-    </div>
-
-    <!-- Processing -->
-    <div [class]="getSectionStyles('processing')">
-        <div class="subnav__header subnav__header-processing">
-            <h2>Processing</h2>
-        </div>
-        <div class="subnav__links">
-            <ul>
-                <li><a class="subnav__link"
-                    routerLink="/status/jobs"
-                    (click)="navigate()">Jobs</a>
-                </li>
-
-                <li><a class="subnav__link"
-                    routerLink="/status/recipes"
-                    (click)="navigate()">Recipes</a>
                 </li>
             </ul>
         </div>

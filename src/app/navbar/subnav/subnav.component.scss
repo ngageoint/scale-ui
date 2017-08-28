@@ -20,6 +20,11 @@ $subnav-height: 250px;
             background: rgba($clr-white, 0.05);
         }
     }
+
+    h2 {
+        color: $clr-white;
+        text-shadow: 1px 1px 7px darken($clr-highlight, 45%);
+    }
 }
 
 .subnav {
@@ -36,13 +41,11 @@ $subnav-height: 250px;
         width: 32%;
 
         h2 {
-            color: $clr-white;
             font-size: 36px;
             font-weight: bold;
             left: 1.0em;
             line-height: 1.25em;
             position: absolute;
-            text-shadow: 1px 1px 7px darken($clr-highlight, 45%);
             top: 0;
         }
     }
