@@ -50,7 +50,7 @@ export class RecipesComponent implements OnInit {
         this.recipesDatatableService.setRecipesDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/status/recipes'], {
+        this.router.navigate(['/processing/recipes'], {
             queryParams: this.datatableOptions
         });
 
@@ -108,7 +108,7 @@ export class RecipesComponent implements OnInit {
         this.updateOptions();
     }
     onRowSelect(e) {
-        this.router.navigate(['/status/recipes/' + e.data.id]);
+        this.router.navigate(['/processing/recipes/' + e.data.id]);
     }
     ngOnInit() {
         if (this.route.snapshot &&

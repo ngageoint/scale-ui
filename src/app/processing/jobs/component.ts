@@ -51,7 +51,7 @@ export class JobsComponent implements OnInit {
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/status/jobs'], {
+        this.router.navigate(['/processing/jobs'], {
             queryParams: this.datatableOptions
         });
 
@@ -109,7 +109,7 @@ export class JobsComponent implements OnInit {
         this.updateOptions();
     }
     onRowSelect(e) {
-        this.router.navigate(['/status/jobs/' + e.data.id]);
+        this.router.navigate(['/processing/jobs/' + e.data.id]);
     }
     ngOnInit() {
         if (this.route.snapshot &&
