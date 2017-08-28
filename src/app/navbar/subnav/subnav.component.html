@@ -10,17 +10,27 @@
             <ul>
                 <li><a class="subnav__link"
                     routerLink="/processing/jobs"
-                    (click)="navigate()">View by Jobs</a>
+                    (click)="navigate()">View Running Jobs</a>
                 </li>
 
                 <li><a class="subnav__link"
                     routerLink="/processing/recipes"
-                    (click)="navigate()">View by Recipes</a>
+                    (click)="navigate()">View Running Recipes</a>
                 </li>
             </ul>
         </div>
         <div class="subnav__links">
             <h2>Historical Search</h2>
+            <ul>
+                <li><a class="subnav__link"
+                    routerLink="/processing/jobs/search"
+                    (click)="navigate()">Search Jobs</a>
+                </li>
+                <li><a class="subnav__link"
+                    routerLink="/processing/recipes/search"
+                    (click)="navigate()">Search Recipes</a>
+                </li>
+            </ul>
         </div>
     </div>
 
