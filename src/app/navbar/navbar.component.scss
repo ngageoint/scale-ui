@@ -1,7 +1,7 @@
+@import '../../defaults/animations';
 @import '../../defaults/colors';
 
 
-$navbar-transition: all 0.35s ease-out;
 $navbar-height: 55px;
 $navshadow: 0 0 0.5em $clr-black;
 $navbar-status-width: 250px;
@@ -37,7 +37,7 @@ $navbar-status-width: 250px;
         text-align: center;
         text-decoration: none;
         text-shadow: 0 1px 0 $clr-navbar-dark;
-        transition: $navbar-transition;
+        transition: $default-transition;
         width: 125px;
 
         &:hover {

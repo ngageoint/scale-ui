@@ -1,5 +1,7 @@
 @import '../navbar.component.scss';
+@import '../../../defaults/animations';
 @import '../../../defaults/colors';
+
 
 $subnav-height: 250px;
 
@@ -9,15 +11,16 @@ $subnav-height: 250px;
     border-bottom: 1px solid $clr-gray-90;
     box-shadow: $navshadow;
     color: $clr-white;
-    text-shadow: 0 1px 0 $clr-black;
 
     .subnav__link {
         border-left: 3px solid $clr-navbar-dark;
         color: $clr-white;
         text-decoration: none;
+        transition: $default-transition;
 
         &:hover {
             background: rgba($clr-white, 0.05);
+            border-left: 3px solid $clr-white;
         }
     }
 
@@ -33,7 +36,6 @@ $subnav-height: 250px;
     display: flex;
     height: $subnav-height;
     min-height: $subnav-height;
-    overflow: hidden;
     padding: 2.0em 1.5em;
 
     .subnav__header {
@@ -71,6 +73,7 @@ $subnav-height: 250px;
 }
 
 $subnav-bg-color: lighten($clr-scale-blue2, 3%);
+
 .subnav__header::before {
     color: $subnav-bg-color;
     font-family: FontAwesome;
@@ -111,4 +114,18 @@ $subnav-bg-color: lighten($clr-scale-blue2, 3%);
 
 .subnav-ctr.hidden {
     top: -500px;
+}
+
+.subnav__rangeinputs {
+    display: flex;
+}
+
+.subnav__daterange {
+    margin-right: 50px;
+}
+
+.subnav__form {
+    div {
+        margin-bottom: 0.5em;
+    }
 }
