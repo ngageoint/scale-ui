@@ -11,6 +11,7 @@ const jobDetails = require('./handlers/jobDetails');
 const jobTypeDetails = require('./handlers/jobTypeDetails');
 const recipeTypeDetails = require('./handlers/recipeTypeDetails');
 const workspaces = require('./handlers/workspaces');
+const sourceFiles = require('./handlers/sourceFiles');
 
 module.exports = {
     init: function(server) {
@@ -90,6 +91,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/workspaces',
             handler: workspaces
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/source-files',
+            handler: sourceFiles
         });
     }
 };

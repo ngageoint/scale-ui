@@ -9,6 +9,7 @@ import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesImportComponent } from './configuration/job-types/import.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
+import { SourceFilesComponent } from './data/source-files/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -19,7 +20,8 @@ const routes: Routes = [
     { path: 'configuration/job-types/import', component: JobTypesImportComponent },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
-    { path: 'configuration/recipe-types', component: RecipeTypesComponent }
+    { path: 'configuration/recipe-types', component: RecipeTypesComponent },
+    { path: 'data/source-files', component: SourceFilesComponent }
 ];
 
 @NgModule({

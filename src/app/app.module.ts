@@ -58,6 +58,9 @@ import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
 import { ErrordialsComponent } from './dashboard/errordials/errordials.component';
 import { HistorychartComponent } from './dashboard/historychart/historychart.component';
+import { SourceFilesComponent } from './data/source-files/component';
+import { SourceFilesApiService } from './data/source-files/api.service';
+import { SourceFilesDatatableService } from './data/source-files/datatable.service';
 
 
 @NgModule({
@@ -80,7 +83,8 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
         JobtypeitemComponent,
         WorkspacesComponent,
         ErrordialsComponent,
-        HistorychartComponent
+        HistorychartComponent,
+        SourceFilesComponent
     ],
     imports: [
         AppRoutingModule,
@@ -127,7 +131,9 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
         DashboardFavoritesService,
         RecipeTypesApiService,
         RecipeTypesDatatableService,
-        WorkspacesApiService
+        WorkspacesApiService,
+        SourceFilesApiService,
+        SourceFilesDatatableService
     ],
     bootstrap: [AppComponent]
 })

@@ -28,9 +28,9 @@ export class Job {
         public last_modified: string,
         public data: object,
         public results: object,
-        public recipes: Array<object>,
-        public job_exes: Array<object>,
-        public inputs: Array<object>,
-        public outputs: Array<object>
+        public recipes: object[],
+        public job_exes: object[],
+        public inputs: object[],
+        public outputs: object[]
     ) {}
 }
