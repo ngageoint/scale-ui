@@ -18,8 +18,8 @@
                 <h2>{{selectedRecipeType.title}} v{{selectedRecipeType.version}}</h2>
                 <ngx-charts-directed-graph
                     [legend]="showLegend"
-                    [links]="graph.links"
-                    [nodes]="graph.nodes"
+                    [links]="links"
+                    [nodes]="nodes"
                     [scheme]="colorScheme"
                     [orientation]="orientation"
                     [curve]="curve"
@@ -37,8 +37,7 @@
                                tooltipPosition="'top'"
                                *ngIf="node.visible">
                             <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.options.color" />
-                            <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{node.label}} {{node
-                                .visible}}</svg:text>
+                            <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{node.label}}</svg:text>
                         </svg:g>
                     </ng-template>
 
@@ -47,7 +46,7 @@
                             <svg:path
                                 class="line"
                                 stroke-width="2"
-                                marker-end="url(#arrow)" >
+                                marker-end="url(#arrow)">
                             </svg:path>
                             <svg:text class="edge-label" text-anchor="middle">
                                 <textPath

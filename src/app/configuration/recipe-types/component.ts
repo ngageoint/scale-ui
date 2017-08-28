@@ -25,7 +25,8 @@ export class RecipeTypesComponent implements OnInit {
     count: number;
     isInitialized: boolean;
     // ngx-charts-dag
-    graph: { links: any[], nodes: any[] };
+    nodes = [];
+    links = [];
     view: any[];
     width: number;
     height: number;
@@ -41,10 +42,6 @@ export class RecipeTypesComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
-        this.graph = {
-            nodes: [],
-            links: []
-        };
         this.width = 700;
         this.height = 300;
         this.orientation = 'LR';
@@ -76,20 +73,18 @@ export class RecipeTypesComponent implements OnInit {
             this.selectedRecipeTypeKeys = Object.keys(this.selectedRecipeType);
 
             // build nodes and links for DAG
-            this.graph = {
-                nodes: [{
-                    id: 'start',
-                    label: 'Start',
-                    name: 'start',
-                    job_type: null,
-                    dependencies: [],
-                    visible: true
-                }],
-                links: []
-            };
+            this.nodes = [{
+                id: 'start',
+                label: 'Start',
+                name: 'start',
+                job_type: null,
+                dependencies: [],
+                visible: true
+            }];
+            this.links = [];
 
             _.forEach(this.selectedRecipeType.definition.jobs, (job) => {
-                this.graph.nodes.push({
+                this.nodes.push({
                     id: _.camelCase(job.name), // id can't have dashes or anything
                     label: job.job_type.name + ' v' + job.job_type.version,
                     name: job.name,
@@ -99,21 +94,23 @@ export class RecipeTypesComponent implements OnInit {
                 });
             });
 
-            _.forEach(this.graph.nodes, (node) => {
+            _.forEach(this.nodes, (node) => {
                 if (node.id !== 'start' && node.id !== 'end') {
                     if (node.dependencies.length === 0) {
                         // job has no dependencies, so link it to start
-                        this.graph.links.push({
+                        this.links.push({
                             source: 'start',
                             target: node.id,
-                            node: node
+                            node: node,
+                            visible: true
                         });
                     } else {
                         _.forEach(node.dependencies, (dependency) => {
-                            this.graph.links.push({
+                            this.links.push({
                                 source: _.camelCase(dependency.name),
                                 target: node.id,
-                                node: node
+                                node: node,
+                                visible: true
                             });
                         });
                     }
@@ -124,24 +121,31 @@ export class RecipeTypesComponent implements OnInit {
 
     select(e) {
         let childNodes = [];
+        const childLinks = [];
 
-        const findChildNodes = (collection, id) => {
-            _.forEach(collection, (item) => {
-                if (item.source === id) {
-                    childNodes.push(item.node);
-                    findChildNodes(this.graph.links, item.node.id);
+        const findChildNodes = (id) => {
+            _.forEach(this.links, (link) => {
+                if (link.source === id) {
+                    childNodes.push(link.node);
+                    link.visible = !link.visible;
+                    childLinks.push(link);
+                    findChildNodes(link.node.id);
                 }
             });
         };
-        findChildNodes(this.graph.links, e.id);
+        findChildNodes(e.id);
 
         childNodes = _.uniqBy(childNodes, 'id');
 
+        // iterate over childNodes and set visible prop in this.nodes collection
         _.forEach(childNodes, (node) => {
-            node.visible = !node.visible;
+            const n = _.find(this.nodes, { id: node.id });
+            n.visible = !n.visible;
         });
 
-        this.graph.nodes = _.unionBy(this.graph.nodes, childNodes, 'id');
+        // todo: Figure out two-way binding
+        console.log('nodes', this.nodes);
+        console.log('links', this.links);
     }
     getUnicode(code) {
         return `&#x${code};`;
