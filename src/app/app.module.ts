@@ -9,7 +9,6 @@ import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { ChartModule } from 'primeng/components/chart/chart';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
-import { TreeModule } from 'primeng/components/tree/tree';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
 import { PanelModule } from 'primeng/components/panel/panel';
@@ -97,7 +96,6 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
         DataTableModule,
         DropdownModule,
         PaginatorModule,
-        TreeModule,
         InputTextModule,
         InputTextareaModule,
         PanelModule,

@@ -1,4 +1,4 @@
-<div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px">
+<div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px" xmlns="http://www.w3.org/1999/html">
     <div class="ui-grid-row">
         <div class="ui-grid-col-3">
             <p-dataTable [value]="recipeTypes" [rows]="10" [sortField]="datatableOptions.sortField"
@@ -16,13 +16,6 @@
             <h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>
             <div class="chart-container" *ngIf="selectedRecipeType">
                 <h2>{{selectedRecipeType.title}} v{{selectedRecipeType.version}}</h2>
-                <!--<p-tree [value]="recipeTypeData" layout="horizontal"></p-tree>-->
-                <!--<p-organizationChart [value]="recipeTypeData"></p-organizationChart>-->
-                <!--<ul>-->
-                <!--<li *ngFor="let key of selectedRecipeTypeKeys">-->
-                <!--{{key}}: {{selectedRecipeType[key]}}-->
-                <!--</li>-->
-                <!--</ul>-->
                 <ngx-charts-directed-graph
                     [legend]="showLegend"
                     [links]="graph.links"
@@ -41,9 +34,11 @@
                     <ng-template #nodeTemplate let-node>
                         <svg:g class="node"
                                pTooltip="node.label"
-                               tooltipPosition="'top'">
+                               tooltipPosition="'top'"
+                               *ngIf="node.visible">
                             <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.options.color" />
-                            <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{node.label}}</svg:text>
+                            <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{node.label}} {{node
+                                .visible}}</svg:text>
                         </svg:g>
                     </ng-template>
 
