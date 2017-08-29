@@ -19,15 +19,3 @@
     padding: 1.5em 0;
     text-align: right;
 }
-
-.spf__button {
-    background: $clr-navbar-dark;
-    background-image: linear-gradient(to bottom, lighten($clr-navbar-dark, 7%), $clr-navbar-dark);
-    border-radius: 3px;
-    padding: 0.5em 1.0em;
-
-    &:hover {
-        background: lighten($clr-navbar-dark, 3%);
-        background-image: linear-gradient(to bottom, lighten($clr-navbar-dark, 10%), lighten($clr-navbar-dark, 3%));
-    }
-}
