@@ -67,6 +67,8 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
 import { SourceFilesComponent } from './data/source-files/component';
 import { SourceFilesApiService } from './data/source-files/api.service';
 import { SourceFilesDatatableService } from './data/source-files/datatable.service';
+import { SourceFileDetailsComponent } from './data/source-files/details.component';
+import { DataService } from './data.service';
 import { ProcessingformComponent } from './navbar/subnav/processingform/processingform.component';
 
 
@@ -92,6 +94,7 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         ErrordialsComponent,
         HistorychartComponent,
         SourceFilesComponent,
+        SourceFileDetailsComponent,
         ProcessingformComponent
     ],
     imports: [
@@ -122,8 +125,7 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         CheckboxModule,
         ChipsModule,
         AccordionModule,
-        TooltipModule,
-        CalendarModule
+        TooltipModule
     ],
     exports: [
         DataTableModule,
@@ -144,7 +146,8 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         RecipeTypesDatatableService,
         WorkspacesApiService,
         SourceFilesApiService,
-        SourceFilesDatatableService
+        SourceFilesDatatableService,
+        DataService
     ],
     bootstrap: [AppComponent]
 })

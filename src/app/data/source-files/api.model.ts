@@ -1,7 +1,7 @@
 export class SourceFile {
     constructor(
         public id: number,
-        public workspace: object,
+        public workspace: any,
         public file_name: string,
         public media_type: string,
         public file_size: number,
