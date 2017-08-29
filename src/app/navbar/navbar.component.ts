@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavbarComponent implements OnInit {
 
-    private selectedId = 'processing';
+    private selectedId = null;
 
     constructor() {
     }
