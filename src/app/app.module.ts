@@ -5,8 +5,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // Prime NG
+import { AutoCompleteModule } from 'primeng/components/autocomplete/autocomplete';
 import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { CalendarModule } from 'primeng/components/calendar/calendar';
 import { ChartModule } from 'primeng/components/chart/chart';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
@@ -97,6 +99,8 @@ import { SourceFilesDatatableService } from './data/source-files/datatable.servi
         CodemirrorModule,
         NgxChartsDagModule,
         // Prime NG
+        AutoCompleteModule,
+        CalendarModule,
         ChartModule,
         DataTableModule,
         DropdownModule,
