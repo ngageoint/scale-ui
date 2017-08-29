@@ -1,32 +1,36 @@
+// Angular Modules
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpModule } from '@angular/http';
+import { NgModule } from '@angular/core';
+
 
 // Prime NG
+import { AccordionModule } from 'primeng/components/accordion/accordion';
 import { AutoCompleteModule } from 'primeng/components/autocomplete/autocomplete';
-import { DataTableModule } from 'primeng/components/datatable/datatable';
-import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { ButtonModule } from 'primeng/components/button/button';
 import { CalendarModule } from 'primeng/components/calendar/calendar';
 import { ChartModule } from 'primeng/components/chart/chart';
-import { PaginatorModule } from 'primeng/components/paginator/paginator';
-import { InputTextModule } from 'primeng/components/inputtext/inputtext';
-import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
-import { PanelModule } from 'primeng/components/panel/panel';
-import { ButtonModule } from 'primeng/components/button/button';
-import { SpinnerModule } from 'primeng/components/spinner/spinner';
-import { ListboxModule } from 'primeng/components/listbox/listbox';
-import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
-import { StepsModule } from 'primeng/components/steps/steps';
-import { MessagesModule } from 'primeng/components/messages/messages';
 import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 import { ChipsModule } from 'primeng/components/chips/chips';
-import { AccordionModule } from 'primeng/components/accordion/accordion';
+import { DataTableModule } from 'primeng/components/datatable/datatable';
+import { DropdownModule } from 'primeng/components/dropdown/dropdown';
+import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
+import { InputTextModule } from 'primeng/components/inputtext/inputtext';
+import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
+import { ListboxModule } from 'primeng/components/listbox/listbox';
+import { MessagesModule } from 'primeng/components/messages/messages';
+import { PaginatorModule } from 'primeng/components/paginator/paginator';
+import { PanelModule } from 'primeng/components/panel/panel';
+import { SpinnerModule } from 'primeng/components/spinner/spinner';
+import { StepsModule } from 'primeng/components/steps/steps';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
 
+// Code Mirror
 import { CodemirrorModule } from 'ng2-codemirror';
 import { NgxChartsDagModule } from '@swimlane/ngx-charts-dag';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -65,6 +69,7 @@ import { SourceFilesApiService } from './data/source-files/api.service';
 import { SourceFilesDatatableService } from './data/source-files/datatable.service';
 import { SourceFileDetailsComponent } from './data/source-files/details.component';
 import { DataService } from './data.service';
+import { ProcessingformComponent } from './navbar/subnav/processingform/processingform.component';
 
 
 @NgModule({
@@ -89,7 +94,8 @@ import { DataService } from './data.service';
         ErrordialsComponent,
         HistorychartComponent,
         SourceFilesComponent,
-        SourceFileDetailsComponent
+        SourceFileDetailsComponent,
+        ProcessingformComponent
     ],
     imports: [
         AppRoutingModule,

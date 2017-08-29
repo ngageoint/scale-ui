@@ -1,0 +1,21 @@
+@import '../../../../defaults/colors';
+
+
+.spf__form {
+    div {
+        margin-bottom: 0.5em;
+    }
+}
+
+.spf__rangeinputs {
+    display: flex;
+}
+
+.spf__daterange {
+    margin-right: 50px;
+}
+
+.spf__buttons {
+    padding: 1.5em 0;
+    text-align: right;
+}
