@@ -63,6 +63,7 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
 import { SourceFilesComponent } from './data/source-files/component';
 import { SourceFilesApiService } from './data/source-files/api.service';
 import { SourceFilesDatatableService } from './data/source-files/datatable.service';
+import { ProcessingformComponent } from './navbar/subnav/processingform/processingform.component';
 
 
 @NgModule({
@@ -86,7 +87,8 @@ import { SourceFilesDatatableService } from './data/source-files/datatable.servi
         WorkspacesComponent,
         ErrordialsComponent,
         HistorychartComponent,
-        SourceFilesComponent
+        SourceFilesComponent,
+        ProcessingformComponent
     ],
     imports: [
         AppRoutingModule,

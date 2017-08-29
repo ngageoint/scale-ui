@@ -1,0 +1,36 @@
+<div class="spf__form">
+    <div class="spf__rangeinputs">
+        <div class="spf__daterange">
+            <p-calendar [(ngModel)]="startTime" placeholder="Start Time" showTime="showTime" hourFormat="24" [showIcon]="true"></p-calendar>
+        </div>
+        <div class="spf__daterange">
+            <p-calendar [(ngModel)]="endTime" placeholder="End Time" showTime="showTime" hourFormat="24" [showIcon]="true"></p-calendar>
+        </div>
+    </div>
+    <div>
+        <p-autoComplete [(ngModel)]="selectedJobType"
+            [suggestions]="filteredJobTypes"
+            (completeMethod)="filterJobTypes($event)"
+            [minLength]="1"
+            [style]="{'width':'90%'}"
+            [inputStyle]="{'width':'90%'}"
+            placeholder="Job Name"
+            [dropdown]="true"></p-autoComplete>
+    </div>
+    <div>
+        <p-autoComplete [(ngModel)]="selectedSourceFile"
+            [suggestions]="filteredSourceFiles"
+            (completeMethod)="filterSourceFiles($event)"
+            [minLength]="1"
+            [style]="{'width':'90%'}"
+            [inputStyle]="{'width':'90%'}"
+            placeholder="Source File"
+            [dropdown]="true"></p-autoComplete>
+    </div>
+    <div class="spf__buttons">
+        <a class="spf__button">
+            <i class="fa fa-search"></i>
+            Search
+        </a>
+    </div>
+</div>

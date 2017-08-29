@@ -115,17 +115,3 @@ $subnav-bg-color: lighten($clr-scale-blue2, 3%);
 .subnav-ctr.hidden {
     top: -500px;
 }
-
-.subnav__rangeinputs {
-    display: flex;
-}
-
-.subnav__daterange {
-    margin-right: 50px;
-}
-
-.subnav__form {
-    div {
-        margin-bottom: 0.5em;
-    }
-}
