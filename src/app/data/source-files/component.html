@@ -1,9 +1,28 @@
 <h2>Source Files</h2>
+<div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+    <div class="ui-grid-row">
+        <div class="ui-grid-col-2">
+            <label>From:</label>
+            <p-calendar [(ngModel)]="datatableOptions.started" [showTime]="true" [utc]="true" dataType="string"
+                        (onSelect)="onStartSelect($event)"></p-calendar>
+        </div>
+        <div class="ui-grid-col-2">
+            <label>To:</label>
+            <p-calendar [(ngModel)]="datatableOptions.ended" [showTime]="true" [utc]="true" dataType="string"
+                        (onSelect)="onEndSelect($event)"></p-calendar>
+        </div>
+        <div class="uid-grid-col-2">
+            <label>Date Field:</label>
+            <p-dropdown [options]="timeFieldOptions" [(ngModel)]="datatableOptions.time_field" (onChange)="onTimeFieldChange($event)"></p-dropdown>
+        </div>
+    </div>
+</div>
 <p-dataTable [value]="sourceFiles" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
              [responsive]="true" resizableColumns="true" selectionMode="single" (onRowSelect)="onRowSelect($event)"
              [style]="{'min-height':'300px'}">
-    <p-column field="file_name" header="File Name" [filter]="true" filterPlaceholder="Search" [sortable]="true"></p-column>
+    <p-column field="file_name" header="File Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"
+              [sortable]="true"></p-column>
     <p-column field="file_size" header="File Size" [sortable]="true"></p-column>
     <p-column field="data_started" header="Data Started" [sortable]="true"></p-column>
     <p-column field="data_ended" header="Data Ended" [sortable]="true"></p-column>
