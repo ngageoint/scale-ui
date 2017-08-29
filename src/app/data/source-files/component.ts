@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 import { SourceFilesApiService } from './api.service';
 import { SourceFile } from './api.model';
@@ -19,7 +20,7 @@ export class SourceFilesComponent implements OnInit {
     sourceFiles: SourceFile[];
     first: number;
     count: number;
-    fileName: string;
+    timeFieldOptions: SelectItem[];
     isInitialized: boolean;
 
     constructor(
@@ -29,6 +30,16 @@ export class SourceFilesComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
+        this.timeFieldOptions = [
+            {
+                label: 'Data',
+                value: 'data'
+            },
+            {
+                label: 'Last Modified',
+                value: 'last_modified'
+            }
+        ];
     }
 
     private updateData() {
@@ -59,13 +70,13 @@ export class SourceFilesComponent implements OnInit {
         this.updateOptions();
     }
     onLazyLoad(e: LazyLoadEvent) {
-        console.log(e);
         // let ngOnInit handle loading data to ensure query params are respected
         if (this.isInitialized) {
             this.datatableOptions = Object.assign(this.datatableOptions, {
                 first: 0,
                 sortField: e.sortField,
-                sortOrder: e.sortOrder
+                sortOrder: e.sortOrder,
+                file_name: e.filters['file_name'] ? e.filters['file_name']['value'] : null
             });
             this.updateOptions();
         } else {
@@ -75,6 +86,27 @@ export class SourceFilesComponent implements OnInit {
     }
     onRowSelect(e) {
         this.router.navigate(['/data/source-files/' + e.data.id]);
+    }
+    onStartSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: e.toISOString()
+        });
+        this.updateOptions();
+    }
+    onEndSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            ended: e.toISOString()
+        });
+        this.updateOptions();
+    }
+    onTimeFieldChange(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            time_field: e.value
+        });
+        this.updateOptions();
     }
     ngOnInit() {
         if (this.route.snapshot &&

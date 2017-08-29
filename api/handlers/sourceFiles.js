@@ -5,6 +5,11 @@ module.exports = function (request, reply) {
     var data = _.clone(sourceFiles);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
+        if (params.file_name) {
+            data.results = _.filter(data.results, function (r) {
+                return r.file_name.toLowerCase().includes(params.file_name);
+            });
+        }
         if (params.order) {
             if (_.startsWith(params.order, '-')) {
                 data.results = _.orderBy(data.results, [_.trimStart(params.order, '-')], ['desc']);

@@ -34,8 +34,7 @@
                     <ng-template #nodeTemplate let-node>
                         <svg:g class="node"
                                pTooltip="node.label"
-                               tooltipPosition="'top'"
-                               *ngIf="node.visible">
+                               tooltipPosition="'top'">
                             <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.options.color" />
                             <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{node.label}}</svg:text>
                         </svg:g>

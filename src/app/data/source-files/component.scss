@@ -1,0 +1,12 @@
+.ui-grid.ui-grid-pad > .ui-grid-row > div {
+    padding: .25em .5em 1em 0;
+}
+
+:host ::ng-deep .ui-dropdown-label  {
+    padding-bottom: 0;
+}
+
+label {
+    font-weight: bold;
+    display: block;
+}

@@ -1,11 +1,13 @@
+import * as moment from 'moment';
+
 export class SourceFilesDatatable {
     constructor(
         public first: number,
         public rows: number,
         public sortField: string,
         public sortOrder: number,
-        public started: Date,
-        public ended: Date,
+        public started: string,
+        public ended: string,
         public time_field: string,
         public is_parsed: boolean,
         public file_name: string
@@ -17,9 +19,9 @@ export const initialSourceFilesDatatable: SourceFilesDatatable = {
     rows: 10,
     sortField: 'last_modified',
     sortOrder: -1,
-    started: null,
-    ended: null,
-    time_field: null,
+    started: moment.utc().subtract(1, 'd').toISOString(),
+    ended: moment.utc().toISOString(),
+    time_field: 'data',
     is_parsed: null,
     file_name: null
 };

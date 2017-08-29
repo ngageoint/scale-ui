@@ -137,13 +137,8 @@ export class RecipeTypesComponent implements OnInit {
 
         childNodes = _.uniqBy(childNodes, 'id');
 
-        // iterate over childNodes and set visible prop in this.nodes collection
-        _.forEach(childNodes, (node) => {
-            const n = _.find(this.nodes, { id: node.id });
-            n.visible = !n.visible;
-        });
-
         // todo: Figure out two-way binding
+        this.nodes = _.pullAllBy(this.nodes, childNodes, 'id');
         console.log('nodes', this.nodes);
         console.log('links', this.links);
     }

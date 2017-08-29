@@ -24,6 +24,7 @@ import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 import { ChipsModule } from 'primeng/components/chips/chips';
 import { AccordionModule } from 'primeng/components/accordion/accordion';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
+import { CalendarModule } from 'primeng/components/calendar/calendar';
 
 import { CodemirrorModule } from 'ng2-codemirror';
 import { NgxChartsDagModule } from '@swimlane/ngx-charts-dag';
@@ -118,7 +119,8 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         CheckboxModule,
         ChipsModule,
         AccordionModule,
-        TooltipModule
+        TooltipModule,
+        CalendarModule
     ],
     exports: [
         DataTableModule,
