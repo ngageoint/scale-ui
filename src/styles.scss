@@ -23,3 +23,25 @@
     margin-left: 0;
     padding-left: 0;
 }
+
+.link-button {
+    background: $clr-blue-lgt;
+    color: $clr-white;
+    padding: 7px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+.table {
+    width: 100%;
+
+    tbody td {
+        padding: 5px;
+    }
+}
+
+.table-striped {
+    tbody tr:nth-child(odd) {
+        background-color: $clr-white;
+    }
+}

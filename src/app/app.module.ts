@@ -24,7 +24,6 @@ import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 import { ChipsModule } from 'primeng/components/chips/chips';
 import { AccordionModule } from 'primeng/components/accordion/accordion';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
-import { CalendarModule } from 'primeng/components/calendar/calendar';
 
 import { CodemirrorModule } from 'ng2-codemirror';
 import { NgxChartsDagModule } from '@swimlane/ngx-charts-dag';
@@ -64,6 +63,8 @@ import { HistorychartComponent } from './dashboard/historychart/historychart.com
 import { SourceFilesComponent } from './data/source-files/component';
 import { SourceFilesApiService } from './data/source-files/api.service';
 import { SourceFilesDatatableService } from './data/source-files/datatable.service';
+import { SourceFileDetailsComponent } from './data/source-files/details.component';
+import { DataService } from './data.service';
 
 
 @NgModule({
@@ -87,7 +88,8 @@ import { SourceFilesDatatableService } from './data/source-files/datatable.servi
         WorkspacesComponent,
         ErrordialsComponent,
         HistorychartComponent,
-        SourceFilesComponent
+        SourceFilesComponent,
+        SourceFileDetailsComponent
     ],
     imports: [
         AppRoutingModule,
@@ -117,8 +119,7 @@ import { SourceFilesDatatableService } from './data/source-files/datatable.servi
         CheckboxModule,
         ChipsModule,
         AccordionModule,
-        TooltipModule,
-        CalendarModule
+        TooltipModule
     ],
     exports: [
         DataTableModule,
@@ -139,7 +140,8 @@ import { SourceFilesDatatableService } from './data/source-files/datatable.servi
         RecipeTypesDatatableService,
         WorkspacesApiService,
         SourceFilesApiService,
-        SourceFilesDatatableService
+        SourceFilesDatatableService,
+        DataService
     ],
     bootstrap: [AppComponent]
 })

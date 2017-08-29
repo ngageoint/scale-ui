@@ -1,16 +1,16 @@
 <h2>Source Files</h2>
 <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
     <div class="ui-grid-row">
-        <div class="ui-grid-col-2">
-            <label>From:</label>
-            <p-calendar [(ngModel)]="datatableOptions.started" [showTime]="true" [utc]="true" dataType="string"
-                        (onSelect)="onStartSelect($event)"></p-calendar>
-        </div>
-        <div class="ui-grid-col-2">
-            <label>To:</label>
-            <p-calendar [(ngModel)]="datatableOptions.ended" [showTime]="true" [utc]="true" dataType="string"
-                        (onSelect)="onEndSelect($event)"></p-calendar>
-        </div>
+        <!--<div class="ui-grid-col-2">-->
+            <!--<label>From:</label>-->
+            <!--<p-calendar [(ngModel)]="datatableOptions.started" [showTime]="true" [utc]="true" dataType="string"-->
+                        <!--(onSelect)="onStartSelect($event)"></p-calendar>-->
+        <!--</div>-->
+        <!--<div class="ui-grid-col-2">-->
+            <!--<label>To:</label>-->
+            <!--<p-calendar [(ngModel)]="datatableOptions.ended" [showTime]="true" [utc]="true" dataType="string"-->
+                        <!--(onSelect)="onEndSelect($event)"></p-calendar>-->
+        <!--</div>-->
         <div class="uid-grid-col-2">
             <label>Date Field:</label>
             <p-dropdown [options]="timeFieldOptions" [(ngModel)]="datatableOptions.time_field" (onChange)="onTimeFieldChange($event)"></p-dropdown>
