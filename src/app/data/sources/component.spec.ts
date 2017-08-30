@@ -3,20 +3,20 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { SourceFilesApiService } from './api.service';
-import { SourceFilesComponent } from './component';
-import { SourceFilesDatatableService } from './datatable.service';
+import { SourcesApiService } from './api.service';
+import { SourcesComponent } from './component';
+import { SourcesDatatableService } from './datatable.service';
 
 describe('SourceFilesComponent', () => {
-    let component: SourceFilesComponent;
-    let fixture: ComponentFixture<SourceFilesComponent>;
+    let component: SourcesComponent;
+    let fixture: ComponentFixture<SourcesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SourceFilesComponent],
+            declarations: [SourcesComponent],
             imports: [HttpModule],
             providers: [
-                SourceFilesApiService, SourceFilesDatatableService,
+                SourcesApiService, SourcesDatatableService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
@@ -27,7 +27,7 @@ describe('SourceFilesComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SourceFilesComponent);
+        fixture = TestBed.createComponent(SourcesComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -2,30 +2,29 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
-import * as moment from 'moment';
 
-import { SourceFilesApiService } from './api.service';
-import { SourceFile } from './api.model';
-import { SourceFilesDatatable } from './datatable.model';
-import { SourceFilesDatatableService } from './datatable.service';
+import { SourcesApiService } from './api.service';
+import { Source } from './api.model';
+import { SourcesDatatable } from './datatable.model';
+import { SourcesDatatableService } from './datatable.service';
 
 @Component({
-    selector: 'app-source-files',
+    selector: 'app-sources',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
 
-export class SourceFilesComponent implements OnInit {
-    datatableOptions: SourceFilesDatatable;
-    sourceFiles: SourceFile[];
+export class SourcesComponent implements OnInit {
+    datatableOptions: SourcesDatatable;
+    sources: Source[];
     first: number;
     count: number;
     timeFieldOptions: SelectItem[];
     isInitialized: boolean;
 
     constructor(
-        private sourceFilesDatatableService: SourceFilesDatatableService,
-        private sourceFilesApiService: SourceFilesApiService,
+        private sourcesDatatableService: SourcesDatatableService,
+        private sourcesApiService: SourcesApiService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -43,19 +42,19 @@ export class SourceFilesComponent implements OnInit {
     }
 
     private updateData() {
-        this.sourceFilesApiService.getSourceFiles(this.datatableOptions).then(data => {
+        this.sourcesApiService.getSources(this.datatableOptions).then(data => {
             this.count = data.count;
-            this.sourceFiles = data.results as SourceFile[];
+            this.sources = data.results as Source[];
         });
     }
     private updateOptions() {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        this.sourceFilesDatatableService.setSourceFilesDatatableOptions(this.datatableOptions);
+        this.sourcesDatatableService.setSourcesDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/data/source-files'], {
+        this.router.navigate(['/data/sources'], {
             queryParams: this.datatableOptions
         });
 
@@ -85,7 +84,7 @@ export class SourceFilesComponent implements OnInit {
         }
     }
     onRowSelect(e) {
-        this.router.navigate(['/data/source-files/' + e.data.id]);
+        this.router.navigate(['/data/sources/' + e.data.id]);
     }
     onStartSelect(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -125,7 +124,7 @@ export class SourceFilesComponent implements OnInit {
                 file_name: params.file_name
             };
         } else {
-            this.datatableOptions = this.sourceFilesDatatableService.getSourceFilesDatatableOptions();
+            this.datatableOptions = this.sourcesDatatableService.getSourcesDatatableOptions();
         }
         this.updateOptions();
     }

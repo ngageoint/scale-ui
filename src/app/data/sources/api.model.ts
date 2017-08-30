@@ -1,4 +1,4 @@
-export class SourceFile {
+export class Source {
     constructor(
         public id: number,
         public workspace: any,

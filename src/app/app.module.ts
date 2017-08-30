@@ -15,6 +15,7 @@ import { ChartModule } from 'primeng/components/chart/chart';
 import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 import { ChipsModule } from 'primeng/components/chips/chips';
 import { DataTableModule } from 'primeng/components/datatable/datatable';
+import { DialogModule } from 'primeng/components/dialog/dialog';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
 import { InputSwitchModule } from 'primeng/components/inputswitch/inputswitch';
 import { InputTextModule } from 'primeng/components/inputtext/inputtext';
@@ -64,10 +65,10 @@ import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
 import { ErrordialsComponent } from './dashboard/errordials/errordials.component';
 import { HistorychartComponent } from './dashboard/historychart/historychart.component';
-import { SourceFilesComponent } from './data/source-files/component';
-import { SourceFilesApiService } from './data/source-files/api.service';
-import { SourceFilesDatatableService } from './data/source-files/datatable.service';
-import { SourceFileDetailsComponent } from './data/source-files/details.component';
+import { SourcesComponent } from './data/sources/component';
+import { SourcesApiService } from './data/sources/api.service';
+import { SourcesDatatableService } from './data/sources/datatable.service';
+import { SourceDetailsComponent } from './data/sources/details.component';
 import { DataService } from './data.service';
 import { ProcessingformComponent } from './navbar/subnav/processingform/processingform.component';
 
@@ -93,8 +94,8 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         WorkspacesComponent,
         ErrordialsComponent,
         HistorychartComponent,
-        SourceFilesComponent,
-        SourceFileDetailsComponent,
+        SourcesComponent,
+        SourceDetailsComponent,
         ProcessingformComponent
     ],
     imports: [
@@ -111,6 +112,7 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         CalendarModule,
         ChartModule,
         DataTableModule,
+        DialogModule,
         DropdownModule,
         PaginatorModule,
         InputTextModule,
@@ -145,8 +147,8 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         RecipeTypesApiService,
         RecipeTypesDatatableService,
         WorkspacesApiService,
-        SourceFilesApiService,
-        SourceFilesDatatableService,
+        SourcesApiService,
+        SourcesDatatableService,
         DataService
     ],
     bootstrap: [AppComponent]

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 
-export class SourceFilesDatatable {
+export class SourcesDatatable {
     constructor(
         public first: number,
         public rows: number,
@@ -14,7 +14,7 @@ export class SourceFilesDatatable {
     ) {}
 }
 
-export const initialSourceFilesDatatable: SourceFilesDatatable = {
+export const initialSourcesDatatable: SourcesDatatable = {
     first: 0,
     rows: 10,
     sortField: 'last_modified',

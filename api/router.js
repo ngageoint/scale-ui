@@ -11,8 +11,9 @@ const jobDetails = require('./handlers/jobDetails');
 const jobTypeDetails = require('./handlers/jobTypeDetails');
 const recipeTypeDetails = require('./handlers/recipeTypeDetails');
 const workspaces = require('./handlers/workspaces');
-const sourceFiles = require('./handlers/sourceFiles');
-const sourceFileDetails = require('./handlers/sourceFileDetails');
+const sources = require('./handlers/sources');
+const sourceDetails = require('./handlers/sourceDetails');
+const sourceDescendants = require('./handlers/sourceDescendants');
 
 module.exports = {
     init: function(server) {
@@ -96,14 +97,20 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/source-files',
-            handler: sourceFiles
+            path: '/mocks/sources',
+            handler: sources
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/source-files/{id}',
-            handler: sourceFileDetails
+            path: '/mocks/sources/{id}',
+            handler: sourceDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/sources/{id}/{type}',
+            handler: sourceDescendants
         });
     }
 };

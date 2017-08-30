@@ -9,8 +9,8 @@ import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesImportComponent } from './configuration/job-types/import.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
-import { SourceFilesComponent } from './data/source-files/component';
-import { SourceFileDetailsComponent } from './data/source-files/details.component';
+import { SourcesComponent } from './data/sources/component';
+import { SourceDetailsComponent } from './data/sources/details.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -22,8 +22,8 @@ const routes: Routes = [
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
-    { path: 'data/source-files', component: SourceFilesComponent },
-    { path: 'data/source-files/:id', component: SourceFileDetailsComponent }
+    { path: 'data/sources', component: SourcesComponent },
+    { path: 'data/sources/:id', component: SourceDetailsComponent }
 ];
 
 @NgModule({

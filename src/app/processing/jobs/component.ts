@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
@@ -17,8 +17,11 @@ import { JobType } from '../../configuration/job-types/api.model';
 })
 
 export class JobsComponent implements OnInit {
+    @Input() jobs: Job[];
+    @Input() isChild: boolean;
+    @Output() datatableChange = new EventEmitter<boolean>();
+
     datatableOptions: JobsDatatable;
-    jobs: Job[];
     jobTypes: JobType[];
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
@@ -50,12 +53,17 @@ export class JobsComponent implements OnInit {
         });
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
 
-        // update querystring
-        this.router.navigate(['/processing/jobs'], {
-            queryParams: this.datatableOptions
-        });
+        if (this.isChild) {
+            // notify the parent that the datatable options (filtering/sorting/etc.) have changed
+            this.datatableChange.emit(true);
+        } else {
+            // component is not being referenced as a child, so update querystring and data
+            this.router.navigate(['/processing/jobs'], {
+                queryParams: this.datatableOptions
+            });
 
-        this.updateData();
+            this.updateData();
+        }
     }
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().then(data => {

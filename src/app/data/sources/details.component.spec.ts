@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 
-import { SourceFilesApiService } from './api.service';
-import { SourceFileDetailsComponent } from './details.component';
+import { SourcesApiService } from './api.service';
+import { SourceDetailsComponent } from './details.component';
 import { DataService } from '../../data.service';
+import { JobsDatatableService } from '../../processing/jobs/datatable.service';
 
-
-describe('SourceFileDetailsComponent', () => {
-    let component: SourceFileDetailsComponent;
-    let fixture: ComponentFixture<SourceFileDetailsComponent>;
+describe('SourceDetailsComponent', () => {
+    let component: SourceDetailsComponent;
+    let fixture: ComponentFixture<SourceDetailsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [SourceFileDetailsComponent],
+            declarations: [SourceDetailsComponent],
             imports: [HttpModule],
             providers: [
-                SourceFilesApiService, DataService,
+                SourcesApiService, DataService, JobsDatatableService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes
@@ -27,7 +27,7 @@ describe('SourceFileDetailsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(SourceFileDetailsComponent);
+        fixture = TestBed.createComponent(SourceDetailsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
