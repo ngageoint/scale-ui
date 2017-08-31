@@ -2,9 +2,9 @@
 
 // Color Variables
 $clr-widget-borders: $clr-gray-75;
-$clr-uibutton: $clr-navbar-hover;
-$clr-uibutton-hover: lighten($clr-uibutton, 7%);
-$clr-uibutton-active: lighten($clr-uibutton, 5%);
+$clr-uibutton: $clr-navbar-dark;
+$clr-uibutton-hover: $clr-navbar-light;
+$clr-uibutton-active: lighten($clr-navbar-light, 3%);
 
 
 // PrimeNG Classes
