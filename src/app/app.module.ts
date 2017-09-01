@@ -31,6 +31,7 @@ import { TooltipModule } from 'primeng/components/tooltip/tooltip';
 // Code Mirror
 import { CodemirrorModule } from 'ng2-codemirror';
 import { NgxChartsDagModule } from '@swimlane/ngx-charts-dag';
+import { UtcDatepickerModule } from 'angular-utc-datepicker';
 
 
 import { AppRoutingModule } from './app-routing.module';
@@ -107,6 +108,7 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         ReactiveFormsModule,
         CodemirrorModule,
         NgxChartsDagModule,
+        UtcDatepickerModule,
         // Prime NG
         AutoCompleteModule,
         CalendarModule,

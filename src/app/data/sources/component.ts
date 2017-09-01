@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 import { SourcesApiService } from './api.service';
 import { Source } from './api.model';
@@ -19,6 +20,8 @@ export class SourcesComponent implements OnInit {
     sources: Source[];
     first: number;
     count: number;
+    started: Date = moment.utc().subtract(1, 'd').toDate();
+    ended: Date = moment.utc().toDate();
     timeFieldOptions: SelectItem[];
     isInitialized: boolean;
 
@@ -89,7 +92,7 @@ export class SourcesComponent implements OnInit {
     onStartSelect(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: e.toISOString()
+            started: moment.utc(e, 'YYYY-MM-DD').toISOString()
         });
         this.updateOptions();
     }
@@ -123,6 +126,8 @@ export class SourcesComponent implements OnInit {
                 is_parsed: params.is_parsed,
                 file_name: params.file_name
             };
+            this.started = moment.utc(this.datatableOptions.started).toDate();
+            this.ended = moment.utc(this.datatableOptions.ended).toDate();
         } else {
             this.datatableOptions = this.sourcesDatatableService.getSourcesDatatableOptions();
         }

@@ -19,8 +19,8 @@ export const initialSourcesDatatable: SourcesDatatable = {
     rows: 10,
     sortField: 'last_modified',
     sortOrder: -1,
-    started: moment.utc().subtract(1, 'd').toISOString(),
-    ended: moment.utc().toISOString(),
+    started: moment.utc().subtract(1, 'd').startOf('d').toISOString(),
+    ended: moment.utc().startOf('d').toISOString(),
     time_field: 'data',
     is_parsed: null,
     file_name: null
