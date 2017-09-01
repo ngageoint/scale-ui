@@ -99,7 +99,7 @@ export class SourcesComponent implements OnInit {
     onEndSelect(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            ended: e.toISOString()
+            ended: moment.utc(e, 'YYYY-MM-DD').toISOString()
         });
         this.updateOptions();
     }
