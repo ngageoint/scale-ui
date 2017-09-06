@@ -1,16 +1,17 @@
-<p-dataTable [value]="jobTypes" [rows]="10" [sortField]="datatableOptions.sortField"
-             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
-    <p-column field="title" header="Job Type" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'overflow':'visible'}">
+<p-dataTable [value]="performanceData" [rows]="10" [sortField]="datatableOptions.sortField"
+             [sortOrder]="datatableOptions.sortOrder">
+    <p-column header="Job Type" [sortable]="true" [filter]="true" filterMatchMode="equals"
+              [style]="{'overflow':'visible'}">
         <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange()" [style]="{'width':'100%'}"
+            <p-dropdown [options]="jobTypeOptions" (onChange)="onChange($event)" [style]="{'width':'100%'}"
                         styleClass="ui-column-filter">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}
                 </ng-template>
             </p-dropdown>
         </ng-template>
-        <ng-template let-col let-jobType="rowData" pTemplate="body">
-            <span>{{jobType.title}} {{jobType.version}}</span>
+        <ng-template let-col let-rowData="rowData" pTemplate="body">
+            <span>{{rowData.job_type.title}} {{rowData.job_type.version}}</span>
         </ng-template>
     </p-column>
     <p-column>
@@ -18,10 +19,10 @@
             <h4>24 Hours</h4>
             <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
                 <div class="ui-grid-row">
-                    <div class="ui-grid-col-4 text-left">
+                    <div class="ui-grid-col-6 text-left">
                         Failure %
                     </div>
-                    <div class="ui-grid-col-8 text-right">
+                    <div class="ui-grid-col-6 text-right">
                         <span class="label label-system">Sys</span>
                         <span class="label label-algorithm">Alg</span>
                         <span class="label label-data">Data</span>
@@ -30,8 +31,40 @@
                 </div>
             </div>
         </ng-template>
-        <ng-template let-col pTemplate="body">
-
+        <ng-template let-col let-rowData="rowData" pTemplate="body">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-6 text-left">
+                        <span *ngIf="rowData.twentyfour_hours.total > 0" class="fail-rate-container">
+                            <span class="fail-rate"
+                                  [style.width]="failRateStyle(rowData.twentyfour_hours.errorTotal, rowData.twentyfour_hours.total)"></span>
+                        </span>
+                        <span *ngIf="rowData.twentyfour_hours.total > 0" class="percentage">{{getPercentage(rowData.twentyfour_hours)}}</span>
+                        <span *ngIf="rowData.twentyfour_hours.total === 0" class="fail-rate-container">
+                            <span class="fail-rate" style="display: none"></span>
+                        </span>
+                        <span *ngIf="rowData.twentyfour_hours.total === 0" class="percentage">0%</span>
+                    </div>
+                    <div class="ui-grid-col-6 text-right">
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.twentyfour_hours)"
+                              [style.background]="getBackground(rowData.twentyfour_hours, 'system')">
+                            {{rowData.twentyfour_hours.system}}
+                        </span>
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.twentyfour_hours)"
+                              [style.background]="getBackground(rowData.twentyfour_hours, 'algorithm')">
+                            {{rowData.twentyfour_hours.algorithm}}
+                        </span>
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.twentyfour_hours)"
+                              [style.background]="getBackground(rowData.twentyfour_hours, 'data')">
+                            {{rowData.twentyfour_hours.data}}
+                        </span>
+                        <span class="label label-primary">{{rowData.twentyfour_hours.total}}</span>
+                    </div>
+                </div>
+            </div>
         </ng-template>
     </p-column>
     <p-column>
@@ -39,10 +72,10 @@
             <h4>48 Hours</h4>
             <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
                 <div class="ui-grid-row">
-                    <div class="ui-grid-col-4 text-left">
+                    <div class="ui-grid-col-6 text-left">
                         Failure %
                     </div>
-                    <div class="ui-grid-col-8 text-right">
+                    <div class="ui-grid-col-6 text-right">
                         <span class="label label-system">Sys</span>
                         <span class="label label-algorithm">Alg</span>
                         <span class="label label-data">Data</span>
@@ -51,8 +84,40 @@
                 </div>
             </div>
         </ng-template>
-        <ng-template let-col pTemplate="body">
-
+        <ng-template let-col let-rowData="rowData" pTemplate="body">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-6 text-left">
+                        <span *ngIf="rowData.fortyeight_hours.total > 0" class="fail-rate-container">
+                            <span class="fail-rate"
+                                  [style.width]="failRateStyle(rowData.fortyeight_hours.errorTotal, rowData.fortyeight_hours.total)"></span>
+                        </span>
+                        <span *ngIf="rowData.fortyeight_hours.total > 0" class="percentage">{{getPercentage(rowData.fortyeight_hours)}}</span>
+                        <span *ngIf="rowData.fortyeight_hours.total === 0" class="fail-rate-container">
+                            <span class="fail-rate" style="display: none"></span>
+                        </span>
+                        <span *ngIf="rowData.fortyeight_hours.total === 0" class="percentage">0%</span>
+                    </div>
+                    <div class="ui-grid-col-6 text-right">
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.fortyeight_hours)"
+                              [style.background]="getBackground(rowData.fortyeight_hours, 'system')">
+                            {{rowData.fortyeight_hours.system}}
+                        </span>
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.fortyeight_hours)"
+                              [style.background]="getBackground(rowData.fortyeight_hours, 'algorithm')">
+                            {{rowData.fortyeight_hours.algorithm}}
+                        </span>
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.fortyeight_hours)"
+                              [style.background]="getBackground(rowData.fortyeight_hours, 'data')">
+                            {{rowData.fortyeight_hours.data}}
+                        </span>
+                        <span class="label label-primary">{{rowData.fortyeight_hours.total}}</span>
+                    </div>
+                </div>
+            </div>
         </ng-template>
     </p-column>
     <p-column>
@@ -60,10 +125,10 @@
             <h4>30 Days</h4>
             <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
                 <div class="ui-grid-row">
-                    <div class="ui-grid-col-4 text-left">
+                    <div class="ui-grid-col-6 text-left">
                         Failure %
                     </div>
-                    <div class="ui-grid-col-8 text-right">
+                    <div class="ui-grid-col-6 text-right">
                         <span class="label label-system">Sys</span>
                         <span class="label label-algorithm">Alg</span>
                         <span class="label label-data">Data</span>
@@ -72,8 +137,40 @@
                 </div>
             </div>
         </ng-template>
-        <ng-template let-col pTemplate="body">
-
+        <ng-template let-col let-rowData="rowData" pTemplate="body">
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-6 text-left">
+                        <span *ngIf="rowData.thirty_days.total > 0" class="fail-rate-container">
+                            <span class="fail-rate"
+                                  [style.width]="failRateStyle(rowData.thirty_days.errorTotal, rowData.thirty_days.total)"></span>
+                        </span>
+                        <span *ngIf="rowData.thirty_days.total > 0" class="percentage">{{getPercentage(rowData.thirty_days)}}</span>
+                        <span *ngIf="rowData.thirty_days.total === 0" class="fail-rate-container">
+                            <span class="fail-rate" style="display: none"></span>
+                        </span>
+                        <span *ngIf="rowData.thirty_days.total === 0" class="percentage">0%</span>
+                    </div>
+                    <div class="ui-grid-col-6 text-right">
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.thirty_days)"
+                              [style.background]="getBackground(rowData.thirty_days, 'system')">
+                            {{rowData.thirty_days.system}}
+                        </span>
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.thirty_days)"
+                              [style.background]="getBackground(rowData.thirty_days, 'algorithm')">
+                            {{rowData.thirty_days.algorithm}}
+                        </span>
+                        <span class="label label-system"
+                              [style.color]="getColor(rowData.thirty_days)"
+                              [style.background]="getBackground(rowData.thirty_days, 'data')">
+                            {{rowData.thirty_days.data}}
+                        </span>
+                        <span class="label label-primary">{{rowData.thirty_days.total}}</span>
+                    </div>
+                </div>
+            </div>
         </ng-template>
     </p-column>
 </p-dataTable>

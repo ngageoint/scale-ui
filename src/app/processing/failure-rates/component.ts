@@ -7,7 +7,7 @@ import * as moment from 'moment';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobType } from '../../configuration/job-types/api.model';
 import { FailureRatesDatatableService } from './datatable.service';
-import { JobTypesDatatable } from '../../configuration/job-types/datatable.model';
+import { FailureRatesDatatable } from './datatable.model';
 import { MetricsApiService } from '../../data/metrics/api.service';
 
 @Component({
@@ -17,15 +17,11 @@ import { MetricsApiService } from '../../data/metrics/api.service';
 })
 
 export class FailureRatesComponent implements OnInit {
-    datatableOptions: JobTypesDatatable;
-    allJobTypes: JobType[];
+    datatableOptions: FailureRatesDatatable;
     jobTypes: JobType[];
     jobTypeOptions: SelectItem[];
-    selectedJobType: number;
+    selectedJobType: JobType;
     performanceData: any[];
-    first: number;
-    count: number;
-    isInitialized: boolean;
 
     constructor(
         private failureRatesDatatableService: FailureRatesDatatableService,
@@ -34,8 +30,8 @@ export class FailureRatesComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute
     ) {
-        this.isInitialized = false;
         this.performanceData = [];
+        this.selectedJobType = null;
     }
 
     private formatData(data, numDays) {
@@ -69,69 +65,50 @@ export class FailureRatesComponent implements OnInit {
         return obj;
     };
     private updateData() {
-        this.jobTypesApiService.getJobTypes(this.datatableOptions).then(data => {
-            this.count = data.count;
-            this.allJobTypes = data.results as JobType[];
-            this.jobTypes = data.results as JobType[];
-            const selectItems = [];
-            _.forEach(this.allJobTypes, (jobType) => {
-                selectItems.push({
-                    label: jobType.title + ' ' + jobType.version,
-                    value: jobType.id
-                });
-            });
-            this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
-            this.jobTypeOptions.unshift({
-                label: 'All',
-                value: 0
-            });
+        const metricsParams = {
+            page: null,
+            page_size: null,
+            started: this.datatableOptions.started,
+            ended: this.datatableOptions.ended,
+            choice_id: this.selectedJobType ? [this.selectedJobType.id] : _.map(this.jobTypes, 'id'),
+            column: ['error_system_count', 'error_algorithm_count', 'error_data_count', 'total_count'],
+            group: null,
+            dataType: 'job-types'
+        };
+        this.metricsApiService.getPlotData(metricsParams).then(metricsData => {
+            if (metricsData.results.length > 0) {
+                const data30Days = _.map(metricsData.results, 'values'),
+                    data48Hours = this.formatData(data30Days, 2),
+                    data24Hours = this.formatData(data48Hours, 1);
 
-            const metricsParams = {
-                page: null,
-                page_size: null,
-                started: this.datatableOptions.started,
-                ended: this.datatableOptions.ended,
-                choice_id: this.selectedJobType > 0 ? [this.selectedJobType] : _.map(this.jobTypes, 'id'),
-                column: ['error_system_count', 'error_algorithm_count', 'error_data_count', 'total_count'],
-                group: null,
-                dataType: 'job-types'
-            };
-
-            this.metricsApiService.getPlotData(metricsParams).then(metricsData => {
-                if (metricsData.results.length > 0) {
-                    const data30Days = _.map(metricsData.results, 'values'),
-                        data48Hours = this.formatData(data30Days, 2),
-                        data24Hours = this.formatData(data48Hours, 1);
-
-                    _.forEach(this.jobTypes, (jobType) => {
-                        this.performanceData.push({
-                            job_type: jobType,
-                            twentyfour_hours: this.formatColumn(data24Hours, jobType.id),
-                            fortyeight_hours: this.formatColumn(data48Hours, jobType.id),
-                            thirty_days: this.formatColumn(data30Days, jobType.id)
-                        });
+                _.forEach(this.jobTypes, (jobType) => {
+                    this.performanceData.push({
+                        job_type: jobType,
+                        twentyfour_hours: this.formatColumn(data24Hours, jobType.id),
+                        fortyeight_hours: this.formatColumn(data48Hours, jobType.id),
+                        thirty_days: this.formatColumn(data30Days, jobType.id)
                     });
+                });
 
-                    this.performanceData = _.orderBy(this.performanceData, [(d) => {
-                        if (d.twentyfour_hours.total > 0) {
-                            return d.twentyfour_hours.errorTotal / d.twentyfour_hours.total;
-                        }
-                        return 0;
-                    }, 'twentyfour_hours.total'], ['desc', 'desc']);
-                    console.log(this.performanceData);
+                this.performanceData = _.orderBy(this.performanceData, [(d) => {
+                    if (d.twentyfour_hours.total > 0) {
+                        return d.twentyfour_hours.errorTotal / d.twentyfour_hours.total;
+                    }
+                    return 0;
+                }, 'twentyfour_hours.total'], ['desc', 'desc']);
+                console.log(this.performanceData);
 
-                    // vm.gridOptions.data = vm.performanceData;
-                    // if (!skipSort) {
-                    //     vm.currSortField = vm.jobTypesParams.orderField || 'twentyfour_hours';
-                    //     vm.currSortErrorType = vm.jobTypesParams.orderErrorType || 'errorTotal';
-                    //     if (vm.jobTypesParams.order && vm.jobTypesParams.orderField && vm.jobTypesParams.orderErrorType) {
-                    //         vm.sortBy(vm.jobTypesParams.orderErrorType, vm.jobTypesParams.orderField, vm.jobTypesParams.order);
-                    //     }
-                    // }
-                }
-            }).catch((error) => {
-                console.log(error);
-            });
+                // vm.gridOptions.data = vm.performanceData;
+                // if (!skipSort) {
+                //     vm.currSortField = vm.jobTypesParams.orderField || 'twentyfour_hours';
+                //     vm.currSortErrorType = vm.jobTypesParams.orderErrorType || 'errorTotal';
+                //     if (vm.jobTypesParams.order && vm.jobTypesParams.orderField && vm.jobTypesParams.orderErrorType) {
+                //         vm.sortBy(vm.jobTypesParams.orderErrorType, vm.jobTypesParams.orderField, vm.jobTypesParams.order);
+                //     }
+                // }
+            }
+        }).catch((error) => {
+            console.log(error);
         });
     }
     private updateOptions() {
@@ -144,31 +121,51 @@ export class FailureRatesComponent implements OnInit {
 
         this.updateData();
     }
-
-    onChange() {
-        if (this.selectedJobType > 0) {
-            this.jobTypes = _.filter(this.allJobTypes, (jobType) => {
-                return jobType.id === this.selectedJobType;
+    private getJobTypes() {
+        this.jobTypesApiService.getJobTypes().then(data => {
+            this.jobTypes = data.results as JobType[];
+            const selectItems = [];
+            _.forEach(this.jobTypes, (jobType) => {
+                selectItems.push({
+                    label: jobType.title + ' ' + jobType.version,
+                    value: jobType
+                });
+                if (this.datatableOptions.name === jobType.name) {
+                    this.selectedJobType = jobType;
+                }
             });
-        } else {
-            this.jobTypes = _.orderBy(_.clone(this.allJobTypes),
-                [this.datatableOptions.sortField],
-                [this.datatableOptions.sortOrder > 0 ? 'asc' : 'desc']);
-        }
-    }
-    onLazyLoad(e: LazyLoadEvent) {
-        // let ngOnInit handle loading data to ensure query params are respected
-        if (this.isInitialized) {
-            this.datatableOptions = Object.assign(this.datatableOptions, {
-                first: 0,
-                sortField: e.sortField,
-                sortOrder: e.sortOrder
+            this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
+            this.jobTypeOptions.unshift({
+                label: 'All',
+                value: null
             });
             this.updateOptions();
-        } else {
-            // data was just loaded by ngOnInit, so set flag to true
-            this.isInitialized = true;
-        }
+        });
+    }
+
+    getPercentage(data) {
+        return data.total > 0 ? ((data.errorTotal / data.total) * 100).toFixed(0) + '%' : '0%';
+    }
+    getColor(data) {
+        return data.total > 0 ? parseFloat((data.errorTotal / data.total).toFixed(2)) >= 0.5 ? '#fff' : '#000' : '#000';
+    }
+    getBackground(data, type) {
+        const rgb = type === 'system' ? '103, 0, 13' : type === 'algorithm' ? '203, 24, 29' : '241, 105, 19';
+        return data.total > 0 ?
+            'rgba(' + rgb + ', ' + parseFloat((data.errorTotal / data.total).toFixed(2)) + ')' :
+            'rgba(' + rgb + ', ' + ' 0)';
+    }
+    failRateStyle(error, total) {
+        const percentage = parseInt(((error / total) * 100).toFixed(0), 10);
+        return percentage + '%';
+    };
+    onChange(e) {
+        this.selectedJobType = e.value;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            name: this.selectedJobType ? this.selectedJobType.name : null,
+            version: this.selectedJobType ? this.selectedJobType.version : null
+        });
+        this.updateOptions();
     }
     ngOnInit() {
         if (this.route.snapshot &&
@@ -176,21 +173,18 @@ export class FailureRatesComponent implements OnInit {
 
             const params = this.route.snapshot.queryParams;
             this.datatableOptions = {
-                first: parseInt(params.first, 10),
-                rows: null,
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                id: params.id,
                 started: params.started,
                 ended: params.ended,
                 name: params.name,
+                version: params.version,
                 category: params.category,
-                is_active: params.is_active,
-                is_operational: params.is_operational
+                orderErrorType: params.orderErrorType
             };
         } else {
             this.datatableOptions = this.failureRatesDatatableService.getFailureRatesDatatableOptions();
         }
-        this.updateOptions();
+        this.getJobTypes();
     }
 }

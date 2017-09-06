@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 
-import { initialJobTypesDatatable, JobTypesDatatable } from '../../configuration/job-types/datatable.model';
+import { initialFailureRatesDatatable, FailureRatesDatatable } from './datatable.model';
 
 @Injectable()
 export class FailureRatesDatatableService {
-    jobTypesDatatable: JobTypesDatatable;
+    failureRatesDatatable: FailureRatesDatatable;
 
     constructor() {
-        this.jobTypesDatatable = initialJobTypesDatatable;
+        this.failureRatesDatatable = initialFailureRatesDatatable;
     }
 
-    getFailureRatesDatatableOptions(): JobTypesDatatable {
-        return this.jobTypesDatatable;
+    getFailureRatesDatatableOptions(): FailureRatesDatatable {
+        return this.failureRatesDatatable;
     }
-    setFailureRatesDatatableOptions(params: JobTypesDatatable): void {
-        this.jobTypesDatatable = params;
+    setFailureRatesDatatableOptions(params: FailureRatesDatatable): void {
+        this.failureRatesDatatable = params;
     }
 }
