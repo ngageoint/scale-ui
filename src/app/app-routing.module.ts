@@ -11,19 +11,23 @@ import { JobTypesImportComponent } from './configuration/job-types/import.compon
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { SourcesComponent } from './data/sources/component';
 import { SourceDetailsComponent } from './data/sources/details.component';
+import { FailureRatesComponent } from './processing/failure-rates/component';
+import { MetricsComponent } from './data/metrics/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
     { path: 'processing/jobs', component: JobsComponent },
     { path: 'processing/jobs/:id', component: JobDetailsComponent },
+    { path: 'processing/failure-rates', component: FailureRatesComponent },
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/import', component: JobTypesImportComponent },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
     { path: 'data/sources', component: SourcesComponent },
-    { path: 'data/sources/:id', component: SourceDetailsComponent }
+    { path: 'data/sources/:id', component: SourceDetailsComponent },
+    { path: 'data/metrics', component: MetricsComponent }
 ];
 
 @NgModule({

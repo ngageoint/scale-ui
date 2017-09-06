@@ -14,6 +14,7 @@ const workspaces = require('./handlers/workspaces');
 const sources = require('./handlers/sources');
 const sourceDetails = require('./handlers/sourceDetails');
 const sourceDescendants = require('./handlers/sourceDescendants');
+const metricsPlotData = require('./handlers/metricsPlotData');
 
 module.exports = {
     init: function(server) {
@@ -111,6 +112,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/sources/{id}/{type}',
             handler: sourceDescendants
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/plot-data',
+            handler: metricsPlotData
         });
     }
 };

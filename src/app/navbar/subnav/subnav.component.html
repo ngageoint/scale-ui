@@ -8,8 +8,12 @@
         <div class="subnav__links">
             <h2>Current Status</h2>
             <div>
-                <button pButton type="button" label="View Running Jobs" icon="fa-cube"></button>
-                <button pButton type="button" label="View Running Recipes" icon="fa-cubes"></button>
+                <a pButton label="View Running Jobs" icon="fa-cube" href="/processing/jobs"></a>
+                <a pButton label="View Running Recipes" icon="fa-cubes" href="/processing/recipes"></a>
+            </div>
+            <h2>Recent History</h2>
+            <div>
+                <a pButton label="Job Failure Rates" icon="fa-exclamation-triangle" href="/processing/failure-rates"></a>
             </div>
                 <!-- <li>
                     <a class="subnav__link"
@@ -37,6 +41,10 @@
                 <li><a class="subnav__link"
                        routerLink="/data/sources"
                        (click)="navigate()">Sources</a>
+                </li>
+                <li><a class="subnav__link"
+                       routerLink="/data/metrics"
+                       (click)="navigate()">Metrics</a>
                 </li>
             </ul>
         </div>

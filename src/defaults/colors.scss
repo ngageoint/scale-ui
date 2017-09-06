@@ -47,3 +47,6 @@ $clr-status-error-algorithm: adjust-hue($clr-status-error-data, 20%);
 $clr-status-error-system: adjust-hue($clr-status-error-data, 40%);
 $clr-status-warn: $clr-status-error-algorithm;
 $clr-status-unknown: $clr-gray-20;
+$clr-failure-system: #67000d;
+$clr-failure-algorithm: #cb181d;
+$clr-failure-data: #f16913;

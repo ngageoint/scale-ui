@@ -68,15 +68,14 @@ export class JobsComponent implements OnInit {
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().then(data => {
             this.jobTypes = data.results as JobType[];
-            const self = this;
             const selectItems = [];
-            _.forEach(this.jobTypes, function (jobType) {
+            _.forEach(this.jobTypes, (jobType) => {
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.version,
                     value: jobType.name
                 });
-                if (self.datatableOptions.job_type_name === jobType.name) {
-                    self.selectedJobType = jobType.name;
+                if (this.datatableOptions.job_type_name === jobType.name) {
+                    this.selectedJobType = jobType.name;
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);

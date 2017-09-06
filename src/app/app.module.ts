@@ -72,6 +72,10 @@ import { SourcesDatatableService } from './data/sources/datatable.service';
 import { SourceDetailsComponent } from './data/sources/details.component';
 import { DataService } from './data.service';
 import { ProcessingformComponent } from './navbar/subnav/processingform/processingform.component';
+import { FailureRatesComponent } from './processing/failure-rates/component';
+import { FailureRatesDatatableService } from './processing/failure-rates/datatable.service';
+import { MetricsComponent } from './data/metrics/component';
+import { MetricsApiService } from './data/metrics/api.service';
 
 
 @NgModule({
@@ -97,7 +101,9 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         HistorychartComponent,
         SourcesComponent,
         SourceDetailsComponent,
-        ProcessingformComponent
+        ProcessingformComponent,
+        FailureRatesComponent,
+        MetricsComponent
     ],
     imports: [
         AppRoutingModule,
@@ -151,7 +157,9 @@ import { ProcessingformComponent } from './navbar/subnav/processingform/processi
         WorkspacesApiService,
         SourcesApiService,
         SourcesDatatableService,
-        DataService
+        DataService,
+        FailureRatesDatatableService,
+        MetricsApiService
     ],
     bootstrap: [AppComponent]
 })

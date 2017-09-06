@@ -1,0 +1,79 @@
+<p-dataTable [value]="jobTypes" [rows]="10" [sortField]="datatableOptions.sortField"
+             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)">
+    <p-column field="title" header="Job Type" [sortable]="true" [filter]="true" filterMatchMode="equals" [style]="{'overflow':'visible'}">
+        <ng-template pTemplate="filter" let-col>
+            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange()" [style]="{'width':'100%'}"
+                        styleClass="ui-column-filter">
+                <ng-template let-jobType p-template="item">
+                    {{ jobType.label }}
+                </ng-template>
+            </p-dropdown>
+        </ng-template>
+        <ng-template let-col let-jobType="rowData" pTemplate="body">
+            <span>{{jobType.title}} {{jobType.version}}</span>
+        </ng-template>
+    </p-column>
+    <p-column>
+        <ng-template pTemplate="header">
+            <h4>24 Hours</h4>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4 text-left">
+                        Failure %
+                    </div>
+                    <div class="ui-grid-col-8 text-right">
+                        <span class="label label-system">Sys</span>
+                        <span class="label label-algorithm">Alg</span>
+                        <span class="label label-data">Data</span>
+                        <span class="label label-primary">Total</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template let-col pTemplate="body">
+
+        </ng-template>
+    </p-column>
+    <p-column>
+        <ng-template pTemplate="header">
+            <h4>48 Hours</h4>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4 text-left">
+                        Failure %
+                    </div>
+                    <div class="ui-grid-col-8 text-right">
+                        <span class="label label-system">Sys</span>
+                        <span class="label label-algorithm">Alg</span>
+                        <span class="label label-data">Data</span>
+                        <span class="label label-primary">Total</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template let-col pTemplate="body">
+
+        </ng-template>
+    </p-column>
+    <p-column>
+        <ng-template pTemplate="header">
+            <h4>30 Days</h4>
+            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+                <div class="ui-grid-row">
+                    <div class="ui-grid-col-4 text-left">
+                        Failure %
+                    </div>
+                    <div class="ui-grid-col-8 text-right">
+                        <span class="label label-system">Sys</span>
+                        <span class="label label-algorithm">Alg</span>
+                        <span class="label label-data">Data</span>
+                        <span class="label label-primary">Total</span>
+                    </div>
+                </div>
+            </div>
+        </ng-template>
+        <ng-template let-col pTemplate="body">
+
+        </ng-template>
+    </p-column>
+</p-dataTable>
