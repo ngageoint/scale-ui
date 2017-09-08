@@ -1,7 +1,13 @@
 <p-dataTable [value]="performanceData" [rows]="10" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder">
-    <p-column header="Job Type" [sortable]="true" [filter]="true" filterMatchMode="equals"
+    <p-column [filter]="true" filterMatchMode="equals"
               [style]="{'overflow':'visible'}">
+        <ng-template pTemplate="header">
+            <h4 (click)="sortBy('job_type.title')" class="sortable">
+                Job Type
+                <i class="fa" [ngClass]="sortConfig.job_type.title.icon"></i>
+            </h4>
+        </ng-template>
         <ng-template pTemplate="filter" let-col>
             <p-dropdown [options]="jobTypeOptions" (onChange)="onChange($event)" [style]="{'width':'100%'}"
                         styleClass="ui-column-filter">
@@ -17,29 +23,42 @@
     <p-column>
         <ng-template pTemplate="header">
             <h4>24 Hours</h4>
-            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6 text-left">
-                        Failure %
+                        <span (click)="sortBy('twentyfour_hours.failRate')" class="sortable">
+                            Failure %
+                            <i class="fa" [ngClass]="sortConfig.twentyfour_hours.failRate.icon"></i>
+                        </span>
                     </div>
                     <div class="ui-grid-col-6 text-right">
-                        <span class="label label-system">Sys</span>
-                        <span class="label label-algorithm">Alg</span>
-                        <span class="label label-data">Data</span>
-                        <span class="label label-primary">Total</span>
+                        <span class="label label-system sortable" (click)="sortBy('twentyfour_hours.system')">
+                            Sys <i class="fa" [ngClass]="sortConfig.twentyfour_hours.system.icon"></i>
+                        </span>
+                        <span class="label label-algorithm sortable" (click)="sortBy('twentyfour_hours.algorithm')">
+                            Alg <i class="fa" [ngClass]="sortConfig.twentyfour_hours.algorithm.icon"></i>
+                        </span>
+                        <span class="label label-data sortable" (click)="sortBy('twentyfour_hours.data')">
+                            Data <i class="fa" [ngClass]="sortConfig.twentyfour_hours.data.icon"></i>
+                        </span>
+                        <span class="label label-primary sortable" (click)="sortBy('twentyfour_hours.total')">
+                            Total <i class="fa" [ngClass]="sortConfig.twentyfour_hours.total.icon"></i>
+                        </span>
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template let-col let-rowData="rowData" pTemplate="body">
-            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6 text-left">
                         <span *ngIf="rowData.twentyfour_hours.total > 0" class="fail-rate-container">
                             <span class="fail-rate"
-                                  [style.width]="failRateStyle(rowData.twentyfour_hours.errorTotal, rowData.twentyfour_hours.total)"></span>
+                                  [style.width]="rowData.twentyfour_hours.failRatePercent"></span>
                         </span>
-                        <span *ngIf="rowData.twentyfour_hours.total > 0" class="percentage">{{getPercentage(rowData.twentyfour_hours)}}</span>
+                        <span *ngIf="rowData.twentyfour_hours.total > 0" class="percentage">
+                            {{rowData.twentyfour_hours.failRatePercent}}
+                        </span>
                         <span *ngIf="rowData.twentyfour_hours.total === 0" class="fail-rate-container">
                             <span class="fail-rate" style="display: none"></span>
                         </span>
@@ -70,29 +89,42 @@
     <p-column>
         <ng-template pTemplate="header">
             <h4>48 Hours</h4>
-            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6 text-left">
-                        Failure %
+                        <span (click)="sortBy('fortyeight_hours.failRate')" class="sortable">
+                            Failure %
+                            <i class="fa" [ngClass]="sortConfig.fortyeight_hours.failRate.icon"></i>
+                        </span>
                     </div>
                     <div class="ui-grid-col-6 text-right">
-                        <span class="label label-system">Sys</span>
-                        <span class="label label-algorithm">Alg</span>
-                        <span class="label label-data">Data</span>
-                        <span class="label label-primary">Total</span>
+                        <span class="label label-system sortable" (click)="sortBy('fortyeight_hours.system')">
+                            Sys <i class="fa" [ngClass]="sortConfig.fortyeight_hours.system.icon"></i>
+                        </span>
+                        <span class="label label-algorithm sortable" (click)="sortBy('fortyeight_hours.algorithm')">
+                            Alg <i class="fa" [ngClass]="sortConfig.fortyeight_hours.algorithm.icon"></i>
+                        </span>
+                        <span class="label label-data sortable" (click)="sortBy('fortyeight_hours.data')">
+                            Data <i class="fa" [ngClass]="sortConfig.fortyeight_hours.data.icon"></i>
+                        </span>
+                        <span class="label label-primary sortable" (click)="sortBy('fortyeight_hours.total')">
+                            Total <i class="fa" [ngClass]="sortConfig.fortyeight_hours.total.icon"></i>
+                        </span>
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template let-col let-rowData="rowData" pTemplate="body">
-            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6 text-left">
                         <span *ngIf="rowData.fortyeight_hours.total > 0" class="fail-rate-container">
                             <span class="fail-rate"
-                                  [style.width]="failRateStyle(rowData.fortyeight_hours.errorTotal, rowData.fortyeight_hours.total)"></span>
+                                  [style.width]="rowData.fortyeight_hours.failRatePercent"></span>
                         </span>
-                        <span *ngIf="rowData.fortyeight_hours.total > 0" class="percentage">{{getPercentage(rowData.fortyeight_hours)}}</span>
+                        <span *ngIf="rowData.fortyeight_hours.total > 0" class="percentage">
+                            {{rowData.fortyeight_hours.failRatePercent}}
+                        </span>
                         <span *ngIf="rowData.fortyeight_hours.total === 0" class="fail-rate-container">
                             <span class="fail-rate" style="display: none"></span>
                         </span>
@@ -123,29 +155,42 @@
     <p-column>
         <ng-template pTemplate="header">
             <h4>30 Days</h4>
-            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6 text-left">
-                        Failure %
+                        <span (click)="sortBy('thirty_days.failRate')" class="sortable">
+                            Failure %
+                            <i class="fa" [ngClass]="sortConfig.thirty_days.failRate.icon"></i>
+                        </span>
                     </div>
                     <div class="ui-grid-col-6 text-right">
-                        <span class="label label-system">Sys</span>
-                        <span class="label label-algorithm">Alg</span>
-                        <span class="label label-data">Data</span>
-                        <span class="label label-primary">Total</span>
+                        <span class="label label-system sortable" (click)="sortBy('thirty_days.system')">
+                            Sys <i class="fa" [ngClass]="sortConfig.thirty_days.system.icon"></i>
+                        </span>
+                        <span class="label label-algorithm sortable" (click)="sortBy('thirty_days.algorithm')">
+                            Alg <i class="fa" [ngClass]="sortConfig.thirty_days.algorithm.icon"></i>
+                        </span>
+                        <span class="label label-data sortable" (click)="sortBy('thirty_days.data')">
+                            Data <i class="fa" [ngClass]="sortConfig.thirty_days.data.icon"></i>
+                        </span>
+                        <span class="label label-primary sortable" (click)="sortBy('thirty_days.total')">
+                            Total <i class="fa" [ngClass]="sortConfig.thirty_days.total.icon"></i>
+                        </span>
                     </div>
                 </div>
             </div>
         </ng-template>
         <ng-template let-col let-rowData="rowData" pTemplate="body">
-            <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
+            <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6 text-left">
                         <span *ngIf="rowData.thirty_days.total > 0" class="fail-rate-container">
                             <span class="fail-rate"
-                                  [style.width]="failRateStyle(rowData.thirty_days.errorTotal, rowData.thirty_days.total)"></span>
+                                  [style.width]="rowData.thirty_days.failRatePercent"></span>
                         </span>
-                        <span *ngIf="rowData.thirty_days.total > 0" class="percentage">{{getPercentage(rowData.thirty_days)}}</span>
+                        <span *ngIf="rowData.thirty_days.total > 0" class="percentage">
+                            {{rowData.thirty_days.failRatePercent}}
+                        </span>
                         <span *ngIf="rowData.thirty_days.total === 0" class="fail-rate-container">
                             <span class="fail-rate" style="display: none"></span>
                         </span>

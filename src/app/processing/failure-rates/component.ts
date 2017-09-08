@@ -22,6 +22,7 @@ export class FailureRatesComponent implements OnInit {
     jobTypeOptions: SelectItem[];
     selectedJobType: JobType;
     performanceData: any[];
+    sortConfig: any;
 
     constructor(
         private failureRatesDatatableService: FailureRatesDatatableService,
@@ -30,7 +31,6 @@ export class FailureRatesComponent implements OnInit {
         private router: Router,
         private route: ActivatedRoute
     ) {
-        this.performanceData = [];
         this.selectedJobType = null;
     }
 
@@ -58,9 +58,13 @@ export class FailureRatesComponent implements OnInit {
             algorithm: _.sum(_.map(_.filter(algorithmErrors, { id: id }), 'value')),
             data: _.sum(_.map(_.filter(dataErrors, { id: id }), 'value')),
             total: _.sum(_.map(_.filter(totalCount, { id: id }), 'value')),
-            errorTotal: null
+            errorTotal: null,
+            failRate: null,
+            failRatePercent: null
         };
         obj.errorTotal = obj.system + obj.algorithm + obj.data;
+        obj.failRate = obj.total > 0 ? obj.errorTotal / obj.total : 0;
+        obj.failRatePercent = (obj.failRate * 100).toFixed(0) + '%';
 
         return obj;
     };
@@ -81,37 +85,23 @@ export class FailureRatesComponent implements OnInit {
                     data48Hours = this.formatData(data30Days, 2),
                     data24Hours = this.formatData(data48Hours, 1);
 
+                let tempData = [];
+
                 _.forEach(this.jobTypes, (jobType) => {
-                    this.performanceData.push({
+                    tempData.push({
                         job_type: jobType,
                         twentyfour_hours: this.formatColumn(data24Hours, jobType.id),
                         fortyeight_hours: this.formatColumn(data48Hours, jobType.id),
                         thirty_days: this.formatColumn(data30Days, jobType.id)
                     });
                 });
-
-                this.performanceData = _.orderBy(this.performanceData, [(d) => {
-                    if (d.twentyfour_hours.total > 0) {
-                        return d.twentyfour_hours.errorTotal / d.twentyfour_hours.total;
-                    }
-                    return 0;
-                }, 'twentyfour_hours.total'], ['desc', 'desc']);
-                console.log(this.performanceData);
-
-                // vm.gridOptions.data = vm.performanceData;
-                // if (!skipSort) {
-                //     vm.currSortField = vm.jobTypesParams.orderField || 'twentyfour_hours';
-                //     vm.currSortErrorType = vm.jobTypesParams.orderErrorType || 'errorTotal';
-                //     if (vm.jobTypesParams.order && vm.jobTypesParams.orderField && vm.jobTypesParams.orderErrorType) {
-                //         vm.sortBy(vm.jobTypesParams.orderErrorType, vm.jobTypesParams.orderField, vm.jobTypesParams.order);
-                //     }
-                // }
+                this.performanceData = tempData;
             }
         }).catch((error) => {
             console.log(error);
         });
     }
-    private updateOptions() {
+    private updateOptions(skipUpdate?) {
         this.failureRatesDatatableService.setFailureRatesDatatableOptions(this.datatableOptions);
 
         // update querystring
@@ -119,7 +109,9 @@ export class FailureRatesComponent implements OnInit {
             queryParams: this.datatableOptions
         });
 
-        this.updateData();
+        if (!skipUpdate) {
+            this.updateData();
+        }
     }
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().then(data => {
@@ -143,9 +135,6 @@ export class FailureRatesComponent implements OnInit {
         });
     }
 
-    getPercentage(data) {
-        return data.total > 0 ? ((data.errorTotal / data.total) * 100).toFixed(0) + '%' : '0%';
-    }
     getColor(data) {
         return data.total > 0 ? parseFloat((data.errorTotal / data.total).toFixed(2)) >= 0.5 ? '#fff' : '#000' : '#000';
     }
@@ -155,9 +144,22 @@ export class FailureRatesComponent implements OnInit {
             'rgba(' + rgb + ', ' + parseFloat((data.errorTotal / data.total).toFixed(2)) + ')' :
             'rgba(' + rgb + ', ' + ' 0)';
     }
-    failRateStyle(error, total) {
-        const percentage = parseInt(((error / total) * 100).toFixed(0), 10);
-        return percentage + '%';
+    sortBy(field) {
+        let sortField = this.datatableOptions.sortField.split('.');
+        this.sortConfig[sortField[0]][sortField[1]].icon = 'hidden';
+        sortField = field.split('.');
+        this.sortConfig[sortField[0]][sortField[1]].direction = this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ?
+            'asc' :
+            'desc';
+        this.sortConfig[sortField[0]][sortField[1]].icon = this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ?
+            'fa-caret-down' :
+            'fa-caret-up';
+        this.performanceData = _.orderBy(this.performanceData, [field], [this.sortConfig[sortField[0]][sortField[1]].direction]);
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            sortField: field,
+            sortOrder: this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ? -1 : 1
+        });
+        this.updateOptions(true);
     };
     onChange(e) {
         this.selectedJobType = e.value;
@@ -179,12 +181,90 @@ export class FailureRatesComponent implements OnInit {
                 ended: params.ended,
                 name: params.name,
                 version: params.version,
-                category: params.category,
-                orderErrorType: params.orderErrorType
+                category: params.category
             };
         } else {
             this.datatableOptions = this.failureRatesDatatableService.getFailureRatesDatatableOptions();
         }
+        this.sortConfig = {
+            twentyfour_hours: {
+                system: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                algorithm: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                data: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                total: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                failRate: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                }
+            },
+            fortyeight_hours: {
+                system: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                algorithm: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                data: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                total: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                failRate: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                }
+            },
+            thirty_days: {
+                system: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                algorithm: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                data: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                total: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                },
+                failRate: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                }
+            },
+            job_type: {
+                title: {
+                    direction: this.datatableOptions.sortOrder || 'desc',
+                    icon: 'hidden'
+                }
+            }
+        };
+        const sortField = this.datatableOptions.sortField.split('.');
+        this.sortConfig[sortField[0]][sortField[1]].direction = this.datatableOptions.sortOrder === -1 ? 'desc' : 'asc';
+        this.sortConfig[sortField[0]][sortField[1]].icon = this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ?
+            'fa-caret-down' :
+            'fa-caret-up';
         this.getJobTypes();
     }
 }

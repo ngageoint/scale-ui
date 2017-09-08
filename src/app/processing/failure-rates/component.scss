@@ -1,3 +1,7 @@
+.ui-grid {
+    line-height: normal;
+}
+
 .label {
     display: inline-block;
     width: 35px;
@@ -6,11 +10,12 @@
 }
 
 .fail-rate-container {
-    width: 80%;
+    width: 70%;
     display: inline-block;
     min-height: 20px;
     border: 1px solid #ccc;
     position: relative;
+    top: 3px;
     overflow: hidden;
     margin: 0 5px 0 0;
 
@@ -21,13 +26,12 @@
         width: 100%;
         display: inline-block;
         height: 100%;
-        padding: 3px;
+        padding: 0px;
         font-size: 11px;
         background-color: #aaa;
     }
 }
 
-.percentage {
-    position: relative;
-    top: -5px;
+.sortable {
+    cursor: pointer;
 }
