@@ -27,6 +27,7 @@ import { PanelModule } from 'primeng/components/panel/panel';
 import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { StepsModule } from 'primeng/components/steps/steps';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
+import { MultiSelectModule } from 'primeng/components/multiselect/multiselect';
 
 // Code Mirror
 import { CodemirrorModule } from 'ng2-codemirror';
@@ -135,7 +136,8 @@ import { MetricsApiService } from './data/metrics/api.service';
         CheckboxModule,
         ChipsModule,
         AccordionModule,
-        TooltipModule
+        TooltipModule,
+        MultiSelectModule
     ],
     exports: [
         DataTableModule,

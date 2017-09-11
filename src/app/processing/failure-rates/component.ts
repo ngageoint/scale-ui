@@ -83,9 +83,8 @@ export class FailureRatesComponent implements OnInit {
             if (metricsData.results.length > 0) {
                 const data30Days = _.map(metricsData.results, 'values'),
                     data48Hours = this.formatData(data30Days, 2),
-                    data24Hours = this.formatData(data48Hours, 1);
-
-                let tempData = [];
+                    data24Hours = this.formatData(data48Hours, 1),
+                    tempData = [];
 
                 _.forEach(this.jobTypes, (jobType) => {
                     tempData.push({

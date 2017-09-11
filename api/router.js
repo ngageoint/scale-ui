@@ -14,6 +14,8 @@ const workspaces = require('./handlers/workspaces');
 const sources = require('./handlers/sources');
 const sourceDetails = require('./handlers/sourceDetails');
 const sourceDescendants = require('./handlers/sourceDescendants');
+const metrics = require('./handlers/metrics');
+const metricsDataTypes = require('./handlers/metricsDataTypeOptions');
 const metricsPlotData = require('./handlers/metricsPlotData');
 
 module.exports = {
@@ -116,7 +118,43 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/plot-data',
+            path: '/mocks/metrics',
+            handler: metrics
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/job-types',
+            handler: metricsDataTypes
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/job-types/plot-data',
+            handler: metricsPlotData
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/ingest',
+            handler: metricsDataTypes
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/ingest/plot-data',
+            handler: metricsPlotData
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/error-types',
+            handler: metricsDataTypes
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/metrics/error-types/plot-data',
             handler: metricsPlotData
         });
     }

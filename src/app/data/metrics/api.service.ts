@@ -10,8 +10,22 @@ export class MetricsApiService {
     constructor(private http: Http) {
     }
 
+    getDataTypes(): Promise<ApiResults> {
+        return this.http.get('/mocks/metrics')
+            .toPromise()
+            .then(response => response.json() as ApiResults)
+            .catch(this.handleError);
+    }
+
+    getDataTypeOptions(name: string): Promise<any> {
+        return this.http.get(`/mocks/metrics/${name}`)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+
     getPlotData(params: any): Promise<ApiResults> {
-        return this.http.get('/mocks/metrics/plot-data', { params: params })
+        return this.http.get(`/mocks/metrics/${params.dataType}/plot-data`, { params: params })
             .toPromise()
             .then(response => response.json() as ApiResults)
             .catch(this.handleError);
