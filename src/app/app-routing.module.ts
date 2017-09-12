@@ -13,12 +13,14 @@ import { SourcesComponent } from './data/sources/component';
 import { SourceDetailsComponent } from './data/sources/details.component';
 import { FailureRatesComponent } from './processing/failure-rates/component';
 import { MetricsComponent } from './data/metrics/component';
+import { RunningJobsComponent } from './processing/running-jobs/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'dashboard', component: DashboardComponent },
     { path: 'processing/jobs', component: JobsComponent },
     { path: 'processing/jobs/:id', component: JobDetailsComponent },
+    { path: 'processing/running-jobs', component: RunningJobsComponent },
     { path: 'processing/failure-rates', component: FailureRatesComponent },
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/import', component: JobTypesImportComponent },

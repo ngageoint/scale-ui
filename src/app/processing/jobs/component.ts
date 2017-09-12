@@ -26,7 +26,7 @@ export class JobsComponent implements OnInit {
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
     selectedJobType: string;
-    statusValues: ['Running', 'Completed'];
+    statusValues: SelectItem[];
     first: number;
     count: number;
     isInitialized: boolean;
@@ -39,6 +39,16 @@ export class JobsComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
+        this.statusValues = [{
+            label: 'View All',
+            value: ''
+        }, {
+            label: 'Running',
+            value: 'RUNNING'
+        }, {
+            label: 'Completed',
+            value: 'COMPLETED'
+        }];
     }
 
     private updateData() {
@@ -80,7 +90,7 @@ export class JobsComponent implements OnInit {
             });
             this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
             this.jobTypeOptions.unshift({
-                label: 'All',
+                label: 'View All',
                 value: ''
             });
             this.updateOptions();

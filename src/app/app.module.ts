@@ -77,6 +77,8 @@ import { FailureRatesComponent } from './processing/failure-rates/component';
 import { FailureRatesDatatableService } from './processing/failure-rates/datatable.service';
 import { MetricsComponent } from './data/metrics/component';
 import { MetricsApiService } from './data/metrics/api.service';
+import { RunningJobsComponent } from './processing/running-jobs/component';
+import { RunningJobsDatatableService } from './processing/running-jobs/datatable.service';
 
 
 @NgModule({
@@ -104,7 +106,8 @@ import { MetricsApiService } from './data/metrics/api.service';
         SourceDetailsComponent,
         ProcessingformComponent,
         FailureRatesComponent,
-        MetricsComponent
+        MetricsComponent,
+        RunningJobsComponent
     ],
     imports: [
         AppRoutingModule,
@@ -161,7 +164,8 @@ import { MetricsApiService } from './data/metrics/api.service';
         SourcesDatatableService,
         DataService,
         FailureRatesDatatableService,
-        MetricsApiService
+        MetricsApiService,
+        RunningJobsDatatableService
     ],
     bootstrap: [AppComponent]
 })
