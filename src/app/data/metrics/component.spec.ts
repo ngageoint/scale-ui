@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { MetricsComponent } from './component';
 import { MetricsApiService } from './api.service';
+import { DataService } from '../../data.service';
 
 
 describe('JobsComponent', () => {
@@ -16,7 +17,7 @@ describe('JobsComponent', () => {
             declarations: [MetricsComponent],
             imports: [HttpModule],
             providers: [
-                MetricsApiService,
+                MetricsApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

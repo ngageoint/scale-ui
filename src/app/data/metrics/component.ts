@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { MetricsApiService } from './api.service';
+import { DataService } from '../../data.service';
 
 @Component({
     selector: 'app-metrics',
@@ -23,12 +24,59 @@ export class MetricsComponent implements OnInit {
     columns: any[] = [];
     metricOptions: SelectItem[] = [];
     selectedMetric: any;
+    yUnits: any;
     data: any;
+    options: any;
     constructor(
-        private metricsApiService: MetricsApiService
+        private metricsApiService: MetricsApiService,
+        private dataService: DataService
     ) {
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+        this.options = {
+            title: {
+                display: true,
+                text: [],
+                fontSize: 16
+            },
+            legend: {
+                position: 'top'
+            },
+            scales: {
+                xAxes: [{
+                    stacked: true
+                }],
+                yAxes: [{
+                    stacked: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: ''
+                    },
+                    ticks: {
+                        callback: (value) => {
+                            return this.formatYValues(value);
+                        }
+                    }
+                }]
+            }
+        };
         this.getDataTypes();
     }
+
+    private formatYValues = (data, noPadding?) => {
+        noPadding = noPadding || false;
+        if (this.yUnits === 'seconds') {
+            return this.dataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
+        } else if (this.yUnits === 'bytes') {
+            return this.dataService.calculateFileSizeFromBytes(data, 1);
+        }
+        return data;
+    };
+    private randomColorGenerator() {
+        return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
+    };
 
     getDataTypes() {
         this.metricsApiService.getDataTypes().then((data) => {
@@ -42,7 +90,6 @@ export class MetricsComponent implements OnInit {
     }
     getDataTypeOptions() {
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).then((result) => {
-            console.log(result);
             this.selectedDataTypeOptions = result;
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
@@ -59,7 +106,7 @@ export class MetricsComponent implements OnInit {
                 });
             });
             this.filteredChoicesOptions = filteredChoicesOptions;
-            this.columns = _.orderBy(result.columns, ['group', 'title'], ['asc', 'asc']);
+            this.columns = _.orderBy(result.columns, ['title'], ['asc']);
             _.forEach(this.columns, (column) => {
                 const option = {
                     label: column.title,
@@ -82,6 +129,7 @@ export class MetricsComponent implements OnInit {
         this.dataTypeFilterText = '';
         this.selectedMetric = null;
         this.columns = [];
+        this.metricOptions = [];
 
         if (!this.selectedDataType.name || this.selectedDataType.name === '') {
             this.selectedDataType = {};
@@ -116,6 +164,8 @@ export class MetricsComponent implements OnInit {
 
             const colNames = [],
                 colArr = [];
+
+            this.yUnits = this.selectedMetric.units;
 
             if (this.filtersApplied.length > 0) {
                 // filters were applied, so build data source accordingly
@@ -169,37 +219,48 @@ export class MetricsComponent implements OnInit {
                         });
                     }
                 });
-            } else {
-                // no filters were applied, so show aggregate statistics
-                _.forEach(data.results, (result) => {
-                    // add result values to valueArr
-                    _.forEach(this.data.labels, (xDate) => {
-                        const valueObj = _.find(result.values, (qDate) => {
-                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
-                        });
-                        // push 0 if data for xDate is not present in result.values
-                        valueArr.push(valueObj ? valueObj.value : 0);
-                    });
 
-                    // prepend valueArr with filter title, and push onto colArr
-                    const columnLabel = result.column.title + ' for all ' + params.dataType.title;
-                    valueArr.unshift(columnLabel);
-                    colNames['aggregate'] = columnLabel;
-                    colArr.push(valueArr);
+                // populate chart dataset
+                _.forEach(this.filtersApplied, (filter) => {
+                    const filterData = _.find(colArr, { id: filter.id });
+                    this.data.datasets.push({
+                        label: `${filter.title} ${filter.version}`,
+                        backgroundColor: this.randomColorGenerator(),
+                        data: filterData ? filterData.data : []
+                    });
+                });
+            } else {
+                // no filters were applied, so show aggregate statistics for selected metric
+                const result = data.results[0];
+
+                // add result values to valueArr
+                _.forEach(this.data.labels, (xDate) => {
+                    const valueObj = _.find(result.values, (qDate) => {
+                        return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                    });
+                    // push 0 if data for xDate is not present in result.values
+                    valueArr.push(valueObj ? valueObj.value : 0);
+                });
+
+                // populate chart dataset
+                this.data.datasets.push({
+                    label: result.column.title + ' for all ' + this.selectedDataType.title,
+                    backgroundColor: this.randomColorGenerator(),
+                    data: valueArr
                 });
             }
-            console.log(colArr);
-            // _.forEach(this.filtersApplied, (filter) => {
-            //     const resultData = [];
-            //     _.forEach(data.results, (result) => {
-            //         resultData.push(_.map(_.filter(result.values, { id: filter.id }), 'value'));
-            //     });
-            //     this.data.datasets.push({
-            //         label: filter.title,
-            //         data: resultData
-            //     });
-            // });
-            // console.log(this.data);
+
+            // compute total count for requested time period
+            let total = 0;
+            _.forEach(this.data.datasets, (dataset) => {
+                total = total + _.sum(dataset.data);
+            });
+            const formattedTotal = this.formatYValues(total, true),
+                formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
+                formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY');
+            this.options.title.text =
+                `${this.selectedMetric.title}: ${formattedTotal.toLocaleString()} for ${formattedStart} - ${formattedEnd}`;
+            this.options.scales.yAxes[0].scaleLabel.labelString = _.capitalize(this.yUnits);
         });
     }
     ngOnInit() {

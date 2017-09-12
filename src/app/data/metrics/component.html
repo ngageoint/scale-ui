@@ -12,6 +12,7 @@
             <div *ngIf="filteredChoicesOptions.length > 0">
                 <label>{{dataTypeFilterText}}</label>
                 <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied"></p-multiSelect>
+                To view an aggregate count for the data source, leave this filter unselected.
             </div>
             <div *ngIf="columns.length > 0">
                 <label>Available Metrics</label>
@@ -21,7 +22,7 @@
                     [disabled]="!selectedMetric"></button>
         </div>
         <div class="ui-grid-col-9">
-            <!--<p-chart type="bar" [data]="data"></p-chart>-->
+            <p-chart type="bar" [data]="data" [options]="options" *ngIf="data.datasets.length > 0"></p-chart>
         </div>
     </div>
 </div>

@@ -7,3 +7,13 @@ label {
 button {
     margin: 10px 0;
 }
+
+.chart-title {
+    margin-left: 12px;
+
+    ::ng-deep .label {
+        font-size: 1em;
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+}
