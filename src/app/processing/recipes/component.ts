@@ -51,7 +51,8 @@ export class RecipesComponent implements OnInit {
 
         // update querystring
         this.router.navigate(['/processing/recipes'], {
-            queryParams: this.datatableOptions
+            queryParams: this.datatableOptions,
+            replaceUrl: true
         });
 
         this.updateData();

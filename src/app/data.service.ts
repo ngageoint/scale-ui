@@ -48,7 +48,7 @@ export class DataService {
         return num;
     };
 
-    public calculateDuration = (start, stop, noPadding) => {
+    public calculateDuration = (start, stop, noPadding?) => {
         const to = moment.utc(stop),
             from = moment.utc(start),
             diff = moment.utc(to).diff(moment.utc(from)),

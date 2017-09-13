@@ -1,21 +1,19 @@
 import { Injectable } from '@angular/core';
 
-import { initialJobsDatatable, JobsDatatable } from '../jobs/datatable.model';
+import { initialRunningJobsDatatable, RunningJobsDatatable } from './datatable.model';
 
 @Injectable()
 export class RunningJobsDatatableService {
-    runningJobsDatatable: JobsDatatable;
+    runningJobsDatatable: RunningJobsDatatable;
 
     constructor() {
-        this.runningJobsDatatable = Object.assign(initialJobsDatatable, {
-            status: 'RUNNING'
-        });
+        this.runningJobsDatatable = initialRunningJobsDatatable;
     }
 
-    getRunningJobsDatatableOptions(): JobsDatatable {
+    getRunningJobsDatatableOptions(): RunningJobsDatatable {
         return this.runningJobsDatatable;
     }
-    setRunningJobsDatatableOptions(params: JobsDatatable): void {
+    setRunningJobsDatatableOptions(params: RunningJobsDatatable): void {
         this.runningJobsDatatable = params;
     }
 }

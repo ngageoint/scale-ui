@@ -79,6 +79,7 @@ import { MetricsComponent } from './data/metrics/component';
 import { MetricsApiService } from './data/metrics/api.service';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { RunningJobsDatatableService } from './processing/running-jobs/datatable.service';
+import { RunningJobsApiService } from './processing/running-jobs/api.service';
 
 
 @NgModule({
@@ -165,6 +166,7 @@ import { RunningJobsDatatableService } from './processing/running-jobs/datatable
         DataService,
         FailureRatesDatatableService,
         MetricsApiService,
+        RunningJobsApiService,
         RunningJobsDatatableService
     ],
     bootstrap: [AppComponent]

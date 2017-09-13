@@ -42,7 +42,8 @@ export class JobTypesComponent implements OnInit {
 
         // update querystring
         this.router.navigate(['/configuration/job-types'], {
-            queryParams: this.datatableOptions
+            queryParams: this.datatableOptions,
+            replaceUrl: true
         });
 
         this.updateData();

@@ -58,7 +58,8 @@ export class SourcesComponent implements OnInit {
 
         // update querystring
         this.router.navigate(['/data/sources'], {
-            queryParams: this.datatableOptions
+            queryParams: this.datatableOptions,
+            replaceUrl: true
         });
 
         this.updateData();

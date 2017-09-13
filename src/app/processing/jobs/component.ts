@@ -69,7 +69,8 @@ export class JobsComponent implements OnInit {
         } else {
             // component is not being referenced as a child, so update querystring and data
             this.router.navigate(['/processing/jobs'], {
-                queryParams: this.datatableOptions
+                queryParams: this.datatableOptions,
+                replaceUrl: true
             });
 
             this.updateData();

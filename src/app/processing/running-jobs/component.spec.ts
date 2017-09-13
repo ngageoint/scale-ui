@@ -3,9 +3,11 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { JobsApiService } from '../jobs/api.service';
+import { RunningJobsApiService } from './api.service';
 import { RunningJobsDatatableService } from './datatable.service';
 import { RunningJobsComponent } from './component';
+import { JobsDatatableService } from '../jobs/datatable.service';
+import { DataService } from '../../data.service';
 
 
 describe('RunningJobsComponent', () => {
@@ -17,7 +19,7 @@ describe('RunningJobsComponent', () => {
             declarations: [RunningJobsComponent],
             imports: [HttpModule],
             providers: [
-                JobsApiService, RunningJobsDatatableService,
+                RunningJobsApiService, RunningJobsDatatableService, JobsDatatableService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

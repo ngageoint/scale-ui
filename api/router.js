@@ -4,6 +4,7 @@ const recipes = require('./handlers/recipes');
 const recipeTypes = require('./handlers/recipeTypes');
 const recipeDetails = require('./handlers/recipeDetails');
 const jobs = require('./handlers/jobs');
+const runningJobs = require('./handlers/runningJobs');
 const jobTypes = require('./handlers/jobTypes');
 const jobTypesValidate = require('./handlers/jobTypesValidate');
 const jobTypesStatus = require('./handlers/jobTypesStatus');
@@ -70,6 +71,12 @@ module.exports = {
 
         server.route({
             method: 'GET',
+            path: '/mocks/running-jobs',
+            handler: runningJobs
+        });
+
+        server.route({
+            method: 'GET',
             path: '/mocks/job-types',
             handler: jobTypes
         });
@@ -130,20 +137,8 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/job-types/plot-data',
-            handler: metricsPlotData
-        });
-
-        server.route({
-            method: 'GET',
             path: '/mocks/metrics/ingest',
             handler: metricsDataTypes
-        });
-
-        server.route({
-            method: 'GET',
-            path: '/mocks/metrics/ingest/plot-data',
-            handler: metricsPlotData
         });
 
         server.route({
@@ -154,7 +149,7 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/error-types/plot-data',
+            path: '/mocks/metrics/{type}/plot-data',
             handler: metricsPlotData
         });
     }

@@ -105,7 +105,8 @@ export class FailureRatesComponent implements OnInit {
 
         // update querystring
         this.router.navigate(['/processing/failure-rates'], {
-            queryParams: this.datatableOptions
+            queryParams: this.datatableOptions,
+            replaceUrl: true
         });
 
         if (!skipUpdate) {
