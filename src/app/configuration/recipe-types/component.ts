@@ -9,6 +9,7 @@ import { RecipeTypesApiService } from './api.service';
 import { RecipeType } from './api.model';
 import { RecipeTypesDatatable } from './datatable.model';
 import { RecipeTypesDatatableService } from './datatable.service';
+import { JobType } from '../job-types/api.model';
 
 @Component({
     selector: 'app-job-types',
@@ -21,6 +22,7 @@ export class RecipeTypesComponent implements OnInit {
     recipeTypes: RecipeType[];
     selectedRecipeType: RecipeType;
     selectedRecipeTypeKeys: string[];
+    selectedJobType: JobType;
     first: number;
     count: number;
     isInitialized: boolean;
@@ -44,8 +46,8 @@ export class RecipeTypesComponent implements OnInit {
         this.isInitialized = false;
         this.width = 700;
         this.height = 300;
-        this.orientation = 'LR';
-        this.curve = shape.curveLinear;
+        this.orientation = 'TB';
+        this.curve = shape.curveBundle.beta(1);
         this.colorScheme = colorSets.find(s => s.name === 'picnic');
         this.view = [this.width, this.height];
         this.showLegend = false;
@@ -121,27 +123,29 @@ export class RecipeTypesComponent implements OnInit {
     }
 
     select(e) {
-        let childNodes = [];
-        const childLinks = [];
-
-        const findChildNodes = (id) => {
-            _.forEach(this.links, (link) => {
-                if (link.source === id) {
-                    childNodes.push(link.node);
-                    link.visible = !link.visible;
-                    childLinks.push(link);
-                    findChildNodes(link.node.id);
-                }
-            });
-        };
-        findChildNodes(e.id);
-
-        childNodes = _.uniqBy(childNodes, 'id');
-
-        // todo: Figure out two-way binding
-        this.nodes = _.pullAllBy(this.nodes, childNodes, 'id');
-        console.log('nodes', this.nodes);
-        console.log('links', this.links);
+        console.log(e);
+        this.selectedJobType = _.find(this.selectedRecipeType.job_types, { name: e.job_type.name, version: e.job_type.version });
+        // let childNodes = [];
+        // const childLinks = [];
+        //
+        // const findChildNodes = (id) => {
+        //     _.forEach(this.links, (link) => {
+        //         if (link.source === id) {
+        //             childNodes.push(link.node);
+        //             link.visible = !link.visible;
+        //             childLinks.push(link);
+        //             findChildNodes(link.node.id);
+        //         }
+        //     });
+        // };
+        // findChildNodes(e.id);
+        //
+        // childNodes = _.uniqBy(childNodes, 'id');
+        //
+        // // todo: Figure out two-way binding
+        // this.nodes = _.pullAllBy(this.nodes, childNodes, 'id');
+        // console.log('nodes', this.nodes);
+        // console.log('links', this.links);
     }
     getUnicode(code) {
         return `&#x${code};`;

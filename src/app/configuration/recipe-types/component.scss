@@ -1,3 +1,29 @@
 .chart-container {
+    h2 {
+        margin-bottom: 0;
+    }
     min-height: 70vh;
+}
+
+.job-type-interface {
+    h4 {
+        margin-bottom: 5px;
+        font-size: 1.2em;
+
+        &.label {
+            display: block;
+        }
+    }
+
+    ::ng-deep .ui-datalist {
+        margin-bottom: 15px;
+
+        .ui-datalist-header {
+            padding: 0.25em 1.25em;
+        }
+    }
+
+    .media-type-list {
+        font-style: italic;
+    }
 }

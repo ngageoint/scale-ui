@@ -14,6 +14,7 @@ import { CalendarModule } from 'primeng/components/calendar/calendar';
 import { ChartModule } from 'primeng/components/chart/chart';
 import { CheckboxModule } from 'primeng/components/checkbox/checkbox';
 import { ChipsModule } from 'primeng/components/chips/chips';
+import { DataListModule } from 'primeng/components/datalist/datalist';
 import { DataTableModule } from 'primeng/components/datatable/datatable';
 import { DialogModule } from 'primeng/components/dialog/dialog';
 import { DropdownModule } from 'primeng/components/dropdown/dropdown';
@@ -22,12 +23,12 @@ import { InputTextModule } from 'primeng/components/inputtext/inputtext';
 import { InputTextareaModule } from 'primeng/components/inputtextarea/inputtextarea';
 import { ListboxModule } from 'primeng/components/listbox/listbox';
 import { MessagesModule } from 'primeng/components/messages/messages';
+import { MultiSelectModule } from 'primeng/components/multiselect/multiselect';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
 import { PanelModule } from 'primeng/components/panel/panel';
 import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { StepsModule } from 'primeng/components/steps/steps';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
-import { MultiSelectModule } from 'primeng/components/multiselect/multiselect';
 
 // Code Mirror
 import { CodemirrorModule } from 'ng2-codemirror';
@@ -124,6 +125,7 @@ import { RunningJobsApiService } from './processing/running-jobs/api.service';
         AutoCompleteModule,
         CalendarModule,
         ChartModule,
+        DataListModule,
         DataTableModule,
         DialogModule,
         DropdownModule,
