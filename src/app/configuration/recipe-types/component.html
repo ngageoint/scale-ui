@@ -12,7 +12,7 @@
             </p-dataTable>
             <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
         </div>
-        <div class="ui-grid-col-7">
+        <div class="ui-grid-col-6">
             <h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>
             <div class="chart-container" *ngIf="selectedRecipeType">
                 <h2>{{selectedRecipeType.title}} v{{selectedRecipeType.version}}</h2>
@@ -63,18 +63,26 @@
                 </ngx-charts-directed-graph>
             </div>
         </div>
-        <div class="ui-grid-col-2">
+        <div class="ui-grid-col-3">
             <div class="job-type-interface" *ngIf="selectedJobType">
                 <h4 class="label label-primary">{{selectedJobType.title}} {{selectedJobType.version}}</h4>
                 <p-dataList [value]="selectedJobType.job_type_interface.input_data">
                     <p-header><strong>Inputs</strong></p-header>
                     <ng-template let-input pTemplate="item">
-                        <div class="ui-g ui-fluid car-item">
+                        <div class="ui-g ui-fluid recipe-io">
                             <div class="ui-g-12">
                                 {{input.name}} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
                                     <li *ngFor="let mediaType of input.media_types">{{mediaType}}</li>
                                 </ul>
+                                <div class="connections" *ngIf="input.dependencies.length > 0">
+                                    <h5>Connections</h5>
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let dependency of input.dependencies">
+                                            <strong>{{dependency.name}}</strong>.<em>{{dependency.output}}</em>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </ng-template>
@@ -82,10 +90,18 @@
                 <p-dataList [value]="selectedJobType.job_type_interface.output_data">
                     <p-header><strong>Outputs</strong></p-header>
                     <ng-template let-output pTemplate="item">
-                        <div class="ui-g ui-fluid car-item">
+                        <div class="ui-g ui-fluid recipe-io">
                             <div class="ui-g-12">
                                 {{output.name}} <span *ngIf="output.required">*</span>
                                 <div class="media-type-list">{{output.media_type}}</div>
+                                <div class="connections" *ngIf="output.dependents.length > 0">
+                                    <h5>Connections</h5>
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let dependent of output.dependents">
+                                            <strong>{{dependent.name}}</strong>.<em>{{dependent.input}}</em>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </ng-template>

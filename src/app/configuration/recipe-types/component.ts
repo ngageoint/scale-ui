@@ -121,10 +121,75 @@ export class RecipeTypesComponent implements OnInit {
             });
         });
     }
+    private getDependents(name, outputName) {
+        const results = [];
+
+        _.forEach(this.selectedRecipeType.definition.jobs, (job) => {
+            if (job.name !== name) {
+                _.forEach(job.dependencies, (dependency) => {
+                    if (dependency.name === name) {
+                        _.forEach(dependency.connections, (conn) => {
+                            if (conn.output === outputName) {
+                                results.push({
+                                    name: job.name,
+                                    output: conn.output,
+                                    input: conn.input
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        return results;
+    };
 
     select(e) {
-        console.log(e);
-        this.selectedJobType = _.find(this.selectedRecipeType.job_types, { name: e.job_type.name, version: e.job_type.version });
+        if (e.job_type) {
+            this.selectedJobType = _.find(this.selectedRecipeType.job_types, { name: e.job_type.name, version: e.job_type.version });
+
+            if (this.selectedRecipeType.definition) {
+                _.forEach(this.selectedRecipeType.definition.jobs, (job) => {
+                    // find dependents
+                    const jobType = _.find(this.selectedRecipeType.job_types, { name: job.job_type.name, version: job.job_type.version });
+                    if (jobType && jobType.job_type_interface) {
+                        _.forEach(jobType.job_type_interface.output_data, (jobOutput) => {
+                            if (jobOutput) {
+                                jobOutput.dependents = this.getDependents(job.name, jobOutput.name);
+                            }
+                        });
+                        // add dependency mappings
+                        _.forEach(jobType.job_type_interface.input_data, (jobInput) => {
+                            if (jobInput) {
+                                const inputMappings = [];
+                                _.forEach(job.dependencies, (dependency) => {
+                                    _.forEach(dependency.connections, (conn) => {
+                                        if (conn.input === jobInput.name) {
+                                            inputMappings.push({
+                                                name: dependency.name,
+                                                output: conn.output,
+                                                input: conn.input
+                                            });
+                                        }
+                                    });
+                                });
+                                _.forEach(job.recipe_inputs, (recipeInput) => {
+                                    if (recipeInput.job_input === jobInput.name) {
+                                        inputMappings.push({
+                                            name: 'recipe',
+                                            output: recipeInput.recipe_input,
+                                            input: recipeInput.job_input
+                                        });
+                                    }
+                                });
+                                jobInput.dependencies = inputMappings;
+                            }
+                        });
+                    }
+                });
+            }
+        }
+
         // let childNodes = [];
         // const childLinks = [];
         //
