@@ -14,7 +14,8 @@
             </p-dropdown>
         </ng-template>
         <ng-template let-col let-job="rowData" pTemplate="body">
-            <span><i class="fa" [innerHtml]="getUnicode(job.job_type.icon_code)"></i> {{job.job_type.title}} {{job.job_type.version}}</span>
+            <span><i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i> {{job.job_type.title}} {{job.job_type
+                .version}}</span>
         </ng-template>
     </p-column>
     <p-column field="created_formatted" header="Created" [sortable]="true"></p-column>
