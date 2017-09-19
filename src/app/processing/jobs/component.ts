@@ -27,6 +27,7 @@ export class JobsComponent implements OnInit {
     selectedJob: Job;
     selectedJobType: string;
     statusValues: SelectItem[];
+    errorCategoryValues: SelectItem[];
     first: number;
     count: number;
     isInitialized: boolean;
@@ -49,12 +50,25 @@ export class JobsComponent implements OnInit {
             label: 'Completed',
             value: 'COMPLETED'
         }];
+        this.errorCategoryValues = [{
+            label: 'View All',
+            value: ''
+        }, {
+            label: 'System',
+            value: 'SYSTEM'
+        }, {
+            label: 'Algorithm',
+            value: 'ALGORITHM'
+        }, {
+            label: 'Data',
+            value: 'DATA'
+        }];
     }
 
     private updateData() {
         this.jobsApiService.getJobs(this.datatableOptions).then(data => {
             this.count = data.count;
-            this.jobs = data.results as Job[];
+            this.jobs = Job.transformer(data.results);
         });
     }
     private updateOptions() {
@@ -98,6 +112,9 @@ export class JobsComponent implements OnInit {
         });
     }
 
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
@@ -130,6 +147,7 @@ export class JobsComponent implements OnInit {
         this.router.navigate(['/processing/jobs/' + e.data.id]);
     }
     ngOnInit() {
+        this.jobs = [];
         if (this.route.snapshot &&
             Object.keys(this.route.snapshot.queryParams).length > 0) {
 

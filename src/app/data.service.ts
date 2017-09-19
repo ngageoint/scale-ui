@@ -81,5 +81,5 @@ export class DataService {
                 '</small>';
         }
         return '';
-    }
+    };
 }
