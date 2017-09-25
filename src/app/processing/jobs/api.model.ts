@@ -46,7 +46,10 @@ export class Job {
         }
     }
     public static transformer(data) {
-        return data.map(item => Job.build(item));
+        if (data) {
+            return data.map(item => Job.build(item));
+        }
+        return null;
     }
 
     constructor(

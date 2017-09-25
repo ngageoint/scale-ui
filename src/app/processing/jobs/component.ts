@@ -27,7 +27,9 @@ export class JobsComponent implements OnInit {
     selectedJob: Job;
     selectedJobType: string;
     statusValues: SelectItem[];
+    selectedStatus: string;
     errorCategoryValues: SelectItem[];
+    selectedErrorCategory: string;
     first: number;
     count: number;
     isInitialized: boolean;
@@ -136,10 +138,21 @@ export class JobsComponent implements OnInit {
             this.isInitialized = true;
         }
     }
-    onChange(e) {
-        e.originalEvent.preventDefault();
+    onJobTypeChange(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             job_type_name: e.value
+        });
+        this.updateOptions();
+    }
+    onStatusChange(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            status: e.value
+        });
+        this.updateOptions();
+    }
+    onErrorCategoryChange(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            error_category: e.value
         });
         this.updateOptions();
     }
@@ -171,6 +184,8 @@ export class JobsComponent implements OnInit {
         } else {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         }
+        this.selectedStatus = this.datatableOptions.status;
+        this.selectedErrorCategory = this.datatableOptions.error_category;
         this.getJobTypes();
     }
 }

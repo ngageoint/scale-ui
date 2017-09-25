@@ -6,7 +6,8 @@
     <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true"
               [style]="{'overflow':'visible'}">
         <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange($event)" [style]="{'width':'100%'}"
+            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"
+                        [style]="{'width':'100%'}"
                         styleClass="ui-column-filter">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}
@@ -21,14 +22,16 @@
     <p-column field="created_formatted" header="Created" [sortable]="true"></p-column>
     <p-column field="last_modified_formatted" header="Last Modified" [sortable]="true"></p-column>
     <p-column field="duration" header="Duration"></p-column>
-    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true">
+    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true" [style]="{'overflow':'visible'}">
         <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="statusValues" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
+            <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" [style]="{'width':'100%'}" styleClass="ui-column-filter"
+                        (onChange)="onStatusChange($event)"></p-dropdown>
         </ng-template>
     </p-column>
-    <p-column field="error.category" header="Error Category" [filter]="true" filterMatchMode="equals" [sortable]="true">
+    <p-column field="error.category" header="Error Category" [filter]="true" filterMatchMode="equals" [sortable]="true" [style]="{'overflow':'visible'}">
         <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="errorCategoryValues" [style]="{'width':'100%'}" styleClass="ui-column-filter"></p-dropdown>
+            <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory" [style]="{'width':'100%'}" styleClass="ui-column-filter"
+                        (onChange)="onErrorCategoryChange($event)"></p-dropdown>
         </ng-template>
     </p-column>
     <p-column field="error.title" header="Error" [sortable]="true">

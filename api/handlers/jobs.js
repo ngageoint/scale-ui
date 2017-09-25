@@ -17,6 +17,16 @@ module.exports = function (request, reply) {
                 data.results = _.orderBy(data.results, [params.order], ['asc']);
             }
         }
+        if (params.status) {
+            data.results = _.filter(data.results, function (result) {
+                return result.status === params.status;
+            });
+        }
+        if (params.error_category) {
+            data.results = _.filter(data.results, function (result) {
+                return result.error_category === params.error_category;
+            });
+        }
         data.count = data.results.length;
         if (params.page && params.page_size) {
             var pagedResults = _.chunk(data.results, params.page_size);
