@@ -1,0 +1,10 @@
+.label-info {
+    padding: .2em .6em .1em .6em;
+}
+.ui-button {
+    font-size: .7em !important;
+    padding: 0 !important;
+}
+::ng-deep .ui-dialog {
+    width: 95% !important;
+}

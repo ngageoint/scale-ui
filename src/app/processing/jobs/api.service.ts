@@ -36,9 +36,22 @@ export class JobsApiService {
             .catch(this.handleError);
     }
     getJob(id: number): Promise<Job> {
-        return this.http.get('/mocks/jobs/' + id)
+        return this.http.get(`/mocks/jobs/${id}`)
             .toPromise()
             .then(response => response.json() as Job)
+            .catch(this.handleError);
+    }
+    updateJob(id: number, data: any): Promise<any> {
+        return this.http.patch(`/mocks/jobs/${id}`, data)
+            .toPromise()
+            .then(response => response.json())
+            .catch(this.handleError);
+    }
+    requeueJobs(params): Promise<any> {
+        params.url = params.url ? params.url : '/mocks/queue/requeue-jobs';
+        return this.http.post(params.url, params)
+            .toPromise()
+            .then(response => response.json())
             .catch(this.handleError);
     }
 

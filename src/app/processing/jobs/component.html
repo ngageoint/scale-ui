@@ -2,42 +2,60 @@
 <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
              [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
-             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
-    <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true"
-              [style]="{'overflow':'visible'}">
-        <ng-template pTemplate="filter" let-col>
+             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}" #datatable>
+    <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
+        <ng-template pTemplate="filter">
             <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"
-                        [style]="{'width':'100%'}"
-                        styleClass="ui-column-filter">
+                        [autoWidth]="false" styleClass="ui-column-filter" appendTo="body">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}
                 </ng-template>
             </p-dropdown>
         </ng-template>
-        <ng-template let-col let-job="rowData" pTemplate="body">
-            <span><i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i> {{job.job_type.title}} {{job.job_type
-                .version}}</span>
+        <ng-template let-job="rowData" pTemplate="body">
+            <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i> {{job.job_type.title}} {{job.job_type.version}}
         </ng-template>
     </p-column>
-    <p-column field="created_formatted" header="Created" [sortable]="true"></p-column>
-    <p-column field="last_modified_formatted" header="Last Modified" [sortable]="true"></p-column>
+    <p-column field="created_formatted" header="Created (Z)" [sortable]="true"></p-column>
+    <p-column field="last_modified_formatted" header="Last Modified (Z)" [sortable]="true"></p-column>
     <p-column field="duration" header="Duration"></p-column>
-    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true" [style]="{'overflow':'visible'}">
-        <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" [style]="{'width':'100%'}" styleClass="ui-column-filter"
-                        (onChange)="onStatusChange($event)"></p-dropdown>
+    <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true">
+        <ng-template pTemplate="filter">
+            <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" (onChange)="onStatusChange($event)"
+                        [autoWidth]="false" styleClass="ui-column-filter" appendTo="body"></p-dropdown>
+        </ng-template>
+        <ng-template let-job="rowData" pTemplate="body">
+            <div class="pull-right">
+                <span class="label label-info" *ngIf="job.is_superseded" pTooltip="Superseded">S</span>
+                <button pButton type="button" icon="fa-ban" class="ui-button-secondary" (click)="cancelJob(job)" pTooltip="Cancel Job"
+                        *ngIf="!job.is_superseded && job.status !== 'COMPLETED' && job.status !== 'CANCELED'"></button>
+                <button pButton type="button" icon="fa-repeat" class="ui-button-secondary" (click)="requeueJobs({job_ids: [job.id]})"
+                        pTooltip="Requeue Job" *ngIf="!job.is_superseded && (job.status === 'FAILED' || job.status === 'CANCELED')"></button>
+            </div>
+            {{ job.status }}
         </ng-template>
     </p-column>
-    <p-column field="error.category" header="Error Category" [filter]="true" filterMatchMode="equals" [sortable]="true" [style]="{'overflow':'visible'}">
-        <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory" [style]="{'width':'100%'}" styleClass="ui-column-filter"
-                        (onChange)="onErrorCategoryChange($event)"></p-dropdown>
+    <p-column field="error.category" header="Error Category" [filter]="true" filterMatchMode="equals" [sortable]="true">
+        <ng-template pTemplate="filter">
+            <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory" (onChange)="onErrorCategoryChange($event)"
+                        [autoWidth]="false" styleClass="ui-column-filter" appendTo="body"></p-dropdown>
         </ng-template>
     </p-column>
     <p-column field="error.title" header="Error" [sortable]="true">
-        <ng-template let-col let-job="rowData" pTemplate="body">
+        <ng-template let-job="rowData" pTemplate="body">
             <div *ngIf="job.error" pTooltip="{{ job.error.description }}">{{ job.error.title }}</div>
         </ng-template>
     </p-column>
+    <p-column [style]="{'width':'5%','text-align':'center'}" header="Log">
+        <ng-template let-job="rowData" pTemplate="body">
+            <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showLog(job)"
+                    icon="fa-file-text"></button>
+        </ng-template>
+    </p-column>
 </p-dataTable>
+<p-dialog header="Log" [(visible)]="logDisplay" [modal]="true" [responsive]="true" [dismissableMask]="true">
+    <span *ngIf="selectedJobForLog">
+        Some log messages for {{ selectedJobForLog.id }}
+    </span>
+</p-dialog>
 <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>

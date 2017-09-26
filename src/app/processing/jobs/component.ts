@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { LazyLoadEvent, Dialog, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 
 import { JobsApiService } from './api.service';
@@ -26,6 +26,8 @@ export class JobsComponent implements OnInit {
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
     selectedJobType: string;
+    selectedJobForLog: Job;
+    logDisplay: boolean;
     statusValues: SelectItem[];
     selectedStatus: string;
     errorCategoryValues: SelectItem[];
@@ -46,11 +48,23 @@ export class JobsComponent implements OnInit {
             label: 'View All',
             value: ''
         }, {
-            label: 'Running',
-            value: 'RUNNING'
+            label: 'Canceled',
+            value: 'CANCELED'
         }, {
             label: 'Completed',
             value: 'COMPLETED'
+        }, {
+            label: 'Failed',
+            value: 'FAILED'
+        }, {
+            label: 'Pending',
+            value: 'PENDING'
+        }, {
+            label: 'Queued',
+            value: 'QUEUED'
+        }, {
+            label: 'Running',
+            value: 'RUNNING'
         }];
         this.errorCategoryValues = [{
             label: 'View All',
@@ -158,6 +172,30 @@ export class JobsComponent implements OnInit {
     }
     onRowSelect(e) {
         this.router.navigate(['/processing/jobs/' + e.data.id]);
+    }
+    cancelJob(job: Job) {
+        const originalStatus = job.status;
+        job.status = 'CANCEL';
+        this.jobsApiService.updateJob(job.id, { status: 'CANCELED' }).then(() => {
+            job.status = 'CANCELED';
+        }, function (err) {
+            console.log(err);
+            job.status = originalStatus;
+        });
+    }
+    requeueJobs(jobsParams) {
+        if (!jobsParams) {
+            jobsParams = _.clone(this.datatableOptions);
+        }
+        this.jobsApiService.requeueJobs(jobsParams).then(() => {
+            this.updateData();
+        }, (err) => {
+            console.log(err);
+        });
+    }
+    showLog(job: Job) {
+        this.logDisplay = true;
+        this.selectedJobForLog = job;
     }
     ngOnInit() {
         this.jobs = [];
