@@ -26,7 +26,7 @@ export class WorkspacesApiService {
         // }
         return this.http.get('/mocks/workspaces', { params: queryParams })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 

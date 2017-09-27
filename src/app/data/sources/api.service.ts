@@ -27,13 +27,13 @@ export class SourcesApiService {
         };
         return this.http.get('/mocks/sources', { params: queryParams })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getSource(id: number): Promise<Source> {
         return this.http.get('/mocks/sources/' + id)
             .toPromise()
-            .then(response => response.json() as Source)
+            .then(response => Source.transformer(response.json()))
             .catch(this.handleError);
     }
     getSourceDescendants(id: number, type: string, params: any): Promise<ApiResults> {
@@ -56,7 +56,7 @@ export class SourcesApiService {
         };
         return this.http.get(`/mocks/sources/${id}/${type}`, { params: queryParams })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 

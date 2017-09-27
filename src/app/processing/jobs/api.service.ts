@@ -33,7 +33,7 @@ export class JobsApiService {
         };
         return this.http.get('/mocks/jobs', { params: queryParams })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getJob(id: number): Promise<Job> {

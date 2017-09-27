@@ -27,14 +27,14 @@ export class RecipeTypesApiService {
         }
         return this.http.get('/mocks/recipe-types', { params: queryParams })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getRecipeType(id: number): Promise<RecipeType> {
         return this.http.get('/mocks/recipe-types/' + id)
             .toPromise()
-            .then(response => response.json() as RecipeType)
+            .then(response => RecipeType.transformer(response.json()))
             .catch(this.handleError);
     }
 

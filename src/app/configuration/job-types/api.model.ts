@@ -4,6 +4,61 @@ import { ErrorMapping } from './error.mapping.model';
 import { CustomResources } from './custom.resources.model';
 
 export class JobType {
+    private static build(data) {
+        if (data) {
+            return new JobType(
+                data.name,
+                data.version,
+                data.job_type_interface,
+                data.title,
+                data.id,
+                data.description,
+                data.category,
+                data.author_name,
+                data.author_url,
+                data.is_system,
+                data.is_long_running,
+                data.is_active,
+                data.is_operational,
+                data.is_paused,
+                data.icon_code,
+                data.uses_docker,
+                data.docker_image,
+                data.revision_num,
+                data.priority,
+                data.timeout,
+                data.max_scheduled,
+                data.max_tries,
+                data.cpus_required,
+                data.mem_required,
+                data.mem_const_required,
+                data.mem_mult_required,
+                data.shared_mem_required,
+                data.disk_out_const_required,
+                data.disk_out_mult_required,
+                data.created,
+                data.archived,
+                data.paused,
+                data.last_modified,
+                data.custom_resources,
+                data.error_mapping,
+                data.trigger_rule,
+                data.errors,
+                data.job_counts_6h,
+                data.job_counts_12h,
+                data.job_counts_24h
+            );
+        }
+    }
+    public static transformer(data) {
+        if (data) {
+            if (Array.isArray(data)) {
+                return data.map(item => JobType.build(item));
+            }
+            return JobType.build(data);
+        }
+        return null;
+    }
     constructor(
         public name: string,
         public version: string,

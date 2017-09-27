@@ -4,7 +4,7 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../api-results.model';
-import { JobType } from './api.model';
+import { JobType } from '../configuration/job-types/api.model';
 
 
 @Injectable()
@@ -15,14 +15,14 @@ export class DashboardApiService {
     getJobTypesAndStatus(): Promise<ApiResults> {
         return this.http.get('/mocks/job-types/status')
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getJobType(id: number): Promise<JobType> {
         return this.http.get('/mocks/job-types/' + id)
             .toPromise()
-            .then(response => response.json() as JobType)
+            .then(response => JobType.transformer(response.json()))
             .catch(this.handleError);
     }
 

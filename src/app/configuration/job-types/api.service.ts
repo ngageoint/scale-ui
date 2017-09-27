@@ -31,14 +31,14 @@ export class JobTypesApiService {
         }
         return this.http.get('/mocks/job-types', { params: queryParams })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getJobType(id: number): Promise<JobType> {
         return this.http.get('/mocks/job-types/' + id)
             .toPromise()
-            .then(response => response.json() as JobType)
+            .then(response => JobType.transformer(response.json()))
             .catch(this.handleError);
     }
 

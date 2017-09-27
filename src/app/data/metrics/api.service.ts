@@ -13,7 +13,7 @@ export class MetricsApiService {
     getDataTypes(): Promise<ApiResults> {
         return this.http.get('/mocks/metrics')
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
@@ -27,7 +27,7 @@ export class MetricsApiService {
     getPlotData(params: any): Promise<ApiResults> {
         return this.http.get(`/mocks/metrics/${params.dataType}/plot-data`, { params: params })
             .toPromise()
-            .then(response => response.json() as ApiResults)
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
