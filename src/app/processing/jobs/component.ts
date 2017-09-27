@@ -9,6 +9,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobType } from '../../configuration/job-types/api.model';
+import { JobExecution } from './execution.model';
 
 @Component({
     selector: 'app-jobs',
@@ -17,7 +18,7 @@ import { JobType } from '../../configuration/job-types/api.model';
 })
 
 export class JobsComponent implements OnInit {
-    @Input() jobs: Job[];
+    @Input() jobs: any;
     @Input() isChild: boolean;
     @Output() datatableChange = new EventEmitter<boolean>();
 
@@ -26,7 +27,7 @@ export class JobsComponent implements OnInit {
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
     selectedJobType: string;
-    selectedJobForLog: Job;
+    selectedJobExecution: JobExecution;
     logDisplay: boolean;
     statusValues: SelectItem[];
     selectedStatus: string;
@@ -194,8 +195,13 @@ export class JobsComponent implements OnInit {
         });
     }
     showLog(job: Job) {
-        this.logDisplay = true;
-        this.selectedJobForLog = job;
+        this.jobsApiService.getJob(job.id).then((data) => {
+            const jobExecution = data.getLatestExecution();
+            this.jobsApiService.getJobExecution(jobExecution.id).then((result) => {
+                this.selectedJobExecution = result;
+                this.logDisplay = true;
+            });
+        });
     }
     ngOnInit() {
         this.jobs = [];

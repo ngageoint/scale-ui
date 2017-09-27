@@ -81,6 +81,8 @@ import { MetricsApiService } from './data/metrics/api.service';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { RunningJobsDatatableService } from './processing/running-jobs/datatable.service';
 import { RunningJobsApiService } from './processing/running-jobs/api.service';
+import { LogViewerComponent } from './common/log-viewer/component';
+import { LogViewerApiService } from './common/log-viewer/api.service';
 
 
 @NgModule({
@@ -109,7 +111,8 @@ import { RunningJobsApiService } from './processing/running-jobs/api.service';
         ProcessingformComponent,
         FailureRatesComponent,
         MetricsComponent,
-        RunningJobsComponent
+        RunningJobsComponent,
+        LogViewerComponent
     ],
     imports: [
         AppRoutingModule,
@@ -169,7 +172,8 @@ import { RunningJobsApiService } from './processing/running-jobs/api.service';
         FailureRatesDatatableService,
         MetricsApiService,
         RunningJobsApiService,
-        RunningJobsDatatableService
+        RunningJobsDatatableService,
+        LogViewerApiService
     ],
     bootstrap: [AppComponent]
 })

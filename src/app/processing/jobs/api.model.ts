@@ -1,5 +1,6 @@
 import { DataService } from '../../data.service';
 import * as moment from 'moment';
+import { JobExecution } from './execution.model';
 
 export class Job {
     dataService: DataService;
@@ -39,7 +40,7 @@ export class Job {
                 data.data,
                 data.results,
                 data.recipes,
-                data.job_exes,
+                JobExecution.transformer(data.job_exes),
                 data.inputs,
                 data.outputs
             );
@@ -47,7 +48,17 @@ export class Job {
     }
     public static transformer(data) {
         if (data) {
-            return data.map(item => Job.build(item));
+            if (Array.isArray(data)) {
+                return data.map(item => Job.build(item));
+            }
+            return Job.build(data);
+        }
+        return null;
+    }
+
+    public getLatestExecution(): JobExecution {
+        if (this.num_exes > 0 ) {
+            return this.job_exes[0];
         }
         return null;
     }
@@ -82,7 +93,7 @@ export class Job {
         public data: object,
         public results: object,
         public recipes: object[],
-        public job_exes: object[],
+        public job_exes: any,
         public inputs: object[],
         public outputs: object[]
     ) {

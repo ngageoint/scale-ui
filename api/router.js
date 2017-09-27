@@ -18,6 +18,8 @@ const sourceDescendants = require('./handlers/sourceDescendants');
 const metrics = require('./handlers/metrics');
 const metricsDataTypes = require('./handlers/metricsDataTypeOptions');
 const metricsPlotData = require('./handlers/metricsPlotData');
+const jobExecutionLogs = require('./handlers/jobExecutionLogs');
+const jobExecution = require('./handlers/jobExecution');
 
 module.exports = {
     init: function(server) {
@@ -151,6 +153,18 @@ module.exports = {
             method: 'GET',
             path: '/mocks/metrics/{type}/plot-data',
             handler: metricsPlotData
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/job-executions/{id}/logs/combined',
+            handler: jobExecutionLogs
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/job-executions/{id}',
+            handler: jobExecution
         });
     }
 };

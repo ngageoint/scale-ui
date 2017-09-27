@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { ApiResults } from '../../api-results.model';
 import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
+import { JobExecution } from './execution.model';
 
 @Injectable()
 export class JobsApiService {
@@ -38,7 +39,13 @@ export class JobsApiService {
     getJob(id: number): Promise<Job> {
         return this.http.get(`/mocks/jobs/${id}`)
             .toPromise()
-            .then(response => response.json() as Job)
+            .then(response => Job.transformer(response.json()))
+            .catch(this.handleError);
+    }
+    getJobExecution(id: number): Promise<JobExecution> {
+        return this.http.get(`/mocks/job-executions/${id}`)
+            .toPromise()
+            .then(response => JobExecution.transformer(response.json()))
             .catch(this.handleError);
     }
     updateJob(id: number, data: any): Promise<any> {

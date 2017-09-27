@@ -53,9 +53,9 @@
         </ng-template>
     </p-column>
 </p-dataTable>
-<p-dialog header="Log" [(visible)]="logDisplay" [modal]="true" [responsive]="true" [dismissableMask]="true">
-    <span *ngIf="selectedJobForLog">
-        Some log messages for {{ selectedJobForLog.id }}
+<p-dialog header="Log" [(visible)]="logDisplay" [modal]="true" [responsive]="true" [dismissableMask]="true" positionTop="40">
+    <span *ngIf="selectedJobExecution">
+        <app-log-viewer [execution]="selectedJobExecution"></app-log-viewer>
     </span>
 </p-dialog>
 <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
