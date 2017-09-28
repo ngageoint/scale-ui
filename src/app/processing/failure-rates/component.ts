@@ -83,8 +83,9 @@ export class FailureRatesComponent implements OnInit {
             if (metricsData.results.length > 0) {
                 const data30Days = _.map(metricsData.results, 'values'),
                     data48Hours = this.formatData(data30Days, 2),
-                    data24Hours = this.formatData(data48Hours, 1),
-                    tempData = [];
+                    data24Hours = this.formatData(data48Hours, 1);
+
+                let tempData = [];
 
                 _.forEach(this.jobTypes, (jobType) => {
                     tempData.push({
@@ -94,6 +95,11 @@ export class FailureRatesComponent implements OnInit {
                         thirty_days: this.formatColumn(data30Days, jobType.id)
                     });
                 });
+                if (this.datatableOptions.name && this.datatableOptions.version) {
+                    tempData = _.filter(tempData, (d) => {
+                        return d.job_type.name === this.datatableOptions.name && d.job_type.version === this.datatableOptions.version;
+                    });
+                }
                 this.performanceData = tempData;
             }
         }).catch((error) => {
@@ -117,12 +123,13 @@ export class FailureRatesComponent implements OnInit {
         this.jobTypesApiService.getJobTypes().then(data => {
             this.jobTypes = data.results as JobType[];
             const selectItems = [];
+            console.log(this.datatableOptions);
             _.forEach(this.jobTypes, (jobType) => {
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.version,
                     value: jobType
                 });
-                if (this.datatableOptions.name === jobType.name) {
+                if (this.datatableOptions.name === jobType.name && this.datatableOptions.version === jobType.version) {
                     this.selectedJobType = jobType;
                 }
             });

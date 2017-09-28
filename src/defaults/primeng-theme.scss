@@ -1252,9 +1252,9 @@ body .ui-datatable thead th.ui-sortable-column:not(.ui-state-active):hover {
     background-color: #e3e3e3;
 }
 body .ui-datatable thead th.ui-state-active {
-    background-color: $clr-highlight;
-    border-color: $clr-highlight;
-    color: $clr-white;
+    background-color: #e3e3e3;
+    border-color: #c0c0c0;
+    color: $clr-black;
 }
 body .ui-datatable thead th.ui-state-active .ui-dropdown-item {
     color: #373a3c;

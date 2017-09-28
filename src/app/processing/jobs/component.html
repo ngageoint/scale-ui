@@ -31,8 +31,16 @@
             <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i> {{job.job_type.title}} {{job.job_type.version}}
         </ng-template>
     </p-column>
-    <p-column field="created_formatted" header="Created (Z)" [sortable]="true"></p-column>
-    <p-column field="last_modified_formatted" header="Last Modified (Z)" [sortable]="true"></p-column>
+    <p-column field="created" header="Created (Z)" [sortable]="true">
+        <ng-template let-job="rowData" pTemplate="body">
+            {{ job.created_formatted }}
+        </ng-template>
+    </p-column>
+    <p-column field="last_modified" header="Last Modified (Z)" [sortable]="true">
+        <ng-template let-job="rowData" pTemplate="body">
+            {{ job.last_modified_formatted }}
+        </ng-template>
+    </p-column>
     <p-column field="duration" header="Duration"></p-column>
     <p-column field="status" header="Status" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter">

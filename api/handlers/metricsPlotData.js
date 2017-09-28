@@ -15,41 +15,43 @@ module.exports = function (request, reply) {
 
         var numDays = moment.utc(params.ended).diff(moment.utc(params.started), 'd') + 1;
 
-        var maxRandom = params.column === 'total_count' ? 1000 : 200;
-        var minRandom = params.column === 'total_count' ? 800 : 10;
-        var returnResult = {
-            column: { title: _.startCase(params.column) },
-            min_x: moment.utc(params.started).format('YYYY-MM-DD'),
-            max_x: moment.utc(params.ended).format('YYYY-MM-DD'),
-            min_y: 1,
-            max_y: 1000,
-            values: []
-        };
+        _.forEach(params.column, function (metric) {
+            var maxRandom = metric === 'total_count' ? 1000 : 200;
+            var minRandom = metric === 'total_count' ? 800 : 10;
+            var returnResult = {
+                column: { title: _.startCase(params.column) },
+                min_x: moment.utc(params.started).format('YYYY-MM-DD'),
+                max_x: moment.utc(params.ended).format('YYYY-MM-DD'),
+                min_y: 1,
+                max_y: 1000,
+                values: []
+            };
 
-        for (var i = 0; i < numDays; i++) {
-            if (params.choice_id && params.choice_id.length > 1) {
-                _.forEach(params.choice_id, function (id) {
+            for (var i = 0; i < numDays; i++) {
+                if (params.choice_id && params.choice_id.length > 1) {
+                    _.forEach(params.choice_id, function (id) {
+                        random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
+                        if (random <= 4) {
+                            var value = Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom;
+                            returnResult.values.push({
+                                date: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
+                                value: value,
+                                id: parseInt(id)
+                            });
+                        }
+                    });
+                } else {
                     random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
                     if (random <= 4) {
-                        var value = Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom;
                         returnResult.values.push({
                             date: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
-                            value: value,
-                            id: parseInt(id)
+                            value: Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom
                         });
                     }
-                });
-            } else {
-                random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
-                if (random <= 4) {
-                    returnResult.values.push({
-                        date: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
-                        value: Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom
-                    });
                 }
             }
-        }
-        returnObj.results.push(returnResult);
+            returnObj.results.push(returnResult);
+        });
     }
 
     reply(returnObj);

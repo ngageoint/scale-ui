@@ -1,3 +1,4 @@
+<h2>Job Type Failure Rates</h2>
 <p-dataTable [value]="performanceData" [rows]="10" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder">
     <p-column [filter]="true" filterMatchMode="equals"
@@ -9,7 +10,7 @@
             </h4>
         </ng-template>
         <ng-template pTemplate="filter" let-col>
-            <p-dropdown [options]="jobTypeOptions" (onChange)="onChange($event)" [style]="{'width':'100%'}"
+            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange($event)" [style]="{'width':'100%'}"
                         styleClass="ui-column-filter">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}
