@@ -10,7 +10,7 @@ export class JobsDatatable {
         public ended: string,
         public status: string,
         public job_id: number,
-        public job_type_id: any,
+        public job_type_id: number,
         public job_type_name: string,
         public job_type_category: string,
         public batch_id: number,

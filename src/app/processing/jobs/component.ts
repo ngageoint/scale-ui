@@ -118,7 +118,7 @@ export class JobsComponent implements OnInit {
                     label: jobType.title + ' ' + jobType.version,
                     value: jobType.id
                 });
-                if (parseInt(this.datatableOptions.job_type_id, 10) === jobType.id) {
+                if (this.datatableOptions.job_type_id === jobType.id) {
                     this.selectedJobType = jobType.id;
                 }
             });
@@ -221,9 +221,7 @@ export class JobsComponent implements OnInit {
     }
     ngOnInit() {
         this.jobs = [];
-        if (this.route.snapshot &&
-            Object.keys(this.route.snapshot.queryParams).length > 0) {
-
+        if (this.route.snapshot && Object.keys(this.route.snapshot.queryParams).length > 0) {
             const params = this.route.snapshot.queryParams;
             this.datatableOptions = {
                 first: parseInt(params.first, 10),
@@ -233,11 +231,11 @@ export class JobsComponent implements OnInit {
                 started: params.started,
                 ended: params.ended,
                 status: params.status,
-                job_id: params.job_id,
-                job_type_id: params.job_type_id,
+                job_id: params.job_id ? parseInt(params.job_id, 10) : null,
+                job_type_id: params.job_type_id ? parseInt(params.job_type_id, 10) : null,
                 job_type_name: params.job_type_name,
                 job_type_category: params.job_type_category,
-                batch_id: params.batch_id,
+                batch_id: params.batch_id ? parseInt(params.batch_id, 10) : null,
                 error_category: params.error_category,
                 include_superseded: params.include_superseded
             };
