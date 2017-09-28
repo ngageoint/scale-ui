@@ -1,13 +1,14 @@
 const _ = require('lodash');
+const moment = require('moment');
 const jobs = require('../data/jobs.json');
 
 module.exports = function (request, reply) {
     var data = _.clone(jobs);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
-        if (params.job_type_name) {
+        if (params.job_type_id) {
             data.results = _.filter(data.results, function (r) {
-                return r.job_type.name.toLowerCase().includes(params.job_type_name);
+                return r.job_type.id === parseInt(params.job_type_id);
             });
         }
         if (params.order) {
@@ -25,6 +26,11 @@ module.exports = function (request, reply) {
         if (params.error_category) {
             data.results = _.filter(data.results, function (result) {
                 return result.error_category === params.error_category;
+            });
+        }
+        if (params.started && params.ended) {
+            data.results = _.filter(data.results, function (result) {
+                return moment.utc(result.started).isSameOrAfter(moment.utc(params.started)) && moment.utc(result.ended).isSameOrBefore(moment.utc(params.ended));
             });
         }
         data.count = data.results.length;

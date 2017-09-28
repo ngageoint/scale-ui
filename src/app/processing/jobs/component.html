@@ -1,8 +1,23 @@
 <h2>Jobs</h2>
+<div class="ui-g margin-bottom-md">
+    <div class="ui-g-2 ui-g-nopad">
+        <label>From:</label>
+        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+    </div>
+    <div class="ui-g-2 ui-g-nopad">
+        <label>To:</label>
+        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+    </div>
+    <div class="ui-g-7 ui-g-nopad"></div>
+    <div class="ui-g-1 ui-g-nopad text-right">
+        <button pButton type="button" class="ui-button-primary" icon="fa-repeat" pTooltip="Requeue All Jobs"
+                (click)="requeueJobs()"></button>
+    </div>
+</div>
 <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
              [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
-             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}" #datatable>
+             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}" class="jobs-table" #datatable>
     <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter">
             <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"

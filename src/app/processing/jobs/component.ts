@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, Dialog, SelectItem } from 'primeng/primeng';
+import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { JobsApiService } from './api.service';
@@ -33,8 +34,9 @@ export class JobsComponent implements OnInit {
     selectedStatus: string;
     errorCategoryValues: SelectItem[];
     selectedErrorCategory: string;
-    first: number;
     count: number;
+    started: string;
+    ended: string;
     isInitialized: boolean;
 
     constructor(
@@ -114,10 +116,10 @@ export class JobsComponent implements OnInit {
             _.forEach(this.jobTypes, (jobType) => {
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.version,
-                    value: jobType.name
+                    value: jobType.id
                 });
-                if (this.datatableOptions.job_type_name === jobType.name) {
-                    this.selectedJobType = jobType.name;
+                if (parseInt(this.datatableOptions.job_type_id, 10) === jobType.id) {
+                    this.selectedJobType = jobType.id;
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
@@ -155,7 +157,7 @@ export class JobsComponent implements OnInit {
     }
     onJobTypeChange(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            job_type_name: e.value
+            job_type_id: e.value
         });
         this.updateOptions();
     }
@@ -173,6 +175,20 @@ export class JobsComponent implements OnInit {
     }
     onRowSelect(e) {
         this.router.navigate(['/processing/jobs/' + e.data.id]);
+    }
+    onStartSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: moment.utc(e, 'YYYY-MM-DD').toISOString()
+        });
+        this.updateOptions();
+    }
+    onEndSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            ended: moment.utc(e, 'YYYY-MM-DD').toISOString()
+        });
+        this.updateOptions();
     }
     cancelJob(job: Job) {
         const originalStatus = job.status;
@@ -230,6 +246,8 @@ export class JobsComponent implements OnInit {
         }
         this.selectedStatus = this.datatableOptions.status;
         this.selectedErrorCategory = this.datatableOptions.error_category;
+        this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
+        this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
         this.getJobTypes();
     }
 }
