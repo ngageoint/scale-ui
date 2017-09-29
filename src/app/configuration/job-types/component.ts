@@ -55,6 +55,9 @@ export class JobTypesComponent implements OnInit {
         });
     }
 
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,

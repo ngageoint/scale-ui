@@ -1,26 +1,123 @@
 <div class="ui-g">
-    <div class="ui-g-12 ui-md-6">
-        <div class="ui-g-5">
+    <div class="ui-g-12">
+        <div class="ui-g-3">
             <p-dataTable [value]="jobTypes" [rows]="10" [sortField]="datatableOptions.sortField"
                          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
                          [(selection)]="selectedJobType" (onRowSelect)="onRowSelect($event)">
                 <p-column field="title" [sortable]="true">
                     <ng-template let-col let-jobType="rowData" pTemplate="body">
-                        <span>{{jobType.title}} {{jobType.version}}</span>
+                        <span>{{ jobType.title }} {{ jobType.version }}</span>
                     </ng-template>
                 </p-column>
             </p-dataTable>
             <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
         </div>
-        <div class="ui-g-7">
+        <div class="ui-g-9">
             <h2 *ngIf="!selectedJobType">Select an algorithm to view its details</h2>
             <div *ngIf="selectedJobType">
-                <h2>{{selectedJobType.title}} {{selectedJobType.version}}</h2>
-                <ul>
-                    <li *ngFor="let key of selectedJobTypeKeys">
-                        {{key}}: {{selectedJobType[key]}}
-                    </li>
-                </ul>
+                <h2><i class="fa" [innerHtml]="getUnicode(selectedJobType.icon_code)"></i> {{ selectedJobType.title }}
+                    {{ selectedJobType.version }}</h2>
+                <div class="ui-g">
+                    <div class="ui-g-8">
+                        <p>{{ selectedJobType.description }}</p>
+                        <strong>Author: </strong> {{ selectedJobType.author_name }}<br />
+                        <a href="{{ selectedJobType.author_url }}" target="_blank">Algorithm Description</a>
+                        <table class="table table-striped margin-top-md">
+                            <thead>
+                            <th colspan="2">Interface</th>
+                            </thead>
+                            <tbody>
+                            <tr *ngIf="selectedJobType.job_type_interface.command">
+                                <td>Command</td>
+                                <td>{{ selectedJobType.job_type_interface.command }}</td>
+                            </tr>
+                            <tr *ngIf="selectedJobType.job_type_interface.command_arguments">
+                                <td>Command Arguments</td>
+                                <td>{{ selectedJobType.job_type_interface.command_arguments }}</td>
+                            </tr>
+                            <tr *ngIf="selectedJobType.job_type_interface.input_data">
+                                <td>Input Data</td>
+                                <td>
+                                    <table class="table table-striped" *ngIf="selectedJobType.job_type_interface.input_data && selectedJobType.job_type_interface.input_data.length > 0">
+                                        <thead><th>Name</th><th>Type</th><th>Media Types</th></thead>
+                                        <tbody>
+                                        <tr *ngFor="let input_data of selectedJobType.job_type_interface.input_data">
+                                            <td>{{ input_data.name }} <span *ngIf="input_data.required">*</span></td>
+                                            <td>{{ input_data.type }}</td>
+                                            <td>{{ input_data.media_types }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr *ngIf="selectedJobType.job_type_interface.output_data">
+                                <td>Output Data</td>
+                                <td>
+                                    <table class="table table-striped" *ngIf="selectedJobType.job_type_interface.output_data && selectedJobType.job_type_interface.output_data.length > 0">
+                                        <thead><th>Name</th><th>Type</th><th>Media Type</th></thead>
+                                        <tbody>
+                                        <tr *ngFor="let output_data of selectedJobType.job_type_interface.output_data">
+                                            <td>{{ output_data.name }} <span *ngIf="output_data.required">*</span></td>
+                                            <td>{{ output_data.type }}</td>
+                                            <td>{{ output_data.media_type }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr *ngIf="selectedJobType.job_type_interface.shared_resources && selectedJobType.job_type_interface.shared_resources.length > 0">
+                                <td>Shared Resources</td>
+                                <td>{{ selectedJobType.job_type_interface.share_resources }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Required</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="ui-g-4">
+                        <dl class="dl-horizontal">
+                            <dt *ngIf="selectedJobType.created">Created:</dt>
+                            <dd *ngIf="selectedJobType.created">{{ selectedJobType.created }}</dd>
+                            <dt *ngIf="selectedJobType.last_modified">Last Modified:</dt>
+                            <dd *ngIf="selectedJobType.last_modified">{{ selectedJobType.last_modified }}</dd>
+                            <dt *ngIf="selectedJobType.archived">Archived:</dt>
+                            <dd *ngIf="selectedJobType.archived">{{ selectedJobType.archived }}</dd>
+                            <dt *ngIf="selectedJobType.cpus_required">CPUs:</dt>
+                            <dd *ngIf="selectedJobType.cpus_required">{{ selectedJobType.cpus_required }}</dd>
+                            <dt *ngIf="selectedJobType.mem_required">Memory:</dt>
+                            <dd *ngIf="selectedJobType.mem_required">{{ selectedJobType.mem_required_formatted }}</dd>
+                            <dt *ngIf="selectedJobType.mem_required">Shared Memory:</dt>
+                            <dd *ngIf="selectedJobType.mem_required">{{ selectedJobType.shared_mem_required_formatted }}</dd>
+                            <dt *ngIf="selectedJobType.disk_out_const_required_formatted">Disk:</dt>
+                            <dd *ngIf="selectedJobType.disk_out_const_required_formatted">{{ selectedJobType.disk_out_const_required_formatted }}</dd>
+                            <dt *ngIf="selectedJobType.disk_out_mult_required">Input Size Multiplier:</dt>
+                            <dd *ngIf="selectedJobType.disk_out_mult_required">{{ selectedJobType.disk_out_mult_required }}</dd>
+                            <dt *ngIf="selectedJobType.docker_image">Docker Image:</dt>
+                            <dd *ngIf="selectedJobType.docker_image">{{ selectedJobType.docker_image }}</dd>
+                            <dt *ngIf="selectedJobType.max_tries">Max Tries:</dt>
+                            <dd *ngIf="selectedJobType.max_tries">{{ selectedJobType.max_tries }}</dd>
+                            <dt *ngIf="selectedJobType.priority">Priority:</dt>
+                            <dd *ngIf="selectedJobType.priority">{{ selectedJobType.priority }}</dd>
+                            <dt *ngIf="selectedJobType.timeout">Timeout:</dt>
+                            <dd *ngIf="selectedJobType.timeout">{{ selectedJobType.timeout }} seconds</dd>
+                            <dt *ngIf="selectedJobType.category">Category:</dt>
+                            <dd *ngIf="selectedJobType.category">{{ selectedJobType.category }}</dd>
+                            <dt *ngIf="selectedJobType.is_system">System Type:</dt>
+                            <dd *ngIf="selectedJobType.is_system">{{ selectedJobType.is_system }}</dd>
+                            <dt *ngIf="selectedJobType.is_long_running">Long Running:</dt>
+                            <dd *ngIf="selectedJobType.is_long_running">{{ selectedJobType.is_long_running }}</dd>
+                            <dt *ngIf="selectedJobType.is_active">Active:</dt>
+                            <dd *ngIf="selectedJobType.is_active">{{ selectedJobType.is_active }}</dd>
+                            <dt *ngIf="selectedJobType.is_operational">Operational:</dt>
+                            <dd *ngIf="selectedJobType.is_operational">{{ selectedJobType.is_operational }}</dd>
+                            <dt *ngIf="selectedJobType.is_paused">Paused:</dt>
+                            <dd *ngIf="selectedJobType.is_paused">{{ selectedJobType.is_paused }}</dd>
+                            <dt *ngIf="selectedJobType.paused">Paused Date:</dt>
+                            <dd *ngIf="selectedJobType.paused">{{ selectedJobType.paused }}</dd>
+                        </dl>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

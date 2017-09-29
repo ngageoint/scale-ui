@@ -44,6 +44,12 @@
 .table {
     width: 100%;
 
+    thead {
+        th {
+            text-align: left;
+        }
+    }
+
     tbody td {
         padding: 5px;
     }
@@ -52,6 +58,9 @@
 .table-striped {
     tbody tr:nth-child(odd) {
         background-color: $clr-white;
+    }
+    tbody tr:nth-child(even) {
+        background-color: $clr-gray-95;
     }
 }
 
@@ -189,4 +198,20 @@ label-default {
 
 .margin-left-lg {
     margin-left: 20px;
+}
+
+.dl-horizontal {
+    dt {
+        float: left;
+        width: 160px;
+        clear: left;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: bold;
+    }
+    dd {
+        margin-left: 180px;
+    }
 }

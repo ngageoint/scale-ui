@@ -1,15 +1,21 @@
+import { DataService } from '../../data.service';
 import { JobTypeInterface } from './interface.model';
 import { Trigger } from './trigger.model';
 import { ErrorMapping } from './error.mapping.model';
 import { CustomResources } from './custom.resources.model';
 
 export class JobType {
+    dataService: DataService;
+    mem_required_formatted: string;
+    shared_mem_required_formatted: string;
+    disk_out_const_required_formatted: string;
+
     private static build(data) {
         if (data) {
             return new JobType(
                 data.name,
                 data.version,
-                data.job_type_interface,
+                data.interface,
                 data.title,
                 data.id,
                 data.description,
@@ -141,5 +147,9 @@ export class JobType {
         this.job_counts_6h = this.job_counts_6h || null;
         this.job_counts_12h = this.job_counts_12h || null;
         this.job_counts_24h = this.job_counts_24h || null;
+        this.dataService = new DataService();
+        this.mem_required_formatted = this.dataService.calculateFileSizeFromMib(this.mem_required);
+        this.shared_mem_required_formatted = this.dataService.calculateFileSizeFromMib(this.shared_mem_required);
+        this.disk_out_const_required_formatted = this.dataService.calculateFileSizeFromMib(this.disk_out_const_required);
     }
 }
