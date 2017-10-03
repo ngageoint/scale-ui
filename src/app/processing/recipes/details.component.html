@@ -1,7 +1,5 @@
-<h2>Recipe Details</h2>
-<a routerLink="/status/recipes">&lt; Recipes List</a>
-<ul>
-    <li *ngFor="let key of recipeKeys">
-        {{key}}: {{recipe[key]}}
-    </li>
-</ul>
+<div *ngIf="recipeType">
+    <h2>{{ recipeType.title }} {{ recipeType.version }}</h2>
+    <a routerLink="/processing/recipes">&lt; Recipes List</a>
+    <app-recipe-graph [recipeType]="recipeType"></app-recipe-graph>
+</div>

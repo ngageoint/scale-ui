@@ -22,7 +22,7 @@
                         <p>{{ selectedJobType.description }}</p>
                         <strong>Author: </strong> {{ selectedJobType.author_name }}<br />
                         <a href="{{ selectedJobType.author_url }}" target="_blank">Algorithm Description</a>
-                        <table class="table table-striped margin-top-md">
+                        <table class="table table-striped margin-top-md" *ngIf="selectedJobType.job_type_interface">
                             <thead>
                             <th colspan="2">Interface</th>
                             </thead>

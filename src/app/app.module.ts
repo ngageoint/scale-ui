@@ -83,6 +83,7 @@ import { RunningJobsDatatableService } from './processing/running-jobs/datatable
 import { RunningJobsApiService } from './processing/running-jobs/api.service';
 import { LogViewerComponent } from './common/log-viewer/component';
 import { LogViewerApiService } from './common/log-viewer/api.service';
+import { RecipeGraphComponent } from './common/recipe-graph/component';
 
 
 @NgModule({
@@ -112,7 +113,8 @@ import { LogViewerApiService } from './common/log-viewer/api.service';
         FailureRatesComponent,
         MetricsComponent,
         RunningJobsComponent,
-        LogViewerComponent
+        LogViewerComponent,
+        RecipeGraphComponent
     ],
     imports: [
         AppRoutingModule,

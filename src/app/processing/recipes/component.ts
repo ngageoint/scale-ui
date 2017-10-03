@@ -18,7 +18,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 
 export class RecipesComponent implements OnInit {
     datatableOptions: RecipesDatatable;
-    recipes: Recipe[];
+    recipes: any;
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
     selectedRecipe: Recipe;
@@ -40,7 +40,7 @@ export class RecipesComponent implements OnInit {
     private updateData() {
         this.recipesApiService.getRecipes(this.datatableOptions).then(data => {
             this.count = data.count;
-            this.recipes = data.results as Recipe[];
+            this.recipes = Recipe.transformer(data.results);
         });
     }
     private updateOptions() {

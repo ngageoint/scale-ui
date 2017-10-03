@@ -1,112 +1,22 @@
-<div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid" style="margin: 10px 0px" xmlns="http://www.w3.org/1999/html">
-    <div class="ui-grid-row">
-        <div class="ui-grid-col-3">
-            <p-dataTable [value]="recipeTypes" [rows]="10" [sortField]="datatableOptions.sortField"
-                         [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
-                         [(selection)]="selectedRecipeType" (onRowSelect)="onRowSelect($event)">
-                <p-column field="title" [sortable]="true">
-                    <ng-template let-col let-recipeType="rowData" pTemplate="body">
-                        <span>{{recipeType.title}} {{recipeType.version}}</span>
-                    </ng-template>
-                </p-column>
-            </p-dataTable>
-            <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
-        </div>
-        <div class="ui-grid-col-6">
-            <h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>
-            <div class="chart-container" *ngIf="selectedRecipeType">
-                <h2>{{selectedRecipeType.title}} v{{selectedRecipeType.version}}</h2>
-                {{selectedRecipeType.description}}
-                <ngx-charts-directed-graph
-                    [legend]="showLegend"
-                    [links]="links"
-                    [nodes]="nodes"
-                    [scheme]="colorScheme"
-                    [orientation]="orientation"
-                    [curve]="curve"
-                    (select)="select($event)">
-
-                    <ng-template #defsTemplate>
-                        <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
-                            <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
-                        </svg:marker>
-                    </ng-template>
-
-                    <ng-template #nodeTemplate let-node>
-                        <svg:g class="node"
-                               pTooltip="node.label"
-                               tooltipPosition="'top'">
-                            <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.options.color" />
-                            <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{node.label}}</svg:text>
-                        </svg:g>
-                    </ng-template>
-
-                    <ng-template #linkTemplate let-link>
-                        <svg:g class="edge">
-                            <svg:path
-                                class="line"
-                                stroke-width="2"
-                                marker-end="url(#arrow)">
-                            </svg:path>
-                            <svg:text class="edge-label" text-anchor="middle">
-                                <textPath
-                                    class="text-path"
-                                    [attr.href]="'#' + link.id"
-                                    [style.dominant-baseline]="link.dominantBaseline"
-                                    startOffset="50%">
-                                    {{link.label}}
-                                </textPath>
-                            </svg:text>
-                        </svg:g>
-                    </ng-template>
-
-                </ngx-charts-directed-graph>
-            </div>
-        </div>
-        <div class="ui-grid-col-3">
-            <div class="job-type-interface" *ngIf="selectedJobType">
-                <h4 class="label label-primary">{{selectedJobType.title}} {{selectedJobType.version}}</h4>
-                <p-dataList [value]="selectedJobType.job_type_interface.input_data">
-                    <p-header><strong>Inputs</strong></p-header>
-                    <ng-template let-input pTemplate="item">
-                        <div class="ui-g ui-fluid recipe-io">
-                            <div class="ui-g-12">
-                                {{input.name}} <span *ngIf="input.required">*</span>
-                                <ul class="list-unstyled media-type-list">
-                                    <li *ngFor="let mediaType of input.media_types">{{mediaType}}</li>
-                                </ul>
-                                <div class="connections" *ngIf="input.dependencies.length > 0">
-                                    <h5>Connections</h5>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let dependency of input.dependencies">
-                                            <strong>{{dependency.name}}</strong>.<em>{{dependency.output}}</em>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </p-dataList>
-                <p-dataList [value]="selectedJobType.job_type_interface.output_data">
-                    <p-header><strong>Outputs</strong></p-header>
-                    <ng-template let-output pTemplate="item">
-                        <div class="ui-g ui-fluid recipe-io">
-                            <div class="ui-g-12">
-                                {{output.name}} <span *ngIf="output.required">*</span>
-                                <div class="media-type-list">{{output.media_type}}</div>
-                                <div class="connections" *ngIf="output.dependents.length > 0">
-                                    <h5>Connections</h5>
-                                    <ul class="list-unstyled">
-                                        <li *ngFor="let dependent of output.dependents">
-                                            <strong>{{dependent.name}}</strong>.<em>{{dependent.input}}</em>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </p-dataList>
-            </div>
+<div class="ui-g" style="margin: 10px 0px" xmlns="http://www.w3.org/1999/html">
+    <div class="ui-g-3">
+        <p-dataTable [value]="recipeTypes" [rows]="10" [sortField]="datatableOptions.sortField"
+                     [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
+                     [(selection)]="selectedRecipeType" (onRowSelect)="onRowSelect($event)">
+            <p-column field="title" [sortable]="true">
+                <ng-template let-col let-recipeType="rowData" pTemplate="body">
+                    <span>{{ recipeType.title }} {{ recipeType.version }}</span>
+                </ng-template>
+            </p-column>
+        </p-dataTable>
+        <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
+    </div>
+    <div class="ui-g-9">
+        <h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>
+        <div *ngIf="selectedRecipeType">
+            <h2>{{ selectedRecipeType.title }} v{{ selectedRecipeType.version }}</h2>
+            {{ selectedRecipeType.description }}
+            <app-recipe-graph [recipeType]="selectedRecipeType"></app-recipe-graph>
         </div>
     </div>
 </div>

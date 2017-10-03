@@ -1,4 +1,14 @@
+import { DataService } from '../../data.service';
+import * as moment from 'moment';
+
 export class Recipe {
+    dataService: DataService;
+    created_formatted: string;
+    completed_formatted: string;
+    superseded_formatted: string;
+    last_modified_formatted: string;
+    duration: string;
+
     private static build(data) {
         if (data) {
             return new Recipe(
@@ -45,5 +55,12 @@ export class Recipe {
         public data: object,
         public inputs: Array<object>,
         public jobs: Array<object>
-    ) {}
+    ) {
+        this.dataService = new DataService();
+        this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');
+        this.completed_formatted = this.completed ? moment.utc(this.completed).format('YYYY-MM-DD HH:mm:ss') : '';
+        this.superseded_formatted = moment.utc(this.superseded).format('YYYY-MM-DD HH:mm:ss');
+        this.last_modified_formatted = moment.utc(this.last_modified).format('YYYY-MM-DD HH:mm:ss');
+        this.duration = this.dataService.calculateDuration(this.created, this.last_modified);
+    }
 }
