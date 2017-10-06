@@ -1,5 +1,5 @@
 <div class="ui-g">
-    <div class="ui-g-8 chart-container">
+    <div class="ui-g-8 ui-lg-9 chart-container">
         <ngx-charts-directed-graph
             [legend]="showLegend"
             [links]="links"
@@ -19,7 +19,8 @@
                 <svg:g class="node"
                        pTooltip="node.label"
                        tooltipPosition="'top'">
-                    <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.options.color" />
+                    <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.options.color"
+                              [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" />
                     <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{ node.label }}</svg:text>
                 </svg:g>
             </ng-template>
@@ -44,7 +45,7 @@
             </ng-template>
         </ngx-charts-directed-graph>
     </div>
-    <div class="ui-g-4">
+    <div class="ui-g-4 ui-lg-3">
         <div class="job-type-interface" *ngIf="selectedJobType">
             <h4 class="label label-primary">{{ selectedJobType.title }} {{ selectedJobType.version }}</h4>
             <p-dataList [value]="selectedJobType.job_type_interface.input_data">

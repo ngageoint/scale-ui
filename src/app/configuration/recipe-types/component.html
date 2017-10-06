@@ -1,22 +1,27 @@
-<div class="ui-g" style="margin: 10px 0px" xmlns="http://www.w3.org/1999/html">
-    <div class="ui-g-3">
-        <p-dataTable [value]="recipeTypes" [rows]="10" [sortField]="datatableOptions.sortField"
-                     [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"
-                     [(selection)]="selectedRecipeType" (onRowSelect)="onRowSelect($event)">
-            <p-column field="title" [sortable]="true">
-                <ng-template let-col let-recipeType="rowData" pTemplate="body">
-                    <span>{{ recipeType.title }} {{ recipeType.version }}</span>
-                </ng-template>
-            </p-column>
-        </p-dataTable>
-        <p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
-    </div>
-    <div class="ui-g-9">
-        <h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>
-        <div *ngIf="selectedRecipeType">
-            <h2>{{ selectedRecipeType.title }} v{{ selectedRecipeType.version }}</h2>
-            {{ selectedRecipeType.description }}
-            <app-recipe-graph [recipeType]="selectedRecipeType"></app-recipe-graph>
-        </div>
-    </div>
+<h2>Recipe Types</h2>
+<p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
+            [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select Recipe Type"></p-dropdown>
+<div class="margin-top-md" *ngIf="selectedRecipeType">
+    <app-recipe-graph [recipeType]="selectedRecipeTypeDetail"></app-recipe-graph>
 </div>
+
+<!--<div class="ui-g" class="margin-top-md margin-bottom-md">-->
+    <!--<div class="ui-g-3 ui-lg-2 ui">-->
+        <!--<p-dataTable [value]="recipeTypes" [rows]="10" [sortField]="datatableOptions.sortField"-->
+                     <!--[sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" selectionMode="single"-->
+                     <!--[(selection)]="selectedRecipeType" (onRowSelect)="onRowSelect($event)">-->
+            <!--<p-column field="title" [sortable]="true">-->
+                <!--<ng-template let-col let-recipeType="rowData" pTemplate="body">-->
+                    <!--<span>{{ recipeType.title }} {{ recipeType.version }}</span>-->
+                <!--</ng-template>-->
+            <!--</p-column>-->
+        <!--</p-dataTable>-->
+        <!--<p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>-->
+    <!--</div>-->
+    <!--<div class="ui-g-9 ui-lg-10">-->
+        <!--<h2 *ngIf="!selectedRecipeType">Select a recipe type to view its details</h2>-->
+        <!--<div *ngIf="selectedRecipeType">-->
+            <!--<app-recipe-graph [recipeType]="selectedRecipeType"></app-recipe-graph>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->

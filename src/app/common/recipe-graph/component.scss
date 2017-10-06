@@ -7,11 +7,12 @@
         margin-bottom: 0;
     }
     min-height: 70vh;
+    border: 1px solid #333;
 }
 
 .job-type-interface {
     h4 {
-        margin-bottom: 5px;
+        margin: 0 0 5px 0;
         font-size: 1.2em;
 
         &.label {
