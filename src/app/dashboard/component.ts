@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 
-import { DashboardApiService } from './api.service';
+import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardFavoritesService } from './favorites.service';
 
 
@@ -10,29 +9,38 @@ import { DashboardFavoritesService } from './favorites.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class DashboardComponent implements OnInit {
-
+export class DashboardComponent implements OnInit, OnDestroy {
+    subscription: any;
     private allJobTypes: any[];
     private favoriteJobTypes: any[];
 
     constructor(
-        private apiService: DashboardApiService,
+        private jobTypesApiService: JobTypesApiService,
         private favoritesService: DashboardFavoritesService
     ) {
         this.allJobTypes = [];
         this.favoriteJobTypes = [];
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
     ngOnInit() {
         this.refreshAllJobTypes();
         this.favoritesService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
         });
     }
+    ngOnDestroy() {
+        this.unsubscribe();
+    }
 
     private refreshAllJobTypes() {
-        this.apiService.getJobTypesAndStatus().then(data => {
-            this.allJobTypes = data.results as any[];
+        this.unsubscribe();
+        this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
+            this.allJobTypes = data.results;
             const favs = [];
             this.allJobTypes.forEach(jt => {
                 if (this.favoritesService.isFavorite(jt.job_type.id)) {
@@ -43,3 +51,4 @@ export class DashboardComponent implements OnInit {
         });
     }
 }
+

@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { ApiResults } from '../../api-results.model';
 import { JobTypesDatatable } from './datatable.model';
 import { JobType } from './api.model';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class JobTypesApiService {
@@ -49,8 +50,25 @@ export class JobTypesApiService {
             .catch(this.handleError);
     }
 
+    getJobTypeStatus(poll?: Boolean): any {
+        if (poll) {
+            const getData = () => {
+                return this.http.get('/mocks/job-types/status')
+                    .switchMap((data) => Observable.timer(5000)
+                        .switchMap(() => getData())
+                        .startWith(ApiResults.transformer(data.json())));
+            };
+            return getData();
+        }
+        return this.http.get('/mocks/job-types/status')
+            .toPromise()
+            .then(response => ApiResults.transformer(response.json()))
+            .catch(this.handleError);
+    }
+
     private handleError(error: any): Promise<any> {
         console.error('An error occurred', error); // for demo purposes only
         return Promise.reject(error.message || error);
     }
 }
+
