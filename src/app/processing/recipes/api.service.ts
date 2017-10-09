@@ -6,13 +6,14 @@ import 'rxjs/add/operator/toPromise';
 import { ApiResults } from '../../api-results.model';
 import { RecipesDatatable } from './datatable.model';
 import { Recipe } from './api.model';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class RecipesApiService {
     constructor(
         private http: Http
     ) { }
-    getRecipes(params: RecipesDatatable): Promise<ApiResults> {
+    getRecipes(params: RecipesDatatable, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         const queryParams = {
@@ -26,6 +27,15 @@ export class RecipesApiService {
             batch_id: params.batch_id,
             include_superseded: params.include_superseded
         };
+        if (poll) {
+            const getData = () => {
+                return this.http.get('/mocks/recipes', { params: queryParams })
+                    .switchMap((data) => Observable.timer(5000)
+                        .switchMap(() => getData())
+                        .startWith(ApiResults.transformer(data.json())));
+            };
+            return getData();
+        }
         return this.http.get('/mocks/recipes', { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))

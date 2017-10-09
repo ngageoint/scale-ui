@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
@@ -17,13 +17,14 @@ import { JobsDatatableService } from '../jobs/datatable.service';
     styleUrls: ['./component.scss']
 })
 
-export class RunningJobsComponent implements OnInit {
+export class RunningJobsComponent implements OnInit, OnDestroy {
     datatableOptions: RunningJobsDatatable;
-    runningJobs: RunningJob[];
+    runningJobs: any;
     selectedJob: RunningJob;
     first: number;
     count: number;
     isInitialized: boolean;
+    subscription: any;
 
     constructor(
         private runningJobsDatatableService: RunningJobsDatatableService,
@@ -37,12 +38,10 @@ export class RunningJobsComponent implements OnInit {
     }
 
     private updateData() {
-        this.runningJobsApiService.getRunningJobs(this.datatableOptions).then(data => {
+        this.unsubscribe();
+        this.subscription = this.runningJobsApiService.getRunningJobs(this.datatableOptions, true).subscribe(data => {
             this.count = data.count;
-            _.forEach(data.results, (result) => {
-                result.longest_running_duration = this.dataService.calculateDuration(result.longest_running, moment.utc().toISOString());
-            });
-            this.runningJobs = data.results as RunningJob[];
+            this.runningJobs = RunningJob.transformer(data.results);
         });
     }
     private updateOptions() {
@@ -59,6 +58,11 @@ export class RunningJobsComponent implements OnInit {
         this.updateData();
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
@@ -101,5 +105,8 @@ export class RunningJobsComponent implements OnInit {
             this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
         }
         this.updateOptions();
+    }
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

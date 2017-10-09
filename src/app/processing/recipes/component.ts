@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
@@ -16,7 +16,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
     styleUrls: ['./component.scss']
 })
 
-export class RecipesComponent implements OnInit {
+export class RecipesComponent implements OnInit, OnDestroy {
     datatableOptions: RecipesDatatable;
     recipes: any;
     recipeTypes: RecipeType[];
@@ -26,6 +26,7 @@ export class RecipesComponent implements OnInit {
     first: number;
     count: number;
     isInitialized: boolean;
+    subscription: any;
 
     constructor(
         private recipesDatatableService: RecipesDatatableService,
@@ -38,7 +39,8 @@ export class RecipesComponent implements OnInit {
     }
 
     private updateData() {
-        this.recipesApiService.getRecipes(this.datatableOptions).then(data => {
+        this.unsubscribe();
+        this.subscription = this.recipesApiService.getRecipes(this.datatableOptions, true).subscribe(data => {
             this.count = data.count;
             this.recipes = Recipe.transformer(data.results);
         });
@@ -80,6 +82,11 @@ export class RecipesComponent implements OnInit {
         });
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
@@ -132,5 +139,8 @@ export class RecipesComponent implements OnInit {
             this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
         }
         this.getRecipeTypes();
+    }
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }
