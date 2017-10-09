@@ -7,7 +7,6 @@ import { RunningJobsApiService } from './api.service';
 import { RunningJobsDatatableService } from './datatable.service';
 import { RunningJobsComponent } from './component';
 import { JobsDatatableService } from '../jobs/datatable.service';
-import { DataService } from '../../data.service';
 
 
 describe('RunningJobsComponent', () => {
@@ -19,7 +18,7 @@ describe('RunningJobsComponent', () => {
             declarations: [RunningJobsComponent],
             imports: [HttpModule],
             providers: [
-                RunningJobsApiService, RunningJobsDatatableService, JobsDatatableService, DataService,
+                RunningJobsApiService, RunningJobsDatatableService, JobsDatatableService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

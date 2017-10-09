@@ -2,13 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
-import * as moment from 'moment';
 
 import { RunningJobsApiService } from './api.service';
 import { RunningJobsDatatable } from './datatable.model';
 import { RunningJobsDatatableService } from './datatable.service';
 import { RunningJob } from './api.model';
-import { DataService } from '../../data.service';
 import { JobsDatatableService } from '../jobs/datatable.service';
 
 @Component({
@@ -29,7 +27,6 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
     constructor(
         private runningJobsDatatableService: RunningJobsDatatableService,
         private runningJobsApiService: RunningJobsApiService,
-        private dataService: DataService,
         private jobsDatatableService: JobsDatatableService,
         private router: Router,
         private route: ActivatedRoute
