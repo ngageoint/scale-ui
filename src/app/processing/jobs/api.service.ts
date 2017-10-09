@@ -7,13 +7,14 @@ import { ApiResults } from '../../api-results.model';
 import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
 import { JobExecution } from './execution.model';
+import { Observable } from 'rxjs/Rx';
 
 @Injectable()
 export class JobsApiService {
     constructor(
         private http: Http
     ) { }
-    getJobs(params: JobsDatatable): Promise<ApiResults> {
+    getJobs(params: JobsDatatable, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         const queryParams = {
@@ -31,6 +32,15 @@ export class JobsApiService {
             error_category: params.error_category,
             include_superseded: params.include_superseded
         };
+        if (poll) {
+            const getData = () => {
+                return this.http.get('/mocks/jobs', { params: queryParams })
+                    .switchMap((data) => Observable.timer(5000)
+                        .switchMap(() => getData())
+                        .startWith(ApiResults.transformer(data.json())));
+            };
+            return getData();
+        }
         return this.http.get('/mocks/jobs', { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))

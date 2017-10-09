@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent, Dialog, SelectItem } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -18,7 +18,7 @@ import { JobExecution } from './execution.model';
     styleUrls: ['./component.scss']
 })
 
-export class JobsComponent implements OnInit {
+export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
     @Input() isChild: boolean;
     @Output() datatableChange = new EventEmitter<boolean>();
@@ -38,6 +38,7 @@ export class JobsComponent implements OnInit {
     started: string;
     ended: string;
     isInitialized: boolean;
+    subscription: any;
 
     constructor(
         private jobsDatatableService: JobsDatatableService,
@@ -85,7 +86,8 @@ export class JobsComponent implements OnInit {
     }
 
     private updateData() {
-        this.jobsApiService.getJobs(this.datatableOptions).then(data => {
+        this.unsubscribe();
+        this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.count = data.count;
             this.jobs = Job.transformer(data.results);
         });
@@ -133,6 +135,11 @@ export class JobsComponent implements OnInit {
 
     getUnicode(code) {
         return `&#x${code};`;
+    }
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -247,5 +254,8 @@ export class JobsComponent implements OnInit {
         this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
         this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
         this.getJobTypes();
+    }
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }
