@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 
 import { RecipeTypesApiService } from './api.service';
 import { RecipeType } from './api.model';
-import { RecipeTypesDatatable } from './datatable.model';
 import { JobType } from '../job-types/api.model';
 
 @Component({
@@ -15,15 +14,10 @@ import { JobType } from '../job-types/api.model';
 })
 
 export class RecipeTypesComponent implements OnInit {
-    datatableOptions: RecipeTypesDatatable;
     recipeTypes: SelectItem[];
     selectedRecipeType: SelectItem;
     selectedRecipeTypeDetail: any;
-    // selectedRecipeTypeKeys: string[];
     selectedJobType: JobType;
-    first: number;
-    count: number;
-    // isInitialized: boolean;
 
     constructor(
         private recipeTypesApiService: RecipeTypesApiService,
@@ -53,7 +47,6 @@ export class RecipeTypesComponent implements OnInit {
         this.recipeTypes = [];
         const params = this.route.snapshot ? this.route.snapshot.queryParams : { id: null };
         this.recipeTypesApiService.getRecipeTypes().then(data => {
-            this.count = data.count;
             _.forEach(data.results, (result) => {
                 this.recipeTypes.push({
                     label: result.title + ' ' + result.version,

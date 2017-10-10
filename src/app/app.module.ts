@@ -53,11 +53,9 @@ import { RecipesApiService } from './processing/recipes/api.service';
 import { RecipesDatatableService } from './processing/recipes/datatable.service';
 import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesApiService } from './configuration/job-types/api.service';
-import { JobTypesDatatableService } from './configuration/job-types/datatable.service';
 import { JobTypesImportComponent } from './configuration/job-types/import.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { RecipeTypesApiService } from './configuration/recipe-types/api.service';
-import { RecipeTypesDatatableService } from './configuration/recipe-types/datatable.service';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { StatusComponent } from './navbar/status/status.component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
@@ -158,13 +156,11 @@ import { RecipeGraphComponent } from './common/recipe-graph/component';
         JobsApiService,
         JobsDatatableService,
         JobTypesApiService,
-        JobTypesDatatableService,
         RecipesApiService,
         RecipesDatatableService,
         ColorService,
         DashboardFavoritesService,
         RecipeTypesApiService,
-        RecipeTypesDatatableService,
         WorkspacesApiService,
         SourcesApiService,
         SourcesDatatableService,

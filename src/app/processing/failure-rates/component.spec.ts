@@ -5,7 +5,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { FailureRatesComponent } from './component';
 import { FailureRatesDatatableService } from './datatable.service';
-import { JobTypesDatatableService } from '../../configuration/job-types/datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 
@@ -19,7 +18,7 @@ describe('JobsComponent', () => {
             declarations: [FailureRatesComponent],
             imports: [HttpModule],
             providers: [
-                FailureRatesDatatableService, JobTypesDatatableService, JobTypesApiService, MetricsApiService,
+                FailureRatesDatatableService, JobTypesApiService, MetricsApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

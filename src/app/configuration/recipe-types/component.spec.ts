@@ -4,7 +4,6 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RecipeTypesApiService } from './api.service';
-import { RecipeTypesDatatableService } from './datatable.service';
 import { RecipeTypesComponent } from './component';
 
 
@@ -17,7 +16,7 @@ describe('RecipeTypesComponent', () => {
             declarations: [RecipeTypesComponent],
             imports: [HttpModule],
             providers: [
-                RecipeTypesApiService, RecipeTypesDatatableService,
+                RecipeTypesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

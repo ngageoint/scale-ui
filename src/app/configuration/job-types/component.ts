@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
+import * as _ from 'lodash';
 
 import { JobTypesApiService } from './api.service';
 import { JobType } from './api.model';
-import { JobTypesDatatable } from './datatable.model';
-import { JobTypesDatatableService } from './datatable.service';
 
 @Component({
     selector: 'app-job-types',
@@ -14,105 +13,50 @@ import { JobTypesDatatableService } from './datatable.service';
 })
 
 export class JobTypesComponent implements OnInit {
-    datatableOptions: JobTypesDatatable;
-    jobTypes: JobType[];
-    selectedJobType: JobType;
-    selectedJobTypeKeys: string[];
-    first: number;
-    count: number;
-    isInitialized: boolean;
+    jobTypes: SelectItem[];
+    selectedJobType: SelectItem;
+    selectedJobTypeDetail: any;
 
     constructor(
-        private jobTypesDatatableService: JobTypesDatatableService,
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
         private route: ActivatedRoute
-    ) {
-        this.isInitialized = false;
-    }
+    ) {}
 
-    private updateData() {
-        this.jobTypesApiService.getJobTypes(this.datatableOptions).then(data => {
-            this.count = data.count;
-            this.jobTypes = data.results as JobType[];
-        });
-    }
-    private updateOptions() {
-        this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
-
-        // update querystring
-        this.router.navigate(['/configuration/job-types'], {
-            queryParams: this.datatableOptions,
-            replaceUrl: true
-        });
-
-        this.updateData();
-    }
     private getJobTypeDetail(id: number) {
         this.jobTypesApiService.getJobType(id).then(data => {
-            this.selectedJobType = data as JobType;
-            this.selectedJobTypeKeys = Object.keys(this.selectedJobType);
+            this.selectedJobTypeDetail = JobType.transformer(data);
         });
     }
 
     getUnicode(code) {
         return `&#x${code};`;
     }
-    paginate(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: e.first,
-            rows: parseInt(e.rows, 10)
-        });
-        this.updateOptions();
-    }
-    onLazyLoad(e: LazyLoadEvent) {
-        // let ngOnInit handle loading data to ensure query params are respected
-        if (this.isInitialized) {
-            this.datatableOptions = Object.assign(this.datatableOptions, {
-                first: 0,
-                sortField: e.sortField,
-                sortOrder: e.sortOrder
-            });
-            this.updateOptions();
-        } else {
-            // data was just loaded by ngOnInit, so set flag to true
-            this.isInitialized = true;
-        }
-    }
     onRowSelect(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            id: e.data.id
-        });
-        this.jobTypesDatatableService.setJobTypesDatatableOptions(this.datatableOptions);
         this.router.navigate(['/configuration/job-types'], {
-            queryParams: this.datatableOptions
+            queryParams: {
+                id: e.value.id,
+            },
+            replaceUrl: true
         });
-        this.getJobTypeDetail(e.data.id);
+        this.getJobTypeDetail(e.value.id);
     }
     ngOnInit() {
-        if (this.route.snapshot &&
-            Object.keys(this.route.snapshot.queryParams).length > 0) {
-
-            const params = this.route.snapshot.queryParams;
-            this.datatableOptions = {
-                first: parseInt(params.first, 10),
-                rows: parseInt(params.rows, 10),
-                sortField: params.sortField,
-                sortOrder: parseInt(params.sortOrder, 10),
-                id: params.id,
-                started: params.started,
-                ended: params.ended,
-                name: params.name,
-                category: params.category,
-                is_active: params.is_active,
-                is_operational: params.is_operational
-            };
-        } else {
-            this.datatableOptions = this.jobTypesDatatableService.getJobTypesDatatableOptions();
-        }
-        this.updateOptions();
-        if (this.datatableOptions.id) {
-            this.getJobTypeDetail(this.datatableOptions.id);
-        }
+        this.jobTypes = [];
+        const params = this.route.snapshot ? this.route.snapshot.queryParams : { id: null };
+        this.jobTypesApiService.getJobTypes().then(data => {
+            _.forEach(data.results, (result) => {
+                this.jobTypes.push({
+                    label: result.title + ' ' + result.version,
+                    value: result
+                });
+                if (params.id && parseInt(params.id, 10) === result.id) {
+                    this.selectedJobType = _.clone(result);
+                }
+            });
+            if (params.id) {
+                this.getJobTypeDetail(params.id);
+            }
+        });
     }
 }

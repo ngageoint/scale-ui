@@ -4,7 +4,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../../api-results.model';
-import { RecipeTypesDatatable } from './datatable.model';
 import { RecipeType } from './api.model';
 
 @Injectable()
@@ -12,7 +11,7 @@ export class RecipeTypesApiService {
     constructor( private http: Http) {
     }
 
-    getRecipeTypes(params?: RecipeTypesDatatable): Promise<ApiResults> {
+    getRecipeTypes(params?: any): Promise<ApiResults> {
         let queryParams = {};
         if (params) {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;

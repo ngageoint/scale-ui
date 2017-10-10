@@ -4,7 +4,6 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../../api-results.model';
-import { JobTypesDatatable } from './datatable.model';
 import { JobType } from './api.model';
 import { Observable } from 'rxjs/Observable';
 
@@ -13,7 +12,7 @@ export class JobTypesApiService {
     constructor( private http: Http) {
     }
 
-    getJobTypes(params?: JobTypesDatatable): Promise<ApiResults> {
+    getJobTypes(params?: any): Promise<ApiResults> {
         let queryParams = {};
         if (params) {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
