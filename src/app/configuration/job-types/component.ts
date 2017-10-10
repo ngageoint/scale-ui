@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SelectItem } from 'primeng/primeng';
+import { SelectItem, TreeNode } from 'primeng/primeng';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from './api.service';
-import { JobType } from './api.model';
 
 @Component({
     selector: 'app-job-types',
@@ -16,15 +15,58 @@ export class JobTypesComponent implements OnInit {
     jobTypes: SelectItem[];
     selectedJobType: SelectItem;
     selectedJobTypeDetail: any;
+    interfaceData: TreeNode[];
+    chartConfig: any;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
         private route: ActivatedRoute
-    ) {}
+    ) {
+        this.chartConfig = {
+            cutoutPercentage: 75,
+            rotation: 0.5 * Math.PI, // start from bottom
+            legend: {
+                display: false,
+                position: 'bottom'
+            },
+            elements: {
+                arc: {
+                    borderWidth: 0
+                }
+            }
+        };
+    }
 
+    private setInterfaceData(data) {
+        const dataArr = [];
+        _.forEach(data, (d) => {
+            dataArr.push({
+                data: d
+            });
+        });
+        return dataArr;
+    }
     private getJobTypeDetail(id: number) {
         this.jobTypesApiService.getJobType(id).then(data => {
+            this.interfaceData = [
+                {
+                    data: {
+                        name: 'Input Data',
+                        type: '',
+                        media_types: ''
+                    },
+                    children: this.setInterfaceData(data.job_type_interface.input_data)
+                },
+                {
+                    data: {
+                        name: 'Output Data',
+                        type: '',
+                        media_type: ''
+                    },
+                    children: this.setInterfaceData(data.job_type_interface.output_data)
+                }
+            ];
             this.selectedJobTypeDetail = data;
         });
     }

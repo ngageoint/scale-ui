@@ -29,6 +29,7 @@ import { PanelModule } from 'primeng/components/panel/panel';
 import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { StepsModule } from 'primeng/components/steps/steps';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
+import { TreeTableModule } from 'primeng/components/treetable/treetable';
 
 // Code Mirror
 import { CodemirrorModule } from 'ng2-codemirror';
@@ -145,7 +146,8 @@ import { RecipeGraphComponent } from './common/recipe-graph/component';
         ChipsModule,
         AccordionModule,
         TooltipModule,
-        MultiSelectModule
+        MultiSelectModule,
+        TreeTableModule
     ],
     exports: [
         DataTableModule,

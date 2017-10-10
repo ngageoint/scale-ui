@@ -51,11 +51,12 @@ h2:first-of-type {
     thead {
         th {
             text-align: left;
+            padding: 5px !important;
         }
     }
 
     tbody td {
-        padding: 5px;
+        padding: 5px !important;
     }
 }
 
