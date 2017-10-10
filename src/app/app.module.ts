@@ -47,7 +47,6 @@ import { JobsDatatableService } from './processing/jobs/datatable.service';
 import { JobDetailsComponent } from './processing/jobs/details.component';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/component';
-import { DashboardApiService } from './dashboard/api.service';
 import { DashboardFavoritesService } from './dashboard/favorites.service';
 import { RecipesComponent } from './processing/recipes/component';
 import { RecipesApiService } from './processing/recipes/api.service';
@@ -163,7 +162,6 @@ import { RecipeGraphComponent } from './common/recipe-graph/component';
         RecipesApiService,
         RecipesDatatableService,
         ColorService,
-        DashboardApiService,
         DashboardFavoritesService,
         RecipeTypesApiService,
         RecipeTypesDatatableService,
