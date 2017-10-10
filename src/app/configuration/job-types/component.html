@@ -1,11 +1,12 @@
 <h2>Job Types</h2>
 <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
             [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select Job Type"></p-dropdown>
-<div *ngIf="selectedJobType">
-    <h2><i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i> {{ selectedJobTypeDetail.title }}
-        {{ selectedJobTypeDetail.version }}</h2>
+<div *ngIf="selectedJobTypeDetail">
+    <hr />
+    <h3><i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i> {{ selectedJobTypeDetail.title }}
+        {{ selectedJobTypeDetail.version }}</h3>
     <div class="ui-g">
-        <div class="ui-g-8">
+        <div class="ui-g-8 ui-g-nopad">
             <p>{{ selectedJobTypeDetail.description }}</p>
             <strong>Author: </strong> {{ selectedJobTypeDetail.author_name }}<br />
             <a href="{{ selectedJobTypeDetail.author_url }}" target="_blank">Algorithm Description</a>
@@ -62,7 +63,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="ui-g-4">
+        <div class="ui-g-4 ui-g-nopad">
             <dl class="dl-horizontal">
                 <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
                 <dd *ngIf="selectedJobTypeDetail.created">{{ selectedJobTypeDetail.created }}</dd>

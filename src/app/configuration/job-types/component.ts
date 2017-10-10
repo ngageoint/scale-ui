@@ -25,7 +25,7 @@ export class JobTypesComponent implements OnInit {
 
     private getJobTypeDetail(id: number) {
         this.jobTypesApiService.getJobType(id).then(data => {
-            this.selectedJobTypeDetail = JobType.transformer(data);
+            this.selectedJobTypeDetail = data;
         });
     }
 
