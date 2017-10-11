@@ -12,7 +12,7 @@ import { DashboardFavoritesService } from './favorites.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     subscription: any;
-    allJobTypes: any[];
+    activeJobTypes: any[];
     favoriteJobTypes: any[];
     total: number;
     failed: number;
@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private jobTypesApiService: JobTypesApiService,
         private favoritesService: DashboardFavoritesService
     ) {
-        this.allJobTypes = [];
+        this.activeJobTypes = [];
         this.favoriteJobTypes = [];
     }
 
@@ -44,9 +44,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private refreshAllJobTypes() {
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
-            this.allJobTypes = data.results;
+            this.activeJobTypes = _.filter(data.results, (result) => {
+                const jobCounts = _.filter(result.job_counts, (count) => {
+                    return count.status !== 'COMPLETED';
+                });
+                return jobCounts.length > 0;
+            });
 
-            const allJobCounts = _.flatten(_.map(this.allJobTypes, 'job_counts'));
+            const allJobCounts = _.flatten(_.map(data.results, 'job_counts'));
             const sysErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
                 return jobCount.status === 'FAILED' && jobCount.category === 'SYSTEM';
             }), 'count'));
@@ -76,7 +81,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ];
 
             const favs = [];
-            this.allJobTypes.forEach(jt => {
+            this.activeJobTypes.forEach(jt => {
                 if (this.favoritesService.isFavorite(jt.job_type.id)) {
                     favs.push(jt);
                 }
@@ -85,4 +90,3 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
 }
-

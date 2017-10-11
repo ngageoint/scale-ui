@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SelectItem, TreeNode } from 'primeng/primeng';
 import * as _ from 'lodash';
@@ -11,12 +11,13 @@ import { JobTypesApiService } from './api.service';
     styleUrls: ['./component.scss']
 })
 
-export class JobTypesComponent implements OnInit {
+export class JobTypesComponent implements OnInit, OnDestroy {
     jobTypes: SelectItem[];
     selectedJobType: SelectItem;
     selectedJobTypeDetail: any;
     interfaceData: TreeNode[];
     chartConfig: any;
+    routeParams: any;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
@@ -75,30 +76,30 @@ export class JobTypesComponent implements OnInit {
         return `&#x${code};`;
     }
     onRowSelect(e) {
-        this.router.navigate(['/configuration/job-types'], {
-            queryParams: {
-                id: e.value.id,
-            },
-            replaceUrl: true
-        });
-        this.getJobTypeDetail(e.value.id);
+        this.router.navigate([`/configuration/job-types/${e.value.id}`]);
     }
     ngOnInit() {
         this.jobTypes = [];
-        const params = this.route.snapshot ? this.route.snapshot.queryParams : { id: null };
+        let id = null;
+        this.routeParams = this.route.paramMap.subscribe(params => {
+            id = +params.get('id');
+        });
         this.jobTypesApiService.getJobTypes().then(data => {
             _.forEach(data.results, (result) => {
                 this.jobTypes.push({
                     label: result.title + ' ' + result.version,
                     value: result
                 });
-                if (params.id && parseInt(params.id, 10) === result.id) {
+                if (id && id === result.id) {
                     this.selectedJobType = _.clone(result);
                 }
             });
-            if (params.id) {
-                this.getJobTypeDetail(params.id);
+            if (id) {
+                this.getJobTypeDetail(id);
             }
         });
+    }
+    ngOnDestroy() {
+        this.routeParams.unsubscribe();
     }
 }

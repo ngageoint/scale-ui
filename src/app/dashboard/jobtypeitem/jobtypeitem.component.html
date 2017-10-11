@@ -2,20 +2,20 @@
 <!-- <span>{{this.jobType.title}} {{this.jobType.version}}</span> -->
 <div class="jti">
     <div [class]="getStatusClass()">
-        <i *ngIf="this.getRunningCount() > 0" class="jti__status-isrunning fa fa-circle-o-notch"></i>
-        <i class="jti__status-icon" [innerHTML]="this.getUnicode(this.item.job_type.icon_code)"></i>
+        <i *ngIf="getRunningCount() > 0" class="jti__status-isrunning fa fa-circle-o-notch"></i>
+        <i class="jti__status-icon" [innerHTML]="getUnicode(item.job_type.icon_code)"></i>
         <span class="jti__status-runningcount">{{ getRunningCount() }}</span>
     </div>
     <div class="jti__info">
         <div class="jti__meta">
-            <div class="jti__heading">{{ this.item.job_type.title }}</div>
+            <div class="jti__heading">{{ item.job_type.title }}</div>
             <div class="jti__subheading">
-                Version {{ this.item.job_type.version }}
+                Version {{ item.job_type.version }}
             </div>
         </div>
         <div class="jti__toolbar">
-            <div class="jti__btn">Details</div>
-            <div class="jti__btn">Jobs</div>
+            <a [routerLink]="['/configuration/job-types/', item.job_type.id]" class="jti__btn">Details</a>
+            <a routerLink="/processing/jobs" [queryParams]="{job_type_id: item.job_type.id}" class="jti__btn">Jobs</a>
             <div class="jti__btn" (click)="toggleFavorite()"><i [class]="getFavoriteBtnClass()"></i></div>
         </div>
     </div>
