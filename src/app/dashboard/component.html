@@ -1,7 +1,7 @@
 <div class="dashboard">
     <div class="algpicker">
 
-        <h2>Favorites ({{ this.favoriteJobTypes.length }})</h2>
+        <h2>Favorites ({{ favoriteJobTypes.length }})</h2>
         <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding"
             emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
             <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
@@ -12,7 +12,7 @@
         </p-dataTable>
 
 
-        <h2>All Jobs ({{ this.allJobTypes.length }})</h2>
+        <h2>All Jobs ({{ allJobTypes.length }})</h2>
         <p-dataTable [value]="allJobTypes" styleClass="nopadding"
             [scrollable]="true" scrollHeight="500px">
             <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
@@ -25,7 +25,7 @@
     </div> <!-- algpicker -->
 
     <div class="charts">
-        <app-errordials></app-errordials>
+        <app-error-dials></app-error-dials>
         <app-historychart></app-historychart>
     </div>
 </div>

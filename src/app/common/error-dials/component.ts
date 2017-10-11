@@ -1,19 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ColorService } from '../../color.service';
 
-
 @Component({
-    selector: 'app-errordials',
-    templateUrl: './errordials.component.html',
-    styleUrls: ['./errordials.component.scss']
+    selector: 'app-error-dials',
+    templateUrl: './component.html',
+    styleUrls: ['./component.scss']
 })
-export class ErrordialsComponent implements OnInit {
-
-    private jobType: any;
-    private data: any;
-    private chartConfig: any;
-    private totalJobs: number;
-    private failedJobs: number;
+export class ErrorDialsComponent implements OnInit {
+    jobType: any;
+    data: any;
+    chartConfig: any;
+    totalJobs: number;
+    failedJobs: number;
 
     constructor(
         private colorService: ColorService
@@ -57,7 +55,6 @@ export class ErrordialsComponent implements OnInit {
     }
 
     ngOnInit() {
-
         const portions = {};
         let failures = 0;
         let total = 0;

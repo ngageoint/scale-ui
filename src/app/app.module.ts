@@ -64,7 +64,6 @@ import { FooterComponent } from './footer/footer.component';
 import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.component';
 import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
-import { ErrordialsComponent } from './dashboard/errordials/errordials.component';
 import { HistorychartComponent } from './dashboard/historychart/historychart.component';
 import { SourcesComponent } from './data/sources/component';
 import { SourcesApiService } from './data/sources/api.service';
@@ -82,6 +81,7 @@ import { RunningJobsApiService } from './processing/running-jobs/api.service';
 import { LogViewerComponent } from './common/log-viewer/component';
 import { LogViewerApiService } from './common/log-viewer/api.service';
 import { RecipeGraphComponent } from './common/recipe-graph/component';
+import { ErrorDialsComponent } from './common/error-dials/component';
 
 
 @NgModule({
@@ -103,7 +103,6 @@ import { RecipeGraphComponent } from './common/recipe-graph/component';
         FooterComponent,
         JobtypeitemComponent,
         WorkspacesComponent,
-        ErrordialsComponent,
         HistorychartComponent,
         SourcesComponent,
         SourceDetailsComponent,
@@ -112,7 +111,8 @@ import { RecipeGraphComponent } from './common/recipe-graph/component';
         MetricsComponent,
         RunningJobsComponent,
         LogViewerComponent,
-        RecipeGraphComponent
+        RecipeGraphComponent,
+        ErrorDialsComponent
     ],
     imports: [
         AppRoutingModule,

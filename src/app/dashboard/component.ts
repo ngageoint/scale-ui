@@ -11,8 +11,8 @@ import { DashboardFavoritesService } from './favorites.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     subscription: any;
-    private allJobTypes: any[];
-    private favoriteJobTypes: any[];
+    allJobTypes: any[];
+    favoriteJobTypes: any[];
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
