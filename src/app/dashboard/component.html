@@ -24,8 +24,8 @@
 
     </div> <!-- algpicker -->
 
-    <div class="charts">
-        <app-error-dials></app-error-dials>
+    <div class="charts" *ngIf="allJobTypes.length > 0">
+        <app-error-dials [total]="total" [failed]="failed" [data]="chartData" label="All Jobs"></app-error-dials>
         <app-historychart></app-historychart>
     </div>
 </div>

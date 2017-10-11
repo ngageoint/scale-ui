@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import * as _ from 'lodash';
+
 import { ColorService } from '../../color.service';
 
 @Component({
@@ -7,88 +9,27 @@ import { ColorService } from '../../color.service';
     styleUrls: ['./component.scss']
 })
 export class ErrorDialsComponent implements OnInit {
+    @Input() label: string;
+    @Input() total: number;
+    @Input() failed: number;
+    @Input() data: any;
     jobType: any;
-    data: any;
+    chartData: any;
     chartConfig: any;
-    totalJobs: number;
-    failedJobs: number;
 
     constructor(
         private colorService: ColorService
-    ) {
-        // this should be passed in
-        this.jobType = {
-            'job_type': {
-                'id': 2, 'name': 'sam', 'version': '1.0', 'title': 'Spectral Angle Mapper',
-                'description': 'The algorithm determines the...',
-                'category': 'spectral', 'author_name': null, 'author_url': null,
-                'is_system': true, 'is_long_running': false, 'is_active': true,
-                'is_operational': true, 'is_paused': false, 'icon_code': 'f0e7'
-            },
-            'job_counts': [{
-                'status': 'RUNNING',
-                'count': 75,
-                'most_recent': '2015-08-31T22:09:12.674Z',
-                'category': null
-            }, {
-                'status': 'FAILED',
-                'count': 45,
-                'most_recent': '2015-08-31T22:09:12.674Z',
-                'category': 'SYSTEM'
-            }, {
-                'status': 'FAILED',
-                'count': 56,
-                'most_recent': '2015-08-31T22:09:12.674Z',
-                'category': 'DATA'
-            }, {
-                'status': 'FAILED',
-                'count': 2,
-                'most_recent': '2015-08-31T22:09:12.674Z',
-                'category': 'ALGORITHM'
-            }, {
-                'status': 'COMPLETED',
-                'count': 75,
-                'most_recent': '2015-08-31T21:51:12.674Z',
-                'category': null
-            }]
-        };
-    }
+    ) {}
 
     ngOnInit() {
-        const portions = {};
-        let failures = 0;
-        let total = 0;
-        for (let i = 0; i < this.jobType.job_counts.length; i++) {
-            const count = this.jobType.job_counts[i];
-            if (count.status === 'RUNNING') {
-                continue; // skip it
-            } else if (count.status === 'COMPLETED') {
-                portions['COMPLETED'] = count.count;
-                total += count.count;
-            } else if (count.status === 'FAILED') {
-                portions[count.category] = count.count;
-                total += count.count;
-                failures += count.count;
-            }
-        }
-
-        const labels = ['COMPLETED', 'SYSTEM', 'DATA', 'ALGORITHM'];
-        const values = [];
-        for (let i = 0; i < labels.length; i++) {
-            values.push(portions[labels[i]]);
-        }
-
-        this.totalJobs = total;
-        this.failedJobs = failures;
-        this.data = {
-            labels: labels,
+        this.chartData = {
+            labels: _.map(this.data, 'label'),
             datasets: [{
-                data: values,
+                data: _.map(this.data, 'value'),
                 backgroundColor: [
-                    this.colorService.COMPLETED,  // completed
-                    this.colorService.ERROR_DATA,  // data
+                    this.colorService.ERROR_SYSTEM,   // system
                     this.colorService.ERROR_ALGORITHM,  // algorithm
-                    this.colorService.ERROR_SYSTEM   // system
+                    this.colorService.ERROR_DATA  // data
                 ],
                 hoverBackgroundColor: []
             }]

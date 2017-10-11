@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardFavoritesService } from './favorites.service';
@@ -13,6 +14,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     subscription: any;
     allJobTypes: any[];
     favoriteJobTypes: any[];
+    total: number;
+    failed: number;
+    chartData: any;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
@@ -41,6 +45,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
             this.allJobTypes = data.results;
+
+            const allJobCounts = _.flatten(_.map(this.allJobTypes, 'job_counts'));
+            const sysErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+                return jobCount.status === 'FAILED' && jobCount.category === 'SYSTEM';
+            }), 'count'));
+            const algErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+                return jobCount.status === 'FAILED' && jobCount.category === 'ALGORITHM';
+            }), 'count'));
+            const dataErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+                return jobCount.status === 'FAILED' && jobCount.category === 'DATA';
+            }), 'count'));
+            this.total = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+                return jobCount.status !== 'RUNNING';
+            }), 'count'));
+            this.failed = sysErrors + algErrors + dataErrors;
+            this.chartData = [
+                {
+                    label: 'SYSTEM',
+                    value: sysErrors
+                },
+                {
+                    label: 'ALGORITHM',
+                    value: algErrors
+                },
+                {
+                    label: 'DATA',
+                    value: dataErrors
+                }
+            ];
+
             const favs = [];
             this.allJobTypes.forEach(jt => {
                 if (this.favoritesService.isFavorite(jt.job_type.id)) {
