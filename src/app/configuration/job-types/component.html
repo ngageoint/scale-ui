@@ -1,8 +1,11 @@
 <h2>Job Types</h2>
 <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
-            [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select Job Type"></p-dropdown>
+            [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."></p-dropdown>
+<hr />
+<div class="text-center" *ngIf="!selectedJobTypeDetail">
+    <h3>Select a job type to view its details</h3>
+</div>
 <div *ngIf="selectedJobTypeDetail">
-    <hr />
     <h3>
         <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i> {{ selectedJobTypeDetail.title }}
         {{ selectedJobTypeDetail.version }}
@@ -14,17 +17,6 @@
                 <a href="{{ selectedJobTypeDetail.author_url }}" target="_blank">Algorithm Description</a><br />
                 {{ selectedJobTypeDetail.description }}
             </p>
-            <div class="ui-g">
-                <div class="ui-g-4 text-center">
-                    <h4>6 Hours</h4>
-                </div>
-                <div class="ui-g-4 text-center">
-                    <h4>12 Hours</h4>
-                </div>
-                <div class="ui-g-4 text-center">
-                    <h4>24 Hours</h4>
-                </div>
-            </div>
             <h3>Interface</h3>
             <table class="table table-striped margin-top-md" *ngIf="selectedJobTypeDetail.job_type_interface">
                 <tbody>
@@ -56,6 +48,13 @@
                 </tr>
                 </tbody>
             </table>
+            <h3 class="text-center">Recent Performance</h3>
+            <hr />
+            <div class="error-dials">
+                <app-error-dials [total]="total6h" [failed]="failed6h" [data]="chartData6h" label="6 Hours"></app-error-dials>
+                <app-error-dials [total]="total12h" [failed]="failed12h" [data]="chartData12h" label="12 Hours"></app-error-dials>
+                <app-error-dials [total]="total24h" [failed]="failed24h" [data]="chartData24h" label="24 Hours"></app-error-dials>
+            </div>
         </div>
         <div class="ui-g-4 ui-g-nopad">
             <dl class="dl-horizontal">

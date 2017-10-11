@@ -22,6 +22,11 @@ dl {
     margin-top: 0;
 }
 
+.error-dials {
+    display: flex;
+    justify-content: space-between;
+}
+
 ::ng-deep .ui-treetable {
     thead {
         th {

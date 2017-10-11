@@ -1,7 +1,5 @@
-<div class="error-dials">
-    <div class="error-dial">
-        <h3>{{ label }}</h3>
-        <h4>{{ failed }} Failure(s) / {{ total }} Total</h4>
-        <p-chart type="doughnut" [options]="chartConfig" [data]="chartData"></p-chart>
-    </div>
+<div class="error-dial">
+    <h3>{{ label }}</h3>
+    <h4>{{ failed }} Failure(s) / {{ total }} Total</h4>
+    <p-chart type="doughnut" [options]="chartConfig" [data]="chartData"></p-chart>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SelectItem, TreeNode } from 'primeng/primeng';
 import * as _ from 'lodash';
 
@@ -16,27 +16,51 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     selectedJobType: SelectItem;
     selectedJobTypeDetail: any;
     interfaceData: TreeNode[];
-    chartConfig: any;
     routeParams: any;
+    chartData6h: any;
+    total6h: number;
+    failed6h: number;
+    chartData12h: any;
+    total12h: number;
+    failed12h: number;
+    chartData24h: any;
+    total24h: number;
+    failed24h: number;
+    private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
+    private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
         private route: ActivatedRoute
     ) {
-        this.chartConfig = {
-            cutoutPercentage: 75,
-            rotation: 0.5 * Math.PI, // start from bottom
-            legend: {
-                display: false,
-                position: 'bottom'
-            },
-            elements: {
-                arc: {
-                    borderWidth: 0
+        if (this.router.events) {
+            this.router.events.subscribe(currentRoute => {
+                if (currentRoute instanceof NavigationEnd) {
+                    this.jobTypes = [];
+                    let id = null;
+                    if (this.route && this.route.paramMap) {
+                        this.routeParams = this.route.paramMap.subscribe(params => {
+                            id = +params.get('id');
+                        });
+                    }
+                    this.jobTypesApiService.getJobTypes().then(data => {
+                        _.forEach(data.results, (result) => {
+                            this.jobTypes.push({
+                                label: result.title + ' ' + result.version,
+                                value: result
+                            });
+                            if (id && id === result.id) {
+                                this.selectedJobType = _.clone(result);
+                            }
+                        });
+                        if (id) {
+                            this.getJobTypeDetail(id);
+                        }
+                    });
                 }
-            }
-        };
+            });
+        }
     }
 
     private setInterfaceData(data) {
@@ -48,7 +72,48 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         });
         return dataArr;
     }
+    private getChartData(data: any): any[] {
+        const returnData = [];
+        const getCount = (status: string, category?: string) => {
+            if (category) {
+                return _.sum(_.map(_.filter(data, (jobCount) => {
+                    return jobCount.status === status && jobCount.category === category;
+                }), 'count'));
+            }
+            return _.sum(_.map(_.filter(data, (jobCount) => {
+                return jobCount.status === status;
+            }), 'count'));
+        };
+
+        _.forEach(this.STATUS_VALUES, status => {
+            if (status === 'FAILED') {
+                _.forEach(this.CATEGORY_VALUES, category => {
+                    returnData.push({
+                        label: category,
+                        value: getCount(status, category)
+                    });
+                });
+            } else {
+                returnData.push({
+                    label: status,
+                    value: getCount(status)
+                });
+            }
+        });
+        return returnData;
+    }
+    private getChartTotals(data: any, type: string): number {
+        if (type === 'total') {
+            return _.sum(_.map(_.filter(data, jobCount => {
+                return jobCount.status !== 'RUNNING';
+            }), 'count'));
+        }
+        return _.sum(_.map(_.filter(data, jobCount => {
+            return jobCount.status === 'FAILED';
+        }), 'count'));
+    }
     private getJobTypeDetail(id: number) {
+        console.log('getJobTypeDetail');
         this.jobTypesApiService.getJobType(id).then(data => {
             this.interfaceData = [
                 {
@@ -68,6 +133,15 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     children: this.setInterfaceData(data.job_type_interface.output_data)
                 }
             ];
+            this.chartData6h = this.getChartData(data.job_counts_6h);
+            this.total6h = this.getChartTotals(data.job_counts_6h, 'total');
+            this.failed6h = this.getChartTotals(data.job_counts_6h, 'failed');
+            this.chartData12h = this.getChartData(data.job_counts_12h);
+            this.total12h = this.getChartTotals(data.job_counts_12h, 'total');
+            this.failed12h = this.getChartTotals(data.job_counts_12h, 'failed');
+            this.chartData24h = this.getChartData(data.job_counts_24h);
+            this.total24h = this.getChartTotals(data.job_counts_24h, 'total');
+            this.failed24h = this.getChartTotals(data.job_counts_24h, 'failed');
             this.selectedJobTypeDetail = data;
         });
     }
@@ -79,29 +153,10 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.router.navigate([`/configuration/job-types/${e.value.id}`]);
     }
     ngOnInit() {
-        this.jobTypes = [];
-        let id = null;
-        if (this.route && this.route.paramMap) {
-            this.routeParams = this.route.paramMap.subscribe(params => {
-                id = +params.get('id');
-            });
-        }
-        this.jobTypesApiService.getJobTypes().then(data => {
-            _.forEach(data.results, (result) => {
-                this.jobTypes.push({
-                    label: result.title + ' ' + result.version,
-                    value: result
-                });
-                if (id && id === result.id) {
-                    this.selectedJobType = _.clone(result);
-                }
-            });
-            if (id) {
-                this.getJobTypeDetail(id);
-            }
-        });
     }
     ngOnDestroy() {
-        this.routeParams.unsubscribe();
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
     }
 }

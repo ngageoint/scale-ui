@@ -1,18 +1,13 @@
-.error-dials {
-    display: flex;
+.error-dial {
+    padding: 1.0em;
+    padding-top: 0;
 
-    .error-dial {
-        padding: 1.0em;
-        padding-top: 0;
-        width: 30%;
+    h3, h4 {
+        margin: 0.25em 0;
+        text-align: center;
+    }
 
-        h3, h4 {
-            margin: 0.25em 0;
-            text-align: center;
-        }
-
-        h4 {
-            font-weight: normal;
-        }
+    h4 {
+        font-weight: normal;
     }
 }

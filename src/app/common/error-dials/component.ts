@@ -13,6 +13,7 @@ export class ErrorDialsComponent implements OnInit {
     @Input() total: number;
     @Input() failed: number;
     @Input() data: any;
+    @Input() legend = false;
     jobType: any;
     chartData: any;
     chartConfig: any;
@@ -39,7 +40,7 @@ export class ErrorDialsComponent implements OnInit {
             cutoutPercentage: 75,
             rotation: 0.5 * Math.PI, // start from bottom
             legend: {
-                display: false,
+                display: this.legend,
                 position: 'bottom'
             },
             elements: {
