@@ -81,9 +81,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.jobTypes = [];
         let id = null;
-        this.routeParams = this.route.paramMap.subscribe(params => {
-            id = +params.get('id');
-        });
+        if (this.route && this.route.paramMap) {
+            this.routeParams = this.route.paramMap.subscribe(params => {
+                id = +params.get('id');
+            });
+        }
         this.jobTypesApiService.getJobTypes().then(data => {
             _.forEach(data.results, (result) => {
                 this.jobTypes.push({
