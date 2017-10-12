@@ -5,6 +5,9 @@ import { Message, MenuItem, SelectItem } from 'primeng/primeng';
 import * as beautify from 'js-beautify';
 import * as _ from 'lodash';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import * as iconData from './font-awesome.json';
@@ -19,6 +22,7 @@ import { CustomResources } from './custom.resources.model';
     styleUrls: ['./import.component.scss']
 })
 export class JobTypesImportComponent implements OnInit, OnDestroy {
+    private routerEvents: any;
     private routeParams: any;
     mode: string;
     jsonMode: boolean;
@@ -73,8 +77,10 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         if (this.router.events) {
-            this.router.events.subscribe(currentRoute => {
-                if (currentRoute instanceof NavigationEnd) {
+            this.routerEvents = this.router.events
+                .filter((event) => event instanceof NavigationEnd)
+                .map(() => this.route)
+                .subscribe(() => {
                     let id = null;
                     if (this.route && this.route.paramMap) {
                         this.routeParams = this.route.paramMap.subscribe(params => {
@@ -261,8 +267,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         // only enable 'Validate and Import' when the form is valid
                         this.items[this.items.length - 1].disabled = !this.importForm.valid;
                     });
-                }
-            });
+                });
         }
     }
     private stripObject(obj: object) {
@@ -302,9 +307,8 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.routeParams) {
-            this.routeParams.unsubscribe();
-        }
+        this.routerEvents.unsubscribe();
+        this.routeParams.unsubscribe();
     }
 
     getUnicode(code) {

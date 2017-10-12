@@ -3,6 +3,9 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SelectItem, TreeNode } from 'primeng/primeng';
 import * as _ from 'lodash';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+
 import { JobTypesApiService } from './api.service';
 
 @Component({
@@ -12,6 +15,7 @@ import { JobTypesApiService } from './api.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
+    private routerEvents: any;
     private routeParams: any;
     jobTypes: SelectItem[];
     selectedJobType: SelectItem;
@@ -35,8 +39,10 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         if (this.router.events) {
-            this.router.events.subscribe(currentRoute => {
-                if (currentRoute instanceof NavigationEnd) {
+            this.routerEvents = this.router.events
+                .filter((event) => event instanceof NavigationEnd)
+                .map(() => this.route)
+                .subscribe(() => {
                     this.jobTypes = [];
                     let id = null;
                     if (this.route && this.route.paramMap) {
@@ -58,8 +64,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                             this.getJobTypeDetail(id);
                         }
                     });
-                }
-            });
+                });
         }
     }
 
@@ -157,8 +162,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     ngOnInit() {
     }
     ngOnDestroy() {
-        if (this.routeParams) {
-            this.routeParams.unsubscribe();
-        }
+        this.routerEvents.unsubscribe();
+        this.routeParams.unsubscribe();
     }
 }

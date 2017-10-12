@@ -3,6 +3,9 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/map';
+
 import { RecipeTypesApiService } from './api.service';
 import { RecipeType } from './api.model';
 import { JobType } from '../job-types/api.model';
@@ -14,6 +17,7 @@ import { JobType } from '../job-types/api.model';
 })
 
 export class RecipeTypesComponent implements OnInit, OnDestroy {
+    private routerEvents: any;
     private routeParams: any;
     recipeTypes: SelectItem[];
     selectedRecipeType: SelectItem;
@@ -26,8 +30,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         if (this.router.events) {
-            this.router.events.subscribe(currentRoute => {
-                if (currentRoute instanceof NavigationEnd) {
+            this.routerEvents = this.router.events
+                .filter((event) => event instanceof NavigationEnd)
+                .map(() => this.route)
+                .subscribe(() => {
                     this.recipeTypes = [];
                     let id = null;
                     if (this.route && this.route.paramMap) {
@@ -49,8 +55,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                             this.getRecipeTypeDetail(id);
                         }
                     });
-                }
-            });
+                });
         }
     }
 
@@ -69,8 +74,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     ngOnInit() {
     }
     ngOnDestroy() {
-        if (this.routeParams) {
-            this.routeParams.unsubscribe();
-        }
+        this.routerEvents.unsubscribe();
+        this.routeParams.unsubscribe();
     }
 }
