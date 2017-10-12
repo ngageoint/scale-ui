@@ -1,5 +1,5 @@
 <h2>Import Algorithm</h2>
-<form [formGroup]="importForm" (ngSubmit)="importForm.value">
+<form [formGroup]="importForm" (ngSubmit)="importForm.value" *ngIf="jobType">
     <p-panel>
         <p-header>
             <div class="ui-helper-clearfix">

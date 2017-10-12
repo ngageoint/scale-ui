@@ -113,7 +113,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         }), 'count'));
     }
     private getJobTypeDetail(id: number) {
-        console.log('getJobTypeDetail');
         this.jobTypesApiService.getJobType(id).then(data => {
             this.interfaceData = [
                 {
@@ -151,6 +150,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onRowSelect(e) {
         this.router.navigate([`/configuration/job-types/${e.value.id}`]);
+    }
+    onEditClick() {
+        this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.id}`]);
     }
     ngOnInit() {
     }

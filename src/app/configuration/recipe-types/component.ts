@@ -69,6 +69,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     ngOnInit() {
     }
     ngOnDestroy() {
-
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
     }
 }

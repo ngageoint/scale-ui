@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message, MenuItem, SelectItem } from 'primeng/primeng';
 import * as beautify from 'js-beautify';
 import * as _ from 'lodash';
@@ -18,7 +18,8 @@ import { CustomResources } from './custom.resources.model';
     templateUrl: './import.component.html',
     styleUrls: ['./import.component.scss']
 })
-export class JobTypesImportComponent implements OnInit {
+export class JobTypesImportComponent implements OnInit, OnDestroy {
+    private routeParams: any;
     jsonMode: boolean;
     jsonModeBtnClass: string;
     jobTypeJson: string;
@@ -66,8 +67,30 @@ export class JobTypesImportComponent implements OnInit {
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private workspacesApiService: WorkspacesApiService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private router: Router,
+        private route: ActivatedRoute
     ) {
+        if (this.router.events) {
+            this.router.events.subscribe(currentRoute => {
+                if (currentRoute instanceof NavigationEnd) {
+                    let id = null;
+                    if (this.route && this.route.paramMap) {
+                        this.routeParams = this.route.paramMap.subscribe(params => {
+                            id = +params.get('id');
+                        });
+                    }
+                    if (id > 0) {
+                        this.jobTypesApiService.getJobType(id).then(data => {
+                            this.jobType = data;
+                        });
+                    } else {
+                        this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''), 'Untitled Algorithm');
+                    }
+                }
+            });
+        }
+
         this.importForm = this.fb.group({
             'json-editor': new FormControl(''),
             'name': new FormControl('', Validators.required),
@@ -164,7 +187,6 @@ export class JobTypesImportComponent implements OnInit {
         ];
         this.workspaces = [];
         this.activeInterfaceIndex = [];
-        this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''), 'Untitled Algorithm');
         this.jsonConfig = {
             mode: {name: 'application/json', json: true},
             indentUnit: 4,
@@ -274,6 +296,12 @@ export class JobTypesImportComponent implements OnInit {
 
     ngOnInit() {
         this.getWorkspaces();
+    }
+
+    ngOnDestroy() {
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
     }
 
     getUnicode(code) {
