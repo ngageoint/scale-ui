@@ -1,6 +1,12 @@
 <h2>Recipe Types</h2>
 <p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
-            [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select Recipe Type"></p-dropdown>
-<div class="margin-top-md" *ngIf="selectedRecipeType">
+            [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."></p-dropdown>
+<hr />
+<div class="text-center" *ngIf="!selectedRecipeTypeDetail">
+    <h3>Select a recipe type to view its details</h3>
+</div>
+<div class="recipe-type-details" *ngIf="selectedRecipeTypeDetail">
+    <h3>{{ selectedRecipeTypeDetail.title }} v{{ selectedRecipeTypeDetail.version }}</h3>
+    <p>{{ selectedRecipeTypeDetail.description }}</p>
     <app-recipe-graph [recipeType]="selectedRecipeTypeDetail"></app-recipe-graph>
 </div>

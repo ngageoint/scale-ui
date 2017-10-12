@@ -7,8 +7,7 @@
 </div>
 <div *ngIf="selectedJobTypeDetail">
     <h3>
-        <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i> {{ selectedJobTypeDetail.title }}
-        {{ selectedJobTypeDetail.version }}
+        <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i> {{ selectedJobTypeDetail.title }} v{{selectedJobTypeDetail.version }}
     </h3>
     <div class="ui-g">
         <div class="ui-g-8 ui-g-nopad">
@@ -48,13 +47,6 @@
                 </tr>
                 </tbody>
             </table>
-            <h3 class="text-center">Recent Performance</h3>
-            <hr />
-            <div class="error-dials">
-                <app-error-dials [total]="total6h" [failed]="failed6h" [data]="chartData6h" label="6 Hours"></app-error-dials>
-                <app-error-dials [total]="total12h" [failed]="failed12h" [data]="chartData12h" label="12 Hours"></app-error-dials>
-                <app-error-dials [total]="total24h" [failed]="failed24h" [data]="chartData24h" label="24 Hours"></app-error-dials>
-            </div>
         </div>
         <div class="ui-g-4 ui-g-nopad">
             <dl class="dl-horizontal">
@@ -98,5 +90,12 @@
                 <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
             </dl>
         </div>
+    </div>
+    <hr />
+    <h3 class="text-center">Recent Performance</h3>
+    <div class="error-dials">
+        <app-error-dials [total]="total6h" [failed]="failed6h" [data]="chartData6h" label="6 Hours"></app-error-dials>
+        <app-error-dials [total]="total12h" [failed]="failed12h" [data]="chartData12h" label="12 Hours"></app-error-dials>
+        <app-error-dials [total]="total24h" [failed]="failed24h" [data]="chartData24h" label="24 Hours"></app-error-dials>
     </div>
 </div>

@@ -72,8 +72,8 @@ export class FailureRatesComponent implements OnInit {
         const metricsParams = {
             page: null,
             page_size: null,
-            started: this.datatableOptions.started,
-            ended: this.datatableOptions.ended,
+            started: moment.utc().subtract(30, 'd').startOf('d').toISOString(),
+            ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
             choice_id: this.selectedJobType ? [this.selectedJobType.id] : _.map(this.jobTypes, 'id'),
             column: ['error_system_count', 'error_algorithm_count', 'error_data_count', 'total_count'],
             group: null,
@@ -184,8 +184,6 @@ export class FailureRatesComponent implements OnInit {
             this.datatableOptions = {
                 sortField: params.sortField,
                 sortOrder: parseInt(params.sortOrder, 10),
-                started: params.started,
-                ended: params.ended,
                 name: params.name,
                 version: params.version,
                 category: params.category

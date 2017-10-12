@@ -24,10 +24,11 @@ const routes: Routes = [
     { path: 'processing/failure-rates', component: FailureRatesComponent },
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:id', component: JobTypesComponent },
-    { path: 'configuration/job-types/import', component: JobTypesImportComponent },
+    { path: 'configuration/job-types/edit/:id', component: JobTypesImportComponent },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
+    { path: 'configuration/recipe-types/:id', component: RecipeTypesComponent },
     { path: 'data/sources', component: SourcesComponent },
     { path: 'data/sources/:id', component: SourceDetailsComponent },
     { path: 'data/metrics', component: MetricsComponent }

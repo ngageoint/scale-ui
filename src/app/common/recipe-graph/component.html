@@ -45,9 +45,9 @@
             </ng-template>
         </ngx-charts-directed-graph>
     </div>
-    <div class="ui-g-4 ui-lg-3">
+    <div class="ui-g-4 ui-lg-3 ui-g-nopad">
         <div class="job-type-interface" *ngIf="selectedJobType">
-            <h4 class="label label-primary">{{ selectedJobType.title }} {{ selectedJobType.version }}</h4>
+            <h4 class="label label-primary">{{ selectedJobType.title }} v{{ selectedJobType.version }}</h4>
             <p-dataList [value]="selectedJobType.job_type_interface.input_data">
                 <p-header><strong>Inputs</strong></p-header>
                 <ng-template let-input pTemplate="item">

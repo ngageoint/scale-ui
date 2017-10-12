@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 
@@ -13,7 +13,8 @@ import { JobType } from '../job-types/api.model';
     styleUrls: ['./component.scss']
 })
 
-export class RecipeTypesComponent implements OnInit {
+export class RecipeTypesComponent implements OnInit, OnDestroy {
+    private routeParams: any;
     recipeTypes: SelectItem[];
     selectedRecipeType: SelectItem;
     selectedRecipeTypeDetail: any;
@@ -23,7 +24,35 @@ export class RecipeTypesComponent implements OnInit {
         private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private route: ActivatedRoute
-    ) {}
+    ) {
+        if (this.router.events) {
+            this.router.events.subscribe(currentRoute => {
+                if (currentRoute instanceof NavigationEnd) {
+                    this.recipeTypes = [];
+                    let id = null;
+                    if (this.route && this.route.paramMap) {
+                        this.routeParams = this.route.paramMap.subscribe(params => {
+                            id = +params.get('id');
+                        });
+                    }
+                    this.recipeTypesApiService.getRecipeTypes().then(data => {
+                        _.forEach(data.results, (result) => {
+                            this.recipeTypes.push({
+                                label: result.title + ' ' + result.version,
+                                value: result
+                            });
+                            if (id === result.id) {
+                                this.selectedRecipeType = _.clone(result);
+                            }
+                        });
+                        if (id) {
+                            this.getRecipeTypeDetail(id);
+                        }
+                    });
+                }
+            });
+        }
+    }
 
     private getRecipeTypeDetail(id: number) {
         this.recipeTypesApiService.getRecipeType(id).then(data => {
@@ -35,30 +64,11 @@ export class RecipeTypesComponent implements OnInit {
         return `&#x${code};`;
     }
     onRowSelect(e) {
-        this.router.navigate(['/configuration/recipe-types'], {
-            queryParams: {
-                id: e.value.id,
-            },
-            replaceUrl: true
-        });
-        this.getRecipeTypeDetail(e.value.id);
+        this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
     }
     ngOnInit() {
-        this.recipeTypes = [];
-        const params = this.route.snapshot ? this.route.snapshot.queryParams : { id: null };
-        this.recipeTypesApiService.getRecipeTypes().then(data => {
-            _.forEach(data.results, (result) => {
-                this.recipeTypes.push({
-                    label: result.title + ' ' + result.version,
-                    value: result
-                });
-                if (params.id && parseInt(params.id, 10) === result.id) {
-                    this.selectedRecipeType = _.clone(result);
-                }
-            });
-            if (params.id) {
-                this.getRecipeTypeDetail(params.id);
-            }
-        });
+    }
+    ngOnDestroy() {
+
     }
 }

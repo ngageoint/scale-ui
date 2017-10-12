@@ -12,11 +12,11 @@ import { JobTypesApiService } from './api.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
+    private routeParams: any;
     jobTypes: SelectItem[];
     selectedJobType: SelectItem;
     selectedJobTypeDetail: any;
     interfaceData: TreeNode[];
-    routeParams: any;
     chartData6h: any;
     total6h: number;
     failed6h: number;
@@ -50,7 +50,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                                 label: result.title + ' ' + result.version,
                                 value: result
                             });
-                            if (id && id === result.id) {
+                            if (id === result.id) {
                                 this.selectedJobType = _.clone(result);
                             }
                         });
