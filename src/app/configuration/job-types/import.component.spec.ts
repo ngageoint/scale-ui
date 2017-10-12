@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { FormBuilder } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { JobTypesApiService } from './api.service';
 import { JobTypesImportComponent } from './import.component';
@@ -19,6 +19,7 @@ describe('JobTypesImportComponent', () => {
             imports: [HttpModule],
             providers: [
                 JobTypesApiService, WorkspacesApiService, FormBuilder,
+                {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

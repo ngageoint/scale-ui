@@ -1,4 +1,4 @@
-<h2>Import Algorithm</h2>
+<h2>{{ mode }} Algorithm</h2>
 <form [formGroup]="importForm" (ngSubmit)="importForm.value" *ngIf="jobType">
     <p-panel>
         <p-header>
@@ -731,7 +731,7 @@
                     </h3>
                     <button class="ui-button-secondary" pButton icon="fa-check" label="Validate"
                             (click)="onValidate()" *ngIf="!validated"></button>
-                    <button class="ui-button-primary" pButton icon="fa-chevron-down" label="Import"
+                    <button class="ui-button-primary" pButton icon="fa-chevron-down" [label]="mode"
                             (click)="onSubmit()" *ngIf="validated && !submitted"></button>
                     <button class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Algorithm"
                             *ngIf="submitted"></button>

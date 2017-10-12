@@ -20,6 +20,7 @@ import { CustomResources } from './custom.resources.model';
 })
 export class JobTypesImportComponent implements OnInit, OnDestroy {
     private routeParams: any;
+    mode: string;
     jsonMode: boolean;
     jsonModeBtnClass: string;
     jobTypeJson: string;
@@ -81,185 +82,188 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         });
                     }
                     if (id > 0) {
+                        this.mode = 'Edit';
                         this.jobTypesApiService.getJobType(id).then(data => {
                             this.jobType = data;
                         });
                     } else {
+                        this.mode = 'Import';
                         this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''), 'Untitled Algorithm');
                     }
+                    this.getWorkspaces();
+
+                    this.importForm = this.fb.group({
+                        'json-editor': new FormControl(''),
+                        'name': new FormControl({value: '', disabled: this.mode === 'Edit'}, Validators.required),
+                        'title': new FormControl(''),
+                        'version': new FormControl('', Validators.required),
+                        'description': new FormControl(''),
+                        'author_name': new FormControl(''),
+                        'author_url': new FormControl(''),
+                        'icon': new FormControl(''),
+                        'docker_image': new FormControl(''),
+                        'timeout': new FormControl(''),
+                        'max_tries': new FormControl(''),
+                        'cpus': new FormControl(''),
+                        'memory': new FormControl(''),
+                        'interface-version': new FormControl(''),
+                        'interface-command': new FormControl('', Validators.required),
+                        'interface-command_arguments': new FormControl('', Validators.required),
+                        'error-mapping-version': new FormControl(''),
+                        'custom-resources-version': new FormControl('')
+                    });
+                    this.triggerForm = this.fb.group({
+                        'type': new FormControl('', Validators.required),
+                        'is_active': new FormControl(''),
+                        'version': new FormControl(''),
+                        'media_type': new FormControl(''),
+                        'data_types': new FormControl(''),
+                        'input_data_name': new FormControl('', Validators.required),
+                        'workspace_name': new FormControl('', Validators.required),
+                        'json-editor': new FormControl('')
+                    });
+                    this.errorMappingForm = this.fb.group({
+                        'key': new FormControl('', Validators.required),
+                        'value': new FormControl('', Validators.required),
+                        'json-editor': new FormControl('')
+                    });
+                    this.interfaceEnvVarsForm = this.fb.group({
+                        'name': new FormControl('', Validators.required),
+                        'value': new FormControl('', Validators.required),
+                        'json-editor': new FormControl('')
+                    });
+                    this.interfaceMountsForm = this.fb.group({
+                        'name': new FormControl('', Validators.required),
+                        'path': new FormControl('', Validators.required),
+                        'required': new FormControl(''),
+                        'mode': new FormControl(''),
+                        'json-editor': new FormControl('')
+                    });
+                    this.interfaceSettingsForm = this.fb.group({
+                        'name': new FormControl('', Validators.required),
+                        'required': new FormControl(''),
+                        'secret': new FormControl(''),
+                        'json-editor': new FormControl('')
+                    });
+                    this.interfaceInputsForm = this.fb.group({
+                        'name': new FormControl('', Validators.required),
+                        'type': new FormControl('', Validators.required),
+                        'media_types': new FormControl(''),
+                        'partial': new FormControl(''),
+                        'required': new FormControl(''),
+                        'json-editor': new FormControl('')
+                    });
+                    this.interfaceOutputsForm = this.fb.group({
+                        'name': new FormControl('', Validators.required),
+                        'type': new FormControl('', Validators.required),
+                        'media_types': new FormControl(''),
+                        'required': new FormControl(''),
+                        'json-editor': new FormControl('')
+                    });
+                    this.customResourcesForm = this.fb.group({
+                        'key': new FormControl('', Validators.required),
+                        'value': new FormControl('', Validators.required),
+                        'json-editor': new FormControl('')
+                    });
+                    this.items = [
+                        {
+                            label: 'General Information'
+                        },
+                        {
+                            label: 'Interface'
+                        },
+                        {
+                            label: 'Trigger'
+                        },
+                        {
+                            label: 'Error Mapping'
+                        },
+                        {
+                            label: 'Custom Resources'
+                        },
+                        {
+                            label: 'Validate and Import',
+                            disabled: this.importForm.valid
+                        }
+                    ];
+                    this.workspaces = [];
+                    this.activeInterfaceIndex = [];
+                    this.jsonConfig = {
+                        mode: {name: 'application/json', json: true},
+                        indentUnit: 4,
+                        lineNumbers: true,
+                        allowDropFileTypes: ['application/json'],
+                        viewportMargin: Infinity
+                    };
+                    this.jsonConfigReadOnly = {
+                        mode: {name: 'application/json', json: true},
+                        indentUnit: 4,
+                        lineNumbers: true,
+                        readOnly: 'nocursor',
+                        viewportMargin: Infinity
+                    };
+                    this.icons = iconData;
+                    this.jsonModeBtnClass = 'ui-button-secondary';
+                    this.currentStepIdx = 0;
+                    this.trigger = new Trigger('', new TriggerConfiguration(new TriggerData('', '')));
+                    this.triggerTypeOptions = [
+                        {
+                            label: 'Parse',
+                            value: 'PARSE'
+                        },
+                        {
+                            label: 'Ingest',
+                            value: 'INGEST'
+                        }
+                    ];
+                    this.errorMappingExitCode = {};
+                    this.interfaceEnvVar = new InterfaceEnvVar('', '');
+                    this.interfaceMount = new InterfaceMount('', '');
+                    this.interfaceMountModeOptions = [
+                        {
+                            label: 'Read Only',
+                            value: 'ro'
+                        },
+                        {
+                            label: 'Read/Write',
+                            value: 'rw'
+                        }
+                    ];
+                    this.interfaceSetting = new InterfaceSetting('');
+                    this.interfaceInput = new InterfaceInput('', '');
+                    this.interfaceInputTypeOptions = [
+                        {
+                            label: 'Property',
+                            value: 'property'
+                        },
+                        {
+                            label: 'File',
+                            value: 'file'
+                        },
+                        {
+                            label: 'Files',
+                            value: 'files'
+                        }
+                    ];
+                    this.interfaceOutput = new InterfaceOutput('', '');
+                    this.interfaceOutputTypeOptions = [
+                        {
+                            label: 'File',
+                            value: 'file'
+                        },
+                        {
+                            label: 'Files',
+                            value: 'files'
+                        }
+                    ];
+                    this.customResources = new CustomResources();
+                    this.importForm.valueChanges.subscribe(() => {
+                        // only enable 'Validate and Import' when the form is valid
+                        this.items[this.items.length - 1].disabled = !this.importForm.valid;
+                    });
                 }
             });
         }
-
-        this.importForm = this.fb.group({
-            'json-editor': new FormControl(''),
-            'name': new FormControl('', Validators.required),
-            'title': new FormControl(''),
-            'version': new FormControl('', Validators.required),
-            'description': new FormControl(''),
-            'author_name': new FormControl(''),
-            'author_url': new FormControl(''),
-            'icon': new FormControl(''),
-            'docker_image': new FormControl(''),
-            'timeout': new FormControl(''),
-            'max_tries': new FormControl(''),
-            'cpus': new FormControl(''),
-            'memory': new FormControl(''),
-            'interface-version': new FormControl(''),
-            'interface-command': new FormControl('', Validators.required),
-            'interface-command_arguments': new FormControl('', Validators.required),
-            'error-mapping-version': new FormControl(''),
-            'custom-resources-version': new FormControl('')
-        });
-        this.triggerForm = this.fb.group({
-            'type': new FormControl('', Validators.required),
-            'is_active': new FormControl(''),
-            'version': new FormControl(''),
-            'media_type': new FormControl(''),
-            'data_types': new FormControl(''),
-            'input_data_name': new FormControl('', Validators.required),
-            'workspace_name': new FormControl('', Validators.required),
-            'json-editor': new FormControl('')
-        });
-        this.errorMappingForm = this.fb.group({
-            'key': new FormControl('', Validators.required),
-            'value': new FormControl('', Validators.required),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceEnvVarsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'value': new FormControl('', Validators.required),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceMountsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'path': new FormControl('', Validators.required),
-            'required': new FormControl(''),
-            'mode': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceSettingsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'required': new FormControl(''),
-            'secret': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceInputsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'type': new FormControl('', Validators.required),
-            'media_types': new FormControl(''),
-            'partial': new FormControl(''),
-            'required': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.interfaceOutputsForm = this.fb.group({
-            'name': new FormControl('', Validators.required),
-            'type': new FormControl('', Validators.required),
-            'media_types': new FormControl(''),
-            'required': new FormControl(''),
-            'json-editor': new FormControl('')
-        });
-        this.customResourcesForm = this.fb.group({
-            'key': new FormControl('', Validators.required),
-            'value': new FormControl('', Validators.required),
-            'json-editor': new FormControl('')
-        });
-        this.items = [
-            {
-                label: 'General Information'
-            },
-            {
-                label: 'Interface'
-            },
-            {
-                label: 'Trigger'
-            },
-            {
-                label: 'Error Mapping'
-            },
-            {
-                label: 'Custom Resources'
-            },
-            {
-                label: 'Validate and Import',
-                disabled: this.importForm.valid
-            }
-        ];
-        this.workspaces = [];
-        this.activeInterfaceIndex = [];
-        this.jsonConfig = {
-            mode: {name: 'application/json', json: true},
-            indentUnit: 4,
-            lineNumbers: true,
-            allowDropFileTypes: ['application/json'],
-            viewportMargin: Infinity
-        };
-        this.jsonConfigReadOnly = {
-            mode: {name: 'application/json', json: true},
-            indentUnit: 4,
-            lineNumbers: true,
-            readOnly: 'nocursor',
-            viewportMargin: Infinity
-        };
-        this.icons = iconData;
-        this.jsonModeBtnClass = 'ui-button-secondary';
-        this.currentStepIdx = 0;
-        this.trigger = new Trigger('', new TriggerConfiguration(new TriggerData('', '')));
-        this.triggerTypeOptions = [
-            {
-                label: 'Parse',
-                value: 'PARSE'
-            },
-            {
-                label: 'Ingest',
-                value: 'INGEST'
-            }
-        ];
-        this.errorMappingExitCode = {};
-        this.interfaceEnvVar = new InterfaceEnvVar('', '');
-        this.interfaceMount = new InterfaceMount('', '');
-        this.interfaceMountModeOptions = [
-            {
-                label: 'Read Only',
-                value: 'ro'
-            },
-            {
-                label: 'Read/Write',
-                value: 'rw'
-            }
-        ];
-        this.interfaceSetting = new InterfaceSetting('');
-        this.interfaceInput = new InterfaceInput('', '');
-        this.interfaceInputTypeOptions = [
-            {
-                label: 'Property',
-                value: 'property'
-            },
-            {
-                label: 'File',
-                value: 'file'
-            },
-            {
-                label: 'Files',
-                value: 'files'
-            }
-        ];
-        this.interfaceOutput = new InterfaceOutput('', '');
-        this.interfaceOutputTypeOptions = [
-            {
-                label: 'File',
-                value: 'file'
-            },
-            {
-                label: 'Files',
-                value: 'files'
-            }
-        ];
-        this.customResources = new CustomResources();
-        this.importForm.valueChanges.subscribe(() => {
-            // only enable 'Validate and Import' when the form is valid
-            this.items[this.items.length - 1].disabled = !this.importForm.valid;
-        });
     }
     private stripObject(obj: object) {
         const strippedObj = _.cloneDeep(obj);
@@ -295,7 +299,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getWorkspaces();
     }
 
     ngOnDestroy() {
