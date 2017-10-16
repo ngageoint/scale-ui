@@ -70,7 +70,7 @@ import { SourcesApiService } from './data/sources/api.service';
 import { SourcesDatatableService } from './data/sources/datatable.service';
 import { SourceDetailsComponent } from './data/sources/details.component';
 import { DataService } from './data.service';
-import { ProcessingformComponent } from './navbar/subnav/processingform/processingform.component';
+import { ProcessingFormComponent } from './navbar/subnav/processing-form/component';
 import { FailureRatesComponent } from './processing/failure-rates/component';
 import { FailureRatesDatatableService } from './processing/failure-rates/datatable.service';
 import { MetricsComponent } from './data/metrics/component';
@@ -106,7 +106,7 @@ import { ErrorDialsComponent } from './common/error-dials/component';
         HistorychartComponent,
         SourcesComponent,
         SourceDetailsComponent,
-        ProcessingformComponent,
+        ProcessingFormComponent,
         FailureRatesComponent,
         MetricsComponent,
         RunningJobsComponent,
