@@ -1,6 +1,5 @@
 <h2>Job Type Failure Rates</h2>
-<p-dataTable [value]="performanceData" [rows]="10" [sortField]="datatableOptions.sortField"
-             [sortOrder]="datatableOptions.sortOrder">
+<p-dataTable [value]="performanceData" [rows]="10" [sortField]="datatableOptions.sortField" [sortOrder]="datatableOptions.sortOrder">
     <p-column [filter]="true" filterMatchMode="equals" [style]="{'width':'20%'}">
         <ng-template pTemplate="header">
             <h4 (click)="sortBy('job_type.title')" class="sortable">

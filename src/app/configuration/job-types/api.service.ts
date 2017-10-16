@@ -49,6 +49,17 @@ export class JobTypesApiService {
             .catch(this.handleError);
     }
 
+    updateJobType(jobType: JobType): Promise<any> {
+        const updatedJobType = {
+            error_mappings: jobType.error_mapping,
+            is_paused: jobType.is_paused
+        };
+        return this.http.patch(`/mocks/job-types/${jobType.id}`, updatedJobType)
+            .toPromise()
+            .then(response => JobType.transformer(response.json()))
+            .catch(this.handleError);
+    }
+
     getJobTypeStatus(poll?: Boolean): any {
         if (poll) {
             const getData = () => {

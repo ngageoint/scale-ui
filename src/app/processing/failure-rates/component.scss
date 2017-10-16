@@ -1,3 +1,7 @@
+::ng-deep body .ui-datatable .ui-datatable-data > tr > td {
+    padding: 0 .75em;
+}
+
 .ui-grid {
     line-height: normal;
 }

@@ -10,6 +10,7 @@ const jobTypesValidate = require('./handlers/jobTypesValidate');
 const jobTypesStatus = require('./handlers/jobTypesStatus');
 const jobDetails = require('./handlers/jobDetails');
 const jobTypeDetails = require('./handlers/jobTypeDetails');
+const jobTypeUpdate = require('./handlers/jobTypeUpdate');
 const recipeTypeDetails = require('./handlers/recipeTypeDetails');
 const workspaces = require('./handlers/workspaces');
 const sources = require('./handlers/sources');
@@ -99,6 +100,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/job-types/{id}',
             handler: jobTypeDetails
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/job-types/{id}',
+            handler: jobTypeUpdate
         });
 
         server.route({

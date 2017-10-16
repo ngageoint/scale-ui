@@ -30,6 +30,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     chartData24h: any;
     total24h: number;
     failed24h: number;
+    pauseBtnIcon = 'fa-pause';
     private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
     private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
 
@@ -155,6 +156,13 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onRowSelect(e) {
         this.router.navigate([`/configuration/job-types/${e.value.id}`]);
+    }
+    onPauseClick() {
+        this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
+        this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).then(data => {
+            this.selectedJobTypeDetail = data;
+            this.pauseBtnIcon = this.selectedJobTypeDetail.is_paused ? 'fa-play' : 'fa-pause';
+        });
     }
     onEditClick() {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.id}`]);

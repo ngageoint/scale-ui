@@ -15,8 +15,10 @@
                     </h3>
                 </div>
                 <div class="ui-g-6 ui-g-nopad text-right">
+                    <button pButton type="button" class="ui-button-secondary" [icon]="pauseBtnIcon" pTooltip="Pause Job Type"
+                            tooltipPosition="bottom" (click)="onPauseClick()"></button>
                     <button pButton type="button" class="ui-button-secondary" icon="fa-edit" pTooltip="Edit Job Type"
-                            (click)="onEditClick()"></button>
+                            tooltipPosition="bottom" (click)="onEditClick()"></button>
                 </div>
             </div>
             <p>
