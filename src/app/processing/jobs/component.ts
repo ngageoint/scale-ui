@@ -24,7 +24,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Output() datatableChange = new EventEmitter<boolean>();
 
     datatableOptions: JobsDatatable;
-    jobTypes: JobType[];
+    jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
     selectedJobType: string;
@@ -113,9 +113,9 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().then(data => {
-            this.jobTypes = data.results as JobType[];
+            this.jobTypes = JobType.transformer(data.results);
             const selectItems = [];
-            _.forEach(this.jobTypes, (jobType) => {
+            _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.version,
                     value: jobType.id
