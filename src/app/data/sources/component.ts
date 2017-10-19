@@ -46,6 +46,7 @@ export class SourcesComponent implements OnInit {
 
     private updateData() {
         this.sourcesApiService.getSources(this.datatableOptions).then(data => {
+            console.log(data);
             this.count = data.count;
             this.sources = data.results as Source[];
         });

@@ -29,6 +29,7 @@ import { PanelModule } from 'primeng/components/panel/panel';
 import { SidebarModule } from 'primeng/components/sidebar/sidebar';
 import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { StepsModule } from 'primeng/components/steps/steps';
+import { ToggleButtonModule } from 'primeng/components/togglebutton/togglebutton';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
 import { TreeTableModule } from 'primeng/components/treetable/treetable';
 
@@ -149,7 +150,8 @@ import { ErrorDialsComponent } from './common/error-dials/component';
         TooltipModule,
         MultiSelectModule,
         TreeTableModule,
-        SidebarModule
+        SidebarModule,
+        ToggleButtonModule
     ],
     exports: [
         DataTableModule,

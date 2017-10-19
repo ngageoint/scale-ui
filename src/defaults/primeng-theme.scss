@@ -331,6 +331,7 @@ body .ui-dropdown.ui-state-focus .ui-dropdown-label.ui-inputtext {
 }
 body .ui-dropdown-panel .ui-dropdown-filter-container {
     padding: 0.375em 0.75em;
+    color: #000;
 }
 body .ui-dropdown-panel .ui-dropdown-filter-container .ui-dropdown-filter {
     width: 100%;
@@ -349,6 +350,7 @@ body .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item {
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
+    color: #000;
 }
 body .ui-dropdown-panel .ui-dropdown-items .ui-dropdown-item:not(.ui-state-highlight):hover {
     background-color: #f4f3f4;

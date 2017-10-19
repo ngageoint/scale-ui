@@ -17,9 +17,24 @@ export class ProcessingFormComponent implements OnInit {
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJobType: JobType;
+    sourceFile: string;
+    timeFieldOptions: SelectItem[];
+    timeField: SelectItem;
     constructor(
         private jobTypesApiService: JobTypesApiService
-    ) { }
+    ) {
+        this.timeFieldOptions = [
+            {
+                label: 'Data',
+                value: 'data'
+            },
+            {
+                label: 'Last Modified',
+                value: 'last_modified'
+            }
+        ];
+        this.timeField = this.timeFieldOptions[0];
+    }
 
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().then(data => {
@@ -33,6 +48,10 @@ export class ProcessingFormComponent implements OnInit {
             });
             this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
         });
+    }
+
+    search() {
+        console.log('search');
     }
 
     ngOnInit() {
