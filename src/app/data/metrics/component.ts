@@ -23,10 +23,13 @@ export class MetricsComponent implements OnInit {
     filteredChoicesOptions: any[] = [];
     columns: any[] = [];
     metricOptions: SelectItem[] = [];
-    selectedMetric: any;
-    yUnits: any;
+    selectedMetric1: any;
+    selectedMetric2: any;
+    yUnits1: any;
+    yUnits2: any;
     data: any;
     options: any;
+    showFilters = true;
     constructor(
         private metricsApiService: MetricsApiService,
         private dataService: DataService
@@ -49,6 +52,8 @@ export class MetricsComponent implements OnInit {
                     stacked: true
                 }],
                 yAxes: [{
+                    id: 'axis1',
+                    position: 'left',
                     stacked: true,
                     scaleLabel: {
                         display: true,
@@ -56,20 +61,19 @@ export class MetricsComponent implements OnInit {
                     },
                     ticks: {
                         callback: (value) => {
-                            return this.formatYValues(value);
+                            return this.formatYValues(this.yUnits1, value);
                         }
                     }
                 }]
             }
         };
-        this.getDataTypes();
     }
 
-    private formatYValues = (data, noPadding?) => {
+    private formatYValues = (units, data, noPadding?) => {
         noPadding = noPadding || false;
-        if (this.yUnits === 'seconds') {
+        if (units === 'seconds') {
             return this.dataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
-        } else if (this.yUnits === 'bytes') {
+        } else if (units === 'bytes') {
             return this.dataService.calculateFileSizeFromBytes(data, 1);
         }
         return data;
@@ -114,6 +118,10 @@ export class MetricsComponent implements OnInit {
                 };
                 this.metricOptions.push(option);
             });
+            this.metricOptions.unshift({
+                label: 'None',
+                value: null
+            });
         });
     }
     onStartSelect(e) {
@@ -127,7 +135,8 @@ export class MetricsComponent implements OnInit {
         this.filtersApplied = [];
         this.selectedDataTypeOptions = [];
         this.dataTypeFilterText = '';
-        this.selectedMetric = null;
+        this.selectedMetric1 = null;
+        this.selectedMetric2 = null;
         this.columns = [];
         this.metricOptions = [];
 
@@ -139,6 +148,30 @@ export class MetricsComponent implements OnInit {
         }
     }
     updateChart() {
+        const axis2 = _.find(this.options.scales.yAxes, { id: 'axis2' });
+        if (this.selectedMetric2 && !axis2) {
+            this.options.scales.yAxes.push({
+                id: 'axis2',
+                position: 'right',
+                stacked: true,
+                scaleLabel: {
+                    display: true,
+                    labelString: ''
+                },
+                ticks: {
+                    callback: (value) => {
+                        return this.formatYValues(this.yUnits2, value);
+                    }
+                }
+            });
+        } else {
+            if (axis2) {
+                _.remove(this.options.scales.yAxes, axis => {
+                    return axis.id === 'axis2';
+                });
+            }
+        }
+        this.showFilters = false;
         this.data = {
             labels: [],
             datasets: []
@@ -153,23 +186,24 @@ export class MetricsComponent implements OnInit {
             started: this.started,
             ended: this.ended,
             choice_id: _.map(this.filtersApplied, 'id'),
-            column: this.selectedMetric.name,
-            group: this.selectedMetric.group,
+            column: this.selectedMetric2 ? [this.selectedMetric1.name, this.selectedMetric2.name] : this.selectedMetric1.name,
+            group: this.selectedMetric2 ? [this.selectedMetric1.group, this.selectedMetric2.group] : this.selectedMetric1.group,
             dataType: this.selectedDataType.name
         };
         this.metricsApiService.getPlotData(params).then((data) => {
             let valueArr = [],
+                colArr = [],
                 queryFilter = null,
                 queryDates = [];
 
-            const colNames = [],
-                colArr = [];
-
-            this.yUnits = this.selectedMetric.units;
+            this.yUnits1 = this.selectedMetric1.units;
+            this.yUnits2 = this.selectedMetric2 ? this.selectedMetric2.units : null;
 
             if (this.filtersApplied.length > 0) {
                 // filters were applied, so build data source accordingly
-                _.forEach(data.results, (result) => {
+                _.forEach(data.results, (result, idx) => {
+                    valueArr = [];
+                    colArr = [];
                     if (result.values.length > 0) {
                         // values for all filters are returned in one array of arrays,
                         // so group results by id to isolate filter values
@@ -218,51 +252,55 @@ export class MetricsComponent implements OnInit {
                             });
                         });
                     }
-                });
 
-                // populate chart dataset
-                _.forEach(this.filtersApplied, (filter) => {
-                    const filterData = _.find(colArr, { id: filter.id });
-                    this.data.datasets.push({
-                        label: `${filter.title} ${filter.version}`,
-                        backgroundColor: this.randomColorGenerator(),
-                        data: filterData ? filterData.data : []
+                    // populate chart dataset
+                    _.forEach(this.filtersApplied, (filter) => {
+                        const filterData = _.find(colArr, { id: filter.id });
+                        this.data.datasets.push({
+                            yAxisID: `axis${idx + 1}`,
+                            label: `${filter.title} ${filter.version}`,
+                            backgroundColor: this.randomColorGenerator(),
+                            data: filterData ? filterData.data : []
+                        });
                     });
                 });
             } else {
                 // no filters were applied, so show aggregate statistics for selected metric
-                const result = data.results[0];
-
-                // add result values to valueArr
-                _.forEach(this.data.labels, (xDate) => {
-                    const valueObj = _.find(result.values, (qDate) => {
-                        return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                _.forEach(data.results, (result, idx) => {
+                    valueArr = [];
+                    // add result values to valueArr
+                    _.forEach(this.data.labels, (xDate) => {
+                        const valueObj = _.find(result.values, (qDate) => {
+                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                        });
+                        // push 0 if data for xDate is not present in result.values
+                        valueArr.push(valueObj ? valueObj.value : 0);
                     });
-                    // push 0 if data for xDate is not present in result.values
-                    valueArr.push(valueObj ? valueObj.value : 0);
-                });
 
-                // populate chart dataset
-                this.data.datasets.push({
-                    label: result.column.title + ' for all ' + this.selectedDataType.title,
-                    backgroundColor: this.randomColorGenerator(),
-                    data: valueArr
+                    // populate chart dataset
+                    this.data.datasets.push({
+                        yAxisID: `axis${idx + 1}`,
+                        label: result.column.title + ' for all ' + this.selectedDataType.title,
+                        backgroundColor: this.randomColorGenerator(),
+                        data: valueArr
+                    });
                 });
             }
 
             // compute total count for requested time period
             let total = 0;
-            _.forEach(this.data.datasets, (dataset) => {
+            _.forEach(this.data.datasets, dataset => {
                 total = total + _.sum(dataset.data);
             });
-            const formattedTotal = this.formatYValues(total, true),
+            const formattedTotal = this.formatYValues(this.yUnits1, total, true),
                 formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY');
             this.options.title.text =
-                `${this.selectedMetric.title}: ${formattedTotal.toLocaleString()} for ${formattedStart} - ${formattedEnd}`;
-            this.options.scales.yAxes[0].scaleLabel.labelString = _.capitalize(this.yUnits);
+                `${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()} for ${formattedStart} - ${formattedEnd}`;
+            this.options.scales.yAxes[0].scaleLabel.labelString = _.capitalize(this.yUnits1);
         });
     }
     ngOnInit() {
+        this.getDataTypes();
     }
 }

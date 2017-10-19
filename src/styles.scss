@@ -19,6 +19,14 @@ h2:first-of-type {
     margin: 3px 0;
 }
 
+a {
+    color: $clr-blue-lgt;
+
+    &:hover {
+        color: $clr-blue-drk;
+    }
+}
+
 .text-left {
     text-align: left;
 }

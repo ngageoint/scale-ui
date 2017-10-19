@@ -1,19 +1,23 @@
-label {
-    display: block;
-    font-weight: bold;
-    margin: 10px 0 0 0;
-}
+.metrics__container {
+    min-height: 75vh;
 
-button {
-    margin: 10px 0;
-}
+    label {
+        display: block;
+        font-weight: bold;
+        margin: 10px 0 0 0;
+    }
 
-.chart-title {
-    margin-left: 12px;
+    button {
+        margin: 10px 0;
+    }
 
-    ::ng-deep .label {
-        font-size: 1em;
-        display: inline-block;
-        margin-bottom: 5px;
+    .metrics__filter-toggle {
+        position: fixed;
+        top: 80px;
+        right: 0;
+        height: 120px;
+        width: 30px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }

@@ -1,28 +1,33 @@
 <h2>Metrics</h2>
-<div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
-    <div class="ui-grid-row">
-        <div class="ui-grid-col-3">
-            <label>From</label>
-            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
-            <label>To</label>
-            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
-            <label>Data Source</label>
-            <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType" (onChange)="changeDataTypeSelection()"
-                        [autoWidth]="false" placeholder="Select..."></p-dropdown>
-            <div *ngIf="filteredChoicesOptions.length > 0">
-                <label>{{dataTypeFilterText}}</label>
-                <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied"></p-multiSelect>
-                To view an aggregate count for the data source, leave this filter unselected.
-            </div>
-            <div *ngIf="columns.length > 0">
-                <label>Available Metrics</label>
-                <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric" [autoWidth]="false" placeholder="Select..."></p-dropdown>
-            </div>
-            <button pButton icon="fa-refresh" label="Update Chart" (click)="updateChart()"
-                    [disabled]="!selectedMetric"></button>
-        </div>
-        <div class="ui-grid-col-9">
-            <p-chart type="bar" [data]="data" [options]="options" *ngIf="data.datasets.length > 0"></p-chart>
-        </div>
+<div class="metrics__container">
+    <div *ngIf="columns.length === 0">
+        Open the <a (click)="showFilters = true">filters dialog</a> to select a data source.
     </div>
+    <p-chart type="bar" [data]="data" [options]="options" *ngIf="data.datasets.length > 0"></p-chart>
+
+    <button pButton type="button" class="ui-button-primary metrics__filter-toggle" icon="fa-filter"
+            (click)="showFilters = !showFilters"></button>
+
+    <p-sidebar [(visible)]="showFilters" position="right" [style]="{'width':'25vw'}">
+        <label>From</label>
+        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+        <label>To</label>
+        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+        <label>Data Source</label>
+        <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType" (onChange)="changeDataTypeSelection()"
+                    [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select..."></p-dropdown>
+        <div *ngIf="filteredChoicesOptions.length > 0">
+            <label>{{dataTypeFilterText}}</label>
+            <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" [style]="{'width':'100%'}"></p-multiSelect><br />
+            To view an aggregate count for the data source, leave this filter unselected.
+        </div>
+        <div *ngIf="columns.length > 0">
+            <label>Y-axis 1 Metrics</label>
+            <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}"></p-dropdown>
+            <label>Y-axis 2 Metrics</label>
+            <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}"></p-dropdown>
+        </div>
+        <button pButton icon="fa-refresh" label="Update Chart" (click)="updateChart()"
+                [disabled]="!selectedMetric1"></button>
+    </p-sidebar>
 </div>

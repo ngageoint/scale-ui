@@ -26,6 +26,7 @@ import { MessagesModule } from 'primeng/components/messages/messages';
 import { MultiSelectModule } from 'primeng/components/multiselect/multiselect';
 import { PaginatorModule } from 'primeng/components/paginator/paginator';
 import { PanelModule } from 'primeng/components/panel/panel';
+import { SidebarModule } from 'primeng/components/sidebar/sidebar';
 import { SpinnerModule } from 'primeng/components/spinner/spinner';
 import { StepsModule } from 'primeng/components/steps/steps';
 import { TooltipModule } from 'primeng/components/tooltip/tooltip';
@@ -147,7 +148,8 @@ import { ErrorDialsComponent } from './common/error-dials/component';
         AccordionModule,
         TooltipModule,
         MultiSelectModule,
-        TreeTableModule
+        TreeTableModule,
+        SidebarModule
     ],
     exports: [
         DataTableModule,

@@ -15,11 +15,14 @@ module.exports = function (request, reply) {
 
         var numDays = moment.utc(params.ended).diff(moment.utc(params.started), 'd') + 1;
 
+        if (!Array.isArray(params.column)) {
+            params.column = [params.column];
+        }
         _.forEach(params.column, function (metric) {
             var maxRandom = metric === 'total_count' ? 1000 : 200;
             var minRandom = metric === 'total_count' ? 800 : 10;
             var returnResult = {
-                column: { title: _.startCase(params.column) },
+                column: { title: _.startCase(metric) },
                 min_x: moment.utc(params.started).format('YYYY-MM-DD'),
                 max_x: moment.utc(params.ended).format('YYYY-MM-DD'),
                 min_y: 1,
