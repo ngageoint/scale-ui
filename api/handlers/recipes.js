@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 const recipes = require('../data/recipes.json');
 
 module.exports = function (request, reply) {
@@ -16,6 +17,11 @@ module.exports = function (request, reply) {
             } else {
                 data.results = _.orderBy(data.results, [params.order], ['asc']);
             }
+        }
+        if (params.started && params.ended) {
+            data.results = _.filter(data.results, function (result) {
+                return moment.utc(result.created).isSameOrAfter(moment.utc(params.started)) && moment.utc(result.last_modified).isSameOrBefore(moment.utc(params.ended));
+            });
         }
         data.count = data.results.length;
         if (params.page && params.page_size) {

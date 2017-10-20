@@ -1,4 +1,14 @@
 <h2>Recipes</h2>
+<div class="recipes__date-filter">
+    <div>
+        <label>From:</label>
+        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+    </div>
+    <div>
+        <label>To:</label>
+        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+    </div>
+</div>
 <p-dataTable [value]="recipes" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [responsive]="true"
              resizableColumns="true" selectionMode="single" [(selection)]="selectedRecipe"

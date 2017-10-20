@@ -26,6 +26,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
     selectedRecipeType: string;
     first: number;
     count: number;
+    started: string;
+    ended: string;
     isInitialized: boolean;
     subscription: any;
 
@@ -120,6 +122,20 @@ export class RecipesComponent implements OnInit, OnDestroy {
     onRowSelect(e) {
         this.router.navigate(['/processing/recipes/' + e.data.id]);
     }
+    onStartSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: moment.utc(e, 'YYYY-MM-DD').toISOString()
+        });
+        this.updateOptions();
+    }
+    onEndSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            ended: moment.utc(e, 'YYYY-MM-DD').toISOString()
+        });
+        this.updateOptions();
+    }
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
@@ -138,8 +154,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
             } else {
                 this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
             }
-            // this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-            // this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
+            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
             this.getRecipeTypes();
         });
     }

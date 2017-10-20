@@ -3,14 +3,22 @@ h2 {
         font-size: 0.7em;
     }
 }
-.label-info {
-    padding: .2em .6em .1em .6em;
+.jobs__date-filter {
+    display: flex;
+    margin-bottom: 10px;
+
+    div {
+        margin-right: 20px;
+    }
 }
-.jobs-table {
+.jobs__table {
     .ui-button {
         font-size: .7em !important;
         padding: 0 !important;
     }
+}
+.label-info {
+    padding: .2em .6em .1em .6em;
 }
 ::ng-deep .ui-dialog {
     width: 95% !important;
