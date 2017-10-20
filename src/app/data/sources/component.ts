@@ -42,11 +42,11 @@ export class SourcesComponent implements OnInit {
                 value: 'last_modified'
             }
         ];
+        this.datatableOptions = this.sourcesDatatableService.getSourcesDatatableOptions();
     }
 
     private updateData() {
         this.sourcesApiService.getSources(this.datatableOptions).then(data => {
-            console.log(data);
             this.count = data.count;
             this.sources = data.results as Source[];
         });
@@ -113,24 +113,25 @@ export class SourcesComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        if (this.route.snapshot && Object.keys(this.route.snapshot.queryParams).length > 0) {
-            const params = this.route.snapshot.queryParams;
-            this.datatableOptions = {
-                first: params.first ? parseInt(params.first, 10) : 0,
-                rows: params.rows ? parseInt(params.rows, 10) : 10,
-                sortField: params.sortField ? params.sortField : 'last_modified',
-                sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
-                ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
-                time_field: params.time_field || 'data',
-                is_parsed: params.is_parsed || null,
-                file_name: params.file_name || null
-            };
-        } else {
-            this.datatableOptions = this.sourcesDatatableService.getSourcesDatatableOptions();
-        }
-        this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-        this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
-        this.updateOptions();
+        this.route.queryParams.subscribe(params => {
+            if (Object.keys(params).length > 0) {
+                this.datatableOptions = {
+                    first: +params.first || 0,
+                    rows: +params.rows || 10,
+                    sortField: params.sortField || 'last_modified',
+                    sortOrder: +params.sortOrder || -1,
+                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
+                    ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
+                    time_field: params.time_field || 'data',
+                    is_parsed: params.is_parsed || null,
+                    file_name: params.file_name || null
+                };
+            } else {
+                this.datatableOptions = this.sourcesDatatableService.getSourcesDatatableOptions();
+            }
+            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
+            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.updateOptions();
+        });
     }
 }

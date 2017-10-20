@@ -19,7 +19,7 @@ h2:first-of-type {
     margin: 3px 0;
 }
 
-a {
+a:not(.ui-button) {
     color: $clr-blue-lgt;
 
     &:hover {

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 import { RecipesApiService } from './api.service';
 import { Recipe } from './api.model';
@@ -36,6 +37,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
+        this.datatableOptions = recipesDatatableService.getRecipesDatatableOptions();
     }
 
     private updateData() {
@@ -119,26 +121,27 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.router.navigate(['/processing/recipes/' + e.data.id]);
     }
     ngOnInit() {
-        if (this.route.snapshot &&
-            Object.keys(this.route.snapshot.queryParams).length > 0) {
-
-            const params = this.route.snapshot.queryParams;
-            this.datatableOptions = {
-                first: parseInt(params.first, 10),
-                rows: parseInt(params.rows, 10),
-                sortField: params.sortField,
-                sortOrder: parseInt(params.sortOrder, 10),
-                started: params.started,
-                ended: params.ended,
-                type_id: params.type_id,
-                type_name: params.type_name,
-                batch_id: params.batch_id,
-                include_superseded: params.include_superseded
-            };
-        } else {
-            this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
-        }
-        this.getRecipeTypes();
+        this.route.queryParams.subscribe(params => {
+            if (Object.keys(params).length > 0) {
+                this.datatableOptions = {
+                    first: +params.first || 0,
+                    rows: +params.rows || 10,
+                    sortField: params.sortField || 'last_modified',
+                    sortOrder: +params.sortOrder || -1,
+                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
+                    ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
+                    type_id: +params.type_id || null,
+                    type_name: params.type_name || null,
+                    batch_id: +params.batch_id || null,
+                    include_superseded: params.include_superseded || null
+                };
+            } else {
+                this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
+            }
+            // this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
+            // this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.getRecipeTypes();
+        });
     }
     ngOnDestroy() {
         this.unsubscribe();

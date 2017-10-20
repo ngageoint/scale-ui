@@ -32,6 +32,7 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
+        this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
     }
 
     private updateData() {
@@ -90,18 +91,28 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         this.router.navigate(['processing', 'jobs']);
     }
     ngOnInit() {
-        if (this.route.snapshot &&
-            Object.keys(this.route.snapshot.queryParams).length > 0) {
-
-            const params = this.route.snapshot.queryParams;
-            this.datatableOptions = {
-                first: parseInt(params.first, 10),
-                rows: parseInt(params.rows, 10)
-            };
-        } else {
-            this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
-        }
-        this.updateOptions();
+        // if (this.route.snapshot &&
+        //     Object.keys(this.route.snapshot.queryParams).length > 0) {
+        //
+        //     const params = this.route.snapshot.queryParams;
+        //     this.datatableOptions = {
+        //         first: parseInt(params.first, 10),
+        //         rows: parseInt(params.rows, 10)
+        //     };
+        // } else {
+        //     this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
+        // }
+        this.route.queryParams.subscribe(params => {
+            if (Object.keys(params).length > 0) {
+                this.datatableOptions = {
+                    first: +params.first || 0,
+                    rows: +params.rows || 10
+                };
+            } else {
+                this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
+            }
+            this.updateOptions();
+        });
     }
     ngOnDestroy() {
         this.unsubscribe();

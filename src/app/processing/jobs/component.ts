@@ -83,6 +83,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             label: 'Data',
             value: 'DATA'
         }];
+        this.datatableOptions = jobsDatatableService.getJobsDatatableOptions();
     }
 
     private updateData() {
@@ -228,32 +229,33 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.jobs = [];
-        if (this.route.snapshot && Object.keys(this.route.snapshot.queryParams).length > 0) {
-            const params = this.route.snapshot.queryParams;
-            this.datatableOptions = {
-                first: params.first ? parseInt(params.first, 10) : 0,
-                rows: params.rows ? parseInt(params.rows, 10) : 10,
-                sortField: params.sortField ? params.sortField : 'last_modified',
-                sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
-                ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
-                status: params.status || null,
-                job_id: params.job_id ? parseInt(params.job_id, 10) : null,
-                job_type_id: params.job_type_id ? parseInt(params.job_type_id, 10) : null,
-                job_type_name: params.job_type_name || null,
-                job_type_category: params.job_type_category || null,
-                batch_id: params.batch_id ? parseInt(params.batch_id, 10) : null,
-                error_category: params.error_category || null,
-                include_superseded: params.include_superseded || null
-            };
-        } else {
-            this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
-        }
-        this.selectedStatus = this.datatableOptions.status;
-        this.selectedErrorCategory = this.datatableOptions.error_category;
-        this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-        this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
-        this.getJobTypes();
+        this.route.queryParams.subscribe(params => {
+            if (Object.keys(params).length > 0) {
+                this.datatableOptions = {
+                    first: params.first ? parseInt(params.first, 10) : 0,
+                    rows: params.rows ? parseInt(params.rows, 10) : 10,
+                    sortField: params.sortField ? params.sortField : 'last_modified',
+                    sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
+                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
+                    ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
+                    status: params.status || null,
+                    job_id: params.job_id ? parseInt(params.job_id, 10) : null,
+                    job_type_id: params.job_type_id ? parseInt(params.job_type_id, 10) : null,
+                    job_type_name: params.job_type_name || null,
+                    job_type_category: params.job_type_category || null,
+                    batch_id: params.batch_id ? parseInt(params.batch_id, 10) : null,
+                    error_category: params.error_category || null,
+                    include_superseded: params.include_superseded || null
+                };
+            } else {
+                this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
+            }
+            this.selectedStatus = this.datatableOptions.status;
+            this.selectedErrorCategory = this.datatableOptions.error_category;
+            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
+            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.getJobTypes();
+        });
     }
     ngOnDestroy() {
         this.unsubscribe();
