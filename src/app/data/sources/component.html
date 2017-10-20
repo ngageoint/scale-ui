@@ -4,14 +4,10 @@
         <div class="ui-grid-col-2">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
-            <!--<p-calendar [(ngModel)]="started" [showTime]="true" [utc]="true" dataType="string"-->
-                        <!--(onSelect)="onStartSelect($event)"></p-calendar>-->
         </div>
         <div class="ui-grid-col-2">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
-            <!--<p-calendar [(ngModel)]="ended" [showTime]="true" [utc]="true" dataType="string"-->
-                        <!--(onSelect)="onEndSelect($event)"></p-calendar>-->
         </div>
         <div class="uid-grid-col-2">
             <label>Date Field:</label>

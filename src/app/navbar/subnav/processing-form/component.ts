@@ -1,10 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
+import { SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { JobTypesApiService } from '../../../configuration/job-types/api.service';
 import { JobType } from '../../../configuration/job-types/api.model';
-import { SelectItem } from 'primeng/primeng';
+import { SourcesDatatableService } from '../../../data/sources/datatable.service';
 
 @Component({
     selector: 'app-processing-form',
@@ -12,6 +14,7 @@ import { SelectItem } from 'primeng/primeng';
     styleUrls: ['./component.scss']
 })
 export class ProcessingFormComponent implements OnInit {
+    @Output() onSearch = new EventEmitter();
     started: string;
     ended: string;
     jobTypes: any;
@@ -19,9 +22,11 @@ export class ProcessingFormComponent implements OnInit {
     selectedJobType: JobType;
     sourceFile: string;
     timeFieldOptions: SelectItem[];
-    timeField: SelectItem;
+    timeField: string;
     constructor(
-        private jobTypesApiService: JobTypesApiService
+        private router: Router,
+        private jobTypesApiService: JobTypesApiService,
+        private sourcesDatatableService: SourcesDatatableService
     ) {
         this.timeFieldOptions = [
             {
@@ -33,7 +38,7 @@ export class ProcessingFormComponent implements OnInit {
                 value: 'last_modified'
             }
         ];
-        this.timeField = this.timeFieldOptions[0];
+        this.timeField = this.timeFieldOptions[0].value;
     }
 
     private getJobTypes() {
@@ -51,7 +56,18 @@ export class ProcessingFormComponent implements OnInit {
     }
 
     search() {
-        console.log('search');
+        if (this.selectedJobType) {
+            console.log(this.selectedJobType);
+        } else if (this.sourceFile) {
+            Object.assign(this.sourcesDatatableService.getSourcesDatatableOptions(), {
+                file_name: this.sourceFile,
+                time_field: this.timeField
+            });
+            this.router.navigate(['/data/sources'], {
+                replaceUrl: true
+            });
+        }
+        this.onSearch.emit();
     }
 
     ngOnInit() {

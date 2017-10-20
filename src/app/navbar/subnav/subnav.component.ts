@@ -31,4 +31,8 @@ export class SubnavComponent implements OnInit {
     navigate() {
         this.onNavigate.emit();
     }
+
+    onSearch() {
+        this.navigate();
+    }
 }

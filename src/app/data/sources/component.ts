@@ -20,8 +20,8 @@ export class SourcesComponent implements OnInit {
     sources: Source[];
     first: number;
     count: number;
-    started: Date = moment.utc().subtract(1, 'd').toDate();
-    ended: Date = moment.utc().toDate();
+    started: string = moment.utc().subtract(1, 'd').format('YYYY-MM-DD');
+    ended: string = moment.utc().format('YYYY-MM-DD');
     timeFieldOptions: SelectItem[];
     isInitialized: boolean;
 
@@ -113,26 +113,24 @@ export class SourcesComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
-        if (this.route.snapshot &&
-            Object.keys(this.route.snapshot.queryParams).length > 0) {
-
+        if (this.route.snapshot && Object.keys(this.route.snapshot.queryParams).length > 0) {
             const params = this.route.snapshot.queryParams;
             this.datatableOptions = {
-                first: parseInt(params.first, 10),
-                rows: parseInt(params.rows, 10),
-                sortField: params.sortField,
-                sortOrder: parseInt(params.sortOrder, 10),
-                started: params.started,
-                ended: params.ended,
-                time_field: params.time_field,
-                is_parsed: params.is_parsed,
-                file_name: params.file_name
+                first: params.first ? parseInt(params.first, 10) : 0,
+                rows: params.rows ? parseInt(params.rows, 10) : 10,
+                sortField: params.sortField ? params.sortField : 'last_modified',
+                sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
+                started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
+                ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
+                time_field: params.time_field || 'data',
+                is_parsed: params.is_parsed || null,
+                file_name: params.file_name || null
             };
-            this.started = moment.utc(this.datatableOptions.started).toDate();
-            this.ended = moment.utc(this.datatableOptions.ended).toDate();
         } else {
             this.datatableOptions = this.sourcesDatatableService.getSourcesDatatableOptions();
         }
+        this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
+        this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
         this.updateOptions();
     }
 }
