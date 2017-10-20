@@ -1,8 +1,17 @@
-.ui-grid.ui-grid-pad > .ui-grid-row > div {
-    padding: .25em .5em 1em 0;
-}
-
 label {
     font-weight: bold;
     display: block;
+}
+
+.sources__date-filter {
+    display: flex;
+    margin-bottom: 10px;
+
+    div {
+        margin-right: 20px;
+    }
+}
+
+::ng-deep body .ui-inputtext {
+    line-height: 1;
 }

@@ -1,16 +1,18 @@
 <h2>Jobs</h2>
-<div class="pull-right">
-    <button pButton type="button" class="ui-button-primary" icon="fa-repeat" pTooltip="Requeue All Jobs"
-            (click)="requeueJobs()"></button>
-</div>
-<div class="jobs__date-filter">
-    <div>
-        <label>From:</label>
-        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+<div class="jobs__header">
+    <div class="jobs__date-filter">
+        <div>
+            <label>From:</label>
+            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+        </div>
+        <div>
+            <label>To:</label>
+            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+        </div>
     </div>
-    <div>
-        <label>To:</label>
-        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+    <div class="jobs__controls">
+        <button pButton type="button" class="ui-button-primary" icon="fa-repeat" pTooltip="Requeue All Jobs"
+                (click)="requeueJobs()"></button>
     </div>
 </div>
 <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
