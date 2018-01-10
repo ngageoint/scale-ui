@@ -17,6 +17,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     total: number;
     failed: number;
     chartData: any;
+    totalActive: number;
+    failedActive: number;
+    chartDataActive: any;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
@@ -41,6 +44,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.unsubscribe();
     }
 
+    private generateStats(jobData: any[]): any {
+        const allJobCounts = _.flatten(_.map(jobData, 'job_counts'));
+        const sysErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+            return jobCount.status === 'FAILED' && jobCount.category === 'SYSTEM';
+        }), 'count'));
+        const algErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+            return jobCount.status === 'FAILED' && jobCount.category === 'ALGORITHM';
+        }), 'count'));
+        const dataErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+            return jobCount.status === 'FAILED' && jobCount.category === 'DATA';
+        }), 'count'));
+        const total = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+            return jobCount.status !== 'RUNNING';
+        }), 'count'));
+        const failed = sysErrors + algErrors + dataErrors;
+        const chartData = [
+            {
+                label: 'SYSTEM',
+                value: sysErrors
+            },
+            {
+                label: 'ALGORITHM',
+                value: algErrors
+            },
+            {
+                label: 'DATA',
+                value: dataErrors
+            }
+        ];
+        return {
+            total: total,
+            failed: failed,
+            chartData: chartData
+        };
+    }
+
     private refreshAllJobTypes() {
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
@@ -50,35 +89,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 });
                 return jobCounts.length > 0;
             });
+            console.log(data.results.length, this.activeJobTypes.length);
 
-            const allJobCounts = _.flatten(_.map(data.results, 'job_counts'));
-            const sysErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-                return jobCount.status === 'FAILED' && jobCount.category === 'SYSTEM';
-            }), 'count'));
-            const algErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-                return jobCount.status === 'FAILED' && jobCount.category === 'ALGORITHM';
-            }), 'count'));
-            const dataErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-                return jobCount.status === 'FAILED' && jobCount.category === 'DATA';
-            }), 'count'));
-            this.total = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-                return jobCount.status !== 'RUNNING';
-            }), 'count'));
-            this.failed = sysErrors + algErrors + dataErrors;
-            this.chartData = [
-                {
-                    label: 'SYSTEM',
-                    value: sysErrors
-                },
-                {
-                    label: 'ALGORITHM',
-                    value: algErrors
-                },
-                {
-                    label: 'DATA',
-                    value: dataErrors
-                }
-            ];
+            const totalJobStats = this.generateStats(data.results);
+            this.total = totalJobStats.total;
+            this.failed = totalJobStats.failed;
+            this.chartData = totalJobStats.chartData;
+
+            const activeJobStats = this.generateStats(this.activeJobTypes);
+            this.totalActive = activeJobStats.total;
+            this.failedActive = activeJobStats.failed;
+            this.chartDataActive = activeJobStats.chartData;
 
             const favs = [];
             this.activeJobTypes.forEach(jt => {

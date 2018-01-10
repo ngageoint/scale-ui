@@ -26,6 +26,7 @@
 
     <div class="charts" *ngIf="activeJobTypes.length > 0">
         <app-error-dials [total]="total" [failed]="failed" [data]="chartData" label="All Jobs"></app-error-dials>
-        <app-historychart></app-historychart>
+        <app-error-dials [total]="totalActive" [failed]="failedActive" [data]="chartDataActive" label="Active Jobs"></app-error-dials>
+        <!--<app-historychart></app-historychart>-->
     </div>
 </div>
