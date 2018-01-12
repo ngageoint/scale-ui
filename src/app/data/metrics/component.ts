@@ -33,43 +33,9 @@ export class MetricsComponent implements OnInit {
     constructor(
         private metricsApiService: MetricsApiService,
         private dataService: DataService
-    ) {
-        this.data = {
-            labels: [],
-            datasets: []
-        };
-        this.options = {
-            title: {
-                display: true,
-                text: [],
-                fontSize: 16
-            },
-            legend: {
-                position: 'top'
-            },
-            scales: {
-                xAxes: [{
-                    stacked: true
-                }],
-                yAxes: [{
-                    id: 'axis1',
-                    position: 'left',
-                    stacked: true,
-                    scaleLabel: {
-                        display: true,
-                        labelString: ''
-                    },
-                    ticks: {
-                        callback: (value) => {
-                            return this.formatYValues(this.yUnits1, value);
-                        }
-                    }
-                }]
-            }
-        };
-    }
+    ) {}
 
-    private formatYValues = (units, data, noPadding?) => {
+    private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
         if (units === 'seconds') {
             return this.dataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
@@ -77,7 +43,8 @@ export class MetricsComponent implements OnInit {
             return this.dataService.calculateFileSizeFromBytes(data, 1);
         }
         return data;
-    };
+    }
+
     private randomColorGenerator() {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     };
@@ -148,15 +115,32 @@ export class MetricsComponent implements OnInit {
         }
     }
     updateChart() {
-        const axis2 = _.find(this.options.scales.yAxes, { id: 'axis2' });
-        if (this.selectedMetric2 && !axis2) {
-            this.options.scales.yAxes.push({
-                id: 'axis2',
+        this.showFilters = false;
+        const datasets = [];
+        const dataLabels = [];
+        const yAxes = [{
+            id: 'yAxis1',
+            position: 'left',
+            stacked: false,
+            scaleLabel: {
+                display: true,
+                labelString: this.selectedMetric1.title
+            },
+            ticks: {
+                callback: (value) => {
+                    return this.formatYValues(this.yUnits1, value);
+                }
+            }
+        }];
+        if (this.selectedMetric2) {
+            // user selected a second metric; another axis is needed
+            yAxes.push({
+                id: 'yAxis2',
                 position: 'right',
-                stacked: true,
+                stacked: false,
                 scaleLabel: {
                     display: true,
-                    labelString: ''
+                    labelString: this.selectedMetric2.title
                 },
                 ticks: {
                     callback: (value) => {
@@ -164,21 +148,10 @@ export class MetricsComponent implements OnInit {
                     }
                 }
             });
-        } else {
-            if (axis2) {
-                _.remove(this.options.scales.yAxes, axis => {
-                    return axis.id === 'axis2';
-                });
-            }
         }
-        this.showFilters = false;
-        this.data = {
-            labels: [],
-            datasets: []
-        };
         const numDays = moment.utc(this.ended, 'YYYY-MM-DD').diff(moment.utc(this.started, 'YYYY-MM-DD'), 'd');
         for (let i = 0; i < numDays; i++) {
-            this.data.labels.push(moment.utc(this.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
+            dataLabels.push(moment.utc(this.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
         }
         const params = {
             page: null,
@@ -237,7 +210,7 @@ export class MetricsComponent implements OnInit {
                             queryDates = d[1];
 
                             // add result values to valueArr
-                            _.forEach(this.data.labels, (xDate) => {
+                            _.forEach(dataLabels, (xDate) => {
                                 const valueObj = _.find(queryDates, (qDate) => {
                                     return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
                                 });
@@ -256,9 +229,10 @@ export class MetricsComponent implements OnInit {
                     // populate chart dataset
                     _.forEach(this.filtersApplied, (filter) => {
                         const filterData = _.find(colArr, { id: filter.id });
-                        this.data.datasets.push({
-                            yAxisID: `axis${idx + 1}`,
-                            label: `${filter.title} ${filter.version}`,
+                        datasets.push({
+                            yAxisID: `yAxis${idx + 1}`,
+                            stack: idx.toString(),
+                            label: `${filter.title} ${filter.version} ${result.column.title}`,
                             backgroundColor: this.randomColorGenerator(),
                             data: filterData ? filterData.data : []
                         });
@@ -269,7 +243,7 @@ export class MetricsComponent implements OnInit {
                 _.forEach(data.results, (result, idx) => {
                     valueArr = [];
                     // add result values to valueArr
-                    _.forEach(this.data.labels, (xDate) => {
+                    _.forEach(dataLabels, (xDate) => {
                         const valueObj = _.find(result.values, (qDate) => {
                             return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
                         });
@@ -278,8 +252,9 @@ export class MetricsComponent implements OnInit {
                     });
 
                     // populate chart dataset
-                    this.data.datasets.push({
-                        yAxisID: `axis${idx + 1}`,
+                    datasets.push({
+                        yAxisID: `yAxis${idx + 1}`,
+                        stack: idx.toString(),
                         label: result.column.title + ' for all ' + this.selectedDataType.title,
                         backgroundColor: this.randomColorGenerator(),
                         data: valueArr
@@ -289,15 +264,37 @@ export class MetricsComponent implements OnInit {
 
             // compute total count for requested time period
             let total = 0;
-            _.forEach(this.data.datasets, dataset => {
+            _.forEach(datasets, dataset => {
                 total = total + _.sum(dataset.data);
             });
+
+            // set chart title
             const formattedTotal = this.formatYValues(this.yUnits1, total, true),
                 formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
-                formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY');
-            this.options.title.text =
-                `${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()} for ${formattedStart} - ${formattedEnd}`;
-            this.options.scales.yAxes[0].scaleLabel.labelString = _.capitalize(this.yUnits1);
+                formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY'),
+                chartTitle = `${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()} for ${formattedStart} - ${formattedEnd}`;
+
+            // initialize chart
+            this.data = {
+                labels: dataLabels,
+                datasets: datasets
+            };
+            this.options = {
+                title: {
+                    display: true,
+                    text: chartTitle,
+                    fontSize: 16
+                },
+                legend: {
+                    position: 'top'
+                },
+                scales: {
+                    xAxes: [{
+                        stacked: true
+                    }],
+                    yAxes: yAxes
+                }
+            };
         });
     }
     ngOnInit() {
