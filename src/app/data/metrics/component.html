@@ -10,7 +10,8 @@
     <button pButton type="button" class="ui-button-primary metrics__filter-toggle" icon="fa-filter"
             (click)="showFilters = !showFilters"></button>
 
-    <p-sidebar [(visible)]="showFilters" position="right" [style]="{'width':'25vw'}" baseZIndex="1002">
+    <p-sidebar [(visible)]="showFilters" position="left" [style]="{'width':'25vw'}" [blockScroll]="true" baseZIndex="1002">
+        <h2>Metrics Filters</h2>
         <label>From</label>
         <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
         <label>To</label>

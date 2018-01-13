@@ -4,20 +4,28 @@
     label {
         display: block;
         font-weight: bold;
-        margin: 10px 0 0 0;
+        margin: 15px 0 0 0;
     }
 
     button {
-        margin: 10px 0;
+        margin: 15px 0;
     }
 
     .metrics__filter-toggle {
         position: fixed;
-        top: 80px;
-        right: 0;
+        top: 130px;
+        left: 0;
         height: 120px;
         width: 30px;
-        border-top-right-radius: 0;
-        border-bottom-right-radius: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+    }
+
+    ::ng-deep canvas {
+        margin-top: -39px;
+    }
+
+    ::ng-deep .ui-sidebar {
+        overflow-y: auto;
     }
 }
