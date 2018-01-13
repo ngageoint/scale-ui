@@ -229,10 +229,13 @@ export class MetricsComponent implements OnInit {
                     // populate chart dataset
                     _.forEach(this.filtersApplied, (filter) => {
                         const filterData = _.find(colArr, { id: filter.id });
+                        const label = filter.version ?
+                            `${filter.title} ${filter.version} ${result.column.title}` :
+                            `${filter.title} ${result.column.title}`;
                         datasets.push({
                             yAxisID: `yAxis${idx + 1}`,
                             stack: idx.toString(),
-                            label: `${filter.title} ${filter.version} ${result.column.title}`,
+                            label: label,
                             backgroundColor: this.randomColorGenerator(),
                             data: filterData ? filterData.data : []
                         });
@@ -272,7 +275,13 @@ export class MetricsComponent implements OnInit {
             const formattedTotal = this.formatYValues(this.yUnits1, total, true),
                 formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY'),
-                chartTitle = `${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()} for ${formattedStart} - ${formattedEnd}`;
+                chartTitle: String[] = [];
+            chartTitle.push(`${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()}`);
+            if (this.yUnits2) {
+                const formattedTotal2 = this.formatYValues(this.yUnits2, total, true);
+                chartTitle.push(`${this.selectedMetric2.title}: ${formattedTotal2.toLocaleString()}`);
+            }
+            chartTitle.push(`${formattedStart} - ${formattedEnd}`);
 
             // initialize chart
             this.data = {
