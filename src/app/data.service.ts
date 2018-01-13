@@ -8,15 +8,15 @@ export class DataService {
     constructor() {
     }
 
-    private padWithZero = (input, length) => {
+    private padWithZero(input, length) {
         // Cast input to string
         input = '' + input;
 
         const paddingSize = Math.max(0, length - input.length);
         return new Array(paddingSize > 0 ? paddingSize + 1 : 0).join('0') + input;
-    };
+    }
 
-    public calculateFileSizeFromMib = (num) => {
+    public calculateFileSizeFromMib(num) {
         if (num > 0) {
             if (num < 1024) {
                 return num.toFixed(2) + ' MB';
@@ -27,9 +27,9 @@ export class DataService {
             return (num / 1024 / 1024).toFixed(2) + ' TB';
         }
         return num;
-    };
+    }
 
-    public calculateFileSizeFromBytes = (num, decimals) => {
+    public calculateFileSizeFromBytes(num, decimals) {
         if (num > 0) {
             if (num < 1024) {
                 return num.toFixed(decimals) + ' Bytes';
@@ -46,9 +46,9 @@ export class DataService {
             return (num / 1024 / 1024 / 1024 / 1024).toFixed(decimals) + ' TB';
         }
         return num;
-    };
+    }
 
-    public calculateDuration = (start, stop, noPadding?) => {
+    public calculateDuration(start, stop, noPadding?) {
         const to = moment.utc(stop),
             from = moment.utc(start),
             diff = moment.utc(to).diff(moment.utc(from)),
@@ -73,13 +73,13 @@ export class DataService {
         }
 
         return durationStr;
-    };
+    }
 
-    public formatDate = (date) => {
+    public formatDate(date) {
         if (date) {
             return _.capitalize(moment.utc(date).from(moment.utc())) + ' <small>' + moment.utc(date).format('YYYY-MM-DD HH:mm:ss') +
                 '</small>';
         }
         return '';
-    };
+    }
 }

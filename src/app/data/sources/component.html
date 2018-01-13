@@ -16,7 +16,7 @@
 <p-dataTable [value]="sources" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
              [responsive]="true" resizableColumns="true" selectionMode="single" (onRowSelect)="onRowSelect($event)"
-             [style]="{'min-height':'300px'}" [enableLoader]="false">
+             [style]="{'min-height':'300px'}">
     <p-column field="file_name" header="File Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"
               [sortable]="true"></p-column>
     <p-column field="file_size" header="File Size" [sortable]="true"></p-column>

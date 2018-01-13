@@ -38,7 +38,7 @@ export class HistorychartComponent implements OnInit {
                 borderWidth: 0,
                 data: [28, 48, 40, 19, 86, 27, 90]
             }]
-        }
+        };
         this.options = {
             tooltips: {
                 mode: 'index',
@@ -53,7 +53,7 @@ export class HistorychartComponent implements OnInit {
                     stacked: true
                 }]
             }
-        }
+        };
     }
 
     ngOnInit() {

@@ -47,7 +47,7 @@ export class MetricsComponent implements OnInit {
 
     private randomColorGenerator() {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
-    };
+    }
 
     getDataTypes() {
         this.metricsApiService.getDataTypes().then((data) => {
@@ -276,12 +276,12 @@ export class MetricsComponent implements OnInit {
                 formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 chartTitle: String[] = [];
+            chartTitle.push(`${formattedStart} - ${formattedEnd}`);
             chartTitle.push(`${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()}`);
             if (this.yUnits2) {
                 const formattedTotal2 = this.formatYValues(this.yUnits2, total, true);
                 chartTitle.push(`${this.selectedMetric2.title}: ${formattedTotal2.toLocaleString()}`);
             }
-            chartTitle.push(`${formattedStart} - ${formattedEnd}`);
 
             // initialize chart
             this.data = {

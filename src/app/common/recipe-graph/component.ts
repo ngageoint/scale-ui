@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { colorSets } from '@swimlane/ngx-charts-dag/release/utils';
+import { colorSets } from '@swimlane/ngx-graph/release/utils';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
@@ -55,7 +55,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         });
         return results;
-    };
+    }
 
     select(e) {
         if (this.selectedNode) {

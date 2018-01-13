@@ -47,7 +47,7 @@ export class FailureRatesComponent implements OnInit {
             dataArr.push(filteredResult);
         });
         return dataArr;
-    };
+    }
     private formatColumn(cData, id) {
         const systemErrors = cData[0],
             algorithmErrors = cData[1],
@@ -68,7 +68,7 @@ export class FailureRatesComponent implements OnInit {
         obj.failRatePercent = (obj.failRate * 100).toFixed(0) + '%';
 
         return obj;
-    };
+    }
     private updateData() {
         const metricsParams = {
             page: null,
@@ -167,7 +167,7 @@ export class FailureRatesComponent implements OnInit {
             sortOrder: this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ? -1 : 1
         });
         this.updateOptions(true);
-    };
+    }
     onChange(e) {
         this.selectedJobType = e.value;
         this.datatableOptions = Object.assign(this.datatableOptions, {

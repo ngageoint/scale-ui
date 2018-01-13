@@ -25,12 +25,12 @@ export class SourceDetailsComponent implements OnInit {
         private dataService: DataService
     ) {}
 
-    private getSourceJobs = () => {
+    private getSourceJobs() {
         this.sourcesApiService.getSourceDescendants(this.source.id, 'jobs', this.jobsDatatableService.getJobsDatatableOptions())
             .then(data => {
                 this.jobsData = data.results as Job[];
             });
-    };
+    }
     formatFilesize(filesize) {
         return this.dataService.calculateFileSizeFromBytes(filesize, 0);
     }

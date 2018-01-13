@@ -41,6 +41,3 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-
-# ignore package-lock.json - causes problems on base
-package-lock.json

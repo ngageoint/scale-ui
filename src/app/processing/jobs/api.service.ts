@@ -7,7 +7,10 @@ import { ApiResults } from '../../api-results.model';
 import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
 import { JobExecution } from './execution.model';
-import { Observable } from 'rxjs/Rx';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/observable/timer';
+import 'rxjs/add/operator/startWith';
 
 @Injectable()
 export class JobsApiService {
