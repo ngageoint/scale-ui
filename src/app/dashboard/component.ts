@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
-import { DashboardFavoritesService } from './favorites.service';
+import { DashboardJobsService } from './jobs.service';
 
 
 @Component({
@@ -20,10 +20,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     totalActive: number;
     failedActive: number;
     chartDataActive: any;
+    chartTitle: string;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
-        private favoritesService: DashboardFavoritesService
+        private jobsService: DashboardJobsService
     ) {
         this.activeJobTypes = [];
         this.favoriteJobTypes = [];
@@ -36,7 +37,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.refreshAllJobTypes();
-        this.favoritesService.favoritesUpdated.subscribe(() => {
+        this.jobsService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
         });
     }
@@ -89,7 +90,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 });
                 return jobCounts.length > 0;
             });
-            console.log(data.results.length, this.activeJobTypes.length);
+            this.jobsService.setActiveJobs(this.activeJobTypes);
 
             const totalJobStats = this.generateStats(data.results);
             this.total = totalJobStats.total;
@@ -103,11 +104,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
             const favs = [];
             this.activeJobTypes.forEach(jt => {
-                if (this.favoritesService.isFavorite(jt.job_type.id)) {
+                if (this.jobsService.isFavorite(jt.job_type)) {
                     favs.push(jt);
                 }
             });
             this.favoriteJobTypes = favs;
+            this.chartTitle = 'Completed vs. Failed counts for';
+            this.chartTitle = favs.length > 0 ? `${this.chartTitle} Favorites` : `${this.chartTitle} Active Jobs`;
         });
     }
 }

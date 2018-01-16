@@ -3,7 +3,7 @@ import { HttpModule } from '@angular/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
-import { DashboardFavoritesService } from './favorites.service';
+import { DashboardJobsService } from './jobs.service';
 import { DashboardComponent } from './component';
 
 
@@ -16,7 +16,7 @@ describe('DashboardComponent', () => {
         TestBed.configureTestingModule({
             declarations: [DashboardComponent],
             imports: [HttpModule],
-            providers: [JobTypesApiService, DashboardFavoritesService],
+            providers: [JobTypesApiService, DashboardJobsService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })

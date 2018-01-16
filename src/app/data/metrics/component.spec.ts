@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MetricsComponent } from './component';
+import { ChartService } from './chart.service';
 import { MetricsApiService } from './api.service';
 import { DataService } from '../../data.service';
 
@@ -17,7 +18,7 @@ describe('JobsComponent', () => {
             declarations: [MetricsComponent],
             imports: [HttpModule],
             providers: [
-                MetricsApiService, DataService,
+                ChartService, MetricsApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

@@ -27,7 +27,7 @@ import { JobsDatatableService } from './processing/jobs/datatable.service';
 import { JobDetailsComponent } from './processing/jobs/details.component';
 import { LogoComponent } from './logo/logo.component';
 import { DashboardComponent } from './dashboard/component';
-import { DashboardFavoritesService } from './dashboard/favorites.service';
+import { DashboardJobsService } from './dashboard/jobs.service';
 import { RecipesComponent } from './processing/recipes/component';
 import { RecipesApiService } from './processing/recipes/api.service';
 import { RecipesDatatableService } from './processing/recipes/datatable.service';
@@ -54,6 +54,7 @@ import { FailureRatesComponent } from './processing/failure-rates/component';
 import { FailureRatesDatatableService } from './processing/failure-rates/datatable.service';
 import { MetricsComponent } from './data/metrics/component';
 import { MetricsApiService } from './data/metrics/api.service';
+import { ChartService } from './data/metrics/chart.service';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { RunningJobsDatatableService } from './processing/running-jobs/datatable.service';
 import { RunningJobsApiService } from './processing/running-jobs/api.service';
@@ -142,7 +143,7 @@ import { ErrorDialsComponent } from './common/error-dials/component';
         RecipesApiService,
         RecipesDatatableService,
         ColorService,
-        DashboardFavoritesService,
+        DashboardJobsService,
         RecipeTypesApiService,
         WorkspacesApiService,
         SourcesApiService,
@@ -150,6 +151,7 @@ import { ErrorDialsComponent } from './common/error-dials/component';
         DataService,
         FailureRatesDatatableService,
         MetricsApiService,
+        ChartService,
         RunningJobsApiService,
         RunningJobsDatatableService,
         LogViewerApiService

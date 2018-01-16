@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { DashboardFavoritesService } from '../favorites.service';
+import { DashboardJobsService } from '../jobs.service';
 
 
 @Component({
@@ -11,7 +11,7 @@ import { DashboardFavoritesService } from '../favorites.service';
 export class JobtypeitemComponent implements OnInit {
 
     @Input() item: any;
-    constructor(private favoritesService: DashboardFavoritesService) {
+    constructor(private jobsService: DashboardJobsService) {
         this.item = {
             job_type: {
                 icon_code: ''
@@ -76,13 +76,13 @@ export class JobtypeitemComponent implements OnInit {
     }
 
     getFavoriteBtnClass() {
-        if (this.favoritesService.isFavorite(this.item.job_type.id)) {
+        if (this.jobsService.isFavorite(this.item.job_type)) {
             return 'fa fa-star';
         }
         return 'fa fa-star-o';
     }
 
     toggleFavorite($event) {
-        this.favoritesService.toggleFavorite(this.item.job_type);
+        this.jobsService.toggleFavorite(this.item.job_type);
     }
 }

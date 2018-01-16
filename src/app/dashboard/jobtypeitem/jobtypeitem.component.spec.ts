@@ -1,7 +1,7 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { DashboardFavoritesService } from '../favorites.service';
+import { DashboardJobsService } from '../jobs.service';
 import { JobtypeitemComponent } from './jobtypeitem.component';
 
 
@@ -13,7 +13,7 @@ describe('JobtypeitemComponent', () => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule],
             declarations: [JobtypeitemComponent],
-            providers: [DashboardFavoritesService]
+            providers: [DashboardJobsService]
         })
         .compileComponents();
     }));

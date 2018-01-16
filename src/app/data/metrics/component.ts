@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { MetricsApiService } from './api.service';
+import { ChartService } from './chart.service';
 import { DataService } from '../../data.service';
 
 @Component({
@@ -32,6 +33,7 @@ export class MetricsComponent implements OnInit {
     showFilters = true;
     constructor(
         private metricsApiService: MetricsApiService,
+        private chartService: ChartService,
         private dataService: DataService
     ) {}
 
@@ -43,10 +45,6 @@ export class MetricsComponent implements OnInit {
             return this.dataService.calculateFileSizeFromBytes(data, 1);
         }
         return data;
-    }
-
-    private randomColorGenerator() {
-        return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
     getDataTypes() {
@@ -116,12 +114,10 @@ export class MetricsComponent implements OnInit {
     }
     updateChart() {
         this.showFilters = false;
-        const datasets = [];
-        const dataLabels = [];
         const yAxes = [{
             id: 'yAxis1',
             position: 'left',
-            stacked: false,
+            stacked: true,
             scaleLabel: {
                 display: true,
                 labelString: this.selectedMetric1.title
@@ -137,7 +133,7 @@ export class MetricsComponent implements OnInit {
             yAxes.push({
                 id: 'yAxis2',
                 position: 'right',
-                stacked: false,
+                stacked: true,
                 scaleLabel: {
                     display: true,
                     labelString: this.selectedMetric2.title
@@ -149,10 +145,7 @@ export class MetricsComponent implements OnInit {
                 }
             });
         }
-        const numDays = moment.utc(this.ended, 'YYYY-MM-DD').diff(moment.utc(this.started, 'YYYY-MM-DD'), 'd');
-        for (let i = 0; i < numDays; i++) {
-            dataLabels.push(moment.utc(this.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
-        }
+
         const params = {
             page: null,
             page_size: null,
@@ -164,110 +157,14 @@ export class MetricsComponent implements OnInit {
             dataType: this.selectedDataType.name
         };
         this.metricsApiService.getPlotData(params).then((data) => {
-            let valueArr = [],
-                colArr = [],
-                queryFilter = null,
-                queryDates = [];
-
             this.yUnits1 = this.selectedMetric1.units;
             this.yUnits2 = this.selectedMetric2 ? this.selectedMetric2.units : null;
 
-            if (this.filtersApplied.length > 0) {
-                // filters were applied, so build data source accordingly
-                _.forEach(data.results, (result, idx) => {
-                    valueArr = [];
-                    colArr = [];
-                    if (result.values.length > 0) {
-                        // values for all filters are returned in one array of arrays,
-                        // so group results by id to isolate filter values
-                        const groupedResult = _.groupBy(result.values, 'id'),
-                            resultObj = {},
-                            filterIds = _.map(this.filtersApplied, 'id');
-                        // try to get each filter id from groupedResult.
-                        // if it's undefined, an empty array will be returned
-                        // this allows a zeroed array to appear in the chart,
-                        // since we want to include all filters selected by the user
-                        // regardless of value
-                        if (filterIds.length > 1) {
-                            // when more than one filter is requested, then an id
-                            // value is present within data.results
-                            _.forEach(filterIds, (id) => {
-                                resultObj[id] = _.get(groupedResult, id, []);
-                            });
-                        } else {
-                            // when one filter is requested, no id value is included
-                            // in data.results, so build resultObj with the other
-                            // info we have
-                            resultObj[params.choice_id[0]] = _.toPairs(groupedResult)[0][1];
-                        }
-                        _.forEach(_.toPairs(resultObj), (d) => {
-                            valueArr = [];
-                            // d[0] will be choice id, d[1] will be values
-                            // if only one filter was selected, d[0] will return as string 'undefined' since no id is included in this case
-                            queryFilter = d[0] === 'undefined' ?
-                                this.filtersApplied[0] :
-                                _.find(this.filtersApplied, { id: parseInt(d[0], 10) });
-                            queryDates = d[1];
-
-                            // add result values to valueArr
-                            _.forEach(dataLabels, (xDate) => {
-                                const valueObj = _.find(queryDates, (qDate) => {
-                                    return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
-                                });
-                                // push 0 if data for xDate is not present in queryDates
-                                valueArr.push(valueObj ? valueObj.value : 0);
-                            });
-
-                            // prepend valueArr with filter title, and push onto colArr
-                            colArr.push({
-                                id: queryFilter.id,
-                                data: valueArr
-                            });
-                        });
-                    }
-
-                    // populate chart dataset
-                    _.forEach(this.filtersApplied, (filter) => {
-                        const filterData = _.find(colArr, { id: filter.id });
-                        const label = filter.version ?
-                            `${filter.title} ${filter.version} ${result.column.title}` :
-                            `${filter.title} ${result.column.title}`;
-                        datasets.push({
-                            yAxisID: `yAxis${idx + 1}`,
-                            stack: idx.toString(),
-                            label: label,
-                            backgroundColor: this.randomColorGenerator(),
-                            data: filterData ? filterData.data : []
-                        });
-                    });
-                });
-            } else {
-                // no filters were applied, so show aggregate statistics for selected metric
-                _.forEach(data.results, (result, idx) => {
-                    valueArr = [];
-                    // add result values to valueArr
-                    _.forEach(dataLabels, (xDate) => {
-                        const valueObj = _.find(result.values, (qDate) => {
-                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
-                        });
-                        // push 0 if data for xDate is not present in result.values
-                        valueArr.push(valueObj ? valueObj.value : 0);
-                    });
-
-                    // populate chart dataset
-                    datasets.push({
-                        yAxisID: `yAxis${idx + 1}`,
-                        stack: idx.toString(),
-                        label: result.column.title + ' for all ' + this.selectedDataType.title,
-                        backgroundColor: this.randomColorGenerator(),
-                        data: valueArr
-                    });
-                });
-            }
+            const chartData = this.chartService.formatPlotResults(data, params, this.filtersApplied, this.selectedDataType.title);
 
             // compute total count for requested time period
             let total = 0;
-            _.forEach(datasets, dataset => {
+            _.forEach(chartData.data, dataset => {
                 total = total + _.sum(dataset.data);
             });
 
@@ -285,8 +182,8 @@ export class MetricsComponent implements OnInit {
 
             // initialize chart
             this.data = {
-                labels: dataLabels,
-                datasets: datasets
+                labels: chartData.labels,
+                datasets: chartData.data
             };
             this.options = {
                 title: {

@@ -5,12 +5,24 @@
 
     .algpicker {
         width: 33%;
+
+        h2 {
+            margin: 20px 0 0 0;
+            padding: 0;
+
+            &:first-of-type {
+                margin: 0;
+            }
+        }
     }
 
     .charts {
-        display: flex;
-        padding: 0 1.0em;
-        width: 67%;
+        height: 75vh;
+        width: 100%;
+
+        h2 {
+            margin-left: 20px;
+        }
     }
 }
 

@@ -58,6 +58,15 @@ $subnav-height: 250px;
         flex-direction: column;
         padding: 0;
 
+        h2 {
+            margin: 20px 0 0 0;
+            padding: 0;
+
+            &:first-of-type {
+                margin: 0;
+            }
+        }
+
         button {
             margin-bottom: 1.0em;
         }
