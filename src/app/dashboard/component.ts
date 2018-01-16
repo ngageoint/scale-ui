@@ -109,8 +109,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             });
             this.favoriteJobTypes = favs;
-            this.chartTitle = 'Completed vs. Failed counts for';
-            this.chartTitle = favs.length > 0 ? `${this.chartTitle} Favorites` : `${this.chartTitle} Active Jobs`;
+            this.chartTitle = 'Completed vs. Failed counts';
+            this.chartTitle = favs.length > 0 ? `${this.chartTitle} (Favorites)` : `${this.chartTitle} (Active Jobs)`;
         });
     }
 }

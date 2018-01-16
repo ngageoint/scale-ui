@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
-// import { ColorService } from '../../color.service';
+import { ColorService } from '../../color.service';
 
 @Component({
     selector: 'app-historychart',
@@ -24,51 +24,11 @@ export class HistorychartComponent implements OnInit {
         private http: HttpModule,
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
-        private metricsApiService: MetricsApiService
-        // private colorService: ColorService
-    ) {
-        // this.data = {
-        //     labels: ['08/16/2017', '08/17/2017', '08/18/2017', '08/19/2017', '08/20/2017', '08/21/2017', '08/22/2017'],
-        //     datasets: [{
-        //         label: 'Completed',
-        //         backgroundColor: colorService.COMPLETED,
-        //         borderWidth: 0,
-        //         data: [165, 159, 180, 181, 156, 155, 140]
-        //     }, {
-        //         label: 'Data',
-        //         backgroundColor: colorService.ERROR_DATA,
-        //         borderWidth: 0,
-        //         data: [28, 48, 40, 19, 86, 27, 90]
-        //     }, {
-        //         label: 'Algorithm',
-        //         backgroundColor: colorService.ERROR_ALGORITHM,
-        //         borderWidth: 0,
-        //         data: [28, 48, 40, 19, 86, 27, 90]
-        //     }, {
-        //         label: 'System',
-        //         backgroundColor: colorService.ERROR_SYSTEM,
-        //         borderWidth: 0,
-        //         data: [28, 48, 40, 19, 86, 27, 90]
-        //     }]
-        // };
-        // this.options = {
-        //     tooltips: {
-        //         mode: 'index',
-        //         intersect: false
-        //     },
-        //     responsive: true,
-        //     scales: {
-        //         xAxes: [{
-        //             stacked: true,
-        //         }],
-        //         yAxes: [{
-        //             stacked: true
-        //         }]
-        //     }
-        // };
-    }
+        private metricsApiService: MetricsApiService,
+        private colorService: ColorService
+    ) {}
 
-    ngOnInit() {
+    private updateChart() {
         this.favorites = this.jobsService.getFavorites();
         this.activeJobs = this.jobsService.getActiveJobs();
         const choiceIds = this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.activeJobs, 'job_type.id');
@@ -100,10 +60,10 @@ export class HistorychartComponent implements OnInit {
                 labelString: 'Failed Count'
             }
         }];
-        debugger;
         this.metricsApiService.getPlotData(this.params).then(data => {
             const filters = this.favorites.length > 0 ? this.favorites : _.map(this.activeJobs, 'job_type');
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '');
+            const colors = [this.colorService.COMPLETED, this.colorService.ERROR];
+            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', colors);
             // initialize chart
             this.data = {
                 labels: chartData.labels,
@@ -113,6 +73,22 @@ export class HistorychartComponent implements OnInit {
                 legend: {
                     display: false
                 },
+                plugins: {
+                    datalabels: {
+                        color: 'white',
+                        display: context => {
+                            return context.dataset.data[context.dataIndex] > 15;
+                        },
+                        font: {
+                            weight: 'bold',
+                            family: 'FontAwesome',
+                            style: 'normal'
+                        },
+                        formatter: (value, context) => {
+                            return context.dataset.icon;
+                        }
+                    }
+                },
                 responsive: true,
                 scales: {
                     xAxes: [{
@@ -121,6 +97,13 @@ export class HistorychartComponent implements OnInit {
                     yAxes: yAxes
                 }
             };
+        });
+    }
+
+    ngOnInit() {
+        this.updateChart();
+        this.jobsService.favoritesUpdated.subscribe(() => {
+            this.updateChart();
         });
     }
 }

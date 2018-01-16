@@ -33,6 +33,7 @@
         "@swimlane/ngx-graph": "^4.0.2",
         "angular-utc-datepicker": "^1.0.1",
         "chart.js": "^2.6.0",
+        "chartjs-plugin-datalabels": "^0.2.0",
         "codemirror": "^5.28.0",
         "core-js": "^2.5.3",
         "d3": "^4.10.0",

@@ -194,6 +194,12 @@ export class MetricsComponent implements OnInit {
                 legend: {
                     position: 'top'
                 },
+                plugins: {
+                    datalabels: {
+                        display: false
+                    }
+                },
+                responsive: true,
                 scales: {
                     xAxes: [{
                         stacked: true

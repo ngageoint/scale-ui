@@ -11,7 +11,7 @@ export class ChartService {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
-    formatPlotResults(data: any, params: any, filtersApplied: any, title: string): any {
+    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, colors?: any[]): any {
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -89,7 +89,9 @@ export class ChartService {
                         yAxisID: `yAxis${idx + 1}`,
                         stack: `stack${idx.toString()}`,
                         label: label,
-                        backgroundColor: this.randomColorGenerator(),
+                        icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
+                        backgroundColor: colors[idx % 2 === 0 ? 0 : 1] || this.randomColorGenerator(),
+                        borderWidth: 2,
                         data: filterData ? filterData.data : []
                     });
                 });
@@ -112,7 +114,8 @@ export class ChartService {
                     yAxisID: `yAxis${idx + 1}`,
                     stack: idx.toString(),
                     label: result.column.title + ' for all ' + title,
-                    backgroundColor: this.randomColorGenerator(),
+                    icon: null,
+                    backgroundColor: colors || this.randomColorGenerator(),
                     data: valueArr
                 });
             });

@@ -1,28 +1,16 @@
 @import '../../defaults/colors';
 
 .dashboard {
-    display: flex;
-
-    .algpicker {
-        width: 33%;
-
-        h2 {
-            margin: 20px 0 0 0;
-            padding: 0;
-
-            &:first-of-type {
-                margin: 0;
-            }
-        }
+    .charts {
+        width: 100%;
     }
 
-    .charts {
-        height: 75vh;
-        width: 100%;
+    ::ng-deep .ui-panel {
+        margin-bottom: 10px;
+    }
 
-        h2 {
-            margin-left: 20px;
-        }
+    ::ng-deep .ui-panel-title {
+        font-weight: bold;
     }
 }
 
