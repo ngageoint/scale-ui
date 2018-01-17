@@ -12,6 +12,7 @@ export class ChartService {
     }
 
     formatPlotResults(data: any, params: any, filtersApplied: any, title: string, colors?: any[]): any {
+        colors = colors || [];
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -90,7 +91,7 @@ export class ChartService {
                         stack: `stack${idx.toString()}`,
                         label: label,
                         icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                        backgroundColor: colors[idx % 2 === 0 ? 0 : 1] || this.randomColorGenerator(),
+                        backgroundColor: colors.length > 0 ? colors[idx % 2 === 0 ? 0 : 1] : this.randomColorGenerator(),
                         borderWidth: 2,
                         data: filterData ? filterData.data : []
                     });
@@ -115,7 +116,7 @@ export class ChartService {
                     stack: idx.toString(),
                     label: result.column.title + ' for all ' + title,
                     icon: null,
-                    backgroundColor: colors || this.randomColorGenerator(),
+                    backgroundColor: colors.length > 0 ? colors[idx % 2 === 0 ? 0 : 1] : this.randomColorGenerator(),
                     data: valueArr
                 });
             });

@@ -43,6 +43,11 @@ export class ErrorDialsComponent implements OnInit {
                 display: this.legend,
                 position: 'bottom'
             },
+            plugins: {
+                datalabels: {
+                    display: false
+                }
+            },
             elements: {
                 arc: {
                     borderWidth: 0
