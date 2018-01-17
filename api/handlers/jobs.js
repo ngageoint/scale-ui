@@ -8,6 +8,9 @@ module.exports = function (request, reply) {
     if (_.keys(params).length > 0) {
         if (params.job_type_id) {
             data.results = _.filter(data.results, function (r) {
+                if (Array.isArray(params.job_type_id)) {
+                    return _.includes(params.job_type_id, r.job_type.id.toString());
+                }
                 return r.job_type.id === parseInt(params.job_type_id);
             });
         }

@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -13,15 +12,15 @@ import { ColorService } from '../../color.service';
     templateUrl: './historychart.component.html',
     styleUrls: ['./historychart.component.scss']
 })
-export class HistorychartComponent implements OnInit {
+export class HistorychartComponent implements OnInit, OnDestroy {
     data: any;
     options: any;
     params: any;
     favorites = [];
     activeJobs = [];
+    subscription: any;
 
     constructor(
-        private http: HttpModule,
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
         private metricsApiService: MetricsApiService,
@@ -100,10 +99,20 @@ export class HistorychartComponent implements OnInit {
         });
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     ngOnInit() {
         this.updateChart();
-        this.jobsService.favoritesUpdated.subscribe(() => {
+        this.subscription = this.jobsService.favoritesUpdated.subscribe(() => {
             this.updateChart();
         });
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

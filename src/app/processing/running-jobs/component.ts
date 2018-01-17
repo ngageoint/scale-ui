@@ -81,7 +81,6 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         }
     }
     onRowSelect(e) {
-        console.log(e);
         const jobsDatatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         this.jobsDatatableService.setJobsDatatableOptions(Object.assign(jobsDatatableOptions, {
             first: 0,
@@ -91,17 +90,6 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         this.router.navigate(['processing', 'jobs']);
     }
     ngOnInit() {
-        // if (this.route.snapshot &&
-        //     Object.keys(this.route.snapshot.queryParams).length > 0) {
-        //
-        //     const params = this.route.snapshot.queryParams;
-        //     this.datatableOptions = {
-        //         first: parseInt(params.first, 10),
-        //         rows: parseInt(params.rows, 10)
-        //     };
-        // } else {
-        //     this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
-        // }
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {

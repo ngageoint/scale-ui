@@ -40,12 +40,12 @@
             "mem_required": "497.4",
             "disk_in_required": "79.8",
             "disk_out_required": "51.3",
-            "created": "2016-04-29T15:33:13Z",
-            "queued": "2016-04-29T15:42:05Z",
-            "started": "2016-04-29T15:46:20Z",
-            "ended": "2016-04-29T15:56:11Z",
-            "last_status_change": "2016-04-29T15:56:11Z",
-            "last_modified": "2016-04-29T15:56:11Z"
+            "created": "2018-01-16T15:33:13Z",
+            "queued": "2018-01-16T15:42:05Z",
+            "started": "2018-01-16T15:46:20Z",
+            "ended": "2018-01-16T15:56:11Z",
+            "last_status_change": "2018-01-16T15:56:11Z",
+            "last_modified": "2018-01-16T15:56:11Z"
         },
         {
             "id": 2,
@@ -72,7 +72,7 @@
             "event": {
                 "id": 99,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-05-05T13:33:01Z"
+                "occurred": "2018-01-16T13:33:01Z"
             },
             "error": null,
             "status": "QUEUED",
@@ -84,12 +84,12 @@
             "mem_required": "121.0",
             "disk_in_required": "29.0",
             "disk_out_required": "72.7",
-            "created": "2016-04-30T21:27:36Z",
-            "queued": "2016-04-30T21:33:38Z",
-            "started": "2016-04-30T21:42:05Z",
-            "ended": "2016-04-30T21:51:55Z",
-            "last_status_change": "2016-04-30T21:51:55Z",
-            "last_modified": "2016-04-30T21:51:55Z"
+            "created": "2018-01-16T21:27:36Z",
+            "queued": "2018-01-16T21:33:38Z",
+            "started": "2018-01-16T21:42:05Z",
+            "ended": "2018-01-16T21:51:55Z",
+            "last_status_change": "2018-01-16T21:51:55Z",
+            "last_modified": "2018-01-16T21:51:55Z"
         },
         {
             "id": 3,
@@ -116,7 +116,7 @@
             "event": {
                 "id": 21,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-05-02T05:20:30Z"
+                "occurred": "2018-01-16T05:20:30Z"
             },
             "error": null,
             "status": "CANCELED",
@@ -128,12 +128,12 @@
             "mem_required": "70.5",
             "disk_in_required": "64.0",
             "disk_out_required": "77.6",
-            "created": "2016-05-02T14:52:59Z",
-            "queued": "2016-05-02T14:53:13Z",
-            "started": "2016-05-02T14:59:44Z",
-            "ended": "2016-05-02T15:03:38Z",
-            "last_status_change": "2016-05-02T15:03:38Z",
-            "last_modified": "2016-05-02T15:03:38Z"
+            "created": "2018-01-16T14:52:59Z",
+            "queued": "2018-01-16T14:53:13Z",
+            "started": "2018-01-16T14:59:44Z",
+            "ended": "2018-01-16T15:03:38Z",
+            "last_status_change": "2018-01-16T15:03:38Z",
+            "last_modified": "2018-01-16T15:03:38Z"
         },
         {
             "id": 4,
@@ -172,12 +172,12 @@
             "mem_required": "509.5",
             "disk_in_required": "27.2",
             "disk_out_required": "88.2",
-            "created": "2016-04-28T11:13:09Z",
-            "queued": "2016-04-28T11:20:37Z",
-            "started": "2016-04-28T11:24:27Z",
-            "ended": "2016-04-28T11:26:34Z",
-            "last_status_change": "2016-04-28T11:26:34Z",
-            "last_modified": "2016-04-28T11:26:34Z"
+            "created": "2018-01-16T11:13:09Z",
+            "queued": "2018-01-16T11:20:37Z",
+            "started": "2018-01-16T11:24:27Z",
+            "ended": "2018-01-16T11:26:34Z",
+            "last_status_change": "2018-01-16T11:26:34Z",
+            "last_modified": "2018-01-16T11:26:34Z"
         },
         {
             "id": 5,
@@ -204,7 +204,7 @@
             "event": {
                 "id": 76,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-04-29T00:46:34Z"
+                "occurred": "2018-01-16T00:46:34Z"
             },
             "error": null,
             "status": "CANCELED",
@@ -216,12 +216,12 @@
             "mem_required": "183.9",
             "disk_in_required": "68.1",
             "disk_out_required": "86.3",
-            "created": "2016-04-30T07:41:30Z",
-            "queued": "2016-04-30T07:50:15Z",
-            "started": "2016-04-30T07:52:19Z",
-            "ended": "2016-04-30T07:57:17Z",
-            "last_status_change": "2016-04-30T07:57:17Z",
-            "last_modified": "2016-04-30T07:57:17Z"
+            "created": "2018-01-16T07:41:30Z",
+            "queued": "2018-01-16T07:50:15Z",
+            "started": "2018-01-16T07:52:19Z",
+            "ended": "2018-01-16T07:57:17Z",
+            "last_status_change": "2018-01-16T07:57:17Z",
+            "last_modified": "2018-01-16T07:57:17Z"
         },
         {
             "id": 6,
@@ -248,7 +248,7 @@
             "event": {
                 "id": 78,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-05-03T05:15:41Z"
+                "occurred": "2018-01-16T05:15:41Z"
             },
             "error": null,
             "status": "PENDING",
@@ -260,12 +260,12 @@
             "mem_required": "154.5",
             "disk_in_required": "26.2",
             "disk_out_required": "71.8",
-            "created": "2016-05-03T18:25:58Z",
-            "queued": "2016-05-03T18:32:42Z",
-            "started": "2016-05-03T18:37:14Z",
-            "ended": "2016-05-03T18:37:42Z",
-            "last_status_change": "2016-05-03T18:37:42Z",
-            "last_modified": "2016-05-03T18:37:42Z"
+            "created": "2018-01-16T18:25:58Z",
+            "queued": "2018-01-16T18:32:42Z",
+            "started": "2018-01-16T18:37:14Z",
+            "ended": "2018-01-16T18:37:42Z",
+            "last_status_change": "2018-01-16T18:37:42Z",
+            "last_modified": "2018-01-16T18:37:42Z"
         },
         {
             "id": 7,
@@ -292,7 +292,7 @@
             "event": {
                 "id": 1,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-05-15T05:11:46Z"
+                "occurred": "2018-01-16T05:11:46Z"
             },
             "error": null,
             "status": "COMPLETED",
@@ -304,12 +304,12 @@
             "mem_required": "448.8",
             "disk_in_required": "80.7",
             "disk_out_required": "82.9",
-            "created": "2016-05-05T16:22:45Z",
-            "queued": "2016-05-05T16:24:33Z",
-            "started": "2016-05-05T16:30:34Z",
-            "ended": "2016-05-05T16:31:57Z",
-            "last_status_change": "2016-05-05T16:31:57Z",
-            "last_modified": "2016-05-05T16:31:57Z"
+            "created": "2018-01-16T16:22:45Z",
+            "queued": "2018-01-16T16:24:33Z",
+            "started": "2018-01-16T16:30:34Z",
+            "ended": "2018-01-16T16:31:57Z",
+            "last_status_change": "2018-01-16T16:31:57Z",
+            "last_modified": "2018-01-16T16:31:57Z"
         },
         {
             "id": 8,
@@ -336,7 +336,7 @@
             "event": {
                 "id": 80,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-04-29T12:53:31Z"
+                "occurred": "2018-01-16T12:53:31Z"
             },
             "error": null,
             "status": "COMPLETED",
@@ -348,12 +348,12 @@
             "mem_required": "302.5",
             "disk_in_required": "56.3",
             "disk_out_required": "18.5",
-            "created": "2016-05-04T10:05:31Z",
-            "queued": "2016-05-04T10:12:39Z",
-            "started": "2016-05-04T10:15:37Z",
-            "ended": "2016-05-04T10:21:14Z",
-            "last_status_change": "2016-05-04T10:21:14Z",
-            "last_modified": "2016-05-04T10:21:14Z"
+            "created": "2018-01-16T10:05:31Z",
+            "queued": "2018-01-16T10:12:39Z",
+            "started": "2018-01-16T10:15:37Z",
+            "ended": "2018-01-16T10:21:14Z",
+            "last_status_change": "2018-01-16T10:21:14Z",
+            "last_modified": "2018-01-16T10:21:14Z"
         },
         {
             "id": 9,
@@ -380,7 +380,7 @@
             "event": {
                 "id": 91,
                 "type": "STRIKE_TRANSFER",
-                "occurred": "2016-04-28T01:07:31Z"
+                "occurred": "2018-01-16T01:07:31Z"
             },
             "error": null,
             "status": "QUEUED",
@@ -392,12 +392,12 @@
             "mem_required": "61.5",
             "disk_in_required": "44.5",
             "disk_out_required": "36.5",
-            "created": "2016-05-04T17:34:51Z",
-            "queued": "2016-05-04T17:42:26Z",
-            "started": "2016-05-04T17:46:27Z",
-            "ended": "2016-05-04T17:48:28Z",
-            "last_status_change": "2016-05-04T17:48:28Z",
-            "last_modified": "2016-05-04T17:48:28Z"
+            "created": "2018-01-16T17:34:51Z",
+            "queued": "2018-01-16T17:42:26Z",
+            "started": "2018-01-16T17:46:27Z",
+            "ended": "2018-01-16T17:48:28Z",
+            "last_status_change": "2018-01-16T17:48:28Z",
+            "last_modified": "2018-01-16T17:48:28Z"
         },
         {
             "id": 10,
@@ -436,12 +436,12 @@
             "mem_required": "229.5",
             "disk_in_required": "89.8",
             "disk_out_required": "47.7",
-            "created": "2016-05-15T16:09:53Z",
-            "queued": "2016-05-15T16:11:41Z",
-            "started": "2016-05-15T16:16:48Z",
-            "ended": "2016-05-15T16:25:43Z",
-            "last_status_change": "2016-05-15T16:25:43Z",
-            "last_modified": "2016-05-15T16:25:43Z",
+            "created": "2018-01-16T16:09:53Z",
+            "queued": "2018-01-16T16:11:41Z",
+            "started": "2018-01-16T16:16:48Z",
+            "ended": "2018-01-16T16:25:43Z",
+            "last_status_change": "2018-01-16T16:25:43Z",
+            "last_modified": "2018-01-16T16:25:43Z",
             "is_superseded": true
         },
         {
@@ -481,12 +481,12 @@
             "mem_required": 2048.0,
             "disk_out_const_required": 1024.0,
             "disk_out_mult_required": 0.0,
-            "created": "2016-05-15T16:09:53Z",
-            "queued": "2016-05-15T16:11:41Z",
-            "started": "2016-05-15T16:16:48Z",
-            "ended": "2016-05-15T16:25:43Z",
-            "last_status_change": "2016-05-15T16:25:43Z",
-            "last_modified": "2016-05-15T16:25:43Z"
+            "created": "2018-01-16T16:09:53Z",
+            "queued": "2018-01-16T16:11:41Z",
+            "started": "2018-01-16T16:16:48Z",
+            "ended": "2018-01-16T16:25:43Z",
+            "last_status_change": "2018-01-16T16:25:43Z",
+            "last_modified": "2018-01-16T16:25:43Z"
         },
         {
             "id": 12,
@@ -525,12 +525,56 @@
             "mem_required": 2048.0,
             "disk_out_const_required": 1024.0,
             "disk_out_mult_required": 0.0,
-            "created": "2016-05-15T16:09:53Z",
-            "queued": "2016-05-15T16:11:41Z",
-            "started": "2016-05-15T16:16:48Z",
-            "ended": "2016-05-15T16:25:43Z",
-            "last_status_change": "2016-05-15T16:25:43Z",
-            "last_modified": "2016-05-15T16:25:43Z"
+            "created": "2018-01-16T16:09:53Z",
+            "queued": "2018-01-16T16:11:41Z",
+            "started": "2018-01-16T16:16:48Z",
+            "ended": "2018-01-16T16:25:43Z",
+            "last_status_change": "2018-01-16T16:25:43Z",
+            "last_modified": "2018-01-16T16:25:43Z"
+        },
+        {
+            "id": 13,
+            "job_type": {
+                "id": 1,
+                "name": "landsat8-parse",
+                "version": "1.0.0",
+                "title": "Landsat 8 Parse",
+                "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
+                "is_system": false,
+                "is_long_running": false,
+                "is_active": true,
+                "is_operational": true,
+                "is_paused": false,
+                "icon_code": "f248"
+            },
+            "job_type_rev": {
+                "id": 56,
+                "job_type": {
+                    "id": 1
+                },
+                "revision_num": 4
+            },
+            "event": {
+                "id": 70,
+                "type": "STRIKE_TRANSFER",
+                "occurred": "2016-04-27T19:11:57Z"
+            },
+            "error": null,
+            "status": "RUNNING",
+            "priority": 97,
+            "num_exes": 94,
+            "timeout": 2317,
+            "max_tries": 2,
+            "cpus_required": "88.2",
+            "mem_required": "497.4",
+            "disk_in_required": "79.8",
+            "disk_out_required": "51.3",
+            "created": "2018-01-16T15:33:13Z",
+            "queued": "2018-01-16T15:42:05Z",
+            "started": "2018-01-16T15:46:20Z",
+            "ended": "2018-01-16T15:56:11Z",
+            "last_status_change": "2018-01-16T15:56:11Z",
+            "last_modified": "2018-01-16T15:56:11Z"
         }
     ]
 }

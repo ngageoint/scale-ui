@@ -27,6 +27,9 @@
                 <p-panel [header]="chartTitle">
                     <app-historychart></app-historychart>
                 </p-panel>
+                <p-panel header="Job Activity">
+                    <app-job-activity></app-job-activity>
+                </p-panel>
             </div>
         </div>
         <div class="ui-g-2">
@@ -42,8 +45,4 @@
             </p-panel>
         </div>
     </div>
-    <!--<div class="charts" *ngIf="activeJobTypes.length > 0">-->
-        <!--<app-error-dials [total]="total" [failed]="failed" [data]="chartData" label="All Jobs"></app-error-dials>-->
-        <!--<app-error-dials [total]="totalActive" [failed]="failedActive" [data]="chartDataActive" label="Active Jobs"></app-error-dials>-->
-    <!--</div>-->
 </div>

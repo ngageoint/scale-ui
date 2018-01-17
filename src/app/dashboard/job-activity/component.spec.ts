@@ -1,29 +1,28 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 
-import { JobTypesApiService } from '../configuration/job-types/api.service';
-import { DashboardJobsService } from './jobs.service';
-import { DashboardComponent } from './component';
+import { JobsApiService } from '../../processing/jobs/api.service';
+import { DashboardJobsService } from '../jobs.service';
+import { JobActivityComponent } from './component';
 
-describe('DashboardComponent', () => {
-
-    let component: DashboardComponent;
-    let fixture: ComponentFixture<DashboardComponent>;
+describe('JobActivityComponent', () => {
+    let component: JobActivityComponent;
+    let fixture: ComponentFixture<JobActivityComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [DashboardComponent],
+            declarations: [JobActivityComponent],
             imports: [HttpModule],
-            providers: [JobTypesApiService, DashboardJobsService],
+            providers: [JobsApiService, DashboardJobsService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
-        .compileComponents();
+            .compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(DashboardComponent);
+        fixture = TestBed.createComponent(JobActivityComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

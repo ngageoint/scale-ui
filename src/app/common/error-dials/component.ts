@@ -37,7 +37,7 @@ export class ErrorDialsComponent implements OnInit {
         };
 
         this.chartConfig = {
-            cutoutPercentage: 75,
+            cutoutPercentage: 0,
             rotation: 0.5 * Math.PI, // start from bottom
             legend: {
                 display: this.legend,
