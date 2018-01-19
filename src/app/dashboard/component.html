@@ -32,23 +32,29 @@
                 </p-panel>
             </div>
         </div>
-        <div class="ui-g-2">
+        <div class="ui-g-2 dashboard__error-charts">
             <p-panel header="Favorites" *ngIf="favoriteJobTypes">
-                <div *ngIf="errorDialDataFavs">
-                    <app-error-dials [total]="errorDialTotalFavs" [failed]="errorDialFailedFavs"
-                                     [data]="errorDialDataFavs"></app-error-dials>
+                <div *ngIf="dataFavs">
+                    <h4 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0">{{ failedFavs }} Failure(s) / {{ totalFavs }} Total</h4>
+                    <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
+                             *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0"></p-chart>
+                    <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
+                    <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
             <p-panel header="Active Jobs" *ngIf="activeJobTypes">
-                <div *ngIf="errorDialDataActive">
-                    <app-error-dials [total]="errorDialTotalActive" [failed]="errorDialFailedActive"
-                                     [data]="errorDialDataActive"></app-error-dials>
+                <div *ngIf="dataActive">
+                    <h4 *ngIf="activeJobTypes.length > 0 && failedActive > 0">{{ failedActive }} Failure(s) / {{ totalActive }} Total</h4>
+                    <p-chart type="pie" [data]="dataActive" [options]="pieChartOptions"
+                             *ngIf="activeJobTypes.length > 0 && failedActive > 0"></p-chart>
+                    <span *ngIf="activeJobTypes.length === 0">There are no active jobs.</span>
+                    <span *ngIf="failedActive === 0 && activeJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
             <p-panel header="All Jobs">
-                <div *ngIf="errorDialDataAll">
-                    <app-error-dials [total]="errorDialTotalAll" [failed]="errorDialFailedAll"
-                                     [data]="errorDialDataAll"></app-error-dials>
+                <div *ngIf="dataAll">
+                    <h4>{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
+                    <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"></p-chart>
                 </div>
             </p-panel>
         </div>

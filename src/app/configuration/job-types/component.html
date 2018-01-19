@@ -103,9 +103,21 @@
     </div>
     <hr />
     <h3 class="text-center">Recent Performance</h3>
-    <div class="error-dials">
-        <app-error-dials [total]="total6h" [failed]="failed6h" [data]="chartData6h" label="6 Hours"></app-error-dials>
-        <app-error-dials [total]="total12h" [failed]="failed12h" [data]="chartData12h" label="12 Hours"></app-error-dials>
-        <app-error-dials [total]="total24h" [failed]="failed24h" [data]="chartData24h" label="24 Hours"></app-error-dials>
+    <div class="ui-g job-type__performance">
+        <div class="ui-g-4">
+            <h3>6 Hours</h3>
+            <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
+        </div>
+        <div class="ui-g-4">
+            <h3>12 Hours</h3>
+            <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
+        </div>
+        <div class="ui-g-4">
+            <h3>24 Hours</h3>
+            <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
+        </div>
+        <!--<app-error-dials [total]="total6h" [failed]="failed6h" [data]="chartData6h" label="6 Hours"></app-error-dials>-->
+        <!--<app-error-dials [total]="total12h" [failed]="failed12h" [data]="chartData12h" label="12 Hours"></app-error-dials>-->
+        <!--<app-error-dials [total]="total24h" [failed]="failed24h" [data]="chartData24h" label="24 Hours"></app-error-dials>-->
     </div>
 </div>

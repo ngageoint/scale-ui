@@ -60,8 +60,8 @@
     "errors": [],
     "job_counts_6h": [
         {
-            "status": "QUEUED",
-            "count": 3,
+            "status": "COMPLETED",
+            "count": 56,
             "most_recent": "2015-09-16T18:36:12.278Z",
             "category": null
         }
@@ -83,7 +83,7 @@
     "job_counts_24h": [
         {
             "status": "QUEUED",
-            "count": 3,
+            "count": 30,
             "most_recent": "2015-09-16T18:36:12.278Z",
             "category": null
         },

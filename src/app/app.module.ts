@@ -61,7 +61,6 @@ import { RunningJobsApiService } from './processing/running-jobs/api.service';
 import { LogViewerComponent } from './common/log-viewer/component';
 import { LogViewerApiService } from './common/log-viewer/api.service';
 import { RecipeGraphComponent } from './common/recipe-graph/component';
-import { ErrorDialsComponent } from './common/error-dials/component';
 import { JobActivityComponent } from './dashboard/job-activity/component';
 
 
@@ -93,7 +92,6 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
         RunningJobsComponent,
         LogViewerComponent,
         RecipeGraphComponent,
-        ErrorDialsComponent,
         JobActivityComponent
     ],
     imports: [

@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
+import { ColorService } from '../color.service';
 
 
 @Component({
@@ -14,24 +15,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
     subscription: any;
     activeJobTypes: any[];
     favoriteJobTypes: any[];
-    errorDialTotalAll: number;
-    errorDialFailedAll: number;
-    errorDialDataAll: any;
-    errorDialTotalActive: number;
-    errorDialFailedActive: number;
-    errorDialDataActive: any;
-    errorDialTotalFavs: number;
-    errorDialFailedFavs: number;
-    errorDialDataFavs: any;
+    pieChartOptions: any;
+    totalAll: number;
+    failedAll: number;
+    dataAll: any;
+    totalActive: number;
+    failedActive: number;
+    dataActive: any;
+    totalFavs: number;
+    failedFavs: number;
+    dataFavs: any;
     perfChartTitle: string;
     activityChartTitle: string;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
-        private jobsService: DashboardJobsService
+        private jobsService: DashboardJobsService,
+        private colorService: ColorService
     ) {
         this.activeJobTypes = [];
         this.favoriteJobTypes = [];
+        this.pieChartOptions = {
+            rotation: 0.5 * Math.PI, // start from bottom
+            legend: {
+                display: false
+            },
+            plugins: {
+                datalabels: false
+            },
+            elements: {
+                arc: {
+                    borderWidth: 0
+                }
+            }
+        };
     }
 
     unsubscribe() {
@@ -64,20 +81,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
             return jobCount.status !== 'RUNNING';
         }), 'count'));
         const failed = sysErrors + algErrors + dataErrors;
-        const chartData = [
-            {
-                label: 'SYSTEM',
-                value: sysErrors
-            },
-            {
-                label: 'ALGORITHM',
-                value: algErrors
-            },
-            {
-                label: 'DATA',
-                value: dataErrors
-            }
-        ];
+        const chartData = {
+            datasets: [{
+                data: [sysErrors, algErrors, dataErrors],
+                backgroundColor: [
+                    this.colorService.ERROR_SYSTEM,   // system
+                    this.colorService.ERROR_ALGORITHM,  // algorithm
+                    this.colorService.ERROR_DATA  // data
+                ]
+            }],
+            labels: ['SYSTEM', 'ALGORITHM', 'DATA']
+        };
         return {
             total: total,
             failed: failed,
@@ -105,20 +119,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.favoriteJobTypes = favs;
 
             const totalJobStats = this.generateStats(data.results);
-            this.errorDialTotalAll = totalJobStats.total;
-            this.errorDialFailedAll = totalJobStats.failed;
-            this.errorDialDataAll = totalJobStats.chartData;
+            this.totalAll = totalJobStats.total;
+            this.failedAll = totalJobStats.failed;
+            this.dataAll = totalJobStats.chartData;
 
             const activeJobStats = this.generateStats(this.activeJobTypes);
-            this.errorDialTotalActive = activeJobStats.total;
-            this.errorDialFailedActive = activeJobStats.failed;
-            this.errorDialDataActive = activeJobStats.chartData;
+            this.totalActive = activeJobStats.total;
+            this.failedActive = activeJobStats.failed;
+            this.dataActive = activeJobStats.chartData;
 
             const favoriteJobStats = this.generateStats(this.favoriteJobTypes);
-            debugger;
-            this.errorDialTotalFavs = favoriteJobStats.total;
-            this.errorDialFailedFavs = favoriteJobStats.failed;
-            this.errorDialDataFavs = favoriteJobStats.chartData;
+            this.totalFavs = favoriteJobStats.total;
+            this.failedFavs = favoriteJobStats.failed;
+            this.dataFavs = favoriteJobStats.chartData;
 
             this.perfChartTitle = 'Completed vs. Failed counts';
             this.perfChartTitle = favs.length > 0 ?

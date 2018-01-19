@@ -22,9 +22,10 @@ dl {
     margin-top: 0;
 }
 
-.error-dials {
-    display: flex;
-    justify-content: space-between;
+.job-type__performance {
+    h3 {
+        text-align: center;
+    }
 }
 
 ::ng-deep .ui-treetable {

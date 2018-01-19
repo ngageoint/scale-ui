@@ -7,6 +7,7 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
 import { JobTypesApiService } from './api.service';
+import { ColorService } from '../../color.service';
 
 @Component({
     selector: 'app-job-types',
@@ -30,12 +31,14 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     chartData24h: any;
     total24h: number;
     failed24h: number;
+    options: any;
     pauseBtnIcon = 'fa-pause';
     private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
     private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
+        private colorService: ColorService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -78,33 +81,16 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         });
         return dataArr;
     }
-    private getChartData(data: any): any[] {
-        const returnData = [];
-        const getCount = (status: string, category?: string) => {
-            if (category) {
-                return _.sum(_.map(_.filter(data, (jobCount) => {
-                    return jobCount.status === status && jobCount.category === category;
-                }), 'count'));
-            }
-            return _.sum(_.map(_.filter(data, (jobCount) => {
-                return jobCount.status === status;
-            }), 'count'));
+    private getChartData(data) {
+        const returnData = {
+            labels: _.map(data, 'status'),
+            datasets: [{
+                data: _.map(data, 'count'),
+                backgroundColor: []
+            }]
         };
-
-        _.forEach(this.STATUS_VALUES, status => {
-            if (status === 'FAILED') {
-                _.forEach(this.CATEGORY_VALUES, category => {
-                    returnData.push({
-                        label: category,
-                        value: getCount(status, category)
-                    });
-                });
-            } else {
-                returnData.push({
-                    label: status,
-                    value: getCount(status)
-                });
-            }
+        _.forEach(data, d => {
+            returnData.datasets[0].backgroundColor.push(this.colorService[_.toUpper(d.status)]);
         });
         return returnData;
     }
@@ -168,6 +154,13 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.id}`]);
     }
     ngOnInit() {
+        this.options = {
+            legend: false,
+            cutoutPercentage: 65,
+            plugins: {
+                datalabels: false
+            }
+        };
     }
     ngOnDestroy() {
         this.routerEvents.unsubscribe();

@@ -12,6 +12,13 @@
     ::ng-deep .ui-panel-title {
         font-weight: bold;
     }
+
+    .dashboard__error-charts {
+        h4 {
+            margin: -10px 0 10px 0;
+            text-align: center;
+        }
+    }
 }
 
 .dashboard__item {
