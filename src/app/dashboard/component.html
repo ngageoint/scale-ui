@@ -13,7 +13,7 @@
             </p-panel>
             <p-panel header="Active Jobs ({{ activeJobTypes.length }})">
                 <p-dataTable [value]="activeJobTypes" styleClass="nopadding"
-                             [scrollable]="true" scrollHeight="400px">
+                             [scrollable]="true" scrollHeight="444px">
                     <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
                             <app-jobtypeitem [item]="item"></app-jobtypeitem>
@@ -24,23 +24,31 @@
         </div>
         <div class="ui-g-7">
             <div class="charts" *ngIf="activeJobTypes.length > 0">
-                <p-panel [header]="chartTitle">
+                <p-panel [header]="perfChartTitle">
                     <app-historychart></app-historychart>
                 </p-panel>
-                <p-panel header="Job Activity">
+                <p-panel [header]="activityChartTitle">
                     <app-job-activity></app-job-activity>
                 </p-panel>
             </div>
         </div>
         <div class="ui-g-2">
-            <p-panel header="All Jobs">
-                <div *ngIf="chartData">
-                    <app-error-dials [total]="total" [failed]="failed" [data]="chartData"></app-error-dials>
+            <p-panel header="Favorites" *ngIf="favoriteJobTypes">
+                <div *ngIf="errorDialDataFavs">
+                    <app-error-dials [total]="errorDialTotalFavs" [failed]="errorDialFailedFavs"
+                                     [data]="errorDialDataFavs"></app-error-dials>
                 </div>
             </p-panel>
-            <p-panel header="Active Jobs">
-                <div *ngIf="chartDataActive">
-                    <app-error-dials [total]="totalActive" [failed]="failedActive" [data]="chartDataActive"></app-error-dials>
+            <p-panel header="Active Jobs" *ngIf="activeJobTypes">
+                <div *ngIf="errorDialDataActive">
+                    <app-error-dials [total]="errorDialTotalActive" [failed]="errorDialFailedActive"
+                                     [data]="errorDialDataActive"></app-error-dials>
+                </div>
+            </p-panel>
+            <p-panel header="All Jobs">
+                <div *ngIf="errorDialDataAll">
+                    <app-error-dials [total]="errorDialTotalAll" [failed]="errorDialFailedAll"
+                                     [data]="errorDialDataAll"></app-error-dials>
                 </div>
             </p-panel>
         </div>

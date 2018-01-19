@@ -1,28 +1,32 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../color.service';
+import { DashboardJobsService } from '../../dashboard/jobs.service';
 
 @Component({
     selector: 'app-error-dials',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class ErrorDialsComponent implements OnInit {
+export class ErrorDialsComponent implements OnInit, OnDestroy {
     @Input() label: string;
     @Input() total: number;
     @Input() failed: number;
     @Input() data: any;
     @Input() legend = false;
+    subscription: any;
     jobType: any;
     chartData: any;
     chartConfig: any;
 
     constructor(
-        private colorService: ColorService
+        private colorService: ColorService,
+        private jobsService: DashboardJobsService
     ) {}
 
-    ngOnInit() {
+    private updateChart() {
+        console.log(this.data);
         this.chartData = {
             labels: _.map(this.data, 'label'),
             datasets: [{
@@ -37,16 +41,13 @@ export class ErrorDialsComponent implements OnInit {
         };
 
         this.chartConfig = {
-            cutoutPercentage: 0,
             rotation: 0.5 * Math.PI, // start from bottom
             legend: {
                 display: this.legend,
                 position: 'bottom'
             },
             plugins: {
-                datalabels: {
-                    display: false
-                }
+                datalabels: false
             },
             elements: {
                 arc: {
@@ -54,5 +55,22 @@ export class ErrorDialsComponent implements OnInit {
                 }
             }
         };
+    }
+
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
+    ngOnInit() {
+        this.updateChart();
+        this.subscription = this.jobsService.favoritesUpdated.subscribe(() => {
+            this.updateChart();
+        });
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

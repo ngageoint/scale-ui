@@ -38,7 +38,7 @@ export class JobsApiService {
         if (poll) {
             const getData = () => {
                 return this.http.get('/mocks/jobs', { params: queryParams })
-                    .switchMap((data) => Observable.timer(5000)
+                    .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
@@ -72,6 +72,21 @@ export class JobsApiService {
         return this.http.post(params.url, params)
             .toPromise()
             .then(response => response.json())
+            .catch(this.handleError);
+    }
+    getJobLoad(params, poll?: boolean): any {
+        if (poll) {
+            const getData = () => {
+                return this.http.get('/mocks/jobload', { params: params })
+                    .switchMap((data) => Observable.timer(600000) // 10 minutes
+                        .switchMap(() => getData())
+                        .startWith(ApiResults.transformer(data.json())));
+            };
+            return getData();
+        }
+        return this.http.get('/mocks/jobload', { params: params })
+            .toPromise()
+            .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 

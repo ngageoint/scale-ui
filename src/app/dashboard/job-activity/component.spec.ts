@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 
+import { ColorService } from '../../color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { DashboardJobsService } from '../jobs.service';
 import { JobActivityComponent } from './component';
@@ -14,7 +15,7 @@ describe('JobActivityComponent', () => {
         TestBed.configureTestingModule({
             declarations: [JobActivityComponent],
             imports: [HttpModule],
-            providers: [JobsApiService, DashboardJobsService],
+            providers: [ColorService, JobsApiService, DashboardJobsService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })

@@ -14,13 +14,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     subscription: any;
     activeJobTypes: any[];
     favoriteJobTypes: any[];
-    total: number;
-    failed: number;
-    chartData: any;
-    totalActive: number;
-    failedActive: number;
-    chartDataActive: any;
-    chartTitle: string;
+    errorDialTotalAll: number;
+    errorDialFailedAll: number;
+    errorDialDataAll: any;
+    errorDialTotalActive: number;
+    errorDialFailedActive: number;
+    errorDialDataActive: any;
+    errorDialTotalFavs: number;
+    errorDialFailedFavs: number;
+    errorDialDataFavs: any;
+    perfChartTitle: string;
+    activityChartTitle: string;
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
@@ -92,16 +96,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             });
             this.jobsService.setActiveJobs(this.activeJobTypes);
 
-            const totalJobStats = this.generateStats(data.results);
-            this.total = totalJobStats.total;
-            this.failed = totalJobStats.failed;
-            this.chartData = totalJobStats.chartData;
-
-            const activeJobStats = this.generateStats(this.activeJobTypes);
-            this.totalActive = activeJobStats.total;
-            this.failedActive = activeJobStats.failed;
-            this.chartDataActive = activeJobStats.chartData;
-
             const favs = [];
             this.activeJobTypes.forEach(jt => {
                 if (this.jobsService.isFavorite(jt.job_type)) {
@@ -109,8 +103,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             });
             this.favoriteJobTypes = favs;
-            this.chartTitle = 'Completed vs. Failed counts';
-            this.chartTitle = favs.length > 0 ? `${this.chartTitle} (Favorites)` : `${this.chartTitle} (Active Jobs)`;
+
+            const totalJobStats = this.generateStats(data.results);
+            this.errorDialTotalAll = totalJobStats.total;
+            this.errorDialFailedAll = totalJobStats.failed;
+            this.errorDialDataAll = totalJobStats.chartData;
+
+            const activeJobStats = this.generateStats(this.activeJobTypes);
+            this.errorDialTotalActive = activeJobStats.total;
+            this.errorDialFailedActive = activeJobStats.failed;
+            this.errorDialDataActive = activeJobStats.chartData;
+
+            const favoriteJobStats = this.generateStats(this.favoriteJobTypes);
+            debugger;
+            this.errorDialTotalFavs = favoriteJobStats.total;
+            this.errorDialFailedFavs = favoriteJobStats.failed;
+            this.errorDialDataFavs = favoriteJobStats.chartData;
+
+            this.perfChartTitle = 'Completed vs. Failed counts';
+            this.perfChartTitle = favs.length > 0 ?
+                `${this.perfChartTitle} (Favorites)` :
+                `${this.perfChartTitle} (Active Jobs)`;
+            this.activityChartTitle = 'Job Activity';
+            this.activityChartTitle = favs.length > 0 ?
+                `${this.activityChartTitle} (Favorites)` :
+                `${this.activityChartTitle} (Active Jobs)`;
         });
     }
 }

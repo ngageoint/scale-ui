@@ -64,7 +64,7 @@ export class JobTypesApiService {
         if (poll) {
             const getData = () => {
                 return this.http.get('/mocks/job-types/status')
-                    .switchMap((data) => Observable.timer(5000)
+                    .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
