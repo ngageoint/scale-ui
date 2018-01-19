@@ -4,12 +4,13 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { MetricsComponent } from './component';
+import { ColorService } from '../../color.service';
 import { ChartService } from './chart.service';
 import { MetricsApiService } from './api.service';
 import { DataService } from '../../data.service';
 
 
-describe('JobsComponent', () => {
+describe('MetricsComponent', () => {
     let component: MetricsComponent;
     let fixture: ComponentFixture<MetricsComponent>;
 
@@ -18,7 +19,7 @@ describe('JobsComponent', () => {
             declarations: [MetricsComponent],
             imports: [HttpModule],
             providers: [
-                ChartService, MetricsApiService, DataService,
+                ColorService, ChartService, MetricsApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
