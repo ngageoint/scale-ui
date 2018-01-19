@@ -2,10 +2,13 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
+import { ColorService } from '../../color.service';
+
 @Injectable()
 export class ChartService {
-    constructor() {
-    }
+    constructor(
+        private colorService: ColorService
+    ) {}
 
     private randomColorGenerator() {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
@@ -86,12 +89,17 @@ export class ChartService {
                     const label = filter.version ?
                         `${filter.title} ${filter.version} ${result.column.title}` :
                         `${filter.title} ${result.column.title}`;
+                    const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
+                    const opacity = parseFloat((1 - ((stackHeight / 10) / 1.5)).toFixed(2));
+                    const bgColor = colors.length > 0 ?
+                        this.colorService.getRgba(colors[idx % 2 === 0 ? 0 : 1], opacity) :
+                        this.randomColorGenerator();
                     datasets.push({
                         yAxisID: `yAxis${idx + 1}`,
                         stack: `stack${idx.toString()}`,
                         label: label,
                         icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                        backgroundColor: colors.length > 0 ? colors[idx % 2 === 0 ? 0 : 1] : this.randomColorGenerator(),
+                        backgroundColor: bgColor,
                         borderWidth: 2,
                         data: filterData ? filterData.data : []
                     });

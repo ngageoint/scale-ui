@@ -39,15 +39,15 @@ export class JobActivityComponent implements OnInit, OnDestroy {
             this.data = {
                 datasets: [{
                     label: 'Running',
-                    backgroundColor: this.colorService.RUNNING,
+                    backgroundColor: this.colorService.getRgba(this.colorService.RUNNING, 0.7),
                     data: []
                 }, {
                     label: 'Queued',
-                    backgroundColor: this.colorService.QUEUED,
+                    backgroundColor: this.colorService.getRgba(this.colorService.QUEUED, 0.7),
                     data: []
                 }, {
                     label: 'Pending',
-                    backgroundColor: this.colorService.PENDING,
+                    backgroundColor: this.colorService.getRgba(this.colorService.PENDING, 0.7),
                     data: []
                 }]
             };
