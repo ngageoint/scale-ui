@@ -824,6 +824,9 @@ body .ui-panel {
     padding: 0;
     border-color: rgba(0, 0, 0, 0.125);
 }
+body .ui-panel .ui-panel-title {
+    font-weight: bold;
+}
 body .ui-panel .ui-panel-titlebar {
     border: 0 none;
     border-bottom: 1px solid #e6e6e6;

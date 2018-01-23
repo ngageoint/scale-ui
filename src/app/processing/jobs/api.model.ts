@@ -1,5 +1,6 @@
 import { DataService } from '../../data.service';
 import * as moment from 'moment';
+import { JobType } from '../../configuration/job-types/api.model';
 import { JobExecution } from './execution.model';
 
 export class Job {
@@ -65,7 +66,7 @@ export class Job {
 
     constructor(
         public id: number,
-        public job_type: object,
+        public job_type: JobType,
         public job_type_rev: object,
         public event: object,
         public error: object,

@@ -10,7 +10,7 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 
 // Prime NG
 import {
-    AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
+    AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, CardModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
     DataTableModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MessagesModule,
     MultiSelectModule, PaginatorModule, PanelModule, SidebarModule, SpinnerModule, StepsModule, ToggleButtonModule, TooltipModule,
     TreeTableModule
@@ -107,6 +107,7 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
         // Prime NG
         AutoCompleteModule,
         CalendarModule,
+        CardModule,
         ChartModule,
         DataListModule,
         DataTableModule,

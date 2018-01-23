@@ -1,8 +1,28 @@
 <h2>Job Details</h2>
 <a routerLink="/processing/jobs">&lt; Jobs List</a>
+<div class="job__details" *ngIf="job">
+    <div class="ui-g">
+        <div class="ui-g-8">
+            <p-panel>
+                <p-header>
+                    <strong>
+                        <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
+                        {{ job.job_type.title }} v{{ job.job_type.version }}
+                        <i class="fa fa-fw fa-square job__status" [ngClass]="job.status.toLowerCase()" pTooltip="{{ jobStatus }}"></i>
+                    </strong>
+                </p-header>
+                Job Info
+            </p-panel>
+        </div>
+        <div class="ui-g-4">
+            <p-panel header="Timeline">
+                <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
+            </p-panel>
+        </div>
+    </div>
+</div>
 <ul>
     <li *ngFor="let key of jobKeys">
         {{key}}: {{job[key]}}
     </li>
 </ul>
-<p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
