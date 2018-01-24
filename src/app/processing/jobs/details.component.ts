@@ -19,6 +19,7 @@ export class JobDetailsComponent implements OnInit {
     jobKeys: string[];
     options: any;
     data: any;
+    triggerOccurred: string;
     constructor(
         private route: ActivatedRoute,
         private jobsApiService: JobsApiService,
@@ -34,6 +35,9 @@ export class JobDetailsComponent implements OnInit {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
             this.jobsApiService.getJob(id).then(data => {
                 this.job = data;
+                this.triggerOccurred = data.event.occurred ?
+                    moment.duration(moment.utc(data.event.occurred).diff(moment.utc())).humanize(true) :
+                    '';
                 const now = moment.utc();
                 const lastStatus = moment.utc(this.job.last_status_change);
                 this.jobStatus = `${_.capitalize(this.job.status)} ${lastStatus.from(now)}`;
@@ -58,8 +62,8 @@ export class JobDetailsComponent implements OnInit {
                     },
                     tooltips: {
                         callbacks: {
-                            label: (tooltipItem, data) => {
-                                const d = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                            label: (tooltipItem, chartData) => {
+                                const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                                 return [
                                     d[2],
                                     moment.utc(d[0]).format('YYYY-MM-DD HH:mm:ss[Z]'),

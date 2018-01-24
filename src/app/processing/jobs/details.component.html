@@ -1,20 +1,44 @@
-<h2>Job Details</h2>
-<a routerLink="/processing/jobs">&lt; Jobs List</a>
 <div class="job__details" *ngIf="job">
+    <h2>
+        <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
+        {{ job.job_type.title }} v{{ job.job_type.version }}
+        <i class="fa fa-fw fa-square job__status" [ngClass]="job.status.toLowerCase()" pTooltip="{{ jobStatus }}"></i>
+    </h2>
+    <a routerLink="/processing/jobs">&lt; Jobs List</a>
     <div class="ui-g">
-        <div class="ui-g-8">
-            <p-panel>
-                <p-header>
-                    <strong>
-                        <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
-                        {{ job.job_type.title }} v{{ job.job_type.version }}
-                        <i class="fa fa-fw fa-square job__status" [ngClass]="job.status.toLowerCase()" pTooltip="{{ jobStatus }}"></i>
-                    </strong>
-                </p-header>
-                Job Info
+        <div class="ui-g-7">
+            <p-panel header="Overview">
+                <table class="table table-hover table-condensed table-striped">
+                    <tbody>
+                    <tr *ngIf="job.recipes">
+                        <td>Recipe:</td>
+                        <td>
+                            <!--<a ng-href="#/recipes/recipe/{{ vm.job.recipes[0].id }}">-->
+                            {{ job.recipes[0].recipe_type.title }} {{ job.recipes[0].recipe_type.version }}
+                            <!--</a>-->
+                        </td>
+                    </tr>
+                    <!--<tr ng-show="vm.job.superseded_by_job.id"><td>Superseded By:</td><td><a ng-href="#/jobs/job/{{ vm.job.superseded_by_job.id }}">{{ vm.job.superseded_by_job.job_type.title }} {{ vm.job.superseded_by_job.job_type.version }}</a></td></tr>-->
+                    <tr *ngIf="job.superseded_job">
+                        <td>Supersedes:</td>
+                        <td>
+                            <!--<a ng-href="#/jobs/job/{{ vm.job.superseded_job.id }}">-->
+                            {{ job.superseded_job.job_type.title }} {{ job.superseded_job.job_type.version }}
+                            <!--</a>-->
+                        </td>
+                    </tr>
+                    <tr><td>Trigger:</td><td>{{ job.event.type }} {{ triggerOccurred }}</td></tr>
+                    <tr><td>Priority:</td><td>{{ job.priority }}</td></tr>
+                    <tr><td>Created:</td><td>{{ job.created_formatted }}</td></tr>
+                    <tr><td>Last Updated:</td><td>{{ job.last_modified_formatted }}</td></tr>
+                    <tr><td>Num Executions:</td><td>{{ job.num_exes }}</td></tr>
+                    <tr><td>Max Tries:</td><td>{{ job.max_tries }}</td></tr>
+                    <tr *ngIf="job.timeout"><td>Timeout:</td><td>{{ job.timeout }} seconds</td></tr>
+                    </tbody>
+                </table>
             </p-panel>
         </div>
-        <div class="ui-g-4">
+        <div class="ui-g-5">
             <p-panel header="Timeline">
                 <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
             </p-panel>
