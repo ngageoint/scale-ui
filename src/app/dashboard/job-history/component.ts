@@ -8,11 +8,11 @@ import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../color.service';
 
 @Component({
-    selector: 'app-historychart',
-    templateUrl: './historychart.component.html',
-    styleUrls: ['./historychart.component.scss']
+    selector: 'app-job-history',
+    templateUrl: './component.html',
+    styleUrls: ['./component.scss']
 })
-export class HistorychartComponent implements OnInit, OnDestroy {
+export class JobHistoryComponent implements OnInit, OnDestroy {
     data: any;
     options: any;
     params: any;

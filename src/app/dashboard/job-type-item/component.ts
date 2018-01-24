@@ -2,13 +2,12 @@ import { Component, Input, OnInit } from '@angular/core';
 
 import { DashboardJobsService } from '../jobs.service';
 
-
 @Component({
-    selector: 'app-jobtypeitem',
-    templateUrl: './jobtypeitem.component.html',
-    styleUrls: ['./jobtypeitem.component.scss']
+    selector: 'app-job-type-item',
+    templateUrl: './component.html',
+    styleUrls: ['./component.scss']
 })
-export class JobtypeitemComponent implements OnInit {
+export class JobTypeItemComponent implements OnInit {
 
     @Input() item: any;
     constructor(private jobsService: DashboardJobsService) {

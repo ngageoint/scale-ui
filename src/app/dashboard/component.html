@@ -6,7 +6,7 @@
                              emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
                     <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
-                            <app-jobtypeitem [item]="item"></app-jobtypeitem>
+                            <app-job-type-item [item]="item"></app-job-type-item>
                         </ng-template>
                     </p-column>
                 </p-dataTable>
@@ -16,7 +16,7 @@
                              [scrollable]="true" scrollHeight="444px">
                     <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
-                            <app-jobtypeitem [item]="item"></app-jobtypeitem>
+                            <app-job-type-item [item]="item"></app-job-type-item>
                         </ng-template>
                     </p-column>
                 </p-dataTable>
@@ -25,7 +25,7 @@
         <div class="ui-g-7">
             <div class="charts" *ngIf="activeJobTypes.length > 0">
                 <p-panel [header]="perfChartTitle">
-                    <app-historychart></app-historychart>
+                    <app-job-history></app-job-history>
                 </p-panel>
                 <p-panel [header]="activityChartTitle">
                     <app-job-activity></app-job-activity>

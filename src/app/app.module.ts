@@ -40,10 +40,10 @@ import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { StatusComponent } from './navbar/status/status.component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
 import { FooterComponent } from './footer/footer.component';
-import { JobtypeitemComponent } from './dashboard/jobtypeitem/jobtypeitem.component';
+import { JobTypeItemComponent } from './dashboard/job-type-item/component';
 import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
-import { HistorychartComponent } from './dashboard/historychart/historychart.component';
+import { JobHistoryComponent } from './dashboard/job-history/component';
 import { SourcesComponent } from './data/sources/component';
 import { SourcesApiService } from './data/sources/api.service';
 import { SourcesDatatableService } from './data/sources/datatable.service';
@@ -81,9 +81,9 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
         RecipeDetailsComponent,
         JobTypesImportComponent,
         FooterComponent,
-        JobtypeitemComponent,
+        JobTypeItemComponent,
         WorkspacesComponent,
-        HistorychartComponent,
+        JobHistoryComponent,
         SourcesComponent,
         SourceDetailsComponent,
         ProcessingFormComponent,
