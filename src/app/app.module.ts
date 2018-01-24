@@ -62,6 +62,9 @@ import { LogViewerComponent } from './common/log-viewer/component';
 import { LogViewerApiService } from './common/log-viewer/api.service';
 import { RecipeGraphComponent } from './common/recipe-graph/component';
 import { JobActivityComponent } from './dashboard/job-activity/component';
+import { DataFeedComponent } from './dashboard/data-feed/component';
+import { IngestComponent } from './data/ingest/component';
+import { IngestApiService } from './data/ingest/api.service';
 
 
 @NgModule({
@@ -92,7 +95,9 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
         RunningJobsComponent,
         LogViewerComponent,
         RecipeGraphComponent,
-        JobActivityComponent
+        JobActivityComponent,
+        DataFeedComponent,
+        IngestComponent
     ],
     imports: [
         AppRoutingModule,
@@ -155,7 +160,8 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
         ChartService,
         RunningJobsApiService,
         RunningJobsDatatableService,
-        LogViewerApiService
+        LogViewerApiService,
+        IngestApiService
     ],
     bootstrap: [AppComponent]
 })
