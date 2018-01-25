@@ -27,16 +27,37 @@ a:not(.ui-button) {
     }
 }
 
+.scale-panel {
+    .scale-panel__title {
+        margin-right: 18px;
+        border: 0 none;
+        border-bottom: 1px solid #e6e6e6;
+        padding: .75em 1.25em .5em 1.25em;
+        background-color: #f5f5f5;
+        border-top-left-radius: 0.25em;
+        border-top-right-radius: 0.25em;
+        border-bottom-left-radius: 0px;
+        border-bottom-right-radius: 0px;
+        font-weight: bold;
+    }
+
+    .scale-panel__body {
+        margin-right: 18px;
+        margin-bottom: 18px;
+        padding: 10px;
+    }
+}
+
 .text-left {
-    text-align: left;
+    text-align: left !important;
 }
 
 .text-center {
-    text-align: center;
+    text-align: center !important;
 }
 
 .text-right {
-    text-align: right;
+    text-align: right !important;
 }
 
 .list-unstyled {

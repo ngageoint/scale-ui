@@ -12,8 +12,8 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 import {
     AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, CardModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
     DataTableModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MessagesModule,
-    MultiSelectModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule, StepsModule, ToggleButtonModule,
-    TooltipModule, TreeTableModule
+    MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule, StepsModule,
+    ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -136,7 +136,8 @@ import { IngestApiService } from './data/ingest/api.service';
         TreeTableModule,
         SidebarModule,
         ToggleButtonModule,
-        ScrollPanelModule
+        ScrollPanelModule,
+        OverlayPanelModule
     ],
     exports: [
         DataTableModule,

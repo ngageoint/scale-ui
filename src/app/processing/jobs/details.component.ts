@@ -30,6 +30,14 @@ export class JobDetailsComponent implements OnInit {
         return `&#x${code};`;
     }
 
+    showExeDetails(id: number) {
+        console.log(id);
+    }
+
+    showExeLog(exe) {
+        console.log(exe);
+    }
+
     ngOnInit() {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
