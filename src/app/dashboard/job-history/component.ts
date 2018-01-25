@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -6,13 +6,15 @@ import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../color.service';
+import { UIChart } from 'primeng/primeng';
 
 @Component({
     selector: 'app-job-history',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobHistoryComponent implements OnInit, OnDestroy {
+export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('chart') chart: UIChart;
     data: any;
     options: any;
     params: any;
@@ -54,6 +56,9 @@ export class JobHistoryComponent implements OnInit, OnDestroy {
             id: 'yAxis2',
             position: 'right',
             stacked: true,
+            gridLines: {
+                drawOnChartArea: false
+            },
             scaleLabel: {
                 display: true,
                 labelString: 'Failed Count'
@@ -94,7 +99,8 @@ export class JobHistoryComponent implements OnInit, OnDestroy {
                         stacked: true
                     }],
                     yAxes: yAxes
-                }
+                },
+                maintainAspectRatio: false
             };
         });
     }
@@ -110,6 +116,12 @@ export class JobHistoryComponent implements OnInit, OnDestroy {
         this.subscription = this.jobsService.favoritesUpdated.subscribe(() => {
             this.updateChart();
         });
+    }
+
+    ngAfterViewInit() {
+        if (this.chart.chart) {
+            this.chart.chart.canvas.parentNode.style.height = '45vh';
+        }
     }
 
     ngOnDestroy() {

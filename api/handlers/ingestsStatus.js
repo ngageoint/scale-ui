@@ -91,17 +91,18 @@ module.exports = function (request, reply) {
     };
 
     var getValues = function (processor) {
-        var started = moment.utc(params.started),
-            ended = moment.utc(params.ended);
+        var started = moment.utc(params.started).startOf('d'),
+            ended = moment.utc(params.ended).startOf('h'),
+            numHours = ended.diff(started, 'h');
 
-        for (var i = 0; i < Math.floor(Math.random() * (1000 - 100 + 1)) + 100; i++) {
+        for (var i = 0; i < numHours; i++) {
             processor.values.push({
-                time: moment.utc(started + Math.random() * (ended - started)).toISOString(),
-                files: Math.floor(Math.random() * (500 - 1 + 1)) + 1,
+                time: moment.utc(started).add(i, 'h').toISOString(),
+                files: Math.floor(Math.random() * 500),
                 size: Math.floor(Math.random() * (100000 - 10000 + 1)) + 10000
             });
         }
-        processor.most_recent = _.orderBy(processor.values, ['time'], ['desc'])[0];
+        processor.most_recent = _.last(processor.values);
         data.results.push(processor);
     };
 

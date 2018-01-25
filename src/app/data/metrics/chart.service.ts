@@ -90,7 +90,7 @@ export class ChartService {
                         `${filter.title} ${filter.version} ${result.column.title}` :
                         `${filter.title} ${result.column.title}`;
                     const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
-                    const opacity = parseFloat((1 - ((stackHeight / 10) / 1.5)).toFixed(2));
+                    const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
                     const bgColor = colors.length > 0 ?
                         this.colorService.getRgba(colors[idx % 2 === 0 ? 0 : 1], opacity) :
                         this.randomColorGenerator();

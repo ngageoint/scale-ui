@@ -4,6 +4,7 @@ const jobTypes = require('../data/job-types.json');
 
 module.exports = function (request, reply) {
     var jobTypeData = _.clone(jobTypes);
+    var params = request.url.query;
     var data = {
         count: 500,
         next: 'http://localhost/api/jobs/?page=2',
@@ -11,8 +12,8 @@ module.exports = function (request, reply) {
         results: []
     };
     var statusValues = ['CANCELED', 'COMPLETED', 'FAILED', 'PENDING', 'QUEUED', 'RUNNING'];
-    var start = moment.utc().subtract(1, 'd');
-    var stop = moment.utc();
+    var start = params.started ? moment.utc(params.started) : moment.utc().subtract(1, 'd');
+    var stop = params.ended ? moment.utc(params.ended) : moment.utc();
     for (var i = 0; i < 500; i++) {
         var jobTypeIdx = Math.floor(Math.random() * (jobTypeData.results.length));
         var date = moment.utc(start.valueOf() + Math.random() * (stop.valueOf() - start.valueOf())).toISOString();
@@ -51,7 +52,6 @@ module.exports = function (request, reply) {
         });
     }
     // var data = _.clone(jobs);
-    var params = request.url.query;
     if (_.keys(params).length > 0) {
         if (params.job_type_id) {
             data.results = _.filter(data.results, function (r) {
@@ -78,11 +78,11 @@ module.exports = function (request, reply) {
                 return result.error_category === params.error_category;
             });
         }
-        if (params.started && params.ended) {
-            data.results = _.filter(data.results, function (result) {
-                return moment.utc(result.started).isSameOrAfter(moment.utc(params.started)) && moment.utc(result.ended).isSameOrBefore(moment.utc(params.ended));
-            });
-        }
+        // if (params.started && params.ended) {
+        //     data.results = _.filter(data.results, function (result) {
+        //         return moment.utc(result.started).isSameOrAfter(moment.utc(params.started)) && moment.utc(result.ended).isSameOrBefore(moment.utc(params.ended));
+        //     });
+        // }
         data.count = data.results.length;
         if (params.page && params.page_size && data.count > params.page_size) {
             var pagedResults = _.chunk(data.results, params.page_size);

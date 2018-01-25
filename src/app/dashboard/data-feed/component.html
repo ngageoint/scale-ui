@@ -1,3 +1,7 @@
-<p>
-  data-feed works!
-</p>
+<div class="data-feed__container">
+    <div class="data-feed__dropdown">
+        <p-dropdown [options]="dataFeeds" [autoWidth]="false" [(ngModel)]="selectedDataFeed" (onChange)="onDataFeedSelect()"
+                    [style]="{'width':'300px', 'margin':'-10px 0 10px 0'}" placeholder="Select..."></p-dropdown>
+    </div>
+    <p-chart #chart type="line" [data]="data" [options]="options"></p-chart>
+</div>
