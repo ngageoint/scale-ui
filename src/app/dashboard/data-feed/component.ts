@@ -145,7 +145,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     type: 'time',
                     time: {
                         displayFormats: {
-                            hour: 'DD MMM HHss[Z]'
+                            hour: 'DD MMM HHmm[Z]'
                         }
                     }
                 }],
@@ -206,7 +206,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         if (this.chart.chart) {
-            this.chart.chart.canvas.parentNode.style.height = '45vh';
+            this.chart.chart.canvas.parentNode.style.height = '33vh';
         }
     }
 

@@ -1,17 +1,19 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { DashboardJobsService } from '../jobs.service';
+import { UIChart } from 'primeng/primeng';
 
 @Component({
     selector: 'app-job-activity',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobActivityComponent implements OnInit, OnDestroy {
+export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('chart') chart: UIChart;
     params: any;
     subscription: any;
     favoritesSubscription: any;
@@ -76,17 +78,32 @@ export class JobActivityComponent implements OnInit, OnDestroy {
         this.options = {
             scales: {
                 xAxes: [{
-                    type: 'time'
+                    type: 'time',
+                    time: {
+                        displayFormats: {
+                            hour: 'DD MMM HHmm[Z]'
+                        }
+                    }
+                }],
+                yAxes: [{
+                    stacked: true
                 }]
             },
             plugins: {
                 datalabels: false
-            }
+            },
+            maintainAspectRatio: false
         };
         this.updateData();
         this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
             this.updateData();
         });
+    }
+
+    ngAfterViewInit() {
+        if (this.chart.chart) {
+            this.chart.chart.canvas.parentNode.style.height = '33vh';
+        }
     }
 
     ngOnDestroy() {
