@@ -12,4 +12,9 @@
             color: $clr-status-completed;
         }
     }
+
+    ::ng-deep .ui-scrollpanel {
+        width: 100%;
+        height: 200px;
+    }
 }

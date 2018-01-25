@@ -6,8 +6,11 @@
     </h2>
     <a routerLink="/processing/jobs">&lt; Jobs List</a>
     <div class="ui-g">
-        <div class="ui-g-7">
-            <p-panel header="Overview">
+        <div class="ui-g-3">
+            <p-scrollPanel>
+                <p-header>
+                    Overview
+                </p-header>
                 <table class="table table-hover table-condensed table-striped">
                     <tbody>
                     <tr *ngIf="job.recipes">
@@ -36,12 +39,22 @@
                     <tr *ngIf="job.timeout"><td>Timeout:</td><td>{{ job.timeout }} seconds</td></tr>
                     </tbody>
                 </table>
-            </p-panel>
+            </p-scrollPanel>
+        </div>
+        <div class="ui-g-4">
+            <p-scrollPanel>
+                <p-header>
+                    Executions
+                </p-header>
+            </p-scrollPanel>
         </div>
         <div class="ui-g-5">
-            <p-panel header="Timeline">
+            <p-scrollPanel>
+                <p-header>
+                    Timeline
+                </p-header>
                 <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
-            </p-panel>
+            </p-scrollPanel>
         </div>
     </div>
 </div>
