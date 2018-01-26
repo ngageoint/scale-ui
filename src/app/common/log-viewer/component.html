@@ -1,21 +1,29 @@
 <div *ngIf="jobLogError" class="label label-danger text-center"><strong>{{ jobLogError }}</strong> {{ jobLogErrorStatus }}</div>
 <div *ngIf="!jobLogError && execution">
-    <div class="ui-g">
-        <div class="ui-g-12" *ngIf="execution.status !== 'FAILED'">
-            <span class="label {{ execution.status.toLowerCase() }}">{{ execution.status }}</span>
+    <p-scrollPanel styleClass="scale-log-panel">
+        <div class="scale-log-panel__title {{ execution.status.toLowerCase()}}" (mouseenter)="showExeError(error)"
+             (mouseleave)="hideExeError(error)">
+            <span class="ui-panel-title">{{ execution.status }}</span>
         </div>
-        <div class="ui-g-12 ui-md-6">
-            <div *ngIf="execution.status === 'FAILED'">
-                <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong>
-                {{ execution.error.description }}
+        <div class="scale-panel__body">
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    Total Lines: {{ execLog.length }}
+                </div>
+            </div>
+            <div class="ui-g log">
+                <div class="ui-g-12 bash">
+                    <div ngClass="line._source.stream" *ngFor="let line of execLog">
+                        {{ line._source['@timestamp'] }}: {{ line._source.message }}
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-    Total Lines: {{ execLog.length }}
-    <div class="ui-g log">
-        <div class="ui-g-12 bash">
-            <div ngClass="line._source.stream" *ngFor="let line of execLog">{{ line._source['@timestamp'] }}: {{ line._source.message
-                }}</div>
+    </p-scrollPanel>
+    <p-overlayPanel #error [dismissable]="true" appendTo="body">
+        <div *ngIf="execution.error && execution.status === 'FAILED'">
+            <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />
+            {{ execution.error.description }}
         </div>
-    </div>
+    </p-overlayPanel>
 </div>

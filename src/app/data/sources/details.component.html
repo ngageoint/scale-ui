@@ -1,44 +1,39 @@
-<h2>Source Details</h2>
-<a routerLink="/data/sources">&lt; Sources List</a>
-<div *ngIf="source">
-    <h3>
+<div class="sources__details" *ngIf="source">
+    <h2>
         {{source.file_name}}
-        <a href="{{source.url}}" class="link-button" target="_blank"><i class="fa fa-download"></i>
+        <a href="{{source.url}}" class="link-button ui-button" target="_blank"><i class="fa fa-download"></i>
             {{formatFilesize(source.file_size)}}</a>
-    </h3>
-    <div class="ui-grid ui-grid-responsive ui-grid-pad ui-fluid">
-        <div class="ui-grid-row">
-            <div class="ui-grid-col-6">
-                <h4>Details</h4>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr><td>Media Type:</td><td>{{source.media_type}}</td></tr>
-                    <tr><td>Countries:</td><td>{{source.countries.join(', ')}}</td></tr>
-                    <tr><td>Data Started:</td><td class="right" [innerHtml]="formatDate(source.data_started)"></td></tr>
-                    <tr><td>Data Ended:</td><td class="right" [innerHtml]="formatDate(source.data_ended)"></td></tr>
-                    <tr><td>Workspace:</td><td><a routerLink="/workspaces/{{source.workspace.id}}">{{source.workspace.name}}</a></td></tr>
-                    <tr><td>Created:</td><td class="right" [innerHtml]="formatDate(source.created)"></td></tr>
-                    <tr><td>Parsed:</td><td class="right" [innerHtml]="formatDate(source.parsed)"></td></tr>
-                    <tr><td>Deleted:</td><td class="right" [innerHtml]="formatDate(source.deleted)"></td></tr>
-                    <tr><td>Last Modified:</td><td class="right" [innerHtml]="formatDate(source.last_modified)"></td></tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="ui-grid-col-6">
-                <h4>
-                    Metadata
-                    <button pButton type="button" label="View All" class="ui-button-info" [hidden]="metadataKeys.length <= 9"
-                            (click)="showMetadata()"></button>
-                </h4>
-                <table class="table table-striped">
-                    <tbody>
-                    <tr class="map-event" *ngFor="let key of metadataKeys; let i = index"  [hidden]="i >= 9">
-                        <td>{{key}}</td>
-                        <td>{{source.meta_data[key]}}</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <p-dialog header="Metadata" [(visible)]="metadataDisplay" [width]="600" [modal]="true" [dismissableMask]="true">
+    </h2>
+    <a routerLink="/data/sources"><i class="fa fa-caret-left"></i> Sources List</a>
+    <div class="ui-g">
+        <div class="ui-g-6">
+            <p-scrollPanel styleClass="scale-panel">
+                <div class="scale-panel__title">
+                    <span class="ui-panel-title">Details</span>
+                </div>
+                <div class="scale-panel__body">
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr><td>Media Type:</td><td>{{source.media_type}}</td></tr>
+                        <tr><td>Countries:</td><td>{{source.countries.join(', ')}}</td></tr>
+                        <tr><td>Data Started:</td><td class="right" [innerHtml]="formatDate(source.data_started)"></td></tr>
+                        <tr><td>Data Ended:</td><td class="right" [innerHtml]="formatDate(source.data_ended)"></td></tr>
+                        <tr><td>Workspace:</td><td><a routerLink="/workspaces/{{source.workspace.id}}">{{source.workspace.name}}</a></td></tr>
+                        <tr><td>Created:</td><td class="right" [innerHtml]="formatDate(source.created)"></td></tr>
+                        <tr><td>Parsed:</td><td class="right" [innerHtml]="formatDate(source.parsed)"></td></tr>
+                        <tr><td>Deleted:</td><td class="right" [innerHtml]="formatDate(source.deleted)"></td></tr>
+                        <tr><td>Last Modified:</td><td class="right" [innerHtml]="formatDate(source.last_modified)"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </p-scrollPanel>
+        </div>
+        <div class="ui-g-6">
+            <p-scrollPanel styleClass="scale-panel">
+                <div class="scale-panel__title">
+                    <span class="ui-panel-title">Metadata</span>
+                </div>
+                <div class="scale-panel__body">
                     <table class="table table-striped">
                         <tbody>
                         <tr class="map-event" *ngFor="let key of metadataKeys">
@@ -47,8 +42,18 @@
                         </tr>
                         </tbody>
                     </table>
-                </p-dialog>
-            </div>
+                    <p-dialog header="Metadata" [(visible)]="metadataDisplay" [width]="600" [modal]="true" [dismissableMask]="true">
+                        <table class="table table-striped">
+                            <tbody>
+                            <tr class="map-event" *ngFor="let key of metadataKeys">
+                                <td>{{key}}</td>
+                                <td>{{source.meta_data[key]}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </p-dialog>
+                </div>
+            </p-scrollPanel>
         </div>
     </div>
     <app-jobs [(jobs)]="jobsData" [isChild]="true" (datatableChange)="onJobsDatatableChange($event)"></app-jobs>

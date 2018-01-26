@@ -2,13 +2,21 @@
 
 .job__details {
     th {
-        font-weight: normal;
+        font-size: 0.9em;
     }
 
-    ::ng-deep .ui-card-header {
-        font-size: 1.5em;
-        font-weight: bold;
-        padding: 15px 0 0 10px;
+    .job__io {
+        th, td {
+            font-size: 0.9em;
+        }
+
+        td {
+            border-radius: 5px;
+        }
+
+        .job__io-header {
+            border-bottom: 1px solid #ccc;
+        }
     }
 
     .job__status {

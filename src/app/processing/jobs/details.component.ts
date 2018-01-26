@@ -16,10 +16,12 @@ import { DataService } from '../../data.service';
 export class JobDetailsComponent implements OnInit {
     job: Job;
     jobStatus: string;
-    jobKeys: string[];
     options: any;
     data: any;
     triggerOccurred: string;
+    selectedJobExe: any;
+    logDisplay: boolean;
+
     constructor(
         private route: ActivatedRoute,
         private jobsApiService: JobsApiService,
@@ -34,13 +36,9 @@ export class JobDetailsComponent implements OnInit {
         return `&#x${code};`;
     }
 
-    showExeDetails(id: number) {
-        console.log(id);
-    }
-
     showExeLog(event, exe) {
-        event.stopPropagation();
-        console.log(exe);
+        this.selectedJobExe = exe;
+        this.logDisplay = true;
     }
 
     ngOnInit() {
@@ -54,7 +52,6 @@ export class JobDetailsComponent implements OnInit {
                 const now = moment.utc();
                 const lastStatus = moment.utc(this.job.last_status_change);
                 this.jobStatus = `${_.capitalize(this.job.status)} ${lastStatus.from(now)}`;
-                this.jobKeys = Object.keys(this.job);
                 this.options = {
                     elements: {
                         font: 'Roboto'

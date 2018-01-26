@@ -23,6 +23,18 @@ export class LogViewerComponent implements OnInit, OnChanges {
         this.execLog = [];
     }
 
+    showExeError(errorPanel) {
+        if (this.execution.status === 'FAILED') {
+            errorPanel.show();
+        }
+    }
+
+    hideExeError(errorPanel) {
+        if (this.execution.status === 'FAILED') {
+            errorPanel.hide();
+        }
+    }
+
     ngOnChanges(changes) {
         console.log(changes);
         if (this.execution) {
