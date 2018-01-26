@@ -17,6 +17,22 @@
         }
     }
 
+    .job__exe {
+        button {
+            font-size: 0.9em;
+            padding: 1px;
+        }
+
+        &:hover {
+            background: #eee;
+            cursor: pointer;
+
+            td {
+                border-radius: 5px;
+            }
+        }
+    }
+
     ::ng-deep .ui-scrollpanel {
         border-color: rgba(0, 0, 0, 0.125);
         width: 100%;

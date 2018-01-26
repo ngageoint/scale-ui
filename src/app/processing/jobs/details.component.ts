@@ -26,6 +26,10 @@ export class JobDetailsComponent implements OnInit {
         private dataService: DataService
     ) {}
 
+    calculateFileSize(fileSize) {
+        return this.dataService.calculateFileSizeFromBytes(fileSize, 0);
+    }
+
     getUnicode(code) {
         return `&#x${code};`;
     }
@@ -34,7 +38,8 @@ export class JobDetailsComponent implements OnInit {
         console.log(id);
     }
 
-    showExeLog(exe) {
+    showExeLog(event, exe) {
+        event.stopPropagation();
         console.log(exe);
     }
 

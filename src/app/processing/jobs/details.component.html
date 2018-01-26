@@ -58,11 +58,11 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="link" *ngFor="let exe of job.job_exes" (click)="showExeDetails(exe.id)">
+                        <tr class="job__exe" *ngFor="let exe of job.job_exes" (click)="showExeDetails(exe.id)">
                             <td>
                                 <i class="fa fa-fw fa-square job__status" [ngClass]="exe.status.toLowerCase()"
-                                   (mouseenter)="timeline.show($event)"></i>
-                                <p-overlayPanel #timeline [dismissable]="true" [showCloseIcon]="true" appendTo="body">
+                                   (mouseenter)="timeline.show($event)" (mouseleave)="timeline.hide()"></i>
+                                <p-overlayPanel #timeline [dismissable]="true" appendTo="body">
                                     <ul class="list-unstyled job__exe-timeline">
                                         <li *ngIf="exe.created_formatted">{{ exe.created_formatted }} (Created)</li>
                                         <li *ngIf="exe.queued_formatted">{{ exe.queued_formatted }} (Queued)</li>
@@ -75,7 +75,7 @@
                             </td>
                             <td>{{ exe.job_exit_code || '--' }}</td>
                             <td class="text-center">
-                                <button pButton class="ui-button-secondary" icon="fa-file-text" (click)="showExeLog(exe)"></button>
+                                <button pButton class="ui-button-secondary" icon="fa-file-text" (click)="showExeLog($event, exe)"></button>
                             </td>
                         </tr>
                         </tbody>
@@ -101,7 +101,66 @@
                     <span class="ui-panel-title">Inputs</span>
                 </div>
                 <div class="scale-panel__body">
-
+                    <table class="table table-striped" cols="5" *ngIf="job.inputs.length > 0">
+                        <thead>
+                        <tr>
+                            <th class="col-md-2">Name</th>
+                            <th class="col-md-1">Type</th>
+                            <th class="col-md-9">Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let input of job.inputs">
+                            <td>{{ input.name }}</td>
+                            <td>{{ input.type }}</td>
+                            <td>
+                                <span *ngIf="input.type === 'file' && input.value">
+                                    <table class="table table-hover table-condensed">
+                                        <tr ngIf="$index === 0">
+                                            <td>File Name</td>
+                                            <td>File Size</td>
+                                            <td>Created</td>
+                                            <td>Last Modified</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <a *ngIf="input.value.url" href="{{ input.value.url }}" target="_jobfile">
+                                                    {{ input.value.file_name }}
+                                                </a>
+                                                <span *ngIf="!input.value.url">{{ input.value.file_name }}</span>
+                                            </td>
+                                            <td>{{ calculateFileSize(input.value.file_size) }}</td>
+                                            <td>{{ input.value.created }}</td>
+                                            <td>{{ input.value.last_modified }}</td>
+                                        </tr>
+                                    </table>
+                                </span>
+                                <span *ngIf="input.type === 'files' && input.value">
+                                    <table class="table">
+                                        <tr>
+                                            <td>File Name</td>
+                                            <td>File Size</td>
+                                            <td>Created</td>
+                                            <td>Last Modified</td>
+                                        </tr>
+                                        <tr *ngFor="let v of input.value">
+                                            <td>
+                                                <a *ngIf="v.url" href="{{ v.url }}" target="_jobfile">{{ v.file_name }}</a>
+                                                <span *ngIf="!v.url">{{ v.file_name }}</span>
+                                            </td>
+                                            <td>{{ calculateFileSize(v.file_size) }}</td>
+                                            <td>{{ v.created }}</td>
+                                            <td>{{ v.last_modified }}</td>
+                                        </tr>
+                                    </table>
+                                </span>
+                                <span *ngIf="input.type === 'property' && input.value">
+                                    {{input.value}}
+                                </span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </p-scrollPanel>
         </div>
