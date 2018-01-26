@@ -8,7 +8,7 @@
     </div>
     <div *ngIf="selectedJobTypeDetail">
         <div class="ui-g">
-            <div class="ui-g-9">
+            <div class="ui-g-10">
                 <p-scrollPanel styleClass="scale-panel">
                     <div class="scale-panel__title job-type__title-container">
                         <div class="ui-panel-title">
@@ -117,33 +117,16 @@
                     </div>
                 </p-scrollPanel>
             </div>
-            <div class="ui-g-3 job-type__performance">
-                <p-scrollPanel styleClass="scale-panel">
-                    <div class="scale-panel__title">
-                        <span class="ui-panel-title">6 Hours</span>
-                    </div>
-                    <div class="scale-panel__body">
-                        <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
-                    </div>
-                </p-scrollPanel>
-                <div class="spacer"></div>
-                <p-scrollPanel styleClass="scale-panel">
-                    <div class="scale-panel__title">
-                        <span class="ui-panel-title">12 Hours</span>
-                    </div>
-                    <div class="scale-panel__body">
-                        <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
-                    </div>
-                </p-scrollPanel>
-                <div class="spacer"></div>
-                <p-scrollPanel styleClass="scale-panel">
-                    <div class="scale-panel__title">
-                        <span class="ui-panel-title">24 Hours</span>
-                    </div>
-                    <div class="scale-panel__body">
-                        <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
-                    </div>
-                </p-scrollPanel>
+            <div class="ui-g-2">
+                <p-panel header="6 Hours" styleClass="margin-bottom-md">
+                    <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
+                </p-panel>
+                <p-panel header="12 Hours" styleClass="margin-bottom-md">
+                    <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
+                </p-panel>
+                <p-panel header="24 Hours">
+                    <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
+                </p-panel>
             </div>
         </div>
     </div>
