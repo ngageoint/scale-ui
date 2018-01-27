@@ -115,6 +115,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                     d1.data = newData;
                     d1.pointBorderColor = '#fff';
+                    d1.borderColor = '#d0eaff';
                 });
                 this.jobsDatasets = chartData.data;
                 this.updateFeedData();
