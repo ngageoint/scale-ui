@@ -13,6 +13,9 @@ export class ColorService {
     public QUEUED = '#93BB87';
     public RUNNING = '#576F50';
     public INGEST = '#bbbbbb';
+    public SCALE_BLUE1 = '#48ACFF';
+    public SCALE_BLUE2 = '#0071BC';
+    public SCALE_BLUE3 = '#24567F';
 
     constructor() { }
 

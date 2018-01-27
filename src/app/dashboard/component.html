@@ -3,6 +3,7 @@
         <div class="ui-g-3">
             <p-panel header="Favorites ({{ favoriteJobTypes.length }})">
                 <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding"
+                             [scrollable]="true" scrollHeight="444px"
                              emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
                     <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
