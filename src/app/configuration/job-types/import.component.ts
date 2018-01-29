@@ -13,8 +13,6 @@ import { environment } from '../../../environments/environment';
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import * as iconData from './font-awesome.json';
-// import { InterfaceEnvVar, InterfaceInput, InterfaceMount, InterfaceOutput, InterfaceSetting, JobTypeInterface } from './interface.model';
-import { JobTypeInterface } from './interface.model';
 import { Trigger, TriggerConfiguration, TriggerData } from './trigger.model';
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { CustomResources } from './custom.resources.model';
@@ -32,6 +30,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     jsonMode: boolean;
     jsonModeBtnClass: string;
     jobTypeJson: string;
+    manifestJson: string;
     jsonConfig: object;
     jsonConfigReadOnly: object;
     msgs: Message[] = [];
@@ -44,7 +43,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
-    // activeInterfaceIndex: number[];
     triggerForm: FormGroup;
     trigger: Trigger;
     triggerJson: string;
@@ -52,24 +50,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     errorMappingForm: FormGroup;
     errorMappingExitCode: any;
     errorMappingJson: string;
-    // interfaceEnvVarsForm: FormGroup;
-    // interfaceEnvVar: InterfaceEnvVar;
-    // interfaceEnvVarJson: string;
-    // interfaceMountsForm: FormGroup;
-    // interfaceMount: InterfaceMount;
-    // interfaceMountsJson: string;
-    // interfaceMountModeOptions: SelectItem[];
-    // interfaceSettingsForm: FormGroup;
-    // interfaceSetting: InterfaceSetting;
-    // interfaceSettingsJson: string;
-    // interfaceInputsForm: FormGroup;
-    // interfaceInput: InterfaceInput;
-    // interfaceInputsJson: string;
-    // interfaceInputTypeOptions: SelectItem[];
-    // interfaceOutputsForm: FormGroup;
-    // interfaceOutput: InterfaceOutput;
-    // interfaceOutputsJson: string;
-    // interfaceOutputTypeOptions: SelectItem[];
     customResourcesForm: FormGroup;
     customResources: any;
     customResourcesJson: string;
@@ -98,7 +78,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         this.mode = 'Import';
-                        this.jobType = new JobType('untitled-algorithm', '1.0', new JobTypeInterface(''), 'Untitled Algorithm');
+                        this.jobType = new JobType('untitled-algorithm', '1.0', null, 'Untitled Algorithm');
                     }
                     this.getWorkspaces();
 
@@ -116,11 +96,9 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         'max_tries': new FormControl(''),
                         'cpus': new FormControl(''),
                         'memory': new FormControl(''),
-                        // 'interface-version': new FormControl(''),
-                        // 'interface-command': new FormControl('', Validators.required),
-                        // 'interface-command_arguments': new FormControl('', Validators.required),
                         'error-mapping-version': new FormControl(''),
-                        'custom-resources-version': new FormControl('')
+                        'custom-resources-version': new FormControl(''),
+                        'manifest': new FormControl('', Validators.required)
                     });
                     this.triggerForm = this.fb.group({
                         'type': new FormControl('', Validators.required),
@@ -137,39 +115,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         'value': new FormControl('', Validators.required),
                         'json-editor': new FormControl('')
                     });
-                    // this.interfaceEnvVarsForm = this.fb.group({
-                    //     'name': new FormControl('', Validators.required),
-                    //     'value': new FormControl('', Validators.required),
-                    //     'json-editor': new FormControl('')
-                    // });
-                    // this.interfaceMountsForm = this.fb.group({
-                    //     'name': new FormControl('', Validators.required),
-                    //     'path': new FormControl('', Validators.required),
-                    //     'required': new FormControl(''),
-                    //     'mode': new FormControl(''),
-                    //     'json-editor': new FormControl('')
-                    // });
-                    // this.interfaceSettingsForm = this.fb.group({
-                    //     'name': new FormControl('', Validators.required),
-                    //     'required': new FormControl(''),
-                    //     'secret': new FormControl(''),
-                    //     'json-editor': new FormControl('')
-                    // });
-                    // this.interfaceInputsForm = this.fb.group({
-                    //     'name': new FormControl('', Validators.required),
-                    //     'type': new FormControl('', Validators.required),
-                    //     'media_types': new FormControl(''),
-                    //     'partial': new FormControl(''),
-                    //     'required': new FormControl(''),
-                    //     'json-editor': new FormControl('')
-                    // });
-                    // this.interfaceOutputsForm = this.fb.group({
-                    //     'name': new FormControl('', Validators.required),
-                    //     'type': new FormControl('', Validators.required),
-                    //     'media_types': new FormControl(''),
-                    //     'required': new FormControl(''),
-                    //     'json-editor': new FormControl('')
-                    // });
                     this.customResourcesForm = this.fb.group({
                         'key': new FormControl('', Validators.required),
                         'value': new FormControl('', Validators.required),
@@ -197,7 +142,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         }
                     ];
                     this.workspaces = [];
-                    // this.activeInterfaceIndex = [];
                     this.jsonConfig = {
                         mode: {name: 'application/json', json: true},
                         indentUnit: 4,
@@ -227,45 +171,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         }
                     ];
                     this.errorMappingExitCode = {};
-                    // this.interfaceEnvVar = new InterfaceEnvVar('', '');
-                    // this.interfaceMount = new InterfaceMount('', '');
-                    // this.interfaceMountModeOptions = [
-                    //     {
-                    //         label: 'Read Only',
-                    //         value: 'ro'
-                    //     },
-                    //     {
-                    //         label: 'Read/Write',
-                    //         value: 'rw'
-                    //     }
-                    // ];
-                    // this.interfaceSetting = new InterfaceSetting('');
-                    // this.interfaceInput = new InterfaceInput('', '');
-                    // this.interfaceInputTypeOptions = [
-                    //     {
-                    //         label: 'Property',
-                    //         value: 'property'
-                    //     },
-                    //     {
-                    //         label: 'File',
-                    //         value: 'file'
-                    //     },
-                    //     {
-                    //         label: 'Files',
-                    //         value: 'files'
-                    //     }
-                    // ];
-                    // this.interfaceOutput = new InterfaceOutput('', '');
-                    // this.interfaceOutputTypeOptions = [
-                    //     {
-                    //         label: 'File',
-                    //         value: 'file'
-                    //     },
-                    //     {
-                    //         label: 'Files',
-                    //         value: 'files'
-                    //     }
-                    // ];
                     this.customResources = new CustomResources();
                     this.importForm.valueChanges.subscribe(() => {
                         // only enable 'Validate and Import' when the form is valid
@@ -318,15 +223,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     getUnicode(code) {
         return `&#x${code};`;
     }
-    // onInterfaceAccordionOpen(e) {
-    //     this.activeInterfaceIndex.push(e.index);
-    // }
-    // onInterfaceAccordionClose(e) {
-    //     const idx = this.activeInterfaceIndex.indexOf(e.index);
-    //     if (idx > -1) {
-    //         this.activeInterfaceIndex.splice(idx, 1);
-    //     }
-    // }
     onModeClick() {
         this.jsonMode = !this.jsonMode;
         if (this.jsonMode) {
@@ -343,21 +239,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                 if (this.jobType.error_mapping) {
                     this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
                 }
-                // if (this.jobType.job_type_interface.env_vars && this.jobType.job_type_interface.env_vars.length > 0) {
-                //     this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
-                // }
-                // if (this.jobType.job_type_interface.mounts && this.jobType.job_type_interface.mounts.length > 0) {
-                //     this.interfaceMountsJson = beautify(JSON.stringify(this.jobType.job_type_interface.mounts));
-                // }
-                // if (this.jobType.job_type_interface.settings && this.jobType.job_type_interface.settings.length > 0) {
-                //     this.interfaceSettingsJson = beautify(JSON.stringify(this.jobType.job_type_interface.settings));
-                // }
-                // if (this.jobType.job_type_interface.input_data && this.jobType.job_type_interface.input_data.length > 0) {
-                //     this.interfaceInputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.input_data));
-                // }
-                // if (this.jobType.job_type_interface.output_data && this.jobType.job_type_interface.output_data.length > 0) {
-                //     this.interfaceOutputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.output_data));
-                // }
                 if (this.jobType.custom_resources) {
                     this.customResourcesJson = beautify(JSON.stringify(this.jobType.custom_resources.resources));
                 }
@@ -368,15 +249,16 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
             }
         }
     }
-    // formatCode(data) {
-    //     return beautify(JSON.stringify(data), { indent_size: 4 });
-    // }
-    // deleteItem(value) {
-    //     // TODO: make this generic
-    //     _.remove(this.jobType.job_type_interface.env_vars, value);
-    // }
     handleStepChange(index) {
         this.currentStepIdx = index;
+    }
+    onImageImport(seedImage) {
+        this.manifestJson = beautify(JSON.stringify(seedImage));
+        this.jobType.manifest = seedImage;
+    }
+    onImageRemove() {
+        this.manifestJson = null;
+        this.jobType.manifest = null;
     }
     onTriggerFormSubmit() {
         this.jobType.trigger_rule = this.stripObject(this.trigger);
@@ -392,31 +274,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
         this.triggerForm.reset();
         this.jobType.trigger_rule = null;
     }
-    // onInterfaceEnvVarsFormSubmit() {
-    //     this.jobType.job_type_interface.env_vars.push(this.stripObject(this.interfaceEnvVar));
-    //     this.interfaceEnvVarJson = beautify(JSON.stringify(this.jobType.job_type_interface.env_vars));
-    //     this.interfaceEnvVarsForm.reset();
-    // }
-    // onInterfaceMountsFormSubmit() {
-    //     this.jobType.job_type_interface.mounts.push(this.stripObject(this.interfaceMount));
-    //     this.interfaceMountsJson = beautify(JSON.stringify(this.jobType.job_type_interface.mounts));
-    //     this.interfaceMountsForm.reset();
-    // }
-    // onInterfaceSettingsFormSubmit() {
-    //     this.jobType.job_type_interface.settings.push(this.stripObject(this.interfaceSetting));
-    //     this.interfaceSettingsJson = beautify(JSON.stringify(this.jobType.job_type_interface.settings));
-    //     this.interfaceSettingsForm.reset();
-    // }
-    // onInterfaceInputsFormSubmit() {
-    //     this.jobType.job_type_interface.input_data.push(this.stripObject(this.interfaceInput));
-    //     this.interfaceInputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.input_data));
-    //     this.interfaceInputsForm.reset();
-    // }
-    // onInterfaceOutputsFormSubmit() {
-    //     this.jobType.job_type_interface.output_data.push(this.stripObject(this.interfaceOutput));
-    //     this.interfaceOutputsJson = beautify(JSON.stringify(this.jobType.job_type_interface.output_data));
-    //     this.interfaceOutputsForm.reset();
-    // }
     onCustomResourcesFormSubmit() {
         this.jobType.custom_resources.resources[this.customResources.key] = this.customResources.value;
         this.jobType.custom_resources.resources = this.stripObject(this.jobType.custom_resources.resources);

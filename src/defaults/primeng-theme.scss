@@ -1779,6 +1779,12 @@ body .ui-dialog.ui-confirm-dialog .ui-dialog-content > span {
     line-height: 1em;
     margin: 0;
 }
+body .ui-dialog .ui-dialog-footer {
+    border-top: 1px solid #ccc;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+}
 body .ui-tooltip .ui-tooltip-text {
     -webkit-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     -moz-box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.3);

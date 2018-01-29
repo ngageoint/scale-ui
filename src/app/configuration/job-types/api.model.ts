@@ -1,5 +1,4 @@
 import { DataService } from '../../data.service';
-import { JobTypeInterface } from './interface.model';
 import { Trigger } from './trigger.model';
 import { ErrorMapping } from './error.mapping.model';
 import { CustomResources } from './custom.resources.model';
@@ -68,7 +67,7 @@ export class JobType {
     constructor(
         public name: string,
         public version: string,
-        public job_type_interface: JobTypeInterface, // api model property is just 'interface'
+        public manifest: any,
         public title?: string,
         public id?: number,
         public description?: string,
@@ -109,7 +108,7 @@ export class JobType {
     ) {
         this.name = this.name || null;
         this.version = this.version || null;
-        this.job_type_interface = this.job_type_interface || null;
+        this.manifest = this.manifest || null;
         this.title = this.title || null;
         this.id = this.id || null;
         this.description = this.description || null;
