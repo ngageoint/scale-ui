@@ -7,6 +7,7 @@ import { NgModule } from '@angular/core';
 import { CodemirrorModule } from 'ng2-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { UtcDatepickerModule } from 'angular-utc-datepicker';
+import { SeedImagesModule } from 'seed-images';
 
 // Prime NG
 import {
@@ -109,6 +110,7 @@ import { IngestApiService } from './data/ingest/api.service';
         CodemirrorModule,
         NgxGraphModule,
         UtcDatepickerModule,
+        SeedImagesModule,
         // Prime NG
         AutoCompleteModule,
         CalendarModule,

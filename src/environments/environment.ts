@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false,
-  scale: true
+    production: false,
+    scale: true,
+    siloUrl: 'http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com'
 };

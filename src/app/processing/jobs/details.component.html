@@ -230,9 +230,10 @@
             </p-scrollPanel>
         </div>
     </div>
-    <p-dialog header="Job Execution Log" [(visible)]="logDisplay" [width]="600" [minHeight]="300" [draggable]="true" positionTop="40">
+    <p-dialog header="Job Execution Log" [(visible)]="logDisplay" [width]="logWidth" [height]="logHeight" [draggable]="true"
+              positionTop="40">
         <span *ngIf="selectedJobExe">
-            <app-log-viewer [execution]="selectedJobExe"></app-log-viewer>
+            <app-log-viewer [execution]="selectedJobExe" [height]="logHeight * 0.85"></app-log-viewer>
         </span>
     </p-dialog>
 </div>

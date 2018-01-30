@@ -21,7 +21,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     jobTypes: SelectItem[];
     selectedJobType: SelectItem;
     selectedJobTypeDetail: any;
-    interfaceData: TreeNode[];
+    // interfaceData: TreeNode[];
     chartData6h: any;
     total6h: number;
     failed6h: number;
@@ -72,15 +72,15 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private setInterfaceData(data) {
-        const dataArr = [];
-        _.forEach(data, (d) => {
-            dataArr.push({
-                data: d
-            });
-        });
-        return dataArr;
-    }
+    // private setInterfaceData(data) {
+    //     const dataArr = [];
+    //     _.forEach(data, (d) => {
+    //         dataArr.push({
+    //             data: d
+    //         });
+    //     });
+    //     return dataArr;
+    // }
     private getChartData(data) {
         const returnData = {
             labels: _.map(data, 'status'),
@@ -106,24 +106,24 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     private getJobTypeDetail(id: number) {
         this.jobTypesApiService.getJobType(id).then(data => {
-            this.interfaceData = [
-                {
-                    data: {
-                        name: 'Input Data',
-                        type: '',
-                        media_types: ''
-                    },
-                    children: this.setInterfaceData(data.job_type_interface.input_data)
-                },
-                {
-                    data: {
-                        name: 'Output Data',
-                        type: '',
-                        media_type: ''
-                    },
-                    children: this.setInterfaceData(data.job_type_interface.output_data)
-                }
-            ];
+            // this.interfaceData = [
+            //     {
+            //         data: {
+            //             name: 'Input Data',
+            //             type: '',
+            //             media_types: ''
+            //         },
+            //         children: this.setInterfaceData(data.job_type_interface.input_data)
+            //     },
+            //     {
+            //         data: {
+            //             name: 'Output Data',
+            //             type: '',
+            //             media_type: ''
+            //         },
+            //         children: this.setInterfaceData(data.job_type_interface.output_data)
+            //     }
+            // ];
             this.chartData6h = this.getChartData(data.job_counts_6h);
             this.total6h = this.getChartTotals(data.job_counts_6h, 'total');
             this.failed6h = this.getChartTotals(data.job_counts_6h, 'failed');
