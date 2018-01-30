@@ -2,7 +2,8 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import { colorSets } from '@swimlane/ngx-graph/release/utils';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
-import { RecipeType } from '../../configuration/recipe-types/api.model';
+
+import { ColorService } from '../../color.service';
 import { JobType } from '../../configuration/job-types/api.model';
 
 @Component({
@@ -11,7 +12,7 @@ import { JobType } from '../../configuration/job-types/api.model';
     styleUrls: ['./component.scss']
 })
 export class RecipeGraphComponent implements OnInit, OnChanges {
-    @Input() recipeType: RecipeType;
+    @Input() recipeData: any;
 
     nodes = [];
     links = [];
@@ -25,7 +26,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedJobType: JobType;
     selectedNode: any;
 
-    constructor() {
+    constructor(
+        private colorService: ColorService
+    ) {
         this.width = 700;
         this.height = 300;
         this.orientation = 'TB';
@@ -37,7 +40,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     private getDependents(name, outputName) {
         const results = [];
 
-        _.forEach(this.recipeType.definition.jobs, (job) => {
+        _.forEach(this.recipeData.definition.jobs, (job) => {
             if (job.name !== name) {
                 _.forEach(job.dependencies, (dependency) => {
                     if (dependency.name === name) {
@@ -69,13 +72,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.selectedJobType = null;
             } else {
                 this.selectedNode = e;
-                this.selectedNode.options.stroke = '#ff0000';
-                this.selectedJobType = _.find(this.recipeType.job_types, { name: e.job_type.name, version: e.job_type.version });
+                this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
+                this.selectedJobType = _.find(this.recipeData.job_types, { name: e.job_type.name, version: e.job_type.version });
 
-                if (this.recipeType.definition) {
-                    _.forEach(this.recipeType.definition.jobs, (job) => {
+                if (this.recipeData.definition) {
+                    _.forEach(this.recipeData.definition.jobs, (job) => {
                         // find dependents
-                        const jobType = _.find(this.recipeType.job_types, { name: job.job_type.name, version: job.job_type.version });
+                        const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
                         if (jobType && jobType.job_type_interface) {
                             _.forEach(jobType.job_type_interface.output_data, (jobOutput) => {
                                 if (jobOutput) {
@@ -116,7 +119,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
     ngOnChanges() {
-        if (this.recipeType) {
+        if (this.recipeData) {
             // build nodes and links for DAG
             this.nodes = [{
                 id: 'start',
@@ -124,18 +127,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 name: 'start',
                 job_type: null,
                 dependencies: [],
-                visible: true
+                visible: true,
+                fillColor: this.colorService.RECIPE_NODE
             }];
             this.links = [];
 
-            _.forEach(this.recipeType.definition.jobs, (job) => {
+            _.forEach(this.recipeData.definition.jobs, (job) => {
                 this.nodes.push({
                     id: _.camelCase(job.name), // id can't have dashes or anything
                     label: job.job_type.name + ' v' + job.job_type.version,
                     name: job.name,
                     job_type: job.job_type,
                     dependencies: job.dependencies,
-                    visible: true
+                    visible: true,
+                    fillColor: this.colorService.RECIPE_NODE
                 });
             });
 

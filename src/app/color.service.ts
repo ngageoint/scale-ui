@@ -16,6 +16,7 @@ export class ColorService {
     public SCALE_BLUE1 = '#48ACFF';
     public SCALE_BLUE2 = '#0071BC';
     public SCALE_BLUE3 = '#24567F';
+    public RECIPE_NODE = '#ddd';
 
     constructor() { }
 

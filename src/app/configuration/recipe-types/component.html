@@ -8,5 +8,5 @@
 <div class="recipe-type-details" *ngIf="selectedRecipeTypeDetail">
     <h3>{{ selectedRecipeTypeDetail.title }} v{{ selectedRecipeTypeDetail.version }}</h3>
     <p>{{ selectedRecipeTypeDetail.description }}</p>
-    <app-recipe-graph [recipeType]="selectedRecipeTypeDetail"></app-recipe-graph>
+    <app-recipe-graph [recipeData]="selectedRecipeTypeDetail"></app-recipe-graph>
 </div>
