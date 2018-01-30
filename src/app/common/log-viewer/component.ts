@@ -10,6 +10,7 @@ import * as _ from 'lodash';
     styleUrls: ['./component.scss']
 })
 export class LogViewerComponent implements OnInit, OnChanges {
+    @Input() height: number;
     @Input() execution: JobExecution;
     // forceScroll = true;
     execLog: any[];

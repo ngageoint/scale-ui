@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ import { DataService } from '../../data.service';
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss']
 })
-export class JobDetailsComponent implements OnInit {
+export class JobDetailsComponent implements OnInit, AfterViewInit {
     job: Job;
     jobStatus: string;
     options: any;
@@ -21,6 +21,8 @@ export class JobDetailsComponent implements OnInit {
     triggerOccurred: string;
     selectedJobExe: any;
     logDisplay: boolean;
+    logWidth: number;
+    logHeight: number;
 
     constructor(
         private route: ActivatedRoute,
@@ -109,5 +111,11 @@ export class JobDetailsComponent implements OnInit {
                 };
             });
         }
+    }
+
+    ngAfterViewInit() {
+        const viewportSize = this.dataService.getViewportSize();
+        this.logWidth = viewportSize.width * 0.75;
+        this.logHeight = viewportSize.height * 0.75;
     }
 }
