@@ -1921,10 +1921,10 @@ body .ui-steps .ui-steps-item {
     background-color: transparent;
     text-align: center;
 }
-body .ui-steps .ui-steps-item.ui-state-disabled {
-    opacity: 1;
-    filter: alpha(opacity=100);
-}
+//body .ui-steps .ui-steps-item.ui-state-disabled {
+//    opacity: 1;
+//    filter: alpha(opacity=100);
+//}
 body .ui-steps .ui-steps-item .ui-menuitem-link {
     display: inline-block;
     text-align: center;
@@ -1959,6 +1959,9 @@ body .ui-steps .ui-steps-item.ui-state-highlight .ui-steps-number {
 }
 body .ui-steps .ui-steps-item:not(.ui-state-highlight) .ui-steps-number:hover {
     background-color: #e6e6e6;
+}
+body .ui-steps .ui-steps-item:not(.ui-state-highlight).ui-state-disabled .ui-steps-number:hover {
+    background-color: #fff;
 }
 body .ui-steps .ui-steps-item.ui-state-highlight .ui-steps-title {
     font-weight: 700;

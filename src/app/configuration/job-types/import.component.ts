@@ -97,8 +97,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                         'cpus': new FormControl(''),
                         'memory': new FormControl(''),
                         'error-mapping-version': new FormControl(''),
-                        'custom-resources-version': new FormControl(''),
-                        'manifest': new FormControl('', Validators.required)
+                        'custom-resources-version': new FormControl('')
                     });
                     this.triggerForm = this.fb.group({
                         'type': new FormControl('', Validators.required),
@@ -174,7 +173,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                     this.customResources = new CustomResources();
                     this.importForm.valueChanges.subscribe(() => {
                         // only enable 'Validate and Import' when the form is valid
-                        this.items[this.items.length - 1].disabled = !this.importForm.valid;
+                        this.items[this.items.length - 1].disabled = !this.importForm.valid || !this.jobType.manifest;
                     });
                 });
         }
@@ -259,6 +258,8 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     onImageRemove() {
         this.manifestJson = null;
         this.jobType.manifest = null;
+        // only enable 'Validate and Import' when the form is valid
+        this.items[this.items.length - 1].disabled = !this.importForm.valid || !this.jobType.manifest;
     }
     onTriggerFormSubmit() {
         this.jobType.trigger_rule = this.stripObject(this.trigger);
