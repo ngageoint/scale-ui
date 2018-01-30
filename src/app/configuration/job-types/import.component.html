@@ -131,9 +131,9 @@
             <div class="ui-g-10" *ngIf="currentStepIdx === 1">
                 <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
                 <div *ngIf="jobType.manifest">
-                    <button pButton class="ui-button-danger margin-bottom-md" icon="fa-remove" label="Remove Manifest"
+                    <button pButton class="ui-button-danger margin-bottom-md" icon="fa-remove" label="Delete Seed Image"
                             (click)="onImageRemove()"></button>
-                    <codemirror [(ngModel)]="manifestJson" [config]="jsonConfigReadOnly" formControlName="json-editor"></codemirror>
+                    <codemirror [(ngModel)]="seedImageJson" [config]="jsonConfigReadOnly" formControlName="json-editor"></codemirror>
                 </div>
             </div>
             <div class="ui-g-10" *ngIf="currentStepIdx === 2">

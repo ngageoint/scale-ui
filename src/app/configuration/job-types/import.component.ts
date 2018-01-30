@@ -30,7 +30,6 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     jsonMode: boolean;
     jsonModeBtnClass: string;
     jobTypeJson: string;
-    manifestJson: string;
     jsonConfig: object;
     jsonConfigReadOnly: object;
     msgs: Message[] = [];
@@ -43,6 +42,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
+    seedImageJson: string;
     triggerForm: FormGroup;
     trigger: Trigger;
     triggerJson: string;
@@ -172,8 +172,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                     this.errorMappingExitCode = {};
                     this.customResources = new CustomResources();
                     this.importForm.valueChanges.subscribe(() => {
-                        // only enable 'Validate and Import' when the form is valid
-                        this.items[this.items.length - 1].disabled = !this.importForm.valid || !this.jobType.manifest;
+                        this.validateForm();
                     });
                 });
         }
@@ -210,6 +209,12 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
             });
         });
     }
+    private validateForm() {
+        // only enable 'Validate and Import' when the form is valid
+        this.items[this.items.length - 1].disabled = !this.importForm.valid ||
+            !this.jobType.manifest ||
+            _.keys(this.jobType.manifest).length === 0;
+    }
 
     ngOnInit() {
     }
@@ -232,11 +237,20 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
             this.msgs = [];
             try {
                 this.jobType = JSON.parse(this.jobTypeJson);
+                if (this.jobType.manifest) {
+                    if (_.keys(this.jobType.manifest).length === 0) {
+                        this.jobType.manifest = null;
+                    } else {
+                        this.seedImageJson = beautify(JSON.stringify(this.jobType.manifest));
+                    }
+                }
                 if (this.jobType.trigger_rule) {
                     this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
                 }
                 if (this.jobType.error_mapping) {
-                    this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
+                    if (this.jobType.error_mapping.exit_codes) {
+                        this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
+                    }
                 }
                 if (this.jobType.custom_resources) {
                     this.customResourcesJson = beautify(JSON.stringify(this.jobType.custom_resources.resources));
@@ -252,14 +266,13 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
         this.currentStepIdx = index;
     }
     onImageImport(seedImage) {
-        this.manifestJson = beautify(JSON.stringify(seedImage));
+        this.seedImageJson = beautify(JSON.stringify(seedImage));
         this.jobType.manifest = seedImage;
     }
     onImageRemove() {
-        this.manifestJson = null;
+        this.seedImageJson = null;
         this.jobType.manifest = null;
-        // only enable 'Validate and Import' when the form is valid
-        this.items[this.items.length - 1].disabled = !this.importForm.valid || !this.jobType.manifest;
+        this.validateForm();
     }
     onTriggerFormSubmit() {
         this.jobType.trigger_rule = this.stripObject(this.trigger);
