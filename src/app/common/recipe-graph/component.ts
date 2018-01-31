@@ -1,5 +1,4 @@
 import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { colorSets } from '@swimlane/ngx-graph/release/utils';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
@@ -16,25 +15,18 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     nodes = [];
     links = [];
-    view: any[];
-    width: number;
     height: number;
     showLegend = false;
     orientation: string; // LR, RL, TB, BT
     curve: any;
-    colorScheme: any;
     selectedJobType: JobType;
     selectedNode: any;
 
     constructor(
         private colorService: ColorService
     ) {
-        this.width = 700;
-        this.height = 300;
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
-        this.colorScheme = colorSets.find(s => s.name === 'picnic');
-        this.view = [this.width, this.height];
         this.showLegend = false;
     }
     private getDependents(name, outputName) {
@@ -140,7 +132,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     job_type: job.job_type,
                     dependencies: job.dependencies,
                     visible: true,
-                    fillColor: this.colorService.RECIPE_NODE
+                    fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE
                 });
             });
 
@@ -168,6 +160,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             });
         }
     }
+
     ngOnInit() {
     }
 }

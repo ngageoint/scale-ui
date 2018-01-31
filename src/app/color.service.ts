@@ -3,20 +3,20 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ColorService {
 
-    public COMPLETED = '#576f50';
-    public ERROR = '#88382a';
-    public FAILED = '#88382a';
+    public ERROR = '#55231A';
     public ERROR_DATA = '#88382a';
     public ERROR_ALGORITHM = '#88582A';
     public ERROR_SYSTEM = '#88772A';
-    public PENDING = '#C5FBB5';
-    public QUEUED = '#93BB87';
-    public RUNNING = '#576F50';
+    public COMPLETED = '#576f50';
+    public FAILED = '#88382a';
+    public PENDING = '#DBA59C';
+    public QUEUED = '#9A59B1';
+    public RUNNING = '#0071BC';
     public INGEST = '#bbbbbb';
     public SCALE_BLUE1 = '#48ACFF';
     public SCALE_BLUE2 = '#0071BC';
     public SCALE_BLUE3 = '#24567F';
-    public RECIPE_NODE = '#ddd';
+    public RECIPE_NODE = '#777';
 
     constructor() { }
 

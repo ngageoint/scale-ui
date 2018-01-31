@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-// import * as _ from 'lodash';
+import * as _ from 'lodash';
 
-import { Recipe } from './api.model';
 import { RecipesApiService } from './api.service';
-// import { RecipeType } from '../../configuration/recipe-types/api.model';
+import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 @Component({
     selector: 'app-recipe-details',
@@ -12,7 +11,6 @@ import { RecipesApiService } from './api.service';
     styleUrls: ['./details.component.scss']
 })
 export class RecipeDetailsComponent implements OnInit {
-    recipe: any;
     recipeType: any;
     constructor(
         private route: ActivatedRoute,
@@ -23,31 +21,25 @@ export class RecipeDetailsComponent implements OnInit {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
             this.recipesApiService.getRecipe(id).then(data => {
-                this.recipe = Recipe.transformer(data);
+                this.recipeType = RecipeType.transformer(data.recipe_type);
 
-                // // attach revision interface to each job type
-                // const jobTypes = [];
-                // _.forEach(data.jobs, (jobData) => {
-                //     const jobType = jobData.job.job_type;
-                //     jobType.job_type_interface = jobData.job.job_type_rev.interface;
-                //     jobTypes.push(jobType);
-                // });
-                // // build recipe type details with revision definition and adjusted job types
-                // this.recipeType = new RecipeType(
-                //     this.recipe.recipe_type.id,
-                //     this.recipe.recipe_type.name,
-                //     this.recipe.recipe_type.version,
-                //     this.recipe.recipe_type.title,
-                //     this.recipe.recipe_type.description,
-                //     this.recipe.recipe_type.is_active,
-                //     this.recipe.recipe_type_rev.definition,
-                //     this.recipe.recipe_type.revision_num,
-                //     this.recipe.recipe_type.created,
-                //     this.recipe.recipe_type.last_modified,
-                //     this.recipe.recipe_type.archived,
-                //     this.recipe.recipe_type.trigger_rule,
-                //     jobTypes
-                // );
+                const jobTypes = [];
+                _.forEach(data.jobs, (jobData) => {
+                    // attach revision interface to each job type
+                    const jobType = jobData.job.job_type;
+                    jobType.job_type_interface = jobData.job.job_type_rev.interface;
+                    jobTypes.push(jobType);
+
+                    // include current job instance in definition
+                    const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
+                        return j.job_type.name === jobData.job.job_type.name && j.job_type.version === jobData.job.job_type.version;
+                    });
+                    if (recipeTypeJob) {
+                        recipeTypeJob.instance = jobData.job;
+                    }
+                });
+                // build recipe type details with revision definition and adjusted job types
+                this.recipeType.job_types = jobTypes;
             });
         }
     }
