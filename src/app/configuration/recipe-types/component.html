@@ -1,6 +1,10 @@
-<h2>Recipe Types</h2>
-<p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
-            [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."></p-dropdown>
+<div class="recipe-type__header">
+    <h2>Recipe Types</h2>
+    <p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
+                class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."></p-dropdown>
+    <button pButton class="btn__new-recipe" icon="fa-plus-circle" label="New Recipe" (click)="createNewRecipe()"
+            [disabled]="recipeTypeId === 0"></button>
+</div>
 <hr />
 <div class="text-center" *ngIf="!selectedRecipeTypeDetail">
     <h3>Select a recipe type to view its details</h3>
@@ -9,13 +13,44 @@
     <div class="ui-g margin-bottom-md">
         <div class="ui-g-8 ui-lg-9 ui-g-nopad">
             <div class="ui-g">
-                <div class="ui-g-6 ui-g-nopad">
-                    <h3>{{ selectedRecipeTypeDetail.title }} v{{ selectedRecipeTypeDetail.version }}</h3>
-                    <p>{{ selectedRecipeTypeDetail.description }}</p>
+                <div class="ui-g-8 ui-g-nopad">
+                    <div *ngIf="!isEditing">
+                        <h3>{{ selectedRecipeTypeDetail.title }} v{{ selectedRecipeTypeDetail.version }}</h3>
+                        <p>{{ selectedRecipeTypeDetail.description }}</p>
+                    </div>
+                    <div *ngIf="isEditing">
+                        <div class="ui-g ui-g-nopad">
+                            <div class="ui-g-4 ui-g-nopad">
+                                <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.name" pInputText>
+                            </div>
+                            <div class="ui-g-4 ui-g-nopad">
+                                <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.title" pInputText>
+                            </div>
+                            <div class="ui-g-4 ui-g-nopad">
+                                <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.version" pInputText>
+                            </div>
+                        </div>
+                        <div class="ui-g ui-g-nopad">
+                            <div class="ui-g-12 ui-g-nopad">
+                                <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.description"
+                                       pInputText>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="ui-g-6 ui-g-nopad text-right">
-                    <button pButton class="ui-button-secondary" icon="fa-plus-circle" label="Add Job Type"
-                            (click)="showAddJobType()"></button>
+                <div class="ui-g-4 ui-g-nopad text-right">
+                    <button class="btn__edit" pButton icon="fa-edit fa-fw" (click)="toggleEdit()"
+                            *ngIf="selectedRecipeType && !isEditing" pTooltip="Edit Recipe Type"></button>
+                    <div class="recipe-type__menu">
+                        <button class="btn__menu ui-button-info" pButton icon="fa-plus fa-fw" (click)="showAddJobType()"
+                                *ngIf="selectedRecipeType && isEditing" pTooltip="Add Job Type"></button>
+                        <button class="btn__menu ui-button-warning" pButton icon="fa-check fa-fw" (click)="validateRecipeType()"
+                                *ngIf="selectedRecipeType && isEditing" pTooltip="Validate Recipe Type"></button>
+                        <button class="btn__menu ui-button-success" pButton icon="fa-save fa-fw" (click)="saveRecipeType()"
+                                *ngIf="selectedRecipeType && isEditing" pTooltip="Save Recipe Type"></button>
+                    </div>
+                    <button class="ui-button-danger" pButton icon="fa-remove fa-fw" (click)="toggleEdit()"
+                            *ngIf="selectedRecipeType && isEditing" pTooltip="Cancel Edit"></button>
                 </div>
             </div>
         </div>

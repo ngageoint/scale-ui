@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { SelectItem } from 'primeng/primeng';
+import { MenuItem, SelectItem } from 'primeng/api';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/filter';
@@ -11,6 +11,7 @@ import { JobTypesApiService } from '../job-types/api.service';
 import { DataService } from '../../data.service';
 import { RecipeType } from './api.model';
 import { JobType } from '../job-types/api.model';
+import { RecipeTypeDefinition } from './definition.model';
 
 @Component({
     selector: 'app-job-types',
@@ -21,6 +22,7 @@ import { JobType } from '../job-types/api.model';
 export class RecipeTypesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    recipeTypeId: number;
     jobTypes: any;
     recipeTypes: SelectItem[];
     selectedRecipeType: SelectItem;
@@ -28,6 +30,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedJobType: JobType;
     addJobTypeDisplay: boolean;
     scrollHeight: any;
+    isEditing: boolean;
 
     constructor(
         private recipeTypesApiService: RecipeTypesApiService,
@@ -42,10 +45,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 .map(() => this.route)
                 .subscribe(() => {
                     this.recipeTypes = [];
-                    let id = null;
                     if (this.route && this.route.paramMap) {
                         this.routeParams = this.route.paramMap.subscribe(params => {
-                            id = +params.get('id');
+                            this.recipeTypeId = params.get('id') ? +params.get('id') : null;
                         });
                     }
                     this.recipeTypesApiService.getRecipeTypes().then(data => {
@@ -54,12 +56,36 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                                 label: result.title + ' ' + result.version,
                                 value: result
                             });
-                            if (id === result.id) {
+                            if (this.recipeTypeId === result.id) {
                                 this.selectedRecipeType = _.clone(result);
                             }
                         });
-                        if (id) {
-                            this.getRecipeTypeDetail(id);
+                        if (this.recipeTypeId) {
+                            this.isEditing = false;
+                            this.getRecipeTypeDetail(this.recipeTypeId);
+                        } else {
+                            if (this.recipeTypeId === 0) {
+                                this.selectedRecipeType = {
+                                    label: 'New Recipe',
+                                    value: new RecipeType(
+                                        null,
+                                        'new-recipe',
+                                        'New Recipe',
+                                        '1.0',
+                                        'Description of a new recipe',
+                                        true,
+                                        new RecipeTypeDefinition([], '1.0', []),
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                };
+                                this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
+                                this.isEditing = true;
+                            }
                         }
                     });
                 });
@@ -72,8 +98,28 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
+    createNewRecipe() {
+        this.router.navigate(['/configuration/recipe-types/0']);
+    }
+
     showAddJobType() {
         this.addJobTypeDisplay = true;
+    }
+
+    toggleEdit() {
+        if (this.recipeTypeId === 0) {
+            this.router.navigate(['/configuration/recipe-types']);
+        } else {
+            this.isEditing = !this.isEditing;
+        }
+    }
+
+    validateRecipeType() {
+        console.log('validate');
+    }
+
+    saveRecipeType() {
+        console.log('save');
     }
 
     getUnicode(code) {
