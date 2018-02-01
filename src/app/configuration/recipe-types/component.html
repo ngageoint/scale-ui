@@ -6,7 +6,28 @@
     <h3>Select a recipe type to view its details</h3>
 </div>
 <div class="recipe-type-details" *ngIf="selectedRecipeTypeDetail">
-    <h3>{{ selectedRecipeTypeDetail.title }} v{{ selectedRecipeTypeDetail.version }}</h3>
-    <p>{{ selectedRecipeTypeDetail.description }}</p>
+    <div class="ui-g margin-bottom-md">
+        <div class="ui-g-8 ui-lg-9 ui-g-nopad">
+            <div class="ui-g">
+                <div class="ui-g-6 ui-g-nopad">
+                    <h3>{{ selectedRecipeTypeDetail.title }} v{{ selectedRecipeTypeDetail.version }}</h3>
+                    <p>{{ selectedRecipeTypeDetail.description }}</p>
+                </div>
+                <div class="ui-g-6 ui-g-nopad text-right">
+                    <button pButton class="ui-button-secondary" icon="fa-plus-circle" label="Add Job Type"
+                            (click)="showAddJobType()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
     <app-recipe-graph [recipeData]="selectedRecipeTypeDetail"></app-recipe-graph>
 </div>
+<p-sidebar [(visible)]="addJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+    <p-dataTable [value]="jobTypes" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'">
+        <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
+            <ng-template let-jobType="rowData" pTemplate="body">
+                <span class="fa" [innerHtml]="getUnicode(jobType.icon_code)"></span> {{ jobType.title }} v{{ jobType.version }}
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</p-sidebar>

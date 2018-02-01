@@ -1,5 +1,5 @@
 <div *ngIf="recipeType">
-    <h2>{{ recipeType.title }} {{ recipeType.version }}</h2>
+    <h2>{{ recipeType.title }} v{{ recipeType.version }}</h2>
     <a routerLink="/processing/recipes">&lt; Recipes List</a>
     <app-recipe-graph [recipeData]="recipeType"></app-recipe-graph>
 </div>

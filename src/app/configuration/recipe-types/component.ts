@@ -7,6 +7,8 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
 import { RecipeTypesApiService } from './api.service';
+import { JobTypesApiService } from '../job-types/api.service';
+import { DataService } from '../../data.service';
 import { RecipeType } from './api.model';
 import { JobType } from '../job-types/api.model';
 
@@ -19,13 +21,18 @@ import { JobType } from '../job-types/api.model';
 export class RecipeTypesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    jobTypes: any;
     recipeTypes: SelectItem[];
     selectedRecipeType: SelectItem;
     selectedRecipeTypeDetail: any;
     selectedJobType: JobType;
+    addJobTypeDisplay: boolean;
+    scrollHeight: any;
 
     constructor(
         private recipeTypesApiService: RecipeTypesApiService,
+        private jobTypesApiService: JobTypesApiService,
+        private dataService: DataService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -65,6 +72,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
+    showAddJobType() {
+        this.addJobTypeDisplay = true;
+    }
+
     getUnicode(code) {
         return `&#x${code};`;
     }
@@ -72,6 +83,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
     }
     ngOnInit() {
+        this.scrollHeight = this.dataService.getViewportSize().height * 0.85;
+        this.jobTypesApiService.getJobTypes().then(data => {
+            this.jobTypes = data.results;
+        });
     }
     ngOnDestroy() {
         this.routerEvents.unsubscribe();
