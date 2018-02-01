@@ -94,7 +94,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     private getRecipeTypeDetail(id: number) {
         this.recipeTypesApiService.getRecipeType(id).then(data => {
-            this.selectedRecipeTypeDetail = RecipeType.transformer(data);
+            this.selectedRecipeTypeDetail = data;
         });
     }
 
@@ -104,6 +104,22 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     showAddJobType() {
         this.addJobTypeDisplay = true;
+    }
+
+    addJobType(jobType) {
+        const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+        recipeData.definition.jobs.push({
+            dependencies: [],
+            job_type: {
+                name: jobType.name,
+                version: jobType.version
+            },
+            name: jobType.name,
+            recipe_inputs: []
+        });
+        recipeData.job_types.push(jobType);
+        this.selectedRecipeTypeDetail = recipeData;
+        this.addJobTypeDisplay = false;
     }
 
     toggleEdit() {

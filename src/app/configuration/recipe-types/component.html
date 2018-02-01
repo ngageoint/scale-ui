@@ -58,10 +58,12 @@
     <app-recipe-graph [recipeData]="selectedRecipeTypeDetail"></app-recipe-graph>
 </div>
 <p-sidebar [(visible)]="addJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
-    <p-dataTable [value]="jobTypes" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'">
+    <p-dataTable [value]="jobTypes" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'" [rowHover]="true">
         <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
             <ng-template let-jobType="rowData" pTemplate="body">
-                <span class="fa" [innerHtml]="getUnicode(jobType.icon_code)"></span> {{ jobType.title }} v{{ jobType.version }}
+                <div class="recipe-type__job-type-row" (click)="addJobType(jobType)">
+                    <span class="fa" [innerHtml]="getUnicode(jobType.icon_code)"></span> {{ jobType.title }} v{{ jobType.version }}
+                </div>
             </ng-template>
         </p-column>
     </p-dataTable>

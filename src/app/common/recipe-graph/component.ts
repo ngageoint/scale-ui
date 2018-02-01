@@ -3,7 +3,6 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../color.service';
-import { JobType } from '../../configuration/job-types/api.model';
 
 @Component({
     selector: 'app-recipe-graph',
@@ -19,7 +18,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     showLegend = false;
     orientation: string; // LR, RL, TB, BT
     curve: any;
-    selectedJobType: JobType;
+    selectedJobType: any;
     selectedNode: any;
 
     constructor(
