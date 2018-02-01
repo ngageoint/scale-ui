@@ -1,4 +1,4 @@
-<div class="ui-g">
+<div class="ui-g" xmlns:svg="http://www.w3.org/1999/html">
     <div class="ui-g-8 ui-lg-9 chart-container">
         <ngx-graph
             [legend]="showLegend"
@@ -20,7 +20,10 @@
                        tooltipPosition="'top'">
                     <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.fillColor"
                               [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" />
-                    <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 2">{{ node.label }}</svg:text>
+                    <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.5" class="node__label">
+                        <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
+                        <svg:tspan class="node__title">{{ node.label }}</svg:tspan>
+                    </svg:text>
                 </svg:g>
             </ng-template>
 

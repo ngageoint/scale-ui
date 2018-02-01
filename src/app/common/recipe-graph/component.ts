@@ -29,6 +29,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
     }
+
     private getDependents(name, outputName) {
         const results = [];
 
@@ -110,6 +111,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     }
+
     ngOnChanges() {
         if (this.recipeData) {
             // build nodes and links for DAG
@@ -118,6 +120,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 label: 'Start',
                 name: 'start',
                 job_type: null,
+                icon: null,
                 dependencies: [],
                 visible: true,
                 fillColor: this.colorService.RECIPE_NODE
@@ -125,11 +128,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.links = [];
 
             _.forEach(this.recipeData.definition.jobs, (job) => {
+                const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
                 this.nodes.push({
                     id: _.camelCase(job.name), // id can't have dashes or anything
-                    label: job.job_type.name + ' v' + job.job_type.version,
+                    label: jobType.name + ' v' + jobType.version,
                     name: job.name,
-                    job_type: job.job_type,
+                    job_type: jobType,
+                    icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
                     dependencies: job.dependencies,
                     visible: true,
                     fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE
