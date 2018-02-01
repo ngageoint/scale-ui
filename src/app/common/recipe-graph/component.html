@@ -51,28 +51,41 @@
     <div class="ui-g-4 ui-lg-3 ui-g-nopad">
         <div class="job-type-interface" *ngIf="selectedJobType">
             <h4 class="label label-primary">{{ selectedJobType.title }} v{{ selectedJobType.version }}</h4>
-            <p-dataList [value]="selectedJobType.job_type_interface.input_data">
+            <p-dataList [value]="selectedJobType.manifest.input_data" [scrollable]="true" scrollHeight="300px">
                 <p-header><strong>Inputs</strong></p-header>
                 <ng-template let-input pTemplate="item">
-                    <div class="ui-g ui-fluid recipe-io">
-                        <div class="ui-g-12">
-                            {{ input.name }} <span *ngIf="input.required">*</span>
-                            <ul class="list-unstyled media-type-list">
-                                <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
+                    <div class="recipe-io">
+                        <div class="dependencies">
+                            <div class="dependencies__header">
+                                <span>Dependencies</span>
+                                <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency()" *ngIf="isEditing"
+                                        pTooltip="Add Dependency"></button>
+                            </div>
+                            <span *ngIf="input.dependencies.length === 0"><em>None</em></span>
+                            <ul class="list-unstyled" *ngIf="input.dependencies.length > 0">
+                                <li *ngFor="let dep of input.dependencies">{{ dep.name }}</li>
                             </ul>
-                            <div class="connections" *ngIf="input.dependencies.length > 0">
-                                <h5>Connections</h5>
-                                <ul class="list-unstyled">
-                                    <li *ngFor="let dependency of input.dependencies">
-                                        <strong>{{ dependency.name }}</strong>.<em>{{ dependency.output }}</em>
-                                    </li>
+                        </div>
+                        <div class="ui-g ui-fluid">
+                            <div class="ui-g-12">
+                                {{ input.name }} <span *ngIf="input.required">*</span>
+                                <ul class="list-unstyled media-type-list">
+                                    <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
                                 </ul>
+                                <div class="connections" *ngIf="input.dependencies.length > 0">
+                                    <h5>Connections</h5>
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let dependency of input.dependencies">
+                                            <strong>{{ dependency.name }}</strong>.<em>{{ dependency.output }}</em>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.job_type_interface.output_data">
+            <p-dataList [value]="selectedJobType.manifest.output_data" [scrollable]="true" scrollHeight="300px">
                 <p-header><strong>Outputs</strong></p-header>
                 <ng-template let-output pTemplate="item">
                     <div class="ui-g ui-fluid recipe-io">
@@ -94,3 +107,15 @@
         </div>
     </div>
 </div>
+<p-sidebar [(visible)]="sidebarDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+    <h2>{{ sidebarTitle }}</h2>
+    <p-dataTable [value]="options" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'" [rowHover]="true">
+        <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
+            <ng-template let-option="rowData" pTemplate="body">
+                <div (click)="optionClick(option)">
+                    <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span> {{ option.title }} v{{ option.version }}
+                </div>
+            </ng-template>
+        </p-column>
+    </p-dataTable>
+</p-sidebar>

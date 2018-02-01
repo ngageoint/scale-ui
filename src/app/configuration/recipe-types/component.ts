@@ -107,19 +107,25 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addJobType(jobType) {
-        const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-        recipeData.definition.jobs.push({
-            dependencies: [],
-            job_type: {
-                name: jobType.name,
-                version: jobType.version
-            },
-            name: jobType.name,
-            recipe_inputs: []
+        // get job type detail in order to obtain the interface
+        this.jobTypesApiService.getJobType(jobType.id).then(data => {
+            const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+            recipeData.definition.jobs.push({
+                dependencies: [],
+                job_type: {
+                    name: data.name,
+                    version: data.version
+                },
+                name: data.name,
+                recipe_inputs: []
+            });
+            recipeData.job_types.push(data);
+            this.selectedRecipeTypeDetail = recipeData;
+            this.addJobTypeDisplay = false;
+        }).catch(err => {
+            // todo show growl message with error info
+            console.log(err);
         });
-        recipeData.job_types.push(jobType);
-        this.selectedRecipeTypeDetail = recipeData;
-        this.addJobTypeDisplay = false;
     }
 
     toggleEdit() {

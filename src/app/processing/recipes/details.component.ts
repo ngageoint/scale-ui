@@ -27,7 +27,7 @@ export class RecipeDetailsComponent implements OnInit {
                 _.forEach(data.jobs, (jobData) => {
                     // attach revision interface to each job type
                     const jobType = jobData.job.job_type;
-                    jobType.job_type_interface = jobData.job.job_type_rev.interface;
+                    jobType.manifest = jobData.job.job_type_rev.interface;
                     jobTypes.push(jobType);
 
                     // include current job instance in definition

@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 
 import { RecipeGraphComponent } from './component';
 import { ColorService } from '../../color.service';
+import { DataService } from '../../data.service';
 
 
 describe('RecipeGraphComponent', () => {
@@ -14,7 +15,7 @@ describe('RecipeGraphComponent', () => {
         TestBed.configureTestingModule({
             declarations: [RecipeGraphComponent],
             imports: [HttpModule],
-            providers: [ColorService],
+            providers: [ColorService, DataService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })

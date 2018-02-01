@@ -14,7 +14,7 @@ export class JobType {
             return new JobType(
                 data.name,
                 data.version,
-                data.interface,
+                data.manifest,
                 data.title,
                 data.id,
                 data.description,

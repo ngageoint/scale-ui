@@ -3,6 +3,7 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../color.service';
+import { DataService } from '../../data.service';
 
 @Component({
     selector: 'app-recipe-graph',
@@ -11,7 +12,12 @@ import { ColorService } from '../../color.service';
 })
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
+    @Input() isEditing: boolean;
 
+    scrollHeight: number;
+    sidebarDisplay: boolean;
+    sidebarTitle: string;
+    options: any;
     nodes = [];
     links = [];
     height: number;
@@ -22,7 +28,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedNode: any;
 
     constructor(
-        private colorService: ColorService
+        private colorService: ColorService,
+        private dataService: DataService
     ) {
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
@@ -71,14 +78,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     _.forEach(this.recipeData.definition.jobs, (job) => {
                         // find dependents
                         const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
-                        if (jobType && jobType.job_type_interface) {
-                            _.forEach(jobType.job_type_interface.output_data, (jobOutput) => {
+                        if (jobType && jobType.manifest) {
+                            _.forEach(jobType.manifest.output_data, (jobOutput) => {
                                 if (jobOutput) {
                                     jobOutput.dependents = this.getDependents(job.name, jobOutput.name);
                                 }
                             });
                             // add dependency mappings
-                            _.forEach(jobType.job_type_interface.input_data, (jobInput) => {
+                            _.forEach(jobType.manifest.input_data, (jobInput) => {
                                 if (jobInput) {
                                     const inputMappings = [];
                                     _.forEach(job.dependencies, (dependency) => {
@@ -111,60 +118,80 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnChanges() {
-        if (this.recipeData) {
-            // build nodes and links for DAG
-            this.nodes = [{
-                id: 'start',
-                label: 'Start',
-                name: 'start',
-                job_type: null,
-                icon: null,
-                dependencies: [],
-                visible: true,
-                fillColor: this.colorService.RECIPE_NODE
-            }];
-            this.links = [];
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
 
-            _.forEach(this.recipeData.definition.jobs, (job) => {
-                const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
-                this.nodes.push({
-                    id: _.camelCase(job.name), // id can't have dashes or anything
-                    label: jobType.name + ' v' + jobType.version,
-                    name: job.name,
-                    job_type: jobType,
-                    icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
-                    dependencies: job.dependencies,
+    addDependency() {
+        this.options = _.filter(this.recipeData.job_types, jobType => {
+            return jobType.id !== this.selectedJobType.id;
+        });
+        this.sidebarTitle = 'Add Dependency';
+        this.sidebarDisplay = true;
+    }
+
+    optionClick(option) {
+        console.log(option);
+        this.sidebarDisplay = false;
+    }
+
+    ngOnChanges(changes) {
+        if (changes.recipeData) {
+            if (this.recipeData) {
+                // build nodes and links for DAG
+                this.nodes = [{
+                    id: 'start',
+                    label: 'Start',
+                    name: 'start',
+                    job_type: null,
+                    icon: null,
+                    dependencies: [],
                     visible: true,
-                    fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE
-                });
-            });
+                    fillColor: this.colorService.RECIPE_NODE
+                }];
+                this.links = [];
 
-            _.forEach(this.nodes, (node) => {
-                if (node.id !== 'start' && node.id !== 'end') {
-                    if (node.dependencies.length === 0) {
-                        // job has no dependencies, so link it to start
-                        this.links.push({
-                            source: 'start',
-                            target: node.id,
-                            node: node,
-                            visible: true
-                        });
-                    } else {
-                        _.forEach(node.dependencies, (dependency) => {
+                _.forEach(this.recipeData.definition.jobs, (job) => {
+                    const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
+                    this.nodes.push({
+                        id: _.camelCase(job.name), // id can't have dashes or anything
+                        label: jobType.name + ' v' + jobType.version,
+                        name: job.name,
+                        job_type: jobType,
+                        icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
+                        dependencies: job.dependencies,
+                        visible: true,
+                        fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE
+                    });
+                });
+
+                _.forEach(this.nodes, (node) => {
+                    if (node.id !== 'start' && node.id !== 'end') {
+                        if (node.dependencies.length === 0) {
+                            // job has no dependencies, so link it to start
                             this.links.push({
-                                source: _.camelCase(dependency.name),
+                                source: 'start',
                                 target: node.id,
                                 node: node,
                                 visible: true
                             });
-                        });
+                        } else {
+                            _.forEach(node.dependencies, (dependency) => {
+                                this.links.push({
+                                    source: _.camelCase(dependency.name),
+                                    target: node.id,
+                                    node: node,
+                                    visible: true
+                                });
+                            });
+                        }
                     }
-                }
-            });
+                });
+            }
         }
     }
 
     ngOnInit() {
+        this.scrollHeight = this.dataService.getViewportSize().height * 0.85;
     }
 }

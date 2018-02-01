@@ -54,6 +54,24 @@
             border: none;
         }
 
+        .dependencies {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 7px;
+
+            .dependencies__header {
+                display: flex;
+
+                span {
+                    font-weight: bold;
+                    margin-right: 7px;
+                }
+
+                button {
+                    font-size: 0.6em;
+                }
+            }
+        }
+
         .connections {
             h5 {
                 font-size: 0.9em;

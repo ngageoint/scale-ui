@@ -66,7 +66,7 @@
         "disk_out_const_required": 1024,
         "disk_out_const_required_formatted": "1.00 GB",
         "disk_out_mult_required": 0,
-        "job_type_interface": {
+        "manifest": {
             "output_data": [{
                 "media_type": "image/tiff",
                 "required": true,

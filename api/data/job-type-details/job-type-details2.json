@@ -19,7 +19,7 @@
     "shared_mem_required": 256.0,
     "disk_out_const_required": 2048.0,
     "disk_out_mult_required": 0.0,
-    "interface": {
+    "manifest": {
         "output_data": [
             {
                 "media_type": "image/tiff",

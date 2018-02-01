@@ -111,7 +111,7 @@
     "disk_out_const_required": 2048,
     "disk_out_const_required_formatted": "2.00 GB",
     "disk_out_mult_required": 0,
-    "job_type_interface": {
+    "manifest": {
       "output_data": [{
         "media_type": "image/nitf",
         "required": true,
@@ -151,7 +151,7 @@
     "disk_out_const_required": 2048,
     "disk_out_const_required_formatted": "2.00 GB",
     "disk_out_mult_required": 0,
-    "job_type_interface": {
+    "manifest": {
       "output_data": [{
         "media_type": "image/tiff",
         "required": true,
@@ -191,7 +191,7 @@
     "disk_out_const_required": 2048,
     "disk_out_const_required_formatted": "2.00 GB",
     "disk_out_mult_required": 0,
-    "job_type_interface": {
+    "manifest": {
       "output_data": [{
         "media_type": "image/tiff",
         "required": true,
@@ -231,7 +231,7 @@
     "disk_out_const_required": 2048,
     "disk_out_const_required_formatted": "2.00 GB",
     "disk_out_mult_required": 0,
-    "job_type_interface": {
+    "manifest": {
       "output_data": [{
         "media_type": "application/xml",
         "required": true,
