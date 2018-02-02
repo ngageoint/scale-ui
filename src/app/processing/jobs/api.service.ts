@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/startWith';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class JobsApiService {
@@ -37,38 +38,38 @@ export class JobsApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get('/mocks/jobs', { params: queryParams })
+                return this.http.get(`${environment.apiPrefix}/jobs`, { params: queryParams })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get('/mocks/jobs', { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/jobs`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getJob(id: number): Promise<Job> {
-        return this.http.get(`/mocks/jobs/${id}`)
+        return this.http.get(`${environment.apiPrefix}/jobs/${id}`)
             .toPromise()
             .then(response => Job.transformer(response.json()))
             .catch(this.handleError);
     }
     getJobExecution(id: number): Promise<JobExecution> {
-        return this.http.get(`/mocks/job-executions/${id}`)
+        return this.http.get(`${environment.apiPrefix}/job-executions/${id}`)
             .toPromise()
             .then(response => JobExecution.transformer(response.json()))
             .catch(this.handleError);
     }
     updateJob(id: number, data: any): Promise<any> {
-        return this.http.patch(`/mocks/jobs/${id}`, data)
+        return this.http.patch(`${environment.apiPrefix}/jobs/${id}`, data)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
     }
     requeueJobs(params): Promise<any> {
-        params.url = params.url ? params.url : '/mocks/queue/requeue-jobs';
+        params.url = params.url ? params.url : `${environment.apiPrefix}/queue/requeue-jobs`;
         return this.http.post(params.url, params)
             .toPromise()
             .then(response => response.json())
@@ -77,14 +78,14 @@ export class JobsApiService {
     getJobLoad(params, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get('/mocks/jobload', { params: params })
+                return this.http.get(`${environment.apiPrefix}/jobload`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get('/mocks/jobload', { params: params })
+        return this.http.get(`${environment.apiPrefix}/jobload`, { params: params })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

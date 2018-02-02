@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import { ApiResults } from '../../api-results.model';
 import { RunningJobsDatatable } from './datatable.model';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class RunningJobsApiService {
@@ -20,14 +21,14 @@ export class RunningJobsApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get('/mocks/running-jobs', { params: queryParams })
+                return this.http.get(`${environment.apiPrefix}/running-jobs`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get('/mocks/running-jobs', { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/running-jobs`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

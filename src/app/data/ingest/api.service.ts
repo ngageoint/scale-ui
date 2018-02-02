@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 
 import { ApiResults } from '../../api-results.model';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class IngestApiService {
@@ -14,14 +15,14 @@ export class IngestApiService {
     getIngestStatus(params: any, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get('/mocks/ingests/status', { params: params })
+                return this.http.get(`${environment.apiPrefix}/ingests/status`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get('/mocks/ingests/status', { params: params })
+        return this.http.get(`${environment.apiPrefix}/ingests/status`, { params: params })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

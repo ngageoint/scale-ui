@@ -5,6 +5,7 @@
 
 export const environment = {
     production: false,
+    apiPrefix: '/mocks',
     scale: true,
     siloUrl: 'http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com'
 };
