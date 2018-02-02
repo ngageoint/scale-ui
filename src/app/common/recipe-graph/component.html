@@ -51,22 +51,34 @@
     <div class="ui-g-4 ui-lg-3 ui-g-nopad">
         <div class="job-type-interface" *ngIf="selectedJobType">
             <h4 class="label label-primary">{{ selectedJobType.title }} v{{ selectedJobType.version }}</h4>
+            <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
+                        class="recipe-dependencies-container" emptyMessage="None">
+                <p-header>
+                    <div class="ui-g">
+                        <div class="ui-g-10 ui-g-nopad">
+                            <strong>Dependencies</strong>
+                        </div>
+                        <div class="ui-g-2 ui-g-nopad text-right">
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency()" *ngIf="isEditing"
+                                    pTooltip="Add Dependency"></button>
+                        </div>
+                    </div>
+                </p-header>
+                <ng-template let-dep pTemplate="item">
+                    <div class="ui-g recipe-io recipe-dependencies">
+                        <div class="ui-g-12">
+                            <button pButton class="ui-button-danger" icon="fa-remove" (click)="removeDependency(dep)"
+                                    *ngIf="isEditing"></button>
+                            {{ dep.name }}
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
             <p-dataList [value]="selectedJobType.manifest.input_data" [scrollable]="true" scrollHeight="300px">
                 <p-header><strong>Inputs</strong></p-header>
                 <ng-template let-input pTemplate="item">
                     <div class="recipe-io">
-                        <div class="dependencies">
-                            <div class="dependencies__header">
-                                <span>Dependencies</span>
-                                <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency()" *ngIf="isEditing"
-                                        pTooltip="Add Dependency"></button>
-                            </div>
-                            <span *ngIf="input.dependencies.length === 0"><em>None</em></span>
-                            <ul class="list-unstyled" *ngIf="input.dependencies.length > 0">
-                                <li *ngFor="let dep of input.dependencies">{{ dep.name }}</li>
-                            </ul>
-                        </div>
-                        <div class="ui-g ui-fluid">
+                        <div class="ui-g">
                             <div class="ui-g-12">
                                 {{ input.name }} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
@@ -88,7 +100,7 @@
             <p-dataList [value]="selectedJobType.manifest.output_data" [scrollable]="true" scrollHeight="300px">
                 <p-header><strong>Outputs</strong></p-header>
                 <ng-template let-output pTemplate="item">
-                    <div class="ui-g ui-fluid recipe-io">
+                    <div class="ui-g recipe-io">
                         <div class="ui-g-12">
                             {{ output.name }} <span *ngIf="output.required">*</span>
                             <div class="media-type-list">{{ output.media_type }}</div>

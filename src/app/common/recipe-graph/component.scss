@@ -38,7 +38,8 @@
         margin-bottom: 15px;
 
         .ui-datalist-header {
-            padding: 0.25em 1.25em;
+            padding: 0.25em;
+            text-align: left;
         }
     }
 
@@ -54,24 +55,6 @@
             border: none;
         }
 
-        .dependencies {
-            border-bottom: 1px solid #ccc;
-            padding: 10px 7px;
-
-            .dependencies__header {
-                display: flex;
-
-                span {
-                    font-weight: bold;
-                    margin-right: 7px;
-                }
-
-                button {
-                    font-size: 0.6em;
-                }
-            }
-        }
-
         .connections {
             h5 {
                 font-size: 0.9em;
@@ -85,6 +68,22 @@
             padding: 8px 5px 5px 5px;
             background: #f0f0f0;
             border-radius: 3px;
+        }
+    }
+
+    .recipe-dependencies-container {
+        button {
+            font-size: 9px;
+            top: -3px;
+            padding: 0;
+        }
+
+        ::ng-deep .ui-datalist-content {
+            padding-bottom: 15px;
+        }
+
+        .recipe-dependencies {
+            margin-bottom: -15px;
         }
     }
 }

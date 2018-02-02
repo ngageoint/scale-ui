@@ -59,6 +59,60 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         return results;
     }
 
+    private updateRecipe() {
+        if (this.recipeData) {
+            // build nodes and links for DAG
+            this.nodes = [{
+                id: 'start',
+                label: 'Start',
+                name: 'start',
+                job_type: null,
+                icon: null,
+                dependencies: [],
+                visible: true,
+                fillColor: this.colorService.RECIPE_NODE
+            }];
+            this.links = [];
+
+            _.forEach(this.recipeData.definition.jobs, (job) => {
+                const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
+                this.nodes.push({
+                    id: _.camelCase(job.name), // id can't have dashes or anything
+                    label: jobType.name + ' v' + jobType.version,
+                    name: job.name,
+                    job_type: jobType,
+                    icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
+                    dependencies: job.dependencies,
+                    visible: true,
+                    fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE
+                });
+            });
+
+            _.forEach(this.nodes, (node) => {
+                if (node.id !== 'start' && node.id !== 'end') {
+                    if (node.dependencies.length === 0) {
+                        // job has no dependencies, so link it to start
+                        this.links.push({
+                            source: 'start',
+                            target: node.id,
+                            node: node,
+                            visible: true
+                        });
+                    } else {
+                        _.forEach(node.dependencies, (dependency) => {
+                            this.links.push({
+                                source: _.camelCase(dependency.name),
+                                target: node.id,
+                                node: node,
+                                visible: true
+                            });
+                        });
+                    }
+                }
+            });
+        }
+    }
+
     select(e) {
         if (this.selectedNode) {
             this.selectedNode.options.stroke = '';
@@ -123,71 +177,51 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     addDependency() {
+        // only show job types present in recipe
         this.options = _.filter(this.recipeData.job_types, jobType => {
             return jobType.id !== this.selectedJobType.id;
+        });
+        // only show job types that are not yet dependencies
+        this.options = _.filter(this.options, option => {
+            return !_.find(this.selectedNode.dependencies, { name: option.name });
         });
         this.sidebarTitle = 'Add Dependency';
         this.sidebarDisplay = true;
     }
 
+    removeDependency(dependency) {
+        console.log(dependency);
+        const currJob = _.find(this.recipeData.definition.jobs, {
+            job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
+        }});
+        if (currJob) {
+            _.remove(currJob.dependencies, dependency);
+            this.updateRecipe();
+        } else {
+            console.log('job not found');
+        }
+    }
+
     optionClick(option) {
-        console.log(option);
+        const currJob = _.find(this.recipeData.definition.jobs, {
+            job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
+        }});
+        if (currJob) {
+            currJob.dependencies.push({
+                connections: [],
+                name: option.name
+            });
+            // manually call updateRecipe
+            this.updateRecipe();
+        } else {
+            console.log('job not found');
+        }
         this.sidebarDisplay = false;
     }
 
     ngOnChanges(changes) {
         if (changes.recipeData) {
-            if (this.recipeData) {
-                // build nodes and links for DAG
-                this.nodes = [{
-                    id: 'start',
-                    label: 'Start',
-                    name: 'start',
-                    job_type: null,
-                    icon: null,
-                    dependencies: [],
-                    visible: true,
-                    fillColor: this.colorService.RECIPE_NODE
-                }];
-                this.links = [];
-
-                _.forEach(this.recipeData.definition.jobs, (job) => {
-                    const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
-                    this.nodes.push({
-                        id: _.camelCase(job.name), // id can't have dashes or anything
-                        label: jobType.name + ' v' + jobType.version,
-                        name: job.name,
-                        job_type: jobType,
-                        icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
-                        dependencies: job.dependencies,
-                        visible: true,
-                        fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE
-                    });
-                });
-
-                _.forEach(this.nodes, (node) => {
-                    if (node.id !== 'start' && node.id !== 'end') {
-                        if (node.dependencies.length === 0) {
-                            // job has no dependencies, so link it to start
-                            this.links.push({
-                                source: 'start',
-                                target: node.id,
-                                node: node,
-                                visible: true
-                            });
-                        } else {
-                            _.forEach(node.dependencies, (dependency) => {
-                                this.links.push({
-                                    source: _.camelCase(dependency.name),
-                                    target: node.id,
-                                    node: node,
-                                    visible: true
-                                });
-                            });
-                        }
-                    }
-                });
-            }
+            this.updateRecipe();
         }
     }
 
