@@ -38,10 +38,10 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             choice_id: choiceIds,
             column: ['completed_count', 'failed_count'],
             dataType: 'job-types',
-            started: moment.utc().subtract(1, 'w').format('YYYY-MM-DD'),
-            ended: moment.utc().format('YYYY-MM-DD'),
+            started: moment.utc().subtract(1, 'w').toISOString(),
+            ended: moment.utc().toISOString(),
             group: ['overview', 'overview'],
-            page: null,
+            page: 1,
             page_size: null
         };
         const yAxes = [{

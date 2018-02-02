@@ -78,7 +78,7 @@ export class JobsApiService {
     getJobLoad(params, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/jobload`, { params: params })
+                return this.http.get(`${environment.apiPrefix}/load`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));

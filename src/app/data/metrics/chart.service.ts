@@ -31,79 +31,82 @@ export class ChartService {
 
         if (filtersApplied.length > 0) {
             // filters were applied, so build data source accordingly
-            _.forEach(data.results, (result, idx) => {
-                valueArr = [];
-                colArr = [];
-                if (result.values.length > 0) {
-                    // values for all filters are returned in one array of arrays,
-                    // so group results by id to isolate filter values
-                    const groupedResult = _.groupBy(result.values, 'id'),
-                        resultObj = {},
-                        filterIds = _.map(filtersApplied, 'id');
-                    // try to get each filter id from groupedResult.
-                    // if it's undefined, an empty array will be returned
-                    // this allows a zeroed array to appear in the chart,
-                    // since we want to include all filters selected by the user
-                    // regardless of value
-                    if (filterIds.length > 1) {
-                        // when more than one filter is requested, then an id
-                        // value is present within data.results
-                        _.forEach(filterIds, (id) => {
-                            resultObj[id] = _.get(groupedResult, id, []);
-                        });
-                    } else {
-                        // when one filter is requested, no id value is included
-                        // in data.results, so build resultObj with the other
-                        // info we have
-                        resultObj[params.choice_id[0]] = _.toPairs(groupedResult)[0][1];
-                    }
-                    _.forEach(_.toPairs(resultObj), (d) => {
-                        valueArr = [];
-                        // d[0] will be choice id, d[1] will be values
-                        // if only one filter was selected, d[0] will return as string 'undefined' since no id is included in this case
-                        queryFilter = d[0] === 'undefined' ?
-                            filtersApplied[0] :
-                            _.find(filtersApplied, { id: parseInt(d[0], 10) });
-                        queryDates = d[1];
-
-                        // add result values to valueArr
-                        _.forEach(dataLabels, (xDate) => {
-                            const valueObj = _.find(queryDates, (qDate) => {
-                                return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+            _.forEach(data.results, (result) => {
+                const idx = _.indexOf(params.column, result.column.name);
+                if (idx > -1) {
+                    valueArr = [];
+                    colArr = [];
+                    if (result.values.length > 0) {
+                        // values for all filters are returned in one array of arrays,
+                        // so group results by id to isolate filter values
+                        const groupedResult = _.groupBy(result.values, 'id'),
+                            resultObj = {},
+                            filterIds = _.map(filtersApplied, 'id');
+                        // try to get each filter id from groupedResult.
+                        // if it's undefined, an empty array will be returned
+                        // this allows a zeroed array to appear in the chart,
+                        // since we want to include all filters selected by the user
+                        // regardless of value
+                        if (filterIds.length > 1) {
+                            // when more than one filter is requested, then an id
+                            // value is present within data.results
+                            _.forEach(filterIds, (id) => {
+                                resultObj[id] = _.get(groupedResult, id, []);
                             });
-                            // push 0 if data for xDate is not present in queryDates
-                            valueArr.push(valueObj ? valueObj.value : 0);
-                        });
+                        } else {
+                            // when one filter is requested, no id value is included
+                            // in data.results, so build resultObj with the other
+                            // info we have
+                            resultObj[params.choice_id[0]] = _.toPairs(groupedResult)[0][1];
+                        }
+                        _.forEach(_.toPairs(resultObj), (d) => {
+                            valueArr = [];
+                            // d[0] will be choice id, d[1] will be values
+                            // if only one filter was selected, d[0] will return as string 'undefined' since no id is included in this case
+                            queryFilter = d[0] === 'undefined' ?
+                                filtersApplied[0] :
+                                _.find(filtersApplied, { id: parseInt(d[0], 10) });
+                            queryDates = d[1];
 
-                        // prepend valueArr with filter title, and push onto colArr
-                        colArr.push({
-                            id: queryFilter.id,
-                            data: valueArr
+                            // add result values to valueArr
+                            _.forEach(dataLabels, (xDate) => {
+                                const valueObj = _.find(queryDates, (qDate) => {
+                                    return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                                });
+                                // push 0 if data for xDate is not present in queryDates
+                                valueArr.push(valueObj ? valueObj.value : 0);
+                            });
+
+                            // prepend valueArr with filter title, and push onto colArr
+                            colArr.push({
+                                id: queryFilter.id,
+                                data: valueArr
+                            });
+                        });
+                    }
+
+                    // populate chart dataset
+                    _.forEach(filtersApplied, (filter) => {
+                        const filterData = _.find(colArr, { id: filter.id });
+                        const label = filter.version ?
+                            `${filter.title} ${filter.version} ${result.column.title}` :
+                            `${filter.title} ${result.column.title}`;
+                        const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
+                        // const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
+                        const bgColor = colors.length > 0 ?
+                            this.colorService.getRgba(colors[idx % 2 === 0 ? 0 : 1], 1) :
+                            this.randomColorGenerator();
+                        datasets.push({
+                            yAxisID: `yAxis${idx + 1}`,
+                            stack: `stack${idx.toString()}`,
+                            label: label,
+                            icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
+                            backgroundColor: bgColor,
+                            borderWidth: 2,
+                            data: filterData ? filterData.data : []
                         });
                     });
                 }
-
-                // populate chart dataset
-                _.forEach(filtersApplied, (filter) => {
-                    const filterData = _.find(colArr, { id: filter.id });
-                    const label = filter.version ?
-                        `${filter.title} ${filter.version} ${result.column.title}` :
-                        `${filter.title} ${result.column.title}`;
-                    const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
-                    const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
-                    const bgColor = colors.length > 0 ?
-                        this.colorService.getRgba(colors[idx % 2 === 0 ? 0 : 1], opacity) :
-                        this.randomColorGenerator();
-                    datasets.push({
-                        yAxisID: `yAxis${idx + 1}`,
-                        stack: `stack${idx.toString()}`,
-                        label: label,
-                        icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                        backgroundColor: bgColor,
-                        borderWidth: 2,
-                        data: filterData ? filterData.data : []
-                    });
-                });
             });
         } else {
             // no filters were applied, so show aggregate statistics for selected metric

@@ -147,10 +147,10 @@ export class MetricsComponent implements OnInit {
         }
 
         const params = {
-            page: null,
+            page: 1,
             page_size: null,
-            started: this.started,
-            ended: this.ended,
+            started: moment.utc(this.started).toISOString(),
+            ended: moment.utc(this.ended).toISOString(),
             choice_id: _.map(this.filtersApplied, 'id'),
             column: this.selectedMetric2 ? [this.selectedMetric1.name, this.selectedMetric2.name] : this.selectedMetric1.name,
             group: this.selectedMetric2 ? [this.selectedMetric1.group, this.selectedMetric2.group] : this.selectedMetric1.group,

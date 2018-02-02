@@ -92,10 +92,10 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 choice_id: choiceIds,
                 column: ['completed_count'],
                 dataType: 'job-types',
-                started: moment.utc().subtract(3, 'd').format('YYYY-MM-DD'),
-                ended: moment.utc().add(1, 'd').format('YYYY-MM-DD'),
+                started: moment.utc().subtract(3, 'd').toISOString(),
+                ended: moment.utc().add(1, 'd').toISOString(),
                 group: ['overview'],
-                page: null,
+                page: 1,
                 page_size: null
             };
 

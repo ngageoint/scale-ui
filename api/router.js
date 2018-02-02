@@ -33,7 +33,7 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/jobload',
+            path: '/mocks/load',
             handler: jobLoad
         });
 
