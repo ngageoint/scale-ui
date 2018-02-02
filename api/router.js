@@ -75,7 +75,7 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/running-jobs',
+            path: '/mocks/job-types/running',
             handler: runningJobs
         });
 

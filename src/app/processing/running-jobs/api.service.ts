@@ -21,7 +21,7 @@ export class RunningJobsApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/running-jobs`, { params: queryParams })
+                return this.http.get(`${environment.apiPrefix}/job-types/running`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
