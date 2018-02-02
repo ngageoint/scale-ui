@@ -31,9 +31,10 @@ export class ChartService {
 
         if (filtersApplied.length > 0) {
             // filters were applied, so build data source accordingly
+            let idx = 0;
             _.forEach(data.results, (result) => {
-                const idx = _.indexOf(params.column, result.column.name);
-                if (idx > -1) {
+                const colIdx = _.indexOf(params.column, result.column.name);
+                if (colIdx > -1) {
                     valueArr = [];
                     colArr = [];
                     if (result.values.length > 0) {
@@ -106,6 +107,9 @@ export class ChartService {
                             data: filterData ? filterData.data : []
                         });
                     });
+
+                    // increment result index
+                    idx++;
                 }
             });
         } else {
