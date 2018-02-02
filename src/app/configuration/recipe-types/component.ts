@@ -129,10 +129,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     toggleEdit() {
+        // todo add warning that changes will be discarded
+        this.isEditing = !this.isEditing;
         if (this.recipeTypeId === 0) {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
-            this.isEditing = !this.isEditing;
+            if (!this.isEditing) {
+                // reset recipe type
+                this.getRecipeTypeDetail(this.recipeTypeId);
+            }
         }
     }
 

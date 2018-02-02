@@ -88,6 +88,8 @@
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
                                         <li *ngFor="let dependency of input.dependencies">
+                                            <button pButton class="ui-button-danger" icon="fa-remove"
+                                                    (click)="removeInputConnection(dependency)" *ngIf="isEditing"></button>
                                             <strong>{{ dependency.name }}</strong>.<em>{{ dependency.output }}</em>
                                         </li>
                                     </ul>

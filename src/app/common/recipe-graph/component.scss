@@ -51,6 +51,12 @@
         border-bottom: 1px solid #e1e1e1;
         margin: 0 5px;
 
+        button {
+            font-size: 9px;
+            top: -3px;
+            padding: 0;
+        }
+
         &:last-of-type {
             border: none;
         }

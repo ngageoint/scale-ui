@@ -59,6 +59,49 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         return results;
     }
 
+    private updateRecipeDefinition() {
+        if (this.recipeData.definition) {
+            _.forEach(this.recipeData.definition.jobs, (job) => {
+                // find dependents
+                const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
+                if (jobType && jobType.manifest) {
+                    _.forEach(jobType.manifest.output_data, (jobOutput) => {
+                        if (jobOutput) {
+                            jobOutput.dependents = this.getDependents(job.name, jobOutput.name);
+                        }
+                    });
+                    // add dependency mappings
+                    _.forEach(jobType.manifest.input_data, (jobInput) => {
+                        if (jobInput) {
+                            const inputMappings = [];
+                            _.forEach(job.dependencies, (dependency) => {
+                                _.forEach(dependency.connections, (conn) => {
+                                    if (conn.input === jobInput.name) {
+                                        inputMappings.push({
+                                            name: dependency.name,
+                                            output: conn.output,
+                                            input: conn.input
+                                        });
+                                    }
+                                });
+                            });
+                            _.forEach(job.recipe_inputs, (recipeInput) => {
+                                if (recipeInput.job_input === jobInput.name) {
+                                    inputMappings.push({
+                                        name: 'recipe',
+                                        output: recipeInput.recipe_input,
+                                        input: recipeInput.job_input
+                                    });
+                                }
+                            });
+                            jobInput.dependencies = inputMappings;
+                        }
+                    });
+                }
+            });
+        }
+    }
+
     private updateRecipe() {
         if (this.recipeData) {
             // build nodes and links for DAG
@@ -110,6 +153,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     }
                 }
             });
+            this.updateRecipeDefinition();
         }
     }
 
@@ -127,47 +171,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.selectedNode = e;
                 this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
                 this.selectedJobType = _.find(this.recipeData.job_types, { name: e.job_type.name, version: e.job_type.version });
-
-                if (this.recipeData.definition) {
-                    _.forEach(this.recipeData.definition.jobs, (job) => {
-                        // find dependents
-                        const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
-                        if (jobType && jobType.manifest) {
-                            _.forEach(jobType.manifest.output_data, (jobOutput) => {
-                                if (jobOutput) {
-                                    jobOutput.dependents = this.getDependents(job.name, jobOutput.name);
-                                }
-                            });
-                            // add dependency mappings
-                            _.forEach(jobType.manifest.input_data, (jobInput) => {
-                                if (jobInput) {
-                                    const inputMappings = [];
-                                    _.forEach(job.dependencies, (dependency) => {
-                                        _.forEach(dependency.connections, (conn) => {
-                                            if (conn.input === jobInput.name) {
-                                                inputMappings.push({
-                                                    name: dependency.name,
-                                                    output: conn.output,
-                                                    input: conn.input
-                                                });
-                                            }
-                                        });
-                                    });
-                                    _.forEach(job.recipe_inputs, (recipeInput) => {
-                                        if (recipeInput.job_input === jobInput.name) {
-                                            inputMappings.push({
-                                                name: 'recipe',
-                                                output: recipeInput.recipe_input,
-                                                input: recipeInput.job_input
-                                            });
-                                        }
-                                    });
-                                    jobInput.dependencies = inputMappings;
-                                }
-                            });
-                        }
-                    });
-                }
             }
         }
     }
@@ -190,13 +193,28 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     removeDependency(dependency) {
-        console.log(dependency);
         const currJob = _.find(this.recipeData.definition.jobs, {
             job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
         }});
         if (currJob) {
             _.remove(currJob.dependencies, dependency);
             this.updateRecipe();
+        } else {
+            console.log('job not found');
+        }
+    }
+
+    removeInputConnection(conn) {
+        const currJob = _.find(this.recipeData.definition.jobs, {
+            job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
+        }});
+        if (currJob) {
+            const currDependency = _.find(currJob.dependencies, { name: conn.name });
+            const currConn = _.find(currDependency.connections, { output: conn.output });
+            _.remove(currDependency.connections, currConn);
+            this.updateRecipeDefinition();
+            // console.log(currDependency.connections);
+            // _.remove(currDependency.connections, conn);
         } else {
             console.log('job not found');
         }
@@ -221,6 +239,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes) {
         if (changes.recipeData) {
+            this.selectedJobType = null;
+            this.selectedNode = null;
             this.updateRecipe();
         }
     }
