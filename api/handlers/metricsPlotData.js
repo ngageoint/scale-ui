@@ -22,7 +22,7 @@ module.exports = function (request, reply) {
             var maxRandom = metric === 'total_count' ? 1000 : 200;
             var minRandom = metric === 'total_count' ? 800 : 10;
             var returnResult = {
-                column: { title: _.startCase(metric) },
+                column: { title: _.startCase(metric), name: _.snakeCase(metric) },
                 min_x: moment.utc(params.started).format('YYYY-MM-DD'),
                 max_x: moment.utc(params.ended).format('YYYY-MM-DD'),
                 min_y: 1,
