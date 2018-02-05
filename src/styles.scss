@@ -27,6 +27,26 @@ a:not(.ui-button) {
     }
 }
 
+.scale-chart-container {
+    position: relative;
+
+    .scale-chart-loading {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1001;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.5);
+        text-align: center;
+        padding-top: 5em;
+
+        svg path, svg rect {
+            fill: #000;
+        }
+    }
+}
+
 .scale-panel {
     .scale-panel__title {
         margin-right: 18px;

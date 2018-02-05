@@ -17,6 +17,7 @@ import { UIChart } from 'primeng/primeng';
 })
 export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('chart') chart: UIChart;
+    chartLoading: boolean;
     feedParams: any;
     jobParams: any;
     data: any;
@@ -67,6 +68,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private fetchChartData(initDataFeeds: boolean) {
+        this.chartLoading = true;
         this.unsubscribe();
         this.feedParams = {
             started: moment.utc().subtract(3, 'd').toISOString(),
@@ -126,6 +128,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
                 this.jobsDatasets = chartData.data;
                 this.updateFeedData();
+                this.chartLoading = false;
             });
         });
     }
