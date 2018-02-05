@@ -15,6 +15,7 @@ import { UIChart } from 'primeng/primeng';
 })
 export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('chart') chart: UIChart;
+    chartLoading: boolean;
     data: any;
     options: any;
     params: any;
@@ -30,6 +31,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {}
 
     private updateChart() {
+        this.chartLoading = true;
         this.favorites = this.jobsService.getFavorites();
         this.activeJobs = this.jobsService.getActiveJobs();
         const choiceIds = this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.activeJobs, 'job_type.id');
@@ -65,6 +67,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         }];
         this.metricsApiService.getPlotData(this.params).then(data => {
+            this.chartLoading = false;
             const filters = this.favorites.length > 0 ? this.favorites : _.map(this.activeJobs, 'job_type');
             const colors = [this.colorService.SCALE_BLUE2, this.colorService.ERROR];
             const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', colors);
@@ -115,6 +118,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.chartLoading = true;
         this.updateChart();
         this.subscription = this.jobsService.favoritesUpdated.subscribe(() => {
             this.updateChart();

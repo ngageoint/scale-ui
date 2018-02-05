@@ -40,8 +40,11 @@
             <p-panel header="Favorites" *ngIf="favoriteJobTypes">
                 <div *ngIf="dataFavs">
                     <h4 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0">{{ failedFavs }} Failure(s) / {{ totalFavs }} Total</h4>
-                    <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
-                             *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0"></p-chart>
+                    <div class="scale-chart-container">
+                        <app-loading-indicator [loading]="chartLoadingFavs"></app-loading-indicator>
+                        <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
+                                 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0"></p-chart>
+                    </div>
                     <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
                     <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
@@ -49,8 +52,11 @@
             <p-panel header="Active Jobs" *ngIf="activeJobTypes">
                 <div *ngIf="dataActive">
                     <h4 *ngIf="activeJobTypes.length > 0 && failedActive > 0">{{ failedActive }} Failure(s) / {{ totalActive }} Total</h4>
-                    <p-chart type="pie" [data]="dataActive" [options]="pieChartOptions"
-                             *ngIf="activeJobTypes.length > 0 && failedActive > 0"></p-chart>
+                    <div class="scale-chart-container">
+                        <app-loading-indicator [loading]="chartLoadingActive"></app-loading-indicator>
+                        <p-chart type="pie" [data]="dataActive" [options]="pieChartOptions"
+                                 *ngIf="activeJobTypes.length > 0 && failedActive > 0"></p-chart>
+                    </div>
                     <span *ngIf="activeJobTypes.length === 0">There are no active jobs.</span>
                     <span *ngIf="failedActive === 0 && activeJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
@@ -58,7 +64,10 @@
             <p-panel header="All Jobs">
                 <div *ngIf="dataAll">
                     <h4>{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
-                    <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"></p-chart>
+                    <div class="scale-chart-container">
+                        <app-loading-indicator [loading]="chartLoadingAll"></app-loading-indicator>
+                        <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"></p-chart>
+                    </div>
                 </div>
             </p-panel>
         </div>

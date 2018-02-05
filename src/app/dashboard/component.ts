@@ -12,6 +12,9 @@ import { ColorService } from '../color.service';
     styleUrls: ['./component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+    chartLoadingFavs: boolean;
+    chartLoadingActive: boolean;
+    chartLoadingAll: boolean;
     subscription: any;
     activeJobTypes: any[];
     favoriteJobTypes: any[];
@@ -57,6 +60,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
+        this.chartLoadingFavs = true;
+        this.chartLoadingActive = true;
+        this.chartLoadingAll = true;
         this.refreshAllJobTypes();
         this.jobsService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
@@ -100,6 +106,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private refreshAllJobTypes() {
+        this.chartLoadingFavs = true;
+        this.chartLoadingActive = true;
+        this.chartLoadingAll = true;
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
             this.activeJobTypes = _.filter(data.results, (result) => {
@@ -122,16 +131,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.totalAll = totalJobStats.total;
             this.failedAll = totalJobStats.failed;
             this.dataAll = totalJobStats.chartData;
+            this.chartLoadingAll = false;
 
             const activeJobStats = this.generateStats(this.activeJobTypes);
             this.totalActive = activeJobStats.total;
             this.failedActive = activeJobStats.failed;
             this.dataActive = activeJobStats.chartData;
+            this.chartLoadingActive = false;
 
             const favoriteJobStats = this.generateStats(this.favoriteJobTypes);
             this.totalFavs = favoriteJobStats.total;
             this.failedFavs = favoriteJobStats.failed;
             this.dataFavs = favoriteJobStats.chartData;
+            this.chartLoadingFavs = false;
 
             this.perfChartTitle = 'Completed vs. Failed counts';
             this.perfChartTitle = favs.length > 0 ?

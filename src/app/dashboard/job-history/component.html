@@ -1,1 +1,4 @@
-<p-chart #chart type="bar" [data]="data" [options]="options"></p-chart>
+<div class="scale-chart-container">
+    <app-loading-indicator [loading]="chartLoading"></app-loading-indicator>
+    <p-chart #chart type="bar" [data]="data" [options]="options"></p-chart>
+</div>

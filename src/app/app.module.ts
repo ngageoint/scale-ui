@@ -66,6 +66,7 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
 import { DataFeedComponent } from './dashboard/data-feed/component';
 import { IngestComponent } from './data/ingest/component';
 import { IngestApiService } from './data/ingest/api.service';
+import { LoadingIndicatorComponent } from './common/loading-indicator/component';
 
 
 @NgModule({
@@ -98,7 +99,8 @@ import { IngestApiService } from './data/ingest/api.service';
         RecipeGraphComponent,
         JobActivityComponent,
         DataFeedComponent,
-        IngestComponent
+        IngestComponent,
+        LoadingIndicatorComponent
     ],
     imports: [
         AppRoutingModule,

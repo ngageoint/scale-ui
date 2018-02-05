@@ -14,6 +14,7 @@ import { UIChart } from 'primeng/primeng';
 })
 export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('chart') chart: UIChart;
+    chartLoading: boolean;
     params: any;
     subscription: any;
     favoritesSubscription: any;
@@ -29,6 +30,7 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {}
 
     private updateData() {
+        this.chartLoading = true;
         this.unsubscribe();
         this.favorites = this.jobsService.getFavorites();
         this.activeJobs = this.jobsService.getActiveJobs();
@@ -38,6 +40,7 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
             job_type_id: this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.activeJobs, 'job_type.id')
         };
         this.subscription = this.jobsApiService.getJobLoad(this.params, true).subscribe(data => {
+            this.chartLoading = false;
             this.data = {
                 datasets: [{
                     label: 'Running',
@@ -81,6 +84,7 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.chartLoading = true;
         this.options = {
             scales: {
                 xAxes: [{
