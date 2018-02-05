@@ -3,11 +3,11 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class DashboardJobsService {
+    @Output() favoritesUpdated = new EventEmitter();
     private FAVORITES_KEY = 'scale.dashboard.favorites';
     favorites = [];
-    activeJobs = [];
+    allJobs = [];
 
-    @Output() favoritesUpdated = new EventEmitter();
     constructor() {
         this.refreshFavorites();
     }
@@ -43,11 +43,11 @@ export class DashboardJobsService {
         localStorage.setItem(this.FAVORITES_KEY, JSON.stringify(this.favorites));
     }
 
-    getActiveJobs() {
-        return this.activeJobs;
+    getAllJobs() {
+        return this.allJobs;
     }
 
-    setActiveJobs(data) {
-        this.activeJobs = data;
+    setAllJobs(data) {
+        this.allJobs = data;
     }
 }

@@ -20,8 +20,8 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     options: any;
     params: any;
     favorites = [];
-    activeJobs = [];
-    subscription: any;
+    allJobs = [];
+    favoritesSubscription: any;
 
     constructor(
         private jobsService: DashboardJobsService,
@@ -33,8 +33,10 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     private updateChart() {
         this.chartLoading = true;
         this.favorites = this.jobsService.getFavorites();
-        this.activeJobs = this.jobsService.getActiveJobs();
-        const choiceIds = this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.activeJobs, 'job_type.id');
+        this.allJobs = this.jobsService.getAllJobs();
+        const choiceIds = this.favorites.length > 0 ?
+            _.map(this.favorites, 'id') :
+            [];
 
         this.params = {
             choice_id: choiceIds,
@@ -68,7 +70,9 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         }];
         this.metricsApiService.getPlotData(this.params).then(data => {
             this.chartLoading = false;
-            const filters = this.favorites.length > 0 ? this.favorites : _.map(this.activeJobs, 'job_type');
+            const filters = this.favorites.length > 0 ?
+                this.favorites :
+                [];
             const colors = [this.colorService.SCALE_BLUE2, this.colorService.ERROR];
             const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', colors, this.favorites.length > 0);
             chartData.labels = _.map(chartData.labels, label => {
@@ -112,15 +116,15 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
+        if (this.favoritesSubscription) {
+            this.favoritesSubscription.unsubscribe();
         }
     }
 
     ngOnInit() {
         this.chartLoading = true;
         this.updateChart();
-        this.subscription = this.jobsService.favoritesUpdated.subscribe(() => {
+        this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
             this.updateChart();
         });
     }

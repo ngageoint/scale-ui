@@ -13,22 +13,19 @@ import { ColorService } from '../color.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     chartLoadingFavs: boolean;
-    chartLoadingActive: boolean;
     chartLoadingAll: boolean;
     subscription: any;
-    activeJobTypes: any[];
+    allJobTypes: any[];
     favoriteJobTypes: any[];
     pieChartOptions: any;
     totalAll: number;
     failedAll: number;
     dataAll: any;
-    totalActive: number;
-    failedActive: number;
-    dataActive: any;
     totalFavs: number;
     failedFavs: number;
     dataFavs: any;
-    perfChartTitle: string;
+    dataFeedChartTitle: string;
+    historyChartTitle: string;
     activityChartTitle: string;
 
     constructor(
@@ -36,7 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private jobsService: DashboardJobsService,
         private colorService: ColorService
     ) {
-        this.activeJobTypes = [];
+        this.allJobTypes = [];
         this.favoriteJobTypes = [];
         this.pieChartOptions = {
             rotation: 0.5 * Math.PI, // start from bottom
@@ -61,7 +58,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.chartLoadingFavs = true;
-        this.chartLoadingActive = true;
         this.chartLoadingAll = true;
         this.refreshAllJobTypes();
         this.jobsService.favoritesUpdated.subscribe(() => {
@@ -107,20 +103,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private refreshAllJobTypes() {
         this.chartLoadingFavs = true;
-        this.chartLoadingActive = true;
         this.chartLoadingAll = true;
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
-            this.activeJobTypes = _.filter(data.results, (result) => {
-                const jobCounts = _.filter(result.job_counts, (count) => {
-                    return count.status !== 'COMPLETED';
-                });
-                return jobCounts.length > 0;
-            });
-            this.jobsService.setActiveJobs(this.activeJobTypes);
+            this.allJobTypes = data.results;
+            this.jobsService.setAllJobs(this.allJobTypes);
 
             const favs = [];
-            this.activeJobTypes.forEach(jt => {
+            this.allJobTypes.forEach(jt => {
                 if (this.jobsService.isFavorite(jt.job_type)) {
                     favs.push(jt);
                 }
@@ -133,26 +123,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dataAll = totalJobStats.chartData;
             this.chartLoadingAll = false;
 
-            const activeJobStats = this.generateStats(this.activeJobTypes);
-            this.totalActive = activeJobStats.total;
-            this.failedActive = activeJobStats.failed;
-            this.dataActive = activeJobStats.chartData;
-            this.chartLoadingActive = false;
-
             const favoriteJobStats = this.generateStats(this.favoriteJobTypes);
             this.totalFavs = favoriteJobStats.total;
             this.failedFavs = favoriteJobStats.failed;
             this.dataFavs = favoriteJobStats.chartData;
             this.chartLoadingFavs = false;
 
-            this.perfChartTitle = 'Completed vs. Failed counts';
-            this.perfChartTitle = favs.length > 0 ?
-                `${this.perfChartTitle} (Favorites)` :
-                `${this.perfChartTitle} (Active Jobs)`;
+            this.dataFeedChartTitle = 'Data Feed';
+            this.dataFeedChartTitle = favs.length > 0 ?
+                `${this.dataFeedChartTitle} (Favorites)` :
+                `${this.dataFeedChartTitle} (All Jobs)`;
+            this.historyChartTitle = 'Completed vs. Failed counts';
+            this.historyChartTitle = favs.length > 0 ?
+                `${this.historyChartTitle} (Favorites)` :
+                `${this.historyChartTitle} (All Jobs)`;
             this.activityChartTitle = 'Job Activity';
             this.activityChartTitle = favs.length > 0 ?
                 `${this.activityChartTitle} (Favorites)` :
-                `${this.activityChartTitle} (Active Jobs)`;
+                `${this.activityChartTitle} (All Jobs)`;
         });
     }
 }

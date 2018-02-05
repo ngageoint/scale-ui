@@ -12,8 +12,13 @@
                     </p-column>
                 </p-dataTable>
             </p-panel>
-            <p-panel header="Active Jobs ({{ activeJobTypes.length }})">
-                <p-dataTable [value]="activeJobTypes" styleClass="nopadding"
+            <p-panel>
+                <p-header>
+                    <div class="dashboard__jobs-table">
+                        <span>Jobs ({{ allJobTypes.length }})</span>
+                    </div>
+                </p-header>
+                <p-dataTable [value]="allJobTypes" styleClass="nopadding"
                              [scrollable]="true" scrollHeight="444px">
                     <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
@@ -24,11 +29,11 @@
             </p-panel>
         </div>
         <div class="ui-g-7">
-            <div class="charts" *ngIf="activeJobTypes.length > 0">
-                <p-panel header="Data Feed">
+            <div class="charts" *ngIf="allJobTypes.length > 0">
+                <p-panel [header]="dataFeedChartTitle">
                     <app-data-feed></app-data-feed>
                 </p-panel>
-                <p-panel [header]="perfChartTitle">
+                <p-panel [header]="historyChartTitle">
                     <app-job-history></app-job-history>
                 </p-panel>
                 <p-panel [header]="activityChartTitle">
@@ -47,18 +52,6 @@
                     </div>
                     <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
                     <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
-                </div>
-            </p-panel>
-            <p-panel header="Active Jobs" *ngIf="activeJobTypes">
-                <div *ngIf="dataActive">
-                    <h4 *ngIf="activeJobTypes.length > 0 && failedActive > 0">{{ failedActive }} Failure(s) / {{ totalActive }} Total</h4>
-                    <div class="scale-chart-container">
-                        <app-loading-indicator [loading]="chartLoadingActive"></app-loading-indicator>
-                        <p-chart type="pie" [data]="dataActive" [options]="pieChartOptions"
-                                 *ngIf="activeJobTypes.length > 0 && failedActive > 0"></p-chart>
-                    </div>
-                    <span *ngIf="activeJobTypes.length === 0">There are no active jobs.</span>
-                    <span *ngIf="failedActive === 0 && activeJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
             <p-panel header="All Jobs">

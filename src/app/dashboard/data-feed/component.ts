@@ -27,7 +27,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     dataFeeds: SelectItem[] = [];
     selectedDataFeed: any;
     favorites = [];
-    activeJobs = [];
+    allJobs = [];
     feedSubscription: any;
     jobSubscription: any;
     favoritesSubscription: any;
@@ -94,8 +94,10 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // get jobs metrics
             this.favorites = this.jobsService.getFavorites();
-            this.activeJobs = this.jobsService.getActiveJobs();
-            const choiceIds = this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.activeJobs, 'job_type.id');
+            this.allJobs = this.jobsService.getAllJobs();
+            const choiceIds = this.favorites.length > 0 ?
+                _.map(this.favorites, 'id') :
+                [];
 
             this.jobParams = {
                 choice_id: choiceIds,
@@ -109,7 +111,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             };
 
             this.metricsApiService.getPlotData(this.jobParams).then(jobData => {
-                const filters = this.favorites.length > 0 ? this.favorites : _.map(this.activeJobs, 'job_type');
+                const filters = this.favorites.length > 0 ?
+                    this.favorites :
+                    [];
                 const colors = [this.colorService.SCALE_BLUE2];
                 const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', colors, this.favorites.length > 0);
 

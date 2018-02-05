@@ -19,7 +19,7 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
     subscription: any;
     favoritesSubscription: any;
     favorites = [];
-    activeJobs = [];
+    allJobs = [];
     data: any;
     options: any;
 
@@ -33,11 +33,11 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chartLoading = true;
         this.unsubscribe();
         this.favorites = this.jobsService.getFavorites();
-        this.activeJobs = this.jobsService.getActiveJobs();
+        this.allJobs = this.jobsService.getAllJobs();
         this.params = {
             started: moment.utc().subtract(1, 'd').toISOString(),
             ended: moment.utc().toISOString(),
-            job_type_id: this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.activeJobs, 'job_type.id')
+            job_type_id: this.favorites.length > 0 ? _.map(this.favorites, 'id') : _.map(this.allJobs, 'job_type.id')
         };
         this.subscription = this.jobsApiService.getJobLoad(this.params, true).subscribe(data => {
             this.chartLoading = false;
