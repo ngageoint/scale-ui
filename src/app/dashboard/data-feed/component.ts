@@ -111,7 +111,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             this.metricsApiService.getPlotData(this.jobParams).then(jobData => {
                 const filters = this.favorites.length > 0 ? this.favorites : _.map(this.activeJobs, 'job_type');
                 const colors = [this.colorService.SCALE_BLUE2];
-                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', colors);
+                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', colors, this.favorites.length > 0);
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {
