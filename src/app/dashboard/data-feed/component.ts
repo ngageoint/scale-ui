@@ -31,6 +31,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     jobSubscription: any;
     favoritesSubscription: any;
 
+    private FEED_DATA = 'scale.dashboard.selectedDataFeed';
+
     constructor(
         private ingestApiService: IngestApiService,
         private jobsService: DashboardJobsService,
@@ -78,8 +80,13 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         value: result
                     });
                 });
+                this.dataFeeds = _.sortBy(this.dataFeeds, ['asc'], ['label']);
             }
-            if (!this.selectedDataFeed) {
+            if (this.selectedDataFeed) {
+                // use value from dataFeeds array to ensure object equality for primeng dropdown
+                const dataFeed = _.find(this.dataFeeds, { label: this.selectedDataFeed.strike.title });
+                this.selectedDataFeed = dataFeed ? dataFeed.value : this.dataFeeds[0].value;
+            } else {
                 this.selectedDataFeed = this.dataFeeds[0].value;
             }
 
@@ -124,6 +131,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onDataFeedSelect() {
+        localStorage.setItem(this.FEED_DATA, JSON.stringify(this.selectedDataFeed));
         this.updateFeedData();
     }
 
@@ -199,6 +207,10 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         };
+        const storedDataFeed = localStorage.getItem(this.FEED_DATA);
+        if (storedDataFeed) {
+            this.selectedDataFeed = JSON.parse(storedDataFeed);
+        }
         this.fetchChartData(true);
         this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
             this.fetchChartData(false);
