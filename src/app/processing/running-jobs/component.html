@@ -1,7 +1,7 @@
 <h2>Running Jobs</h2>
 <p-dataTable [value]="runningJobs" [rows]="datatableOptions.rows" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
              [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
-             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
+             [loading]="datatableLoading" (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}" class="running-jobs">
     <p-column field="job_type.name" header="Job Type">
         <ng-template let-col let-job="rowData" pTemplate="body">
             <span>{{job.job_type.title}} {{job.job_type.version}}</span>
@@ -10,4 +10,5 @@
     <p-column field="count" header="Number of Jobs"></p-column>
     <p-column field="longest_running_duration" header="Duration of Longest Running Job"></p-column>
 </p-dataTable>
-<p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
+<p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
+             (onPageChange)="paginate($event)"></p-paginator>

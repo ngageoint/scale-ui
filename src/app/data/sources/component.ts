@@ -17,6 +17,7 @@ import { SourcesDatatableService } from './datatable.service';
 
 export class SourcesComponent implements OnInit {
     datatableOptions: SourcesDatatable;
+    datatableLoading: boolean;
     sources: Source[];
     first: number;
     count: number;
@@ -46,7 +47,9 @@ export class SourcesComponent implements OnInit {
     }
 
     private updateData() {
+        this.datatableLoading = true;
         this.sourcesApiService.getSources(this.datatableOptions).then(data => {
+            this.datatableLoading = false;
             this.count = data.count;
             this.sources = data.results as Source[];
         });
@@ -113,6 +116,7 @@ export class SourcesComponent implements OnInit {
         this.updateOptions();
     }
     ngOnInit() {
+        this.datatableLoading = true;
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {

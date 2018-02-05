@@ -17,6 +17,7 @@ import { JobsDatatableService } from '../jobs/datatable.service';
 
 export class RunningJobsComponent implements OnInit, OnDestroy {
     datatableOptions: RunningJobsDatatable;
+    datatableLoading: boolean;
     runningJobs: any;
     selectedJob: RunningJob;
     first: number;
@@ -36,8 +37,10 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
     }
 
     private updateData() {
+        this.datatableLoading = true;
         this.unsubscribe();
         this.subscription = this.runningJobsApiService.getRunningJobs(this.datatableOptions, true).subscribe(data => {
+            this.datatableLoading = false;
             this.count = data.count;
             this.runningJobs = RunningJob.transformer(data.results);
         });
@@ -90,6 +93,7 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         this.router.navigate(['processing', 'jobs']);
     }
     ngOnInit() {
+        this.datatableLoading = true;
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {

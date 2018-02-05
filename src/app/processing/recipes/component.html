@@ -11,7 +11,7 @@
 </div>
 <p-dataTable [value]="recipes" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [responsive]="true"
-             resizableColumns="true" selectionMode="single" [(selection)]="selectedRecipe"
+             resizableColumns="true" selectionMode="single" [(selection)]="selectedRecipe" [loading]="datatableLoading"
              (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
     <p-column field="type.name" header="Recipe Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter">
@@ -43,4 +43,5 @@
         </ng-template>
     </p-column>
 </p-dataTable>
-<p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
+             (onPageChange)="paginate($event)"></p-paginator>

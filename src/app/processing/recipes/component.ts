@@ -19,6 +19,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 
 export class RecipesComponent implements OnInit, OnDestroy {
     datatableOptions: RecipesDatatable;
+    datatableLoading: boolean;
     recipes: any;
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
@@ -43,8 +44,10 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
 
     private updateData() {
+        this.datatableLoading = true;
         this.unsubscribe();
         this.subscription = this.recipesApiService.getRecipes(this.datatableOptions, true).subscribe(data => {
+            this.datatableLoading = false;
             this.count = data.count;
             this.recipes = Recipe.transformer(data.results);
         });
@@ -137,6 +140,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     ngOnInit() {
+        this.datatableLoading = true;
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {

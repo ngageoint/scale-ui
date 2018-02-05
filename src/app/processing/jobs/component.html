@@ -18,7 +18,8 @@
 <p-dataTable [value]="jobs" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
              [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
              [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
-             (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}" class="jobs__table" #datatable>
+             (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
+             class="jobs__table" #datatable>
     <p-column field="job_type.name" header="Job Type" [filter]="true" filterMatchMode="equals" [sortable]="true">
         <ng-template pTemplate="filter">
             <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"
@@ -82,4 +83,5 @@
         <app-log-viewer [execution]="selectedJobExecution"></app-log-viewer>
     </span>
 </p-dialog>
-<p-paginator [rows]="10" [first]="datatableOptions.first" [totalRecords]="count" (onPageChange)="paginate($event)"></p-paginator>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
+             (onPageChange)="paginate($event)"></p-paginator>

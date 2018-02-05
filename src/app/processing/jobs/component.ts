@@ -24,6 +24,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Output() datatableChange = new EventEmitter<boolean>();
 
     datatableOptions: JobsDatatable;
+    datatableLoading: boolean;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
@@ -87,8 +88,10 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
 
     private updateData() {
+        this.datatableLoading = true;
         this.unsubscribe();
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
+            this.datatableLoading = false;
             this.count = data.count;
             this.jobs = Job.transformer(data.results);
         });
@@ -228,6 +231,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
     }
     ngOnInit() {
+        this.datatableLoading = true;
         this.jobs = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
