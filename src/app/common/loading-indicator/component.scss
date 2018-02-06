@@ -6,8 +6,9 @@
     width: 100%;
     height: 100%;
     background: rgba(255, 255, 255, 0.5);
-    text-align: center;
-    padding-top: 5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     svg path, svg rect {
         fill: #000;

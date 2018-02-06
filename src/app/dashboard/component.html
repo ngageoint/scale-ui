@@ -56,11 +56,17 @@
             </p-panel>
             <p-panel header="All Job Types">
                 <div *ngIf="dataAll">
-                    <h4>{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
+                    <h4></h4>
+                    <div class="scale-chart-container">
+
+                    </div>
+                    <h4 *ngIf="allJobTypes.length > 0 && failedAll > 0">{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
                     <div class="scale-chart-container">
                         <app-loading-indicator [loading]="chartLoadingAll"></app-loading-indicator>
                         <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"></p-chart>
                     </div>
+                    <span *ngIf="allJobTypes.length === 0">No job types found.</span>
+                    <span *ngIf="failedAll === 0 && allJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
         </div>
