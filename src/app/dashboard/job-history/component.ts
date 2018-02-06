@@ -42,7 +42,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             choice_id: choiceIds,
             column: ['completed_count', 'failed_count'],
             dataType: 'job-types',
-            started: moment.utc().subtract(2, 'w').toISOString(),
+            started: moment.utc().subtract(10, 'd').toISOString(),
             ended: moment.utc().toISOString(),
             group: ['overview', 'overview'],
             page: 1,
@@ -131,7 +131,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         if (this.chart.chart) {
-            this.chart.chart.canvas.parentNode.style.height = '33vh';
+            this.chart.chart.canvas.parentNode.style.height = '360px';
         }
     }
 

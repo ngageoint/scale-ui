@@ -112,7 +112,7 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngAfterViewInit() {
         if (this.chart.chart) {
-            this.chart.chart.canvas.parentNode.style.height = '33vh';
+            this.chart.chart.canvas.parentNode.style.height = '360px';
         }
     }
 

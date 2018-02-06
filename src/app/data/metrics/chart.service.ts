@@ -114,26 +114,33 @@ export class ChartService {
             });
         } else {
             // no filters were applied, so show aggregate statistics for selected metric
-            _.forEach(data.results, (result, idx) => {
-                valueArr = [];
-                // add result values to valueArr
-                _.forEach(dataLabels, (xDate) => {
-                    const valueObj = _.find(result.values, (qDate) => {
-                        return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+            let idx = 0;
+            _.forEach(data.results, (result) => {
+                const colIdx = _.indexOf(params.column, result.column.name);
+                if (colIdx > -1) {
+                    valueArr = [];
+                    // add result values to valueArr
+                    _.forEach(dataLabels, (xDate) => {
+                        const valueObj = _.find(result.values, (qDate) => {
+                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                        });
+                        // push 0 if data for xDate is not present in result.values
+                        valueArr.push(valueObj ? valueObj.value : 0);
                     });
-                    // push 0 if data for xDate is not present in result.values
-                    valueArr.push(valueObj ? valueObj.value : 0);
-                });
 
-                // populate chart dataset
-                datasets.push({
-                    yAxisID: `yAxis${idx + 1}`,
-                    stack: idx.toString(),
-                    label: result.column.title + ' for all ' + title,
-                    icon: null,
-                    backgroundColor: colors.length > 0 ? colors[idx % 2 === 0 ? 0 : 1] : this.randomColorGenerator(),
-                    data: valueArr
-                });
+                    // populate chart dataset
+                    datasets.push({
+                        yAxisID: `yAxis${idx + 1}`,
+                        stack: idx.toString(),
+                        label: result.column.title + ' for all ' + title,
+                        icon: null,
+                        backgroundColor: colors.length > 0 ? colors[idx % 2 === 0 ? 0 : 1] : this.randomColorGenerator(),
+                        data: valueArr
+                    });
+
+                    // increment result index
+                    idx = idx++;
+                }
             });
         }
         return {

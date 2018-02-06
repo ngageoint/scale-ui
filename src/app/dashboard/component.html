@@ -49,7 +49,7 @@
     </div>
     <div class="ui-g">
         <div class="ui-g-3">
-            <p-panel [style]="{height: '721px'}">
+            <p-panel [style]="{height: '720px'}">
                 <p-header>
                     <div class="dashboard__jobs-table">
                         <span><strong>Job Types ({{ allJobTypes.length }})</strong></span>
@@ -67,10 +67,10 @@
         </div>
         <div class="ui-g-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="historyChartTitle">
+                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
                     <app-job-history></app-job-history>
                 </p-panel>
-                <p-panel [header]="activityChartTitle">
+                <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <app-job-activity></app-job-activity>
                 </p-panel>
             </div>
