@@ -21,7 +21,7 @@ export class LogViewerApiService {
         this.logArgs = args;
     }
     getLog(id: number): Promise<any> {
-        return this.http.get(`${environment.apiPrefix}/job-executions/${id}/logs/combined`)
+        return this.http.get(`${environment.apiPrefix}/job-executions/${id}/logs/combined/`)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);

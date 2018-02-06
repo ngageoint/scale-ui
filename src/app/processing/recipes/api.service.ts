@@ -30,21 +30,21 @@ export class RecipesApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/recipes`, { params: queryParams })
+                return this.http.get(`${environment.apiPrefix}/recipes/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/recipes`, { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/recipes/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getRecipe(id: number): Promise<Recipe> {
-        return this.http.get(`${environment.apiPrefix}/recipes/` + id)
+        return this.http.get(`${environment.apiPrefix}/recipes/${id}/`)
             .toPromise()
             .then(response => Recipe.transformer(response.json()))
             .catch(this.handleError);

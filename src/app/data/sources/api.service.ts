@@ -26,13 +26,13 @@ export class SourcesApiService {
             is_parsed: params.is_parsed,
             file_name: params.file_name
         };
-        return this.http.get(`${environment.apiPrefix}/sources`, { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/sources/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getSource(id: number): Promise<Source> {
-        return this.http.get(`${environment.apiPrefix}/sources/` + id)
+        return this.http.get(`${environment.apiPrefix}/sources/${id}/`)
             .toPromise()
             .then(response => Source.transformer(response.json()))
             .catch(this.handleError);
@@ -55,7 +55,7 @@ export class SourcesApiService {
             error_category: params.error_category,
             include_superseded: params.include_superseded
         };
-        return this.http.get(`${environment.apiPrefix}/sources/${id}/${type}`, { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/sources/${id}/${type}/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

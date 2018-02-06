@@ -25,7 +25,7 @@ export class WorkspacesApiService {
         //         name: params.name
         //     };
         // }
-        return this.http.get(`${environment.apiPrefix}/workspaces`, { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/workspaces/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

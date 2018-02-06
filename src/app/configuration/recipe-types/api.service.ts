@@ -25,14 +25,14 @@ export class RecipeTypesApiService {
                 ended: params.ended
             };
         }
-        return this.http.get(`${environment.apiPrefix}/recipe-types`, { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/recipe-types/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getRecipeType(id: number): Promise<RecipeType> {
-        return this.http.get(`${environment.apiPrefix}/recipe-types/` + id)
+        return this.http.get(`${environment.apiPrefix}/recipe-types/${id}/`)
             .toPromise()
             .then(response => RecipeType.transformer(response.json()))
             .catch(this.handleError);

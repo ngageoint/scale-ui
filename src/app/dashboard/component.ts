@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
-import { IngestApiService } from '../data/ingest/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { ColorService } from '../color.service';
 
@@ -31,7 +30,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
-        private ingestApiService: IngestApiService,
         private jobsService: DashboardJobsService,
         private colorService: ColorService
     ) {

@@ -21,14 +21,14 @@ export class RunningJobsApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/job-types/running`, { params: queryParams })
+                return this.http.get(`${environment.apiPrefix}/job-types/running/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/running-jobs`, { params: queryParams })
+        return this.http.get(`${environment.apiPrefix}/running-jobs/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

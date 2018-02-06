@@ -15,14 +15,14 @@ export class IngestApiService {
     getIngests(params: any, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/ingests`, { params: params })
+                return this.http.get(`${environment.apiPrefix}/ingests/`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/ingests`, { params: params })
+        return this.http.get(`${environment.apiPrefix}/ingests/`, { params: params })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
@@ -31,14 +31,14 @@ export class IngestApiService {
     getIngestStatus(params: any, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/ingests/status`, { params: params })
+                return this.http.get(`${environment.apiPrefix}/ingests/status/`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/ingests/status`, { params: params })
+        return this.http.get(`${environment.apiPrefix}/ingests/status/`, { params: params })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

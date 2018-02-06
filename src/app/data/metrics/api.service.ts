@@ -12,21 +12,21 @@ export class MetricsApiService {
     }
 
     getDataTypes(): Promise<ApiResults> {
-        return this.http.get(`${environment.apiPrefix}/metrics`)
+        return this.http.get(`${environment.apiPrefix}/metrics/`)
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getDataTypeOptions(name: string): Promise<any> {
-        return this.http.get(`${environment.apiPrefix}/metrics/${name}`)
+        return this.http.get(`${environment.apiPrefix}/metrics/${name}/`)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
     }
 
     getPlotData(params: any): Promise<ApiResults> {
-        return this.http.get(`${environment.apiPrefix}/metrics/${params.dataType}/plot-data`, { params: params })
+        return this.http.get(`${environment.apiPrefix}/metrics/${params.dataType}/plot-data/`, { params: params })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
