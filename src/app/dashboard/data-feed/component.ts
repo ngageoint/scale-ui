@@ -115,7 +115,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.favorites :
                     [];
                 const colors = [this.colorService.SCALE_BLUE2];
-                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', colors, this.favorites.length > 0);
+                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', colors);
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {

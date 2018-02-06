@@ -74,7 +74,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.favorites :
                 [];
             const colors = [this.colorService.SCALE_BLUE2, this.colorService.ERROR];
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', colors, this.favorites.length > 0);
+            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', colors);
             chartData.labels = _.map(chartData.labels, label => {
                 return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
             });

@@ -14,9 +14,8 @@ export class ChartService {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
-    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, colors?: any[], dynamicOpacity?: boolean): any {
+    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, colors?: any[]): any {
         colors = colors || [];
-        dynamicOpacity = dynamicOpacity || false;
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -94,7 +93,7 @@ export class ChartService {
                             `${filter.title} ${filter.version} ${result.column.title}` :
                             `${filter.title} ${result.column.title}`;
                         const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
-                        const opacity = dynamicOpacity ? parseFloat((1 - (stackHeight / 10)).toFixed(2)) : 1;
+                        const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
                         const bgColor = colors.length > 0 ?
                             this.colorService.getRgba(colors[idx % 2 === 0 ? 0 : 1], opacity) :
                             this.randomColorGenerator();
