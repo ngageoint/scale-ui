@@ -132,15 +132,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dataFeedChartTitle = 'Data Feed';
             this.dataFeedChartTitle = favs.length > 0 ?
                 `${this.dataFeedChartTitle} (Favorites)` :
-                `${this.dataFeedChartTitle} (All Jobs)`;
+                `${this.dataFeedChartTitle} (All Job Types)`;
             this.historyChartTitle = 'Completed vs. Failed counts';
             this.historyChartTitle = favs.length > 0 ?
                 `${this.historyChartTitle} (Favorites)` :
-                `${this.historyChartTitle} (All Jobs)`;
+                `${this.historyChartTitle} (All Job Types)`;
             this.activityChartTitle = 'Job Activity';
             this.activityChartTitle = favs.length > 0 ?
                 `${this.activityChartTitle} (Favorites)` :
-                `${this.activityChartTitle} (All Jobs)`;
+                `${this.activityChartTitle} (All Job Types)`;
         });
     }
 }

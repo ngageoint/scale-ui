@@ -15,7 +15,7 @@
             <p-panel>
                 <p-header>
                     <div class="dashboard__jobs-table">
-                        <span>Jobs ({{ allJobTypes.length }})</span>
+                        <span><strong>Job Types ({{ allJobTypes.length }})</strong></span>
                     </div>
                 </p-header>
                 <p-dataTable [value]="allJobTypes" styleClass="nopadding"
@@ -54,7 +54,7 @@
                     <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
-            <p-panel header="All Jobs">
+            <p-panel header="All Job Types">
                 <div *ngIf="dataAll">
                     <h4>{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
                     <div class="scale-chart-container">
