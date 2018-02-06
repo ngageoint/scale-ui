@@ -12,6 +12,22 @@ export class IngestApiService {
     constructor(private http: Http) {
     }
 
+    getIngests(params: any, poll?: boolean): any {
+        if (poll) {
+            const getData = () => {
+                return this.http.get(`${environment.apiPrefix}/ingests`, { params: params })
+                    .switchMap((data) => Observable.timer(600000) // 10 minutes
+                        .switchMap(() => getData())
+                        .startWith(ApiResults.transformer(data.json())));
+            };
+            return getData();
+        }
+        return this.http.get(`${environment.apiPrefix}/ingests`, { params: params })
+            .toPromise()
+            .then(response => ApiResults.transformer(response.json()))
+            .catch(this.handleError);
+    }
+
     getIngestStatus(params: any, poll?: boolean): any {
         if (poll) {
             const getData = () => {

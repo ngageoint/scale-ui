@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
+import { IngestApiService } from '../data/ingest/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { ColorService } from '../color.service';
 
@@ -30,6 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
+        private ingestApiService: IngestApiService,
         private jobsService: DashboardJobsService,
         private colorService: ColorService
     ) {
@@ -37,6 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.favoriteJobTypes = [];
         this.pieChartOptions = {
             rotation: 0.5 * Math.PI, // start from bottom
+            cutoutPercentage: 40,
             legend: {
                 display: false
             },
@@ -86,6 +89,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const chartData = {
             datasets: [{
                 data: [sysErrors, algErrors, dataErrors],
+                borderColor: '#fff',
+                borderWidth: 1,
                 backgroundColor: [
                     this.colorService.ERROR_SYSTEM,   // system
                     this.colorService.ERROR_ALGORITHM,  // algorithm

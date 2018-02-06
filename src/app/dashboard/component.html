@@ -1,26 +1,11 @@
 <div class="dashboard">
     <div class="ui-g">
         <div class="ui-g-3">
-            <p-panel header="Favorites ({{ favoriteJobTypes.length }})">
+            <p-panel header="Favorites ({{ favoriteJobTypes.length }})" [style]="{height: '444px'}">
                 <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding"
-                             [scrollable]="true" scrollHeight="444px"
+                             [scrollable]="true" scrollHeight="295px"
                              emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
                     <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
-                        <ng-template let-col let-item="rowData" pTemplate="body">
-                            <app-job-type-item [item]="item"></app-job-type-item>
-                        </ng-template>
-                    </p-column>
-                </p-dataTable>
-            </p-panel>
-            <p-panel>
-                <p-header>
-                    <div class="dashboard__jobs-table">
-                        <span><strong>Job Types ({{ allJobTypes.length }})</strong></span>
-                    </div>
-                </p-header>
-                <p-dataTable [value]="allJobTypes" styleClass="nopadding"
-                             [scrollable]="true" scrollHeight="444px">
-                    <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
                             <app-job-type-item [item]="item"></app-job-type-item>
                         </ng-template>
@@ -30,20 +15,15 @@
         </div>
         <div class="ui-g-7">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="dataFeedChartTitle">
+                <p-panel [header]="dataFeedChartTitle" [style]="{height: '444px'}">
                     <app-data-feed></app-data-feed>
-                </p-panel>
-                <p-panel [header]="historyChartTitle">
-                    <app-job-history></app-job-history>
-                </p-panel>
-                <p-panel [header]="activityChartTitle">
-                    <app-job-activity></app-job-activity>
                 </p-panel>
             </div>
         </div>
         <div class="ui-g-2 dashboard__error-charts">
-            <p-panel header="Favorites" *ngIf="favoriteJobTypes">
-                <div *ngIf="dataFavs">
+            <p-panel header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes" [style]="{height: '444px'}">
+                <div class="dashboard__error-chart" *ngIf="dataFavs">
+                    <h3>Favorites</h3>
                     <h4 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0">{{ failedFavs }} Failure(s) / {{ totalFavs }} Total</h4>
                     <div class="scale-chart-container">
                         <app-loading-indicator [loading]="chartLoadingFavs"></app-loading-indicator>
@@ -53,13 +33,9 @@
                     <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
                     <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
-            </p-panel>
-            <p-panel header="All Job Types">
-                <div *ngIf="dataAll">
-                    <h4></h4>
-                    <div class="scale-chart-container">
-
-                    </div>
+                <hr />
+                <div class="dashboard__error-chart" *ngIf="dataAll">
+                    <h3>All Job Types</h3>
                     <h4 *ngIf="allJobTypes.length > 0 && failedAll > 0">{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
                     <div class="scale-chart-container">
                         <app-loading-indicator [loading]="chartLoadingAll"></app-loading-indicator>
@@ -69,6 +45,35 @@
                     <span *ngIf="failedAll === 0 && allJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-3">
+            <p-panel [style]="{height: '721px'}">
+                <p-header>
+                    <div class="dashboard__jobs-table">
+                        <span><strong>Job Types ({{ allJobTypes.length }})</strong></span>
+                    </div>
+                </p-header>
+                <p-dataTable [value]="allJobTypes" styleClass="nopadding"
+                             [scrollable]="true" scrollHeight="571px">
+                    <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
+                        <ng-template let-col let-item="rowData" pTemplate="body">
+                            <app-job-type-item [item]="item"></app-job-type-item>
+                        </ng-template>
+                    </p-column>
+                </p-dataTable>
+            </p-panel>
+        </div>
+        <div class="ui-g-9">
+            <div class="charts" *ngIf="allJobTypes.length > 0">
+                <p-panel [header]="historyChartTitle">
+                    <app-job-history></app-job-history>
+                </p-panel>
+                <p-panel [header]="activityChartTitle">
+                    <app-job-activity></app-job-activity>
+                </p-panel>
+            </div>
         </div>
     </div>
 </div>

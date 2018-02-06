@@ -15,9 +15,18 @@
     }
 
     .dashboard__error-charts {
-        h4 {
-            margin: -10px 0 10px 0;
-            text-align: center;
+        .dashboard__error-chart {
+            margin-bottom: 10px;
+
+            h3 {
+                margin: 0 0 5px 0;
+                text-align: center;
+            }
+
+            h4 {
+                margin: -10px 0 10px 0;
+                text-align: center;
+            }
         }
     }
 
