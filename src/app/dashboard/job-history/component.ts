@@ -42,7 +42,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             choice_id: choiceIds,
             column: ['completed_count', 'failed_count'],
             dataType: 'job-types',
-            started: moment.utc().subtract(1, 'w').toISOString(),
+            started: moment.utc().subtract(2, 'w').toISOString(),
             ended: moment.utc().toISOString(),
             group: ['overview', 'overview'],
             page: 1,
