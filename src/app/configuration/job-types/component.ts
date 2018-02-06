@@ -156,7 +156,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.options = {
             legend: false,
-            cutoutPercentage: 65,
+            cutoutPercentage: 40,
             plugins: {
                 datalabels: false
             }

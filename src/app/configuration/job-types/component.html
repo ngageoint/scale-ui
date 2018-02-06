@@ -119,13 +119,22 @@
             </div>
             <div class="ui-g-2">
                 <p-panel header="6 Hours" styleClass="margin-bottom-md">
-                    <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
+                    <span *ngIf="total6h === 0">No data available</span>
+                    <div *ngIf="total6h > 0">
+                        <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
+                    </div>
                 </p-panel>
                 <p-panel header="12 Hours" styleClass="margin-bottom-md">
-                    <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
+                    <span *ngIf="total12h === 0">No data available</span>
+                    <div *ngIf="total12h > 0">
+                        <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
+                    </div>
                 </p-panel>
                 <p-panel header="24 Hours">
-                    <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
+                    <span *ngIf="total24h === 0">No data available</span>
+                    <div *ngIf="total24h > 0">
+                        <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
+                    </div>
                 </p-panel>
             </div>
         </div>
