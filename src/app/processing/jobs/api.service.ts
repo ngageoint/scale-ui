@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/catch';
 
 import { ApiResults } from '../../api-results.model';
 import { Job } from './api.model';
@@ -41,7 +42,9 @@ export class JobsApiService {
                 return this.http.get(`${environment.apiPrefix}/jobs/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())));
+                        .startWith(ApiResults.transformer(data.json())).catch(e => {
+                            console.log('Poll error', e); return Observable.throw(e);
+                        }));
             };
             return getData();
         }

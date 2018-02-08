@@ -23,6 +23,7 @@ export class FailureRatesComponent implements OnInit {
     selectedJobType: JobType;
     performanceData: any[];
     sortConfig: any;
+    datatableLoading: boolean;
 
     constructor(
         private failureRatesDatatableService: FailureRatesDatatableService,
@@ -70,8 +71,9 @@ export class FailureRatesComponent implements OnInit {
         return obj;
     }
     private updateData() {
+        this.datatableLoading = true;
         const metricsParams = {
-            page: null,
+            page: 1,
             page_size: null,
             started: moment.utc().subtract(30, 'd').startOf('d').toISOString(),
             ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
@@ -102,8 +104,10 @@ export class FailureRatesComponent implements OnInit {
                     });
                 }
                 this.performanceData = tempData;
+                this.datatableLoading = false;
             }
         }).catch((error) => {
+            this.datatableLoading = false;
             console.log(error);
         });
     }
@@ -121,7 +125,9 @@ export class FailureRatesComponent implements OnInit {
         }
     }
     private getJobTypes() {
+        this.datatableLoading = true;
         this.jobTypesApiService.getJobTypes().then(data => {
+            this.datatableLoading = false;
             this.jobTypes = JobType.transformer(data.results);
             const selectItems = [];
             _.forEach(this.jobTypes, (jobType) => {

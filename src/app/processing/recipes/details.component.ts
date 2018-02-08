@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
@@ -10,17 +10,25 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss']
 })
-export class RecipeDetailsComponent implements OnInit {
+export class RecipeDetailsComponent implements OnInit, OnDestroy {
     recipeType: any;
+    subscription: any;
+
     constructor(
         private route: ActivatedRoute,
         private recipesApiService: RecipesApiService
     ) { }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     ngOnInit() {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-            this.recipesApiService.getRecipe(id).then(data => {
+            this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(data => {
                 this.recipeType = RecipeType.transformer(data.recipe_type);
 
                 const jobTypes = [];
@@ -42,5 +50,9 @@ export class RecipeDetailsComponent implements OnInit {
                 this.recipeType.job_types = jobTypes;
             });
         }
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

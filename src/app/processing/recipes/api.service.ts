@@ -43,7 +43,16 @@ export class RecipesApiService {
             .catch(this.handleError);
     }
 
-    getRecipe(id: number): Promise<Recipe> {
+    getRecipe(id: number, poll?: Boolean): any {
+        if (poll) {
+            const getData = () => {
+                return this.http.get(`${environment.apiPrefix}/recipes/${id}/`)
+                    .switchMap((data) => Observable.timer(5000)
+                        .switchMap(() => getData())
+                        .startWith(Recipe.transformer(data.json())));
+            };
+            return getData();
+        }
         return this.http.get(`${environment.apiPrefix}/recipes/${id}/`)
             .toPromise()
             .then(response => Recipe.transformer(response.json()))

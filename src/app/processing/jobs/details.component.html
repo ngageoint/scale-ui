@@ -63,11 +63,11 @@
                                    (mouseenter)="timeline.show($event)" (mouseleave)="timeline.hide()"></i>
                                 <p-overlayPanel #timeline [dismissable]="true" appendTo="body">
                                     <ul class="list-unstyled job__exe-timeline">
-                                        <li *ngIf="exe.created_formatted">{{ exe.created_formatted }} (Created)</li>
-                                        <li *ngIf="exe.queued_formatted">{{ exe.queued_formatted }} (Queued)</li>
-                                        <li *ngIf="exe.started_formatted">{{ exe.started_formatted }} (Started)</li>
-                                        <li *ngIf="exe.ended_formatted">{{ exe.ended_formatted }} (Ended)</li>
-                                        <li *ngIf="exe.last_modified_formatted">{{ exe.last_modified_formatted }} (Last Modified)</li>
+                                        <li *ngIf="exe.created">{{ exe.created_formatted }} (Created)</li>
+                                        <li *ngIf="exe.queued">{{ exe.queued_formatted }} (Queued)</li>
+                                        <li *ngIf="exe.started">{{ exe.started_formatted }} (Started)</li>
+                                        <li *ngIf="exe.ended">{{ exe.ended_formatted }} (Ended)</li>
+                                        <li *ngIf="exe.last_modified">{{ exe.last_modified_formatted }} (Last Modified)</li>
                                     </ul>
                                 </p-overlayPanel>
                                 {{ exe.status }}

@@ -101,6 +101,8 @@ export class Job {
         this.dataService = new DataService();
         this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');
         this.last_modified_formatted = moment.utc(this.last_modified).format('YYYY-MM-DD HH:mm:ss');
-        this.duration = this.dataService.calculateDuration(this.started, this.ended);
+        this.duration = this.started && this.ended ?
+            this.dataService.calculateDuration(this.started, this.ended) :
+            null;
     }
 }
