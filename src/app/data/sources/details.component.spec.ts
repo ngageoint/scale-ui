@@ -6,7 +6,6 @@ import { ActivatedRoute } from '@angular/router';
 import { SourcesApiService } from './api.service';
 import { SourceDetailsComponent } from './details.component';
 import { DataService } from '../../data.service';
-import { JobsDatatableService } from '../../processing/jobs/datatable.service';
 
 describe('SourceDetailsComponent', () => {
     let component: SourceDetailsComponent;
@@ -17,7 +16,7 @@ describe('SourceDetailsComponent', () => {
             declarations: [SourceDetailsComponent],
             imports: [HttpModule],
             providers: [
-                SourcesApiService, DataService, JobsDatatableService,
+                SourcesApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

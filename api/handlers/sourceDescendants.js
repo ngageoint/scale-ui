@@ -14,6 +14,14 @@ module.exports = function (request, reply) {
                 return moment.utc(params.started).isSameOrAfter(moment.utc(r.started)) && moment.utc(params.ended).isSameOrBefore(moment.utc(r.ended));
             });
         }
+        if (params.job_type_id) {
+            data.results = _.filter(data.results, function (r) {
+                if (Array.isArray(params.job_type_id)) {
+                    return _.includes(params.job_type_id, r.job_type.id.toString());
+                }
+                return r.job_type.id === parseInt(params.job_type_id);
+            });
+        }
         if (params.job_type_name) {
             data.results = _.filter(data.results, function (r) {
                 return r.job_type.name.toLowerCase().includes(params.job_type_name);

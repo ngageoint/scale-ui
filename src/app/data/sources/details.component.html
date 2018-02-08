@@ -56,5 +56,5 @@
             </p-scrollPanel>
         </div>
     </div>
-    <app-jobs [(jobs)]="jobsData" [isChild]="true" (datatableChange)="onJobsDatatableChange($event)"></app-jobs>
+    <app-jobs [(jobs)]="jobsData" [(datatableOptions)]="jobsDatatableOptions" [isChild]="true" (datatableChange)="onJobsDatatableChange($event)"></app-jobs>
 </div>

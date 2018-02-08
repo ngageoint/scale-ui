@@ -21,9 +21,9 @@ import { JobExecution } from './execution.model';
 export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
     @Input() isChild: boolean;
-    @Output() datatableChange = new EventEmitter<boolean>();
+    @Input() datatableOptions: JobsDatatable;
+    @Output() datatableChange = new EventEmitter<JobsDatatable>();
 
-    datatableOptions: JobsDatatable;
     datatableLoading: boolean;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
@@ -84,7 +84,6 @@ export class JobsComponent implements OnInit, OnDestroy {
             label: 'Data',
             value: 'DATA'
         }];
-        this.datatableOptions = jobsDatatableService.getJobsDatatableOptions();
     }
 
     private updateData() {
@@ -100,13 +99,14 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
 
         if (this.isChild) {
             // notify the parent that the datatable options (filtering/sorting/etc.) have changed
-            this.datatableChange.emit(true);
+            this.datatableChange.emit(this.datatableOptions);
+            this.datatableLoading = false;
         } else {
-            // component is not being referenced as a child, so update querystring and data
+            // component is not a child, so update datatable options, querystring, and data
+            this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
             this.router.navigate(['/processing/jobs'], {
                 queryParams: this.datatableOptions,
                 replaceUrl: true
@@ -232,6 +232,9 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.datatableLoading = true;
+        if (!this.datatableOptions) {
+            this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
+        }
         this.jobs = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
@@ -251,8 +254,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                     error_category: params.error_category || null,
                     include_superseded: params.include_superseded || null
                 };
-            } else {
-                this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
             }
             this.selectedStatus = this.datatableOptions.status;
             this.selectedErrorCategory = this.datatableOptions.error_category;

@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { Source } from './api.model';
 import { SourcesApiService } from './api.service';
 import { DataService } from '../../data.service';
-import { JobsDatatableService } from '../../processing/jobs/datatable.service';
+import { initialJobsDatatable, JobsDatatable } from '../../processing/jobs/datatable.model';
 import { Job } from '../../processing/jobs/api.model';
 
 @Component({
@@ -17,18 +17,21 @@ export class SourceDetailsComponent implements OnInit {
     source: Source;
     metadataKeys: string[];
     metadataDisplay: boolean;
-    jobsData: Job[];
+    jobsData: any;
+    jobsDatatableOptions: JobsDatatable;
+
     constructor(
         private route: ActivatedRoute,
         private sourcesApiService: SourcesApiService,
-        private jobsDatatableService: JobsDatatableService,
         private dataService: DataService
-    ) {}
+    ) {
+        this.jobsDatatableOptions = _.clone(initialJobsDatatable);
+    }
 
     private getSourceJobs() {
-        this.sourcesApiService.getSourceDescendants(this.source.id, 'jobs', this.jobsDatatableService.getJobsDatatableOptions())
+        this.sourcesApiService.getSourceDescendants(this.source.id, 'jobs', this.jobsDatatableOptions)
             .then(data => {
-                this.jobsData = data.results as Job[];
+                this.jobsData = Job.transformer(data.results);
             });
     }
     formatFilesize(filesize) {
@@ -40,8 +43,11 @@ export class SourceDetailsComponent implements OnInit {
     showMetadata() {
         this.metadataDisplay = true;
     }
-    onJobsDatatableChange() {
-        this.getSourceJobs();
+    onJobsDatatableChange(datatableOptions: JobsDatatable) {
+        this.jobsDatatableOptions = datatableOptions;
+        if (this.source.id) {
+            this.getSourceJobs();
+        }
     }
     ngOnInit() {
         if (this.route.snapshot) {
@@ -49,7 +55,7 @@ export class SourceDetailsComponent implements OnInit {
             this.sourcesApiService.getSource(id).then(data => {
                 this.source = data as Source;
                 this.metadataKeys = _.keys(this.source.meta_data);
-                this.getSourceJobs();
+                // this.getSourceJobs();
             });
         }
     }
