@@ -139,7 +139,7 @@ export class ChartService {
                     });
 
                     // increment result index
-                    idx = idx++;
+                    idx++;
                 }
             });
         }

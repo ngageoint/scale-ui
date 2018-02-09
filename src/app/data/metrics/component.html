@@ -3,8 +3,8 @@
     <div *ngIf="columns.length === 0">
         Open the <a (click)="showFilters = true">filters dialog</a> to select a data source.
     </div>
-    <div *ngIf="data && options">
-        <p-chart type="bar" [data]="data" [options]="options"></p-chart>
+    <div [hidden]="!data">
+        <p-chart #chart type="bar" [data]="data" [options]="options"></p-chart>
     </div>
 
     <button pButton type="button" class="ui-button-primary metrics__filter-toggle" icon="fa-filter"

@@ -40,11 +40,12 @@ export class JobsApiService {
         if (poll) {
             const getData = () => {
                 return this.http.get(`${environment.apiPrefix}/jobs/`, { params: queryParams })
+                    .catch(e => {
+                        console.log('Poll error', e); return Observable.throw(e);
+                    })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())).catch(e => {
-                            console.log('Poll error', e); return Observable.throw(e);
-                        }));
+                        .startWith(ApiResults.transformer(data.json())));
             };
             return getData();
         }

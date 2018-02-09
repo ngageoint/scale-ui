@@ -954,7 +954,7 @@ body .ui-tabview.ui-tabview-left .ui-tabview-nav,
 body .ui-tabview.ui-tabview-right .ui-tabview-nav {
     padding: 0;
     border: 0 none;
-    background: $clr-white;
+    background: $clr-app-background;
     -moz-border-radius: 0;
     -webkit-border-radius: 0;
     border-radius: 0;
@@ -1142,6 +1142,9 @@ body .ui-scrollpanel .ui-scrollpanel-track {
 }
 body .ui-scrollpanel .ui-scrollpanel-corner {
     background-color: #f7f7f7;
+}
+body .ui-scrollpanel-hidden {
+    display: none;
 }
 body .ui-toolbar {
     padding: 0.375em 0.75em;

@@ -14,7 +14,7 @@ import {
     AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, CardModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
     DataTableModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MessagesModule,
     MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule, StepsModule,
-    ToggleButtonModule, TooltipModule, TreeTableModule
+    TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -141,7 +141,8 @@ import { LoadingIndicatorComponent } from './common/loading-indicator/component'
         SidebarModule,
         ToggleButtonModule,
         ScrollPanelModule,
-        OverlayPanelModule
+        OverlayPanelModule,
+        TabViewModule
     ],
     exports: [
         DataTableModule,

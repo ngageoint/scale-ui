@@ -56,5 +56,14 @@
             </p-scrollPanel>
         </div>
     </div>
-    <app-jobs [(jobs)]="jobsData" [(datatableOptions)]="jobsDatatableOptions" [isChild]="true" (datatableChange)="onJobsDatatableChange($event)"></app-jobs>
+    <div class="ui-g margin-top-md">
+        <div class="ui-g-12">
+            <p-tabView>
+                <p-tabPanel header="Jobs">
+                    <app-jobs [(jobs)]="jobsData" [(datatableOptions)]="jobsDatatableOptions" [isChild]="true"
+                              (datatableChange)="onJobsDatatableChange($event)"></app-jobs>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
 </div>

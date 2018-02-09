@@ -44,9 +44,8 @@ export class SourcesApiService {
             order: sortStr,
             page: page,
             page_size: params.rows,
-            // would be params.started and params.ended if date controls were placed on source jobs datatable
-            started: null,
-            ended: null,
+            started: params.started,
+            ended: params.ended,
             status: params.status,
             job_id: params.job_id,
             job_type_id: params.job_type_id,

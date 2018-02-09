@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -6,13 +6,15 @@ import * as moment from 'moment';
 import { MetricsApiService } from './api.service';
 import { ChartService } from './chart.service';
 import { DataService } from '../../data.service';
+import { UIChart } from 'primeng/primeng';
 
 @Component({
     selector: 'app-metrics',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class MetricsComponent implements OnInit {
+export class MetricsComponent implements OnInit, AfterViewInit {
+    @ViewChild('chart') chart: UIChart;
     started = moment.utc().subtract(1, 'M').startOf('d').format('YYYY-MM-DD');
     ended = moment.utc().startOf('d').format('YYYY-MM-DD');
     availableDataTypes: SelectItem[] = [];
@@ -205,11 +207,19 @@ export class MetricsComponent implements OnInit {
                         stacked: true
                     }],
                     yAxes: yAxes
-                }
+                },
+                maintainAspectRatio: false
             };
         });
     }
+
     ngOnInit() {
         this.getDataTypes();
+    }
+
+    ngAfterViewInit() {
+        if (this.chart.chart) {
+            this.chart.chart.canvas.parentNode.style.height = '85vh';
+        }
     }
 }
