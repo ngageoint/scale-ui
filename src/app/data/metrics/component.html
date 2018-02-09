@@ -3,8 +3,11 @@
     <div *ngIf="columns.length === 0">
         Open the <a (click)="showFilters = true">filters dialog</a> to select a data source.
     </div>
-    <div [hidden]="!data">
-        <p-chart #chart type="bar" [data]="data" [options]="options"></p-chart>
+    <div [hidden]="!showChart">
+        <div class="scale-chart-container">
+            <app-loading-indicator [loading]="chartLoading"></app-loading-indicator>
+            <p-chart #chart type="bar" [data]="data" [options]="options"></p-chart>
+        </div>
     </div>
 
     <button pButton type="button" class="ui-button-primary metrics__filter-toggle" icon="fa-filter"
@@ -17,8 +20,14 @@
         <label>To</label>
         <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         <label>Data Source</label>
+        <div class="metrics__filter-loading" *ngIf="dataTypesLoading">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
         <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType" (onChange)="changeDataTypeSelection()"
-                    [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select..."></p-dropdown>
+                    [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading"></p-dropdown>
+        <div class="metrics__filter-loading" *ngIf="filteredChoicesLoading">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
         <div *ngIf="filteredChoicesOptions.length > 0">
             <label>{{dataTypeFilterText}}</label>
             <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" [style]="{'width':'100%'}"></p-multiSelect><br />

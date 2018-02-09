@@ -15,15 +15,19 @@ import { UIChart } from 'primeng/primeng';
 })
 export class MetricsComponent implements OnInit, AfterViewInit {
     @ViewChild('chart') chart: UIChart;
+    chartLoading: boolean;
+    showChart: boolean;
     started = moment.utc().subtract(1, 'M').startOf('d').format('YYYY-MM-DD');
     ended = moment.utc().startOf('d').format('YYYY-MM-DD');
     availableDataTypes: SelectItem[] = [];
+    dataTypesLoading: boolean;
     selectedDataType: any;
     filtersApplied: any[] = [];
     selectedDataTypeOptions: any[] = [];
     dataTypeFilterText = '';
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
+    filteredChoicesLoading: boolean;
     columns: any[] = [];
     metricOptions: SelectItem[] = [];
     selectedMetric1: any;
@@ -50,17 +54,24 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
 
     getDataTypes() {
+        this.dataTypesLoading = true;
         this.metricsApiService.getDataTypes().then((data) => {
+            this.dataTypesLoading = false;
             _.forEach(data.results, (result) => {
                 this.availableDataTypes.push({
                     label: result.title,
                     value: result
                 });
             });
-        });
+        }).catch(e => {
+            console.log(e);
+            this.dataTypesLoading = false;
+        })
     }
     getDataTypeOptions() {
+        this.filteredChoicesLoading = true;
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).then((result) => {
+            this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
@@ -89,6 +100,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 label: 'None',
                 value: null
             });
+        }).catch(e => {
+            console.log(e);
+            this.filteredChoicesLoading = false;
         });
     }
     onStartSelect(e) {
@@ -115,6 +129,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
     }
     updateChart() {
+        this.showChart = true;
+        this.chartLoading = true;
         this.showFilters = false;
         const yAxes = [{
             id: 'yAxis1',
@@ -210,7 +226,11 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 },
                 maintainAspectRatio: false
             };
-        });
+            this.chartLoading = false;
+        }).catch(e => {
+            console.log(e);
+            this.chartLoading = false;
+        })
     }
 
     ngOnInit() {
