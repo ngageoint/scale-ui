@@ -22,6 +22,7 @@ import { RecipeTypeDefinition } from './definition.model';
 export class RecipeTypesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    loadingRecipeType: boolean;
     recipeTypeId: number;
     jobTypes: any;
     recipeTypes: SelectItem[];
@@ -93,8 +94,13 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     private getRecipeTypeDetail(id: number) {
+        this.loadingRecipeType = true;
         this.recipeTypesApiService.getRecipeType(id).then(data => {
+            this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
+        }).catch(e => {
+            console.log(e);
+            this.loadingRecipeType = false;
         });
     }
 
@@ -110,6 +116,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         // get job type detail in order to obtain the interface
         this.jobTypesApiService.getJobType(jobType.id).then(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+            if (!recipeData.job_types) {
+                recipeData.job_types = [];
+            }
             recipeData.definition.jobs.push({
                 dependencies: [],
                 job_type: {

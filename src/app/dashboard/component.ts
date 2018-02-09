@@ -12,8 +12,7 @@ import { ColorService } from '../color.service';
     styleUrls: ['./component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-    chartLoadingFavs: boolean;
-    chartLoadingAll: boolean;
+    loadingJobTypes: boolean;
     subscription: any;
     allJobTypes: any[];
     favoriteJobTypes: any[];
@@ -58,8 +57,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
-        this.chartLoadingFavs = true;
-        this.chartLoadingAll = true;
         this.refreshAllJobTypes();
         this.jobsService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
@@ -105,8 +102,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private refreshAllJobTypes() {
-        this.chartLoadingFavs = true;
-        this.chartLoadingAll = true;
+        this.loadingJobTypes = true;
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
             this.allJobTypes = data.results;
@@ -119,18 +115,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             });
             this.favoriteJobTypes = favs;
+            this.loadingJobTypes = false;
 
             const totalJobStats = this.generateStats(data.results);
             this.totalAll = totalJobStats.total;
             this.failedAll = totalJobStats.failed;
             this.dataAll = totalJobStats.chartData;
-            this.chartLoadingAll = false;
 
             const favoriteJobStats = this.generateStats(this.favoriteJobTypes);
             this.totalFavs = favoriteJobStats.total;
             this.failedFavs = favoriteJobStats.failed;
             this.dataFavs = favoriteJobStats.chartData;
-            this.chartLoadingFavs = false;
 
             this.dataFeedChartTitle = 'Data Feed';
             this.dataFeedChartTitle = favs.length > 0 ?

@@ -2,7 +2,7 @@
     <div class="ui-g">
         <div class="ui-g-3">
             <p-panel header="Favorites ({{ favoriteJobTypes.length }})" [style]="{height: '444px'}">
-                <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding"
+                <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
                              [scrollable]="true" scrollHeight="295px"
                              emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
                     <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
@@ -26,7 +26,7 @@
                     <h3>Favorites</h3>
                     <h4 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0">{{ failedFavs }} Failure(s) / {{ totalFavs }} Total</h4>
                     <div class="scale-chart-container">
-                        <app-loading-indicator [loading]="chartLoadingFavs"></app-loading-indicator>
+                        <app-loading-indicator [loading]="loadingJobTypes"></app-loading-indicator>
                         <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
                                  *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0"></p-chart>
                     </div>
@@ -34,11 +34,11 @@
                     <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
                 <hr />
-                <div class="dashboard__error-chart" *ngIf="dataAll">
+                <div class="dashboard__error-chart">
                     <h3>All Job Types</h3>
                     <h4 *ngIf="allJobTypes.length > 0 && failedAll > 0">{{ failedAll }} Failure(s) / {{ totalAll }} Total</h4>
                     <div class="scale-chart-container">
-                        <app-loading-indicator [loading]="chartLoadingAll"></app-loading-indicator>
+                        <app-loading-indicator [loading]="loadingJobTypes"></app-loading-indicator>
                         <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"
                                  *ngIf="allJobTypes.length > 0 && failedAll > 0"></p-chart>
                     </div>
@@ -56,7 +56,7 @@
                         <span><strong>Job Types ({{ allJobTypes.length }})</strong></span>
                     </div>
                 </p-header>
-                <p-dataTable [value]="allJobTypes" styleClass="nopadding"
+                <p-dataTable [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
                              [scrollable]="true" scrollHeight="571px">
                     <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
                         <ng-template let-col let-item="rowData" pTemplate="body">
@@ -67,7 +67,7 @@
             </p-panel>
         </div>
         <div class="ui-g-9">
-            <div class="charts" *ngIf="allJobTypes.length > 0">
+            <div class="charts">
                 <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
                     <app-job-history></app-job-history>
                 </p-panel>
