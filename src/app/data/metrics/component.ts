@@ -66,7 +66,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }).catch(e => {
             console.log(e);
             this.dataTypesLoading = false;
-        })
+        });
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
@@ -230,7 +230,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }).catch(e => {
             console.log(e);
             this.chartLoading = false;
-        })
+        });
     }
 
     ngOnInit() {
