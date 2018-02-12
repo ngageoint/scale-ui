@@ -52,8 +52,8 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
                     moment.duration(moment.utc(data.event.occurred).diff(moment.utc())).humanize(true) :
                     '';
                 const now = moment.utc();
-                const lastStatus = moment.utc(this.job.last_status_change);
-                this.jobStatus = `${_.capitalize(this.job.status)} ${lastStatus.from(now)}`;
+                const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
+                this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
                 this.options = {
                     elements: {
                         font: 'Roboto'
