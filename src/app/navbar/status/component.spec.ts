@@ -1,8 +1,9 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpModule } from '@angular/http';
 
-import { StatusComponent } from './status.component';
-
+import { StatusApiService } from './api.service';
+import { StatusComponent } from './component';
 
 describe('StatusComponent', () => {
     let component: StatusComponent;
@@ -11,6 +12,8 @@ describe('StatusComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [StatusComponent],
+            imports: [HttpModule],
+            providers: [StatusApiService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })

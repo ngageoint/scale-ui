@@ -38,7 +38,7 @@ import { JobTypesImportComponent } from './configuration/job-types/import.compon
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { RecipeTypesApiService } from './configuration/recipe-types/api.service';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
-import { StatusComponent } from './navbar/status/status.component';
+import { StatusComponent } from './navbar/status/component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { JobTypeItemComponent } from './dashboard/job-type-item/component';
@@ -67,6 +67,7 @@ import { DataFeedComponent } from './dashboard/data-feed/component';
 import { IngestComponent } from './data/ingest/component';
 import { IngestApiService } from './data/ingest/api.service';
 import { LoadingIndicatorComponent } from './common/loading-indicator/component';
+import { StatusApiService } from './navbar/status/api.service';
 
 
 @NgModule({
@@ -168,7 +169,8 @@ import { LoadingIndicatorComponent } from './common/loading-indicator/component'
         RunningJobsApiService,
         RunningJobsDatatableService,
         LogViewerApiService,
-        IngestApiService
+        IngestApiService,
+        StatusApiService
     ],
     bootstrap: [AppComponent]
 })

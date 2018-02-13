@@ -22,6 +22,7 @@ const metricsPlotData = require('./handlers/metricsPlotData');
 const jobExecutionLogs = require('./handlers/jobExecutionLogs');
 const jobExecution = require('./handlers/jobExecution');
 const ingestsStatus = require('./handlers/ingestsStatus');
+const status = require('./handlers/status');
 
 module.exports = {
     init: function(server) {
@@ -179,6 +180,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/ingests/status/',
             handler: ingestsStatus
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/status/',
+            handler: status
         });
     }
 };
