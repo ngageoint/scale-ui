@@ -1,19 +1,25 @@
 import { Component, OnInit } from '@angular/core';
-
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
     selector: 'app-navbar',
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss']
 })
+
 export class NavbarComponent implements OnInit {
+    selectedId = null;
+    subscription: any;
+    msgs: any = [];
 
-    private selectedId = null;
-
-    constructor() {
-    }
+    constructor(
+        private messageService: MessageService
+    ) {}
 
     ngOnInit() {
+        this.subscription = this.messageService.messageObserver.subscribe(data => {
+            this.msgs.push(data);
+        });
     }
 
     selectNavItem(event, itemId) {

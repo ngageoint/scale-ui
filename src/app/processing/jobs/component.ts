@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -46,7 +47,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         private jobsApiService: JobsApiService,
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private messageService: MessageService
     ) {
         this.isInitialized = false;
         this.statusValues = [{
@@ -93,6 +95,9 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.datatableLoading = false;
             this.count = data.count;
             this.jobs = Job.transformer(data.results);
+        }, err => {
+            this.datatableLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
         });
     }
     private updateOptions() {
@@ -134,6 +139,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                 value: ''
             });
             this.updateOptions();
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
     }
 
@@ -206,9 +213,9 @@ export class JobsComponent implements OnInit, OnDestroy {
         job.status = 'CANCEL';
         this.jobsApiService.updateJob(job.id, { status: 'CANCELED' }).then(() => {
             job.status = 'CANCELED';
-        }, function (err) {
-            console.log(err);
+        }, err => {
             job.status = originalStatus;
+            this.messageService.add({severity: 'error', summary: 'Error canceling job', detail: err.statusText});
         });
     }
     requeueJobs(jobsParams) {
@@ -217,8 +224,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
         this.jobsApiService.requeueJobs(jobsParams).then(() => {
             this.updateData();
-        }, (err) => {
-            console.log(err);
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
         });
     }
     showLog(job: Job) {
@@ -227,7 +234,11 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.jobsApiService.getJobExecution(jobExecution.id).then((result) => {
                 this.selectedJobExecution = result;
                 this.logDisplay = true;
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving log', detail: err.statusText});
             });
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving log', detail: err.statusText});
         });
     }
     ngOnInit() {

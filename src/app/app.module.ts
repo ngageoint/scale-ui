@@ -12,10 +12,11 @@ import { SeedImagesModule } from 'seed-images';
 // Prime NG
 import {
     AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, CardModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
-    DataTableModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MessagesModule,
-    MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule, StepsModule,
-    TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
+    DataTableModule, DialogModule, DropdownModule, GrowlModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule,
+    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
+    StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -143,7 +144,8 @@ import { StatusApiService } from './navbar/status/api.service';
         ToggleButtonModule,
         ScrollPanelModule,
         OverlayPanelModule,
-        TabViewModule
+        TabViewModule,
+        GrowlModule
     ],
     exports: [
         DataTableModule,
@@ -151,6 +153,7 @@ import { StatusApiService } from './navbar/status/api.service';
         PaginatorModule
     ],
     providers: [
+        MessageService,
         JobsApiService,
         JobsDatatableService,
         JobTypesApiService,

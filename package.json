@@ -57,6 +57,7 @@
         "@types/jasmine": "^2.8.2",
         "@types/jasminewd2": "^2.0.3",
         "@types/node": "^8.0.58",
+        "boom": "^7.1.1",
         "codelyzer": "^4.0.2",
         "hapi": "^16.5.2",
         "jasmine-core": "^2.8.0",
