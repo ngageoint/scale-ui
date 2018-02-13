@@ -41,12 +41,12 @@ export class JobsApiService {
         if (poll) {
             const getData = () => {
                 return this.http.get(`${environment.apiPrefix}/jobs/`, { params: queryParams })
-                    .catch(e => {
-                        return Observable.throw(e);
-                    })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())));
+                        .startWith(ApiResults.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }
