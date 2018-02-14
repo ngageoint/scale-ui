@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -35,6 +36,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     private FEED_DATA = 'scale.dashboard.selectedDataFeed';
 
     constructor(
+        private messageService: MessageService,
         private ingestApiService: IngestApiService,
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
@@ -134,6 +136,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.updateFeedData();
                 this.chartLoading = false;
             });
+        }, err => {
+            this.chartLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving ingest status', detail: err.statusText});
         });
     }
 

@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 import { ApiResults } from '../../api-results.model';
 import { RecipesDatatable } from './datatable.model';
@@ -33,7 +35,10 @@ export class RecipesApiService {
                 return this.http.get(`${environment.apiPrefix}/recipes/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())));
+                        .startWith(ApiResults.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }
@@ -49,7 +54,10 @@ export class RecipesApiService {
                 return this.http.get(`${environment.apiPrefix}/recipes/${id}/`)
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
-                        .startWith(Recipe.transformer(data.json())));
+                        .startWith(Recipe.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }

@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -26,7 +27,8 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
     constructor(
         private colorService: ColorService,
         private jobsApiService: JobsApiService,
-        private jobsService: DashboardJobsService
+        private jobsService: DashboardJobsService,
+        private messageService: MessageService
     ) {}
 
     private updateData() {
@@ -74,6 +76,9 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
                     });
                 });
             });
+        }, err => {
+            this.chartLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job load', detail: err.statusText});
         });
     }
 

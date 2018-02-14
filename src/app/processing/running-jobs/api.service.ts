@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 import { ApiResults } from '../../api-results.model';
 import { RunningJobsDatatable } from './datatable.model';
@@ -24,7 +26,10 @@ export class RunningJobsApiService {
                 return this.http.get(`${environment.apiPrefix}/job-types/running/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())));
+                        .startWith(ApiResults.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }

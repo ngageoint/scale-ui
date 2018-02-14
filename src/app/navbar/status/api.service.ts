@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
@@ -17,7 +19,10 @@ export class StatusApiService {
                 return this.http.get(`${environment.apiPrefix}/status/`)
                     .switchMap((data) => Observable.timer(300000) // 5 minutes
                         .switchMap(() => getData())
-                        .startWith(data.json()));
+                        .startWith(data.json()))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }

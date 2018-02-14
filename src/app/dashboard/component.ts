@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
@@ -28,6 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     activityChartTitle: string;
 
     constructor(
+        private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
         private jobsService: DashboardJobsService,
         private colorService: ColorService
@@ -139,6 +141,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.activityChartTitle = favs.length > 0 ?
                 `${this.activityChartTitle} (Favorites)` :
                 `${this.activityChartTitle} (All Job Types)`;
+        }, err => {
+            this.loadingJobTypes = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});
         });
     }
 }

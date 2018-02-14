@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
@@ -19,7 +20,7 @@ describe('RunningJobsComponent', () => {
             declarations: [RunningJobsComponent],
             imports: [HttpModule],
             providers: [
-                RunningJobsApiService, RunningJobsDatatableService, JobsDatatableService,
+                MessageService, RunningJobsApiService, RunningJobsDatatableService, JobsDatatableService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

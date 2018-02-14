@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 import { ApiResults } from '../../api-results.model';
 import { JobType } from './api.model';
@@ -67,7 +69,10 @@ export class JobTypesApiService {
                 return this.http.get(`${environment.apiPrefix}/job-types/status/`)
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())));
+                        .startWith(ApiResults.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }

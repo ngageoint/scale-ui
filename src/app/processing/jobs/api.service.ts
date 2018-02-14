@@ -86,7 +86,10 @@ export class JobsApiService {
                 return this.http.get(`${environment.apiPrefix}/load/`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())));
+                        .startWith(ApiResults.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
             };
             return getData();
         }

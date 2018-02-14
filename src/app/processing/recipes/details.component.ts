@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { RecipesApiService } from './api.service';
@@ -15,6 +16,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     subscription: any;
 
     constructor(
+        private messageService: MessageService,
         private route: ActivatedRoute,
         private recipesApiService: RecipesApiService
     ) { }
@@ -48,6 +50,8 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                 });
                 // build recipe type details with revision definition and adjusted job types
                 this.recipeType.job_types = jobTypes;
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving recipe', detail: err.statusText});
             });
         }
     }

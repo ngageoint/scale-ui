@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -33,6 +34,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     subscription: any;
 
     constructor(
+        private messageService: MessageService,
         private recipesDatatableService: RecipesDatatableService,
         private recipesApiService: RecipesApiService,
         private recipeTypesApiService: RecipeTypesApiService,
@@ -50,6 +52,9 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.datatableLoading = false;
             this.count = data.count;
             this.recipes = Recipe.transformer(data.results);
+        }, err => {
+            this.datatableLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipes', detail: err.statusText});
         });
     }
     private updateOptions() {

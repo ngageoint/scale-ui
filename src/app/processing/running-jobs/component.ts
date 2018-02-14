@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
 
@@ -26,6 +27,7 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
     subscription: any;
 
     constructor(
+        private messageService: MessageService,
         private runningJobsDatatableService: RunningJobsDatatableService,
         private runningJobsApiService: RunningJobsApiService,
         private jobsDatatableService: JobsDatatableService,
@@ -43,6 +45,9 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
             this.datatableLoading = false;
             this.count = data.count;
             this.runningJobs = RunningJob.transformer(data.results);
+        }, err => {
+            this.datatableLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving running jobs', detail: err.statusText});
         });
     }
     private updateOptions() {

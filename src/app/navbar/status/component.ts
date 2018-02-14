@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { StatusApiService } from './api.service';
 
@@ -16,6 +17,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     pctDisk: number;
 
     constructor(
+        private messageService: MessageService,
         private statusApiService: StatusApiService
     ) { }
 
@@ -55,6 +57,9 @@ export class StatusComponent implements OnInit, OnDestroy {
             this.pctCpu = this.getCpuUsage();
             this.pctMem = this.getMemUsage();
             this.pctDisk = this.getDiskUsage();
+        }, err => {
+            this.loading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving system status', detail: err.statusText});
         });
     }
 

@@ -1,5 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
@@ -16,7 +17,7 @@ describe('DashboardComponent', () => {
         TestBed.configureTestingModule({
             declarations: [DashboardComponent],
             imports: [HttpModule],
-            providers: [JobTypesApiService, DashboardJobsService, ColorService],
+            providers: [MessageService, JobTypesApiService, DashboardJobsService, ColorService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
