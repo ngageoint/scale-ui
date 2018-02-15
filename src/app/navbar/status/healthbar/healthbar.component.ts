@@ -18,6 +18,6 @@ export class HealthbarComponent implements OnInit {
         if (this.percentage) {
             return `${100 - this.percentage}%`;
         }
-        return '0%';
+        return '100%';
     }
 }
