@@ -18,7 +18,7 @@ import { SourcesDatatableService } from './datatable.service';
 export class SourcesComponent implements OnInit {
     datatableOptions: SourcesDatatable;
     datatableLoading: boolean;
-    sources: Source[];
+    sources: any;
     first: number;
     count: number;
     started: string = moment.utc().subtract(1, 'd').format('YYYY-MM-DD');
@@ -51,7 +51,7 @@ export class SourcesComponent implements OnInit {
         this.sourcesApiService.getSources(this.datatableOptions).then(data => {
             this.datatableLoading = false;
             this.count = data.count;
-            this.sources = data.results as Source[];
+            this.sources = Source.transformer(data.results);
         });
     }
     private updateOptions() {

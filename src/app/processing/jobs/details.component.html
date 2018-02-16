@@ -37,7 +37,7 @@
                         <tr><td>Last Updated:</td><td>{{ job.last_modified_formatted }}</td></tr>
                         <tr><td>Num Executions:</td><td>{{ job.num_exes }}</td></tr>
                         <tr><td>Max Tries:</td><td>{{ job.max_tries }}</td></tr>
-                        <tr *ngIf="job.timeout"><td>Timeout:</td><td>{{ job.timeout }} seconds</td></tr>
+                        <tr *ngIf="job.timeout"><td>Timeout:</td><td>{{ job.timeout_formatted }}</td></tr>
                         </tbody>
                     </table>
                 </div>

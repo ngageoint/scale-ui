@@ -1,4 +1,9 @@
+import { DataService } from '../../data.service';
+
 export class Source {
+    dataService: DataService;
+    file_size_formatted: string;
+
     private static build(data) {
         if (data) {
             return new Source(
@@ -55,5 +60,8 @@ export class Source {
         public last_modified: string,
         public is_parsed: boolean,
         public parsed: string
-    ) {}
+    ) {
+        this.dataService = new DataService();
+        this.file_size_formatted = this.dataService.calculateFileSizeFromBytes(this.file_size, 0);
+    }
 }

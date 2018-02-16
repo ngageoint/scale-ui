@@ -8,6 +8,7 @@ export class Job {
     created_formatted: string;
     last_modified_formatted: string;
     duration: string;
+    timeout_formatted: string;
 
     private static build(data) {
         if (data) {
@@ -104,5 +105,8 @@ export class Job {
         this.duration = this.started && this.ended ?
             this.dataService.calculateDuration(this.started, this.ended) :
             null;
+        this.timeout_formatted = this.timeout ?
+            this.dataService.calculateDuration(moment.utc().toISOString(), moment.utc().add(this.timeout, 's').toISOString()) :
+            'Unknown';
     }
 }
