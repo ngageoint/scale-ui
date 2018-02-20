@@ -16,6 +16,7 @@ import {
     MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
     StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
+import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -145,7 +146,8 @@ import { StatusApiService } from './navbar/status/api.service';
         ScrollPanelModule,
         OverlayPanelModule,
         TabViewModule,
-        GrowlModule
+        GrowlModule,
+        TableModule
     ],
     exports: [
         DataTableModule,

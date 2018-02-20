@@ -26,6 +26,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Output() datatableChange = new EventEmitter<JobsDatatable>();
 
     datatableLoading: boolean;
+    columns: any[];
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
@@ -51,6 +52,16 @@ export class JobsComponent implements OnInit, OnDestroy {
         private messageService: MessageService
     ) {
         this.isInitialized = false;
+        this.columns = [
+            { field: 'job_type.name', header: 'Job Type' },
+            { field: 'created', header: 'Created (Z)' },
+            { field: 'last_modified', header: 'Last Modified (Z)' },
+            { field: 'duration', header: 'Duration' },
+            { field: 'status', header: 'Status' },
+            { field: 'error.category', header: 'Error Category' },
+            { field: 'error.title', header: 'Error' },
+            { field: 'id', header: 'Log' }
+        ];
         this.statusValues = [{
             label: 'View All',
             value: ''

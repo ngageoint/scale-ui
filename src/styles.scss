@@ -19,12 +19,16 @@ h2:first-of-type {
     margin: 3px 0;
 }
 
-a:not(.ui-button) {
+a:not(.ui-button, .ui-paginator) {
     color: $clr-blue-lgt;
 
     &:hover {
         color: $clr-blue-drk;
     }
+}
+
+.column-filter {
+    width: 100%;
 }
 
 .scale-chart-container {

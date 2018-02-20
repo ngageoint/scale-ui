@@ -1,24 +1,34 @@
-.ui-steps .ui-steps-item {
-    float: none;
+//.ui-steps .ui-steps-item {
+//    float: none;
+//}
+//.ui-message {
+//    margin: 0;
+//}
+//.ui-accordion .ui-accordion-header a {
+//    text-decoration: none;
+//}
+//.ui-accordion .ui-accordion-header.ui-state-active {
+//    background: #f6f7f9;
+//    border-color: #d9d9d9;
+//    border-radius: 3px;
+//}
+.ui-table .ui-table-thead>tr>th,
+.ui-table .ui-table-tbody>tr>td,
+.ui-table .ui-table-tfoot>tr>td {
+    padding: .4em .5em;
 }
-.ui-message {
-    margin: 0;
+
+.ui-scrollpanel-bar-x {
+    display: none;
 }
-.ui-accordion .ui-accordion-header a {
-    text-decoration: none;
-}
-.ui-accordion .ui-accordion-header.ui-state-active {
-    background: #f6f7f9;
-    border-color: #d9d9d9;
-    border-radius: 3px;
-}
+
 .CodeMirror {
     height: auto;
 }
 
-.nopadding .ui-datatable-data > tr > td {
-    padding: 0;
-}
+//.nopadding .ui-datatable-data > tr > td {
+//    padding: 0;
+//}
 
 .angular-utc-datepicker_button {
     padding: 6px !important;
@@ -26,6 +36,6 @@
     border-radius: 0;
 }
 
-.ui-datatable table {
-    table-layout: auto;
-}
+//.ui-datatable table {
+//    table-layout: auto;
+//}
