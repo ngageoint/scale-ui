@@ -154,7 +154,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
     onClick(e) {
         e.stopPropagation();
-        console.log(e);
     }
     ngOnInit() {
         this.datatableLoading = true;

@@ -1,8 +1,10 @@
 import { DataService } from '../../data.service';
+import * as moment from 'moment';
 
 export class Source {
     dataService: DataService;
     file_size_formatted: string;
+    last_modified_formatted: string;
 
     private static build(data) {
         if (data) {
@@ -63,5 +65,6 @@ export class Source {
     ) {
         this.dataService = new DataService();
         this.file_size_formatted = this.dataService.calculateFileSizeFromBytes(this.file_size, 0);
+        this.last_modified_formatted = moment.utc(this.last_modified).format('YYYY-MM-DD HH:mm:ss');
     }
 }

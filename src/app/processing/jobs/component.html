@@ -27,7 +27,7 @@
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type.name'">
                     <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" appendTo="body">
+                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body">
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
                         </ng-template>
@@ -35,12 +35,13 @@
                 </div>
                 <div *ngSwitchCase="'status'">
                     <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" (onChange)="onStatusChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" appendTo="body"></p-dropdown>
+                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"></p-dropdown>
                 </div>
                 <div *ngSwitchCase="'error.category'">
                     <ng-template pTemplate="filter">
-                        <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory" (onChange)="onErrorCategoryChange($event)"
-                                    [autoWidth]="false" styleClass="column-filter" appendTo="body"></p-dropdown>
+                        <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
+                                    (onChange)="onErrorCategoryChange($event)" [autoWidth]="false" styleClass="column-filter"
+                                    (click)="onFilterClick($event)" appendTo="body"></p-dropdown>
                     </ng-template>
                 </div>
             </th>

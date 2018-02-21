@@ -252,6 +252,9 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving log', detail: err.statusText});
         });
     }
+    onFilterClick(e) {
+        e.stopPropagation();
+    }
     ngOnInit() {
         this.datatableLoading = true;
         if (!this.datatableOptions) {

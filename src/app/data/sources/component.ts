@@ -18,6 +18,7 @@ import { SourcesDatatableService } from './datatable.service';
 export class SourcesComponent implements OnInit {
     datatableOptions: SourcesDatatable;
     datatableLoading: boolean;
+    columns: any[];
     sources: any;
     first: number;
     count: number;
@@ -33,6 +34,14 @@ export class SourcesComponent implements OnInit {
         private route: ActivatedRoute
     ) {
         this.isInitialized = false;
+        this.columns = [
+            { field: 'file_name', header: 'File Name' },
+            { field: 'file_size_formatted', header: 'File Size' },
+            { field: 'data_started', header: 'Data Started' },
+            { field: 'data_ended', header: 'Data Ended' },
+            { field: 'countries', header: 'Countries' },
+            { field: 'last_modified_formatted', header: 'Last Modified (Z)' }
+        ];
         this.timeFieldOptions = [
             {
                 label: 'Data',
@@ -114,6 +123,9 @@ export class SourcesComponent implements OnInit {
             time_field: e.value
         });
         this.updateOptions();
+    }
+    onFilterClick(e) {
+        e.stopPropagation();
     }
     ngOnInit() {
         this.datatableLoading = true;
