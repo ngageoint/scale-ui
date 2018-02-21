@@ -21,6 +21,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 export class RecipesComponent implements OnInit, OnDestroy {
     datatableOptions: RecipesDatatable;
     datatableLoading: boolean;
+    columns: any[];
     recipes: any;
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
@@ -41,6 +42,13 @@ export class RecipesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute
     ) {
+        this.columns = [
+            { field: 'recipe_type.name', header: 'Recipe Type' },
+            { field: 'created', header: 'Created (Z)' },
+            { field: 'last_modified', header: 'Last Modified (Z)' },
+            { field: 'duration', header: 'Duration' },
+            { field: 'completed', header: 'Completed (Z)' }
+        ];
         this.isInitialized = false;
         this.datatableOptions = recipesDatatableService.getRecipesDatatableOptions();
     }
@@ -143,6 +151,10 @@ export class RecipesComponent implements OnInit, OnDestroy {
             ended: moment.utc(e, 'YYYY-MM-DD').toISOString()
         });
         this.updateOptions();
+    }
+    onClick(e) {
+        e.stopPropagation();
+        console.log(e);
     }
     ngOnInit() {
         this.datatableLoading = true;

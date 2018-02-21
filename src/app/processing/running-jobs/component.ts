@@ -19,6 +19,7 @@ import { JobsDatatableService } from '../jobs/datatable.service';
 export class RunningJobsComponent implements OnInit, OnDestroy {
     datatableOptions: RunningJobsDatatable;
     datatableLoading: boolean;
+    columns: any[];
     runningJobs: any;
     selectedJob: RunningJob;
     first: number;
@@ -34,6 +35,11 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute
     ) {
+        this.columns = [
+            { field: 'job_type.name', header: 'Job Type' },
+            { field: 'count', header: 'Number of Jobs' },
+            { field: 'longest_running_duration', header: 'Duration of Longest Running Job' }
+        ];
         this.isInitialized = false;
         this.datatableOptions = this.runningJobsDatatableService.getRunningJobsDatatableOptions();
     }
@@ -64,6 +70,9 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         this.updateData();
     }
 
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
     unsubscribe() {
         if (this.subscription) {
             this.subscription.unsubscribe();
