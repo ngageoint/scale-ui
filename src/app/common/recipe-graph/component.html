@@ -123,13 +123,24 @@
 </div>
 <p-sidebar [(visible)]="sidebarDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
     <h2>{{ sidebarTitle }}</h2>
-    <p-dataTable [value]="options" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'" [rowHover]="true">
-        <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
-            <ng-template let-option="rowData" pTemplate="body">
-                <div (click)="optionClick(option)">
-                    <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span> {{ option.title }} v{{ option.version }}
-                </div>
-            </ng-template>
-        </p-column>
-    </p-dataTable>
+    <p-table [columns]="columns" [value]="options" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'"
+             [rowHover]="true" #datatable>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                           class="column-filter">
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td>
+                    <div (click)="optionClick(rowData)">
+                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span> {{ rowData.title }} v{{ rowData.version }}
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
 </p-sidebar>

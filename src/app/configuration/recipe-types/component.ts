@@ -22,6 +22,7 @@ import { RecipeTypeDefinition } from './definition.model';
 export class RecipeTypesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    columns: any[];
     loadingRecipeType: boolean;
     recipeTypeId: number;
     jobTypes: any;
@@ -40,6 +41,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute
     ) {
+        this.columns = [
+            { field: 'title', header: 'Title', filterMatchMode: 'contains' }
+        ];
         if (this.router.events) {
             this.routerEvents = this.router.events
                 .filter((event) => event instanceof NavigationEnd)

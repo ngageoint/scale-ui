@@ -14,6 +14,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
 
+    columns: any[];
     scrollHeight: number;
     sidebarDisplay: boolean;
     sidebarTitle: string;
@@ -31,6 +32,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         private colorService: ColorService,
         private dataService: DataService
     ) {
+        this.columns = [
+            { field: 'title', header: 'Title', filterMatchMode: 'contains' }
+        ];
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;

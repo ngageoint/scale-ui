@@ -1,17 +1,40 @@
 <div class="dashboard">
     <div class="ui-g">
-        <div class="ui-g-3">
-            <p-panel header="Favorites ({{ favoriteJobTypes.length }})" [style]="{height: '444px'}">
-                <p-dataTable [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
-                             [scrollable]="true" scrollHeight="295px"
-                             emptyMessage="You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list for quick access.">
-                    <p-column field="title" [sortable]="false" [filter]="true" filterMatchMode="contains">
-                        <ng-template let-col let-item="rowData" pTemplate="body">
-                            <app-job-type-item [item]="item"></app-job-type-item>
+        <div class="ui-g-3 dashboard__favs-container">
+            <p-scrollPanel styleClass="scale-panel">
+                <div class="scale-panel__title">
+                    <span class="ui-panel-title">Favorites ({{ favoriteJobTypes.length }})</span>
+                </div>
+                <div class="scale-panel__body">
+                    <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
+                             #datatable>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr *ngIf="favoriteJobTypes.length > 0">
+                                <th *ngFor="let col of columns">
+                                    <input pInputText type="text"
+                                           (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                           class="column-filter">
+                                </th>
+                            </tr>
                         </ng-template>
-                    </p-column>
-                </p-dataTable>
-            </p-panel>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td>
+                                    <app-job-type-item [item]="rowData"></app-job-type-item>
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="columns.length">
+                                    You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list
+                                    for quick access.
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-scrollPanel>
         </div>
         <div class="ui-g-7">
             <div class="charts" *ngIf="allJobTypes.length > 0">
@@ -49,22 +72,31 @@
         </div>
     </div>
     <div class="ui-g">
-        <div class="ui-g-3">
-            <p-panel [style]="{height: '720px'}">
-                <p-header>
-                    <div class="dashboard__jobs-table">
-                        <span><strong>Job Types ({{ allJobTypes.length }})</strong></span>
-                    </div>
-                </p-header>
-                <p-dataTable [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
-                             [scrollable]="true" scrollHeight="571px">
-                    <p-column field="job_type.title" [sortable]="false" [filter]="true" filterMatchMode="contains">
-                        <ng-template let-col let-item="rowData" pTemplate="body">
-                            <app-job-type-item [item]="item"></app-job-type-item>
+        <div class="ui-g-3 dashboard__all-container">
+            <p-scrollPanel styleClass="scale-panel">
+                <div class="scale-panel__title">
+                    <span class="ui-panel-title">Job Types ({{ allJobTypes.length }})</span>
+                </div>
+                <div class="scale-panel__body">
+                    <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns">
+                                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                           class="column-filter">
+                                </th>
+                            </tr>
                         </ng-template>
-                    </p-column>
-                </p-dataTable>
-            </p-panel>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td>
+                                    <app-job-type-item [item]="rowData"></app-job-type-item>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-scrollPanel>
         </div>
         <div class="ui-g-9">
             <div class="charts">

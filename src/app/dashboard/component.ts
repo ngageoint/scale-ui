@@ -14,6 +14,8 @@ import { ColorService } from '../color.service';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     loadingJobTypes: boolean;
+    columnsFavs: any[];
+    columnsAll: any[];
     subscription: any;
     allJobTypes: any[];
     favoriteJobTypes: any[];
@@ -34,6 +36,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private jobsService: DashboardJobsService,
         private colorService: ColorService
     ) {
+        this.columnsFavs = [
+            { field: 'title', header: 'Title', filterMatchMode: 'contains' }
+        ];
+        this.columnsAll = [
+            { field: 'job_type.title', header: 'Title', filterMatchMode: 'contains' }
+        ];
         this.allJobTypes = [];
         this.favoriteJobTypes = [];
         this.pieChartOptions = {
