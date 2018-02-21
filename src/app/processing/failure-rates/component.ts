@@ -18,6 +18,7 @@ import { MetricsApiService } from '../../data/metrics/api.service';
 
 export class FailureRatesComponent implements OnInit {
     datatableOptions: FailureRatesDatatable;
+    columns: any[];
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJobType: JobType;
@@ -34,6 +35,11 @@ export class FailureRatesComponent implements OnInit {
     ) {
         this.selectedJobType = null;
         this.datatableOptions = this.failureRatesDatatableService.getFailureRatesDatatableOptions();
+        this.columns = [
+            { field: 'job_type.id', header: 'Job Type' },
+            { field: 'twentyfour_hours', header: '24 Hours' },
+            { field: 'fortyeight_hours', header: '48 Hours' }
+        ];
     }
 
     private formatData(data, numDays) {

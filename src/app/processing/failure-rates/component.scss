@@ -1,9 +1,5 @@
-::ng-deep body .ui-datatable .ui-datatable-data > tr > td {
-    padding: 0 .75em;
-}
+.fail-rate__table .ui-table {
 
-.ui-grid {
-    line-height: normal;
 }
 
 .label-container {
@@ -28,7 +24,7 @@ h4 {
     min-height: 20px;
     border: 1px solid #ccc;
     position: relative;
-    top: 3px;
+    top: 1px;
     overflow: hidden;
     margin: 0 5px 0 0;
 
