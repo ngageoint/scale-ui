@@ -14,8 +14,7 @@ export class ChartService {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
-    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, colors?: any[]): any {
-        colors = colors || [];
+    formatPlotResults(data: any, params: any, filtersApplied: any, title: string): any {
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -34,6 +33,7 @@ export class ChartService {
             let idx = 0;
             _.forEach(data.results, (result) => {
                 const colIdx = _.indexOf(params.column, result.column.name);
+                const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
                     valueArr = [];
                     colArr = [];
@@ -94,8 +94,8 @@ export class ChartService {
                             `${filter.title} ${result.column.title}`;
                         const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
                         const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
-                        const bgColor = colors.length > 0 ?
-                            this.colorService.getRgba(colors[idx % 2 === 0 ? 0 : 1], opacity) :
+                        const bgColor = colorObj ?
+                            this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
                         datasets.push({
                             yAxisID: `yAxis${idx + 1}`,
@@ -117,6 +117,7 @@ export class ChartService {
             let idx = 0;
             _.forEach(data.results, (result) => {
                 const colIdx = _.indexOf(params.column, result.column.name);
+                const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
                     valueArr = [];
                     // add result values to valueArr
@@ -134,7 +135,7 @@ export class ChartService {
                         stack: idx.toString(),
                         label: result.column.title + ' for all ' + title,
                         icon: null,
-                        backgroundColor: colors.length > 0 ? colors[idx % 2 === 0 ? 0 : 1] : this.randomColorGenerator(),
+                        backgroundColor: colorObj ? colorObj.color : this.randomColorGenerator(),
                         data: valueArr
                     });
 

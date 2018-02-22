@@ -104,6 +104,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             this.jobParams = {
                 choice_id: choiceIds,
                 column: ['completed_count'],
+                colors: [
+                    { column: 'completed_count', color: this.colorService.SCALE_BLUE2 }
+                ],
                 dataType: 'job-types',
                 started: moment.utc().subtract(3, 'd').toISOString(),
                 ended: moment.utc().add(1, 'd').toISOString(),
@@ -116,8 +119,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 const filters = this.favorites.length > 0 ?
                     this.favorites :
                     [];
-                const colors = [this.colorService.SCALE_BLUE2];
-                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', colors);
+                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '');
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {

@@ -41,6 +41,10 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         this.params = {
             choice_id: choiceIds,
             column: ['completed_count', 'failed_count'],
+            colors: [
+                { column: 'completed_count', color: this.colorService.SCALE_BLUE2 },
+                { column: 'failed_count', color: this.colorService.ERROR }
+            ],
             dataType: 'job-types',
             started: moment.utc().subtract(10, 'd').toISOString(),
             ended: moment.utc().toISOString(),
@@ -73,15 +77,14 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             const filters = this.favorites.length > 0 ?
                 this.favorites :
                 [];
-            const colors = [this.colorService.SCALE_BLUE2, this.colorService.ERROR];
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', colors);
+            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '');
             chartData.labels = _.map(chartData.labels, label => {
                 return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
             });
             // initialize chart
             this.data = {
                 labels: chartData.labels,
-                datasets: chartData.data
+                datasets: _.reverse(chartData.data) // failed comes back first, so reverse the data array
             };
             this.options = {
                 legend: {
