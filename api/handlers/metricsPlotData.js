@@ -1,5 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
+const metricsJobTypes = require('../data/metricsJobTypes.json');
 
 module.exports = function (request, reply) {
     var params = request.url.query;
@@ -18,6 +19,14 @@ module.exports = function (request, reply) {
         if (!Array.isArray(params.column)) {
             params.column = [params.column];
         }
+        var colArray = [];
+        _.forEach(params.column, function (metric) {
+            var otherMetrics = _.filter(metricsJobTypes.columns, function (c) {
+                return c.group === _.find(metricsJobTypes.columns, { name: metric }).group;
+            });
+            colArray.concat(_.map(otherMetrics, 'name'));
+        });
+        console.log(colArray);
         _.forEach(params.column, function (metric) {
             var maxRandom = metric === 'total_count' ? 1000 : 200;
             var minRandom = metric === 'total_count' ? 800 : 10;
