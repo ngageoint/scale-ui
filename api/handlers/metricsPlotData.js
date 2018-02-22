@@ -19,15 +19,16 @@ module.exports = function (request, reply) {
         if (!Array.isArray(params.column)) {
             params.column = [params.column];
         }
+        // right now the api returns all columns from a group instead of just what was requested, so let's replicate that bad behavior
         var colArray = [];
         _.forEach(params.column, function (metric) {
             var otherMetrics = _.filter(metricsJobTypes.columns, function (c) {
                 return c.group === _.find(metricsJobTypes.columns, { name: metric }).group;
             });
-            colArray.concat(_.map(otherMetrics, 'name'));
+            colArray = colArray.concat(_.map(otherMetrics, 'name'));
         });
-        console.log(colArray);
-        _.forEach(params.column, function (metric) {
+        colArray = _.uniq(colArray);
+        _.forEach(colArray, function (metric) {
             var maxRandom = metric === 'total_count' ? 1000 : 200;
             var minRandom = metric === 'total_count' ? 800 : 10;
             var returnResult = {
