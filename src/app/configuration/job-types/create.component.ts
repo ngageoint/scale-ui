@@ -18,11 +18,11 @@ import { WorkspacesApiService } from '../workspaces/api.service';
 import { CustomResources } from './custom.resources.model';
 
 @Component({
-    selector: 'app-job-types-import',
-    templateUrl: './import.component.html',
-    styleUrls: ['./import.component.scss']
+    selector: 'app-job-types-create',
+    templateUrl: './create.component.html',
+    styleUrls: ['./create.component.scss']
 })
-export class JobTypesImportComponent implements OnInit, OnDestroy {
+export class JobTypesCreateComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
     env = environment;
@@ -36,7 +36,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
     workspaces: SelectItem[];
     jobType: JobType;
     cleanJobType: JobType;
-    importForm: FormGroup;
+    createForm: FormGroup;
     validated: boolean;
     submitted: boolean;
     icons: any;
@@ -77,12 +77,12 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                             this.jobType = data;
                         });
                     } else {
-                        this.mode = 'Import';
-                        this.jobType = new JobType('untitled-algorithm', '1.0', null, 'Untitled Algorithm');
+                        this.mode = 'Create';
+                        this.jobType = new JobType('untitled-job-type', '1.0', null, 'Untitled Job Type');
                     }
                     this.getWorkspaces();
 
-                    this.importForm = this.fb.group({
+                    this.createForm = this.fb.group({
                         'json-editor': new FormControl(''),
                         'name': new FormControl({value: '', disabled: this.mode === 'Edit'}, Validators.required),
                         'title': new FormControl(''),
@@ -136,8 +136,8 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                             label: 'Custom Resources'
                         },
                         {
-                            label: 'Validate and Import',
-                            disabled: this.importForm.valid
+                            label: 'Validate and Create',
+                            disabled: this.createForm.valid
                         }
                     ];
                     this.workspaces = [];
@@ -171,7 +171,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                     ];
                     this.errorMappingExitCode = {};
                     this.customResources = new CustomResources();
-                    this.importForm.valueChanges.subscribe(() => {
+                    this.createForm.valueChanges.subscribe(() => {
                         this.validateForm();
                     });
                 });
@@ -210,8 +210,8 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
         });
     }
     private validateForm() {
-        // only enable 'Validate and Import' when the form is valid
-        this.items[this.items.length - 1].disabled = !this.importForm.valid ||
+        // only enable 'Validate and Create' when the form is valid
+        this.items[this.items.length - 1].disabled = !this.createForm.valid ||
             !this.jobType.manifest ||
             _.keys(this.jobType.manifest).length === 0;
     }
@@ -312,7 +312,7 @@ export class JobTypesImportComponent implements OnInit, OnDestroy {
                 });
             } else {
                 this.validated = true;
-                this.msgs.push({severity: 'info', summary: 'Validation Successful', detail: 'Algorithm is valid and ready for import.'});
+                this.msgs.push({severity: 'info', summary: 'Validation Successful', detail: 'Job Type is valid and can be created.'});
             }
         });
     }

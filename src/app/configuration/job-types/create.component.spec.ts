@@ -5,17 +5,17 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { JobTypesApiService } from './api.service';
-import { JobTypesImportComponent } from './import.component';
+import { JobTypesCreateComponent } from './create.component';
 import { WorkspacesApiService } from '../workspaces/api.service';
 
 
-describe('JobTypesImportComponent', () => {
-    let component: JobTypesImportComponent;
-    let fixture: ComponentFixture<JobTypesImportComponent>;
+describe('JobTypesCreateComponent', () => {
+    let component: JobTypesCreateComponent;
+    let fixture: ComponentFixture<JobTypesCreateComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [JobTypesImportComponent],
+            declarations: [JobTypesCreateComponent],
             imports: [HttpModule],
             providers: [
                 JobTypesApiService, WorkspacesApiService, FormBuilder,
@@ -29,7 +29,7 @@ describe('JobTypesImportComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(JobTypesImportComponent);
+        fixture = TestBed.createComponent(JobTypesCreateComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

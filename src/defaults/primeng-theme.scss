@@ -280,6 +280,32 @@ $inputGroupTextColor: #222222;
     color: $stateActiveTextColor;
 }
 
+.ui-button {
+    color: $clr-white;
+    background-color: $clr-navbar-dark;
+    border: 1px solid transparent;
+    padding: 0.2em;
+    font-size: 1em;
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+
+    &:focus, &:enabled:hover {
+        outline: 0 none;
+        color: #fff;
+        border: 1px solid transparent;
+        background-color: lighten($clr-navbar-dark, 5%);
+    }
+
+    &:enabled:active {
+        background-color: lighten($clr-navbar-light, 3%);
+        -moz-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        -webkit-box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+        box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    }
+}
+
 .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
     @include hover-element();
 }
@@ -486,7 +512,14 @@ $inputGroupTextColor: #222222;
 }
 
 .ui-tabview {
+    padding: 0;
+
     .ui-tabview-nav {
+        padding: .2em .2em 0 0 !important;
+        background: #e5e5e5;
+        outline: 1px solid #e5e5e5;
+        border: none;
+
         li {
             &:not(.ui-state-active):not(.ui-state-disabled):hover {
                 @include hover-element();
@@ -560,8 +593,84 @@ $inputGroupTextColor: #222222;
 }
 
 .ui-steps {
-    .ui-steps-item:not(.ui-state-highlight):not(.ui-state-disabled):hover {
-        @include hover-element();
+    position: relative;
+
+    .ui-steps-item {
+        background-color: transparent;
+        text-align: center;
+        float: none;
+        border: none;
+
+        .ui-menuitem-link {
+            display: inline-block;
+            text-align: center;
+            background-color: transparent;
+            overflow: hidden;
+
+            .ui-steps-number {
+                display: inline-block;
+                background-color: $clr-white;
+                -moz-border-radius: 50%;
+                -webkit-border-radius: 50%;
+                border-radius: 50%;
+                padding: 0.25em 0.563em;
+                color: #747a7f;
+                position: relative;
+                width: 28px;
+                margin-top: 0;
+                font-size: 1em;
+                top: 0.875em;
+                margin-bottom: 0.75em;
+                border: 1px solid #cccccc;
+            }
+
+            .ui-steps-title {
+                display: block;
+                margin-top: 0.375em;
+                color: #747a7f;
+            }
+        }
+
+        &.ui-state-highlight {
+            .ui-steps-number {
+                background-color: $clr-highlight;
+                color: $clr-white;
+                border-color: $clr-highlight;
+            }
+
+            .ui-steps-title {
+                font-weight: 700;
+                color: #373a3c;
+            }
+        }
+
+        &:not(.ui-state-highlight) {
+            .ui-steps-number:hover {
+                background-color: #e6e6e6;
+            }
+
+            &.ui-state-disabled {
+                .ui-steps-number:hover {
+                    background-color: #fff;
+                }
+            }
+        }
+
+        &:last-child {
+            .ui-menuitem-link {
+                display: block;
+            }
+        }
+    }
+
+    &:before {
+        content: ' ';
+        //border: 1px solid $clr-highlight;
+        width: 100%;
+        top: 45%;
+        left: 0;
+        display: block;
+        position: absolute;
     }
 }
 

@@ -1,9 +1,9 @@
-<h2>{{ mode }} Algorithm</h2>
-<form [formGroup]="importForm" (ngSubmit)="importForm.value" *ngIf="jobType">
+<h2>{{ mode }} Job Type</h2>
+<form [formGroup]="createForm" (ngSubmit)="createForm.value" *ngIf="jobType">
     <p-panel>
         <p-header>
             <div class="ui-helper-clearfix">
-                <span class="ui-panel-title algorithm-title">{{jobType.title}}</span>
+                <span class="ui-panel-title job-type-title">{{jobType.title}}</span>
                 <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa-code"
                         iconPos="left" (click)="onModeClick()"></button>
             </div>
@@ -24,7 +24,7 @@
                     <div class="ui-g-4">
                         <input pInputText id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
                         <div class="ui-message ui-messages-error ui-corner-all"
-                             *ngIf="!importForm.controls['name'].valid && importForm.controls['name'].dirty">
+                             *ngIf="!createForm.controls['name'].valid && createForm.controls['name'].dirty">
                             Name is required
                         </div>
                     </div>
@@ -42,7 +42,7 @@
                     <div class="ui-g-4">
                         <input pInputText id="version" formControlName="version" placeholder="Required" [(ngModel)]="jobType.version"/>
                         <div class="ui-message ui-messages-error ui-corner-all"
-                             *ngIf="!importForm.controls['version'].valid && importForm.controls['version'].dirty">
+                             *ngIf="!createForm.controls['version'].valid && createForm.controls['version'].dirty">
                             Version is required
                         </div>
                     </div>
@@ -123,8 +123,8 @@
                 <!--<div class="ui-g">-->
                 <!--<div class="ui-g-2"></div>-->
                 <!--<div class="ui-g-10">-->
-                <!--<button pButton type="submit" label="Submit" [disabled]="!importForm.valid"-->
-                <!--(click)="onSubmit(importForm.value)"></button>-->
+                <!--<button pButton type="submit" label="Submit" [disabled]="!createForm.valid"-->
+                <!--(click)="onSubmit(createForm.value)"></button>-->
                 <!--</div>-->
                 <!--</div>-->
             </div>
@@ -371,7 +371,7 @@
                     </div>
                 </form>
             </div>
-            <div class="ui-g-10 validate-and-import" *ngIf="currentStepIdx === 5">
+            <div class="ui-g-10 validate-and-create" *ngIf="currentStepIdx === 5">
                 <h3>
                     <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
                        [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{jobType.title}} v{{jobType.version}}
@@ -380,7 +380,7 @@
                         (click)="onValidate()" *ngIf="!validated"></button>
                 <button class="ui-button-primary" pButton icon="fa-chevron-down" [label]="mode"
                         (click)="onSubmit()" *ngIf="validated && !submitted"></button>
-                <button class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Algorithm"
+                <button class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Job Type"
                         *ngIf="submitted"></button>
                 <ul class="list-unstyled">
                     <li><b>Name:</b> {{jobType.name}}</li>
@@ -395,10 +395,10 @@
                 </ul>
                 <!--<div class="ui-g">-->
                     <!--<div class="ui-g-2">-->
-                        <!--<button class="import-form-btn" pButton icon="fa-check" label="Validate"></button>-->
+                        <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
                     <!--</div>-->
                     <!--<div class="ui-g-2">-->
-                        <!--<button class="import-form-btn" pButton icon="fa-arrow-circle-o-up" label="Import"></button>-->
+                        <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
                     <!--</div>-->
                 <!--</div>-->
             </div>

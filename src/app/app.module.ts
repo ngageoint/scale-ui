@@ -36,7 +36,7 @@ import { RecipesApiService } from './processing/recipes/api.service';
 import { RecipesDatatableService } from './processing/recipes/datatable.service';
 import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesApiService } from './configuration/job-types/api.service';
-import { JobTypesImportComponent } from './configuration/job-types/import.component';
+import { JobTypesCreateComponent } from './configuration/job-types/create.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { RecipeTypesApiService } from './configuration/recipe-types/api.service';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
@@ -87,7 +87,7 @@ import { StatusApiService } from './navbar/status/api.service';
         HealthbarComponent,
         JobDetailsComponent,
         RecipeDetailsComponent,
-        JobTypesImportComponent,
+        JobTypesCreateComponent,
         FooterComponent,
         JobTypeItemComponent,
         WorkspacesComponent,

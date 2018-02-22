@@ -59,7 +59,7 @@
     <div class="ui-g margin-top-md">
         <div class="ui-g-12">
             <p-tabView>
-                <p-tabPanel header="Jobs">
+                <p-tabPanel header="Jobs" headerStyleClass="scale-tab-header">
                     <app-jobs [(jobs)]="jobsData" [(datatableOptions)]="jobsDatatableOptions" [isChild]="true"
                               (datatableChange)="onJobsDatatableChange($event)"></app-jobs>
                 </p-tabPanel>

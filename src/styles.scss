@@ -31,6 +31,14 @@ a:not(.ui-button, .ui-paginator) {
     width: 100%;
 }
 
+.scale-tab-header {
+    background: $clr-navbar-dark;
+
+    a {
+        color: #fff;
+    }
+}
+
 .scale-chart-container {
     position: relative;
 }

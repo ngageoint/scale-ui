@@ -7,7 +7,7 @@ import { JobDetailsComponent } from './processing/jobs/details.component';
 import { RecipesComponent } from './processing/recipes/component';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { JobTypesComponent } from './configuration/job-types/component';
-import { JobTypesImportComponent } from './configuration/job-types/import.component';
+import { JobTypesCreateComponent } from './configuration/job-types/create.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { SourcesComponent } from './data/sources/component';
 import { SourceDetailsComponent } from './data/sources/details.component';
@@ -24,7 +24,7 @@ const routes: Routes = [
     { path: 'processing/failure-rates', component: FailureRatesComponent },
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:id', component: JobTypesComponent },
-    { path: 'configuration/job-types/edit/:id', component: JobTypesImportComponent },
+    { path: 'configuration/job-types/edit/:id', component: JobTypesCreateComponent },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
