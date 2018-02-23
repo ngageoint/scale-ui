@@ -33,6 +33,9 @@ label {
 .label-info {
     padding: .2em .6em .1em .6em;
 }
+::ng-deep .jobs__error-tooltip.ui-tooltip {
+    max-width: 50%;
+}
 ::ng-deep .ui-dialog {
     width: 95% !important;
 }

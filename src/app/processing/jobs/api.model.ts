@@ -17,16 +17,14 @@ export class Job {
                 data.job_type,
                 data.job_type_rev,
                 data.event,
+                data.node,
                 data.error,
                 data.status,
                 data.priority,
                 data.num_exes,
                 data.timeout,
                 data.max_tries,
-                data.cpus_required,
-                data.mem_required,
-                data.disk_in_required,
-                data.disk_out_required,
+                data.input_file_size,
                 data.is_superseded,
                 data.root_superseded_job,
                 data.superseded_job,
@@ -39,12 +37,11 @@ export class Job {
                 data.last_status_change,
                 data.superseded,
                 data.last_modified,
-                data.data,
-                data.results,
-                data.recipes,
-                JobExecution.transformer(data.job_exes),
-                data.inputs,
-                data.outputs
+                data.input,
+                data.output,
+                data.resources,
+                JobExecution.transformer(data.execution),
+                data.recipe
             );
         }
     }
@@ -58,28 +55,19 @@ export class Job {
         return null;
     }
 
-    public getLatestExecution(): JobExecution {
-        if (this.num_exes > 0 ) {
-            return this.job_exes[0];
-        }
-        return null;
-    }
-
     constructor(
         public id: number,
         public job_type: JobType,
         public job_type_rev: object,
         public event: any,
+        public node: any,
         public error: object,
         public status: string,
         public priority: number,
         public num_exes: number,
         public timeout: number,
         public max_tries: number,
-        public cpus_required: number,
-        public mem_required: number,
-        public disk_in_required: number,
-        public disk_out_required: number,
+        public input_file_size: number,
         public is_superseded: boolean,
         public root_superseded_job: object,
         public superseded_job: Job,
@@ -92,12 +80,11 @@ export class Job {
         public last_status_change: string,
         public superseded: string,
         public last_modified: string,
-        public data: object,
-        public results: object,
-        public recipes: object[],
-        public job_exes: any,
-        public inputs: object[],
-        public outputs: object[]
+        public input: object,
+        public output: object,
+        public resources: any,
+        public execution: any,
+        public recipe: any
     ) {
         this.dataService = new DataService();
         this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');

@@ -38,11 +38,9 @@
                                 [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"></p-dropdown>
                 </div>
                 <div *ngSwitchCase="'error.category'">
-                    <ng-template pTemplate="filter">
-                        <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
-                                    (onChange)="onErrorCategoryChange($event)" [autoWidth]="false" styleClass="column-filter"
-                                    (click)="onFilterClick($event)" appendTo="body"></p-dropdown>
-                    </ng-template>
+                    <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
+                                (onChange)="onErrorCategoryChange($event)" [autoWidth]="false" styleClass="column-filter"
+                                (click)="onFilterClick($event)" appendTo="body"></p-dropdown>
                 </div>
             </th>
         </tr>
@@ -72,8 +70,17 @@
                     </div>
                     {{ rowData.status }}
                 </div>
+                <div *ngSwitchCase="'node'">
+                    {{ rowData.node.hostname }}
+                </div>
+                <div *ngSwitchCase="'error.category'">
+                    {{ rowData.error.category }}
+                </div>
                 <div *ngSwitchCase="'error.title'">
-                    <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}">{{ rowData.error.title }}</div>
+                    <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}" tooltipPosition="left" appendTo="body"
+                         tooltipStyleClass="jobs__error-tooltip">
+                        {{ rowData.error.title }}
+                    </div>
                 </div>
                 <div class="text-center" *ngSwitchCase="'id'">
                     <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showLog(rowData)"

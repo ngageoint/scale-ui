@@ -56,6 +56,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             { field: 'job_type.name', header: 'Job Type' },
             { field: 'created', header: 'Created (Z)' },
             { field: 'last_modified', header: 'Last Modified (Z)' },
+            { field: 'node', header: 'Node' },
             { field: 'duration', header: 'Duration' },
             { field: 'status', header: 'Status' },
             { field: 'error.category', header: 'Error Category' },
@@ -241,8 +242,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     showLog(job: Job) {
         this.jobsApiService.getJob(job.id).then((data) => {
-            const jobExecution = data.getLatestExecution();
-            this.jobsApiService.getJobExecution(jobExecution.id).then((result) => {
+            this.jobsApiService.getJobExecution(data.execution).then((result) => {
                 this.selectedJobExecution = result;
                 this.logDisplay = true;
             }, err => {

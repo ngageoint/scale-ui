@@ -33,16 +33,22 @@ module.exports = function (request, reply) {
                 type: 'STRIKE_TRANSFER',
                 occurred: '2016-04-27T19:11:57Z'
             },
-            error: null,
+            node: {
+                id: 1,
+                hostname: 'my-host.example.domain'
+            },
+            error: {
+                title: 'test',
+                category: 'none',
+                description: 'This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. '
+            },
             status: statusValue,
             priority: 97,
             num_exes: 94,
             timeout: 2317,
             max_tries: 2,
-            cpus_required: 88.2,
-            mem_required: 497.4,
-            disk_in_required: 79.8,
-            disk_out_required: 51.3,
+            input_file_size: 79.8,
+            is_superseded: Math.floor(Math.random() * (2 - 1 + 1) + 1) % 2 === 0,
             created: moment.utc(date).subtract(12, 'm').toISOString(),
             queued: moment.utc(date).subtract(10, 'm').toISOString(),
             started: moment.utc(date).subtract(5, 'm').toISOString(),
