@@ -36,13 +36,13 @@
             </td>
         </tr>
     </ng-template>
-    <!--<p-column field="file_name" header="File Name" [filter]="true" filterPlaceholder="Search" filterMatchMode="contains"-->
-              <!--[sortable]="true"></p-column>-->
-    <!--<p-column field="file_size_formatted" header="File Size" [sortable]="true"></p-column>-->
-    <!--<p-column field="data_started" header="Data Started" [sortable]="true"></p-column>-->
-    <!--<p-column field="data_ended" header="Data Ended" [sortable]="true"></p-column>-->
-    <!--<p-column field="countries" header="Countries" [sortable]="true"></p-column>-->
-    <!--<p-column field="last_modified" header="Last Modified" [sortable]="true"></p-column>-->
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length" class="text-center">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
 </p-table>
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
              (onPageChange)="paginate($event)"></p-paginator>

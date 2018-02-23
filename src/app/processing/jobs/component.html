@@ -92,6 +92,13 @@
             </td>
         </tr>
     </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length" class="text-center">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
 </p-table>
 <p-dialog header="Log" [(visible)]="logDisplay" [modal]="true" [responsive]="true" [dismissableMask]="true" positionTop="40">
     <span *ngIf="selectedJobExecution">

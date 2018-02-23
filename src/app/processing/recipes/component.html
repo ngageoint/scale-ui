@@ -50,6 +50,13 @@
             </td>
         </tr>
     </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length" class="text-center">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
 </p-table>
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
              (onPageChange)="paginate($event)"></p-paginator>
