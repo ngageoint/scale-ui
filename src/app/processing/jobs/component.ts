@@ -232,7 +232,17 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     requeueJobs(jobsParams) {
         if (!jobsParams) {
-            jobsParams = _.clone(this.datatableOptions);
+            jobsParams = {
+                started: this.datatableOptions.started,
+                ended: this.datatableOptions.ended,
+                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
+                status: this.datatableOptions.status === 'CANCELED' || this.datatableOptions.status === 'FAILED' ?
+                    this.datatableOptions.status :
+                    null,
+                job_type_ids: this.datatableOptions.job_type_id ? [this.datatableOptions.job_type_id] : null
+            };
+            // remove null properties
+            jobsParams = _.pickBy(jobsParams);
         }
         this.jobsApiService.requeueJobs(jobsParams).then(() => {
             this.updateData();
@@ -268,8 +278,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
-                    ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
+                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
+                    ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
                     status: params.status || null,
                     job_id: params.job_id ? parseInt(params.job_id, 10) : null,
                     job_type_id: params.job_type_id ? parseInt(params.job_type_id, 10) : null,
