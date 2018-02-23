@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message, MenuItem, SelectItem } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as beautify from 'js-beautify';
 import * as _ from 'lodash';
 
@@ -33,6 +34,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     jsonConfig: object;
     jsonConfigReadOnly: object;
     msgs: Message[] = [];
+    msgSubscription: any;
     workspaces: SelectItem[];
     jobType: JobType;
     cleanJobType: JobType;
@@ -42,7 +44,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
-    seedImageJson: string;
     triggerForm: FormGroup;
     trigger: Trigger;
     triggerJson: string;
@@ -54,6 +55,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     customResources: any;
     customResourcesJson: string;
     constructor(
+        private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
         private workspacesApiService: WorkspacesApiService,
         private fb: FormBuilder,
@@ -217,11 +219,16 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.msgSubscription = this.messageService.messageObserver.subscribe(() => {
+            // ignore messages from service
+            this.msgs = [];
+        });
     }
 
     ngOnDestroy() {
         this.routerEvents.unsubscribe();
         this.routeParams.unsubscribe();
+        this.msgSubscription.unsubscribe();
     }
 
     getUnicode(code) {
@@ -240,8 +247,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 if (this.jobType.manifest) {
                     if (_.keys(this.jobType.manifest).length === 0) {
                         this.jobType.manifest = null;
-                    } else {
-                        this.seedImageJson = beautify(JSON.stringify(this.jobType.manifest));
                     }
                 }
                 if (this.jobType.trigger_rule) {
@@ -266,11 +271,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.currentStepIdx = index;
     }
     onImageImport(seedImage) {
-        this.seedImageJson = beautify(JSON.stringify(seedImage));
         this.jobType.manifest = seedImage;
+        console.log(seedImage);
     }
     onImageRemove() {
-        this.seedImageJson = null;
         this.jobType.manifest = null;
         this.validateForm();
     }

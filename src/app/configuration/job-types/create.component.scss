@@ -1,3 +1,16 @@
+.seed-image {
+    width: 33%;
+}
+.seed-header {
+    display: flex;
+    justify-content: space-between;
+
+    h3 {
+        margin: 0;
+        padding: 0;
+    }
+}
+
 ::ng-deep .ui-inputtext {
     width: 100%;
 }

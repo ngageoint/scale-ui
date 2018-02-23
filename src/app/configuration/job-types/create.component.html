@@ -130,10 +130,15 @@
             </div>
             <div class="ui-g-10" *ngIf="currentStepIdx === 1">
                 <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
-                <div *ngIf="jobType.manifest">
-                    <button pButton class="ui-button-danger margin-bottom-md" icon="fa-remove" label="Delete Seed Image"
-                            (click)="onImageRemove()"></button>
-                    <codemirror [(ngModel)]="seedImageJson" [config]="jsonConfigReadOnly" formControlName="json-editor"></codemirror>
+                <div class="ui-g" *ngIf="jobType.manifest">
+                    <div class="ui-g-4">
+                        <div class="seed-header">
+                            <h3>{{ jobType.manifest.job.title }}</h3>
+                            <button pButton class="ui-button-danger margin-bottom-md" icon="fa-remove" pTooltip="Delete Seed Image"
+                                    (click)="onImageRemove()"></button>
+                        </div>
+                        {{ jobType.manifest.job.description }}
+                    </div>
                 </div>
             </div>
             <div class="ui-g-10" *ngIf="currentStepIdx === 2">
