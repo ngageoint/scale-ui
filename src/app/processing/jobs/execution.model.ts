@@ -1,4 +1,5 @@
 import { Job } from './api.model';
+import { JobType } from '../../configuration/job-types/api.model';
 import * as moment from 'moment';
 
 export class JobExecution {
@@ -13,33 +14,22 @@ export class JobExecution {
             return new JobExecution(
                 data.id,
                 data.status,
-                data.command_arguments,
-                data.timeout,
-                data.pre_started,
-                data.pre_completed,
-                data.pre_exit_code,
-                data.job_started,
-                data.job_completed,
-                data.job_exit_code,
-                data.post_started,
-                data.post_completed,
-                data.post_exit_code,
+                data.exe_num,
+                data.cluster_id,
                 data.created,
                 data.queued,
                 data.started,
                 data.ended,
-                data.last_modified,
                 data.job,
                 data.node,
                 data.error,
-                data.environment,
-                data.cpus_scheduled,
-                data.mem_scheduled,
-                data.disk_in_scheduled,
-                data.disk_out_scheduled,
-                data.disk_total_scheduled,
-                data.results,
-                data.results_manifest
+                data.job_type,
+                data.timeout,
+                data.input_file_size,
+                data.task_results,
+                data.resources,
+                data.configuration,
+                data.output
             );
         }
     }
@@ -56,33 +46,22 @@ export class JobExecution {
     constructor(
         public id: number,
         public status: string,
-        public command_arguments: string,
-        public timeout: number,
-        public pre_started: string,
-        public pre_completed: string,
-        public pre_exit_code: number,
-        public job_started: string,
-        public job_completed: string,
-        public job_exit_code: number,
-        public post_started: string,
-        public post_completed: string,
-        public post_exit_code: number,
+        public exe_num: any,
+        public cluster_id: any,
         public created: string,
         public queued: string,
         public started: string,
         public ended: string,
-        public last_modified: string,
         public job: Job,
         public node: any,
         public error: any,
-        public environment: any,
-        public cpus_scheduled: number,
-        public mem_scheduled: number,
-        public disk_in_scheduled: number,
-        public disk_out_scheduled: number,
-        public disk_total_scheduled: number,
-        public results: any,
-        public results_manifest: any
+        public job_type: JobType,
+        public timeout: any,
+        public input_file_size: any,
+        public task_results: any,
+        public resources: any,
+        public configuration: any,
+        public output: any
     ) {
         this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');
         this.queued_formatted = moment.utc(this.queued).format('YYYY-MM-DD HH:mm:ss');

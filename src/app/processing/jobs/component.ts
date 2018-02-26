@@ -251,15 +251,15 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
     }
     showLog(job: Job) {
-        this.jobsApiService.getJob(job.id).then((data) => {
-            this.jobsApiService.getJobExecution(data.execution).then((result) => {
+        this.jobsApiService.getJobExecutions(job.id).then((data) => {
+            this.jobsApiService.getJobExecution(job.id, data.exe_num).then((result) => {
                 this.selectedJobExecution = result;
                 this.logDisplay = true;
             }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error retrieving log', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job execution', detail: err.statusText});
             });
         }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving log', detail: err.statusText});
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job execution list', detail: err.statusText});
         });
     }
     onFilterClick(e) {
