@@ -73,6 +73,18 @@ export class JobsApiService {
             .then(response => JobExecution.transformer(response.json()))
             .catch(this.handleError);
     }
+    getJobInputs(id: number): Promise<any> {
+        return this.http.get(`${environment.apiPrefix}/jobs/${id}/input_files/`)
+            .toPromise()
+            .then(response => ApiResults.transformer(response.json()))
+            .catch(this.handleError);
+    }
+    getJobOutputs(id: number): Promise<any> {
+        return this.http.get(`${environment.apiPrefix}/products/`, { params: { job_id: id } })
+            .toPromise()
+            .then(response => ApiResults.transformer(response.json()))
+            .catch(this.handleError);
+    }
     updateJob(id: number, data: any): Promise<any> {
         return this.http.patch(`${environment.apiPrefix}/jobs/${id}/`, data)
             .toPromise()

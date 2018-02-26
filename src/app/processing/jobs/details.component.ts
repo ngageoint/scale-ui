@@ -17,6 +17,8 @@ import { DataService } from '../../data.service';
 })
 export class JobDetailsComponent implements OnInit, AfterViewInit {
     job: Job;
+    jobInputs = [];
+    jobOutputs = [];
     jobExecutions: any;
     jobStatus: string;
     options: any;
@@ -116,9 +118,25 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
             this.jobsApiService.getJob(id).then(data => {
+                this.initJobDetail(data);
+
+                // get job inputs
+                this.jobsApiService.getJobInputs(id).then(inputData => {
+                    this.jobInputs = inputData.results;
+                }, err => {
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
+                });
+
+                // get job outputs
+                this.jobsApiService.getJobOutputs(id).then(outputData => {
+                    this.jobOutputs = outputData.results;
+                }, err => {
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+                });
+
+                // get job executions
                 this.jobsApiService.getJobExecutions(id).then(exeData => {
-                    this.jobExecutions = exeData.results;
-                    this.initJobDetail(data);
+                    this.jobExecutions = JobExecution.transformer(exeData.results);
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
                 });

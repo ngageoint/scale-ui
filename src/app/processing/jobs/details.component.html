@@ -97,63 +97,26 @@
                     <span class="ui-panel-title">Inputs</span>
                 </div>
                 <div class="scale-panel__body">
-                    <table class="table table-striped job__io" *ngIf="job.inputs.length > 0">
+                    <table class="table table-striped job__io" *ngIf="jobInputs.length > 0">
                         <thead>
                         <tr class="job__io-header">
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Value</th>
+                            <th>File Name</th>
+                            <th>File Size</th>
+                            <th>Created</th>
+                            <th>Last Modified</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let input of job.inputs">
-                            <td>{{ input.name }}</td>
-                            <td>{{ input.type }}</td>
+                        <tr *ngFor="let input of jobInputs">
                             <td>
-                                <span *ngIf="input.type === 'file' && input.value">
-                                    <table class="table">
-                                        <tr *ngIf="$index === 0">
-                                            <td>File Name</td>
-                                            <td>File Size</td>
-                                            <td>Created</td>
-                                            <td>Last Modified</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a *ngIf="input.value.url" href="{{ input.value.url }}" target="_jobfile">
-                                                    {{ input.value.file_name }}
-                                                </a>
-                                                <span *ngIf="!input.value.url">{{ input.value.file_name }}</span>
-                                            </td>
-                                            <td>{{ calculateFileSize(input.value.file_size) }}</td>
-                                            <td>{{ input.value.created }}</td>
-                                            <td>{{ input.value.last_modified }}</td>
-                                        </tr>
-                                    </table>
-                                </span>
-                                <span *ngIf="input.type === 'files' && input.value">
-                                    <table class="table">
-                                        <tr>
-                                            <td>File Name</td>
-                                            <td>File Size</td>
-                                            <td>Created</td>
-                                            <td>Last Modified</td>
-                                        </tr>
-                                        <tr *ngFor="let v of input.value">
-                                            <td>
-                                                <a *ngIf="v.url" href="{{ v.url }}" target="_jobfile">{{ v.file_name }}</a>
-                                                <span *ngIf="!v.url">{{ v.file_name }}</span>
-                                            </td>
-                                            <td>{{ calculateFileSize(v.file_size) }}</td>
-                                            <td>{{ v.created }}</td>
-                                            <td>{{ v.last_modified }}</td>
-                                        </tr>
-                                    </table>
-                                </span>
-                                <span *ngIf="input.type === 'property' && input.value">
-                                    {{input.value}}
-                                </span>
+                                <a *ngIf="input.url" href="{{ input.url }}" target="_jobfile">
+                                    {{ input.file_name }}
+                                </a>
+                                <span *ngIf="!input.url">{{ input.file_name }}</span>
                             </td>
+                            <td>{{ calculateFileSize(input.file_size) }}</td>
+                            <td>{{ input.created }}</td>
+                            <td>{{ input.last_modified }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -166,63 +129,26 @@
                     <span class="ui-panel-title">Outputs</span>
                 </div>
                 <div class="scale-panel__body">
-                    <table class="table table-striped job__io" *ngIf="job.outputs.length > 0">
+                    <table class="table table-striped job__io" *ngIf="jobOutputs.length > 0">
                         <thead>
                         <tr class="job__io-header">
-                            <th>Name</th>
-                            <th>Type</th>
-                            <th>Value</th>
+                            <th>File Name</th>
+                            <th>File Size</th>
+                            <th>Created</th>
+                            <th>Last Modified</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr *ngFor="let output of job.outputs">
-                            <td>{{ output.name }}</td>
-                            <td>{{ output.type }}</td>
+                        <tr *ngFor="let output of jobOutputs">
                             <td>
-                                <span *ngIf="output.type === 'file' && output.value">
-                                    <table class="table">
-                                        <tr *ngIf="$index === 0">
-                                            <td>File Name</td>
-                                            <td>File Size</td>
-                                            <td>Created</td>
-                                            <td>Last Modified</td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <a *ngIf="output.value.url" href="{{ output.value.url }}" target="_jobfile">
-                                                    {{ output.value.file_name }}
-                                                </a>
-                                                <span *ngIf="!output.value.url">{{ output.value.file_name }}</span>
-                                            </td>
-                                            <td>{{ calculateFileSize(output.value.file_size) }}</td>
-                                            <td>{{ output.value.created }}</td>
-                                            <td>{{ output.value.last_modified }}</td>
-                                        </tr>
-                                    </table>
-                                </span>
-                                <span *ngIf="output.type === 'files' && output.value">
-                                    <table class="table">
-                                        <tr>
-                                            <td>File Name</td>
-                                            <td>File Size</td>
-                                            <td>Created</td>
-                                            <td>Last Modified</td>
-                                        </tr>
-                                        <tr *ngFor="let v of output.value">
-                                            <td>
-                                                <a *ngIf="v.url" href="{{ v.url }}" target="_jobfile">{{ v.file_name }}</a>
-                                                <span *ngIf="!v.url">{{ v.file_name }}</span>
-                                            </td>
-                                            <td>{{ calculateFileSize(v.file_size) }}</td>
-                                            <td>{{ v.created }}</td>
-                                            <td>{{ v.last_modified }}</td>
-                                        </tr>
-                                    </table>
-                                </span>
-                                <span *ngIf="output.type === 'property' && output.value">
-                                    {{ output.value }}
-                                </span>
+                                <a *ngIf="output.url" href="{{ output.url }}" target="_jobfile">
+                                    {{ output.file_name }}
+                                </a>
+                                <span *ngIf="!output.value.url">{{ output.file_name }}</span>
                             </td>
+                            <td>{{ calculateFileSize(output.file_size) }}</td>
+                            <td>{{ output.created }}</td>
+                            <td>{{ output.last_modified }}</td>
                         </tr>
                         </tbody>
                     </table>
