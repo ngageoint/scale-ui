@@ -74,7 +74,7 @@ export class JobsApiService {
             .catch(this.handleError);
     }
     requeueJobs(params): Promise<any> {
-        params.url = params.url ? params.url : `${environment.apiPrefix}/queue/requeue-jobs/`;
+        params.url = params.url ? params.url : `${environment.apiPrefix}/jobs/requeue/`;
         return this.http.post(params.url, params)
             .toPromise()
             .then(response => response.json())
