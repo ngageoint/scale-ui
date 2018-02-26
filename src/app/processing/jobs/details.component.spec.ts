@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { JobsApiService } from './api.service';
 import { DataService } from '../../data.service';
@@ -17,7 +18,7 @@ describe('JobDetailsComponent', () => {
             declarations: [JobDetailsComponent],
             imports: [HttpModule],
             providers: [
-                JobsApiService, DataService,
+                MessageService, JobsApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

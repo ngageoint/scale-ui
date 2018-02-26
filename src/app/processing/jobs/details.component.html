@@ -57,7 +57,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr class="job__exe" *ngFor="let exe of job.job_exes" (click)="showExeLog($event, exe)">
+                        <tr class="job__exe" *ngFor="let exe of jobExecutions" (click)="showExeLog($event, exe)">
                             <td>
                                 <i class="fa fa-fw fa-square job__status" [ngClass]="exe.status.toLowerCase()"
                                    (mouseenter)="timeline.show($event)" (mouseleave)="timeline.hide()"></i>

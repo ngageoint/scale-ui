@@ -250,9 +250,9 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
         });
     }
-    showLog(job: Job) {
-        this.jobsApiService.getJobExecutions(job.id).then((data) => {
-            this.jobsApiService.getJobExecution(job.id, data.exe_num).then((result) => {
+    showLog(jobId) {
+        this.jobsApiService.getJobExecutions(jobId).then((data) => {
+            this.jobsApiService.getJobExecution(jobId, data.exe_num).then(result => {
                 this.selectedJobExecution = result;
                 this.logDisplay = true;
             }, err => {

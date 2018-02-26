@@ -83,7 +83,7 @@
                     </div>
                 </div>
                 <div class="text-center" *ngSwitchCase="'id'">
-                    <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showLog(rowData)"
+                    <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showLog(rowData.id)"
                             icon="fa-file-text"></button>
                 </div>
                 <div *ngSwitchDefault>
