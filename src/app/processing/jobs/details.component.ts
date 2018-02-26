@@ -117,7 +117,7 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
             this.jobsApiService.getJob(id).then(data => {
                 this.jobsApiService.getJobExecutions(id).then(exeData => {
-                    this.jobExecutions = exeData;
+                    this.jobExecutions = exeData.results;
                     this.initJobDetail(data);
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
