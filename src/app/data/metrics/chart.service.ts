@@ -32,6 +32,7 @@ export class ChartService {
             // filters were applied, so build data source accordingly
             let idx = 0;
             _.forEach(data.results, (result) => {
+                params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
                 const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
@@ -116,6 +117,7 @@ export class ChartService {
             // no filters were applied, so show aggregate statistics for selected metric
             let idx = 0;
             _.forEach(data.results, (result) => {
+                params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
                 const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {

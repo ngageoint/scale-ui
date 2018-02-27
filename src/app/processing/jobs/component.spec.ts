@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { MessageService } from 'primeng/components/common/messageservice';
 
+import { DataService } from '../../data.service';
 import { JobsApiService } from './api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobsDatatableService } from './datatable.service';
@@ -20,7 +21,7 @@ describe('JobsComponent', () => {
             declarations: [JobsComponent],
             imports: [HttpModule],
             providers: [
-                JobsApiService, JobsDatatableService, JobTypesApiService, MessageService,
+                DataService, JobsApiService, JobsDatatableService, JobTypesApiService, MessageService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

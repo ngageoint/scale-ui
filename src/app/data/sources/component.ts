@@ -4,6 +4,7 @@ import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import { DataService } from '../../data.service';
 import { SourcesApiService } from './api.service';
 import { Source } from './api.model';
 import { SourcesDatatable } from './datatable.model';
@@ -28,6 +29,7 @@ export class SourcesComponent implements OnInit {
     isInitialized: boolean;
 
     constructor(
+        public dataService: DataService,
         private sourcesDatatableService: SourcesDatatableService,
         private sourcesApiService: SourcesApiService,
         private router: Router,
@@ -40,7 +42,7 @@ export class SourcesComponent implements OnInit {
             { field: 'data_started', header: 'Data Started' },
             { field: 'data_ended', header: 'Data Ended' },
             { field: 'countries', header: 'Countries' },
-            { field: 'last_modified_formatted', header: 'Last Modified (Z)' }
+            { field: 'last_modified', header: 'Last Modified (Z)' }
         ];
         this.timeFieldOptions = [
             {

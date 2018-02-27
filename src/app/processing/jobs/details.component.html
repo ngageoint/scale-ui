@@ -31,15 +31,47 @@
                                 <!--</a>-->
                             </td>
                         </tr>
-                        <tr><td>Trigger:</td><td>{{ job.event.type }} {{ triggerOccurred }}</td></tr>
+                        <tr>
+                            <td>Trigger:</td>
+                            <td>
+                                {{ job.event.type }}
+                                <span [pTooltip]="dataService.formatDate(job.event.occurred)">
+                                    {{ dataService.formatDate(job.event.occurred, true) }}
+                                </span>
+                            </td>
+                        </tr>
                         <tr><td>Priority:</td><td>{{ job.priority }}</td></tr>
-                        <tr><td>Created:</td><td>{{ job.created_formatted }}</td></tr>
-                        <tr><td>Last Updated:</td><td>{{ job.last_modified_formatted }}</td></tr>
+                        <tr>
+                            <td>Created:</td>
+                            <td>
+                                <span [pTooltip]="dataService.formatDate(job.created)">
+                                    {{ dataService.formatDate(job.created, true) }}
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Last Updated:</td>
+                            <td>
+                                <span [pTooltip]="dataService.formatDate(job.last_modified)">
+                                    {{ dataService.formatDate(job.last_modified, true) }}
+                                </span>
+                            </td>
+                        </tr>
                         <tr><td>Num Executions:</td><td>{{ job.num_exes }}</td></tr>
                         <tr><td>Max Tries:</td><td>{{ job.max_tries }}</td></tr>
                         <tr *ngIf="job.timeout"><td>Timeout:</td><td>{{ job.timeout_formatted }}</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </p-scrollPanel>
+        </div>
+        <div class="ui-g-5">
+            <p-scrollPanel styleClass="scale-panel">
+                <div class="scale-panel__title">
+                    <span class="ui-panel-title">Timeline</span>
+                </div>
+                <div class="scale-panel__body">
+                    <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
                 </div>
             </p-scrollPanel>
         </div>
@@ -76,16 +108,6 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
-            </p-scrollPanel>
-        </div>
-        <div class="ui-g-5">
-            <p-scrollPanel styleClass="scale-panel">
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Timeline</span>
-                </div>
-                <div class="scale-panel__body">
-                    <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
                 </div>
             </p-scrollPanel>
         </div>

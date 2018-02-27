@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../environments/environment';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -75,10 +76,11 @@ export class DataService {
         return durationStr;
     }
 
-    public formatDate(date) {
+    public formatDate(date, humanize?: boolean) {
         if (date) {
-            return _.capitalize(moment.utc(date).from(moment.utc())) + ' <small>' + moment.utc(date).format('YYYY-MM-DD HH:mm:ss') +
-                '</small>';
+            return humanize ?
+                _.capitalize(moment.utc(date).from(moment.utc())) :
+                moment.utc(date).format(environment.dateFormat);
         }
         return '';
     }

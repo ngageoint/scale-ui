@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
+import { DataService } from '../../data.service';
 import { SourcesApiService } from './api.service';
 import { SourcesComponent } from './component';
 import { SourcesDatatableService } from './datatable.service';
@@ -17,7 +18,7 @@ describe('SourceFilesComponent', () => {
             declarations: [SourcesComponent],
             imports: [HttpModule],
             providers: [
-                SourcesApiService, SourcesDatatableService,
+                DataService, SourcesApiService, SourcesDatatableService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

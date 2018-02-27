@@ -2,6 +2,7 @@ import { DataService } from '../../data.service';
 import * as moment from 'moment';
 import { JobType } from '../../configuration/job-types/api.model';
 import { JobExecution } from './execution.model';
+import { environment } from '../../../environments/environment';
 
 export class Job {
     dataService: DataService;
@@ -87,8 +88,8 @@ export class Job {
         public recipe: any
     ) {
         this.dataService = new DataService();
-        this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');
-        this.last_modified_formatted = moment.utc(this.last_modified).format('YYYY-MM-DD HH:mm:ss');
+        this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
+        this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
         this.duration = this.started && this.ended ?
             this.dataService.calculateDuration(this.started, this.ended) :
             null;

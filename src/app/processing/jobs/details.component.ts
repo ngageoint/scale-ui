@@ -17,13 +17,16 @@ import { DataService } from '../../data.service';
 })
 export class JobDetailsComponent implements OnInit, AfterViewInit {
     job: Job;
+    loading: boolean;
+    loadingInputs: boolean;
+    loadingOutputs: boolean;
+    loadingExecutions: boolean;
     jobInputs = [];
     jobOutputs = [];
     jobExecutions: any;
     jobStatus: string;
     options: any;
     data: any;
-    triggerOccurred: string;
     selectedJobExe: any;
     logDisplay: boolean;
     logWidth: number;
@@ -33,14 +36,11 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private jobsApiService: JobsApiService,
-        private dataService: DataService
+        public dataService: DataService
     ) {}
 
     private initJobDetail(data) {
         this.job = data;
-        this.triggerOccurred = data.event.occurred ?
-            moment.duration(moment.utc(data.event.occurred).diff(moment.utc())).humanize(true) :
-            '';
         const now = moment.utc();
         const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
         this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
@@ -117,30 +117,42 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+            this.loading = true;
             this.jobsApiService.getJob(id).then(data => {
+                this.loading = false;
                 this.initJobDetail(data);
 
                 // get job inputs
+                this.loadingInputs = true;
                 this.jobsApiService.getJobInputs(id).then(inputData => {
+                    this.loadingInputs = false;
                     this.jobInputs = inputData.results;
                 }, err => {
+                    this.loadingInputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
                 });
 
                 // get job outputs
+                this.loadingOutputs = true;
                 this.jobsApiService.getJobOutputs(id).then(outputData => {
+                    this.loadingOutputs = false;
                     this.jobOutputs = outputData.results;
                 }, err => {
+                    this.loadingOutputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
                 });
 
                 // get job executions
+                this.loadingExecutions = true;
                 this.jobsApiService.getJobExecutions(id).then(exeData => {
+                    this.loadingExecutions = false;
                     this.jobExecutions = JobExecution.transformer(exeData.results);
                 }, err => {
+                    this.loadingExecutions = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
                 });
             }, err => {
+                this.loading = false;
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
             });
         }

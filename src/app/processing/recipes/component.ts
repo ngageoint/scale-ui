@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import { DataService } from '../../data.service';
 import { RecipesApiService } from './api.service';
 import { Recipe } from './api.model';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
@@ -35,6 +36,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     subscription: any;
 
     constructor(
+        public dataService: DataService,
         private messageService: MessageService,
         private recipesDatatableService: RecipesDatatableService,
         private recipesApiService: RecipesApiService,
