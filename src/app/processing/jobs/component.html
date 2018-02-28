@@ -74,9 +74,6 @@
                     </div>
                     {{ rowData.status }}
                 </div>
-                <div *ngSwitchCase="'node'">
-                    {{ rowData.node.hostname }}
-                </div>
                 <div *ngSwitchCase="'error.title'">
                     <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}" tooltipPosition="left" appendTo="body"
                          tooltipStyleClass="jobs__error-tooltip">

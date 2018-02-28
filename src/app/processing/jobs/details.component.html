@@ -77,6 +77,7 @@
         </div>
         <div class="ui-g-3">
             <p-scrollPanel styleClass="scale-panel">
+                <app-loading-indicator [loading]="loadingExecutions"></app-loading-indicator>
                 <div class="scale-panel__title">
                     <span class="ui-panel-title">Executions</span>
                 </div>
@@ -115,6 +116,7 @@
     <div class="ui-g">
         <div class="ui-g-6">
             <p-scrollPanel styleClass="scale-panel">
+                <app-loading-indicator [loading]="loadingInputs"></app-loading-indicator>
                 <div class="scale-panel__title">
                     <span class="ui-panel-title">Inputs</span>
                 </div>
@@ -147,6 +149,7 @@
         </div>
         <div class="ui-g-6">
             <p-scrollPanel styleClass="scale-panel">
+                <app-loading-indicator [loading]="loadingOutputs"></app-loading-indicator>
                 <div class="scale-panel__title">
                     <span class="ui-panel-title">Outputs</span>
                 </div>
@@ -166,7 +169,7 @@
                                 <a *ngIf="output.url" href="{{ output.url }}" target="_jobfile">
                                     {{ output.file_name }}
                                 </a>
-                                <span *ngIf="!output.value.url">{{ output.file_name }}</span>
+                                <span *ngIf="!output.url">{{ output.file_name }}</span>
                             </td>
                             <td>{{ calculateFileSize(output.file_size) }}</td>
                             <td>{{ output.created }}</td>
