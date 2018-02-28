@@ -2,14 +2,20 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-import { environment } from '../../../environments/environment';
 
+import { DataService } from '../../data.service';
 import { ApiResults } from '../../api-results.model';
 import { RecipeType } from './api.model';
 
 @Injectable()
 export class RecipeTypesApiService {
-    constructor( private http: Http) {
+    apiPrefix: string;
+
+    constructor(
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('recipe-types');
     }
 
     getRecipeTypes(params?: any): Promise<ApiResults> {
@@ -25,14 +31,14 @@ export class RecipeTypesApiService {
                 ended: params.ended
             };
         }
-        return this.http.get(`${environment.apiPrefix}/recipe-types/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getRecipeType(id: number): Promise<RecipeType> {
-        return this.http.get(`${environment.apiPrefix}/recipe-types/${id}/`)
+        return this.http.get(`${this.apiPrefix}/recipe-types/${id}/`)
             .toPromise()
             .then(response => RecipeType.transformer(response.json()))
             .catch(this.handleError);

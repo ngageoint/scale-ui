@@ -98,4 +98,10 @@ export class DataService {
             height: y
         };
     }
+
+    public getApiPrefix(endpoint) {
+        const versionObj = _.find(environment.apiVersions, { endpoint: endpoint });
+        const version = versionObj ? versionObj.version : environment.apiDefaultVersion;
+        return `${environment.apiPrefix}/${version}`;
+    }
 }

@@ -24,167 +24,169 @@ const jobExecution = require('./handlers/jobExecution');
 const ingestsStatus = require('./handlers/ingestsStatus');
 const status = require('./handlers/status');
 
+const apiVersion = 'v5';
+
 module.exports = {
     init: function(server) {
         server.route({
             method: 'GET',
-            path: '/mocks/hello',
+            path: '/mocks/' + apiVersion + '/hello',
             handler: hello
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/load/',
+            path: '/mocks/' + apiVersion + '/load/',
             handler: jobLoad
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/recipes/',
+            path: '/mocks/' + apiVersion + '/recipes/',
             handler: recipes
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/recipe-types/',
+            path: '/mocks/' + apiVersion + '/recipe-types/',
             handler: recipeTypes
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/recipes/{id}/',
+            path: '/mocks/' + apiVersion + '/recipes/{id}/',
             handler: recipeDetails
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/recipe-types/{id}/',
+            path: '/mocks/' + apiVersion + '/recipe-types/{id}/',
             handler: recipeTypeDetails
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/jobs/',
+            path: '/mocks/' + apiVersion + '/jobs/',
             handler: jobs
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/jobs/{id}/',
+            path: '/mocks/' + apiVersion + '/jobs/{id}/',
             handler: jobDetails
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/job-types/running/',
+            path: '/mocks/' + apiVersion + '/job-types/running/',
             handler: runningJobs
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/job-types/',
+            path: '/mocks/' + apiVersion + '/job-types/',
             handler: jobTypes
         });
 
         server.route({
             method: 'POST',
-            path: '/mocks/job-types/validate/',
+            path: '/mocks/' + apiVersion + '/job-types/validate/',
             handler: jobTypesValidate
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/job-types/status/',
+            path: '/mocks/' + apiVersion + '/job-types/status/',
             handler: jobTypesStatus
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/job-types/{id}/',
+            path: '/mocks/' + apiVersion + '/job-types/{id}/',
             handler: jobTypeDetails
         });
 
         server.route({
             method: 'PATCH',
-            path: '/mocks/job-types/{id}/',
+            path: '/mocks/' + apiVersion + '/job-types/{id}/',
             handler: jobTypeUpdate
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/workspaces/',
+            path: '/mocks/' + apiVersion + '/workspaces/',
             handler: workspaces
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/sources/',
+            path: '/mocks/' + apiVersion + '/sources/',
             handler: sources
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/sources/{id}/',
+            path: '/mocks/' + apiVersion + '/sources/{id}/',
             handler: sourceDetails
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/sources/{id}/{type}/',
+            path: '/mocks/' + apiVersion + '/sources/{id}/{type}/',
             handler: sourceDescendants
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/',
+            path: '/mocks/' + apiVersion + '/metrics/',
             handler: metrics
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/job-types/',
+            path: '/mocks/' + apiVersion + '/metrics/job-types/',
             handler: metricsDataTypes
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/ingest/',
+            path: '/mocks/' + apiVersion + '/metrics/ingest/',
             handler: metricsDataTypes
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/error-types/',
+            path: '/mocks/' + apiVersion + '/metrics/error-types/',
             handler: metricsDataTypes
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/metrics/{type}/plot-data/',
+            path: '/mocks/' + apiVersion + '/metrics/{type}/plot-data/',
             handler: metricsPlotData
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/job-executions/{id}/logs/combined/',
+            path: '/mocks/' + apiVersion + '/job-executions/{id}/logs/combined/',
             handler: jobExecutionLogs
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/job-executions/{id}/',
+            path: '/mocks/' + apiVersion + '/job-executions/{id}/',
             handler: jobExecution
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/ingests/status/',
+            path: '/mocks/' + apiVersion + '/ingests/status/',
             handler: ingestsStatus
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/status/',
+            path: '/mocks/' + apiVersion + '/status/',
             handler: status
         });
     }

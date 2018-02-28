@@ -3,16 +3,21 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import { DataService } from '../../data.service';
 import { ApiResults } from '../../api-results.model';
 import { Source } from './api.model';
 import { SourcesDatatable } from './datatable.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class SourcesApiService {
+    apiPrefix: string;
+
     constructor(
-        private http: Http
-    ) { }
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('sources');
+    }
     getSources(params: SourcesDatatable): Promise<ApiResults> {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
@@ -26,13 +31,13 @@ export class SourcesApiService {
             is_parsed: params.is_parsed,
             file_name: params.file_name
         };
-        return this.http.get(`${environment.apiPrefix}/sources/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/sources/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getSource(id: number): Promise<Source> {
-        return this.http.get(`${environment.apiPrefix}/sources/${id}/`)
+        return this.http.get(`${this.apiPrefix}/sources/${id}/`)
             .toPromise()
             .then(response => Source.transformer(response.json()))
             .catch(this.handleError);
@@ -54,7 +59,7 @@ export class SourcesApiService {
             error_category: params.error_category,
             include_superseded: params.include_superseded
         };
-        return this.http.get(`${environment.apiPrefix}/sources/${id}/${type}/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/sources/${id}/${type}/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

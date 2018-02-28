@@ -61,7 +61,6 @@ import { MetricsApiService } from './data/metrics/api.service';
 import { ChartService } from './data/metrics/chart.service';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { RunningJobsDatatableService } from './processing/running-jobs/datatable.service';
-import { RunningJobsApiService } from './processing/running-jobs/api.service';
 import { LogViewerComponent } from './common/log-viewer/component';
 import { LogViewerApiService } from './common/log-viewer/api.service';
 import { RecipeGraphComponent } from './common/recipe-graph/component';
@@ -170,7 +169,6 @@ import { StatusApiService } from './navbar/status/api.service';
         FailureRatesDatatableService,
         MetricsApiService,
         ChartService,
-        RunningJobsApiService,
         RunningJobsDatatableService,
         LogViewerApiService,
         IngestApiService,

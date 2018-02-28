@@ -2,15 +2,19 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
-import { environment } from '../../../environments/environment';
+
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class LogViewerApiService {
+    apiPrefix: string;
     logArgs: any[];
 
     constructor(
-        private http: Http
+        private http: Http,
+        private dataService: DataService
     ) {
+        this.apiPrefix = this.dataService.getApiPrefix('job-executions');
         this.logArgs = [];
     }
 
@@ -21,7 +25,7 @@ export class LogViewerApiService {
         this.logArgs = args;
     }
     getLog(id: number): Promise<any> {
-        return this.http.get(`${environment.apiPrefix}/job-executions/${id}/logs/combined/`)
+        return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);

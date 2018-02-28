@@ -1,13 +1,14 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 
+import { DataService } from '../../data.service';
 import { MetricsApiService } from './api.service';
 
 describe('MetricsApiService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpModule],
-            providers: [MetricsApiService]
+            providers: [DataService, MetricsApiService]
         });
     });
 

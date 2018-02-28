@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
 
-import { RunningJobsApiService } from './api.service';
+import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { RunningJobsDatatable } from './datatable.model';
 import { RunningJobsDatatableService } from './datatable.service';
 import { RunningJob } from './api.model';
@@ -30,7 +30,7 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
     constructor(
         private messageService: MessageService,
         private runningJobsDatatableService: RunningJobsDatatableService,
-        private runningJobsApiService: RunningJobsApiService,
+        private jobTypesApiService: JobTypesApiService,
         private jobsDatatableService: JobsDatatableService,
         private router: Router,
         private route: ActivatedRoute
@@ -47,7 +47,7 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
     private updateData() {
         this.datatableLoading = true;
         this.unsubscribe();
-        this.subscription = this.runningJobsApiService.getRunningJobs(this.datatableOptions, true).subscribe(data => {
+        this.subscription = this.jobTypesApiService.getRunningJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
             this.runningJobs = RunningJob.transformer(data.results);

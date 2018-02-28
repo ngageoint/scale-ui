@@ -3,12 +3,18 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
+import { DataService } from '../../data.service';
 import { ApiResults } from '../../api-results.model';
-import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class WorkspacesApiService {
-    constructor( private http: Http) {
+    apiPrefix: string;
+
+    constructor(
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('workspaces');
     }
 
     getWorkspaces(params?: object): Promise<ApiResults> {
@@ -25,7 +31,7 @@ export class WorkspacesApiService {
         //         name: params.name
         //     };
         // }
-        return this.http.get(`${environment.apiPrefix}/workspaces/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/workspaces/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

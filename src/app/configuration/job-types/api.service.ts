@@ -4,15 +4,22 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs/Observable';
 
+import { DataService } from '../../data.service';
 import { ApiResults } from '../../api-results.model';
 import { JobType } from './api.model';
-import { Observable } from 'rxjs/Observable';
-import { environment } from '../../../environments/environment';
+import { RunningJobsDatatable } from '../../processing/running-jobs/datatable.model';
 
 @Injectable()
 export class JobTypesApiService {
-    constructor( private http: Http) {
+    apiPrefix: string;
+
+    constructor(
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('job-types');
     }
 
     getJobTypes(params?: any): Promise<ApiResults> {
@@ -32,21 +39,21 @@ export class JobTypesApiService {
                 is_operational: params.is_operational
             };
         }
-        return this.http.get(`${environment.apiPrefix}/job-types/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/job-types/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
 
     getJobType(id: number): Promise<JobType> {
-        return this.http.get(`${environment.apiPrefix}/job-types/${id}/`)
+        return this.http.get(`${this.apiPrefix}/job-types/${id}/`)
             .toPromise()
             .then(response => JobType.transformer(response.json()))
             .catch(this.handleError);
     }
 
     validateJobType(jobType: JobType): Promise<any> {
-        return this.http.post(`${environment.apiPrefix}/job-types/validate/`, jobType)
+        return this.http.post(`${this.apiPrefix}/job-types/validate/`, jobType)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
@@ -57,7 +64,7 @@ export class JobTypesApiService {
             error_mappings: jobType.error_mapping,
             is_paused: jobType.is_paused
         };
-        return this.http.patch(`${environment.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
+        return this.http.patch(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
             .toPromise()
             .then(response => JobType.transformer(response.json()))
             .catch(this.handleError);
@@ -66,7 +73,7 @@ export class JobTypesApiService {
     getJobTypeStatus(poll?: Boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/job-types/status/`)
+                return this.http.get(`${this.apiPrefix}/job-types/status/`)
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())))
@@ -76,7 +83,31 @@ export class JobTypesApiService {
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/job-types/status/`)
+        return this.http.get(`${this.apiPrefix}/job-types/status/`)
+            .toPromise()
+            .then(response => ApiResults.transformer(response.json()))
+            .catch(this.handleError);
+    }
+
+    getRunningJobs(params: RunningJobsDatatable, poll?: Boolean): any {
+        const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+        const queryParams = {
+            page: page,
+            page_size: params.rows
+        };
+        if (poll) {
+            const getData = () => {
+                return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
+                    .switchMap((data) => Observable.timer(5000)
+                        .switchMap(() => getData())
+                        .startWith(ApiResults.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
+            };
+            return getData();
+        }
+        return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

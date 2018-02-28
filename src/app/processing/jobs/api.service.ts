@@ -4,22 +4,28 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
-
-import { ApiResults } from '../../api-results.model';
-import { Job } from './api.model';
-import { JobsDatatable } from './datatable.model';
-import { JobExecution } from './execution.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/startWith';
-import { environment } from '../../../environments/environment';
+
+import { DataService } from '../../data.service';
+import { ApiResults } from '../../api-results.model';
+import { Job } from './api.model';
+import { JobsDatatable } from './datatable.model';
+import { JobExecution } from './execution.model';
 
 @Injectable()
 export class JobsApiService {
+    apiPrefix: string;
+
     constructor(
-        private http: Http
-    ) { }
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('jobs');
+    }
+
     getJobs(params: JobsDatatable, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
@@ -40,7 +46,7 @@ export class JobsApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/jobs/`, { params: queryParams })
+                return this.http.get(`${this.apiPrefix}/jobs/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())))
@@ -50,49 +56,49 @@ export class JobsApiService {
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/jobs/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/jobs/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getJob(id: number): Promise<Job> {
-        return this.http.get(`${environment.apiPrefix}/jobs/${id}/`)
+        return this.http.get(`${this.apiPrefix}/jobs/${id}/`)
             .toPromise()
             .then(response => Job.transformer(response.json()))
             .catch(this.handleError);
     }
     getJobExecutions(id: number): Promise<any> {
-        return this.http.get(`${environment.apiPrefix}/jobs/${id}/executions/`)
+        return this.http.get(`${this.apiPrefix}/jobs/${id}/executions/`)
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getJobExecution(id: number, exe_num: number): Promise<JobExecution> {
-        return this.http.get(`${environment.apiPrefix}/jobs/${id}/executions/${exe_num}/`)
+        return this.http.get(`${this.apiPrefix}/jobs/${id}/executions/${exe_num}/`)
             .toPromise()
             .then(response => JobExecution.transformer(response.json()))
             .catch(this.handleError);
     }
     getJobInputs(id: number): Promise<any> {
-        return this.http.get(`${environment.apiPrefix}/jobs/${id}/input_files/`)
+        return this.http.get(`${this.apiPrefix}/jobs/${id}/input_files/`)
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     getJobOutputs(id: number): Promise<any> {
-        return this.http.get(`${environment.apiPrefix}/products/`, { params: { job_id: id } })
+        return this.http.get(`${this.apiPrefix}/products/`, { params: { job_id: id } })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
     updateJob(id: number, data: any): Promise<any> {
-        return this.http.patch(`${environment.apiPrefix}/jobs/${id}/`, data)
+        return this.http.patch(`${this.apiPrefix}/jobs/${id}/`, data)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
     }
     requeueJobs(params): Promise<any> {
-        params.url = params.url ? params.url : `${environment.apiPrefix}/jobs/requeue/`;
+        params.url = params.url ? params.url : `${this.apiPrefix}/jobs/requeue/`;
         return this.http.post(params.url, params)
             .toPromise()
             .then(response => response.json())
@@ -101,7 +107,7 @@ export class JobsApiService {
     getJobLoad(params, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/load/`, { params: params })
+                return this.http.get(`${this.apiPrefix}/load/`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())))
@@ -111,7 +117,7 @@ export class JobsApiService {
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/load/`, { params: params })
+        return this.http.get(`${this.apiPrefix}/load/`, { params: params })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);

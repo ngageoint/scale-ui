@@ -4,19 +4,25 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
-
 import { Observable } from 'rxjs/Observable';
-import { environment } from '../../../environments/environment';
+
+import { DataService } from '../../data.service';
 
 @Injectable()
 export class StatusApiService {
-    constructor(private http: Http) {
+    apiPrefix: string;
+
+    constructor(
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('status');
     }
 
     getStatus(poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/status/`)
+                return this.http.get(`${this.apiPrefix}/status/`)
                     .switchMap((data) => Observable.timer(300000) // 5 minutes
                         .switchMap(() => getData())
                         .startWith(data.json()))
@@ -26,7 +32,7 @@ export class StatusApiService {
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/status/`)
+        return this.http.get(`${this.apiPrefix}/status/`)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);

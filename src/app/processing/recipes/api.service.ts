@@ -4,18 +4,24 @@ import { Http } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs/Observable';
 
+import { DataService } from '../../data.service';
 import { ApiResults } from '../../api-results.model';
 import { RecipesDatatable } from './datatable.model';
 import { Recipe } from './api.model';
-import { Observable } from 'rxjs/Observable';
-import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class RecipesApiService {
+    apiPrefix: string;
+
     constructor(
-        private http: Http
-    ) { }
+        private http: Http,
+        private dataService: DataService
+    ) {
+        this.apiPrefix = this.dataService.getApiPrefix('recipes');
+    }
+
     getRecipes(params: RecipesDatatable, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
@@ -32,7 +38,7 @@ export class RecipesApiService {
         };
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/recipes/`, { params: queryParams })
+                return this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
                         .startWith(ApiResults.transformer(data.json())))
@@ -42,7 +48,7 @@ export class RecipesApiService {
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/recipes/`, { params: queryParams })
+        return this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
@@ -51,7 +57,7 @@ export class RecipesApiService {
     getRecipe(id: number, poll?: Boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${environment.apiPrefix}/recipes/${id}/`)
+                return this.http.get(`${this.apiPrefix}/recipes/${id}/`)
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
                         .startWith(Recipe.transformer(data.json())))
@@ -61,7 +67,7 @@ export class RecipesApiService {
             };
             return getData();
         }
-        return this.http.get(`${environment.apiPrefix}/recipes/${id}/`)
+        return this.http.get(`${this.apiPrefix}/recipes/${id}/`)
             .toPromise()
             .then(response => Recipe.transformer(response.json()))
             .catch(this.handleError);
