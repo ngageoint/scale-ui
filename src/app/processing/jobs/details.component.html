@@ -139,8 +139,16 @@
                                 <span *ngIf="!input.url">{{ input.file_name }}</span>
                             </td>
                             <td>{{ calculateFileSize(input.file_size) }}</td>
-                            <td>{{ input.created }}</td>
-                            <td>{{ input.last_modified }}</td>
+                            <td>
+                                <span [pTooltip]="dataService.formatDate(input.created)">
+                                    {{ dataService.formatDate(input.created, true) }}
+                                </span>
+                            </td>
+                            <td>
+                                <span [pTooltip]="dataService.formatDate(input.last_modified)">
+                                    {{ dataService.formatDate(input.last_modified, true) }}
+                                </span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -172,8 +180,16 @@
                                 <span *ngIf="!output.url">{{ output.file_name }}</span>
                             </td>
                             <td>{{ calculateFileSize(output.file_size) }}</td>
-                            <td>{{ output.created }}</td>
-                            <td>{{ output.last_modified }}</td>
+                            <td>
+                                <span [pTooltip]="dataService.formatDate(output.created)">
+                                    {{ dataService.formatDate(output.created, true) }}
+                                </span>
+                            </td>
+                            <td>
+                                <span [pTooltip]="dataService.formatDate(output.last_modified)" tooltipPosition="left">
+                                    {{ dataService.formatDate(output.last_modified, true) }}
+                                </span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
