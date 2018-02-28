@@ -23,6 +23,9 @@ const jobExecutionLogs = require('./handlers/jobExecutionLogs');
 const jobExecution = require('./handlers/jobExecution');
 const ingestsStatus = require('./handlers/ingestsStatus');
 const status = require('./handlers/status');
+const jobInputs = require('./handlers/jobInputs');
+const products = require('./handlers/products');
+const jobExecutions = require('./handlers/jobExecutions');
 
 const apiVersion = 'v5';
 
@@ -188,6 +191,24 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/status/',
             handler: status
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/jobs/{id}/input_files/',
+            handler: jobInputs
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/products/',
+            handler: products
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/jobs/{id}/executions/',
+            handler: jobExecutions
         });
     }
 };

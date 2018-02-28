@@ -42,6 +42,64 @@ module.exports = function (request, reply) {
                 category: 'none',
                 description: 'This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. '
             },
+            execution: {
+                id: 3,
+                status: 'COMPLETED',
+                exe_num: 1,
+                cluster_id: 'scale_job_1234_263x0',
+                created: '2015-08-28T17:57:41.033Z',
+                queued: '2015-08-28T17:57:41.010Z',
+                started: '2015-08-28T17:57:44.494Z',
+                ended: '2015-08-28T17:57:45.906Z',
+                job: {
+                    id: 3
+                },
+                node: {
+                    id: 1,
+                    hostname: 'machine.com'
+                },
+                error: null,
+                job_type: {
+                    id: 1,
+                    name: 'scale-ingest',
+                    version: '1.0',
+                    title: 'Scale Ingest',
+                    description: 'Ingests a source file into a workspace',
+                    category: 'system',
+                    author_name: null,
+                    author_url: null,
+                    is_system: true,
+                    is_long_running: false,
+                    is_active: true,
+                    is_operational: true,
+                    is_paused: false,
+                    icon_code: 'f013'
+                },
+                timeout: 1800,
+                input_file_size: 10.0,
+                task_results: null,
+                resources: {
+                    version: '1.0',
+                    resources: {
+                        mem: 128.0,
+                        disk: 11.0,
+                        cpus: 1.0
+                    }
+                },
+                configuration: {
+                    tasks: [],
+                    version: '2.0',
+                    output: {
+                        output_data: [
+                            {
+                                name: 'output_file',
+                                file_id: 3
+                            }
+                        ],
+                        version: '1.0'
+                    }
+                }
+            },
             status: statusValue,
             priority: 97,
             num_exes: 94,
