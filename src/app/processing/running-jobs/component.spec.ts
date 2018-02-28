@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
+import { DataService } from '../../data.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { RunningJobsDatatableService } from './datatable.service';
 import { RunningJobsComponent } from './component';
@@ -20,7 +21,7 @@ describe('RunningJobsComponent', () => {
             declarations: [RunningJobsComponent],
             imports: [HttpModule],
             providers: [
-                MessageService, JobTypesApiService, RunningJobsDatatableService, JobsDatatableService,
+                DataService, MessageService, JobTypesApiService, RunningJobsDatatableService, JobsDatatableService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

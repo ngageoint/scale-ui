@@ -123,7 +123,7 @@
 </div>
 <p-sidebar [(visible)]="sidebarDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
     <h2>{{ sidebarTitle }}</h2>
-    <p-table [columns]="columns" [value]="options" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'"
+    <p-table [columns]="columns" [value]="options" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
              [rowHover]="true" #datatable>
         <ng-template pTemplate="header" let-columns>
             <tr>

@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 
+import { DataService } from '../../data.service';
 import { LogViewerApiService } from './api.service';
 import { LogViewerComponent } from './component';
 
@@ -15,6 +16,7 @@ describe('LogViewerComponent', () => {
             declarations: [LogViewerComponent],
             imports: [HttpModule],
             providers: [
+                DataService,
                 LogViewerApiService
             ],
             // Tells the compiler not to error on unknown elements and attributes

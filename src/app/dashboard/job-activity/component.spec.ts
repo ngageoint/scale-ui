@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { MessageService } from 'primeng/components/common/messageservice';
 
+import { DataService } from '../../data.service';
 import { ColorService } from '../../color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { DashboardJobsService } from '../jobs.service';
@@ -16,7 +17,7 @@ describe('JobActivityComponent', () => {
         TestBed.configureTestingModule({
             declarations: [JobActivityComponent],
             imports: [HttpModule],
-            providers: [MessageService, ColorService, JobsApiService, DashboardJobsService],
+            providers: [DataService, MessageService, ColorService, JobsApiService, DashboardJobsService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })

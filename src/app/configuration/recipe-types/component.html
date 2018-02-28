@@ -62,8 +62,8 @@
 </div>
 <p-sidebar [(visible)]="addJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
     <h2>Add Job Type</h2>
-    <p-table [columns]="columns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" [scrollHeight]="scrollHeight + 'px'"
-             [rowHover]="true" #datatable>
+    <p-table [columns]="columns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%" [rowHover]="true"
+             #datatable>
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">

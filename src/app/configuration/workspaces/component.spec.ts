@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { DataService } from '../../data.service';
 import { WorkspacesApiService } from './api.service';
 import { WorkspacesComponent } from './component';
 
@@ -16,7 +17,7 @@ describe('WorkspacesComponent', () => {
             declarations: [WorkspacesComponent],
             imports: [HttpModule],
             providers: [
-                WorkspacesApiService,
+                DataService, WorkspacesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

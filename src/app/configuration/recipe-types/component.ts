@@ -31,7 +31,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedRecipeTypeDetail: any;
     selectedJobType: JobType;
     addJobTypeDisplay: boolean;
-    scrollHeight: any;
     isEditing: boolean;
 
     constructor(
@@ -169,7 +168,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
     }
     ngOnInit() {
-        this.scrollHeight = this.dataService.getViewportSize().height * 0.85;
         this.jobTypesApiService.getJobTypes().then(data => {
             this.jobTypes = data.results;
         });

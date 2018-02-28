@@ -4,13 +4,14 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
+import { DataService } from '../../data.service';
 import { FailureRatesComponent } from './component';
 import { FailureRatesDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 
 
-describe('JobsComponent', () => {
+describe('FailureRatesComponent', () => {
     let component: FailureRatesComponent;
     let fixture: ComponentFixture<FailureRatesComponent>;
 
@@ -19,7 +20,7 @@ describe('JobsComponent', () => {
             declarations: [FailureRatesComponent],
             imports: [HttpModule],
             providers: [
-                FailureRatesDatatableService, JobTypesApiService, MetricsApiService,
+                DataService, FailureRatesDatatableService, JobTypesApiService, MetricsApiService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

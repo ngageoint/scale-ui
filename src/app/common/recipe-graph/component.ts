@@ -15,7 +15,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() isEditing: boolean;
 
     columns: any[];
-    scrollHeight: number;
     sidebarDisplay: boolean;
     sidebarTitle: string;
     options: any;
@@ -250,6 +249,5 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.scrollHeight = this.dataService.getViewportSize().height * 0.85;
     }
 }

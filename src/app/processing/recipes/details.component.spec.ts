@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 
+import { DataService } from '../../data.service';
 import { RecipesApiService } from './api.service';
 import { RecipeDetailsComponent } from './details.component';
 
@@ -17,7 +18,7 @@ describe('RecipeDetailsComponent', () => {
             declarations: [RecipeDetailsComponent],
             imports: [HttpModule],
             providers: [
-                MessageService, RecipesApiService,
+                DataService, MessageService, RecipesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

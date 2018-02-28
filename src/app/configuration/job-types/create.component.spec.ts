@@ -5,6 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
+import { DataService } from '../../data.service';
 import { JobTypesApiService } from './api.service';
 import { JobTypesCreateComponent } from './create.component';
 import { WorkspacesApiService } from '../workspaces/api.service';
@@ -19,7 +20,7 @@ describe('JobTypesCreateComponent', () => {
             declarations: [JobTypesCreateComponent],
             imports: [HttpModule],
             providers: [
-                MessageService, JobTypesApiService, WorkspacesApiService, FormBuilder,
+                DataService, MessageService, JobTypesApiService, WorkspacesApiService, FormBuilder,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
