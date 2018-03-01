@@ -38,7 +38,8 @@ export class FailureRatesComponent implements OnInit {
         this.columns = [
             { field: 'job_type.id', header: 'Job Type' },
             { field: 'twentyfour_hours', header: '24 Hours' },
-            { field: 'fortyeight_hours', header: '48 Hours' }
+            { field: 'fortyeight_hours', header: '48 Hours' },
+            { field: 'thirty_days', header: '30 Days' }
         ];
     }
 
@@ -109,6 +110,8 @@ export class FailureRatesComponent implements OnInit {
                         return d.job_type.name === this.datatableOptions.name && d.job_type.version === this.datatableOptions.version;
                     });
                 }
+                const direction = this.datatableOptions.sortOrder === -1 ? 'desc' : 'asc';
+                this.performanceData = _.orderBy(tempData, [this.datatableOptions.sortField], [direction]);
                 this.performanceData = tempData;
                 this.datatableLoading = false;
             }
@@ -201,38 +204,38 @@ export class FailureRatesComponent implements OnInit {
             } else {
                 this.datatableOptions = this.failureRatesDatatableService.getFailureRatesDatatableOptions();
             }
-            this.sortConfig = {
-                twentyfour_hours: {
-                    system: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    algorithm: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    data: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    total: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    failRate: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
-                },
-                fortyeight_hours: {
-                    system: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    algorithm: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    data: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    total: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    failRate: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
-                },
-                thirty_days: {
-                    system: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    algorithm: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    data: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    total: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
-                    failRate: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
-                },
-                job_type: {
-                    title: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
-                }
-            };
-            const sortField = this.datatableOptions.sortField.split('.');
-            this.sortConfig[sortField[0]][sortField[1]].direction = this.datatableOptions.sortOrder === -1 ? 'desc' : 'asc';
-            this.sortConfig[sortField[0]][sortField[1]].icon = this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ?
-                'fa-caret-down' :
-                'fa-caret-up';
-            this.getJobTypes();
         });
+        this.sortConfig = {
+            twentyfour_hours: {
+                system: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                algorithm: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                data: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                total: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                failRate: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
+            },
+            fortyeight_hours: {
+                system: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                algorithm: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                data: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                total: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                failRate: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
+            },
+            thirty_days: {
+                system: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                algorithm: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                data: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                total: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' },
+                failRate: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
+            },
+            job_type: {
+                title: { direction: this.datatableOptions.sortOrder || 'desc', icon: 'hidden' }
+            }
+        };
+        const sortField = this.datatableOptions.sortField.split('.');
+        this.sortConfig[sortField[0]][sortField[1]].direction = this.datatableOptions.sortOrder === -1 ? 'desc' : 'asc';
+        this.sortConfig[sortField[0]][sortField[1]].icon = this.sortConfig[sortField[0]][sortField[1]].direction === 'desc' ?
+            'fa-caret-down' :
+            'fa-caret-up';
+        this.getJobTypes();
     }
 }

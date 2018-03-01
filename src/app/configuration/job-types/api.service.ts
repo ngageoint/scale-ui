@@ -30,13 +30,17 @@ export class JobTypesApiService {
             queryParams = {
                 order: sortStr,
                 page: page,
-                page_size: params.rows,
+                page_size: params.rows || 1000,
                 started: params.started,
                 ended: params.ended,
                 name: params.name,
                 category: params.category,
                 is_active: params.is_active,
                 is_operational: params.is_operational
+            };
+        } else {
+            queryParams = {
+                page_size: 1000
             };
         }
         return this.http.get(`${this.apiPrefix}/job-types/`, { params: queryParams })

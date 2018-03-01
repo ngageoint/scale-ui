@@ -54,7 +54,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                             id = +params.get('id');
                         });
                     }
-                    this.jobTypesApiService.getJobTypes({ rows: 1000 }).then(data => {
+                    this.jobTypesApiService.getJobTypes().then(data => {
                         _.forEach(data.results, (result) => {
                             this.jobTypes.push({
                                 label: result.title + ' ' + result.version,

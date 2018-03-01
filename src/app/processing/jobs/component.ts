@@ -135,7 +135,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     private getJobTypes() {
-        this.jobTypesApiService.getJobTypes({ rows: 1000 }).then(data => {
+        this.jobTypesApiService.getJobTypes().then(data => {
             this.jobTypes = JobType.transformer(data.results);
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
