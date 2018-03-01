@@ -121,6 +121,9 @@
                     <span class="ui-panel-title">Inputs</span>
                 </div>
                 <div class="scale-panel__body">
+                    <div *ngIf="jobInputs.length === 0">
+                        No records found.
+                    </div>
                     <table class="table table-striped job__io" *ngIf="jobInputs.length > 0">
                         <thead>
                         <tr class="job__io-header">
@@ -162,6 +165,9 @@
                     <span class="ui-panel-title">Outputs</span>
                 </div>
                 <div class="scale-panel__body">
+                    <div *ngIf="jobOutputs.length === 0">
+                        No records found.
+                    </div>
                     <table class="table table-striped job__io" *ngIf="jobOutputs.length > 0">
                         <thead>
                         <tr class="job__io-header">

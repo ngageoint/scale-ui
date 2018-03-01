@@ -135,7 +135,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     private getJobTypes() {
-        this.jobTypesApiService.getJobTypes().then(data => {
+        this.jobTypesApiService.getJobTypes({ rows: 1000 }).then(data => {
             this.jobTypes = JobType.transformer(data.results);
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
@@ -176,11 +176,13 @@ export class JobsComponent implements OnInit, OnDestroy {
     onLazyLoad(e: LazyLoadEvent) {
         // let ngOnInit handle loading data to ensure query params are respected
         if (this.isInitialized) {
-            this.datatableOptions = Object.assign(this.datatableOptions, {
-                first: 0,
-                sortField: e.sortField,
-                sortOrder: e.sortOrder
-            });
+            if (e.sortField !== this.datatableOptions.sortField || e.sortOrder !== this.datatableOptions.sortOrder) {
+                this.datatableOptions = Object.assign(this.datatableOptions, {
+                    first: 0,
+                    sortField: e.sortField,
+                    sortOrder: e.sortOrder
+                });
+            }
             this.updateOptions();
         } else {
             // data was just loaded by ngOnInit, so set flag to true
@@ -206,19 +208,23 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     onRowSelect(e) {
-        this.router.navigate(['/processing/jobs/' + e.data.id]);
+        if (e.originalEvent.ctrlKey) {
+            window.open(`/processing/jobs/${e.data.id}`);
+        } else {
+            this.router.navigate([`/processing/jobs/${e.data.id}`]);
+        }
     }
     onStartSelect(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            started: moment.utc(e, 'YYYY-MM-DD').toISOString()
-        });
-        this.updateOptions();
+        this.started = e;
     }
     onEndSelect(e) {
+        this.ended = e;
+    }
+    onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            ended: moment.utc(e, 'YYYY-MM-DD').toISOString()
+            started: moment.utc(this.started, 'YYYY-MM-DD').startOf('d').toISOString(),
+            ended: moment.utc(this.ended, 'YYYY-MM-DD').endOf('d').toISOString()
         });
         this.updateOptions();
     }

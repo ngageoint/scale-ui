@@ -9,6 +9,7 @@
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
+        <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
     </div>
     <div class="jobs__controls">
         <button pButton type="button" class="ui-button-primary" icon="fa-repeat" pTooltip="Requeue All Jobs"
