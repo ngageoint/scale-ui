@@ -208,7 +208,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     onRowSelect(e) {
-        if (e.originalEvent.ctrlKey) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/processing/jobs/${e.data.id}`);
         } else {
             this.router.navigate([`/processing/jobs/${e.data.id}`]);

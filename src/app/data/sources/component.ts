@@ -103,7 +103,11 @@ export class SourcesComponent implements OnInit {
         }
     }
     onRowSelect(e) {
-        this.router.navigate(['/data/sources/' + e.data.id]);
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/data/sources/${e.data.id}`);
+        } else {
+            this.router.navigate([`/data/sources/${e.data.id}`]);
+        }
     }
     onStartSelect(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
