@@ -13,9 +13,11 @@ module.exports = function (request, reply) {
     var stop = params.ended ? moment.utc(params.ended) : moment.utc();
     for (var i = 0; i < 5; i++) {
         var date = moment.utc(start.valueOf() + Math.random() * (stop.valueOf() - start.valueOf())).toISOString();
+        var statusValues = ['CANCELED', 'COMPLETED', 'FAILED', 'PENDING', 'QUEUED', 'RUNNING'];
+        var status = statusValues[Math.floor(Math.random() * (statusValues.length))];
         data.results.push({
-            id: 3,
-            status: 'COMPLETED',
+            id: Math.floor(Math.random() * (1000 - 1 + 1)) + 1,
+            status: status,
             exe_num: 1,
             cluster_id: 'scale_job_1234_263x0',
             created: moment.utc(date).subtract(5, 'm').toISOString(),
@@ -29,7 +31,18 @@ module.exports = function (request, reply) {
                 id: 1,
                 hostname: 'machine.com'
             },
-            error: null,
+            error: status === 'FAILED' ?
+                {
+                    id: 1,
+                    name: 'unknown',
+                    title: 'Unknown',
+                    description: 'The error that caused the failure is unknown.',
+                    category: 'SYSTEM',
+                    is_builtin: true,
+                    created: moment.utc(date).subtract(5, 'm').toISOString(),
+                    last_modified: moment.utc(date).subtract(2, 'm').toISOString()
+                } :
+                null,
             job_type: {
                 id: 1,
                 name: 'scale-ingest',

@@ -2,7 +2,7 @@
     <h2>
         <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
         {{ job.job_type.title }} v{{ job.job_type.version }}
-        <i class="fa fa-fw fa-square job__status" [ngClass]="job.status.toLowerCase()" pTooltip="{{ jobStatus }}"></i>
+        <i class="fa fa-fw fa-square" [ngClass]="job.status.toLowerCase()" pTooltip="{{ jobStatus }}"></i>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
     <div class="ui-g">
@@ -14,11 +14,11 @@
                 <div class="scale-panel__body">
                     <table class="table table-striped">
                         <tbody>
-                        <tr *ngIf="job.recipes">
+                        <tr *ngIf="job.recipe">
                             <td>Recipe:</td>
                             <td>
                                 <!--<a ng-href="#/recipes/recipe/{{ vm.job.recipes[0].id }}">-->
-                                {{ job.recipes[0].recipe_type.title }} {{ job.recipes[0].recipe_type.version }}
+                                {{ job.recipe.recipe_type.title }} {{ job.recipe.recipe_type.version }}
                                 <!--</a>-->
                             </td>
                         </tr>
@@ -203,10 +203,9 @@
             </p-scrollPanel>
         </div>
     </div>
-    <p-dialog header="Job Execution Log" [(visible)]="logDisplay" [width]="logWidth" [height]="logHeight" [draggable]="true"
-              positionTop="40">
+    <p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true">
         <span *ngIf="selectedJobExe">
-            <app-log-viewer [execution]="selectedJobExe" [height]="logHeight * 0.85"></app-log-viewer>
+            <app-log-viewer [execution]="selectedJobExe"></app-log-viewer>
         </span>
-    </p-dialog>
+    </p-sidebar>
 </div>

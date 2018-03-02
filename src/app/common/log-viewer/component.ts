@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { MessageService } from 'primeng/components/common/messageservice';
+import * as _ from 'lodash';
+
 import { JobExecution } from '../../processing/jobs/execution.model';
 import { LogViewerApiService } from './api.service';
-
-import * as _ from 'lodash';
 
 @Component({
     selector: 'app-log-viewer',
@@ -10,23 +11,30 @@ import * as _ from 'lodash';
     styleUrls: ['./component.scss']
 })
 export class LogViewerComponent implements OnInit, OnChanges {
-    @Input() height: number;
     @Input() execution: JobExecution;
     // forceScroll = true;
     execLog: any[];
-    jobLogError: string;
-    jobLogErrorStatus: string;
+    execLogStr: string;
     latestScaleOrderNum = 0;
+    jsonConfig = {
+        mode: {name: 'text/x-log', json: false},
+        indentUnit: 4,
+        firstLineNumber: 0,
+        lineNumbers: true,
+        readOnly: true,
+        viewportMargin: Infinity
+    };
 
     constructor(
+        private messageService: MessageService,
         private logViewerApiService: LogViewerApiService
     ) {
         this.execLog = [];
     }
 
-    showExeError(errorPanel) {
+    showExeError(errorPanel, $event) {
         if (this.execution.status === 'FAILED') {
-            errorPanel.show();
+            errorPanel.show($event);
         }
     }
 
@@ -37,6 +45,12 @@ export class LogViewerComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes) {
+        if (changes.execution.previousValue) {
+            if (changes.execution.previousValue.id !== changes.execution.currentValue.id) {
+                this.execLog = [];
+                this.execLogStr = '';
+            }
+        }
         console.log(changes);
         if (this.execution) {
             this.logViewerApiService.getLog(this.execution.id).then((result) => {
@@ -67,12 +81,18 @@ export class LogViewerComponent implements OnInit, OnChanges {
                             this.execLog = _.take(this.execLog, this.execLog.length - result.hits.hits.length);
                         }
                     }
+                    _.forEach(this.execLog, line => {
+                        this.execLogStr = this.execLogStr ?
+                            `${this.execLogStr}\r\n${line._source['@timestamp']}: ${line._source.message }` :
+                            `// Total Lines: ${this.execLog.length}\r\n${line._source['@timestamp']}: ${line._source.message }`;
+                    });
                 }
             }, (error) => {
+                let errorDetail = '';
                 if (error.statusText && error.statusText !== '') {
-                    this.jobLogErrorStatus = error.statusText;
+                    errorDetail = error.statusText;
                 }
-                this.jobLogError = 'Unable to retrieve job logs.';
+                this.messageService.add({severity: 'error', summary: 'Unable to retrieve execution log', detail: errorDetail});
             });
         }
     }

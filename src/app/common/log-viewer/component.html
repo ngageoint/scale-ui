@@ -1,29 +1,15 @@
-<div *ngIf="jobLogError" class="label label-danger text-center"><strong>{{ jobLogError }}</strong> {{ jobLogErrorStatus }}</div>
-<div class="scale-log__viewer" *ngIf="!jobLogError && execution">
-    <p-scrollPanel [style]="{width: '100%', height: height + 'px'}" styleClass="scale-log__panel">
-        <div class="scale-log__title {{ execution.status.toLowerCase()}}" (mouseenter)="showExeError(error)"
-             (mouseleave)="hideExeError(error)">
-            <span class="ui-panel-title">{{ execution.status }}</span>
-        </div>
-        <div class="scale-log__body">
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    Total Lines: {{ execLog.length }}
-                </div>
+<div class="scale-log__container">
+    <div class="scale-log__viewer" *ngIf="!jobLogError && execution">
+        <h3 class="scale-log__title" (mouseenter)="showExeError(error, $event)" (mouseleave)="hideExeError(error)">
+            <i class="fa fa-fw fa-square" [ngClass]="execution.status.toLowerCase()"></i>
+            {{ execution.status }}
+        </h3>
+        <codemirror [(ngModel)]="execLogStr" [config]="jsonConfig"></codemirror>
+        <p-overlayPanel #error appendTo="body">
+            <div *ngIf="execution.error && execution.status === 'FAILED'">
+                <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />
+                {{ execution.error.description }}
             </div>
-            <div class="ui-g log">
-                <div class="ui-g-12 bash">
-                    <div ngClass="line._source.stream" *ngFor="let line of execLog">
-                        {{ line._source['@timestamp'] }}: {{ line._source.message }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </p-scrollPanel>
-    <p-overlayPanel #error [dismissable]="true" appendTo="body">
-        <div *ngIf="execution.error && execution.status === 'FAILED'">
-            <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />
-            {{ execution.error.description }}
-        </div>
-    </p-overlayPanel>
+        </p-overlayPanel>
+    </div>
 </div>
