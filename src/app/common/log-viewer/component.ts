@@ -21,8 +21,7 @@ export class LogViewerComponent implements OnInit, OnChanges {
         indentUnit: 4,
         firstLineNumber: 0,
         lineNumbers: true,
-        readOnly: true,
-        viewportMargin: Infinity
+        readOnly: true
     };
 
     constructor(
@@ -83,7 +82,7 @@ export class LogViewerComponent implements OnInit, OnChanges {
                     }
                     _.forEach(this.execLog, line => {
                         this.execLogStr = this.execLogStr ?
-                            `${this.execLogStr}\r\n${line._source['@timestamp']}: ${line._source.message }` :
+                            `${this.execLogStr}${line._source['@timestamp']}: ${line._source.message }` :
                             `// Total Lines: ${this.execLog.length}\r\n${line._source['@timestamp']}: ${line._source.message }`;
                     });
                 }

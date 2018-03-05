@@ -1,51 +1,14 @@
 @import '../../../defaults/colors';
 
 .scale-log__container {
-    height: 100%;
-    overflow-y: auto;
-
     .scale-log__viewer {
         .scale-log__title {
             width: 49%;
+            margin-top: 0;
         }
-        //.scale-log__title {
-        //    margin-right: 18px;
-        //    border: 0 none;
-        //    border-bottom: 1px solid #e6e6e6;
-        //    padding: .75em 1.25em .5em 1.25em;
-        //    background-color: #f5f5f5;
-        //    border-top-left-radius: 0.25em;
-        //    border-top-right-radius: 0.25em;
-        //    border-bottom-left-radius: 0px;
-        //    border-bottom-right-radius: 0px;
-        //    font-weight: bold;
-        //
-        //    &.completed {
-        //        background-color: $clr-status-completed;
-        //    }
-        //
-        //    .failed {
-        //        background-color: $clr-status-failed;
-        //    }
-        //
-        //    .pending {
-        //        background-color: $clr-status-pending;
-        //    }
-        //
-        //    .queued {
-        //        background-color: $clr-status-queued;
-        //    }
-        //
-        //    .running {
-        //        background-color: $clr-status-running;
-        //    }
-        //
-        //}
-        //
-        //.scale-log__body {
-        //    margin-right: 18px;
-        //    margin-bottom: 18px;
-        //    padding: 10px;
-        //}
+
+        ::ng-deep .CodeMirror {
+            height: 25em;
+        }
     }
 }
