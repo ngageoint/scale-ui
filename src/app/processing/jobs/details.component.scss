@@ -19,24 +19,6 @@
         }
     }
 
-    .job__status {
-        &.completed {
-            color: $clr-status-completed;
-        }
-        &.failed {
-            color: $clr-status-failed;
-        }
-        &.pending {
-            color: $clr-status-pending;
-        }
-        &.queued {
-            color: $clr-status-queued;
-        }
-        &.running {
-            color: $clr-status-running;
-        }
-    }
-
     .job__exe {
         button {
             font-size: 0.9em;

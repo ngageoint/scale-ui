@@ -138,7 +138,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     onRowSelect(e) {
-        this.router.navigate(['/processing/recipes/' + e.data.id]);
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/processing/recipes/${e.data.id}`);
+        } else {
+            this.router.navigate([`/processing/recipes/${e.data.id}`]);
+        }
     }
     onStartSelect(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {

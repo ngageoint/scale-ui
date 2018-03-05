@@ -266,3 +266,19 @@ label-default {
         margin-left: 180px;
     }
 }
+
+.completed {
+    color: $clr-status-completed;
+}
+.failed {
+    color: $clr-status-failed;
+}
+.pending {
+    color: $clr-status-pending;
+}
+.queued {
+    color: $clr-status-queued;
+}
+.running {
+    color: $clr-status-running;
+}

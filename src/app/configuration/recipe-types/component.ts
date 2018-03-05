@@ -165,7 +165,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         return `&#x${code};`;
     }
     onRowSelect(e) {
-        this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/configuration/recipe-types/${e.value.id}`);
+        } else {
+            this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
+        }
     }
     ngOnInit() {
         this.jobTypesApiService.getJobTypes().then(data => {

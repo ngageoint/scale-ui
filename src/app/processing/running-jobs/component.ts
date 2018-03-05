@@ -104,7 +104,11 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
             status: 'RUNNING',
             job_type_id: e.data.job_type.id
         }));
-        this.router.navigate(['processing', 'jobs']);
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/processing/jobs/?first=0&status=RUNNING&job_type_id=${e.data.job_type.id}`);
+        } else {
+            this.router.navigate(['/processing/jobs/']);
+        }
     }
     ngOnInit() {
         this.datatableLoading = true;
