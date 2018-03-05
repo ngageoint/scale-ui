@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { RecipesApiService } from './api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 @Component({
@@ -18,7 +19,8 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     constructor(
         private messageService: MessageService,
         private route: ActivatedRoute,
-        private recipesApiService: RecipesApiService
+        private recipesApiService: RecipesApiService,
+        private recipeTypesApiService: RecipeTypesApiService
     ) { }
 
     unsubscribe() {
@@ -31,25 +33,28 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
             this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(data => {
-                this.recipeType = RecipeType.transformer(data.recipe_type);
+                this.recipeTypesApiService.getRecipeType(data.recipe_type.id).then(recipeTypeData => {
+                    this.recipeType = RecipeType.transformer(recipeTypeData);
+                    const jobTypes = [];
+                    _.forEach(data.jobs, (jobData) => {
+                        // attach revision interface to each job type
+                        const jobType = jobData.job.job_type;
+                        jobType.manifest = jobData.job.job_type_rev.interface;
+                        jobTypes.push(jobType);
 
-                const jobTypes = [];
-                _.forEach(data.jobs, (jobData) => {
-                    // attach revision interface to each job type
-                    const jobType = jobData.job.job_type;
-                    jobType.manifest = jobData.job.job_type_rev.interface;
-                    jobTypes.push(jobType);
-
-                    // include current job instance in definition
-                    const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
-                        return j.job_type.name === jobData.job.job_type.name && j.job_type.version === jobData.job.job_type.version;
+                        // include current job instance in definition
+                        const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
+                            return j.job_type.name === jobData.job.job_type.name && j.job_type.version === jobData.job.job_type.version;
+                        });
+                        if (recipeTypeJob) {
+                            recipeTypeJob.instance = jobData.job;
+                        }
                     });
-                    if (recipeTypeJob) {
-                        recipeTypeJob.instance = jobData.job;
-                    }
+                    // build recipe type details with revision definition and adjusted job types
+                    this.recipeType.job_types = jobTypes;
+                }, err => {
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type', detail: err.statusText});
                 });
-                // build recipe type details with revision definition and adjusted job types
-                this.recipeType.job_types = jobTypes;
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving recipe', detail: err.statusText});
             });

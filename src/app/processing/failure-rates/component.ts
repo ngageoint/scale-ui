@@ -112,7 +112,6 @@ export class FailureRatesComponent implements OnInit {
                 }
                 const direction = this.datatableOptions.sortOrder === -1 ? 'desc' : 'asc';
                 this.performanceData = _.orderBy(tempData, [this.datatableOptions.sortField], [direction]);
-                this.performanceData = tempData;
                 this.datatableLoading = false;
             }
         }).catch((error) => {
