@@ -12,7 +12,7 @@ module.exports = function (request, reply) {
         var lineType = rand === 1 ? 'stdout' : 'stderr';
         log.hits.hits.push({
             _source: {
-                message: 'This is a ' + lineType + ' message',
+                message: 'This is a ' + lineType + ' message\r\n',
                 '@timestamp': moment.utc().toISOString(),
                 scale_order_num: i,
                 scale_task: '',
