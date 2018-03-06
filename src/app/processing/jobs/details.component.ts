@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
@@ -15,7 +15,8 @@ import { DataService } from '../../data.service';
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss']
 })
-export class JobDetailsComponent implements OnInit, AfterViewInit {
+export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+    subscription: any;
     job: Job;
     loading: boolean;
     loadingInputs: boolean;
@@ -114,11 +115,17 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
         this.logDisplay = true;
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     ngOnInit() {
         if (this.route.snapshot) {
-            const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
+            const id = +this.route.snapshot.paramMap.get('id');
             this.loading = true;
-            this.jobsApiService.getJob(id).then(data => {
+            this.subscription = this.jobsApiService.getJob(id, true).subscribe(data => {
                 this.loading = false;
                 this.initJobDetail(data);
 
@@ -162,5 +169,9 @@ export class JobDetailsComponent implements OnInit, AfterViewInit {
         const viewportSize = this.dataService.getViewportSize();
         this.logWidth = viewportSize.width * 0.75;
         this.logHeight = viewportSize.height * 0.75;
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

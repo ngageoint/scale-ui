@@ -61,7 +61,19 @@ export class JobsApiService {
             .then(response => ApiResults.transformer(response.json()))
             .catch(this.handleError);
     }
-    getJob(id: number): Promise<Job> {
+    getJob(id: number, poll?: Boolean): any {
+        if (poll) {
+            const getData = () => {
+                return this.http.get(`${this.apiPrefix}/jobs/${id}/`)
+                    .switchMap((data) => Observable.timer(60000) // 1 minute
+                        .switchMap(() => getData())
+                        .startWith(Job.transformer(data.json())))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
+            };
+            return getData();
+        }
         return this.http.get(`${this.apiPrefix}/jobs/${id}/`)
             .toPromise()
             .then(response => Job.transformer(response.json()))
