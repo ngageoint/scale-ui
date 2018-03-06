@@ -2,6 +2,9 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
+import { Observable } from 'rxjs/Observable';
 
 import { DataService } from '../../data.service';
 
@@ -24,7 +27,19 @@ export class LogViewerApiService {
     setLogArgs(args: any[]): void {
         this.logArgs = args;
     }
-    getLog(id: number): Promise<any> {
+    getLog(id: number, poll?: boolean): any {
+        if (poll) {
+            const getData = () => {
+                return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
+                    .switchMap((data) => Observable.timer(5000) // 5 seconds
+                        .switchMap(() => getData())
+                        .startWith(data.json()))
+                    .catch(e => {
+                        return Observable.throw(e);
+                    });
+            };
+            return getData();
+        }
         return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
             .toPromise()
             .then(response => response.json())

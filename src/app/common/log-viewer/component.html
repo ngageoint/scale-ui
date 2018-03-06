@@ -4,7 +4,7 @@
             <i class="fa fa-fw fa-square" [ngClass]="execution.status.toLowerCase()"></i>
             {{ execution.status }}
         </h3>
-        <codemirror [(ngModel)]="execLogStr" [config]="jsonConfig"></codemirror>
+        <codemirror [(ngModel)]="execLogStr" [config]="jsonConfig" #codemirror></codemirror>
         <p-overlayPanel #error appendTo="body">
             <div *ngIf="execution.error && execution.status === 'FAILED'">
                 <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />

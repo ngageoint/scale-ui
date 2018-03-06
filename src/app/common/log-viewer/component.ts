@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -10,8 +10,10 @@ import { LogViewerApiService } from './api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class LogViewerComponent implements OnInit, OnChanges {
+export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
     @Input() execution: JobExecution;
+    @ViewChild('codemirror') codemirror: any;
+    subscription: any;
     // forceScroll = true;
     execLog: any[];
     execLogStr: string;
@@ -43,7 +45,14 @@ export class LogViewerComponent implements OnInit, OnChanges {
         }
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     ngOnChanges(changes) {
+        this.unsubscribe();
         if (changes.execution.previousValue) {
             if (changes.execution.previousValue.id !== changes.execution.currentValue.id) {
                 this.execLog = [];
@@ -52,7 +61,7 @@ export class LogViewerComponent implements OnInit, OnChanges {
         }
         console.log(changes);
         if (this.execution) {
-            this.logViewerApiService.getLog(this.execution.id).then((result) => {
+            this.subscription = this.logViewerApiService.getLog(this.execution.id, true).subscribe(result => {
                 if (result.status !== 204) {
                     // // Content was returned, so add it to the log array
                     // // get difference of max scroll length and current scroll length.var  = result.data;
@@ -85,6 +94,9 @@ export class LogViewerComponent implements OnInit, OnChanges {
                             `${this.execLogStr}${line._source['@timestamp']}: ${line._source.message }` :
                             `// Total Lines: ${this.execLog.length}\r\n${line._source['@timestamp']}: ${line._source.message }`;
                     });
+                    console.log(this.codemirror);
+                    this.codemirror.instance.focus();
+                    this.codemirror.instance.setCursor({ line: this.execLog.length, ch: 1 });
                 }
             }, (error) => {
                 let errorDetail = '';
@@ -98,5 +110,9 @@ export class LogViewerComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.logViewerApiService.setLogArgs([]);
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }
