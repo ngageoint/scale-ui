@@ -36,6 +36,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
     private fetchLog() {
         this.subscription = this.logViewerApiService.getLog(this.execution.id, true).subscribe(result => {
             if (result.status !== 204) {
+                this.execLogStr = '';
                 // concat new content and sort log array by timestamp and then by order num
                 this.execLog = _.sortBy(this.execLog.concat(result.hits.hits), ['_source.@timestamp', '_source.scale_order_num']);
                 if (this.execLog && this.execLog.length > 0) {
@@ -53,7 +54,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
                         this.execLog = _.take(this.execLog, this.execLog.length - result.hits.hits.length);
                     }
                 }
-                _.forEach(result.hits.hits, line => {
+                _.forEach(this.execLogStr, line => {
                     this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
                 });
                 setTimeout(() => {
@@ -100,7 +101,6 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
 
         if (changes.execution && !_.isEqual(changes.execution.previousValue, changes.execution.currentValue)) {
             this.execLog = [];
-            this.execLogStr = '';
             this.logViewerApiService.setLogArgs({});
             this.fetchLog();
         }
