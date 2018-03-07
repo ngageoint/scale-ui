@@ -203,9 +203,9 @@
             </p-scrollPanel>
         </div>
     </div>
-    <p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true">
+    <p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true" (onAfterHide)="hideExeLog()">
         <span *ngIf="selectedJobExe">
-            <app-log-viewer [execution]="selectedJobExe"></app-log-viewer>
+            <app-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></app-log-viewer>
         </span>
     </p-sidebar>
 </div>

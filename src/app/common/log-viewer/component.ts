@@ -12,6 +12,7 @@ import { LogViewerApiService } from './api.service';
 })
 export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
     @Input() execution: JobExecution;
+    @Input() visible: boolean;
     @ViewChild('codemirror') codemirror: any;
     subscription: any;
     // forceScroll = true;
@@ -19,9 +20,8 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
     execLogStr: string;
     latestScaleOrderNum = 0;
     jsonConfig = {
-        mode: {name: 'text/x-log', json: false},
+        mode: {name: 'text/plain', json: false},
         indentUnit: 4,
-        firstLineNumber: 0,
         lineNumbers: true,
         readOnly: true
     };
@@ -31,6 +31,43 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
         private logViewerApiService: LogViewerApiService
     ) {
         this.execLog = [];
+    }
+
+    private fetchLog() {
+        this.subscription = this.logViewerApiService.getLog(this.execution.id, true).subscribe(result => {
+            if (result.status !== 204) {
+                // concat new content and sort log array by timestamp and then by order num
+                this.execLog = _.sortBy(this.execLog.concat(result.hits.hits), ['_source.@timestamp', '_source.scale_order_num']);
+                if (this.execLog && this.execLog.length > 0) {
+                    const lastLog = _.last(this.execLog)._source;
+                    if (lastLog.scale_order_num !== this.latestScaleOrderNum) {
+                        // new entries, so leave them on the array and report the new timestamp
+                        console.log('New entries - ' + lastLog.scale_order_num + ' : ' + this.latestScaleOrderNum);
+                        this.latestScaleOrderNum = lastLog.scale_order_num;
+                        this.logViewerApiService.setLogArgs({
+                            started: lastLog['@timestamp']
+                        });
+                    } else {
+                        // duplicate entries, so remove them from the array
+                        console.log('Duplicate entries');
+                        this.execLog = _.take(this.execLog, this.execLog.length - result.hits.hits.length);
+                    }
+                }
+                _.forEach(result.hits.hits, line => {
+                    this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
+                });
+                setTimeout(() => {
+                    this.codemirror.instance.focus();
+                    this.codemirror.instance.setCursor(1e8, 0);
+                });
+            }
+        }, (error) => {
+            let errorDetail = '';
+            if (error.statusText && error.statusText !== '') {
+                errorDetail = error.statusText;
+            }
+            this.messageService.add({severity: 'error', summary: 'Unable to retrieve execution log', detail: errorDetail});
+        });
     }
 
     showExeError(errorPanel, $event) {
@@ -47,69 +84,26 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     unsubscribe() {
         if (this.subscription) {
+            console.log('unsubscribe');
             this.subscription.unsubscribe();
-        }
-    }
-
-    ngOnChanges(changes) {
-        this.unsubscribe();
-        if (changes.execution.previousValue) {
-            if (changes.execution.previousValue.id !== changes.execution.currentValue.id) {
-                this.execLog = [];
-                this.execLogStr = '';
-            }
-        }
-        console.log(changes);
-        if (this.execution) {
-            this.subscription = this.logViewerApiService.getLog(this.execution.id, true).subscribe(result => {
-                if (result.status !== 204) {
-                    // // Content was returned, so add it to the log array
-                    // // get difference of max scroll length and current scroll length.var  = result.data;
-                    // var div = $($element[0]).find('.bash');
-                    // vm.scrollDiff = (div.scrollTop() + div.prop('offsetHeight')) - div.prop('scrollHeight');
-                    // if (vm.scrollDiff >= 0) {
-                    //     vm.forceScroll = true;
-                    // }
-                    // concat new content and sort log array by timestamp and then by order num
-                    this.execLog = _.sortBy(this.execLog.concat(result.hits.hits), ['_source.@timestamp', '_source.scale_order_num']);
-                    if (this.execLog && this.execLog.length > 0) {
-                        const lastLog = _.last(this.execLog)._source;
-                        if (lastLog.scale_order_num !== this.latestScaleOrderNum) {
-                            // new entries, so leave them on the array and report the new timestamp
-                            console.log('New entries - ' + lastLog.scale_order_num + ' : ' + this.latestScaleOrderNum);
-                            this.latestScaleOrderNum = lastLog.scale_order_num;
-                            this.logViewerApiService.setLogArgs([
-                                {
-                                    started: lastLog['@timestamp']
-                                }
-                            ]);
-                        } else {
-                            // duplicate entries, so remove them from the array
-                            console.log('Duplicate entries');
-                            this.execLog = _.take(this.execLog, this.execLog.length - result.hits.hits.length);
-                        }
-                    }
-                    _.forEach(this.execLog, line => {
-                        this.execLogStr = this.execLogStr ?
-                            `${this.execLogStr}${line._source['@timestamp']}: ${line._source.message }` :
-                            `// Total Lines: ${this.execLog.length}\r\n${line._source['@timestamp']}: ${line._source.message }`;
-                    });
-                    console.log(this.codemirror);
-                    this.codemirror.instance.focus();
-                    this.codemirror.instance.setCursor({ line: this.execLog.length, ch: 1 });
-                }
-            }, (error) => {
-                let errorDetail = '';
-                if (error.statusText && error.statusText !== '') {
-                    errorDetail = error.statusText;
-                }
-                this.messageService.add({severity: 'error', summary: 'Unable to retrieve execution log', detail: errorDetail});
-            });
         }
     }
 
     ngOnInit() {
         this.logViewerApiService.setLogArgs([]);
+    }
+
+    ngOnChanges(changes) {
+        if (changes.visible && !changes.visible.currentValue) {
+            this.unsubscribe();
+        }
+
+        if (changes.execution && !_.isEqual(changes.execution.previousValue, changes.execution.currentValue)) {
+            this.execLog = [];
+            this.execLogStr = '';
+            this.logViewerApiService.setLogArgs({});
+            this.fetchLog();
+        }
     }
 
     ngOnDestroy() {

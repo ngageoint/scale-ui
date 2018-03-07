@@ -115,6 +115,10 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.logDisplay = true;
     }
 
+    hideExeLog() {
+        this.selectedJobExe = null;
+    }
+
     unsubscribe() {
         if (this.subscription) {
             this.subscription.unsubscribe();

@@ -11,26 +11,23 @@ import { DataService } from '../../data.service';
 @Injectable()
 export class LogViewerApiService {
     apiPrefix: string;
-    logArgs: any[];
+    logArgs: any;
 
     constructor(
         private http: Http,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('job-executions');
-        this.logArgs = [];
+        this.logArgs = {};
     }
 
-    getLogArgs(): any {
-        return this.logArgs;
-    }
-    setLogArgs(args: any[]): void {
+    setLogArgs(args): void {
         this.logArgs = args;
     }
     getLog(id: number, poll?: boolean): any {
         if (poll) {
             const getData = () => {
-                return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
+                return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`, { params: this.logArgs })
                     .switchMap((data) => Observable.timer(5000) // 5 seconds
                         .switchMap(() => getData())
                         .startWith(data.json()))
