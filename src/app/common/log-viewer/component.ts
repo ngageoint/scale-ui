@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -10,12 +10,12 @@ import { LogViewerApiService } from './api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
+export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     @Input() execution: JobExecution;
     @Input() visible: boolean;
     @ViewChild('codemirror') codemirror: any;
     subscription: any;
-    // forceScroll = true;
+    scrollToLine = 1e8;
     execLog: any[];
     execLogStr: string;
     latestScaleOrderNum = 0;
@@ -54,12 +54,8 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
                         this.execLog = _.take(this.execLog, this.execLog.length - result.hits.hits.length);
                     }
                 }
-                _.forEach(this.execLogStr, line => {
+                _.forEach(this.execLog, line => {
                     this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
-                });
-                setTimeout(() => {
-                    this.codemirror.instance.focus();
-                    this.codemirror.instance.setCursor(1e8, 0);
                 });
             }
         }, (error) => {
@@ -108,5 +104,17 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngAfterViewInit() {
+        this.codemirror.instance.on('scroll', (instance) => {
+            const rect = instance.getWrapperElement().getBoundingClientRect();
+            const bottomVisibleLine = instance.lineAtHeight(rect.bottom, 'window');
+            this.scrollToLine = bottomVisibleLine < instance.lineCount() ? bottomVisibleLine - 1 : 1e8;
+        });
+        this.codemirror.instance.on('change', (instance) => {
+            instance.focus();
+            instance.setCursor(this.scrollToLine, 0);
+        });
     }
 }
