@@ -15,6 +15,7 @@ export class StatusComponent implements OnInit, OnDestroy {
     pctCpu: number;
     pctMem: number;
     pctDisk: number;
+    pctGpu: number;
 
     constructor(
         private messageService: MessageService,
@@ -41,6 +42,7 @@ export class StatusComponent implements OnInit, OnDestroy {
             this.pctCpu = this.getUsage(this.status.resources.cpus);
             this.pctMem = this.getUsage(this.status.resources.mem);
             this.pctDisk = this.getUsage(this.status.resources.disk);
+            this.pctGpu = this.getUsage(this.status.resources.gpus);
         }, err => {
             this.loading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving system status', detail: err.statusText});

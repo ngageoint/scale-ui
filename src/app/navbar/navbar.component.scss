@@ -2,7 +2,7 @@
 @import '../../defaults/colors';
 
 
-$navbar-height: 55px;
+$navbar-height: 68px;
 $navshadow: 0 0 0.5em $clr-black;
 $navbar-status-width: 250px;
 
@@ -33,7 +33,7 @@ $navbar-status-width: 250px;
 
     a {
         color: $clr-gray-85;
-        padding: 1.1em;
+        padding: 1.5em 1.1em 1.1em 1.1em;
         text-align: center;
         text-decoration: none;
         text-shadow: 0 1px 0 $clr-navbar-dark;
@@ -74,7 +74,7 @@ $navbar-status-width: 250px;
 .navbar__logo {
     color: $clr-white;
     margin-right: 1.0em;
-    padding: 0.5em 1.25em;
+    padding: 1em 1.25em 0.5em 1.25em;
     text-align: center;
 
     a {
