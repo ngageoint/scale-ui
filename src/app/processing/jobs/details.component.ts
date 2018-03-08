@@ -26,6 +26,7 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     jobOutputs = [];
     jobExecutions: any;
     jobStatus: string;
+    exeStatus: string;
     options: any;
     data: any;
     selectedJobExe: any;
@@ -45,6 +46,7 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         const now = moment.utc();
         const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
         this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
+        this.exeStatus = `${_.toLower(this.job.execution.status)} ${moment.utc(this.job.execution.last_modified).from(now)}`;
         this.options = {
             elements: {
                 font: 'Roboto'
