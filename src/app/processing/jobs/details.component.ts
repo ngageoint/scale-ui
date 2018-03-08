@@ -119,6 +119,14 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         this.selectedJobExe = null;
     }
 
+    showStatus(statusPanel, $event) {
+        statusPanel.show($event);
+    }
+
+    hideStatus(statusPanel) {
+        statusPanel.hide();
+    }
+
     unsubscribe() {
         if (this.subscription) {
             this.subscription.unsubscribe();

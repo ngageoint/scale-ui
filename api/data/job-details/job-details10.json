@@ -66,7 +66,16 @@
         },
         "occurred": "2016-05-15T17:27:31.467Z"
     },
-    "error": null,
+    "error": {
+        "id": 1,
+        "name": "unknown",
+        "title": "Unknown",
+        "description": "The error that caused the failure is unknown.",
+        "category": "SYSTEM",
+        "is_builtin": true,
+        "created": "2015-03-11T00:00:00Z",
+        "last_modified": "2015-03-11T00:00:00Z"
+    },
     "status": "FAILED",
     "priority": 210,
     "num_exes": 1,

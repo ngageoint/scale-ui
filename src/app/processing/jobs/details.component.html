@@ -2,7 +2,8 @@
     <h2>
         <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
         {{ job.job_type.title }} v{{ job.job_type.version }}
-        <i class="fa fa-fw fa-square" [ngClass]="job.status.toLowerCase()" pTooltip="{{ jobStatus }}"></i>
+        <i class="fa fa-fw fa-square" [ngClass]="job.status.toLowerCase()"
+           (mouseenter)="showStatus(status, $event)" (mouseleave)="hideStatus(status)"></i>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
     <div class="ui-g">
@@ -208,4 +209,12 @@
             <app-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></app-log-viewer>
         </span>
     </p-sidebar>
+    <p-overlayPanel #status appendTo="body">
+        <strong>{{ jobStatus }}</strong>
+        <div *ngIf="job.status === 'FAILED' && job.error">
+            <hr />
+            <strong>{{ job.error.category }} Error: {{ job.error.title }}</strong><br />
+            {{ job.error.description }}
+        </div>
+    </p-overlayPanel>
 </div>

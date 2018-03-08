@@ -62,7 +62,7 @@ export class Job {
         public job_type_rev: object,
         public event: any,
         public node: any,
-        public error: object,
+        public error: any,
         public status: string,
         public priority: number,
         public num_exes: number,
