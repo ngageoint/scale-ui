@@ -12,9 +12,9 @@ server.connection({
 
 router.init(server);
 
-server.start((err) => {
+server.start(function (err) {
     if (err) {
         throw err;
     }
-    console.log(`Server running at: ${server.info.uri}`);
+    console.log('Server running at: ' + server.info.uri);
 });
