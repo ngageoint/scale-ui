@@ -77,6 +77,7 @@ export class DataService {
     }
 
     public formatDate(date, humanize?: boolean) {
+        humanize = humanize || false;
         if (date) {
             return humanize ?
                 _.capitalize(moment.utc(date).from(moment.utc())) :

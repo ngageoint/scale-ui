@@ -77,7 +77,7 @@
                         <strong>
                             <span class="fa fa-fw fa-square" [ngClass]="job.execution.status.toLowerCase()"></span>
                             Latest execution
-                            <span [pTooltip]="dataService.formatDate(job.execution.last_modified)" tooltipPosition="bottom">
+                            <span [pTooltip]="dataService.formatDate(job.execution.ended)" tooltipPosition="bottom">
                                 {{ exeStatus }}
                             </span>
                             <button pButton class="ui-button-secondary" icon="fa-file-text" label="View Log"

@@ -43,10 +43,15 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
     private initJobDetail(data) {
         this.job = data;
+        if (this.selectedJobExe && this.job.execution.id === this.selectedJobExe.id) {
+            this.selectedJobExe = _.clone(this.job.execution);
+        }
         const now = moment.utc();
         const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
         this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
-        this.exeStatus = `${_.toLower(this.job.execution.status)} ${moment.utc(this.job.execution.last_modified).from(now)}`;
+        this.exeStatus = this.job.execution.ended ?
+            `${_.toLower(this.job.execution.status)} ${moment.utc(this.job.execution.last_modified).from(now)}` :
+            `${_.toLower(this.job.execution.status)}`;
         this.options = {
             elements: {
                 font: 'Roboto'

@@ -65,7 +65,7 @@ export class JobsApiService {
         if (poll) {
             const getData = () => {
                 return this.http.get(`${this.apiPrefix}/jobs/${id}/`)
-                    .switchMap((data) => Observable.timer(3000000) // 30 seconds
+                    .switchMap((data) => Observable.timer(30000) // 30 seconds
                         .switchMap(() => getData())
                         .startWith(Job.transformer(data.json())))
                     .catch(e => {

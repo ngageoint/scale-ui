@@ -1,4 +1,5 @@
 <div class="scale-log__container">
+    <app-loading-indicator [loading]="loading"></app-loading-indicator>
     <div class="scale-log__viewer" *ngIf="!jobLogError && execution">
         <h3 class="scale-log__title" (mouseenter)="showExeError(error, $event)" (mouseleave)="hideExeError(error)">
             <i class="fa fa-fw fa-square" [ngClass]="execution.status.toLowerCase()"></i>

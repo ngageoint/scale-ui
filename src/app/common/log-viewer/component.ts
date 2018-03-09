@@ -14,6 +14,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     @Input() execution: JobExecution;
     @Input() visible: boolean;
     @ViewChild('codemirror') codemirror: any;
+    loading: boolean;
     subscription: any;
     scrollToLine = 1e8;
     execLog: any[];
@@ -34,8 +35,10 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
 
     private fetchLog() {
+        this.loading = true;
         this.subscription = this.logViewerApiService.getLog(this.execution.id, true).subscribe(result => {
-            if (result.status !== 204) {
+            this.loading = false;
+            if (result && result.status !== 204) {
                 this.execLogStr = '';
                 // concat new content and sort log array by timestamp and then by order num
                 this.execLog = _.sortBy(this.execLog.concat(result.hits.hits), ['_source.@timestamp', '_source.scale_order_num']);
@@ -51,14 +54,17 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
                     } else {
                         // duplicate entries, so remove them from the array
                         console.log('Duplicate entries');
-                        this.execLog = _.take(this.execLog, this.execLog.length - result.hits.hits.length);
+                        this.execLog = _.uniqBy(this.execLog, '_source.scale_order_num');
                     }
                 }
                 _.forEach(this.execLog, line => {
                     this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
                 });
+            } else {
+                this.execLogStr = 'Waiting for log output...';
             }
         }, (error) => {
+            this.loading = false;
             let errorDetail = '';
             if (error.statusText && error.statusText !== '') {
                 errorDetail = error.statusText;
@@ -93,12 +99,22 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     ngOnChanges(changes) {
         if (changes.visible && !changes.visible.currentValue) {
             this.unsubscribe();
+        } else {
+            if (changes.execution) {
+                if (changes.execution.previousValue) {
+                    if (changes.execution.previousValue.id !== changes.execution.currentValue.id) {
+                        this.execLog = [];
+                        this.logViewerApiService.setLogArgs({});
+                        this.fetchLog();
+                    }
+                } else if (changes.execution.currentValue) {
+                    this.fetchLog();
+                }
+            }
         }
 
         if (changes.execution && !_.isEqual(changes.execution.previousValue, changes.execution.currentValue)) {
-            this.execLog = [];
-            this.logViewerApiService.setLogArgs({});
-            this.fetchLog();
+
         }
     }
 
