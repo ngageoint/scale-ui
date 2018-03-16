@@ -3,6 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../data.service';
@@ -21,7 +22,7 @@ describe('JobsComponent', () => {
             declarations: [JobsComponent],
             imports: [HttpModule],
             providers: [
-                DataService, JobsApiService, JobsDatatableService, JobTypesApiService, MessageService,
+                DataService, JobsApiService, JobsDatatableService, JobTypesApiService, ConfirmationService, MessageService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

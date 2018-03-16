@@ -133,9 +133,14 @@ module.exports = function (request, reply) {
             }
         }
         if (params.status) {
-            data.results = _.filter(data.results, function (result) {
-                return result.status === params.status;
+            var tempResults = [];
+            params.status = Array.isArray(params.status) ? params.status : [params.status];
+            _.forEach(params.status, function (status) {
+                tempResults = _.filter(data.results, function (result) {
+                    return result.status === status;
+                });
             });
+            data.results = _.clone(tempResults);
         }
         if (params.error_category) {
             data.results = _.filter(data.results, function (result) {

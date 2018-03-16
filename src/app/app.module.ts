@@ -17,8 +17,10 @@ import {
     TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
 import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { TableModule } from 'primeng/table';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -121,6 +123,7 @@ import { StatusApiService } from './navbar/status/api.service';
         CalendarModule,
         CardModule,
         ChartModule,
+        ConfirmDialogModule,
         DataListModule,
         DialogModule,
         DropdownModule,
@@ -172,7 +175,8 @@ import { StatusApiService } from './navbar/status/api.service';
         RunningJobsDatatableService,
         LogViewerApiService,
         IngestApiService,
-        StatusApiService
+        StatusApiService,
+        ConfirmationService
     ],
     bootstrap: [AppComponent]
 })

@@ -13,7 +13,7 @@
     </div>
     <div class="jobs__controls">
         <button pButton type="button" class="ui-button-primary" icon="fa-repeat" pTooltip="Requeue All Jobs"
-                (click)="requeueJobs()"></button>
+                (click)="requeueAllConfirm()"></button>
     </div>
 </div>
 <p-table [value]="jobs" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
@@ -85,7 +85,7 @@
                     </div>
                 </div>
                 <div class="text-center" *ngSwitchCase="'id'">
-                    <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showLog(rowData.id)"
+                    <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showExeLog(rowData.execution)"
                             icon="fa-file-text"></button>
                 </div>
                 <div *ngSwitchDefault>
@@ -102,10 +102,16 @@
         </tr>
     </ng-template>
 </p-table>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
+             (onPageChange)="paginate($event)"></p-paginator>
 <p-dialog header="Log" [(visible)]="logDisplay" [modal]="true" [responsive]="true" [dismissableMask]="true" positionTop="40">
     <span *ngIf="selectedJobExecution">
         <app-log-viewer [execution]="selectedJobExecution"></app-log-viewer>
     </span>
 </p-dialog>
-<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
-             (onPageChange)="paginate($event)"></p-paginator>
+<p-confirmDialog></p-confirmDialog>
+<p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true" (onAfterHide)="hideExeLog()">
+        <span *ngIf="selectedJobExe">
+            <app-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></app-log-viewer>
+        </span>
+</p-sidebar>

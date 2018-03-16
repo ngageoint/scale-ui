@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -32,7 +33,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
     selectedJobType: string;
-    selectedJobExecution: JobExecution;
+    selectedJobExe: JobExecution;
     logDisplay: boolean;
     statusValues: SelectItem[];
     selectedStatus: string;
@@ -51,6 +52,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         private jobTypesApiService: JobTypesApiService,
         private router: Router,
         private route: ActivatedRoute,
+        private confirmationService: ConfirmationService,
         private messageService: MessageService
     ) {
         this.isInitialized = false;
@@ -238,7 +240,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error canceling job', detail: err.statusText});
         });
     }
-    requeueJobs(jobsParams) {
+    requeueJobs(jobsParams?) {
         if (!jobsParams) {
             jobsParams = {
                 started: this.datatableOptions.started,
@@ -258,20 +260,35 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
         });
     }
-    showLog(jobId) {
-        this.jobsApiService.getJobExecutions(jobId).then((data) => {
-            this.jobsApiService.getJobExecution(jobId, data.exe_num).then(result => {
-                this.selectedJobExecution = result;
-                this.logDisplay = true;
-            }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job execution', detail: err.statusText});
-            });
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job execution list', detail: err.statusText});
-        });
+    showExeLog(exe) {
+        console.log(exe);
+        this.selectedJobExe = exe;
+        this.logDisplay = true;
+    }
+    hideExeLog() {
+        this.selectedJobExe = null;
     }
     onFilterClick(e) {
         e.stopPropagation();
+    }
+    requeueAllConfirm() {
+        // query for canceled and failed jobs with current params to report an accurate requeue count
+        const requeueParams = _.clone(this.datatableOptions);
+        requeueParams.status = ['CANCELED', 'FAILED'];
+        this.jobsApiService.getJobs(requeueParams).then(data => {
+            this.confirmationService.confirm({
+                message: `This will requeue <span class="failed"><strong>${data.count}</strong></span> canceled and failed jobs.
+                          Are you sure that you want to proceed?`,
+                header: 'Requeue All Jobs',
+                icon: 'fa fa-question-circle',
+                accept: () => {
+                    this.requeueJobs();
+                },
+                reject: () => {
+                    console.log('requeue rejected');
+                }
+            });
+        });
     }
     ngOnInit() {
         this.datatableLoading = true;
