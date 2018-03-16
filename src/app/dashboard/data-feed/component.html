@@ -1,7 +1,7 @@
 <div class="data-feed__container">
     <div class="data-feed__dropdown">
         <p-dropdown [options]="dataFeeds" [autoWidth]="false" [(ngModel)]="selectedDataFeed" (onChange)="onDataFeedSelect()"
-                    [style]="{'width':'300px', 'margin':'-10px 0 10px 0'}" placeholder="Select..."></p-dropdown>
+                    [style]="{'width':'300px', 'margin':'-10px 0 10px 0'}" placeholder="Select..." [showClear]="false"></p-dropdown>
     </div>
     <div class="scale-chart-container">
         <app-loading-indicator [loading]="chartLoading"></app-loading-indicator>

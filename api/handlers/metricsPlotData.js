@@ -27,7 +27,7 @@ module.exports = function (request, reply) {
             });
             colArray = colArray.concat(_.map(otherMetrics, 'name'));
         });
-        colArray = _.uniq(colArray);
+        colArray = _.reverse(_.uniq(colArray));
         _.forEach(colArray, function (metric) {
             var maxRandom = metric === 'total_count' ? 1000 : 200;
             var minRandom = metric === 'total_count' ? 800 : 10;

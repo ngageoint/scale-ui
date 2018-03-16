@@ -7,7 +7,7 @@
                 {{ col.header }}
                 <div *ngSwitchCase="'job_type.id'">
                     <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange($event)" [autoWidth]="false"
-                                appendTo="body" styleClass="column-filter">
+                                appendTo="body" styleClass="column-filter" [showClear]="false">
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
                         </ng-template>

@@ -20,7 +20,8 @@
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'recipe_type.name'">
                     <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType" (onChange)="onChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" appendTo="body" (click)="onClick($event)">
+                                [autoWidth]="false" styleClass="column-filter" appendTo="body" (click)="onClick($event)"
+                                [showClear]="false">
                         <ng-template let-recipeType p-template="item">
                             {{ recipeType.label }}
                         </ng-template>

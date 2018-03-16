@@ -15,7 +15,7 @@ export class RecipesDatatable {
 
 export const initialRecipesDatatable: RecipesDatatable = {
     first: 0,
-    rows: 10,
+    rows: 20,
     sortField: 'last_modified',
     sortOrder: -1,
     started: null,

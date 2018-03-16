@@ -10,7 +10,8 @@
     </div>
     <div>
         <label>Date Field:</label>
-        <p-dropdown [options]="timeFieldOptions" [(ngModel)]="datatableOptions.time_field" (onChange)="onTimeFieldChange($event)"></p-dropdown>
+        <p-dropdown [options]="timeFieldOptions" [(ngModel)]="datatableOptions.time_field" (onChange)="onTimeFieldChange($event)"
+                    [showClear]="false"></p-dropdown>
     </div>
 </div>
 <p-table [value]="sources" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"

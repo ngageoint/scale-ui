@@ -2,8 +2,8 @@
     <h2>
         <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
         {{ job.job_type.title }} v{{ job.job_type.version }}
-        <i class="fa fa-fw fa-square" [ngClass]="job.status.toLowerCase()"
-           (mouseenter)="showStatus(status, $event)" (mouseleave)="hideStatus(status)"></i>
+        <i class="fa fa-fw fa-square" [ngClass]="job.statusClass" (mouseenter)="showStatus(status, $event)"
+           (mouseleave)="hideStatus(status)"></i>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
     <div class="ui-g">
@@ -75,7 +75,7 @@
                     <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
                     <div class="text-center margin-top-lg job__latest-exe">
                         <strong>
-                            <span class="fa fa-fw fa-square" [ngClass]="job.execution.status.toLowerCase()"></span>
+                            <span class="fa fa-fw fa-square" [ngClass]="job.exeStatusClass"></span>
                             Latest execution
                             <span [pTooltip]="dataService.formatDate(job.execution.ended)" tooltipPosition="bottom">
                                 {{ exeStatus }}
@@ -104,7 +104,7 @@
                         <tbody>
                         <tr class="job__exe" *ngFor="let exe of jobExecutions" (click)="showExeLog($event, exe)">
                             <td>
-                                <i class="fa fa-fw fa-square job__status" [ngClass]="exe.status.toLowerCase()"
+                                <i class="fa fa-fw fa-square job__status" [ngClass]="exe.statusClass"
                                    (mouseenter)="timeline.show($event)" (mouseleave)="timeline.hide()"></i>
                                 <p-overlayPanel #timeline [dismissable]="true" appendTo="body">
                                     <ul class="list-unstyled job__exe-timeline">

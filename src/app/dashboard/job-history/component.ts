@@ -58,18 +58,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             stacked: true,
             scaleLabel: {
                 display: true,
-                labelString: 'Completed Count'
-            }
-        }, {
-            id: 'yAxis2',
-            position: 'right',
-            stacked: true,
-            gridLines: {
-                drawOnChartArea: false
-            },
-            scaleLabel: {
-                display: true,
-                labelString: 'Failed Count'
+                labelString: 'Job Count'
             }
         }];
         this.metricsApiService.getPlotData(this.params).then(data => {
@@ -77,7 +66,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             const filters = this.favorites.length > 0 ?
                 this.favorites :
                 [];
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '');
+            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', false);
             chartData.labels = _.map(chartData.labels, label => {
                 return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
             });

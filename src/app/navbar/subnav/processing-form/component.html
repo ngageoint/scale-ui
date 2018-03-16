@@ -10,7 +10,7 @@
     <div class="ui-g">
         <div class="ui-g-12">
             <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" [autoWidth]="false" filter="filter" placeholder="Job Type"
-                        [style]="{'width':'100%'}">
+                        [style]="{'width':'100%'}" [showClear]="false">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}
                 </ng-template>
@@ -22,7 +22,8 @@
             <input pInputText [(ngModel)]="sourceFile" class="spf__input" placeholder="Source File">
         </div>
         <div class="ui-g-3">
-            <p-dropdown [options]="timeFieldOptions" [(ngModel)]="timeField" [autoWidth]="false" [style]="{'width':'100%'}"></p-dropdown>
+            <p-dropdown [options]="timeFieldOptions" [(ngModel)]="timeField" [autoWidth]="false" [style]="{'width':'100%'}"
+                        [showClear]="false"></p-dropdown>
         </div>
         <div class="ui-g-12">
             <button pButton type="button" label="Search" icon="fa-search" (click)="search()"></button>

@@ -10,6 +10,8 @@ export class Job {
     last_modified_formatted: string;
     duration: string;
     timeout_formatted: string;
+    statusClass: string;
+    exeStatusClass: string;
 
     private static build(data) {
         if (data) {
@@ -96,5 +98,11 @@ export class Job {
         this.timeout_formatted = this.timeout ?
             this.dataService.calculateDuration(moment.utc().toISOString(), moment.utc().add(this.timeout, 's').toISOString()) :
             'Unknown';
+        this.statusClass = this.status === 'RUNNING' ?
+            `${this.status.toLowerCase()} throb-text` :
+            this.status.toLowerCase();
+        this.exeStatusClass = this.execution.status === 'RUNNING' ?
+            `${this.execution.status.toLowerCase()} throb-text` :
+            this.execution.status.toLowerCase();
     }
 }

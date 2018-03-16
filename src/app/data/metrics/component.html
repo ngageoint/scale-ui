@@ -24,7 +24,8 @@
             <i class="fa fa-circle-o-notch fa-spin"></i>
         </div>
         <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType" (onChange)="changeDataTypeSelection()"
-                    [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading"></p-dropdown>
+                    [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading"
+                    [showClear]="false"></p-dropdown>
         <div class="metrics__filter-loading" *ngIf="filteredChoicesLoading">
             <i class="fa fa-circle-o-notch fa-spin"></i>
         </div>
@@ -34,10 +35,10 @@
             To view an aggregate count for the data source, leave this filter unselected.
         </div>
         <div *ngIf="columns.length > 0">
-            <label>Y-axis 1 Metrics</label>
-            <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}"></p-dropdown>
-            <label>Y-axis 2 Metrics</label>
-            <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}"></p-dropdown>
+            <label>Primary Metric</label>
+            <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
+            <label>Secondary Metric</label>
+            <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         </div>
         <button pButton icon="fa-refresh" label="Update Chart" (click)="updateChart()"
                 [disabled]="!selectedMetric1"></button>

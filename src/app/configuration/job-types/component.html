@@ -1,7 +1,8 @@
 <div class="job-type__details">
     <h2>Job Types</h2>
     <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
-                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."></p-dropdown>
+                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."
+                [showClear]="false"></p-dropdown>
     <hr />
     <div class="text-center" *ngIf="!selectedJobTypeDetail">
         <h3>Select a job type to view its details</h3>

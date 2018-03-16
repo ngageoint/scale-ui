@@ -2,7 +2,7 @@
     <app-loading-indicator [loading]="loading"></app-loading-indicator>
     <div class="scale-log__viewer" *ngIf="!jobLogError && execution">
         <h3 class="scale-log__title" (mouseenter)="showExeError(error, $event)" (mouseleave)="hideExeError(error)">
-            <i class="fa fa-fw fa-square" [ngClass]="execution.status.toLowerCase()"></i>
+            <i class="fa fa-fw fa-square" [ngClass]="execution.statusClass"></i>
             {{ execution.status }}
         </h3>
         <codemirror [(ngModel)]="execLogStr" [config]="jsonConfig" #codemirror></codemirror>

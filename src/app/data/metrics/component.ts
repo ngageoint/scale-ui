@@ -34,6 +34,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     selectedMetric2: any;
     yUnits1: any;
     yUnits2: any;
+    multiAxis: boolean;
     data: any;
     options: any;
     showFilters = true;
@@ -132,13 +133,16 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.showChart = true;
         this.chartLoading = true;
         this.showFilters = false;
+        this.yUnits1 = this.selectedMetric1.units;
+        this.yUnits2 = this.selectedMetric2 ? this.selectedMetric2.units : null;
+        this.multiAxis = this.yUnits1 !== this.yUnits2;
         const yAxes = [{
             id: 'yAxis1',
             position: 'left',
             stacked: true,
             scaleLabel: {
                 display: true,
-                labelString: this.selectedMetric1.title
+                labelString: this.multiAxis ? this.selectedMetric1.title : ''
             },
             ticks: {
                 callback: (value) => {
@@ -146,7 +150,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 }
             }
         }];
-        if (this.selectedMetric2) {
+
+        if (this.selectedMetric2 && this.multiAxis) {
             // user selected a second metric; another axis is needed
             yAxes.push({
                 id: 'yAxis2',
@@ -175,10 +180,13 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             dataType: this.selectedDataType.name
         };
         this.metricsApiService.getPlotData(params).then((data) => {
-            this.yUnits1 = this.selectedMetric1.units;
-            this.yUnits2 = this.selectedMetric2 ? this.selectedMetric2.units : null;
-
-            const chartData = this.chartService.formatPlotResults(data, params, this.filtersApplied, this.selectedDataType.title);
+            const chartData = this.chartService.formatPlotResults(
+                data,
+                params,
+                this.filtersApplied,
+                this.selectedDataType.title,
+                this.multiAxis
+            );
 
             // compute total count for requested time period
             let total = 0;

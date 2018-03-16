@@ -150,7 +150,7 @@
                         <div class="ui-g-10">
                             <p-dropdown [options]="triggerTypeOptions" [(ngModel)]="trigger.type"
                                         formControlName="type" placeholder="Select..." autoWidth="false"
-                                        [style]="{'width': '25%'}">
+                                        [style]="{'width': '25%'}" [showClear]="false">
                                 <ng-template let-type p-template="item">
                                     {{ type.label }}
                                 </ng-template>
@@ -210,7 +210,7 @@
                             <p-dropdown [options]="workspaces"
                                         [(ngModel)]="trigger.configuration.data.workspace_name"
                                         formControlName="workspace_name" placeholder="Select..." autoWidth="false"
-                                        [style]="{'width': '25%'}">
+                                        [style]="{'width': '25%'}" [showClear]="false">
                                 <ng-template let-type p-template="item">
                                     {{ type.label }}
                                 </ng-template>

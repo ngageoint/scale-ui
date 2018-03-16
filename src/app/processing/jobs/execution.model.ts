@@ -8,6 +8,7 @@ export class JobExecution {
     started_formatted: string;
     ended_formatted: string;
     last_modified_formatted: string;
+    statusClass: string;
 
     private static build(data) {
         if (data) {
@@ -70,5 +71,8 @@ export class JobExecution {
         this.started_formatted = moment.utc(this.started).format('YYYY-MM-DD HH:mm:ss');
         this.ended_formatted = moment.utc(this.ended).format('YYYY-MM-DD HH:mm:ss');
         this.last_modified_formatted = moment.utc(this.last_modified_formatted).format('YYYY-MM-DD HH:mm:ss');
+        this.statusClass = this.status === 'RUNNING' ?
+            `${this.status.toLowerCase()} throb-text` :
+            this.status.toLowerCase();
     }
 }

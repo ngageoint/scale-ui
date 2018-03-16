@@ -15,6 +15,55 @@
 
 // Components & Pages loaded separately
 
+.throb-text, .throb-background, .throb-svg {
+    animation-duration: 1.0s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-fill-mode: none;
+    animation-play-state: running;
+}
+
+.throb-text {
+    animation-name: throb-text;
+}
+
+.throb-background {
+    animation-name: throb-background;
+}
+
+.throb-svg {
+    animation-name: throb-svg;
+}
+
+@keyframes throb-text {
+    0% {
+        color: $clr-status-running;
+    }
+    100% {
+        color: transparentize($clr-status-running, 0.6);
+    }
+}
+
+@keyframes throb-background {
+    0% {
+        background-color: $clr-status-running;
+    }
+    100% {
+        background-color: transparentize($clr-status-running, 0.6);
+    }
+}
+
+@keyframes throb-svg {
+    0% {
+        fill: $clr-status-running;
+    }
+    100% {
+        fill: transparentize($clr-status-running, 0.6);
+    }
+}
+
 h2:first-of-type {
     margin: 3px 0;
 }

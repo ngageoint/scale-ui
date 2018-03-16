@@ -7,5 +7,5 @@ export class RunningJobsDatatable {
 
 export const initialRunningJobsDatatable: RunningJobsDatatable = {
     first: 0,
-    rows: 10
+    rows: 20
 };

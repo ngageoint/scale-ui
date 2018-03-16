@@ -16,7 +16,7 @@ export class SourcesDatatable {
 
 export const initialSourcesDatatable: SourcesDatatable = {
     first: 0,
-    rows: 10,
+    rows: 20,
     sortField: 'last_modified',
     sortOrder: -1,
     started: moment.utc().subtract(1, 'd').startOf('d').toISOString(),

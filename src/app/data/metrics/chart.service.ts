@@ -14,7 +14,7 @@ export class ChartService {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
-    formatPlotResults(data: any, params: any, filtersApplied: any, title: string): any {
+    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, multiAxis: boolean): any {
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -99,7 +99,7 @@ export class ChartService {
                             this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
                         datasets.push({
-                            yAxisID: `yAxis${idx + 1}`,
+                            yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
                             stack: `stack${idx.toString()}`,
                             label: label,
                             icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
@@ -133,7 +133,7 @@ export class ChartService {
 
                     // populate chart dataset
                     datasets.push({
-                        yAxisID: `yAxis${idx + 1}`,
+                        yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
                         stack: idx.toString(),
                         label: result.column.title + ' for all ' + title,
                         icon: null,
