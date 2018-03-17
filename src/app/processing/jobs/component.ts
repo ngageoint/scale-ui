@@ -261,7 +261,6 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
     }
     showExeLog(exe) {
-        console.log(exe);
         this.selectedJobExe = exe;
         this.logDisplay = true;
     }
@@ -288,6 +287,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     console.log('requeue rejected');
                 }
             });
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
         });
     }
     ngOnInit() {
