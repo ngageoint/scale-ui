@@ -16,7 +16,7 @@
 // Components & Pages loaded separately
 
 .throb-text, .throb-background, .throb-svg {
-    animation-duration: 1.0s;
+    animation-duration: 0.6s;
     animation-timing-function: ease-out;
     animation-delay: 0;
     animation-direction: alternate;
@@ -42,7 +42,7 @@
         color: $clr-status-running;
     }
     100% {
-        color: transparentize($clr-status-running, 0.6);
+        color: transparentize($clr-status-running, 0.65);
     }
 }
 
@@ -51,7 +51,7 @@
         background-color: $clr-status-running;
     }
     100% {
-        background-color: transparentize($clr-status-running, 0.6);
+        background-color: transparentize($clr-status-running, 0.65);
     }
 }
 
@@ -60,7 +60,7 @@
         fill: $clr-status-running;
     }
     100% {
-        fill: transparentize($clr-status-running, 0.6);
+        fill: transparentize($clr-status-running, 0.65);
     }
 }
 
