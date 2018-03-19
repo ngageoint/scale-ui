@@ -101,8 +101,10 @@ export class Job {
         this.statusClass = this.status === 'RUNNING' ?
             `${this.status.toLowerCase()} throb-text` :
             this.status.toLowerCase();
-        this.exeStatusClass = this.execution.status === 'RUNNING' ?
-            `${this.execution.status.toLowerCase()} throb-text` :
-            this.execution.status.toLowerCase();
+        if (this.execution) {
+            this.exeStatusClass = this.execution.status === 'RUNNING' ?
+                `${this.execution.status.toLowerCase()} throb-text` :
+                this.execution.status.toLowerCase();
+        }
     }
 }
