@@ -98,6 +98,14 @@ export class JobActivityComponent implements OnInit, AfterViewInit, OnDestroy {
                         displayFormats: {
                             hour: 'DD MMM HHmm[Z]'
                         }
+                    },
+                    ticks: {
+                        callback: (value, index, values) => {
+                            if (!values[index]) {
+                                return;
+                            }
+                            return moment.utc(values[index]['value']).format('DD MMM HHmm[Z]');
+                        }
                     }
                 }],
                 yAxes: [{
