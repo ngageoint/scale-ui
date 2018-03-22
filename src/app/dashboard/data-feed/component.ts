@@ -78,7 +78,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.unsubscribe();
         this.feedParams = {
             started: moment.utc().subtract(3, 'd').toISOString(),
-            ended: moment.utc().toISOString()
+            ended: moment.utc().toISOString(),
+            use_ingest_time: true
         };
         this.feedSubscription = this.ingestApiService.getIngestStatus(this.feedParams, true).subscribe(data => {
             if (initDataFeeds) {
@@ -210,7 +211,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     position: 'left',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Files Ingested'
+                        labelString: 'Ingest Rate'
                     }
                 }, {
                     id: 'yAxis1',
@@ -237,7 +238,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         const data = chart.data;
                         return Array.isArray(data.datasets) ? _.map(data.datasets, (dataset, i) => {
                             return {
-                                text: dataset.icon ? dataset.icon : '\uf201',
+                                text: dataset.icon ? dataset.icon : 'Ingest Rate',
                                 fillStyle: dataset.backgroundColor,
                                 hidden: !chart.isDatasetVisible(i),
                                 lineCap: dataset.borderCapStyle,
