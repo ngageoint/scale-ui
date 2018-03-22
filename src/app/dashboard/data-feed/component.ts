@@ -216,6 +216,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         drawOnChartArea: false
                     },
                     stacked: false,
+                    ticks: {
+                        suggestedMin: 0
+                    },
                     scaleLabel: {
                         display: true,
                         labelString: 'Completed Count'
