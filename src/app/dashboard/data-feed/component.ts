@@ -149,26 +149,14 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         status: 'COMPLETED',
                         job_type_id: d1.id
                     }).then(jobData => {
-                        console.log(jobData);
-                        console.log(chartData.data);
-                        const stuff = _.toPairs(
-                            _.groupBy(jobData.results, r => moment.utc(r.last_status_change).startOf('h').toISOString())
-                        );
-                        _.forEach(stuff, s => {
-                            console.log(d1);
-                            const chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: d1.id }));
-                            chartData.data[chartDataIdx].data.push({
-                                x: s[0],
-                                y: s[1].length
-                            });
+                        const chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: d1.id }));
+                        // remove last element, since that will always have a 0 count
+                        chartData.data[chartDataIdx].data.pop();
+                        // add counts for today from jobData
+                        chartData.data[chartDataIdx].data.push({
+                            x: moment.utc().toISOString(),
+                            y: jobData.results.length
                         });
-                        // const todayData = [];
-                        // _.forEach(jobData.results, jd => {
-                        //     todayData.push({
-                        //         x: moment.utc(jd.last_status_change, 'YYYY-MM-DD').toISOString(),
-                        //         y: 's'
-                        //     });
-                        // });
                         this.jobsDatasets = chartData.data;
                         this.updateFeedData();
                         this.chartLoading = false;
