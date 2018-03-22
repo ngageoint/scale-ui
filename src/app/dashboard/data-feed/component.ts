@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { UIChart } from 'primeng/primeng';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -9,7 +10,8 @@ import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../color.service';
-import { UIChart } from 'primeng/primeng';
+import { JobsApiService } from '../../processing/jobs/api.service';
+import { JobsDatatable } from '../../processing/jobs/datatable.model';
 
 @Component({
     selector: 'app-data-feed',
@@ -20,7 +22,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('chart') chart: UIChart;
     chartLoading: boolean;
     feedParams: any;
-    jobParams: any;
+    plotParams: any;
     data: any;
     options: any;
     feedDataset: any;
@@ -32,6 +34,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     feedSubscription: any;
     jobSubscription: any;
     favoritesSubscription: any;
+    jobParams: any;
 
     private FEED_DATA = 'scale.dashboard.selectedDataFeed';
 
@@ -41,7 +44,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
         private metricsApiService: MetricsApiService,
-        private colorService: ColorService
+        private colorService: ColorService,
+        private jobsApiService: JobsApiService
     ) {
         this.feedDataset = {
             data: []
@@ -101,7 +105,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 _.map(this.favorites, 'id') :
                 [];
 
-            this.jobParams = {
+            this.plotParams = {
                 choice_id: choiceIds,
                 column: ['completed_count'],
                 colors: [
@@ -115,11 +119,11 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 page_size: null
             };
 
-            this.metricsApiService.getPlotData(this.jobParams).then(jobData => {
+            this.metricsApiService.getPlotData(this.plotParams).then(plotData => {
                 const filters = this.favorites.length > 0 ?
                     this.favorites :
                     [];
-                const chartData = this.chartService.formatPlotResults(jobData, this.jobParams, filters, '', true);
+                const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', true);
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {
@@ -133,10 +137,43 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     d1.data = newData;
                     d1.pointBorderColor = '#fff';
                     d1.borderColor = '#d0eaff';
+                    // get completed counts for the current day
+                    // need to use the jobs api for this, since metrics only does 1 full day at a time
+                    this.jobsApiService.getJobs({
+                        first: 0,
+                        rows: 1000,
+                        sortField: 'last_status_change',
+                        sortOrder: 1,
+                        started: moment.utc().startOf('d').toISOString(),
+                        ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
+                        status: 'COMPLETED',
+                        job_type_id: d1.id
+                    }).then(jobData => {
+                        console.log(jobData);
+                        console.log(chartData.data);
+                        const stuff = _.toPairs(
+                            _.groupBy(jobData.results, r => moment.utc(r.last_status_change).startOf('h').toISOString())
+                        );
+                        _.forEach(stuff, s => {
+                            console.log(d1);
+                            const chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: d1.id }));
+                            chartData.data[chartDataIdx].data.push({
+                                x: s[0],
+                                y: s[1].length
+                            });
+                        });
+                        // const todayData = [];
+                        // _.forEach(jobData.results, jd => {
+                        //     todayData.push({
+                        //         x: moment.utc(jd.last_status_change, 'YYYY-MM-DD').toISOString(),
+                        //         y: 's'
+                        //     });
+                        // });
+                        this.jobsDatasets = chartData.data;
+                        this.updateFeedData();
+                        this.chartLoading = false;
+                    });
                 });
-                this.jobsDatasets = chartData.data;
-                this.updateFeedData();
-                this.chartLoading = false;
             });
         }, err => {
             this.chartLoading = false;

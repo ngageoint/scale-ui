@@ -10,6 +10,7 @@ import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../color.service';
+import { JobsApiService } from '../../processing/jobs/api.service';
 
 describe('DataFeedComponent', () => {
     let component: DataFeedComponent;
@@ -19,7 +20,10 @@ describe('DataFeedComponent', () => {
         TestBed.configureTestingModule({
             declarations: [DataFeedComponent],
             imports: [HttpModule],
-            providers: [DataService, MessageService, IngestApiService, DashboardJobsService, ChartService, MetricsApiService, ColorService],
+            providers: [
+                DataService, MessageService, IngestApiService, DashboardJobsService, ChartService, MetricsApiService, ColorService,
+                JobsApiService
+            ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })

@@ -99,6 +99,7 @@ export class ChartService {
                             this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
                         datasets.push({
+                            id: filter.id,
                             yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
                             stack: `stack${idx.toString()}`,
                             label: label,
