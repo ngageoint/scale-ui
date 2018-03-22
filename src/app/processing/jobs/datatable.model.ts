@@ -2,8 +2,8 @@ import * as moment from 'moment';
 
 export class JobsDatatable {
     constructor(
-        public first: number,
-        public rows: number,
+        public first?: number,
+        public rows?: number,
         public sortField?: string,
         public sortOrder?: number,
         public started?: string,

@@ -141,10 +141,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     // get completed counts for the current day
                     // need to use the jobs api for this, since metrics only does 1 full day at a time
                     this.jobsApiService.getJobs({
-                        first: 0,
-                        rows: 1000,
-                        sortField: 'last_status_change',
-                        sortOrder: 1,
                         started: moment.utc().startOf('d').toISOString(),
                         ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
                         status: 'COMPLETED',
@@ -156,7 +152,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         // add counts for today from jobData
                         chartData.data[chartDataIdx].data.push({
                             x: moment.utc().toISOString(),
-                            y: jobData.results.length
+                            y: jobData.count
                         });
                         this.jobsDatasets = chartData.data;
                         this.updateFeedData();
@@ -219,7 +215,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     gridLines: {
                         drawOnChartArea: false
                     },
-                    stacked: true,
+                    stacked: false,
                     scaleLabel: {
                         display: true,
                         labelString: 'Completed Count'
