@@ -14,7 +14,7 @@ export class ChartService {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
-    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, multiAxis: boolean): any {
+    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, multiAxis: boolean, type?: string): any {
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -98,16 +98,32 @@ export class ChartService {
                         const bgColor = colorObj ?
                             this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
-                        datasets.push({
-                            id: filter.id,
-                            yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
-                            stack: `stack${idx.toString()}`,
-                            label: label,
-                            icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                            backgroundColor: bgColor,
-                            borderWidth: 2,
-                            data: filterData ? filterData.data : []
-                        });
+                        if (idx === 0) {
+                            datasets.push({
+                                id: filter.id,
+                                yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
+                                stack: `stack${idx.toString()}`,
+                                label: label,
+                                icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
+                                backgroundColor: bgColor,
+                                borderWidth: 2,
+                                data: filterData ? filterData.data : [],
+                                type: type || 'bar',
+                                fill: false,
+                                borderColor: bgColor
+                            });
+                        } else {
+                            datasets.push({
+                                id: filter.id,
+                                yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
+                                stack: `stack${idx.toString()}`,
+                                label: label,
+                                icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
+                                backgroundColor: bgColor,
+                                borderWidth: 2,
+                                data: filterData ? filterData.data : []
+                            });
+                        }
                     });
 
                     // increment result index
@@ -133,14 +149,29 @@ export class ChartService {
                     });
 
                     // populate chart dataset
-                    datasets.push({
-                        yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
-                        stack: idx.toString(),
-                        label: result.column.title + ' for all ' + title,
-                        icon: null,
-                        backgroundColor: colorObj ? colorObj.color : this.randomColorGenerator(),
-                        data: valueArr
-                    });
+                    if (idx === 0) {
+                        const bgColor = colorObj ? colorObj.color : this.randomColorGenerator();
+                        datasets.push({
+                            yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
+                            stack: idx.toString(),
+                            label: result.column.title + ' for all ' + title,
+                            icon: null,
+                            backgroundColor: bgColor,
+                            data: valueArr,
+                            type: type || 'bar',
+                            fill: false,
+                            borderColor: bgColor
+                        });
+                    } else {
+                        datasets.push({
+                            yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
+                            stack: idx.toString(),
+                            label: result.column.title + ' for all ' + title,
+                            icon: null,
+                            backgroundColor: colorObj ? colorObj.color : this.randomColorGenerator(),
+                            data: valueArr
+                        });
+                    }
 
                     // increment result index
                     idx++;

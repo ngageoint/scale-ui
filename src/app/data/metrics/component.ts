@@ -32,6 +32,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     metricOptions: SelectItem[] = [];
     selectedMetric1: any;
     selectedMetric2: any;
+    chartTypes: SelectItem[];
+    selectedChartType: any;
     yUnits1: any;
     yUnits2: any;
     multiAxis: boolean;
@@ -42,7 +44,19 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         private metricsApiService: MetricsApiService,
         private chartService: ChartService,
         private dataService: DataService
-    ) {}
+    ) {
+        this.chartTypes = [
+            {
+                label: 'Line',
+                value: 'line'
+            },
+            {
+                label: 'Bar',
+                value: 'bar'
+            }
+        ];
+        this.selectedChartType = 'line';
+    }
 
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
@@ -185,7 +199,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 params,
                 this.filtersApplied,
                 this.selectedDataType.title,
-                this.multiAxis
+                this.multiAxis,
+                this.selectedChartType
             );
 
             // compute total count for requested time period
