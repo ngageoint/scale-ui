@@ -61,7 +61,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
         if (units === 'seconds') {
-            return this.dataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
+            const r = this.dataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
+            return r;
         } else if (units === 'bytes') {
             return this.dataService.calculateFileSizeFromBytes(data, 1);
         }
@@ -152,7 +153,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.multiAxis = this.yUnits1 !== this.yUnits2;
         const yAxes = [{
             id: 'yAxis1',
-            position: 'left',
+            position: 'right',
             stacked: true,
             scaleLabel: {
                 display: true,
@@ -169,7 +170,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             // user selected a second metric; another axis is needed
             yAxes.push({
                 id: 'yAxis2',
-                position: 'right',
+                position: 'left',
                 stacked: true,
                 scaleLabel: {
                     display: true,

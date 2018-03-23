@@ -98,32 +98,19 @@ export class ChartService {
                         const bgColor = colorObj ?
                             this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
-                        if (idx === 0) {
-                            datasets.push({
-                                id: filter.id,
-                                yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
-                                stack: `stack${idx.toString()}`,
-                                label: label,
-                                icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                                backgroundColor: bgColor,
-                                borderWidth: 2,
-                                data: filterData ? filterData.data : [],
-                                type: type || 'bar',
-                                fill: false,
-                                borderColor: bgColor
-                            });
-                        } else {
-                            datasets.push({
-                                id: filter.id,
-                                yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
-                                stack: `stack${idx.toString()}`,
-                                label: label,
-                                icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                                backgroundColor: bgColor,
-                                borderWidth: 2,
-                                data: filterData ? filterData.data : []
-                            });
-                        }
+                        datasets.push({
+                            id: filter.id,
+                            yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
+                            stack: `stack${idx.toString()}`,
+                            label: label,
+                            icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
+                            backgroundColor: bgColor,
+                            borderWidth: 2,
+                            data: filterData ? filterData.data : [],
+                            type: type || 'bar',
+                            fill: false,
+                            borderColor: bgColor
+                        });
                     });
 
                     // increment result index
@@ -149,29 +136,18 @@ export class ChartService {
                     });
 
                     // populate chart dataset
-                    if (idx === 0) {
-                        const bgColor = colorObj ? colorObj.color : this.randomColorGenerator();
-                        datasets.push({
-                            yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
-                            stack: idx.toString(),
-                            label: result.column.title + ' for all ' + title,
-                            icon: null,
-                            backgroundColor: bgColor,
-                            data: valueArr,
-                            type: type || 'bar',
-                            fill: false,
-                            borderColor: bgColor
-                        });
-                    } else {
-                        datasets.push({
-                            yAxisID: multiAxis ? `yAxis${idx + 1}` : 'yAxis1',
-                            stack: idx.toString(),
-                            label: result.column.title + ' for all ' + title,
-                            icon: null,
-                            backgroundColor: colorObj ? colorObj.color : this.randomColorGenerator(),
-                            data: valueArr
-                        });
-                    }
+                    const bgColor = colorObj ? colorObj.color : this.randomColorGenerator();
+                    datasets.push({
+                        yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
+                        stack: colIdx.toString(),
+                        label: result.column.title + ' for all ' + title,
+                        icon: null,
+                        backgroundColor: bgColor,
+                        data: valueArr,
+                        type: colIdx === 0 ? 'bar' : type || 'bar',
+                        fill: false,
+                        borderColor: bgColor
+                    });
 
                     // increment result index
                     idx++;
