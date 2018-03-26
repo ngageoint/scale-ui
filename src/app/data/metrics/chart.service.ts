@@ -40,11 +40,13 @@ export class ChartService {
         if (filtersApplied.length > 0) {
             // filters were applied, so build data source accordingly
             let idx = 0;
+            let isPrimary = true;
             _.forEach(data.results, (result) => {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
                 const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
+                    isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];
                     colArr = [];
                     if (result.values.length > 0) {
@@ -107,9 +109,6 @@ export class ChartService {
                         const bgColor = colorObj ?
                             this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
-                        console.log(label);
-                        console.log(primaryMetric);
-                        console.log(secondaryMetric);
                         datasets.push({
                             id: filter.id,
                             yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
@@ -119,7 +118,7 @@ export class ChartService {
                             backgroundColor: bgColor,
                             borderWidth: 2,
                             data: filterData ? filterData.data : [],
-                            type: type || 'bar',
+                            type: isPrimary ? 'bar' : type || 'bar',
                             fill: false,
                             borderColor: bgColor
                         });
@@ -132,11 +131,13 @@ export class ChartService {
         } else {
             // no filters were applied, so show aggregate statistics for selected metric
             let idx = 0;
+            let isPrimary = true;
             _.forEach(data.results, (result) => {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
                 const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
+                    isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];
                     // add result values to valueArr
                     _.forEach(dataLabels, (xDate) => {
@@ -156,7 +157,7 @@ export class ChartService {
                         icon: null,
                         backgroundColor: bgColor,
                         data: valueArr,
-                        type: colIdx === 0 ? 'bar' : type || 'bar',
+                        type: isPrimary ? 'bar' : type || 'bar',
                         fill: false,
                         borderColor: bgColor
                     });

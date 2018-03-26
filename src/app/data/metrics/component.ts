@@ -147,7 +147,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
     }
     updateChart() {
-        if (_.isEqual(this.selectedMetric1, this.selectedMetric2) {
+        if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
             this.messageService.add({severity: 'warning', summary: 'Selected the same metric twice'});
             return false;
         }
@@ -259,8 +259,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 maintainAspectRatio: false,
                 tooltips: {
                     callbacks: {
-                        label: (tooltipItem, data) => {
-                            const dataset = data.datasets[tooltipItem.datasetIndex];
+                        label: (tooltipItem, tooltipData) => {
+                            const dataset = tooltipData.datasets[tooltipItem.datasetIndex];
                             if (this.multiAxis) {
                                 if (dataset.yAxisID === 'yAxis1') {
                                     return `${this.selectedMetric1.title}: ${this.formatYValues(this.yUnits1, tooltipItem.yLabel)}`;

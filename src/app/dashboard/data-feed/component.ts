@@ -124,7 +124,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 const filters = this.favorites.length > 0 ?
                     this.favorites :
                     [];
-                const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', true);
+                const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', false);
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {
@@ -153,6 +153,10 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         chartData.data[chartDataIdx].data.push({
                             x: moment.utc().toISOString(),
                             y: jobData.count
+                        });
+                        _.forEach(chartData.data, d => {
+                            d.fill = true;
+                            d.type = 'line';
                         });
                         this.jobsDatasets = chartData.data;
                         this.updateFeedData();
@@ -203,25 +207,11 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                 }],
                 yAxes: [{
-                    id: 'yAxis2',
+                    id: 'yAxis1',
                     position: 'left',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Ingest Rate'
-                    }
-                }, {
-                    id: 'yAxis1',
-                    position: 'right',
-                    gridLines: {
-                        drawOnChartArea: false
-                    },
-                    stacked: false,
-                    ticks: {
-                        suggestedMin: 0
-                    },
-                    scaleLabel: {
-                        display: true,
-                        labelString: 'Completed Count'
+                        labelString: 'Count'
                     }
                 }]
             },
