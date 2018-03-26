@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -41,6 +42,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     options: any;
     showFilters = true;
     constructor(
+        private messageService: MessageService,
         private metricsApiService: MetricsApiService,
         private chartService: ChartService,
         private dataService: DataService
@@ -79,9 +81,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     value: result
                 });
             });
-        }).catch(e => {
-            console.log(e);
+        }).catch(err => {
             this.dataTypesLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving data types', detail: err.statusText});
         });
     }
     getDataTypeOptions() {
@@ -116,9 +118,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 label: 'None',
                 value: null
             });
-        }).catch(e => {
-            console.log(e);
+        }).catch(err => {
             this.filteredChoicesLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving data type options', detail: err.statusText});
         });
     }
     onStartSelect(e) {
@@ -145,19 +147,23 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
     }
     updateChart() {
+        if (_.isEqual(this.selectedMetric1, this.selectedMetric2) {
+            this.messageService.add({severity: 'warning', summary: 'Selected the same metric twice'});
+            return false;
+        }
         this.showChart = true;
         this.chartLoading = true;
         this.showFilters = false;
         this.yUnits1 = this.selectedMetric1.units;
         this.yUnits2 = this.selectedMetric2 ? this.selectedMetric2.units : null;
-        this.multiAxis = this.yUnits1 !== this.yUnits2;
+        this.multiAxis = this.yUnits2 && this.yUnits1 !== this.yUnits2;
         const yAxes = [{
             id: 'yAxis1',
-            position: 'right',
+            position: this.multiAxis ? 'right' : 'left',
             stacked: true,
             scaleLabel: {
                 display: true,
-                labelString: this.multiAxis ? this.selectedMetric1.title : ''
+                labelString: this.selectedMetric1.title
             },
             ticks: {
                 callback: (value) => {
@@ -201,6 +207,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 this.filtersApplied,
                 this.selectedDataType.title,
                 this.multiAxis,
+                this.selectedMetric1,
+                this.selectedMetric2,
                 this.selectedChartType
             );
 
@@ -248,12 +256,26 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     }],
                     yAxes: yAxes
                 },
-                maintainAspectRatio: false
+                maintainAspectRatio: false,
+                tooltips: {
+                    callbacks: {
+                        label: (tooltipItem, data) => {
+                            const dataset = data.datasets[tooltipItem.datasetIndex];
+                            if (this.multiAxis) {
+                                if (dataset.yAxisID === 'yAxis1') {
+                                    return `${this.selectedMetric1.title}: ${this.formatYValues(this.yUnits1, tooltipItem.yLabel)}`;
+                                }
+                                return `${this.selectedMetric2.title}: ${this.formatYValues(this.yUnits2, tooltipItem.yLabel)}`;
+                            }
+                            return `${dataset.label}: ${this.formatYValues(this.yUnits1, tooltipItem.yLabel)}`;
+                        }
+                    }
+                }
             };
             this.chartLoading = false;
-        }).catch(e => {
-            console.log(e);
+        }).catch(err => {
             this.chartLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving plot data', detail: err.statusText});
         });
     }
 

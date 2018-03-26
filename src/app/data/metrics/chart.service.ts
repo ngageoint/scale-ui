@@ -14,7 +14,16 @@ export class ChartService {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
     }
 
-    formatPlotResults(data: any, params: any, filtersApplied: any, title: string, multiAxis: boolean, type?: string): any {
+    formatPlotResults(
+        data: any,
+        params: any,
+        filtersApplied: any,
+        title: string,
+        multiAxis: boolean,
+        primaryMetric?: any,
+        secondaryMetric?: any,
+        type?: string
+    ): any {
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -98,6 +107,9 @@ export class ChartService {
                         const bgColor = colorObj ?
                             this.colorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
+                        console.log(label);
+                        console.log(primaryMetric);
+                        console.log(secondaryMetric);
                         datasets.push({
                             id: filter.id,
                             yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',

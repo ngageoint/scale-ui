@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { MetricsComponent } from './component';
 import { ColorService } from '../../color.service';
@@ -19,7 +20,7 @@ describe('MetricsComponent', () => {
             declarations: [MetricsComponent],
             imports: [HttpModule],
             providers: [
-                ColorService, ChartService, MetricsApiService, DataService,
+                MessageService, ColorService, ChartService, MetricsApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
