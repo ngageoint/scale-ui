@@ -118,6 +118,7 @@ export class ChartService {
                             backgroundColor: bgColor,
                             borderWidth: 2,
                             data: filterData ? filterData.data : [],
+                            isPrimary: isPrimary,
                             type: isPrimary ? 'bar' : type || 'bar',
                             fill: false,
                             borderColor: bgColor
@@ -157,6 +158,7 @@ export class ChartService {
                         icon: null,
                         backgroundColor: bgColor,
                         data: valueArr,
+                        isPrimary: isPrimary,
                         type: isPrimary ? 'bar' : type || 'bar',
                         fill: false,
                         borderColor: bgColor
@@ -168,7 +170,7 @@ export class ChartService {
             });
         }
         return {
-            data: datasets,
+            data: _.orderBy(datasets, ['isPrimary'], ['asc']),
             labels: dataLabels
         };
     }

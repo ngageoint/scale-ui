@@ -124,7 +124,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 const filters = this.favorites.length > 0 ?
                     this.favorites :
                     [];
-                const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', false);
+                const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', true);
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {
@@ -146,7 +146,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         status: 'COMPLETED',
                         job_type_id: d1.id
                     }).then(jobData => {
-                        const chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: d1.id }));
+                        let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: d1.id }));
+                        chartDataIdx = chartDataIdx > -1 ? chartDataIdx : 0;
                         // remove last element, since that will always have a 0 count
                         chartData.data[chartDataIdx].data.pop();
                         // add counts for today from jobData
@@ -207,11 +208,25 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                 }],
                 yAxes: [{
-                    id: 'yAxis1',
+                    id: 'yAxis2',
                     position: 'left',
                     scaleLabel: {
                         display: true,
-                        labelString: 'Count'
+                        labelString: 'Ingest Rate'
+                    }
+                }, {
+                    id: 'yAxis1',
+                    position: 'right',
+                    gridLines: {
+                        drawOnChartArea: false
+                    },
+                    stacked: false,
+                    ticks: {
+                        suggestedMin: 0
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Completed Count'
                     }
                 }]
             },
