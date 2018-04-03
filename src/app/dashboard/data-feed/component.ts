@@ -76,7 +76,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private fetchJobsData(job_type_id: number, chartData: any): Promise<any> {
-        const promise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             this.jobsApiService.getJobs({
                 started: moment.utc().startOf('d').toISOString(),
                 ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
@@ -101,7 +101,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 reject(err);
             });
         });
-        return promise;
     }
 
     private fetchChartData(initDataFeeds: boolean) {
@@ -175,10 +174,19 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     promises.push(this.fetchJobsData(d1.id, chartData));
                 });
                 Promise.all(promises).then(values => {
-                    this.jobsDatasets = _.last(values).data;
-                    this.updateFeedData();
-                    this.chartLoading = false;
-                })
+                    // use unique objects from data arrays
+                    this.jobsDatasets = _.uniq(_.flatten(_.map(values, 'data')));
+                    this.productsApiService.getProducts({
+                        page: 1,
+                        started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
+                        ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
+                        job_type_id: _.map(this.favorites, 'id')
+                    }).then(productData => {
+                        console.log(productData);
+                        this.updateFeedData();
+                        this.chartLoading = false;
+                    });
+                });
             });
         }, err => {
             this.chartLoading = false;
