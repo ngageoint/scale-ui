@@ -21,6 +21,14 @@ module.exports = function (request, reply) {
         //         return moment.utc(result.started).isSameOrAfter(moment.utc(params.started)) && moment.utc(result.ended).isSameOrBefore(moment.utc(params.ended));
         //     });
         // }
+        if (params.job_type_id) {
+            data.results = _.filter(data.results, function (r) {
+                if (Array.isArray(params.job_type_id)) {
+                    return _.includes(params.job_type_id, r.job_type.id.toString());
+                }
+                return r.job_type.id === parseInt(params.job_type_id);
+            });
+        }
         data.count = data.results.length;
         if (params.page && params.page_size && data.count > params.page_size) {
             var pagedResults = _.chunk(data.results, params.page_size);

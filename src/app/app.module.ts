@@ -72,6 +72,7 @@ import { IngestComponent } from './data/ingest/component';
 import { IngestApiService } from './data/ingest/api.service';
 import { LoadingIndicatorComponent } from './common/loading-indicator/component';
 import { StatusApiService } from './navbar/status/api.service';
+import { ProductsApiService } from './common/products/api.service';
 
 
 @NgModule({
@@ -176,7 +177,8 @@ import { StatusApiService } from './navbar/status/api.service';
         LogViewerApiService,
         IngestApiService,
         StatusApiService,
-        ConfirmationService
+        ConfirmationService,
+        ProductsApiService
     ],
     bootstrap: [AppComponent]
 })

@@ -12,6 +12,7 @@ import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { JobsDatatable } from '../../processing/jobs/datatable.model';
+import { ProductsApiService } from '../../common/products/api.service';
 
 @Component({
     selector: 'app-data-feed',
@@ -45,7 +46,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         private chartService: ChartService,
         private metricsApiService: MetricsApiService,
         private colorService: ColorService,
-        private jobsApiService: JobsApiService
+        private jobsApiService: JobsApiService,
+        private productsApiService: ProductsApiService
     ) {
         this.feedDataset = {
             data: []
@@ -71,6 +73,35 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.data = {
             datasets: this.jobsDatasets.length > 0 ? _.concat([this.feedDataset], this.jobsDatasets) : [this.feedDataset]
         };
+    }
+
+    private fetchJobsData(job_type_id: number, chartData: any): Promise<any> {
+        const promise = new Promise((resolve, reject) => {
+            this.jobsApiService.getJobs({
+                started: moment.utc().startOf('d').toISOString(),
+                ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
+                status: 'COMPLETED',
+                job_type_id: job_type_id
+            }).then(jobData => {
+                let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: job_type_id }));
+                chartDataIdx = chartDataIdx > -1 ? chartDataIdx : 0;
+                // remove last element, since that will always have a 0 count
+                chartData.data[chartDataIdx].data.pop();
+                // add counts for today from jobData
+                chartData.data[chartDataIdx].data.push({
+                    x: moment.utc().toISOString(),
+                    y: jobData.count
+                });
+                _.forEach(chartData.data, d => {
+                    d.fill = true;
+                    d.type = 'line';
+                });
+                resolve(chartData);
+            }, err => {
+                reject(err);
+            });
+        });
+        return promise;
     }
 
     private fetchChartData(initDataFeeds: boolean) {
@@ -125,6 +156,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.favorites :
                     [];
                 const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', true);
+                const promises = [];
 
                 // refactor data to match this chart's format
                 _.forEach(chartData.data, d1 => {
@@ -140,30 +172,13 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     d1.borderColor = '#d0eaff';
                     // get completed counts for the current day
                     // need to use the jobs api for this, since metrics only does 1 full day at a time
-                    this.jobsApiService.getJobs({
-                        started: moment.utc().startOf('d').toISOString(),
-                        ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
-                        status: 'COMPLETED',
-                        job_type_id: d1.id
-                    }).then(jobData => {
-                        let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: d1.id }));
-                        chartDataIdx = chartDataIdx > -1 ? chartDataIdx : 0;
-                        // remove last element, since that will always have a 0 count
-                        chartData.data[chartDataIdx].data.pop();
-                        // add counts for today from jobData
-                        chartData.data[chartDataIdx].data.push({
-                            x: moment.utc().toISOString(),
-                            y: jobData.count
-                        });
-                        _.forEach(chartData.data, d => {
-                            d.fill = true;
-                            d.type = 'line';
-                        });
-                        this.jobsDatasets = chartData.data;
-                        this.updateFeedData();
-                        this.chartLoading = false;
-                    });
+                    promises.push(this.fetchJobsData(d1.id, chartData));
                 });
+                Promise.all(promises).then(values => {
+                    this.jobsDatasets = _.last(values).data;
+                    this.updateFeedData();
+                    this.chartLoading = false;
+                })
             });
         }, err => {
             this.chartLoading = false;
@@ -220,7 +235,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     gridLines: {
                         drawOnChartArea: false
                     },
-                    stacked: false,
+                    stacked: true,
                     ticks: {
                         suggestedMin: 0
                     },
@@ -265,6 +280,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         this.fetchChartData(true);
         this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
+            // don't duplicate data feeds in dropdown
             this.fetchChartData(false);
         });
     }
