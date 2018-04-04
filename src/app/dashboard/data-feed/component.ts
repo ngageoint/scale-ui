@@ -28,6 +28,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     options: any;
     feedDataset: any;
     jobsDatasets = [];
+    productsDataset: any;
     dataFeeds: SelectItem[] = [];
     selectedDataFeed: any;
     favorites = [];
@@ -59,6 +60,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             label: this.selectedDataFeed.strike.title,
             fill: false,
             borderColor: this.colorService.INGEST,
+            backgroundColor: this.colorService.INGEST,
             borderWidth: 2,
             pointRadius: 2,
             pointBackgroundColor: this.colorService.INGEST,
@@ -71,7 +73,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         });
         this.data = {
-            datasets: this.jobsDatasets.length > 0 ? _.concat([this.feedDataset], this.jobsDatasets) : [this.feedDataset]
+            datasets: this.jobsDatasets.length > 0 ?
+                _.concat([this.feedDataset, this.productsDataset], this.jobsDatasets) :
+                [this.feedDataset, this.productsDataset]
         };
     }
 
@@ -180,9 +184,29 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         page: 1,
                         started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
                         ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
-                        job_type_id: _.map(this.favorites, 'id')
+                        job_type_id: _.map(this.favorites, 'id'),
+                        sortOrder: 1,
+                        sortField: 'created'
                     }).then(productData => {
-                        console.log(productData);
+                        this.productsDataset = {
+                            label: 'Products',
+                            fill: false,
+                            borderColor: this.colorService.WARNING,
+                            backgroundColor: this.colorService.WARNING,
+                            borderWidth: 2,
+                            pointRadius: 2,
+                            pointBackgroundColor: this.colorService.WARNING,
+                            data: []
+                        };
+                        const products = _.toPairs(_.groupBy(productData.results, r => {
+                            return moment.utc(r.created).startOf('d').toISOString();
+                        }));
+                        _.forEach(products, p => {
+                            this.productsDataset.data.push({
+                                x: p[0],
+                                y: p[1].length
+                            });
+                        });
                         this.updateFeedData();
                         this.chartLoading = false;
                     });
@@ -265,7 +289,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         const data = chart.data;
                         return Array.isArray(data.datasets) ? _.map(data.datasets, (dataset, i) => {
                             return {
-                                text: dataset.icon ? dataset.icon : 'Ingest Rate',
+                                text: dataset.icon ? dataset.icon : dataset.label === 'Products' ? dataset.label : 'Ingest Rate',
                                 fillStyle: dataset.backgroundColor,
                                 hidden: !chart.isDatasetVisible(i),
                                 lineCap: dataset.borderCapStyle,

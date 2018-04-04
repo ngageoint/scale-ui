@@ -5,7 +5,7 @@ const jobTypeData = require('../data/job-types.json');
 module.exports = function (request, reply) {
     var params = request.url.query;
     var data = {
-        count: 15,
+        count: 500,
         next: null,
         previous: null,
         results: []
@@ -13,7 +13,7 @@ module.exports = function (request, reply) {
     var jobTypes = jobTypeData.results;
     var start = params.started ? moment.utc(params.started) : moment.utc().subtract(1, 'd');
     var stop = params.ended ? moment.utc(params.ended) : moment.utc();
-    for (var i = 0; i < 15; i++) {
+    for (var i = 0; i < 500; i++) {
         var date = moment.utc(start.valueOf() + Math.random() * (stop.valueOf() - start.valueOf())).toISOString();
         data.results.push({
             id: 465,
@@ -78,6 +78,13 @@ module.exports = function (request, reply) {
         //         return moment.utc(result.started).isSameOrAfter(moment.utc(params.started)) && moment.utc(result.ended).isSameOrBefore(moment.utc(params.ended));
         //     });
         // }
+        if (params.order) {
+            if (_.startsWith(params.order, '-')) {
+                data.results = _.orderBy(data.results, [_.trimStart(params.order, '-')], ['desc']);
+            } else {
+                data.results = _.orderBy(data.results, [params.order], ['asc']);
+            }
+        }
         if (params.job_type_id) {
             data.results = _.filter(data.results, function (r) {
                 if (Array.isArray(params.job_type_id)) {
