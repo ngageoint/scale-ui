@@ -2,8 +2,9 @@
 <form [formGroup]="createForm" (ngSubmit)="createForm.value" *ngIf="jobType">
     <p-panel>
         <p-header>
-            <div class="ui-helper-clearfix">
+            <div class="seed-panel-title">
                 <span class="ui-panel-title job-type-title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
+                <span *ngIf="!jobType.manifest"></span>
                 <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa-code"
                         iconPos="left" (click)="onModeClick()"></button>
             </div>
@@ -26,6 +27,18 @@
                                     (click)="onImageRemove()"></button>
                         </div>
                         {{ jobType.manifest.job.description }}
+                        <ul class="list-unstyled">
+                            <li><strong>Maintainer:</strong> {{ jobType.manifest.job.maintainer.name }}</li>
+                            <li *ngIf="jobType.manifest.job.maintainer.organization">
+                                <strong>Organization:</strong> {{ jobType.manifest.job.maintainer.organization }}
+                            </li>
+                            <li *ngIf="jobType.manifest.job.maintainer.email">
+                                <strong>Email:</strong> {{ jobType.manifest.job.maintainer.email }}
+                            </li>
+                            <li *ngIf="jobType.manifest.job.maintainer.phone">
+                                <strong>Phone:</strong> {{ jobType.manifest.job.maintainer.phone }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>

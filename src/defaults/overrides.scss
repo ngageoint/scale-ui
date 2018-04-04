@@ -48,6 +48,21 @@
     }
 }
 
+.seed-jobs .results .ui-button,
+.seed-jobs .results .ui-dropdown,
+.seed-jobs .job-details .code pre,
+.seed-jobs .results .ui-dialog-title {
+    font-size: 1em !important;
+}
+
+.seed-jobs .results .ui-dialog-title {
+    font-weight: bold;
+}
+
+.seed-jobs .job-details .header button {
+    font-size: 0.8em !important;
+}
+
 .CodeMirror {
     height: auto;
 }

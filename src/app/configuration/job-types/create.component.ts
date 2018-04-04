@@ -185,6 +185,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
     onImageImport(seedImage) {
         this.jobType.manifest = seedImage;
+        this.jobType.docker_image = `${seedImage.job.name}/${seedImage.job.jobVersion}`;
         this.validateForm();
         console.log(seedImage);
     }
