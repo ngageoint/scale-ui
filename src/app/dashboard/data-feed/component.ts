@@ -74,8 +74,11 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         });
         this.data = {
             datasets: this.jobsDatasets.length > 0 ?
-                _.concat([this.feedDataset, this.productsDataset], this.jobsDatasets) :
-                [this.feedDataset, this.productsDataset]
+                _.concat([this.feedDataset], this.jobsDatasets) :
+                [this.feedDataset]
+            // datasets: this.jobsDatasets.length > 0 ?
+            //     _.concat([this.feedDataset, this.productsDataset], this.jobsDatasets) :
+            //     [this.feedDataset, this.productsDataset]
         };
     }
 
@@ -180,36 +183,38 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 Promise.all(promises).then(values => {
                     // use unique objects from data arrays
                     this.jobsDatasets = _.uniq(_.flatten(_.map(values, 'data')));
-                    this.productsApiService.getProducts({
-                        page: 1,
-                        started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
-                        ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
-                        job_type_id: _.map(this.favorites, 'id'),
-                        sortOrder: 1,
-                        sortField: 'created'
-                    }).then(productData => {
-                        this.productsDataset = {
-                            label: 'Products',
-                            fill: false,
-                            borderColor: this.colorService.WARNING,
-                            backgroundColor: this.colorService.WARNING,
-                            borderWidth: 2,
-                            pointRadius: 2,
-                            pointBackgroundColor: this.colorService.WARNING,
-                            data: []
-                        };
-                        const products = _.toPairs(_.groupBy(productData.results, r => {
-                            return moment.utc(r.created).startOf('d').toISOString();
-                        }));
-                        _.forEach(products, p => {
-                            this.productsDataset.data.push({
-                                x: p[0],
-                                y: p[1].length
-                            });
-                        });
-                        this.updateFeedData();
-                        this.chartLoading = false;
-                    });
+                    this.updateFeedData();
+                    this.chartLoading = false;
+                    // this.productsApiService.getProducts({
+                    //     page: 1,
+                    //     started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
+                    //     ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
+                    //     job_type_id: _.map(this.favorites, 'id'),
+                    //     sortOrder: 1,
+                    //     sortField: 'created'
+                    // }).then(productData => {
+                    //     this.productsDataset = {
+                    //         label: 'Products',
+                    //         fill: false,
+                    //         borderColor: this.colorService.WARNING,
+                    //         backgroundColor: this.colorService.WARNING,
+                    //         borderWidth: 2,
+                    //         pointRadius: 2,
+                    //         pointBackgroundColor: this.colorService.WARNING,
+                    //         data: []
+                    //     };
+                    //     const products = _.toPairs(_.groupBy(productData.results, r => {
+                    //         return moment.utc(r.created).startOf('d').toISOString();
+                    //     }));
+                    //     _.forEach(products, p => {
+                    //         this.productsDataset.data.push({
+                    //             x: p[0],
+                    //             y: p[1].length
+                    //         });
+                    //     });
+                    //     this.updateFeedData();
+                    //     this.chartLoading = false;
+                    // });
                 });
             });
         }, err => {
