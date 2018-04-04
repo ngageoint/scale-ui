@@ -11,7 +11,6 @@ import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { JobsDatatable } from '../../processing/jobs/datatable.model';
 import { ProductsApiService } from '../../common/products/api.service';
 
 @Component({
@@ -56,30 +55,36 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private updateFeedData() {
-        this.feedDataset = {
-            label: this.selectedDataFeed.strike.title,
-            fill: false,
-            borderColor: this.colorService.INGEST,
-            backgroundColor: this.colorService.INGEST,
-            borderWidth: 2,
-            pointRadius: 2,
-            pointBackgroundColor: this.colorService.INGEST,
-            data: []
-        };
-        _.forEach(this.selectedDataFeed.values, value => {
-            this.feedDataset.data.push({
-                x: value.time,
-                y: value.files
+        if (this.selectedDataFeed) {
+            this.feedDataset = {
+                label: this.selectedDataFeed.strike.title,
+                fill: false,
+                borderColor: this.colorService.INGEST,
+                backgroundColor: this.colorService.INGEST,
+                borderWidth: 2,
+                pointRadius: 2,
+                pointBackgroundColor: this.colorService.INGEST,
+                data: []
+            };
+            _.forEach(this.selectedDataFeed.values, value => {
+                this.feedDataset.data.push({
+                    x: value.time,
+                    y: value.files
+                });
             });
-        });
-        this.data = {
-            datasets: this.jobsDatasets.length > 0 ?
-                _.concat([this.feedDataset], this.jobsDatasets) :
-                [this.feedDataset]
-            // datasets: this.jobsDatasets.length > 0 ?
-            //     _.concat([this.feedDataset, this.productsDataset], this.jobsDatasets) :
-            //     [this.feedDataset, this.productsDataset]
-        };
+            this.data = {
+                datasets: this.jobsDatasets.length > 0 ?
+                    _.concat([this.feedDataset], this.jobsDatasets) :
+                    [this.feedDataset]
+                // datasets: this.jobsDatasets.length > 0 ?
+                //     _.concat([this.feedDataset, this.productsDataset], this.jobsDatasets) :
+                //     [this.feedDataset, this.productsDataset]
+            };
+        } else {
+            this.data = {
+                datasets: this.jobsDatasets
+            };
+        }
     }
 
     private fetchJobsData(job_type_id: number, chartData: any): Promise<any> {
@@ -128,12 +133,14 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
                 this.dataFeeds = _.sortBy(this.dataFeeds, ['asc'], ['label']);
             }
-            if (this.selectedDataFeed) {
-                // use value from dataFeeds array to ensure object equality for primeng dropdown
-                const dataFeed = _.find(this.dataFeeds, { label: this.selectedDataFeed.strike.title });
-                this.selectedDataFeed = dataFeed ? dataFeed.value : this.dataFeeds[0].value;
-            } else {
-                this.selectedDataFeed = this.dataFeeds[0].value;
+            if (this.dataFeeds.length > 0) {
+                if (this.selectedDataFeed) {
+                    // use value from dataFeeds array to ensure object equality for primeng dropdown
+                    const dataFeed = _.find(this.dataFeeds, { label: this.selectedDataFeed.strike.title });
+                    this.selectedDataFeed = dataFeed ? dataFeed.value : this.dataFeeds[0].value;
+                } else {
+                    this.selectedDataFeed = this.dataFeeds[0].value;
+                }
             }
 
             // get jobs metrics
@@ -294,7 +301,13 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         const data = chart.data;
                         return Array.isArray(data.datasets) ? _.map(data.datasets, (dataset, i) => {
                             return {
-                                text: dataset.icon ? dataset.icon : dataset.label === 'Products' ? dataset.label : 'Ingest Rate',
+                                text: dataset.icon ?
+                                    dataset.icon :
+                                    dataset.label === 'Products' ?
+                                        dataset.label :
+                                        this.selectedDataFeed ?
+                                            'Ingest Rate' :
+                                            dataset.label,
                                 fillStyle: dataset.backgroundColor,
                                 hidden: !chart.isDatasetVisible(i),
                                 lineCap: dataset.borderCapStyle,

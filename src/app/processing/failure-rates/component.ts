@@ -185,8 +185,8 @@ export class FailureRatesComponent implements OnInit {
     onChange(e) {
         this.selectedJobType = e.value;
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            name: this.selectedJobType ? this.selectedJobType.name : null,
-            version: this.selectedJobType ? this.selectedJobType.version : null
+            name: this.selectedJobType ? this.selectedJobType.manifest.job.name : null,
+            version: this.selectedJobType ? this.selectedJobType.manifest.job.jobVersion : null
         });
         this.updateOptions();
     }

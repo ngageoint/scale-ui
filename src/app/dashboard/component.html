@@ -99,7 +99,7 @@
             </p-scrollPanel>
         </div>
         <div class="ui-g-9">
-            <div class="charts">
+            <div class="charts" *ngIf="allJobTypes.length > 0">
                 <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
                     <app-job-history></app-job-history>
                 </p-panel>

@@ -125,10 +125,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             recipeData.definition.jobs.push({
                 dependencies: [],
                 job_type: {
-                    name: data.name,
-                    version: data.version
+                    name: data.manifest.job.name,
+                    version: data.manifest.job.jobVersion
                 },
-                name: data.name,
+                name: data.manifest.job.name,
                 recipe_inputs: []
             });
             recipeData.job_types.push(data);

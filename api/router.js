@@ -27,7 +27,7 @@ const jobInputs = require('./handlers/jobInputs');
 const products = require('./handlers/products');
 const jobExecutions = require('./handlers/jobExecutions');
 
-const apiVersion = 'v5';
+const apiVersion = 'v6';
 
 module.exports = {
     init: function(server) {

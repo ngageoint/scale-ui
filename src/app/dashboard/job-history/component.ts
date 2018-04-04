@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -24,6 +25,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     favoritesSubscription: any;
 
     constructor(
+        private messageService: MessageService,
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
         private metricsApiService: MetricsApiService,
@@ -104,6 +106,9 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
                 },
                 maintainAspectRatio: false
             };
+        }, err => {
+            this.chartLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job history', detail: err.statusText});
         });
     }
 

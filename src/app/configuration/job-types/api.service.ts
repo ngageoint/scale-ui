@@ -65,7 +65,6 @@ export class JobTypesApiService {
 
     updateJobType(jobType: JobType): Promise<any> {
         const updatedJobType = {
-            error_mappings: jobType.error_mapping,
             is_paused: jobType.is_paused
         };
         return this.http.patch(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)

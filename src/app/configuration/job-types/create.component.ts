@@ -14,9 +14,7 @@ import { environment } from '../../../environments/environment';
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import * as iconData from './font-awesome.json';
-import { Trigger, TriggerConfiguration, TriggerData } from './trigger.model';
 import { WorkspacesApiService } from '../workspaces/api.service';
-import { CustomResources } from './custom.resources.model';
 
 @Component({
     selector: 'app-job-types-create',
@@ -70,7 +68,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         });
                     } else {
                         this.mode = 'Create';
-                        this.jobType = new JobType('untitled-job-type', '1.0', null, 'Untitled Job Type');
+                        this.jobType = new JobType(null);
                     }
 
                     this.createForm = this.fb.group({
