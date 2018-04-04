@@ -44,16 +44,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
-    triggerForm: FormGroup;
-    trigger: Trigger;
-    triggerJson: string;
-    triggerTypeOptions: SelectItem[];
-    errorMappingForm: FormGroup;
-    errorMappingExitCode: any;
-    errorMappingJson: string;
-    customResourcesForm: FormGroup;
-    customResources: any;
-    customResourcesJson: string;
     constructor(
         private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
@@ -82,60 +72,17 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         this.mode = 'Create';
                         this.jobType = new JobType('untitled-job-type', '1.0', null, 'Untitled Job Type');
                     }
-                    this.getWorkspaces();
 
                     this.createForm = this.fb.group({
                         'json-editor': new FormControl(''),
-                        'name': new FormControl({value: '', disabled: this.mode === 'Edit'}, Validators.required),
-                        'title': new FormControl(''),
-                        'version': new FormControl('', Validators.required),
-                        'description': new FormControl(''),
-                        'author_name': new FormControl(''),
-                        'author_url': new FormControl(''),
-                        'icon': new FormControl(''),
-                        'docker_image': new FormControl(''),
-                        'timeout': new FormControl(''),
-                        'max_tries': new FormControl(''),
-                        'cpus': new FormControl(''),
-                        'memory': new FormControl(''),
-                        'error-mapping-version': new FormControl(''),
-                        'custom-resources-version': new FormControl('')
-                    });
-                    this.triggerForm = this.fb.group({
-                        'type': new FormControl('', Validators.required),
-                        'is_active': new FormControl(''),
-                        'version': new FormControl(''),
-                        'media_type': new FormControl(''),
-                        'data_types': new FormControl(''),
-                        'input_data_name': new FormControl('', Validators.required),
-                        'workspace_name': new FormControl('', Validators.required),
-                        'json-editor': new FormControl('')
-                    });
-                    this.errorMappingForm = this.fb.group({
-                        'key': new FormControl('', Validators.required),
-                        'value': new FormControl('', Validators.required),
-                        'json-editor': new FormControl('')
-                    });
-                    this.customResourcesForm = this.fb.group({
-                        'key': new FormControl('', Validators.required),
-                        'value': new FormControl('', Validators.required),
-                        'json-editor': new FormControl('')
+                        'icon': new FormControl('')
                     });
                     this.items = [
-                        {
-                            label: 'General Information'
-                        },
                         {
                             label: 'Seed Image'
                         },
                         {
-                            label: 'Trigger'
-                        },
-                        {
-                            label: 'Error Mapping'
-                        },
-                        {
-                            label: 'Custom Resources'
+                            label: 'General Information'
                         },
                         {
                             label: 'Validate and Create',
@@ -160,19 +107,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     this.icons = iconData;
                     this.jsonModeBtnClass = 'ui-button-secondary';
                     this.currentStepIdx = 0;
-                    this.trigger = new Trigger('', new TriggerConfiguration(new TriggerData('', '')));
-                    this.triggerTypeOptions = [
-                        {
-                            label: 'Parse',
-                            value: 'PARSE'
-                        },
-                        {
-                            label: 'Ingest',
-                            value: 'INGEST'
-                        }
-                    ];
-                    this.errorMappingExitCode = {};
-                    this.customResources = new CustomResources();
                     this.createForm.valueChanges.subscribe(() => {
                         this.validateForm();
                     });
@@ -200,16 +134,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
             }
         });
         return strippedObj;
-    }
-    private getWorkspaces() {
-        this.workspacesApiService.getWorkspaces().then(data => {
-            _.forEach(data.results, (workspace) => {
-                this.workspaces.push({
-                    label: workspace.title,
-                    value: workspace.name
-                });
-            });
-        });
     }
     private validateForm() {
         // only enable 'Validate and Create' when the form is valid
@@ -249,17 +173,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         this.jobType.manifest = null;
                     }
                 }
-                if (this.jobType.trigger_rule) {
-                    this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
-                }
-                if (this.jobType.error_mapping) {
-                    if (this.jobType.error_mapping.exit_codes) {
-                        this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
-                    }
-                }
-                if (this.jobType.custom_resources) {
-                    this.customResourcesJson = beautify(JSON.stringify(this.jobType.custom_resources.resources));
-                }
             } catch (error) {
                 this.msgs.push({severity: 'error', summary: 'Error:', detail: error.message});
                 this.jsonMode = true;
@@ -272,31 +185,12 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
     onImageImport(seedImage) {
         this.jobType.manifest = seedImage;
+        this.validateForm();
         console.log(seedImage);
     }
     onImageRemove() {
         this.jobType.manifest = null;
         this.validateForm();
-    }
-    onTriggerFormSubmit() {
-        this.jobType.trigger_rule = this.stripObject(this.trigger);
-        this.triggerJson = beautify(JSON.stringify(this.jobType.trigger_rule));
-    }
-    onErrorMappingFormSubmit() {
-        this.jobType.error_mapping.exit_codes[this.errorMappingExitCode.key] = this.errorMappingExitCode.value;
-        this.jobType.error_mapping.exit_codes = this.stripObject(this.jobType.error_mapping.exit_codes);
-        this.errorMappingJson = beautify(JSON.stringify(this.jobType.error_mapping.exit_codes));
-        this.errorMappingForm.reset();
-    }
-    onTriggerDelete() {
-        this.triggerForm.reset();
-        this.jobType.trigger_rule = null;
-    }
-    onCustomResourcesFormSubmit() {
-        this.jobType.custom_resources.resources[this.customResources.key] = this.customResources.value;
-        this.jobType.custom_resources.resources = this.stripObject(this.jobType.custom_resources.resources);
-        this.customResourcesJson = beautify(JSON.stringify(this.jobType.custom_resources.resources));
-        this.customResourcesForm.reset();
     }
     onValidate() {
         this.msgs = [];

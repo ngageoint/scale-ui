@@ -3,7 +3,7 @@
     <p-panel>
         <p-header>
             <div class="ui-helper-clearfix">
-                <span class="ui-panel-title job-type-title">{{jobType.title}}</span>
+                <span class="ui-panel-title job-type-title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
                 <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa-code"
                         iconPos="left" (click)="onModeClick()"></button>
             </div>
@@ -17,123 +17,11 @@
                 <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
             </div>
             <div class="ui-g-10" *ngIf="currentStepIdx === 0">
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="name">Name *:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <input pInputText id="name" formControlName="name" placeholder="Required" [(ngModel)]="jobType.name"/>
-                        <div class="ui-message ui-messages-error ui-corner-all"
-                             *ngIf="!createForm.controls['name'].valid && createForm.controls['name'].dirty">
-                            Name is required
-                        </div>
-                    </div>
-                    <div class="ui-g-2">
-                        <label for="name">Title:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <input pInputText id="title" formControlName="title" [(ngModel)]="jobType.title"/>
-                    </div>
-                </div>
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="name">Version *:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <input pInputText id="version" formControlName="version" placeholder="Required" [(ngModel)]="jobType.version"/>
-                        <div class="ui-message ui-messages-error ui-corner-all"
-                             *ngIf="!createForm.controls['version'].valid && createForm.controls['version'].dirty">
-                            Version is required
-                        </div>
-                    </div>
-                    <div class="ui-g-2">
-                        <label for="docker-image">Docker Image:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <input pInputText id="docker-image" formControlName="docker_image" [(ngModel)]="jobType.docker_image"/>
-                    </div>
-                </div>
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="name">Description:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
-                                  [(ngModel)]="jobType.description"></textarea>
-                    </div>
-                    <div class="ui-g-2">
-                        <label>Icon:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
-                                   [style]="{'max-height':'150px','overflow':'auto'}">
-                            <ng-template let-icon pTemplate="item">
-                                <div class="ui-helper-clearfix">
-                                    <span class="fa fa-fw {{icon.label}}"></span> {{icon.label.replace('fa-','')}}
-                                </div>
-                            </ng-template>
-                        </p-listbox>
-                    </div>
-                </div>
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="author-name">Author Name:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <input pInputText id="author-name" formControlName="author_name" [(ngModel)]="jobType.author_name"/>
-                    </div>
-                    <div class="ui-g-2">
-                        <label for="author-url">Author URL:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <input pInputText id="author-url" formControlName="author_url" [(ngModel)]="jobType.author_url"/>
-                    </div>
-                </div>
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="name">Timeout (seconds):</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <p-spinner size="30" id="timeout" formControlName="timeout" [(ngModel)]="jobType.timeout" [min]="0"></p-spinner>
-                    </div>
-                    <div class="ui-g-2">
-                        <label for="max-tries">Max Tries:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <p-spinner size="30" id="max-tries" formControlName="max_tries" [(ngModel)]="jobType.max_tries"
-                                   [min]="0"></p-spinner>
-                    </div>
-                </div>
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="cpus">CPUs:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <p-spinner size="30" id="cpus" formControlName="cpus" [(ngModel)]="jobType.cpus_required" [min]="0"
-                                   [step]="0.25"></p-spinner>
-                    </div>
-                    <div class="ui-g-2">
-                        <label for="memory">Memory (MiB):</label>
-                    </div>
-                    <div class="ui-g-4">
-                        <p-spinner size="30" id="memory" formControlName="memory" [(ngModel)]="jobType.mem_required" [min]="0"
-                                   [step]="100"></p-spinner>
-                    </div>
-                </div>
-                <!--<div class="ui-g">-->
-                <!--<div class="ui-g-2"></div>-->
-                <!--<div class="ui-g-10">-->
-                <!--<button pButton type="submit" label="Submit" [disabled]="!createForm.valid"-->
-                <!--(click)="onSubmit(createForm.value)"></button>-->
-                <!--</div>-->
-                <!--</div>-->
-            </div>
-            <div class="ui-g-10" *ngIf="currentStepIdx === 1">
                 <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
                 <div class="ui-g" *ngIf="jobType.manifest">
-                    <div class="ui-g-4">
+                    <div class="ui-g-12">
                         <div class="seed-header">
-                            <h3>{{ jobType.manifest.job.title }}</h3>
+                            <h3>{{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}</h3>
                             <button pButton class="ui-button-danger margin-bottom-md" icon="fa-remove" pTooltip="Delete Seed Image"
                                     (click)="onImageRemove()"></button>
                         </div>
@@ -141,263 +29,37 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-g-10" *ngIf="currentStepIdx === 2">
-                <form [formGroup]="triggerForm" (ngSubmit)="triggerForm.value">
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label>Type *:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <p-dropdown [options]="triggerTypeOptions" [(ngModel)]="trigger.type"
-                                        formControlName="type" placeholder="Select..." autoWidth="false"
-                                        [style]="{'width': '25%'}" [showClear]="false">
-                                <ng-template let-type p-template="item">
-                                    {{ type.label }}
-                                </ng-template>
-                            </p-dropdown>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!triggerForm.controls['type'].valid && triggerForm.controls['type'].dirty">
-                                Type is Required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label for="trigger-version">Version:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <input pInputText id="trigger-version" formControlName="version"
-                                   [(ngModel)]="trigger.configuration.version"/>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label for="trigger-media_type">Media Type:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <input pInputText id="trigger-media_type" formControlName="media_type"
-                                   [(ngModel)]="trigger.configuration.condition.media_type"/>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label>Data Types:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <p-chips [(ngModel)]="trigger.configuration.condition.data_types"
-                                     formControlName="data_types"></p-chips>
-                            Enter data type and press 'Enter/Return'
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label for="trigger-input_data_name">Input Data Name *:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <input pInputText id="trigger-input_data_name" formControlName="input_data_name"
-                                   [(ngModel)]="trigger.configuration.data.input_data_name"/>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!triggerForm.controls['input_data_name'].valid && triggerForm.controls['input_data_name'].dirty">
-                                Input Data Name is Required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label>Workspace *:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <p-dropdown [options]="workspaces"
-                                        [(ngModel)]="trigger.configuration.data.workspace_name"
-                                        formControlName="workspace_name" placeholder="Select..." autoWidth="false"
-                                        [style]="{'width': '25%'}" [showClear]="false">
-                                <ng-template let-type p-template="item">
-                                    {{ type.label }}
-                                </ng-template>
-                            </p-dropdown>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!triggerForm.controls['workspace_name'].valid && triggerForm.controls['workspace_name'].dirty">
-                                Workspace Name is Required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10">
-                            <p-checkbox [(ngModel)]="trigger.is_active" formControlName="is_active"
-                                        binary="true" label="Active"></p-checkbox>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10">
-                            <button pButton icon="fa-save" label="Save" [disabled]="!triggerForm.valid"
-                                    (click)="onTriggerFormSubmit()"></button>
-                        </div>
-                        <div class="ui-g-10" *ngIf="jobType.trigger_rule">
-                            <button pButton icon="fa-remove" label="Delete" [disabled]="!triggerForm.valid"
-                                    (click)="onTriggerDelete()" class="ui-button-danger"></button>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10">
-                            <div *ngIf="triggerJson && triggerJson !== ''">
-                                Current Trigger Rule
-                                <codemirror [(ngModel)]="triggerJson" formControlName="json-editor"
-                                            [config]="jsonConfigReadOnly"></codemirror>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="ui-g-10" *ngIf="currentStepIdx === 3">
+            <div class="ui-g-10" *ngIf="currentStepIdx === 1">
                 <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="error-mapping-version">Version:</label>
+                    <div class="ui-g-1">
+                        <label>Icon:</label>
                     </div>
-                    <div class="ui-g-10">
-                        <input pInputText id="error-mapping-version" formControlName="error-mapping-version"
-                               [(ngModel)]="jobType.error_mapping.version"/>
-                    </div>
-                </div>
-                <hr />
-                <h3>Exit Codes</h3>
-                <div class="ui-g">
-                    <div class="ui-g-12">
-                        <form [formGroup]="errorMappingForm" (ngSubmit)="errorMappingForm.value">
-                            <div class="ui-g">
-                                <div class="ui-g-2">
-                                    <label for="error-mapping-key">Key *:</label>
+                    <div class="ui-g-4">
+                        <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
+                                   [style]="{'max-height':'300px','overflow':'auto'}">
+                            <ng-template let-icon pTemplate="item">
+                                <div class="ui-helper-clearfix">
+                                    <span class="fa fa-fw {{ icon.label }}"></span> {{ icon.label.replace('fa-','') }}
                                 </div>
-                                <div class="ui-g-10">
-                                    <input pInputText id="error-mapping-key" formControlName="key" placeholder="Key is Required"
-                                           [(ngModel)]="errorMappingExitCode.key"/>
-                                    <div class="ui-message ui-messages-error ui-corner-all"
-                                         *ngIf="!errorMappingForm.controls['key'].valid && errorMappingForm.controls['key'].dirty">
-                                        Name is required
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ui-g">
-                                <div class="ui-g-2">
-                                    <label for="error-mapping-value">Value *:</label>
-                                </div>
-                                <div class="ui-g-10">
-                                    <input pInputText id="error-mapping-value" formControlName="value"
-                                           placeholder="Value is Required" [(ngModel)]="errorMappingExitCode.value"/>
-                                    <div class="ui-message ui-messages-error ui-corner-all"
-                                         *ngIf="!errorMappingForm.controls['value'].valid && errorMappingForm.controls['value'].dirty">
-                                        Value is required
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="ui-g">
-                                <div class="ui-g-2"></div>
-                                <div class="ui-g-10">
-                                    <button pButton icon="fa-save" label="Save" [disabled]="!errorMappingForm.valid"
-                                            (click)="onErrorMappingFormSubmit()"></button>
-                                </div>
-                            </div>
-                            <div class="ui-g">
-                                <div class="ui-g-2"></div>
-                                <div class="ui-g-10">
-                                    <div *ngIf="errorMappingJson && errorMappingJson !== ''">
-                                        Current Exit Codes
-                                        <codemirror [(ngModel)]="errorMappingJson" formControlName="json-editor"
-                                                    [config]="jsonConfigReadOnly"></codemirror>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
+                            </ng-template>
+                        </p-listbox>
                     </div>
                 </div>
             </div>
-            <div class="ui-g-10" *ngIf="currentStepIdx === 4">
-                <div class="ui-g">
-                    <div class="ui-g-2">
-                        <label for="custom-resources-version">Version:</label>
-                    </div>
-                    <div class="ui-g-10">
-                        <input pInputText id="custom-resources-version" formControlName="custom-resources-version"
-                               [(ngModel)]="jobType.custom_resources.version"/>
-                    </div>
-                </div>
-                <p>Arbitrary resource names are supported, but there a few pre-defined types:</p>
-                <ul>
-                    <li><code>cpus:</code> The number of CPUs</li>
-                    <li><code>mem:</code> The amount of memory in MiB</li>
-                    <li><code>disk:</code> The amount of local disk space in MiB</li>
-                </ul>
-                <form [formGroup]="customResourcesForm" (ngSubmit)="customResourcesForm.value">
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label for="custom-resources-key">Key *:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <input pInputText id="custom-resources-key" formControlName="key"
-                                   placeholder="Key is Required (cpus, mem, disk, or some other arbitrary name)"
-                                   [(ngModel)]="customResources.key"/>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!customResourcesForm.controls['key'].valid && customResourcesForm.controls['key'].dirty">
-                                Key is required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2">
-                            <label for="custom-resources-value">Value *:</label>
-                        </div>
-                        <div class="ui-g-10">
-                            <p-spinner size="30" id="custom-resources-value" formControlName="value" [(ngModel)]="customResources.value"
-                                       [min]="0" placeholder="Value is Required"></p-spinner>
-                            <div class="ui-message ui-messages-error ui-corner-all"
-                                 *ngIf="!customResourcesForm.controls['value'].valid && customResourcesForm.controls['value'].dirty">
-                                Value is required
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10">
-                            <button pButton icon="fa-save" label="Save" [disabled]="!customResourcesForm.valid"
-                                    (click)="onCustomResourcesFormSubmit()"></button>
-                        </div>
-                    </div>
-                    <div class="ui-g">
-                        <div class="ui-g-2"></div>
-                        <div class="ui-g-10">
-                            <div *ngIf="customResourcesJson && customResourcesJson !== ''">
-                                Current Resources
-                                <codemirror [(ngModel)]="customResourcesJson" formControlName="json-editor"
-                                            [config]="jsonConfigReadOnly"></codemirror>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="ui-g-10 validate-and-create" *ngIf="currentStepIdx === 5">
+            <div class="ui-g-10 validate-and-create" *ngIf="currentStepIdx === 2">
                 <h3>
                     <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
-                       [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{jobType.title}} v{{jobType.version}}
+                       [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i> {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
                 </h3>
+                <ul class="list-unstyled">
+                    <li><b>Description:</b> {{ jobType.manifest.job.description }}</li>
+                </ul>
                 <button class="ui-button-secondary" pButton icon="fa-check" label="Validate"
                         (click)="onValidate()" *ngIf="!validated"></button>
                 <button class="ui-button-primary" pButton icon="fa-chevron-down" [label]="mode"
                         (click)="onSubmit()" *ngIf="validated && !submitted"></button>
                 <button class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Job Type"
                         *ngIf="submitted"></button>
-                <ul class="list-unstyled">
-                    <li><b>Name:</b> {{jobType.name}}</li>
-                    <li *ngIf="jobType.description"><b>Description:</b> {{jobType.description}}</li>
-                    <li *ngIf="jobType.author_name"><b>Author Name:</b> {{jobType.author_name}}</li>
-                    <li *ngIf="jobType.author_url"><b>Author URL:</b> {{jobType.author_url}}</li>
-                    <li *ngIf="jobType.docker_image"><b>Docker Image:</b> {{jobType.docker_image}}</li>
-                    <li *ngIf="jobType.timeout"><b>Timeout:</b> {{jobType.timeout}}</li>
-                    <li *ngIf="jobType.max_tries"><b>Max Tries:</b> {{jobType.max_tries}}</li>
-                    <li *ngIf="jobType.cpus_required"><b>CPUs:</b> {{jobType.cpus_required}}</li>
-                    <li *ngIf="jobType.mem_required"><b>Memory:</b> {{jobType.mem_required}}</li>
-                </ul>
                 <!--<div class="ui-g">-->
                     <!--<div class="ui-g-2">-->
                         <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
