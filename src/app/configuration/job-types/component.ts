@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SelectItem, TreeNode } from 'primeng/primeng';
+import { MenuItem } from 'primeng/api';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/filter';
@@ -8,6 +9,7 @@ import 'rxjs/add/operator/map';
 
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../color.service';
+import { WorkspacesApiService } from '../workspaces/api.service';
 
 @Component({
     selector: 'app-job-types',
@@ -19,7 +21,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
     jobTypes: SelectItem[];
-    selectedJobType: SelectItem;
+    selectedJobType: any;
     selectedJobTypeDetail: any;
     // interfaceData: TreeNode[];
     chartData6h: any;
@@ -33,12 +35,22 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     failed24h: number;
     options: any;
     pauseBtnIcon = 'fa-pause';
+    items: MenuItem[] = [
+        { label: 'Pause', icon: 'fa-pause', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa-barcode', command: () => { this.scanDisplay = true; } }
+    ];
+    scanDisplay: boolean;
+    workspaces: SelectItem[] = [];
+    selectedWorkspace: any;
+    isScanning: boolean;
     private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
     private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
 
     constructor(
         private jobTypesApiService: JobTypesApiService,
         private colorService: ColorService,
+        private workspacesApiService: WorkspacesApiService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -66,6 +78,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                         });
                         if (id) {
                             this.getJobTypeDetail(id);
+                            this.getWorkspaces();
                         }
                     });
                 });
@@ -136,6 +149,16 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.selectedJobTypeDetail = data;
         });
     }
+    private getWorkspaces() {
+        this.workspacesApiService.getWorkspaces().then(data => {
+            _.forEach(data.results, (result) => {
+                this.workspaces.push({
+                    label: result.title,
+                    value: result
+                });
+            });
+        });
+    }
 
     getUnicode(code) {
         return `&#x${code};`;
@@ -156,6 +179,59 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onEditClick() {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.id}`]);
+    }
+    onScanHide() {
+        this.selectedWorkspace = null;
+    }
+    scanWorkspace() {
+        console.log(`Job Type: ${this.selectedJobType}`);
+        console.log(`Workspace: ${this.selectedWorkspace}`);
+        this.scanDisplay = false;
+        this.isScanning = true;
+        this.jobTypesApiService.scanJobTypeWorkspace({
+            id: this.selectedJobType.id,
+            trigger_rule: {
+                configuration: {
+                    condition: {
+                        data_types: [],
+                        media_type: ''
+                    },
+                    data: {
+                        input_data_name: 'input_file',
+                        workspace_name: this.selectedWorkspace.name
+                    }
+                },
+                is_active: true,
+                name: `
+                    ${this.selectedJobType.manifest.name}-${this.selectedJobType.manifest.jobVersion}-trigger
+                `,
+                type: 'INGEST'
+            }
+        }).then(result => {
+            // post to scan with
+            // {
+            // "name": "my-scan-process",
+            // "title": "My Scan Process",
+            // "description": "This is my Scan",
+            // "configuration": {
+            //     "version": "1.0",
+            //     "workspace": this.selectedWorkspace.name,
+            //     "scanner": {
+            //         "type": "s3",
+            //     },
+            //     "recursive": true,
+            //     "files_to_ingest": [{
+            //         "filename_regex": ".*"
+            //     }]
+            // }
+
+            // then use the id that comes back from the above request and do a process scan
+            // POST /scans/{id}/process/?ingest=true
+            this.isScanning = false;
+        }, err => {
+            console.log(err);
+            this.isScanning = false;
+        })
     }
     ngOnInit() {
         this.options = {

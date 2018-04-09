@@ -38,6 +38,17 @@
         }
     }
 
+    .job-type__scan {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        button {
+            padding: 0.09em;
+            margin-left: 5px;
+        }
+    }
+
     ::ng-deep .ui-treetable {
         thead {
             th {

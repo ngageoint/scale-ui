@@ -57,7 +57,7 @@ export class JobTypesApiService {
     }
 
     validateJobType(jobType: JobType): Promise<any> {
-        return this.http.post(`${this.apiPrefix}/job-types/validate/`, jobType)
+        return this.http.post(`${this.apiPrefix}/job-types/validation/`, jobType)
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);
@@ -113,6 +113,13 @@ export class JobTypesApiService {
         return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
             .toPromise()
             .then(response => ApiResults.transformer(response.json()))
+            .catch(this.handleError);
+    }
+
+    scanJobTypeWorkspace(params: any): Promise<any> {
+        return this.http.patch(`${this.apiPrefix}/job-types/{$params.id}/`, { params: params.trigger_rule })
+            .toPromise()
+            .then(response => response.json())
             .catch(this.handleError);
     }
 

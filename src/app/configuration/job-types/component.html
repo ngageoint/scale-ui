@@ -17,14 +17,17 @@
                                 <div class="ui-g-6">
                                 <span class="job-type__title">
                                     <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
-                                    {{ selectedJobTypeDetail.title }} v{{selectedJobTypeDetail.version }}
+                                    {{ selectedJobTypeDetail.manifest.title }} v{{selectedJobTypeDetail.manifest.jobVersion }}
                                 </span>
                                 </div>
                                 <div class="ui-g-6 text-right">
-                                    <button pButton type="button" class="ui-button-secondary" [icon]="pauseBtnIcon" pTooltip="Pause Job Type"
+                                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                                            (click)="menu.toggle($event)"></button>
+                                    <!-- <button pButton type="button" class="ui-button-secondary" [icon]="pauseBtnIcon" pTooltip="Pause Job Type"
                                             tooltipPosition="bottom" (click)="onPauseClick()"></button>
                                     <button pButton type="button" class="ui-button-secondary" icon="fa-edit" pTooltip="Edit Job Type"
-                                            tooltipPosition="bottom" (click)="onEditClick()"></button>
+                                            tooltipPosition="bottom" (click)="onEditClick()"></button> -->
                                 </div>
                             </div>
                         </div>
@@ -33,9 +36,8 @@
                         <div class="ui-g">
                             <div class="ui-g-8">
                             <span>
-                                <strong>Author: </strong> {{ selectedJobTypeDetail.author_name }}<br />
-                                <a href="{{ selectedJobTypeDetail.author_url }}" target="_blank">Algorithm Description</a><br />
-                                {{ selectedJobTypeDetail.description }}
+                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.maintainer.name }}<br />
+                                {{ selectedJobTypeDetail.manifest.description }}
                             </span>
                             </div>
                             <div class="ui-g-4">
@@ -46,7 +48,7 @@
                                     <dd *ngIf="selectedJobTypeDetail.last_modified">{{ selectedJobTypeDetail.last_modified }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.archived">Archived:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.archived">{{ selectedJobTypeDetail.archived }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.cpus_required">CPUs:</dt>
+                                    <!-- <dt *ngIf="selectedJobTypeDetail.cpus_required">CPUs:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.cpus_required">{{ selectedJobTypeDetail.cpus_required }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.mem_required">Memory:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.mem_required">{{ selectedJobTypeDetail.mem_required_formatted }}</dd>
@@ -55,7 +57,7 @@
                                     <dt *ngIf="selectedJobTypeDetail.disk_out_const_required_formatted">Disk:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.disk_out_const_required_formatted">{{ selectedJobTypeDetail.disk_out_const_required_formatted }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.disk_out_mult_required">Input Size Multiplier:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.disk_out_mult_required">{{ selectedJobTypeDetail.disk_out_mult_required }}</dd>
+                                    <dd *ngIf="selectedJobTypeDetail.disk_out_mult_required">{{ selectedJobTypeDetail.disk_out_mult_required }}</dd> -->
                                     <dt *ngIf="selectedJobTypeDetail.docker_image">Docker Image:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.docker_image">{{ selectedJobTypeDetail.docker_image }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.max_tries">Max Tries:</dt>
@@ -63,13 +65,13 @@
                                     <dt *ngIf="selectedJobTypeDetail.priority">Priority:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.priority">{{ selectedJobTypeDetail.priority }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.timeout">Timeout:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.timeout">{{ selectedJobTypeDetail.timeout }} seconds</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.category">Category:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.category">{{ selectedJobTypeDetail.category }}</dd>
+                                    <dd *ngIf="selectedJobTypeDetail.manifest.timeout">{{ selectedJobTypeDetail.manifest.timeout }} seconds</dd>
+                                    <!-- <dt *ngIf="selectedJobTypeDetail.category">Category:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.category">{{ selectedJobTypeDetail.category }}</dd> -->
                                     <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.is_system">{{ selectedJobTypeDetail.is_system }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.is_long_running">Long Running:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.is_long_running">{{ selectedJobTypeDetail.is_long_running }}</dd>
+                                    <!-- <dt *ngIf="selectedJobTypeDetail.is_long_running">Long Running:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.is_long_running">{{ selectedJobTypeDetail.is_long_running }}</dd> -->
                                     <dt *ngIf="selectedJobTypeDetail.is_active">Active:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.is_active">{{ selectedJobTypeDetail.is_active }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.is_operational">Operational:</dt>
@@ -140,4 +142,15 @@
             </div>
         </div>
     </div>
+    <p-dialog [(visible)]="scanDisplay" [modal]="true" [dismissableMask]="true" (onHide)="onScanHide()">
+        <p-header>
+            <strong>Scan</strong>
+        </p-header>
+        Select a workspace to scan<br />
+        <div class="job-type__scan">
+            <p-dropdown [options]="workspaces" [autoWidth]="false" [(ngModel)]="selectedWorkspace" appendTo="body"
+                        [style]="{'width':'300px'}" placeholder="Select..." [showClear]="false"></p-dropdown>
+            <button pButton type="button" label="Scan" [disabled]="!selectedWorkspace" (click)="scanWorkspace()"></button>
+        </div>
+    </p-dialog>
 </div>
