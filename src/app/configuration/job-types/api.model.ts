@@ -10,7 +10,6 @@ export class JobType {
                 data.id,
                 data.category,
                 data.is_system,
-                data.is_long_running,
                 data.is_active,
                 data.is_operational,
                 data.is_paused,
@@ -18,7 +17,6 @@ export class JobType {
                 data.docker_image,
                 data.revision_num,
                 data.priority,
-                data.timeout,
                 data.max_scheduled,
                 data.max_tries,
                 data.created,
@@ -45,7 +43,6 @@ export class JobType {
         public id?: number,
         public category?: string,
         public is_system?: boolean,
-        public is_long_running?: boolean,
         public is_active?: boolean,
         public is_operational?: boolean,
         public is_paused?: boolean,
@@ -53,7 +50,6 @@ export class JobType {
         public docker_image?: string,
         public revision_num?: number,
         public priority?: number,
-        public timeout?: number,
         public max_scheduled?: number,
         public max_tries?: number,
         public created?: string,
@@ -68,7 +64,6 @@ export class JobType {
         this.id = this.id || null;
         this.category = this.category || null;
         this.is_system = this.is_system || null;
-        this.is_long_running = this.is_long_running || null;
         this.is_active = this.is_active || null;
         this.is_operational = this.is_operational || null;
         this.is_paused = this.is_paused || null;
@@ -76,7 +71,6 @@ export class JobType {
         this.docker_image = this.docker_image || null;
         this.revision_num = this.revision_num || null;
         this.priority = this.priority || null;
-        this.timeout = this.timeout || null;
         this.max_scheduled = this.max_scheduled || null;
         this.max_tries = this.max_tries || null;
         this.created = this.created || null;
