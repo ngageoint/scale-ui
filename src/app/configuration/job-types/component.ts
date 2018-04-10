@@ -84,7 +84,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                         });
                         if (id) {
                             this.getJobTypeDetail(id);
-                            this.getWorkspaces();
                         }
                     }, err => {
                         console.log(err);
@@ -251,6 +250,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     this.scanProgress = 0;
                     this.scanDisplay = false; // hide scan dialog
                     this.isScanning = false; // done scanning
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Scan Process',
+                        detail: 'Scan process has been successfully launched'
+                    });
                 });
             }, err => {
                 this.handleScanError(err);
@@ -267,6 +271,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 datalabels: false
             }
         };
+        this.getWorkspaces();
     }
     ngOnDestroy() {
         this.routerEvents.unsubscribe();
