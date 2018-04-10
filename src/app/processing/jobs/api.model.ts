@@ -51,7 +51,9 @@ export class Job {
                 data.output,
                 data.resources,
                 JobExecution.transformer(data.execution),
-                data.recipe
+                data.recipe,
+                data.inputs,
+                data.outputs
             );
         }
     }
@@ -94,7 +96,9 @@ export class Job {
         public output: object,
         public resources: any,
         public execution: any,
-        public recipe: any
+        public recipe: any,
+        public inputs: any,
+        public outputs: any
     ) {
         this.dataService = new DataService();
         this.created_formatted = moment.utc(this.created).format(environment.dateFormat);

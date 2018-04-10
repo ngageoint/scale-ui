@@ -130,20 +130,32 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             });
 
             // get job outputs
-            this.loadingOutputs = true;
-            this.jobsApiService.getJobOutputs(id).then(outputData => {
-                this.loadingOutputs = false;
-                _.forEach(outputData.results, d => {
+            if (data.outputs) {
+                // v6 products api seems to be broken, so use outputs field from v5 response for now
+                this.jobOutputs = _.map(data.outputs, 'value');
+                _.forEach(this.jobOutputs, d => {
                     d.createdTooltip = this.dataService.formatDate(d.created);
                     d.createdDisplay = this.dataService.formatDate(d.created, true);
                     d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
                     d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
                 });
-                this.jobOutputs = outputData.results;
-            }, err => {
-                this.loadingOutputs = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
-            });
+            } else {
+                // this is for the v6 response
+                this.loadingOutputs = true;
+                this.jobsApiService.getJobOutputs(id).then(outputData => {
+                    this.loadingOutputs = false;
+                    _.forEach(outputData.results, d => {
+                        d.createdTooltip = this.dataService.formatDate(d.created);
+                        d.createdDisplay = this.dataService.formatDate(d.created, true);
+                        d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
+                        d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                    });
+                    this.jobOutputs = outputData.results;
+                }, err => {
+                    this.loadingOutputs = false;
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+                });
+            }
 
             // get job executions
             this.loadingExecutions = true;
