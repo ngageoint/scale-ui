@@ -1,7 +1,7 @@
 <div class="job__details" *ngIf="job">
     <h2>
         <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
-        {{ job.job_type.title }} v{{ job.job_type.version }}
+        {{ job.job_type.manifest.title }} v{{ job.job_type.manifest.jobVersion }}
         <i class="fa fa-fw fa-square" [ngClass]="job.statusClass" (mouseenter)="showStatus(status, $event)"
            (mouseleave)="hideStatus(status)"></i>
     </h2>
@@ -28,7 +28,7 @@
                             <td>Supersedes:</td>
                             <td>
                                 <!--<a ng-href="#/jobs/job/{{ vm.job.superseded_job.id }}">-->
-                                {{ job.superseded_job.job_type.title }} {{ job.superseded_job.job_type.version }}
+                                {{ job.superseded_job.job_type.manifest.title }} {{ job.superseded_job.job_type.manifest.jobVersion }}
                                 <!--</a>-->
                             </td>
                         </tr>
@@ -36,8 +36,8 @@
                             <td>Trigger:</td>
                             <td>
                                 {{ job.event.type }}
-                                <span [pTooltip]="dataService.formatDate(job.event.occurred)">
-                                    {{ dataService.formatDate(job.event.occurred, true) }}
+                                <span [pTooltip]="job.occurredTooltip">
+                                    {{ job.occurredDisplay }}
                                 </span>
                             </td>
                         </tr>
@@ -45,16 +45,16 @@
                         <tr>
                             <td>Created:</td>
                             <td>
-                                <span [pTooltip]="dataService.formatDate(job.created)">
-                                    {{ dataService.formatDate(job.created, true) }}
+                                <span [pTooltip]="job.createdTooltip">
+                                    {{ job.createdDisplay }}
                                 </span>
                             </td>
                         </tr>
                         <tr>
                             <td>Last Updated:</td>
                             <td>
-                                <span [pTooltip]="dataService.formatDate(job.last_modified)">
-                                    {{ dataService.formatDate(job.last_modified, true) }}
+                                <span [pTooltip]="job.lastModifiedTooltip">
+                                    {{ job.lastModifiedDisplay }}
                                 </span>
                             </td>
                         </tr>
@@ -77,7 +77,7 @@
                         <strong>
                             <span class="fa fa-fw fa-square" [ngClass]="job.exeStatusClass"></span>
                             Latest execution
-                            <span [pTooltip]="dataService.formatDate(job.execution.ended)" tooltipPosition="bottom">
+                            <span [pTooltip]="job.exeEndedTooltip" tooltipPosition="bottom">
                                 {{ exeStatus }}
                             </span>
                             <button pButton class="ui-button-secondary" icon="fa-file-text" label="View Log"
@@ -155,13 +155,13 @@
                             </td>
                             <td>{{ calculateFileSize(input.file_size) }}</td>
                             <td>
-                                <span [pTooltip]="dataService.formatDate(input.created)">
-                                    {{ dataService.formatDate(input.created, true) }}
+                                <span [pTooltip]="input.createdTooltip">
+                                    {{ input.createdDisplay }}
                                 </span>
                             </td>
                             <td>
-                                <span [pTooltip]="dataService.formatDate(input.last_modified)">
-                                    {{ dataService.formatDate(input.last_modified, true) }}
+                                <span [pTooltip]="input.lastModifiedTooltip" tooltipPosition="left">
+                                    {{ input.lastModifiedDisplay }}
                                 </span>
                             </td>
                         </tr>
@@ -199,13 +199,13 @@
                             </td>
                             <td>{{ calculateFileSize(output.file_size) }}</td>
                             <td>
-                                <span [pTooltip]="dataService.formatDate(output.created)">
-                                    {{ dataService.formatDate(output.created, true) }}
+                                <span [pTooltip]="output.createdTooltip">
+                                    {{ output.createdDisplay }}
                                 </span>
                             </td>
                             <td>
-                                <span [pTooltip]="dataService.formatDate(output.last_modified)" tooltipPosition="left">
-                                    {{ dataService.formatDate(output.last_modified, true) }}
+                                <span [pTooltip]="output.lastModifiedTooltip" tooltipPosition="left">
+                                    {{ output.lastModifiedDisplay }}
                                 </span>
                             </td>
                         </tr>

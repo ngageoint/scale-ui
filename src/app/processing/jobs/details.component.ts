@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
@@ -15,7 +15,7 @@ import { DataService } from '../../data.service';
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss']
 })
-export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class JobDetailsComponent implements OnInit, OnDestroy {
     subscription: any;
     job: Job;
     loading: boolean;
@@ -31,14 +31,12 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     data: any;
     selectedJobExe: any;
     logDisplay: boolean;
-    logWidth: number;
-    logHeight: number;
 
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
         private jobsApiService: JobsApiService,
-        public dataService: DataService
+        private dataService: DataService
     ) {}
 
     private initJobDetail(data) {
@@ -109,6 +107,59 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         };
     }
 
+    private getJobDetail(id: number) {
+        this.loading = true;
+        this.subscription = this.jobsApiService.getJob(id, true).subscribe(data => {
+            this.loading = false;
+            this.initJobDetail(data);
+
+            // get job inputs
+            this.loadingInputs = true;
+            this.jobsApiService.getJobInputs(id).then(inputData => {
+                this.loadingInputs = false;
+                _.forEach(inputData.results, d => {
+                    d.createdTooltip = this.dataService.formatDate(d.created);
+                    d.createdDisplay = this.dataService.formatDate(d.created, true);
+                    d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
+                    d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                });
+                this.jobInputs = inputData.results;
+            }, err => {
+                this.loadingInputs = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
+            });
+
+            // get job outputs
+            this.loadingOutputs = true;
+            this.jobsApiService.getJobOutputs(id).then(outputData => {
+                this.loadingOutputs = false;
+                _.forEach(outputData.results, d => {
+                    d.createdTooltip = this.dataService.formatDate(d.created);
+                    d.createdDisplay = this.dataService.formatDate(d.created, true);
+                    d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
+                    d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                });
+                this.jobOutputs = outputData.results;
+            }, err => {
+                this.loadingOutputs = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+            });
+
+            // get job executions
+            this.loadingExecutions = true;
+            this.jobsApiService.getJobExecutions(id).then(exeData => {
+                this.loadingExecutions = false;
+                this.jobExecutions = JobExecution.transformer(exeData.results);
+            }, err => {
+                this.loadingExecutions = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
+            });
+        }, err => {
+            this.loading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
+        });
+    }
+
     calculateFileSize(fileSize) {
         return this.dataService.calculateFileSizeFromBytes(fileSize, 0);
     }
@@ -143,51 +194,8 @@ export class JobDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         if (this.route.snapshot) {
             const id = +this.route.snapshot.paramMap.get('id');
-            this.loading = true;
-            this.subscription = this.jobsApiService.getJob(id, true).subscribe(data => {
-                this.loading = false;
-                this.initJobDetail(data);
-
-                // get job inputs
-                this.loadingInputs = true;
-                this.jobsApiService.getJobInputs(id).then(inputData => {
-                    this.loadingInputs = false;
-                    this.jobInputs = inputData.results;
-                }, err => {
-                    this.loadingInputs = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
-                });
-
-                // get job outputs
-                this.loadingOutputs = true;
-                this.jobsApiService.getJobOutputs(id).then(outputData => {
-                    this.loadingOutputs = false;
-                    this.jobOutputs = outputData.results;
-                }, err => {
-                    this.loadingOutputs = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
-                });
-
-                // get job executions
-                this.loadingExecutions = true;
-                this.jobsApiService.getJobExecutions(id).then(exeData => {
-                    this.loadingExecutions = false;
-                    this.jobExecutions = JobExecution.transformer(exeData.results);
-                }, err => {
-                    this.loadingExecutions = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
-                });
-            }, err => {
-                this.loading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
-            });
+            this.getJobDetail(id);
         }
-    }
-
-    ngAfterViewInit() {
-        const viewportSize = this.dataService.getViewportSize();
-        this.logWidth = viewportSize.width * 0.75;
-        this.logHeight = viewportSize.height * 0.75;
     }
 
     ngOnDestroy() {

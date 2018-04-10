@@ -2,31 +2,39 @@
     "id": 15096,
     "job_type": {
         "id": 2,
-        "name": "sam",
-        "title": "Spectral Angle Mapper",
-        "version": "1.0",
-        "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra. This technique, developed by J.W. Boardman, determines the spectral similarity between given reference spectra, r, (i.e., the image endmember in this case) and the spectra found at each pixel, t (Kruse, et al., 1992). The result of the comparison is reported as the angular difference (in radians) between the two spectra. Each pair of spectra is treated as a vector in nb-space, allowing the similarity of the spectra to be determined without regard to their relative brightness values. The result of the SAM calculation is an image for each reference spectrum, with high values (displayed in brighter values) corresponding to a better match between reference and test spectra.",
-        "is_system": false,
+        "category": "spectral",
+        "is_system": true,
         "is_long_running": false,
         "is_active": true,
         "is_operational": true,
         "is_paused": false,
-        "icon_code": "f0e7",
-        "uses_docker": false,
-        "docker_privileged": false,
+        "icon_code": "f102",
         "docker_image": null,
-        "priority": 2,
-        "timeout": 600,
-        "max_tries": 1,
-        "cpus_required": 0.5,
-        "mem_required": 128.0,
-        "shared_mem_required": 256.0,
-        "disk_out_const_required": 0.0,
-        "disk_out_mult_required": 0.0,
-        "created": "2016-05-15T00:00:00Z",
+        "priority": 10,
+        "timeout": 0,
+        "max_tries": 0,
+        "manifest": {
+            "name": "sam",
+            "jobVersion": "1.0.0",
+            "packageVersion": "",
+            "title": "Spectral Angle Mapper",
+            "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
+            "maintainer": {
+                "name": "Boardman",
+                "email": ""
+            },
+            "timeout": 0,
+            "interface": {
+                "command": "./parse_landsat.sh",
+                "inputs": {},
+                "outputs": {},
+                "settings": []
+            }
+        },
+        "created": "2015-03-11T00:00:00Z",
         "archived": null,
         "paused": null,
-        "last_modified": "2016-05-15T00:00:00Z"
+        "last_modified": "2015-03-11T00:00:00Z"
     },
     "job_type_rev": {
         "id": 5,

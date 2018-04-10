@@ -104,7 +104,7 @@
         <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <div *ngSwitchCase="'job_type.id'">
-                    {{ rowData.job_type.title }} {{ rowData.job_type.version }}
+                    {{ rowData.job_type.manifest.title }} {{ rowData.job_type.manifest.jobVersion }}
                 </div>
                 <div *ngSwitchCase="'twentyfour_hours'">
                     <div class="ui-g">

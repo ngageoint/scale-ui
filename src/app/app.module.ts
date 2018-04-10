@@ -21,6 +21,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { MenuModule } from 'primeng/menu';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -74,6 +75,7 @@ import { IngestApiService } from './data/ingest/api.service';
 import { LoadingIndicatorComponent } from './common/loading-indicator/component';
 import { StatusApiService } from './navbar/status/api.service';
 import { ProductsApiService } from './common/products/api.service';
+import { ScansApiService } from './common/scans/api.service';
 
 
 @NgModule({
@@ -152,7 +154,8 @@ import { ProductsApiService } from './common/products/api.service';
         TabViewModule,
         GrowlModule,
         TableModule,
-        MenuModule
+        MenuModule,
+        ProgressBarModule
     ],
     exports: [
         DropdownModule,
@@ -180,7 +183,8 @@ import { ProductsApiService } from './common/products/api.service';
         IngestApiService,
         StatusApiService,
         ConfirmationService,
-        ProductsApiService
+        ProductsApiService,
+        ScansApiService
     ],
     bootstrap: [AppComponent]
 })

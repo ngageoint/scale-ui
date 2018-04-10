@@ -2,31 +2,39 @@
     "id": 124,
     "job_type": {
         "id": 8,
-        "name": "landsat8-ortho",
-        "title": "Landsat 8 Ortho (OSSIM)",
-        "version": "2.0",
-        "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
-        "is_system": false,
+        "category": "spectral",
+        "is_system": true,
         "is_long_running": false,
         "is_active": true,
         "is_operational": true,
         "is_paused": false,
-        "icon_code": "f1c0",
-        "uses_docker": false,
-        "docker_privileged": false,
+        "icon_code": "f0b2",
         "docker_image": null,
-        "priority": 2,
-        "timeout": 600,
-        "max_tries": 1,
-        "cpus_required": 4.0,
-        "mem_required": 2048.0,
-        "shared_mem_required": 256.0,
-        "disk_out_const_required": 2048.0,
-        "disk_out_mult_required": 0.0,
-        "created": "2016-05-15T00:00:00Z",
+        "priority": 10,
+        "timeout": 0,
+        "max_tries": 0,
+        "manifest": {
+            "name": "landsat8-ortho",
+            "jobVersion": "2.0",
+            "packageVersion": "",
+            "title": "Landsat 8 Ortho (OSSIM)",
+            "description": "Applies Orthorectification to Landsat 8 GeoTiffs",
+            "maintainer": {
+                "name": "Radiant Blue",
+                "email": ""
+            },
+            "timeout": 0,
+            "interface": {
+                "command": "./parse_landsat.sh",
+                "inputs": {},
+                "outputs": {},
+                "settings": []
+            }
+        },
+        "created": "2015-03-11T00:00:00Z",
         "archived": null,
         "paused": null,
-        "last_modified": "2016-05-15T00:00:00Z"
+        "last_modified": "2015-03-11T00:00:00Z"
     },
     "job_type_rev": {
         "id": 5,

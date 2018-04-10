@@ -2,31 +2,39 @@
     "id": 124,
     "job_type": {
         "id": 1,
-        "name": "landsat8-parse",
-        "version": "1.0.0",
-        "title": "Landsat 8 Parse",
-        "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
-        "is_system": false,
+        "category": "landsat",
+        "is_system": true,
         "is_long_running": false,
         "is_active": true,
-        "is_operational": true,
+        "is_operational": false,
         "is_paused": false,
-        "icon_code": "f248",
-        "uses_docker": false,
-        "docker_privileged": false,
+        "icon_code": "f090",
         "docker_image": null,
-        "priority": 2,
-        "timeout": 600,
-        "max_tries": 1,
-        "cpus_required": 0.25,
-        "mem_required": 512.0,
-        "shared_mem_required": 256.0,
-        "disk_out_const_required": 2048.0,
-        "disk_out_mult_required": 0.0,
-        "created": "2016-05-15T00:00:00Z",
+        "priority": 10,
+        "timeout": 0,
+        "max_tries": 0,
+        "manifest": {
+            "name": "landsat8-parse",
+            "jobVersion": "1.0.0",
+            "packageVersion": "",
+            "title": "Landsat 8 Parse",
+            "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
+            "maintainer": {
+                "name": "USGS",
+                "email": ""
+            },
+            "timeout": 0,
+            "interface": {
+                "command": "./parse_landsat.sh",
+                "inputs": {},
+                "outputs": {},
+                "settings": []
+            }
+        },
+        "created": "2015-03-11T00:00:00Z",
         "archived": null,
         "paused": null,
-        "last_modified": "2016-05-15T00:00:00Z"
+        "last_modified": "2015-03-11T00:00:00Z"
     },
     "job_type_rev": {
         "id": 5,

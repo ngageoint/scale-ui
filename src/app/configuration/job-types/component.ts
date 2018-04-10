@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { SelectItem, TreeNode } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/filter';
@@ -10,6 +11,7 @@ import 'rxjs/add/operator/map';
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../color.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
+import { ScansApiService } from '../../common/scans/api.service';
 
 @Component({
     selector: 'app-job-types',
@@ -44,13 +46,17 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     workspaces: SelectItem[] = [];
     selectedWorkspace: any;
     isScanning: boolean;
+    scanProgress = 0;
+    scanBtnIcon = 'fa-barcode';
     private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
     private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
 
     constructor(
+        private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
         private colorService: ColorService,
         private workspacesApiService: WorkspacesApiService,
+        private scansApiService: ScansApiService,
         private router: Router,
         private route: ActivatedRoute
     ) {
@@ -69,7 +75,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     this.jobTypesApiService.getJobTypes().then(data => {
                         _.forEach(data.results, (result) => {
                             this.jobTypes.push({
-                                label: result.title + ' ' + result.version,
+                                label: `${result.manifest.title} ${result.manifest.jobVersion}`,
                                 value: result
                             });
                             if (id === result.id) {
@@ -80,6 +86,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                             this.getJobTypeDetail(id);
                             this.getWorkspaces();
                         }
+                    }, err => {
+                        console.log(err);
+                        this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
                     });
                 });
         }
@@ -147,6 +156,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.total24h = this.getChartTotals(data.job_counts_24h, 'total');
             this.failed24h = this.getChartTotals(data.job_counts_24h, 'failed');
             this.selectedJobTypeDetail = data;
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText});
         });
     }
     private getWorkspaces() {
@@ -157,7 +168,16 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     value: result
                 });
             });
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
         });
+    }
+    private handleScanError(err) {
+        console.log(err);
+        this.isScanning = false;
+        this.scanBtnIcon = 'fa-barcode';
+        this.scanProgress = 0;
+        this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
     }
 
     getUnicode(code) {
@@ -175,6 +195,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).then(data => {
             this.selectedJobTypeDetail = data;
             this.pauseBtnIcon = this.selectedJobTypeDetail.is_paused ? 'fa-play' : 'fa-pause';
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
         });
     }
     onEditClick() {
@@ -184,12 +206,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.selectedWorkspace = null;
     }
     scanWorkspace() {
-        console.log(`Job Type: ${this.selectedJobType}`);
-        console.log(`Workspace: ${this.selectedWorkspace}`);
-        this.scanDisplay = false;
-        this.isScanning = true;
-        this.jobTypesApiService.scanJobTypeWorkspace({
-            id: this.selectedJobType.id,
+        const scanObj = {
+            id: this.selectedJobTypeDetail.id,
             trigger_rule: {
                 configuration: {
                     condition: {
@@ -202,36 +220,44 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     }
                 },
                 is_active: true,
-                name: `
-                    ${this.selectedJobType.manifest.name}-${this.selectedJobType.manifest.jobVersion}-trigger
-                `,
+                name: `${this.selectedJobTypeDetail.manifest.name}-${this.selectedJobTypeDetail.manifest.jobVersion}-trigger`,
                 type: 'INGEST'
             }
-        }).then(result => {
-            // post to scan with
-            // {
-            // "name": "my-scan-process",
-            // "title": "My Scan Process",
-            // "description": "This is my Scan",
-            // "configuration": {
-            //     "version": "1.0",
-            //     "workspace": this.selectedWorkspace.name,
-            //     "scanner": {
-            //         "type": "s3",
-            //     },
-            //     "recursive": true,
-            //     "files_to_ingest": [{
-            //         "filename_regex": ".*"
-            //     }]
-            // }
-
-            // then use the id that comes back from the above request and do a process scan
-            // POST /scans/{id}/process/?ingest=true
-            this.isScanning = false;
+        };
+        this.isScanning = true;
+        this.scanProgress = 33;
+        this.scanBtnIcon = 'fa-spinner fa-spin';
+        this.jobTypesApiService.scanJobTypeWorkspace(scanObj).then(() => {
+            const scan = {
+                name: 'my-scan-process',
+                title: 'My Scan Process',
+                description: 'This is my Scan',
+                configuration: {
+                    version: '1.0',
+                    workspace: this.selectedWorkspace.name,
+                    scanner: {
+                        type: 's3',
+                    },
+                    recursive: true,
+                    files_to_ingest: [{
+                        filename_regex: '.*'
+                    }]
+                }
+            };
+            this.scanProgress = 66;
+            this.scansApiService.createScan(scan).then(scanResult => {
+                // then use the id that comes back from the above request and do a process scan
+                this.scansApiService.processScan(scanResult.id).then(() => {
+                    this.scanProgress = 0;
+                    this.scanDisplay = false; // hide scan dialog
+                    this.isScanning = false; // done scanning
+                });
+            }, err => {
+                this.handleScanError(err);
+            });
         }, err => {
-            console.log(err);
-            this.isScanning = false;
-        })
+            this.handleScanError(err);
+        });
     }
     ngOnInit() {
         this.options = {

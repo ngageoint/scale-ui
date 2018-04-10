@@ -1,32 +1,40 @@
 {
     "id": 124,
     "job_type": {
-        "id": 10,
-        "name": "export-kml",
-        "title": "Export KML",
-        "version": "1.5",
-        "description": "Creates KML from data",
-        "is_system": false,
+        "id": 11,
+        "category": "export",
+        "is_system": true,
         "is_long_running": false,
         "is_active": true,
         "is_operational": true,
         "is_paused": false,
         "icon_code": "f0ac",
-        "uses_docker": false,
-        "docker_privileged": false,
         "docker_image": null,
-        "priority": 2,
-        "timeout": 600,
-        "max_tries": 1,
-        "cpus_required": 2.0,
-        "mem_required": 2048.0,
-        "shared_mem_required": 256.0,
-        "disk_out_const_required": 1024.0,
-        "disk_out_mult_required": 0.0,
-        "created": "2016-05-15T00:00:00Z",
+        "priority": 10,
+        "timeout": 0,
+        "max_tries": 0,
+        "manifest": {
+            "name": "export-kml",
+            "jobVersion": "1.5",
+            "packageVersion": "",
+            "title": "Export KML",
+            "description": "Creates KML from data",
+            "maintainer": {
+                "name": "AIS",
+                "email": ""
+            },
+            "timeout": 0,
+            "interface": {
+                "command": "./parse_landsat.sh",
+                "inputs": {},
+                "outputs": {},
+                "settings": []
+            }
+        },
+        "created": "2015-05-10T00:00:00Z",
         "archived": null,
         "paused": null,
-        "last_modified": "2016-05-15T00:00:00Z"
+        "last_modified": "2015-05-10T00:00:00Z"
     },
     "job_type_rev": {
         "id": 5,

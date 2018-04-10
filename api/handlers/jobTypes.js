@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const jobTypes = require('../data/job-types.json');
+var _ = require('lodash');
+var jobTypes = require('../data/job-types.json');
 
 module.exports = function (request, reply) {
     var data = _.clone(jobTypes);

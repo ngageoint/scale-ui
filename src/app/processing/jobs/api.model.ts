@@ -12,6 +12,13 @@ export class Job {
     timeout_formatted: string;
     statusClass: string;
     exeStatusClass: string;
+    createdTooltip: any;
+    createdDisplay: any;
+    lastModifiedTooltip: any;
+    lastModifiedDisplay: any;
+    occurredTooltip: any;
+    occurredDisplay: any;
+    exeEndedTooltip: any;
 
     private static build(data) {
         if (data) {
@@ -106,5 +113,12 @@ export class Job {
                 `${this.execution.status.toLowerCase()} throb-text` :
                 this.execution.status.toLowerCase();
         }
+        this.createdTooltip = this.dataService.formatDate(this.created);
+        this.createdDisplay = this.dataService.formatDate(this.created, true);
+        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
+        this.occurredTooltip = this.dataService.formatDate(this.event.occurred);
+        this.occurredDisplay = this.dataService.formatDate(this.event.occurred, true);
+        this.exeEndedTooltip = this.dataService.formatDate(this.execution.ended);
     }
 }

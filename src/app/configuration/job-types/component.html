@@ -150,7 +150,9 @@
         <div class="job-type__scan">
             <p-dropdown [options]="workspaces" [autoWidth]="false" [(ngModel)]="selectedWorkspace" appendTo="body"
                         [style]="{'width':'300px'}" placeholder="Select..." [showClear]="false"></p-dropdown>
-            <button pButton type="button" label="Scan" [disabled]="!selectedWorkspace" (click)="scanWorkspace()"></button>
+            <button pButton type="button" label="Scan" [icon]="scanBtnIcon" [disabled]="!selectedWorkspace"
+                    (click)="scanWorkspace()"></button>
         </div>
+        <p-progressBar [value]="scanProgress" *ngIf="scanProgress > 0"></p-progressBar>
     </p-dialog>
 </div>

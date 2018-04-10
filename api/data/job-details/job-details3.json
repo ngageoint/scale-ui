@@ -2,31 +2,39 @@
     "id": 124,
     "job_type": {
         "id": 3,
-        "name": "scm",
-        "title": "Spectral Correlation Mapper",
-        "version": "1.0",
-        "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity. The Spectral Correlation Mapper (SCM) method is a derivative of Pearsonian Correlation Coefficient that eliminates negative correlation and maintains the SAM characteristic of minimizing the shading effect resulting in better results. The SCM varies from –1 to 1 and cos (SAM) varies from 0 to 1. Figure 1 – Graphic area in relation to the deviations beginning at x mean and y mean. Figure 2 – Exemplification of correlation: a) positive – with the major part of points presenting signals similar in relation at x mean and y mean; b) negative – with the major part of points with apposite signals in relation at x mean and y mean. The SCM algorithm method, similar to SAM, uses the reference spectrum defined by the investigator, in accordance with the image s/he wants to classify.",
-        "is_system": false,
+        "category": "spectral",
+        "is_system": true,
         "is_long_running": false,
         "is_active": true,
         "is_operational": true,
         "is_paused": false,
-        "icon_code": "f140",
-        "uses_docker": false,
-        "docker_privileged": false,
+        "icon_code": "f101",
         "docker_image": null,
-        "priority": 2,
-        "timeout": 600,
-        "max_tries": 1,
-        "cpus_required": 0.25,
-        "mem_required": 512.0,
-        "shared_mem_required": 256.0,
-        "disk_out_const_required": 2048.0,
-        "disk_out_mult_required": 0.0,
-        "created": "2016-05-15T00:00:00Z",
+        "priority": 10,
+        "timeout": 0,
+        "manifest": {
+            "name": "scm",
+            "jobVersion": "1.0",
+            "packageVersion": "",
+            "title": "Spectral Correlation Mapper",
+            "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
+            "maintainer": {
+                "name": "Universidade de Brasília",
+                "email": ""
+            },
+            "timeout": 0,
+            "interface": {
+                "command": "./parse_landsat.sh",
+                "inputs": {},
+                "outputs": {},
+                "settings": []
+            }
+        },
+        "max_tries": 0,
+        "created": "2015-03-11T00:00:00Z",
         "archived": null,
         "paused": null,
-        "last_modified": "2016-05-15T00:00:00Z"
+        "last_modified": "2015-03-11T00:00:00Z"
     },
     "job_type_rev": {
         "id": 5,

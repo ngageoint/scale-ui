@@ -117,7 +117,7 @@ export class JobTypesApiService {
     }
 
     scanJobTypeWorkspace(params: any): Promise<any> {
-        return this.http.patch(`${this.apiPrefix}/job-types/{$params.id}/`, { params: params.trigger_rule })
+        return this.http.patch(`${this.apiPrefix}/job-types/${params.id}/`, { params: params.trigger_rule })
             .toPromise()
             .then(response => response.json())
             .catch(this.handleError);

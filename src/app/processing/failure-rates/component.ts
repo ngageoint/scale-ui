@@ -140,7 +140,7 @@ export class FailureRatesComponent implements OnInit {
             const selectItems = [];
             _.forEach(this.jobTypes, (jobType) => {
                 selectItems.push({
-                    label: jobType.title + ' ' + jobType.version,
+                    label: `${jobType.manifest.title} ${jobType.manifest.jobVersion}`,
                     value: jobType
                 });
                 if (this.datatableOptions.name === jobType.name && this.datatableOptions.version === jobType.version) {
