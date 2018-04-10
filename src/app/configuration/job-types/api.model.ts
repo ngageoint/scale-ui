@@ -1,13 +1,15 @@
-import { DataService } from '../../data.service';
-
 export class JobType {
-    dataService: DataService;
-
     private static build(data) {
         if (data) {
             return new JobType(
                 data.manifest,
                 data.id,
+                data.name,
+                data.title,
+                data.version,
+                data.description,
+                data.author_name,
+                data.author_url,
                 data.category,
                 data.is_system,
                 data.is_active,
@@ -41,6 +43,12 @@ export class JobType {
     constructor(
         public manifest: any,
         public id?: number,
+        public name?: string,
+        public title?: string,
+        public version?: string,
+        public description?: string,
+        public author_name?: string,
+        public author_url?: string,
         public category?: string,
         public is_system?: boolean,
         public is_active?: boolean,
@@ -60,7 +68,18 @@ export class JobType {
         public job_counts_12h?: object[],
         public job_counts_24h?: object[]
     ) {
-        this.manifest = this.manifest || null;
+        this.manifest = this.manifest || {
+            job: {
+                name: this.name,
+                title: this.title,
+                jobVersion: this.version,
+                description: this.description,
+                maintainer: {
+                    name: this.author_name,
+                    url: this.author_url
+                }
+            }
+        };
         this.id = this.id || null;
         this.category = this.category || null;
         this.is_system = this.is_system || null;
@@ -80,6 +99,5 @@ export class JobType {
         this.job_counts_6h = this.job_counts_6h || null;
         this.job_counts_12h = this.job_counts_12h || null;
         this.job_counts_24h = this.job_counts_24h || null;
-        this.dataService = new DataService();
     }
 }

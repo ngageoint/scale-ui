@@ -45,7 +45,11 @@ export class JobTypesApiService {
         }
         return this.http.get(`${this.apiPrefix}/job-types/`, { params: queryParams })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => {
+                const returnObj = ApiResults.transformer(response.json());
+                returnObj['results'] = JobType.transformer(returnObj['results']);
+                return returnObj;
+            })
             .catch(this.handleError);
     }
 
@@ -64,7 +68,7 @@ export class JobTypesApiService {
     }
 
     createJobType(jobType: JobType): Promise<any> {
-        return this.http.post(`${this.apiPrefix}/job-types/${jobType.id}/`, jobType)
+        return this.http.post(`${this.apiPrefix}/job-types/`, jobType)
             .toPromise()
             .then(response => JobType.transformer(response.json()))
             .catch(this.handleError);
