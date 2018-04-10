@@ -70,20 +70,24 @@ export class JobType {
         public job_counts_12h?: object[],
         public job_counts_24h?: object[]
     ) {
-        if (!this.manifest || !this.manifest.seedVersion) {
-            this.manifest = this.manifest || {
-                job: {
-                    name: this.name,
-                    title: this.title,
-                    jobVersion: this.version,
-                    description: this.description,
-                    maintainer: {
-                        name: this.author_name,
-                        url: this.author_url
-                    },
-                    timeout: this.timeout
-                }
-            };
+        if (this.id) {
+            if (!this.manifest || !this.manifest.seedVersion) {
+                this.manifest = {
+                    job: {
+                        name: this.name,
+                        title: this.title,
+                        jobVersion: this.version,
+                        description: this.description,
+                        maintainer: {
+                            name: this.author_name,
+                            url: this.author_url
+                        },
+                        timeout: this.timeout
+                    }
+                };
+            }
+        } else {
+            this.manifest = this.manifest || null;
         }
         this.id = this.id || null;
         this.category = this.category || null;
