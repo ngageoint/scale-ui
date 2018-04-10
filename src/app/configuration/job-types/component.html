@@ -64,7 +64,7 @@
                                     <dd *ngIf="selectedJobTypeDetail.max_tries">{{ selectedJobTypeDetail.max_tries }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.priority">Priority:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.priority">{{ selectedJobTypeDetail.priority }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.timeout">Timeout:</dt>
+                                    <dt *ngIf="selectedJobTypeDetail.manifest.job.timeout">Timeout:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
                                     <!-- <dt *ngIf="selectedJobTypeDetail.category">Category:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.category">{{ selectedJobTypeDetail.category }}</dd> -->

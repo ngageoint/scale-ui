@@ -10,6 +10,7 @@ export class JobType {
                 data.description,
                 data.author_name,
                 data.author_url,
+                data.timeout,
                 data.category,
                 data.is_system,
                 data.is_active,
@@ -49,6 +50,7 @@ export class JobType {
         public description?: string,
         public author_name?: string,
         public author_url?: string,
+        public timeout?: any,
         public category?: string,
         public is_system?: boolean,
         public is_active?: boolean,
@@ -68,18 +70,21 @@ export class JobType {
         public job_counts_12h?: object[],
         public job_counts_24h?: object[]
     ) {
-        this.manifest = this.manifest || {
-            job: {
-                name: this.name,
-                title: this.title,
-                jobVersion: this.version,
-                description: this.description,
-                maintainer: {
-                    name: this.author_name,
-                    url: this.author_url
+        if (!this.manifest || !this.manifest.seedVersion) {
+            this.manifest = this.manifest || {
+                job: {
+                    name: this.name,
+                    title: this.title,
+                    jobVersion: this.version,
+                    description: this.description,
+                    maintainer: {
+                        name: this.author_name,
+                        url: this.author_url
+                    },
+                    timeout: this.timeout
                 }
-            }
-        };
+            };
+        }
         this.id = this.id || null;
         this.category = this.category || null;
         this.is_system = this.is_system || null;

@@ -24,7 +24,7 @@ export class Job {
         if (data) {
             return new Job(
                 data.id,
-                data.job_type,
+                JobType.transformer(data.job_type),
                 data.job_type_rev,
                 data.event,
                 data.node,
@@ -69,7 +69,7 @@ export class Job {
 
     constructor(
         public id: number,
-        public job_type: JobType,
+        public job_type: any,
         public job_type_rev: object,
         public event: any,
         public node: any,
@@ -123,6 +123,6 @@ export class Job {
         this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
         this.occurredTooltip = this.dataService.formatDate(this.event.occurred);
         this.occurredDisplay = this.dataService.formatDate(this.event.occurred, true);
-        this.exeEndedTooltip = this.dataService.formatDate(this.execution.ended);
+        this.exeEndedTooltip = this.execution ? this.dataService.formatDate(this.execution.ended) : null;
     }
 }
