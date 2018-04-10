@@ -14,21 +14,23 @@
         "timeout": 0,
         "max_tries": 0,
         "manifest": {
-            "name": "export-kml",
-            "jobVersion": "1.5",
-            "packageVersion": "",
-            "title": "Export KML",
-            "description": "Creates KML from data",
-            "maintainer": {
-                "name": "AIS",
-                "email": ""
-            },
-            "timeout": 0,
-            "interface": {
-                "command": "./parse_landsat.sh",
-                "inputs": {},
-                "outputs": {},
-                "settings": []
+            "job": {
+                "name": "export-kml",
+                "jobVersion": "1.5",
+                "packageVersion": "",
+                "title": "Export KML",
+                "description": "Creates KML from data",
+                "maintainer": {
+                    "name": "AIS",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./parse_landsat.sh",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
             }
         },
         "created": "2015-05-10T00:00:00Z",

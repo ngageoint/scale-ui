@@ -17,7 +17,7 @@
                                 <div class="ui-g-6">
                                 <span class="job-type__title">
                                     <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
-                                    {{ selectedJobTypeDetail.manifest.title }} v{{selectedJobTypeDetail.manifest.jobVersion }}
+                                    {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
                                 </span>
                                 </div>
                                 <div class="ui-g-6 text-right">
@@ -36,8 +36,8 @@
                         <div class="ui-g">
                             <div class="ui-g-8">
                             <span>
-                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.maintainer.name }}<br />
-                                {{ selectedJobTypeDetail.manifest.description }}
+                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
+                                {{ selectedJobTypeDetail.manifest.job.description }}
                             </span>
                             </div>
                             <div class="ui-g-4">
@@ -65,7 +65,7 @@
                                     <dt *ngIf="selectedJobTypeDetail.priority">Priority:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.priority">{{ selectedJobTypeDetail.priority }}</dd>
                                     <dt *ngIf="selectedJobTypeDetail.timeout">Timeout:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.manifest.timeout">{{ selectedJobTypeDetail.manifest.timeout }} seconds</dd>
+                                    <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
                                     <!-- <dt *ngIf="selectedJobTypeDetail.category">Category:</dt>
                                     <dd *ngIf="selectedJobTypeDetail.category">{{ selectedJobTypeDetail.category }}</dd> -->
                                     <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>

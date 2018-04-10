@@ -57,7 +57,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     ) {
         this.isInitialized = false;
         this.columns = [
-            { field: 'job_type.manifest.name', header: 'Job Type' },
+            { field: 'job_type.manifest.job.name', header: 'Job Type' },
             { field: 'created', header: 'Created (Z)' },
             { field: 'last_modified', header: 'Last Modified (Z)' },
             { field: 'node.hostname', header: 'Node' },
@@ -110,9 +110,6 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
-            _.forEach(data.results, d => {
-
-            })
             this.jobs = Job.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -145,7 +142,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
-                    label: jobType.manifest.title + ' ' + jobType.manifest.jobVersion,
+                    label: jobType.manifest.job.title + ' ' + jobType.manifest.job.jobVersion,
                     value: jobType.id
                 });
                 if (this.datatableOptions.job_type_id === jobType.id) {

@@ -63,6 +63,13 @@ export class JobTypesApiService {
             .catch(this.handleError);
     }
 
+    createJobType(jobType: JobType): Promise<any> {
+        return this.http.post(`${this.apiPrefix}/job-types/${jobType.id}/`, jobType)
+            .toPromise()
+            .then(response => JobType.transformer(response.json()))
+            .catch(this.handleError);
+    }
+
     updateJobType(jobType: JobType): Promise<any> {
         const updatedJobType = {
             is_paused: jobType.is_paused

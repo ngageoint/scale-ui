@@ -14,21 +14,23 @@
         "timeout": 0,
         "max_tries": 0,
         "manifest": {
-            "name": "cem",
-            "jobVersion": "1.0",
-            "packageVersion": "",
-            "title": "Constrained Energy Minimization",
-            "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
-            "maintainer": {
-                "name": "DigitalGlobe",
-                "email": ""
-            },
-            "timeout": 0,
-            "interface": {
-                "command": "./parse_landsat.sh",
-                "inputs": {},
-                "outputs": {},
-                "settings": []
+            "job": {
+                "name": "cem",
+                "jobVersion": "1.0",
+                "packageVersion": "",
+                "title": "Constrained Energy Minimization",
+                "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
+                "maintainer": {
+                    "name": "DigitalGlobe",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./parse_landsat.sh",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
             }
         },
         "created": "2015-03-11T00:00:00Z",

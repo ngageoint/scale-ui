@@ -14,21 +14,23 @@
         "timeout": 0,
         "max_tries": 0,
         "manifest": {
-            "name": "landsat8-atmos-corr",
-            "jobVersion": "2.1.9",
-            "packageVersion": "",
-            "title": "Landsat 8 Atmospheric Correction",
-            "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
-            "maintainer": {
-                "name": "Radiant Blue",
-                "email": ""
-            },
-            "timeout": 0,
-            "interface": {
-                "command": "./parse_landsat.sh",
-                "inputs": {},
-                "outputs": {},
-                "settings": []
+            "job": {
+                "name": "landsat8-atmos-corr",
+                "jobVersion": "2.1.9",
+                "packageVersion": "",
+                "title": "Landsat 8 Atmospheric Correction",
+                "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
+                "maintainer": {
+                    "name": "Radiant Blue",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./parse_landsat.sh",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
             }
         },
         "created": "2015-03-11T00:00:00Z",

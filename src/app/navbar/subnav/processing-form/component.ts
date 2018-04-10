@@ -49,7 +49,7 @@ export class ProcessingFormComponent implements OnInit {
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
-                    label: `${jobType.manifest.title} ${jobType.manifest.jobVersion}`,
+                    label: `${jobType.manifest.job.title} ${jobType.manifest.job.jobVersion}`,
                     value: jobType.id
                 });
             });

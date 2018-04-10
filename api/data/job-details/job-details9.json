@@ -14,21 +14,23 @@
         "timeout": 0,
         "max_tries": 0,
         "manifest": {
-            "name": "wv2-ortho",
-            "jobVersion": "2.0",
-            "packageVersion": "",
-            "title": "WorldView-2 Rigorous Orthorectification",
-            "description": "Applies Orthorectification to WorldView-2 data",
-            "maintainer": {
-                "name": "DigitalGlobe",
-                "email": ""
-            },
-            "timeout": 0,
-            "interface": {
-                "command": "./parse_landsat.sh",
-                "inputs": {},
-                "outputs": {},
-                "settings": []
+            "job": {
+                "name": "wv2-ortho",
+                "jobVersion": "2.0",
+                "packageVersion": "",
+                "title": "WorldView-2 Rigorous Orthorectification",
+                "description": "Applies Orthorectification to WorldView-2 data",
+                "maintainer": {
+                    "name": "DigitalGlobe",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./parse_landsat.sh",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
             }
         },
         "created": "2015-03-11T00:00:00Z",

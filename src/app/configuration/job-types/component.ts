@@ -75,7 +75,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     this.jobTypesApiService.getJobTypes().then(data => {
                         _.forEach(data.results, (result) => {
                             this.jobTypes.push({
-                                label: `${result.manifest.title} ${result.manifest.jobVersion}`,
+                                label: `${result.manifest.job.title} ${result.manifest.job.jobVersion}`,
                                 value: result
                             });
                             if (id === result.id) {
@@ -220,7 +220,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     }
                 },
                 is_active: true,
-                name: `${this.selectedJobTypeDetail.manifest.name}-${this.selectedJobTypeDetail.manifest.jobVersion}-trigger`,
+                name: `${this.selectedJobTypeDetail.manifest.job.name}-${this.selectedJobTypeDetail.manifest.job.jobVersion}-trigger`,
                 type: 'INGEST'
             }
         };

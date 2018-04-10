@@ -1,33 +1,33 @@
-const hello = require('./handlers/hello');
-const jobLoad = require('./handlers/jobload');
-const recipes = require('./handlers/recipes');
-const recipeTypes = require('./handlers/recipeTypes');
-const recipeDetails = require('./handlers/recipeDetails');
-const jobs = require('./handlers/jobs');
-const runningJobs = require('./handlers/runningJobs');
-const jobTypes = require('./handlers/jobTypes');
-const jobTypesValidate = require('./handlers/jobTypesValidate');
-const jobTypesStatus = require('./handlers/jobTypesStatus');
-const jobDetails = require('./handlers/jobDetails');
-const jobTypeDetails = require('./handlers/jobTypeDetails');
-const jobTypeUpdate = require('./handlers/jobTypeUpdate');
-const recipeTypeDetails = require('./handlers/recipeTypeDetails');
-const workspaces = require('./handlers/workspaces');
-const sources = require('./handlers/sources');
-const sourceDetails = require('./handlers/sourceDetails');
-const sourceDescendants = require('./handlers/sourceDescendants');
-const metrics = require('./handlers/metrics');
-const metricsDataTypes = require('./handlers/metricsDataTypeOptions');
-const metricsPlotData = require('./handlers/metricsPlotData');
-const jobExecutionLogs = require('./handlers/jobExecutionLogs');
-const jobExecution = require('./handlers/jobExecution');
-const ingestsStatus = require('./handlers/ingestsStatus');
-const status = require('./handlers/status');
-const jobInputs = require('./handlers/jobInputs');
-const products = require('./handlers/products');
-const jobExecutions = require('./handlers/jobExecutions');
+var hello = require('./handlers/hello');
+var jobLoad = require('./handlers/jobload');
+var recipes = require('./handlers/recipes');
+var recipeTypes = require('./handlers/recipeTypes');
+var recipeDetails = require('./handlers/recipeDetails');
+var jobs = require('./handlers/jobs');
+var runningJobs = require('./handlers/runningJobs');
+var jobTypes = require('./handlers/jobTypes');
+var jobTypesValidate = require('./handlers/jobTypesValidate');
+var jobTypesStatus = require('./handlers/jobTypesStatus');
+var jobDetails = require('./handlers/jobDetails');
+var jobTypeDetails = require('./handlers/jobTypeDetails');
+var jobTypeUpdate = require('./handlers/jobTypeUpdate');
+var recipeTypeDetails = require('./handlers/recipeTypeDetails');
+var workspaces = require('./handlers/workspaces');
+var sources = require('./handlers/sources');
+var sourceDetails = require('./handlers/sourceDetails');
+var sourceDescendants = require('./handlers/sourceDescendants');
+var metrics = require('./handlers/metrics');
+var metricsDataTypes = require('./handlers/metricsDataTypeOptions');
+var metricsPlotData = require('./handlers/metricsPlotData');
+var jobExecutionLogs = require('./handlers/jobExecutionLogs');
+var jobExecution = require('./handlers/jobExecution');
+var ingestsStatus = require('./handlers/ingestsStatus');
+var status = require('./handlers/status');
+var jobInputs = require('./handlers/jobInputs');
+var products = require('./handlers/products');
+var jobExecutions = require('./handlers/jobExecutions');
 
-const apiVersion = 'v6';
+var apiVersion = 'v6';
 
 module.exports = {
     init: function(server) {
@@ -93,7 +93,7 @@ module.exports = {
 
         server.route({
             method: 'POST',
-            path: '/mocks/' + apiVersion + '/job-types/validate/',
+            path: '/mocks/' + apiVersion + '/job-types/validation/',
             handler: jobTypesValidate
         });
 

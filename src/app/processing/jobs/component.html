@@ -26,7 +26,7 @@
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
-                <div *ngSwitchCase="'job_type.manifest.name'">
+                <div *ngSwitchCase="'job_type.manifest.job.name'">
                     <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"
                                 [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
                                 [showClear]="false">
@@ -51,10 +51,10 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
-                <div *ngSwitchCase="'job_type.manifest.name'">
+                <div *ngSwitchCase="'job_type.manifest.job.name'">
                     <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
                        [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
-                    {{ rowData.job_type.manifest.title }} {{ rowData.job_type.manifest.jobVersion }}
+                    {{ rowData.job_type.manifest.job.title }} {{ rowData.job_type.manifest.job.jobVersion }}
                 </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">

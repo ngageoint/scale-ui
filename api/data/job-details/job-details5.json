@@ -14,21 +14,23 @@
         "timeout": 0,
         "max_tries": 0,
         "manifest": {
-            "name": "wv2-parse",
-            "jobVersion": "1.0.1",
-            "packageVersion": "",
-            "title": "WorldView-2 Parse",
-            "description": "Parses WorldView-2 GeoTiffs",
-            "maintainer": {
-                "name": "DigitalGlobe",
-                "email": ""
-            },
-            "timeout": 0,
-            "interface": {
-                "command": "./parse_landsat.sh",
-                "inputs": {},
-                "outputs": {},
-                "settings": []
+            "job": {
+                "name": "wv2-parse",
+                "jobVersion": "1.0.1",
+                "packageVersion": "",
+                "title": "WorldView-2 Parse",
+                "description": "Parses WorldView-2 GeoTiffs",
+                "maintainer": {
+                    "name": "DigitalGlobe",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./parse_landsat.sh",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
             }
         },
         "created": "2015-03-11T00:00:00Z",

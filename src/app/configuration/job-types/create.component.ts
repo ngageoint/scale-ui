@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { Message, MenuItem, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -42,6 +42,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     icons: any;
     items: MenuItem[];
     currentStepIdx: number;
+    modifiedJobTypeId: number;
     constructor(
         private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
@@ -84,7 +85,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         },
                         {
                             label: 'Validate and Create',
-                            disabled: this.createForm.valid
+                            disabled: this.createForm.valid && this.mode === 'Create'
                         }
                     ];
                     this.workspaces = [];
@@ -216,10 +217,31 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     onSubmit() {
         this.submitted = true;
         this.msgs = [];
-        this.msgs.push({severity: 'success', summary: 'Success', detail: 'Form Submitted'});
-        _.forEach(this.items, (item) => {
-            item.disabled = true;
-        });
+        if (this.mode === 'Create') {
+            this.jobTypesApiService.createJobType(this.cleanJobType).then(result => {
+                this.msgs.push({severity: 'success', summary: 'Success', detail: `${this.mode} Successful`});
+                this.modifiedJobTypeId = result.id;
+                _.forEach(this.items, item => {
+                    item.disabled = true;
+                });
+            }, err => {
+                console.log(err);
+                this.modifiedJobTypeId = null;
+                this.msgs.push({severity: 'error', summary: 'Error', detail: err.statusText});
+            });
+        } else {
+            this.jobTypesApiService.updateJobType(this.cleanJobType).then(result => {
+                this.msgs.push({severity: 'success', summary: 'Success', detail: `${this.mode} Successful`});
+                this.modifiedJobTypeId = result.id;
+                _.forEach(this.items, item => {
+                    item.disabled = true;
+                });
+            }, err => {
+                console.log(err);
+                this.modifiedJobTypeId = null;
+                this.msgs.push({severity: 'error', summary: 'Error', detail: err.statusText});
+            });
+        }
     }
     get diagnostic() { return JSON.stringify(this.cleanJobType); }
 }

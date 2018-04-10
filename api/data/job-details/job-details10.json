@@ -14,21 +14,23 @@
         "timeout": 0,
         "max_tries": 0,
         "manifest": {
-            "name": "export-shp",
-            "jobVersion": "2.0",
-            "packageVersion": "",
-            "title": "Export Shapefile",
-            "description": "Creates shapefile (.shp) from raster data",
-            "maintainer": {
-                "name": "AIS",
-                "email": ""
-            },
-            "timeout": 0,
-            "interface": {
-                "command": "./parse_landsat.sh",
-                "inputs": {},
-                "outputs": {},
-                "settings": []
+            "job": {
+                "name": "export-shp",
+                "jobVersion": "2.0",
+                "packageVersion": "",
+                "title": "Export Shapefile",
+                "description": "Creates shapefile (.shp) from raster data",
+                "maintainer": {
+                    "name": "AIS",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./parse_landsat.sh",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
             }
         },
         "created": "2015-03-11T00:00:00Z",
