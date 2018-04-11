@@ -227,8 +227,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.scanProgress = 33;
         this.scanBtnIcon = 'fa-spinner fa-spin';
         this.jobTypesApiService.scanJobTypeWorkspace(scanObj).then(() => {
+            const rand = Math.floor(Math.random() * 1000000000);
             const scan = {
-                name: 'my-scan-process',
+                name: `my-scan-process-${rand}`,
                 title: 'My Scan Process',
                 description: 'This is my Scan',
                 configuration: {
