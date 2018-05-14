@@ -79,7 +79,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                                 value: result
                             });
                             if (id === result.id) {
-                                this.selectedJobType = _.clone(result);
+                                this.selectedJobType = result;
                             }
                         });
                         if (id) {

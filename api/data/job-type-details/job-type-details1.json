@@ -25,7 +25,8 @@
                 "outputs": {},
                 "settings": []
             }
-        }
+        },
+        "seedVersion": "1.0"
     },
     "job_counts_6h": [
         {
