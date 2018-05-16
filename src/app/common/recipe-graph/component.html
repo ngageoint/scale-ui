@@ -50,7 +50,7 @@
     </div>
     <div class="ui-g-4 ui-lg-3 ui-g-nopad">
         <div class="job-type-interface" *ngIf="selectedJobType">
-            <h4 class="label label-primary">{{ selectedJobType.title }} v{{ selectedJobType.version }}</h4>
+            <h4 class="label label-primary">{{ selectedJobType.manifest.job.title }} v{{ selectedJobType.manifest.job.jobVersion }}</h4>
             <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
                         class="recipe-dependencies-container" emptyMessage="None">
                 <p-header>
@@ -137,7 +137,8 @@
             <tr [pSelectableRow]="rowData">
                 <td>
                     <div (click)="optionClick(rowData)">
-                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span> {{ rowData.title }} v{{ rowData.version }}
+                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
+                        {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
                     </div>
                 </td>
             </tr>

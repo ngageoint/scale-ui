@@ -76,7 +76,8 @@
             <tr [pSelectableRow]="rowData">
                 <td>
                     <div class="recipe-type__job-type-row" (click)="addJobType(rowData)">
-                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span> {{ rowData.title }} v{{ rowData.version }}
+                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
+                        {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
                     </div>
                 </td>
             </tr>

@@ -121,18 +121,27 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.links = [];
 
             _.forEach(this.recipeData.definition.jobs, (job) => {
-                const jobType = _.find(this.recipeData.job_types, { name: job.job_type.name, version: job.job_type.version });
-                this.nodes.push({
-                    id: _.camelCase(job.name), // id can't have dashes or anything
-                    label: jobType.name + ' v' + jobType.version,
-                    name: job.name,
-                    job_type: jobType,
-                    icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
-                    dependencies: job.dependencies,
-                    visible: true,
-                    fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE,
-                    class: job.instance.status === 'RUNNING' ? 'throb-svg' : null
+                const jobType = _.find(this.recipeData.job_types, {
+                    manifest: {
+                        job: {
+                            name: job.job_type.name,
+                            jobVersion: job.job_type.version
+                        }
+                    }
                 });
+                if (jobType) {
+                    this.nodes.push({
+                        id: _.camelCase(job.name), // id can't have dashes or anything
+                        label: jobType.manifest.job.name + ' v' + jobType.manifest.job.jobVersion,
+                        name: job.name,
+                        job_type: jobType,
+                        icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
+                        dependencies: job.dependencies,
+                        visible: true,
+                        fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE,
+                        class: job.instance ? job.instance.status === 'RUNNING' ? 'throb-svg' : null : null
+                    });
+                }
             });
 
             _.forEach(this.nodes, (node) => {
@@ -168,13 +177,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         if (e.job_type) {
             if (this.selectedJobType &&
-                    e.job_type.name === this.selectedJobType.name &&
-                    e.job_type.version === this.selectedJobType.version) {
+                    e.job_type.manifest.job.name === this.selectedJobType.name &&
+                    e.job_type.manifest.job.jobVersion === this.selectedJobType.version) {
                 this.selectedJobType = null;
             } else {
                 this.selectedNode = e;
                 this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
-                this.selectedJobType = _.find(this.recipeData.job_types, { name: e.job_type.name, version: e.job_type.version });
+                this.selectedJobType = _.find(this.recipeData.job_types, {
+                    manifest: {
+                        job: {
+                            name: e.job_type.manifest.job.name,
+                            jobVersion: e.job_type.manifest.job.jobVersion
+                        }
+                    }
+                });
             }
         }
     }
@@ -226,12 +242,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     optionClick(option) {
         const currJob = _.find(this.recipeData.definition.jobs, {
-            job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
-        }});
+            job_type: {
+                name: this.selectedNode.job_type.manifest.job.name,
+                version: this.selectedNode.job_type.manifest.job.jobVersion
+            }
+        });
         if (currJob) {
             currJob.dependencies.push({
                 connections: [],
-                name: option.name
+                name: option.manifest.job.name
             });
             // manually call updateRecipe
             this.updateRecipe();
