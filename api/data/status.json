@@ -42,7 +42,7 @@
       "mem": {
          "offered": 91445.0,
          "total": 177501.0,
-         "running": 1024.0,
+         "running": 100296.0,
          "free": 72744.0,
          "unavailable": 12288.0
       },
@@ -56,14 +56,14 @@
       "disk": {
          "offered": 383051.0,
          "total": 676101.0,
-         "running": 0.0,
+         "running": 512894.0,
          "free": 289722.0,
          "unavailable": 3328.0
       },
       "cpus": {
          "offered": 7.3,
          "total": 28.0,
-         "running": 1.0,
+         "running": 10.0,
          "free": 11.0,
          "unavailable": 8.7
       }

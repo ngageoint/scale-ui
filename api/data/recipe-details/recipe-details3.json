@@ -229,13 +229,27 @@
                 "id": 1,
                 "job_type": {
                     "id": 5,
-                    "name": "wv2-parse",
-                    "version": "1.0.1",
-                    "title": "WorldView-2 Parse",
-                    "description": "Parses WorldView-2 imagery. WorldView-2 is a commercial Earth observation satellite owned by DigitalGlobe. WorldView-2 provides commercially available panchromatic imagery of .46 m resolution, and eight-band multispectral imagery with 1.84 m (6 ft 0 in) resolution. It was launched October 8, 2009 to become DigitalGlobe's third satellite in orbit, joining WorldView-1 which was launched in 2007 and QuickBird which was launched in 2001. It takes a new photograph of any place on Earth every 1.1 days.",
-                    "category": "worldview",
-                    "author_name": "DigitalGlobe",
-                    "author_url": "https://en.wikipedia.org/wiki/WorldView-2",
+                    "manifest": {
+                        "job": {
+                            "name": "wv2-parse",
+                            "jobVersion": "1.0.1",
+                            "packageVersion": "",
+                            "title": "WorldView-2 Parse",
+                            "description": "Parses WorldView-2 imagery. WorldView-2 is a commercial Earth observation satellite owned by DigitalGlobe. WorldView-2 provides commercially available panchromatic imagery of .46 m resolution, and eight-band multispectral imagery with 1.84 m (6 ft 0 in) resolution. It was launched October 8, 2009 to become DigitalGlobe's third satellite in orbit, joining WorldView-1 which was launched in 2007 and QuickBird which was launched in 2001. It takes a new photograph of any place on Earth every 1.1 days.",
+                            "maintainer": {
+                                "name": "DigitalGlobe",
+                                "email": ""
+                            },
+                            "timeout": 0,
+                            "interface": {
+                                "command": "./parse_wv2.sh",
+                                "inputs": {},
+                                "outputs": {},
+                                "settings": []
+                            }
+                        },
+                        "seedVersion": "1.0"
+                    },
                     "is_system": false,
                     "is_long_running": false,
                     "is_active": true,
@@ -306,11 +320,27 @@
             "job": {
                 "job_type": {
                     "id": 6,
-                    "name": "wv2-atmosphere-corr",
-                    "version": "1.0.1",
-                    "title": "WorldView-2 Atmospheric Correction",
-                    "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
-                    "category": "worldview",
+                    "manifest": {
+                        "job": {
+                            "name": "wv2-atmosphere-corr",
+                            "jobVersion": "1.0.1",
+                            "packageVersion": "",
+                            "title": "WorldView-2 Atmospheric Correction",
+                            "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
+                            "maintainer": {
+                                "name": "DigitalGlobe",
+                                "email": ""
+                            },
+                            "timeout": 0,
+                            "interface": {
+                                "command": "./correct_wv2.sh",
+                                "inputs": {},
+                                "outputs": {},
+                                "settings": []
+                            }
+                        },
+                        "seedVersion": "1.0"
+                    },
                     "is_system": false,
                     "is_long_running": false,
                     "is_active": true,
@@ -381,11 +411,27 @@
             "job": {
                 "job_type": {
                     "id": 9,
-                    "name": "wv2-ortho",
-                    "version": "2.0",
-                    "title": "WorldView-2 Rigorous Orthorectification",
-                    "description": "Applies Orthorectification to WorldView-2 data",
-                    "category": "worldview",
+                    "manifest": {
+                        "job": {
+                            "name": "wv2-ortho",
+                            "jobVersion": "2.0",
+                            "packageVersion": "",
+                            "title": "WorldView-2 Rigorous Orthorectification",
+                            "description": "Applies Orthorectification to WorldView-2 data",
+                            "maintainer": {
+                                "name": "DigitalGlobe",
+                                "email": ""
+                            },
+                            "timeout": 0,
+                            "interface": {
+                                "command": "./wv2_ortho.py",
+                                "inputs": {},
+                                "outputs": {},
+                                "settings": []
+                            }
+                        },
+                        "seedVersion": "1.0"
+                    },
                     "is_system": false,
                     "is_long_running": false,
                     "is_active": true,
@@ -455,12 +501,28 @@
             "job_name": "export-shp",
             "job": {
                 "job_type": {
-                    "id": 8,
-                    "name": "export-shp",
-                    "version": "2.0",
-                    "title": "Export Shapefile",
-                    "description": "Creates shapefile (.shp) from raster data",
-                    "category": "export",
+                    "id": 10,
+                    "manifest": {
+                        "job": {
+                            "name": "export-shp",
+                            "jobVersion": "2.0",
+                            "packageVersion": "",
+                            "title": "Export Shapefile",
+                            "description": "Creates shapefile (.shp) from raster data",
+                            "maintainer": {
+                                "name": "USGS",
+                                "email": ""
+                            },
+                            "timeout": 0,
+                            "interface": {
+                                "command": "./export_shapefile.sh",
+                                "inputs": {},
+                                "outputs": {},
+                                "settings": []
+                            }
+                        },
+                        "seedVersion": "1.0"
+                    },
                     "is_system": false,
                     "is_long_running": false,
                     "is_active": true,

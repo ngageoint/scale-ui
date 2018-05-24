@@ -38,13 +38,12 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                     const jobTypes = [];
                     _.forEach(data.jobs, (jobData) => {
                         // attach revision interface to each job type
-                        const jobType = jobData.job.job_type;
-                        jobType.manifest = jobData.job.job_type_rev.interface;
-                        jobTypes.push(jobType);
+                        jobTypes.push(jobData.job.job_type);
 
                         // include current job instance in definition
                         const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
-                            return j.job_type.name === jobData.job.job_type.name && j.job_type.version === jobData.job.job_type.version;
+                            return j.job_type.name === jobData.job.job_type.manifest.job.name &&
+                                j.job_type.version === jobData.job.job_type.manifest.job.jobVersion;
                         });
                         if (recipeTypeJob) {
                             recipeTypeJob.instance = jobData.job;

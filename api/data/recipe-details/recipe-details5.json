@@ -139,13 +139,27 @@
                 "id": 12,
                 "job_type": {
                     "id": 10,
-                    "name": "caffe-aircraft-detection",
-                    "version": "1.0",
-                    "title": "Caffe Aircraft Detection",
-                    "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
-                    "category": "export",
-                    "author_name": "Yangqing Jia ",
-                    "author_url": "http://caffe.berkeleyvision.org/",
+                    "manifest": {
+                        "job": {
+                            "name": "caffe-aircraft-detection",
+                            "jobVersion": "1.0",
+                            "packageVersion": "",
+                            "title": "Caffe Aircraft Detection",
+                            "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
+                            "maintainer": {
+                                "name": "Yangqing Jia",
+                                "email": ""
+                            },
+                            "timeout": 0,
+                            "interface": {
+                                "command": "./aircraft.py",
+                                "inputs": {},
+                                "outputs": {},
+                                "settings": []
+                            }
+                        },
+                        "seedVersion": "1.0"
+                    },
                     "is_system": false,
                     "is_long_running": false,
                     "is_active": true,
