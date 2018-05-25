@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { DataService } from '../../data.service';
 import * as moment from 'moment';
 
@@ -57,10 +58,10 @@ export class Recipe {
         public jobs: Array<object>
     ) {
         this.dataService = new DataService();
-        this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');
-        this.completed_formatted = this.completed ? moment.utc(this.completed).format('YYYY-MM-DD HH:mm:ss') : '';
-        this.superseded_formatted = moment.utc(this.superseded).format('YYYY-MM-DD HH:mm:ss');
-        this.last_modified_formatted = moment.utc(this.last_modified).format('YYYY-MM-DD HH:mm:ss');
+        this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
+        this.completed_formatted = this.completed ? moment.utc(this.completed).format(environment.dateFormat) : '';
+        this.superseded_formatted = moment.utc(this.superseded).format(environment.dateFormat);
+        this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
         this.duration = this.dataService.calculateDuration(this.created, this.last_modified);
     }
 }

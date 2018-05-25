@@ -42,21 +42,21 @@
       "mem": {
          "offered": 91445.0,
          "total": 177501.0,
-         "running": 100296.0,
+         "running": 140296.0,
          "free": 72744.0,
          "unavailable": 12288.0
       },
       "gpus": {
-         "offered": 0.0,
-         "total": 0.0,
-         "running": 0.0,
-         "free": 0.0,
-         "unavailable": 0.0
+         "offered": 10.0,
+         "total": 20.0,
+         "running": 1.0,
+         "free": 9.0,
+         "unavailable": 10.0
       },
       "disk": {
          "offered": 383051.0,
          "total": 676101.0,
-         "running": 512894.0,
+         "running": 412894.0,
          "free": 289722.0,
          "unavailable": 3328.0
       },

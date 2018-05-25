@@ -1,3 +1,4 @@
+import { environment } from '../../../environments/environment';
 import { Job } from './api.model';
 import { JobType } from '../../configuration/job-types/api.model';
 import * as moment from 'moment';
@@ -66,11 +67,11 @@ export class JobExecution {
         public configuration: any,
         public output: any
     ) {
-        this.created_formatted = moment.utc(this.created).format('YYYY-MM-DD HH:mm:ss');
-        this.queued_formatted = moment.utc(this.queued).format('YYYY-MM-DD HH:mm:ss');
-        this.started_formatted = moment.utc(this.started).format('YYYY-MM-DD HH:mm:ss');
-        this.ended_formatted = moment.utc(this.ended).format('YYYY-MM-DD HH:mm:ss');
-        this.last_modified_formatted = moment.utc(this.last_modified_formatted).format('YYYY-MM-DD HH:mm:ss');
+        this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
+        this.queued_formatted = moment.utc(this.queued).format(environment.dateFormat);
+        this.started_formatted = moment.utc(this.started).format(environment.dateFormat);
+        this.ended_formatted = moment.utc(this.ended).format(environment.dateFormat);
+        this.last_modified_formatted = moment.utc(this.last_modified_formatted).format(environment.dateFormat);
         this.statusClass = this.status === 'RUNNING' ?
             `${this.status.toLowerCase()} throb-text` :
             this.status.toLowerCase();

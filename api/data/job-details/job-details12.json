@@ -31,7 +31,8 @@
                     "outputs": {},
                     "settings": []
                 }
-            }
+            },
+            "seedVersion": "1.0"
         },
         "created": "2015-05-10T00:00:00Z",
         "archived": null,
