@@ -167,7 +167,7 @@
         {
             "job_name": "sam",
             "job": {
-                "id": 1,
+                "id": 2,
                 "job_type": {
                     "id": 2,
                     "manifest": {
@@ -259,8 +259,9 @@
         {
             "job_name": "export-kml",
             "job": {
+                "id": 11,
                 "job_type": {
-                    "id": 10,
+                    "id": 11,
                     "manifest": {
                         "job": {
                             "name": "export-kml",

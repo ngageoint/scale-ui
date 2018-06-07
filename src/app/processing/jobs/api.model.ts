@@ -1,4 +1,4 @@
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import * as moment from 'moment';
 import { JobType } from '../../configuration/job-types/api.model';
 import { JobExecution } from './execution.model';

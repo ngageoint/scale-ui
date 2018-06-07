@@ -11,7 +11,7 @@
         </p-header>
         <p-messages [(value)]="msgs"></p-messages>
         <div *ngIf="jsonMode">
-            <codemirror [(ngModel)]="jobTypeJson" formControlName="json-editor" [config]="jsonConfig"></codemirror>
+            <ngx-codemirror [(ngModel)]="jobTypeJson" formControlName="json-editor" [options]="jsonConfig"></ngx-codemirror>
         </div>
         <div class="ui-g" [hidden]="jsonMode">
             <div class="ui-g-2">
@@ -74,14 +74,14 @@
                 <button class="ui-button-primary" pButton icon="fa-arrow-right" [label]="mode"
                         (click)="onSubmit()" *ngIf="validated && !submitted"></button>
                 <a class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Job Type"
-                        routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
+                   routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
                 <!--<div class="ui-g">-->
-                    <!--<div class="ui-g-2">-->
-                        <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
-                    <!--</div>-->
-                    <!--<div class="ui-g-2">-->
-                        <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
-                    <!--</div>-->
+                <!--<div class="ui-g-2">-->
+                <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
+                <!--</div>-->
+                <!--<div class="ui-g-2">-->
+                <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
+                <!--</div>-->
                 <!--</div>-->
             </div>
         </div>

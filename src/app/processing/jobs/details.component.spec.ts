@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { JobsApiService } from './api.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { JobDetailsComponent } from './details.component';
 
 

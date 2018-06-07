@@ -3,8 +3,8 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { DataService } from '../../data.service';
-import { ColorService } from '../../color.service';
+import { DataService } from '../../common/services/data.service';
+import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { DashboardJobsService } from '../jobs.service';
 import { JobActivityComponent } from './component';

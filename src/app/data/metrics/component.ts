@@ -6,7 +6,7 @@ import * as moment from 'moment';
 
 import { MetricsApiService } from './api.service';
 import { ChartService } from './chart.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/primeng';
 
 @Component({

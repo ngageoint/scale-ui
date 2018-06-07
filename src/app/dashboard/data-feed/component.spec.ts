@@ -3,15 +3,15 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpModule } from '@angular/http';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { DataFeedComponent } from './component';
 import { IngestApiService } from '../../data/ingest/api.service';
 import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { ProductsApiService } from '../../common/products/api.service';
+import { ProductsApiService } from '../../common/components/products/api.service';
 
 describe('DataFeedComponent', () => {
     let component: DataFeedComponent;

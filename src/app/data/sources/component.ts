@@ -4,7 +4,7 @@ import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { SourcesApiService } from './api.service';
 import { Source } from './api.model';
 import { SourcesDatatable } from './datatable.model';

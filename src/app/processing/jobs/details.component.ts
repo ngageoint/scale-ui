@@ -8,7 +8,7 @@ import * as Color from 'chartjs-color';
 import { Job } from './api.model';
 import { JobExecution } from './execution.model';
 import { JobsApiService } from './api.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 
 @Component({
     selector: 'app-job-details',

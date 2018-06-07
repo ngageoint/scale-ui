@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
-import { ColorService } from '../color.service';
+import { ColorService } from '../common/services/color.service';
 
 
 @Component({

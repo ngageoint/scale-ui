@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpModule } from '@angular/http';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { StatusApiService } from './api.service';
 import { StatusComponent } from './component';
 

@@ -1,8 +1,8 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
-import { JobExecution } from '../../processing/jobs/execution.model';
+import { JobExecution } from '../../../processing/jobs/execution.model';
 import { LogViewerApiService } from './api.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { LogViewerApiService } from './api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
+export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
     @Input() execution: JobExecution;
     @Input() visible: boolean;
     @ViewChild('codemirror') codemirror: any;
@@ -85,6 +85,19 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
         }
     }
 
+    onScroll() {
+        const rect = this.codemirror.codeMirror.getWrapperElement().getBoundingClientRect();
+        const bottomVisibleLine = this.codemirror.codeMirror.lineAtHeight(rect.bottom, 'window');
+        this.scrollToLine = bottomVisibleLine < this.codemirror.codeMirror.lineCount() ? bottomVisibleLine - 1 : 1e8;
+    }
+
+    onCursorActivity() {
+        if (this.codemirror) {
+            this.codemirror.codeMirror.focus();
+            this.codemirror.codeMirror.setCursor(this.scrollToLine, 0);
+        }
+    }
+
     unsubscribe() {
         if (this.subscription) {
             console.log('unsubscribe');
@@ -120,19 +133,5 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
 
     ngOnDestroy() {
         this.unsubscribe();
-    }
-
-    ngAfterViewInit() {
-        if (this.codemirror) {
-            this.codemirror.instance.on('scroll', (instance) => {
-                const rect = instance.getWrapperElement().getBoundingClientRect();
-                const bottomVisibleLine = instance.lineAtHeight(rect.bottom, 'window');
-                this.scrollToLine = bottomVisibleLine < instance.lineCount() ? bottomVisibleLine - 1 : 1e8;
-            });
-            this.codemirror.instance.on('change', (instance) => {
-                instance.focus();
-                instance.setCursor(this.scrollToLine, 0);
-            });
-        }
     }
 }

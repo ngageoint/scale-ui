@@ -3,7 +3,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { DashboardJobsService } from '../jobs.service';
 import { UIChart } from 'primeng/primeng';

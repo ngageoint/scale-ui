@@ -5,7 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { SourcesApiService } from './api.service';
 import { SourceDetailsComponent } from './details.component';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 
 describe('SourceDetailsComponent', () => {
     let component: SourceDetailsComponent;

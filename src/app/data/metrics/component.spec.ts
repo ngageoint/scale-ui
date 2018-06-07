@@ -5,10 +5,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { MetricsComponent } from './component';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { ChartService } from './chart.service';
 import { MetricsApiService } from './api.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 
 
 describe('MetricsComponent', () => {

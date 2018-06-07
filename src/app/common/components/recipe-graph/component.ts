@@ -2,8 +2,8 @@ import { Component, Input, OnChanges, OnInit } from '@angular/core';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
-import { ColorService } from '../../color.service';
-import { DataService } from '../../data.service';
+import { ColorService } from '../../services/color.service';
+import { DataService } from '../../services/data.service';
 
 @Component({
     selector: 'app-recipe-graph',

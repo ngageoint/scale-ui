@@ -1,11 +1,12 @@
 <div class="scale-log__container">
     <app-loading-indicator [loading]="loading"></app-loading-indicator>
-    <div class="scale-log__viewer" *ngIf="!jobLogError && execution">
+    <div class="scale-log__viewer" *ngIf="execution">
         <h3 class="scale-log__title" (mouseenter)="showExeError(error, $event)" (mouseleave)="hideExeError(error)">
             <i class="fa fa-fw fa-square" [ngClass]="execution.statusClass"></i>
             {{ execution.status }}
         </h3>
-        <codemirror [(ngModel)]="execLogStr" [config]="jsonConfig" #codemirror></codemirror>
+        <ngx-codemirror [(ngModel)]="execLogStr" [options]="jsonConfig" (scroll)="onScroll()" (cursorActivity)="onCursorActivity()"
+                        #codemirror></ngx-codemirror>
         <p-overlayPanel #error appendTo="body">
             <div *ngIf="execution.error && execution.status === 'FAILED'">
                 <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />

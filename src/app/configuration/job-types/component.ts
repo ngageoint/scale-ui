@@ -9,9 +9,9 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
 import { JobTypesApiService } from './api.service';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
-import { ScansApiService } from '../../common/scans/api.service';
+import { ScansApiService } from '../../common/components/scans/api.service';
 
 @Component({
     selector: 'app-job-types',

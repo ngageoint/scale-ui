@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 
 import { JobType } from '../../configuration/job-types/api.model';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 
 export class RunningJob {
     dataService: DataService;

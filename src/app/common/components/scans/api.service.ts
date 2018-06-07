@@ -4,8 +4,8 @@ import * as _ from 'lodash';
 
 import 'rxjs/add/operator/toPromise';
 
-import { DataService } from '../../data.service';
-import { ApiResults } from '../../api-results.model';
+import { DataService } from '../../services/data.service';
+import { ApiResults } from '../../models/api-results.model';
 
 @Injectable()
 export class ScansApiService {

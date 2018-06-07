@@ -10,8 +10,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/startWith';
 
-import { DataService } from '../../data.service';
-import { ApiResults } from '../../api-results.model';
+import { DataService } from '../../services/data.service';
+import { ApiResults } from '../../models/api-results.model';
 
 @Injectable()
 export class ProductsApiService {

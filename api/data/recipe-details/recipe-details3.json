@@ -226,7 +226,7 @@
         {
             "job_name": "wv2-parse",
             "job": {
-                "id": 1,
+                "id": 5,
                 "job_type": {
                     "id": 5,
                     "manifest": {
@@ -318,6 +318,7 @@
         {
             "job_name": "wv2-atmosphere-corr",
             "job": {
+                "id": 6,
                 "job_type": {
                     "id": 6,
                     "manifest": {
@@ -409,6 +410,7 @@
         {
             "job_name": "wv2-ortho",
             "job": {
+                "id": 9,
                 "job_type": {
                     "id": 9,
                     "manifest": {
@@ -500,6 +502,7 @@
         {
             "job_name": "export-shp",
             "job": {
+                "id": 10,
                 "job_type": {
                     "id": 10,
                     "manifest": {

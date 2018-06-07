@@ -4,11 +4,11 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { JobTypesApiService } from './api.service';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
-import { ScansApiService } from '../../common/scans/api.service';
+import { ScansApiService } from '../../common/components/scans/api.service';
 import { JobTypesComponent } from './component';
 
 

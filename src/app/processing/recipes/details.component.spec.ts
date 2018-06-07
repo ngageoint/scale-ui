@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute } from '@angular/router';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { RecipesApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { RecipeDetailsComponent } from './details.component';

@@ -3,10 +3,10 @@ import { HttpModule } from '@angular/http';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataService } from '../data.service';
+import { DataService } from '../common/services/data.service';
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
-import { ColorService } from '../color.service';
+import { ColorService } from '../common/services/color.service';
 import { DashboardComponent } from './component';
 
 describe('DashboardComponent', () => {

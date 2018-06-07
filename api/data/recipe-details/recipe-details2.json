@@ -256,7 +256,7 @@
         {
             "job_name": "sam",
             "job": {
-                "id": 1,
+                "id": 2,
                 "job_type": {
                     "id": 2,
                     "manifest": {
@@ -348,6 +348,7 @@
         {
             "job_name": "scm",
             "job": {
+                "id": 3,
                 "job_type": {
                     "id": 3,
                     "manifest": {
@@ -439,6 +440,7 @@
         {
             "job_name": "cem",
             "job": {
+                "id": 4,
                 "job_type": {
                     "id": 4,
                     "manifest": {
@@ -530,6 +532,7 @@
         {
             "job_name": "export-shp",
             "job": {
+                "id": 10,
                 "job_type": {
                     "id": 10,
                     "manifest": {

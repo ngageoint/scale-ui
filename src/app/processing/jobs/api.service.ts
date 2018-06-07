@@ -9,8 +9,8 @@ import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/startWith';
 
-import { DataService } from '../../data.service';
-import { ApiResults } from '../../api-results.model';
+import { DataService } from '../../common/services/data.service';
+import { ApiResults } from '../../common/models/api-results.model';
 import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
 import { JobExecution } from './execution.model';

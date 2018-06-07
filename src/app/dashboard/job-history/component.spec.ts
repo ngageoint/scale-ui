@@ -3,11 +3,11 @@ import { HttpModule } from '@angular/http';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { JobHistoryComponent } from './component';
 
 

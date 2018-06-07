@@ -81,7 +81,7 @@ export class JobTypeItemComponent implements OnInit {
         return 'fa fa-star-o';
     }
 
-    toggleFavorite($event) {
+    toggleFavorite() {
         this.jobsService.toggleFavorite(this.item.job_type);
     }
 }

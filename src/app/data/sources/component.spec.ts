@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { SourcesApiService } from './api.service';
 import { SourcesComponent } from './component';
 import { SourcesDatatableService } from './datatable.service';

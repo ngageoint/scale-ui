@@ -378,6 +378,7 @@
         {
             "job_name": "landsat8-atmos-corr",
             "job": {
+                "id": 7,
                 "job_type": {
                     "id": 7,
                     "manifest": {
@@ -469,6 +470,7 @@
         {
             "job_name": "landsat8-ortho",
             "job": {
+                "id": 8,
                 "job_type": {
                     "id": 8,
                     "manifest": {
@@ -560,8 +562,9 @@
         {
             "job_name": "export-shp",
             "job": {
+                "id": 10,
                 "job_type": {
-                    "id": 8,
+                    "id": 10,
                     "name": "export-shp",
                     "version": "2.0",
                     "title": "Export Shapefile",

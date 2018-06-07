@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { WorkspacesApiService } from './api.service';
 import { WorkspacesComponent } from './component';
 

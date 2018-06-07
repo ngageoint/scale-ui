@@ -4,7 +4,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { FailureRatesComponent } from './component';
 import { FailureRatesDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';

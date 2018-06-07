@@ -6,7 +6,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { JobsApiService } from './api.service';
 import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';

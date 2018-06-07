@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 
 @Injectable()
 export class ChartService {

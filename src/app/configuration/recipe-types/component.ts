@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 
 import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
 import { JobType } from '../job-types/api.model';
 import { RecipeTypeDefinition } from './definition.model';

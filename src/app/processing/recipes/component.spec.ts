@@ -5,7 +5,7 @@ import { HttpModule } from '@angular/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { RecipesApiService } from './api.service';
 import { RecipesDatatableService} from './datatable.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';

@@ -1,21 +1,26 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpModule } from '@angular/http';
 
-import { RecipeGraphComponent } from './component';
-import { ColorService } from '../../color.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../services/data.service';
+import { LogViewerApiService } from './api.service';
+import { LogViewerComponent } from './component';
 
 
-describe('RecipeGraphComponent', () => {
-    let component: RecipeGraphComponent;
-    let fixture: ComponentFixture<RecipeGraphComponent>;
+describe('LogViewerComponent', () => {
+    let component: LogViewerComponent;
+    let fixture: ComponentFixture<LogViewerComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [RecipeGraphComponent],
+            declarations: [LogViewerComponent],
             imports: [HttpModule],
-            providers: [ColorService, DataService],
+            providers: [
+                MessageService,
+                DataService,
+                LogViewerApiService
+            ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
@@ -23,7 +28,7 @@ describe('RecipeGraphComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(RecipeGraphComponent);
+        fixture = TestBed.createComponent(LogViewerComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

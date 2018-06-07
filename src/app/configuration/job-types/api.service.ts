@@ -6,8 +6,8 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 
-import { DataService } from '../../data.service';
-import { ApiResults } from '../../api-results.model';
+import { DataService } from '../../common/services/data.service';
+import { ApiResults } from '../../common/models/api-results.model';
 import { JobType } from './api.model';
 import { RunningJobsDatatable } from '../../processing/running-jobs/datatable.model';
 

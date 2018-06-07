@@ -6,7 +6,7 @@ import { Subject } from 'rxjs/Subject';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { JobsApiService } from './api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobsDatatableService } from './datatable.service';

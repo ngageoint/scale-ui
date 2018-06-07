@@ -3,8 +3,8 @@ import { Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { DataService } from '../../data.service';
-import { ApiResults } from '../../api-results.model';
+import { DataService } from '../../common/services/data.service';
+import { ApiResults } from '../../common/models/api-results.model';
 import { RecipeType } from './api.model';
 
 @Injectable()

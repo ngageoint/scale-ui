@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { RecipeTypesComponent } from './component';
 
 

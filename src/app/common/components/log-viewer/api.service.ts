@@ -6,7 +6,7 @@ import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../services/data.service';
 
 @Injectable()
 export class LogViewerApiService {

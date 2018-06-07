@@ -5,7 +5,7 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { JobTypesApiService } from './api.service';
 import { JobTypesCreateComponent } from './create.component';
 import { WorkspacesApiService } from '../workspaces/api.service';

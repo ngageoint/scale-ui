@@ -1,5 +1,5 @@
 import { environment } from '../../../environments/environment';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import * as moment from 'moment';
 
 export class Source {

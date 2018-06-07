@@ -138,7 +138,7 @@
             "job": {
                 "id": 12,
                 "job_type": {
-                    "id": 10,
+                    "id": 12,
                     "manifest": {
                         "job": {
                             "name": "caffe-aircraft-detection",

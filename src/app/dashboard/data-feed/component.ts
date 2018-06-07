@@ -9,9 +9,9 @@ import { IngestApiService } from '../../data/ingest/api.service';
 import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
-import { ColorService } from '../../color.service';
+import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { ProductsApiService } from '../../common/products/api.service';
+import { ProductsApiService } from '../../common/components/products/api.service';
 
 @Component({
     selector: 'app-data-feed',

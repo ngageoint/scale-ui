@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import { Source } from './api.model';
 import { SourcesApiService } from './api.service';
-import { DataService } from '../../data.service';
+import { DataService } from '../../common/services/data.service';
 import { initialJobsDatatable, JobsDatatable } from '../../processing/jobs/datatable.model';
 import { Job } from '../../processing/jobs/api.model';
 

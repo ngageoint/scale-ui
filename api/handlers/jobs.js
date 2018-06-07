@@ -19,8 +19,8 @@ module.exports = function (request, reply) {
         var date = moment.utc(start.valueOf() + Math.random() * (stop.valueOf() - start.valueOf())).toISOString();
         var statusValue = statusValues[Math.floor(Math.random() * (statusValues.length))];
         data.results.push({
-            id: i,
-            job_type: jobTypeData.results[jobTypeIdx],
+            id: jobTypeIdx + 1,
+            job_type: _.find(jobTypeData.results, { id: jobTypeIdx + 1 }),
             job_type_rev: {
                 id: 56,
                 job_type: {
