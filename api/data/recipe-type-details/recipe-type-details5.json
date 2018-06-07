@@ -45,14 +45,7 @@
         }
     },
     "job_types": [{
-        "id": 10,
-        "name": "caffe-aircraft-detection",
-        "version": "1.0",
-        "title": "Caffe Aircraft Detection",
-        "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
-        "category": "export",
-        "author_name": "Yangqing Jia ",
-        "author_url": "http://caffe.berkeleyvision.org/",
+        "id": 12,
         "is_operational": true,
         "icon_code": "f072",
         "docker_privileged": false,
@@ -60,32 +53,27 @@
         "priority": 1,
         "timeout": 30,
         "max_tries": 3,
-        "cpus_required": 2,
-        "mem_required": 2048,
-        "mem_required_formatted": "2.00 GB",
-        "disk_out_const_required": 1024,
-        "disk_out_const_required_formatted": "1.00 GB",
-        "disk_out_mult_required": 0,
         "manifest": {
-            "output_data": [{
-                "media_type": "image/tiff",
-                "required": true,
-                "type": "file",
-                "name": "outfile"
-            }],
-            "shared_resources": [],
-            "command_arguments": "${infile} ${job_output_dir}",
-            "input_data": [{
-                "media_types": ["image/nitf"],
-                "required": true,
-                "type": "file",
-                "name": "infile"
-            }],
-            "version": "1.0",
-            "command": "./aircraft.py"
-        },
-        "error_mapping": {},
-        "errors": {}
+            "job": {
+                "name": "caffe-aircraft-detection",
+                "jobVersion": "1.0",
+                "packageVersion": "",
+                "title": "Caffe Aircraft Detection",
+                "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
+                "maintainer": {
+                    "name": "Yangqing Jia",
+                    "email": ""
+                },
+                "timeout": 0,
+                "interface": {
+                    "command": "./aircraft.py",
+                    "inputs": {},
+                    "outputs": {},
+                    "settings": []
+                }
+            },
+            "seedVersion": "1.0"
+        }
     }],
     "modified": false
 }
