@@ -6,8 +6,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as beautify from 'js-beautify';
 import * as _ from 'lodash';
 
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import { map, filter } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 
@@ -52,69 +51,69 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         if (this.router.events) {
-            this.routerEvents = this.router.events
-                .filter((event) => event instanceof NavigationEnd)
-                .map(() => this.route)
-                .subscribe(() => {
-                    let id = null;
-                    if (this.route && this.route.paramMap) {
-                        this.routeParams = this.route.paramMap.subscribe(params => {
-                            id = +params.get('id');
-                        });
-                    }
-                    if (id > 0) {
-                        this.mode = 'Edit';
-                        this.jobTypesApiService.getJobType(id).subscribe(data => {
-                            this.jobType = data;
-                        });
-                    } else {
-                        this.mode = 'Create';
-                        this.jobType = new JobType(null);
-                    }
+            this.routerEvents = this.router.events.pipe(
+                filter((event) => event instanceof NavigationEnd),
+                map(() => this.route)
+            ).subscribe(() => {
+                let id = null;
+                if (this.route && this.route.paramMap) {
+                    this.routeParams = this.route.paramMap.subscribe(params => {
+                        id = +params.get('id');
+                    });
+                }
+                if (id > 0) {
+                    this.mode = 'Edit';
+                    this.jobTypesApiService.getJobType(id).subscribe(data => {
+                        this.jobType = data;
+                    });
+                } else {
+                    this.mode = 'Create';
+                    this.jobType = new JobType(null);
+                }
 
-                    this.createForm = this.fb.group({
-                        'json-editor': new FormControl(''),
-                        'icon': new FormControl('')
-                    });
-                    this.items = [
-                        {
-                            label: 'Seed Image'
-                        },
-                        {
-                            label: 'General Information'
-                        },
-                        {
-                            label: 'Validate and Create',
-                            disabled: this.createForm.valid && this.mode === 'Create'
-                        }
-                    ];
-                    this.workspaces = [];
-                    this.jsonConfig = {
-                        mode: {name: 'application/json', json: true},
-                        indentUnit: 4,
-                        lineNumbers: true,
-                        allowDropFileTypes: ['application/json'],
-                        viewportMargin: Infinity
-                    };
-                    this.jsonConfigReadOnly = {
-                        mode: {name: 'application/json', json: true},
-                        indentUnit: 4,
-                        lineNumbers: true,
-                        readOnly: 'nocursor',
-                        viewportMargin: Infinity
-                    };
-                    _.forEach(iconData, d => {
-                        this.icons.push({
-                            label: d.label,
-                            value: d.value
-                        });
-                    });
-                    this.jsonModeBtnClass = 'ui-button-secondary';
-                    this.currentStepIdx = 0;
-                    this.createForm.valueChanges.subscribe(() => {
-                        this.validateForm();
+                this.createForm = this.fb.group({
+                    'json-editor': new FormControl(''),
+                    'icon': new FormControl('')
+                });
+                this.items = [
+                    {
+                        label: 'Seed Image'
+                    },
+                    {
+                        label: 'General Information'
+                    },
+                    {
+                        label: 'Validate and Create',
+                        disabled: this.createForm.valid && this.mode === 'Create'
+                    }
+                ];
+                this.workspaces = [];
+                this.jsonConfig = {
+                    mode: {name: 'application/json', json: true},
+                    indentUnit: 4,
+                    lineNumbers: true,
+                    allowDropFileTypes: ['application/json'],
+                    viewportMargin: Infinity
+                };
+                this.jsonConfigReadOnly = {
+                    mode: {name: 'application/json', json: true},
+                    indentUnit: 4,
+                    lineNumbers: true,
+                    readOnly: 'nocursor',
+                    viewportMargin: Infinity
+                };
+                _.forEach(iconData, d => {
+                    this.icons.push({
+                        label: d.label,
+                        value: d.value
                     });
                 });
+                this.jsonModeBtnClass = 'ui-button-secondary';
+                this.currentStepIdx = 0;
+                this.createForm.valueChanges.subscribe(() => {
+                    this.validateForm();
+                });
+            });
         }
     }
     private stripObject(obj: object) {
@@ -222,7 +221,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         });
     }
     selectIcon() {
-        console.log(this.createForm.get('icon').value);
         this.jobType.icon_code = this.createForm.get('icon').value;
     }
     onSubmit() {

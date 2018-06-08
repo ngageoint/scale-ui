@@ -1,10 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import * as _ from 'lodash';
 
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import { map, filter } from 'rxjs/operators';
 
 import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
@@ -44,55 +43,55 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
         if (this.router.events) {
-            this.routerEvents = this.router.events
-                .filter((event) => event instanceof NavigationEnd)
-                .map(() => this.route)
-                .subscribe(() => {
-                    this.recipeTypes = [];
-                    if (this.route && this.route.paramMap) {
-                        this.routeParams = this.route.paramMap.subscribe(params => {
-                            this.recipeTypeId = params.get('id') ? +params.get('id') : null;
+            this.routerEvents = this.router.events.pipe(
+                filter((event) => event instanceof NavigationEnd),
+                map(() => this.route)
+            ).subscribe(() => {
+                this.recipeTypes = [];
+                if (this.route && this.route.paramMap) {
+                    this.routeParams = this.route.paramMap.subscribe(params => {
+                        this.recipeTypeId = params.get('id') ? +params.get('id') : null;
+                    });
+                }
+                this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+                    _.forEach(data.results, (result) => {
+                        this.recipeTypes.push({
+                            label: result.title + ' ' + result.version,
+                            value: result
                         });
-                    }
-                    this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-                        _.forEach(data.results, (result) => {
-                            this.recipeTypes.push({
-                                label: result.title + ' ' + result.version,
-                                value: result
-                            });
-                            if (this.recipeTypeId === result.id) {
-                                this.selectedRecipeType = _.clone(result);
-                            }
-                        });
-                        if (this.recipeTypeId) {
-                            this.isEditing = false;
-                            this.getRecipeTypeDetail(this.recipeTypeId);
-                        } else {
-                            if (this.recipeTypeId === 0) {
-                                this.selectedRecipeType = {
-                                    label: 'New Recipe',
-                                    value: new RecipeType(
-                                        null,
-                                        'new-recipe',
-                                        'New Recipe',
-                                        '1.0',
-                                        'Description of a new recipe',
-                                        true,
-                                        new RecipeTypeDefinition([], '1.0', []),
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        null,
-                                        null
-                                    )
-                                };
-                                this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
-                                this.isEditing = true;
-                            }
+                        if (this.recipeTypeId === result.id) {
+                            this.selectedRecipeType = _.clone(result);
                         }
                     });
+                    if (this.recipeTypeId) {
+                        this.isEditing = false;
+                        this.getRecipeTypeDetail(this.recipeTypeId);
+                    } else {
+                        if (this.recipeTypeId === 0) {
+                            this.selectedRecipeType = {
+                                label: 'New Recipe',
+                                value: new RecipeType(
+                                    null,
+                                    'new-recipe',
+                                    'New Recipe',
+                                    '1.0',
+                                    'Description of a new recipe',
+                                    true,
+                                    new RecipeTypeDefinition([], '1.0', []),
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null,
+                                    null
+                                )
+                            };
+                            this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
+                            this.isEditing = true;
+                        }
+                    }
                 });
+            });
         }
     }
 

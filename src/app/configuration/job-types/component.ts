@@ -5,8 +5,7 @@ import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/map';
+import { map, filter } from 'rxjs/operators';
 
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
@@ -61,35 +60,35 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {
         if (this.router.events) {
-            this.routerEvents = this.router.events
-                .filter((event) => event instanceof NavigationEnd)
-                .map(() => this.route)
-                .subscribe(() => {
-                    this.jobTypes = [];
-                    let id = null;
-                    if (this.route && this.route.paramMap) {
-                        this.routeParams = this.route.paramMap.subscribe(params => {
-                            id = +params.get('id');
-                        });
-                    }
-                    this.jobTypesApiService.getJobTypes().subscribe(data => {
-                        _.forEach(data.results, (result) => {
-                            this.jobTypes.push({
-                                label: `${result.manifest.job.title} ${result.manifest.job.jobVersion}`,
-                                value: result
-                            });
-                            if (id === result.id) {
-                                this.selectedJobType = result;
-                            }
-                        });
-                        if (id) {
-                            this.getJobTypeDetail(id);
-                        }
-                    }, err => {
-                        console.log(err);
-                        this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
+            this.routerEvents = this.router.events.pipe(
+                filter((event) => event instanceof NavigationEnd),
+                map(() => this.route)
+            ).subscribe(() => {
+                this.jobTypes = [];
+                let id = null;
+                if (this.route && this.route.paramMap) {
+                    this.routeParams = this.route.paramMap.subscribe(params => {
+                        id = +params.get('id');
                     });
+                }
+                this.jobTypesApiService.getJobTypes().subscribe(data => {
+                    _.forEach(data.results, (result) => {
+                        this.jobTypes.push({
+                            label: `${result.manifest.job.title} ${result.manifest.job.jobVersion}`,
+                            value: result
+                        });
+                        if (id === result.id) {
+                            this.selectedJobType = result;
+                        }
+                    });
+                    if (id) {
+                        this.getJobTypeDetail(id);
+                    }
+                }, err => {
+                    console.log(err);
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
                 });
+            });
         }
     }
 

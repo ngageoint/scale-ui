@@ -4,7 +4,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { catchError } from 'rxjs/internal/operators';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { concatMap, map, tap, delay, skip } from 'rxjs/operators';
 import { concat, of, throwError } from 'rxjs/index';
 
