@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { catchError, map } from 'rxjs/internal/operators';
 
@@ -23,7 +21,7 @@ export class RecipesApiService {
         this.apiPrefix = this.dataService.getApiPrefix('recipes');
     }
 
-    getRecipes(params: RecipesDatatable, poll?: Boolean): any {
+    getRecipes(params: RecipesDatatable, poll?: Boolean): Observable<any> {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         let apiParams = {
@@ -44,16 +42,11 @@ export class RecipesApiService {
             fromObject: apiParams
         });
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
-                    .switchMap((data) => Observable.timer(5000)
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams });
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(5000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
             .pipe(
@@ -66,16 +59,11 @@ export class RecipesApiService {
 
     getRecipe(id: number, poll?: Boolean): any {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/recipes/${id}/`)
-                    .switchMap((data) => Observable.timer(5000)
-                        .switchMap(() => getData())
-                        .startWith(Recipe.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/recipes/${id}/`);
+            const mapRequest = response => {
+                return Recipe.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(5000, request, mapRequest);
         }
         return this.http.get<Recipe>(`${this.apiPrefix}/recipes/${id}/`)
             .pipe(

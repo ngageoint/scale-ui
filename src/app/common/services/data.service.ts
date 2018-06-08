@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs/index';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+
+import { catchError } from 'rxjs/internal/operators';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { concatMap, map, tap, delay, skip } from 'rxjs/operators';
+import { concat, of, throwError } from 'rxjs/index';
 
 import { environment } from '../../../environments/environment';
 
@@ -123,5 +127,25 @@ export class DataService {
         // return an observable with a user-facing error message
         return throwError(
             'Something bad happened; please try again later.');
+    }
+
+    generatePoll(delayValue, request, mapResponse?) {
+        const load = new BehaviorSubject('');
+        const whenToRefresh = of('').pipe(
+            delay(delayValue),
+            tap(() => load.next('')),
+            skip(1)
+        );
+        if (mapResponse) {
+            return load.pipe(
+                concatMap(() => concat(request, whenToRefresh)),
+                map(mapResponse),
+                catchError(this.handleError)
+            );
+        }
+        return load.pipe(
+            concatMap(() => concat(request, whenToRefresh)),
+            catchError(this.handleError)
+        );
     }
 }

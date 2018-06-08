@@ -2,11 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/switchMap';
-import 'rxjs/add/observable/timer';
-import 'rxjs/add/operator/startWith';
 import { Observable } from 'rxjs/Observable';
 import { catchError, map } from 'rxjs/internal/operators';
 
@@ -27,7 +22,7 @@ export class JobsApiService {
         this.apiPrefix = this.dataService.getApiPrefix('jobs');
     }
 
-    getJobs(params: JobsDatatable, poll?: Boolean): any {
+    getJobs(params: JobsDatatable, poll?: Boolean): Observable<any> {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         let apiParams = {
@@ -52,16 +47,11 @@ export class JobsApiService {
             fromObject: apiParams
         });
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/jobs/`, { params: queryParams })
-                    .switchMap((data) => Observable.timer(600000) // 10 minutes
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/jobs/`, { params: queryParams });
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(600000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/jobs/`, { params: queryParams })
             .pipe(
@@ -71,18 +61,13 @@ export class JobsApiService {
                 catchError(this.dataService.handleError)
             );
     }
-    getJob(id: number, poll?: Boolean): any {
+    getJob(id: number, poll?: Boolean): Observable<any> {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/jobs/${id}/`)
-                    .switchMap((data) => Observable.timer(30000) // 30 seconds
-                        .switchMap(() => getData())
-                        .startWith(Job.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/jobs/${id}/`);
+            const mapRequest = response => {
+                return Job.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(300000, request, mapRequest);
         }
         return this.http.get<Job>(`${this.apiPrefix}/jobs/${id}/`)
             .pipe(
@@ -144,18 +129,13 @@ export class JobsApiService {
                 catchError(this.dataService.handleError)
             );
     }
-    getJobLoad(params, poll?: boolean): any {
+    getJobLoad(params, poll?: boolean): Observable<any> {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/load/`, { params: params })
-                    .switchMap((data) => Observable.timer(600000) // 10 minutes
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/load/`, { params: params });
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(600000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/load/`, { params: params })
             .pipe(

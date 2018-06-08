@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
-import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
 import { catchError, map } from 'rxjs/internal/operators';
 
@@ -89,18 +86,13 @@ export class JobTypesApiService {
             );
     }
 
-    getJobTypeStatus(poll?: Boolean): any {
+    getJobTypeStatus(poll?: Boolean): Observable<any> {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/job-types/status/`)
-                    .switchMap((data) => Observable.timer(600000) // 10 minutes
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/job-types/status/`);
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(600000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/status/`)
             .pipe(
@@ -111,7 +103,7 @@ export class JobTypesApiService {
             );
     }
 
-    getRunningJobs(params: RunningJobsDatatable, poll?: Boolean): any {
+    getRunningJobs(params: RunningJobsDatatable, poll?: Boolean): Observable<any> {
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         const queryParams = new HttpParams({
             fromObject: {
@@ -121,16 +113,11 @@ export class JobTypesApiService {
         });
 
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
-                    .switchMap((data) => Observable.timer(5000)
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams });
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(5000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
             .pipe(

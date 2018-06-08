@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { catchError } from 'rxjs/internal/operators';
 
@@ -19,18 +17,10 @@ export class StatusApiService {
         this.apiPrefix = this.dataService.getApiPrefix('status');
     }
 
-    getStatus(poll?: boolean): any {
+    getStatus(poll?: boolean): Observable<any> {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/status/`)
-                    .switchMap((data) => Observable.timer(300000) // 5 minutes
-                        .switchMap(() => getData())
-                        .startWith(data))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
-            };
-            return getData();
+            const request = this.http.get(`${this.apiPrefix}/status/`);
+            return this.dataService.generatePoll(300000, request);
         }
         return this.http.get<any>(`${this.apiPrefix}/status/`)
             .pipe(

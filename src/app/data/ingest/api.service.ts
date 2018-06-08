@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/observable/throw';
-import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 import { catchError, map } from 'rxjs/internal/operators';
 
@@ -20,18 +18,13 @@ export class IngestApiService {
         this.apiPrefix = this.dataService.getApiPrefix('ingests');
     }
 
-    getIngests(params: any, poll?: boolean): any {
+    getIngests(params: any, poll?: boolean): Observable<any> {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/ingests/`, { params: params })
-                    .switchMap((data) => Observable.timer(600000) // 10 minutes
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/ingests/`, { params: params });
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(600000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/`, { params: params })
             .pipe(
@@ -42,18 +35,13 @@ export class IngestApiService {
             );
     }
 
-    getIngestStatus(params: any, poll?: boolean): any {
+    getIngestStatus(params: any, poll?: boolean): Observable<any> {
         if (poll) {
-            const getData = () => {
-                return this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params })
-                    .switchMap((data) => Observable.timer(600000) // 10 minutes
-                        .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data)))
-                    .catch(e => {
-                        return Observable.throw(e);
-                    });
+            const request = this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params });
+            const mapRequest = response => {
+                return ApiResults.transformer(response);
             };
-            return getData();
+            return this.dataService.generatePoll(600000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/status/`, { params: params })
             .pipe(
