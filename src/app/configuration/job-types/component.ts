@@ -72,7 +72,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                             id = +params.get('id');
                         });
                     }
-                    this.jobTypesApiService.getJobTypes().then(data => {
+                    this.jobTypesApiService.getJobTypes().subscribe(data => {
                         _.forEach(data.results, (result) => {
                             this.jobTypes.push({
                                 label: `${result.manifest.job.title} ${result.manifest.job.jobVersion}`,
@@ -126,7 +126,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         }), 'count'));
     }
     private getJobTypeDetail(id: number) {
-        this.jobTypesApiService.getJobType(id).then(data => {
+        this.jobTypesApiService.getJobType(id).subscribe(data => {
             // this.interfaceData = [
             //     {
             //         data: {
@@ -160,7 +160,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         });
     }
     private getWorkspaces() {
-        this.workspacesApiService.getWorkspaces().then(data => {
+        this.workspacesApiService.getWorkspaces().subscribe(data => {
             _.forEach(data.results, (result) => {
                 this.workspaces.push({
                     label: result.title,
@@ -191,7 +191,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onPauseClick() {
         this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
-        this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).then(data => {
+        this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
             this.selectedJobTypeDetail = data;
             this.pauseBtnIcon = this.selectedJobTypeDetail.is_paused ? 'fa-play' : 'fa-pause';
         }, err => {
@@ -226,7 +226,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.isScanning = true;
         this.scanProgress = 33;
         this.scanBtnIcon = 'fa-spinner fa-spin';
-        this.jobTypesApiService.scanJobTypeWorkspace(scanObj).then(() => {
+        this.jobTypesApiService.scanJobTypeWorkspace(scanObj).subscribe(() => {
             const rand = Math.floor(Math.random() * 1000000000);
             const scan = {
                 name: `my-scan-process-${rand}`,
@@ -245,9 +245,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 }
             };
             this.scanProgress = 66;
-            this.scansApiService.createScan(scan).then(scanResult => {
+            this.scansApiService.createScan(scan).subscribe(scanResult => {
                 // then use the id that comes back from the above request and do a process scan
-                this.scansApiService.processScan(scanResult.id).then(() => {
+                this.scansApiService.processScan(scanResult.id).subscribe(() => {
                     this.scanProgress = 0;
                     this.scanDisplay = false; // hide scan dialog
                     this.isScanning = false; // done scanning

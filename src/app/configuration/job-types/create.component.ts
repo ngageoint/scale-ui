@@ -64,7 +64,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     }
                     if (id > 0) {
                         this.mode = 'Edit';
-                        this.jobTypesApiService.getJobType(id).then(data => {
+                        this.jobTypesApiService.getJobType(id).subscribe(data => {
                             this.jobType = data;
                         });
                     } else {
@@ -204,7 +204,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         // delete this.cleanJobType.job_type_interface;
 
         // perform validation
-        this.jobTypesApiService.validateJobType(this.cleanJobType).then(result => {
+        this.jobTypesApiService.validateJobType(this.cleanJobType).subscribe(result => {
             if (result.warnings.length > 0) {
                 this.validated = false;
                 _.forEach(result.warnings, (warning) => {
@@ -220,7 +220,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.submitted = true;
         this.msgs = [];
         if (this.mode === 'Create') {
-            this.jobTypesApiService.createJobType(this.cleanJobType).then(result => {
+            this.jobTypesApiService.createJobType(this.cleanJobType).subscribe(result => {
                 this.msgs.push({severity: 'success', summary: 'Success', detail: `${this.mode} Successful`});
                 this.modifiedJobTypeId = result.id;
                 _.forEach(this.items, item => {
@@ -232,7 +232,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 this.msgs.push({severity: 'error', summary: 'Error', detail: err.statusText});
             });
         } else {
-            this.jobTypesApiService.updateJobType(this.cleanJobType).then(result => {
+            this.jobTypesApiService.updateJobType(this.cleanJobType).subscribe(result => {
                 this.msgs.push({severity: 'success', summary: 'Success', detail: `${this.mode} Successful`});
                 this.modifiedJobTypeId = result.id;
                 _.forEach(this.items, item => {

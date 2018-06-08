@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/operator/toPromise';
+import { catchError, map } from 'rxjs/internal/operators';
+import { Observable } from 'rxjs/Observable';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
@@ -17,29 +18,30 @@ export class MetricsApiService {
         this.apiPrefix = this.dataService.getApiPrefix('metrics');
     }
 
-    getDataTypes(): Promise<ApiResults> {
-        return this.http.get(`${this.apiPrefix}/metrics/`)
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
+    getDataTypes(): Observable<ApiResults> {
+        return this.http.get<ApiResults>(`${this.apiPrefix}/metrics/`)
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
-    getDataTypeOptions(name: string): Promise<any> {
-        return this.http.get(`${this.apiPrefix}/metrics/${name}/`)
-            .toPromise()
-            .then(response => Promise.resolve(response))
-            .catch(this.handleError);
+    getDataTypeOptions(name: string): Observable<any> {
+        return this.http.get<any>(`${this.apiPrefix}/metrics/${name}/`)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 
-    getPlotData(params: any): Promise<ApiResults> {
-        return this.http.get(`${this.apiPrefix}/metrics/${params.dataType}/plot-data/`, { params: params })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+    getPlotData(params: any): Observable<ApiResults> {
+        return this.http.get<ApiResults>(`${this.apiPrefix}/metrics/${params.dataType}/plot-data/`, { params: params })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 }

@@ -82,7 +82,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.updateData();
     }
     private getRecipeTypes() {
-        this.recipeTypesApiService.getRecipeTypes().then(data => {
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
             this.recipeTypes = data.results as RecipeType[];
             const self = this;
             const selectItems = [];

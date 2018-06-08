@@ -4,7 +4,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import 'rxjs/add/operator/do';
 import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
@@ -22,7 +24,7 @@ export class JobTypesApiService {
         this.apiPrefix = this.dataService.getApiPrefix('job-types');
     }
 
-    getJobTypes(params?: any): Promise<ApiResults> {
+    getJobTypes(params?: any): Observable<ApiResults> {
         let queryParams = {};
         if (params) {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
@@ -43,45 +45,49 @@ export class JobTypesApiService {
                 page_size: 1000
             };
         }
-        return this.http.get(`${this.apiPrefix}/job-types/`, { params: queryParams })
-            .toPromise()
-            .then(response => {
-                const returnObj = ApiResults.transformer(response);
-                returnObj['results'] = JobType.transformer(returnObj['results']);
-                return Promise.resolve(returnObj);
-            })
-            .catch(this.handleError);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    const returnObj = ApiResults.transformer(response);
+                    returnObj.results = JobType.transformer(returnObj.results);
+                    return returnObj;
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
-    getJobType(id: number): Promise<JobType> {
-        return this.http.get(`${this.apiPrefix}/job-types/${id}/`)
-            .toPromise()
-            .then(response => Promise.resolve(JobType.transformer(response)))
-            .catch(this.handleError);
+    getJobType(id: number): Observable<any> {
+        return this.http.get<JobType>(`${this.apiPrefix}/job-types/${id}/`)
+            .pipe(
+                map(response => {
+                    return JobType.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
-    validateJobType(jobType: JobType): Promise<any> {
-        return this.http.post(`${this.apiPrefix}/job-types/validation/`, jobType)
-            .toPromise()
-            .then(response => Promise.resolve(response))
-            .catch(this.handleError);
+    validateJobType(jobType: JobType): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/job-types/validation/`, jobType)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 
-    createJobType(jobType: JobType): Promise<any> {
-        return this.http.post(`${this.apiPrefix}/job-types/`, jobType)
-            .toPromise()
-            .then(response => Promise.resolve(JobType.transformer(response)))
-            .catch(this.handleError);
+    createJobType(jobType: JobType): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/job-types/`, jobType)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 
-    updateJobType(jobType: JobType): Promise<any> {
+    updateJobType(jobType: JobType): Observable<any> {
         const updatedJobType = {
             is_paused: jobType.is_paused
         };
-        return this.http.patch(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
-            .toPromise()
-            .then(response => Promise.resolve(JobType.transformer(response)))
-            .catch(this.handleError);
+        return this.http.patch<any>(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 
     getJobTypeStatus(poll?: Boolean): any {
@@ -97,10 +103,13 @@ export class JobTypesApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/job-types/status/`)
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/status/`)
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
     getRunningJobs(params: RunningJobsDatatable, poll?: Boolean): any {
@@ -108,7 +117,7 @@ export class JobTypesApiService {
         const queryParams = new HttpParams({
             fromObject: {
                 page: page.toString(),
-                page_size: params.rows.toString(),
+                page_size: params.rows ? params.rows.toString() : null,
             }
         });
 
@@ -124,21 +133,19 @@ export class JobTypesApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
-    scanJobTypeWorkspace(params: any): Promise<any> {
-        return this.http.patch(`${this.apiPrefix}/job-types/${params.id}/`, { params: params.trigger_rule })
-            .toPromise()
-            .then(response => Promise.resolve(response))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+    scanJobTypeWorkspace(params: any): Observable<any> {
+        return this.http.patch<any>(`${this.apiPrefix}/job-types/${params.id}/`, { params: params.trigger_rule })
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 }

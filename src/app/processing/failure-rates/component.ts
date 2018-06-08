@@ -89,7 +89,7 @@ export class FailureRatesComponent implements OnInit {
             group: null,
             dataType: 'job-types'
         };
-        this.metricsApiService.getPlotData(metricsParams).then(metricsData => {
+        this.metricsApiService.getPlotData(metricsParams).subscribe(metricsData => {
             if (metricsData.results.length > 0) {
                 const data30Days = _.map(metricsData.results, 'values'),
                     data48Hours = this.formatData(data30Days, 2),
@@ -114,9 +114,9 @@ export class FailureRatesComponent implements OnInit {
                 this.performanceData = _.orderBy(tempData, [this.datatableOptions.sortField], [direction]);
                 this.datatableLoading = false;
             }
-        }).catch((error) => {
+        }, err => {
             this.datatableLoading = false;
-            console.log(error);
+            console.log(err);
         });
     }
     private updateOptions(skipUpdate?) {
@@ -134,7 +134,7 @@ export class FailureRatesComponent implements OnInit {
     }
     private getJobTypes() {
         this.datatableLoading = true;
-        this.jobTypesApiService.getJobTypes().then(data => {
+        this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.datatableLoading = false;
             this.jobTypes = JobType.transformer(data.results);
             const selectItems = [];

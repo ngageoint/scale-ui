@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
@@ -33,10 +34,13 @@ export class IngestApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/ingests/`, { params: params })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/`, { params: params })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
     getIngestStatus(params: any, poll?: boolean): any {
@@ -52,14 +56,12 @@ export class IngestApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/status/`, { params: params })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 }

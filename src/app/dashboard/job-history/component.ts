@@ -63,7 +63,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
                 labelString: 'Job Count'
             }
         }];
-        this.metricsApiService.getPlotData(this.params).then(data => {
+        this.metricsApiService.getPlotData(this.params).subscribe(data => {
             this.chartLoading = false;
             const filters = this.favorites.length > 0 ?
                 this.favorites :

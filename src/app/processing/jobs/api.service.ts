@@ -5,17 +5,17 @@ import * as _ from 'lodash';
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/switchMap';
 import 'rxjs/add/observable/timer';
 import 'rxjs/add/operator/startWith';
+import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
 import { JobExecution } from './execution.model';
-import { catchError } from 'rxjs/internal/operators';
 
 @Injectable()
 export class JobsApiService {
@@ -28,13 +28,13 @@ export class JobsApiService {
         this.apiPrefix = this.dataService.getApiPrefix('jobs');
     }
 
-    getJobs(params: JobsDatatable, poll?: Boolean) {
+    getJobs(params: JobsDatatable, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         let apiParams = {
             order: sortStr,
             page: page.toString(),
-            page_size: params.rows.toString(),
+            page_size: params.rows ? params.rows.toString() : null,
             started: params.started,
             ended: params.ended,
             status: params.status,
@@ -66,10 +66,13 @@ export class JobsApiService {
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/jobs/`, { params: queryParams })
             .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
-            )
+            );
     }
-    getJob(id: number, poll?: Boolean) {
+    getJob(id: number, poll?: Boolean): any {
         if (poll) {
             const getData = () => {
                 return this.http.get(`${this.apiPrefix}/jobs/${id}/`)
@@ -84,24 +87,36 @@ export class JobsApiService {
         }
         return this.http.get<Job>(`${this.apiPrefix}/jobs/${id}/`)
             .pipe(
+                map(response => {
+                    return Job.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }
     getJobExecutions(id: number): Observable<ApiResults> {
         return this.http.get<ApiResults>(`${this.apiPrefix}/jobs/${id}/executions/`)
             .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }
-    getJobExecution(id: number, exe_num: number): Observable<JobExecution> {
+    getJobExecution(id: number, exe_num: number): Observable<any> {
         return this.http.get<JobExecution>(`${this.apiPrefix}/jobs/${id}/executions/${exe_num}/`)
             .pipe(
+                map(response => {
+                    return JobExecution.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }
     getJobInputs(id: number): Observable<ApiResults> {
         return this.http.get<ApiResults>(`${this.apiPrefix}/jobs/${id}/input_files/`)
             .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }
@@ -111,6 +126,9 @@ export class JobsApiService {
         });
         return this.http.get<ApiResults>(`${this.apiPrefix}/products/`, { params: queryParams })
             .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }
@@ -142,6 +160,9 @@ export class JobsApiService {
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/load/`, { params: params })
             .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }

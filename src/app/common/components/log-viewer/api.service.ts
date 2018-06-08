@@ -7,6 +7,7 @@ import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
 
 import { DataService } from '../../services/data.service';
+import { catchError } from 'rxjs/internal/operators';
 
 @Injectable()
 export class LogViewerApiService {
@@ -37,14 +38,9 @@ export class LogViewerApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
-            .toPromise()
-            .then(response => Promise.resolve(response))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+        return this.http.get<any>(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 }

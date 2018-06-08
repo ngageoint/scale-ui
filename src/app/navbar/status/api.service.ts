@@ -5,6 +5,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
+import { catchError } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 
@@ -32,14 +33,9 @@ export class StatusApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/status/`)
-            .toPromise()
-            .then(response => Promise.resolve(response))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+        return this.http.get<any>(`${this.apiPrefix}/status/`)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
     }
 }

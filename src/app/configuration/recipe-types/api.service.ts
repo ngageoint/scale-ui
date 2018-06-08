@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
@@ -18,7 +19,7 @@ export class RecipeTypesApiService {
         this.apiPrefix = this.dataService.getApiPrefix('recipe-types');
     }
 
-    getRecipeTypes(params?: any): Promise<ApiResults> {
+    getRecipeTypes(params?: any): Observable<ApiResults> {
         let queryParams = {};
         if (params) {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
@@ -31,21 +32,22 @@ export class RecipeTypesApiService {
                 ended: params.ended
             };
         }
-        return this.http.get(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
-    getRecipeType(id: number): Promise<RecipeType> {
-        return this.http.get(`${this.apiPrefix}/recipe-types/${id}/`)
-            .toPromise()
-            .then(response => Promise.resolve(RecipeType.transformer(response)))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+    getRecipeType(id: number): Observable<any> {
+        return this.http.get<RecipeType>(`${this.apiPrefix}/recipe-types/${id}/`)
+            .pipe(
+                map(response => {
+                    return RecipeType.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 }

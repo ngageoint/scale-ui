@@ -54,7 +54,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                             this.recipeTypeId = params.get('id') ? +params.get('id') : null;
                         });
                     }
-                    this.recipeTypesApiService.getRecipeTypes().then(data => {
+                    this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
                         _.forEach(data.results, (result) => {
                             this.recipeTypes.push({
                                 label: result.title + ' ' + result.version,
@@ -98,11 +98,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     private getRecipeTypeDetail(id: number) {
         this.loadingRecipeType = true;
-        this.recipeTypesApiService.getRecipeType(id).then(data => {
+        this.recipeTypesApiService.getRecipeType(id).subscribe(data => {
             this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
-        }).catch(e => {
-            console.log(e);
+        }, err => {
+            console.log(err);
             this.loadingRecipeType = false;
         });
     }
@@ -117,7 +117,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     addJobType(jobType) {
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.id).then(data => {
+        this.jobTypesApiService.getJobType(jobType.id).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
             if (!recipeData.job_types) {
                 recipeData.job_types = [];
@@ -134,7 +134,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             recipeData.job_types.push(data);
             this.selectedRecipeTypeDetail = recipeData;
             this.addJobTypeDisplay = false;
-        }).catch(err => {
+        }, err => {
             // todo show growl message with error info
             console.log(err);
         });
@@ -172,7 +172,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
-        this.jobTypesApiService.getJobTypes().then(data => {
+        this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = data.results;
         });
     }

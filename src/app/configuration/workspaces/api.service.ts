@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import 'rxjs/add/operator/toPromise';
+import { Observable } from 'rxjs/Observable';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
+import { catchError, map } from 'rxjs/internal/operators';
 
 @Injectable()
 export class WorkspacesApiService {
@@ -17,7 +18,7 @@ export class WorkspacesApiService {
         this.apiPrefix = this.dataService.getApiPrefix('workspaces');
     }
 
-    getWorkspaces(params?: object): Promise<ApiResults> {
+    getWorkspaces(params?: object): Observable<ApiResults> {
         const queryParams = {};
         // if (params) {
         //     const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
@@ -31,14 +32,12 @@ export class WorkspacesApiService {
         //         name: params.name
         //     };
         // }
-        return this.http.get(`${this.apiPrefix}/workspaces/`, { params: queryParams })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/workspaces/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 }

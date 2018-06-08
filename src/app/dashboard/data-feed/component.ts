@@ -94,7 +94,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
                 status: 'COMPLETED',
                 job_type_id: job_type_id
-            }).then(jobData => {
+            }).subscribe(jobData => {
                 let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: job_type_id }));
                 chartDataIdx = chartDataIdx > -1 ? chartDataIdx : 0;
                 // remove last element, since that will always have a 0 count
@@ -164,7 +164,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 page_size: null
             };
 
-            this.metricsApiService.getPlotData(this.plotParams).then(plotData => {
+            this.metricsApiService.getPlotData(this.plotParams).subscribe(plotData => {
                 const filters = this.favorites.length > 0 ?
                     this.favorites :
                     [];

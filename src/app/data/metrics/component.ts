@@ -73,7 +73,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 
     getDataTypes() {
         this.dataTypesLoading = true;
-        this.metricsApiService.getDataTypes().then((data) => {
+        this.metricsApiService.getDataTypes().subscribe((data) => {
             this.dataTypesLoading = false;
             _.forEach(data.results, (result) => {
                 this.availableDataTypes.push({
@@ -81,14 +81,14 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     value: result
                 });
             });
-        }).catch(err => {
+        }, err => {
             this.dataTypesLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving data types', detail: err.statusText});
         });
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
-        this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).then((result) => {
+        this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe((result) => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
             _.forEach(result.filters, (filter) => {
@@ -118,7 +118,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 label: 'None',
                 value: null
             });
-        }).catch(err => {
+        }, err => {
             this.filteredChoicesLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving data type options', detail: err.statusText});
         });
@@ -200,7 +200,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             group: this.selectedMetric2 ? [this.selectedMetric1.group, this.selectedMetric2.group] : this.selectedMetric1.group,
             dataType: this.selectedDataType.name
         };
-        this.metricsApiService.getPlotData(params).then((data) => {
+        this.metricsApiService.getPlotData(params).subscribe((data) => {
             const chartData = this.chartService.formatPlotResults(
                 data,
                 params,
@@ -273,7 +273,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 }
             };
             this.chartLoading = false;
-        }).catch(err => {
+        }, err => {
             this.chartLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving plot data', detail: err.statusText});
         });

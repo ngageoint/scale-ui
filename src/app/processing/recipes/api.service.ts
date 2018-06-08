@@ -6,6 +6,7 @@ import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
 import { Observable } from 'rxjs/Observable';
+import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
@@ -29,13 +30,13 @@ export class RecipesApiService {
         let apiParams = {
             order: sortStr,
             page: page.toString(),
-            page_size: params.rows.toString(),
+            page_size: params.rows ? params.rows.toString() : null,
             started: params.started,
             ended: params.ended,
-            type_id: params.type_id.toString(),
+            type_id: params.type_id ? params.type_id.toString() : null,
             type_name: params.type_name,
-            batch_id: params.batch_id.toString(),
-            include_superseded: params.include_superseded.toString()
+            batch_id: params.batch_id ? params.batch_id.toString() : null,
+            include_superseded: params.include_superseded ? params.include_superseded.toString() : null
         };
         apiParams = _.pickBy(apiParams, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
@@ -55,10 +56,13 @@ export class RecipesApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
-            .toPromise()
-            .then(response => Promise.resolve(ApiResults.transformer(response)))
-            .catch(this.handleError);
+        return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 
     getRecipe(id: number, poll?: Boolean): any {
@@ -74,14 +78,12 @@ export class RecipesApiService {
             };
             return getData();
         }
-        return this.http.get(`${this.apiPrefix}/recipes/${id}/`)
-            .toPromise()
-            .then(response => Promise.resolve(Recipe.transformer(response)))
-            .catch(this.handleError);
-    }
-
-    private handleError(error: any): Promise<any> {
-        console.error('An error occurred', error); // for demo purposes only
-        return Promise.reject(error.message || error);
+        return this.http.get<Recipe>(`${this.apiPrefix}/recipes/${id}/`)
+            .pipe(
+                map(response => {
+                    return Recipe.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
     }
 }
