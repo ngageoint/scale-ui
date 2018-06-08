@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
+import { HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs/index';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+
+import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class DataService {
@@ -17,7 +20,7 @@ export class DataService {
         return new Array(paddingSize > 0 ? paddingSize + 1 : 0).join('0') + input;
     }
 
-    public calculateFileSizeFromMib(num) {
+    calculateFileSizeFromMib(num) {
         if (num > 0) {
             if (num < 1024) {
                 return num.toFixed(2) + ' MB';
@@ -30,7 +33,7 @@ export class DataService {
         return num;
     }
 
-    public calculateFileSizeFromBytes(num, decimals) {
+    calculateFileSizeFromBytes(num, decimals) {
         if (num > 0) {
             if (num < 1024) {
                 return num.toFixed(decimals) + ' Bytes';
@@ -49,7 +52,7 @@ export class DataService {
         return num;
     }
 
-    public calculateDuration(start, stop, noPadding?) {
+    calculateDuration(start, stop, noPadding?) {
         const to = moment.utc(stop),
             from = moment.utc(start),
             diff = moment.utc(to).diff(moment.utc(from)),
@@ -76,7 +79,7 @@ export class DataService {
         return durationStr;
     }
 
-    public formatDate(date, humanize?: boolean) {
+    formatDate(date, humanize?: boolean) {
         humanize = humanize || false;
         if (date) {
             return humanize ?
@@ -86,7 +89,7 @@ export class DataService {
         return '';
     }
 
-    public getViewportSize() {
+    getViewportSize() {
         const w = window,
             d = document,
             e = d.documentElement,
@@ -100,9 +103,25 @@ export class DataService {
         };
     }
 
-    public getApiPrefix(endpoint) {
+    getApiPrefix(endpoint) {
         const versionObj = _.find(environment.apiVersions, { endpoint: endpoint });
         const version = versionObj ? versionObj.version : environment.apiDefaultVersion;
         return `${environment.apiPrefix}/${version}`;
+    }
+
+    handleError(error: HttpErrorResponse) {
+        if (error.error instanceof ErrorEvent) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('An error occurred:', error.error.message);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.error(
+                `Backend returned code ${error.status}, ` +
+                `body was: ${error.error}`);
+        }
+        // return an observable with a user-facing error message
+        return throwError(
+            'Something bad happened; please try again later.');
     }
 }

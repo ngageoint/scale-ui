@@ -233,12 +233,13 @@ export class JobsComponent implements OnInit, OnDestroy {
     cancelJob(job: Job) {
         const originalStatus = job.status;
         job.status = 'CANCEL';
-        this.jobsApiService.updateJob(job.id, { status: 'CANCELED' }).then(() => {
-            job.status = 'CANCELED';
-        }, err => {
-            job.status = originalStatus;
-            this.messageService.add({severity: 'error', summary: 'Error canceling job', detail: err.statusText});
-        });
+        this.jobsApiService.updateJob(job.id, { status: 'CANCELED' })
+            .subscribe(() => {
+                job.status = 'CANCELED';
+            }, err => {
+                job.status = originalStatus;
+                this.messageService.add({severity: 'error', summary: 'Error canceling job', detail: err.statusText});
+            });
     }
     requeueJobs(jobsParams?) {
         if (!jobsParams) {
@@ -254,19 +255,21 @@ export class JobsComponent implements OnInit, OnDestroy {
             // remove null properties
             jobsParams = _.pickBy(jobsParams);
         }
-        this.jobsApiService.requeueJobs(jobsParams).then(() => {
-            this.updateData();
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
-        });
+        this.jobsApiService.requeueJobs(jobsParams)
+            .subscribe(() => {
+                this.updateData();
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
+            });
     }
     showExeLog(id) {
-        this.jobsApiService.getJob(id).then(data => {
-            this.selectedJobExe = data.execution;
-            this.logDisplay = true;
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
-        });
+        this.jobsApiService.getJob(id)
+            .subscribe(data => {
+                this.selectedJobExe = data.execution;
+                this.logDisplay = true;
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
+            });
     }
     hideExeLog() {
         this.selectedJobExe = null;
@@ -278,22 +281,23 @@ export class JobsComponent implements OnInit, OnDestroy {
         // query for canceled and failed jobs with current params to report an accurate requeue count
         const requeueParams = _.clone(this.datatableOptions);
         requeueParams.status = ['CANCELED', 'FAILED'];
-        this.jobsApiService.getJobs(requeueParams).then(data => {
-            this.confirmationService.confirm({
-                message: `This will requeue <span class="failed"><strong>${data.count}</strong></span> canceled and failed jobs.
-                          Are you sure that you want to proceed?`,
-                header: 'Requeue All Jobs',
-                icon: 'fa fa-question-circle',
-                accept: () => {
-                    this.requeueJobs();
-                },
-                reject: () => {
-                    console.log('requeue rejected');
-                }
+        this.jobsApiService.getJobs(requeueParams)
+            .subscribe(data => {
+                this.confirmationService.confirm({
+                    message: `This will requeue <span class="failed"><strong>${data.count}</strong></span> canceled and failed jobs.
+                              Are you sure that you want to proceed?`,
+                    header: 'Requeue All Jobs',
+                    icon: 'fa fa-question-circle',
+                    accept: () => {
+                        this.requeueJobs();
+                    },
+                    reject: () => {
+                        console.log('requeue rejected');
+                    }
+                });
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
             });
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
-        });
     }
     ngOnInit() {
         this.datatableLoading = true;

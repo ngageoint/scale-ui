@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
@@ -14,7 +14,7 @@ export class IngestApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('ingests');
@@ -26,7 +26,7 @@ export class IngestApiService {
                 return this.http.get(`${this.apiPrefix}/ingests/`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())))
+                        .startWith(ApiResults.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -35,7 +35,7 @@ export class IngestApiService {
         }
         return this.http.get(`${this.apiPrefix}/ingests/`, { params: params })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 
@@ -45,7 +45,7 @@ export class IngestApiService {
                 return this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())))
+                        .startWith(ApiResults.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -54,7 +54,7 @@ export class IngestApiService {
         }
         return this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 

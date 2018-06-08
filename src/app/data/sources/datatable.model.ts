@@ -9,7 +9,7 @@ export class SourcesDatatable {
         public started: string,
         public ended: string,
         public time_field: string,
-        public is_parsed: boolean,
+        public is_parsed: any,
         public file_name: string
     ) {}
 }

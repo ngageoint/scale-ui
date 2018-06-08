@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../services/data.service';
 import { LogViewerApiService } from './api.service';
@@ -15,7 +15,7 @@ describe('LogViewerComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [LogViewerComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [
                 MessageService,
                 DataService,

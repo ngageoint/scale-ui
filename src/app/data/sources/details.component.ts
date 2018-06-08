@@ -30,7 +30,7 @@ export class SourceDetailsComponent implements OnInit {
 
     private getSourceJobs() {
         this.sourcesApiService.getSourceDescendants(this.source.id, 'jobs', this.jobsDatatableOptions)
-            .then(data => {
+            .subscribe(data => {
                 this.jobsData = Job.transformer(data.results);
             });
     }
@@ -52,11 +52,12 @@ export class SourceDetailsComponent implements OnInit {
     ngOnInit() {
         if (this.route.snapshot) {
             const id = parseInt(this.route.snapshot.paramMap.get('id'), 10);
-            this.sourcesApiService.getSource(id).then(data => {
-                this.source = data as Source;
-                this.metadataKeys = _.keys(this.source.meta_data);
-                // this.getSourceJobs();
-            });
+            this.sourcesApiService.getSource(id)
+                .subscribe(data => {
+                    this.source = data as Source;
+                    this.metadataKeys = _.keys(this.source.meta_data);
+                    // this.getSourceJobs();
+                });
         }
     }
 }

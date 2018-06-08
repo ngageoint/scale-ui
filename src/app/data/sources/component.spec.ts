@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
@@ -16,7 +16,7 @@ describe('SourceFilesComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [SourcesComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [
                 DataService, SourcesApiService, SourcesDatatableService,
                 {

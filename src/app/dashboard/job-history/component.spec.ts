@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 
@@ -17,7 +17,7 @@ describe('JobHistoryComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             declarations: [JobHistoryComponent],
             providers: [MessageService, DataService, DashboardJobsService, ChartService, MetricsApiService, ColorService],
             // Tells the compiler not to error on unknown elements and attributes

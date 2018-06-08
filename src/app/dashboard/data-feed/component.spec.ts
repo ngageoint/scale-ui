@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../common/services/data.service';
 import { DataFeedComponent } from './component';
@@ -20,7 +20,7 @@ describe('DataFeedComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [DataFeedComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [
                 DataService, MessageService, IngestApiService, DashboardJobsService, ChartService, MetricsApiService, ColorService,
                 JobsApiService, ProductsApiService

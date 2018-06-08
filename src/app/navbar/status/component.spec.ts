@@ -1,7 +1,7 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../common/services/data.service';
 import { StatusApiService } from './api.service';
@@ -14,7 +14,7 @@ describe('StatusComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [StatusComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [DataService, MessageService, StatusApiService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]

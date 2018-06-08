@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RecipeTypesApiService } from './api.service';
@@ -16,7 +16,7 @@ describe('RecipeTypesComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [RecipeTypesComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [
                 RecipeTypesApiService, JobTypesApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},

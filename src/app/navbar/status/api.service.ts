@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
@@ -13,7 +13,7 @@ export class StatusApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('status');
@@ -25,7 +25,7 @@ export class StatusApiService {
                 return this.http.get(`${this.apiPrefix}/status/`)
                     .switchMap((data) => Observable.timer(300000) // 5 minutes
                         .switchMap(() => getData())
-                        .startWith(data.json()))
+                        .startWith(data))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -34,7 +34,7 @@ export class StatusApiService {
         }
         return this.http.get(`${this.apiPrefix}/status/`)
             .toPromise()
-            .then(response => response.json())
+            .then(response => Promise.resolve(response))
             .catch(this.handleError);
     }
 

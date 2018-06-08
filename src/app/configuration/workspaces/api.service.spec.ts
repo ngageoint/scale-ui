@@ -1,5 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../common/services/data.service';
 import { WorkspacesApiService } from './api.service';
@@ -7,7 +7,7 @@ import { WorkspacesApiService } from './api.service';
 describe('WorkspacesApiService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [DataService, WorkspacesApiService]
         });
     });

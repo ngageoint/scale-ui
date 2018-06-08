@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -11,7 +11,7 @@ export class WorkspacesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('workspaces');
@@ -33,7 +33,7 @@ export class WorkspacesApiService {
         // }
         return this.http.get(`${this.apiPrefix}/workspaces/`, { params: queryParams })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 

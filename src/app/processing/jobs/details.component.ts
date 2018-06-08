@@ -115,19 +115,20 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
             // get job inputs
             this.loadingInputs = true;
-            this.jobsApiService.getJobInputs(id).then(inputData => {
-                this.loadingInputs = false;
-                _.forEach(inputData.results, d => {
-                    d.createdTooltip = this.dataService.formatDate(d.created);
-                    d.createdDisplay = this.dataService.formatDate(d.created, true);
-                    d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
-                    d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+            this.jobsApiService.getJobInputs(id)
+                .subscribe(inputData => {
+                    this.loadingInputs = false;
+                    _.forEach(inputData.results, d => {
+                        d.createdTooltip = this.dataService.formatDate(d.created);
+                        d.createdDisplay = this.dataService.formatDate(d.created, true);
+                        d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
+                        d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                    });
+                    this.jobInputs = inputData.results;
+                }, err => {
+                    this.loadingInputs = false;
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
                 });
-                this.jobInputs = inputData.results;
-            }, err => {
-                this.loadingInputs = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
-            });
 
             // get job outputs
             if (data.outputs) {
@@ -142,34 +143,36 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             } else {
                 // this is for the v6 response
                 this.loadingOutputs = true;
-                this.jobsApiService.getJobOutputs(id).then(outputData => {
-                    this.loadingOutputs = false;
-                    _.forEach(outputData.results, d => {
-                        d.createdTooltip = this.dataService.formatDate(d.created);
-                        d.createdDisplay = this.dataService.formatDate(d.created, true);
-                        d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
-                        d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                this.jobsApiService.getJobOutputs(id)
+                    .subscribe(outputData => {
+                        this.loadingOutputs = false;
+                        _.forEach(outputData.results, d => {
+                            d.createdTooltip = this.dataService.formatDate(d.created);
+                            d.createdDisplay = this.dataService.formatDate(d.created, true);
+                            d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
+                            d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                        });
+                        this.jobOutputs = outputData.results;
+                    }, err => {
+                        this.loadingOutputs = false;
+                        this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
                     });
-                    this.jobOutputs = outputData.results;
-                }, err => {
-                    this.loadingOutputs = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
-                });
             }
 
             // get job executions
             this.loadingExecutions = true;
-            this.jobsApiService.getJobExecutions(id).then(exeData => {
-                this.loadingExecutions = false;
-                this.jobExecutions = JobExecution.transformer(exeData.results);
+            this.jobsApiService.getJobExecutions(id)
+                .subscribe(exeData => {
+                    this.loadingExecutions = false;
+                    this.jobExecutions = JobExecution.transformer(exeData.results);
+                }, err => {
+                    this.loadingExecutions = false;
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
+                });
             }, err => {
-                this.loadingExecutions = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
+                this.loading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
             });
-        }, err => {
-            this.loading = false;
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
-        });
     }
 
     calculateFileSize(fileSize) {

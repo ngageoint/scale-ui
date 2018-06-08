@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
@@ -16,7 +16,7 @@ export class JobTypesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('job-types');
@@ -46,9 +46,9 @@ export class JobTypesApiService {
         return this.http.get(`${this.apiPrefix}/job-types/`, { params: queryParams })
             .toPromise()
             .then(response => {
-                const returnObj = ApiResults.transformer(response.json());
+                const returnObj = ApiResults.transformer(response);
                 returnObj['results'] = JobType.transformer(returnObj['results']);
-                return returnObj;
+                return Promise.resolve(returnObj);
             })
             .catch(this.handleError);
     }
@@ -56,21 +56,21 @@ export class JobTypesApiService {
     getJobType(id: number): Promise<JobType> {
         return this.http.get(`${this.apiPrefix}/job-types/${id}/`)
             .toPromise()
-            .then(response => JobType.transformer(response.json()))
+            .then(response => Promise.resolve(JobType.transformer(response)))
             .catch(this.handleError);
     }
 
     validateJobType(jobType: JobType): Promise<any> {
         return this.http.post(`${this.apiPrefix}/job-types/validation/`, jobType)
             .toPromise()
-            .then(response => response.json())
+            .then(response => Promise.resolve(response))
             .catch(this.handleError);
     }
 
     createJobType(jobType: JobType): Promise<any> {
         return this.http.post(`${this.apiPrefix}/job-types/`, jobType)
             .toPromise()
-            .then(response => JobType.transformer(response.json()))
+            .then(response => Promise.resolve(JobType.transformer(response)))
             .catch(this.handleError);
     }
 
@@ -80,7 +80,7 @@ export class JobTypesApiService {
         };
         return this.http.patch(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
             .toPromise()
-            .then(response => JobType.transformer(response.json()))
+            .then(response => Promise.resolve(JobType.transformer(response)))
             .catch(this.handleError);
     }
 
@@ -90,7 +90,7 @@ export class JobTypesApiService {
                 return this.http.get(`${this.apiPrefix}/job-types/status/`)
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())))
+                        .startWith(ApiResults.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -99,22 +99,25 @@ export class JobTypesApiService {
         }
         return this.http.get(`${this.apiPrefix}/job-types/status/`)
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 
     getRunningJobs(params: RunningJobsDatatable, poll?: Boolean): any {
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        const queryParams = {
-            page: page,
-            page_size: params.rows
-        };
+        const queryParams = new HttpParams({
+            fromObject: {
+                page: page.toString(),
+                page_size: params.rows.toString(),
+            }
+        });
+
         if (poll) {
             const getData = () => {
                 return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())))
+                        .startWith(ApiResults.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -123,14 +126,14 @@ export class JobTypesApiService {
         }
         return this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 
     scanJobTypeWorkspace(params: any): Promise<any> {
         return this.http.patch(`${this.apiPrefix}/job-types/${params.id}/`, { params: params.trigger_rule })
             .toPromise()
-            .then(response => response.json())
+            .then(response => Promise.resolve(response))
             .catch(this.handleError);
     }
 

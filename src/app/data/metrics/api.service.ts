@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -11,7 +11,7 @@ export class MetricsApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('metrics');
@@ -20,21 +20,21 @@ export class MetricsApiService {
     getDataTypes(): Promise<ApiResults> {
         return this.http.get(`${this.apiPrefix}/metrics/`)
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 
     getDataTypeOptions(name: string): Promise<any> {
         return this.http.get(`${this.apiPrefix}/metrics/${name}/`)
             .toPromise()
-            .then(response => response.json())
+            .then(response => Promise.resolve(response))
             .catch(this.handleError);
     }
 
     getPlotData(params: any): Promise<ApiResults> {
         return this.http.get(`${this.apiPrefix}/metrics/${params.dataType}/plot-data/`, { params: params })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 

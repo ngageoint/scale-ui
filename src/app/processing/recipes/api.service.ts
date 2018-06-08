@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import * as _ from 'lodash';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
@@ -16,7 +17,7 @@ export class RecipesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('recipes');
@@ -25,23 +26,29 @@ export class RecipesApiService {
     getRecipes(params: RecipesDatatable, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        const queryParams = {
+        let apiParams = {
             order: sortStr,
-            page: page,
-            page_size: params.rows,
+            page: page.toString(),
+            page_size: params.rows.toString(),
             started: params.started,
             ended: params.ended,
-            type_id: params.type_id,
+            type_id: params.type_id.toString(),
             type_name: params.type_name,
-            batch_id: params.batch_id,
-            include_superseded: params.include_superseded
+            batch_id: params.batch_id.toString(),
+            include_superseded: params.include_superseded.toString()
         };
+        apiParams = _.pickBy(apiParams, (d) => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        const queryParams = new HttpParams({
+            fromObject: apiParams
+        });
         if (poll) {
             const getData = () => {
                 return this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())))
+                        .startWith(ApiResults.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -50,7 +57,7 @@ export class RecipesApiService {
         }
         return this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 
@@ -60,7 +67,7 @@ export class RecipesApiService {
                 return this.http.get(`${this.apiPrefix}/recipes/${id}/`)
                     .switchMap((data) => Observable.timer(5000)
                         .switchMap(() => getData())
-                        .startWith(Recipe.transformer(data.json())))
+                        .startWith(Recipe.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -69,7 +76,7 @@ export class RecipesApiService {
         }
         return this.http.get(`${this.apiPrefix}/recipes/${id}/`)
             .toPromise()
-            .then(response => Recipe.transformer(response.json()))
+            .then(response => Promise.resolve(Recipe.transformer(response)))
             .catch(this.handleError);
     }
 

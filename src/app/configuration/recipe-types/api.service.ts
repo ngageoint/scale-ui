@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -12,7 +12,7 @@ export class RecipeTypesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('recipe-types');
@@ -33,14 +33,14 @@ export class RecipeTypesApiService {
         }
         return this.http.get(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 
     getRecipeType(id: number): Promise<RecipeType> {
         return this.http.get(`${this.apiPrefix}/recipe-types/${id}/`)
             .toPromise()
-            .then(response => RecipeType.transformer(response.json()))
+            .then(response => Promise.resolve(RecipeType.transformer(response)))
             .catch(this.handleError);
     }
 

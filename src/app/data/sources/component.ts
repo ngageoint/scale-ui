@@ -9,6 +9,7 @@ import { SourcesApiService } from './api.service';
 import { Source } from './api.model';
 import { SourcesDatatable } from './datatable.model';
 import { SourcesDatatableService } from './datatable.service';
+import { ApiResults } from '../../common/models/api-results.model';
 
 @Component({
     selector: 'app-sources',
@@ -59,11 +60,20 @@ export class SourcesComponent implements OnInit {
 
     private updateData() {
         this.datatableLoading = true;
-        this.sourcesApiService.getSources(this.datatableOptions).then(data => {
-            this.datatableLoading = false;
-            this.count = data.count;
-            this.sources = Source.transformer(data.results);
-        });
+        this.sourcesApiService.getSources(this.datatableOptions)
+            .subscribe(data => {
+                this.datatableLoading = false;
+                this.count = data.count;
+                this.sources = Source.transformer(data.results);
+            });
+        // this.sourcesApiService.getSources(this.datatableOptions).then(data => {
+        //     this.datatableLoading = false;
+        //     this.count = data.count;
+        //     this.sources = Source.transformer(data.results);
+        // }, err => {
+        //     this.datatableLoading = false;
+        //     console.log(err);
+        // });
     }
     private updateOptions() {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {

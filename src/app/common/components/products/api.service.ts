@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 
 import 'rxjs/add/operator/toPromise';
@@ -18,7 +18,7 @@ export class ProductsApiService {
     apiPrefix: string;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('products');
@@ -27,9 +27,9 @@ export class ProductsApiService {
     getProducts(params: any, poll?: Boolean): any {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        let queryParams = {
-            page: page,
-            page_size: params.rows,
+        let apiParams = {
+            page: page.toString(),
+            page_size: params.rows.toString(),
             started: params.started,
             ended: params.ended,
             time_field: params.time_field,
@@ -41,15 +41,18 @@ export class ProductsApiService {
             batch_id: params.batch_id,
             file_name: params.file_name
         };
-        queryParams = _.pickBy(queryParams, (d) => {
+        apiParams = _.pickBy(apiParams, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        const queryParams = new HttpParams({
+            fromObject: apiParams
         });
         if (poll) {
             const getData = () => {
                 return this.http.get(`${this.apiPrefix}/products/`, { params: queryParams })
                     .switchMap((data) => Observable.timer(600000) // 10 minutes
                         .switchMap(() => getData())
-                        .startWith(ApiResults.transformer(data.json())))
+                        .startWith(ApiResults.transformer(data)))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -58,7 +61,7 @@ export class ProductsApiService {
         }
         return this.http.get(`${this.apiPrefix}/products/`, { params: queryParams })
             .toPromise()
-            .then(response => ApiResults.transformer(response.json()))
+            .then(response => Promise.resolve(ApiResults.transformer(response)))
             .catch(this.handleError);
     }
 

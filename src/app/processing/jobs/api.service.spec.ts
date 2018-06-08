@@ -1,5 +1,5 @@
 import { TestBed, inject } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../common/services/data.service';
 import { JobsApiService } from './api.service';
@@ -8,7 +8,7 @@ import { JobsApiService } from './api.service';
 describe('JobsApiService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [DataService, JobsApiService]
         });
     });

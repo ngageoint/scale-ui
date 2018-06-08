@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
@@ -17,7 +17,7 @@ describe('ProcessingformComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [ProcessingFormComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [
                 DataService, JobTypesApiService, JobsDatatableService, SourcesDatatableService,
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}

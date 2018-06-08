@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/toPromise';
 import 'rxjs/add/observable/throw';
@@ -14,7 +14,7 @@ export class LogViewerApiService {
     logArgs: any;
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private dataService: DataService
     ) {
         this.apiPrefix = this.dataService.getApiPrefix('job-executions');
@@ -30,7 +30,7 @@ export class LogViewerApiService {
                 return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`, { params: this.logArgs })
                     .switchMap((data) => Observable.timer(5000) // 5 seconds
                         .switchMap(() => getData())
-                        .startWith(data.json()))
+                        .startWith(data))
                     .catch(e => {
                         return Observable.throw(e);
                     });
@@ -39,7 +39,7 @@ export class LogViewerApiService {
         }
         return this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
             .toPromise()
-            .then(response => response.json())
+            .then(response => Promise.resolve(response))
             .catch(this.handleError);
     }
 

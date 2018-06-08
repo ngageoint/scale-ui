@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { HttpModule } from '@angular/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -18,7 +18,7 @@ describe('JobTypesCreateComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             declarations: [JobTypesCreateComponent],
-            imports: [HttpModule],
+            imports: [HttpClientTestingModule],
             providers: [
                 DataService, MessageService, JobTypesApiService, WorkspacesApiService, FormBuilder,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
