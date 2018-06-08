@@ -130,11 +130,13 @@ export class DataService {
     }
 
     generatePoll(delayValue, request, mapResponse?) {
-        const load = new BehaviorSubject('');
-        const whenToRefresh = of('').pipe(
-            delay(delayValue),
-            tap(() => load.next('')),
-            skip(1)
+        // Set up a poll that will only start a subsequent request when the current request has resolved
+
+        const load = new BehaviorSubject(''); // initial value in BehaviorSubject causes the stream to start when subscribed
+        const whenToRefresh = of('').pipe( // create a stream using the static of. This will fire an event immediately when subscribed
+            delay(delayValue), // delay the event by the specified value
+            tap(() => load.next('')), // use a tap to actually trigger the next request
+            skip(1) // skip since we do not want to use the '' event anywhere, it was just a trigger
         );
         if (mapResponse) {
             return load.pipe(
