@@ -131,7 +131,7 @@ export class DataService {
 
     generatePoll(delayValue, request, mapResponse?) {
         // Set up a poll that will only start a subsequent request when the current request has resolved
-
+        // Reference: https://blog.strongbrew.io/rxjs-polling/
         const load = new BehaviorSubject(''); // initial value in BehaviorSubject causes the stream to start when subscribed
         const whenToRefresh = of('').pipe( // create a stream using the static of. This will fire an event immediately when subscribed
             delay(delayValue), // delay the event by the specified value

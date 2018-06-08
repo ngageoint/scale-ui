@@ -39,7 +39,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     createForm: FormGroup;
     validated: boolean;
     submitted: boolean;
-    icons: any;
+    icons: SelectItem[] = [];
     items: MenuItem[];
     currentStepIdx: number;
     modifiedJobTypeId: number;
@@ -103,7 +103,12 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         readOnly: 'nocursor',
                         viewportMargin: Infinity
                     };
-                    this.icons = iconData;
+                    _.forEach(iconData, d => {
+                        this.icons.push({
+                            label: d.label,
+                            value: d.value
+                        });
+                    });
                     this.jsonModeBtnClass = 'ui-button-secondary';
                     this.currentStepIdx = 0;
                     this.createForm.valueChanges.subscribe(() => {
@@ -215,6 +220,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 this.msgs.push({severity: 'info', summary: 'Validation Successful', detail: 'Job Type is valid and can be created.'});
             }
         });
+    }
+    selectIcon() {
+        console.log(this.createForm.get('icon').value);
+        this.jobType.icon_code = this.createForm.get('icon').value;
     }
     onSubmit() {
         this.submitted = true;

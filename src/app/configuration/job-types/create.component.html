@@ -49,10 +49,10 @@
                     </div>
                     <div class="ui-g-4">
                         Select an icon which will be used to represent this job type in Scale.
-                        <p-listbox [options]="icons" [(ngModel)]="jobType.icon_code" formControlName="icon" filter="filter"
+                        <p-listbox [options]="icons" formControlName="icon" filter="filter" (onChange)="selectIcon()"
                                    [style]="{'max-height':'300px','overflow':'auto','margin-top':'10px'}">
                             <ng-template let-icon pTemplate="item">
-                                <div class="ui-helper-clearfix">
+                                <div class="ui-helper-clearfix" *ngIf="icon.label">
                                     <span class="fa fa-fw {{ icon.label }}"></span> {{ icon.label.replace('fa-','') }}
                                 </div>
                             </ng-template>
