@@ -1,0 +1,10 @@
+<div class="data-feed__container">
+    <div class="data-feed__dropdown">
+        <p-dropdown [options]="dataFeeds" [autoWidth]="false" [(ngModel)]="selectedDataFeed" (onChange)="onDataFeedSelect()"
+                    [style]="{'width':'300px', 'margin':'-10px 0 10px 0'}" placeholder="Select..." [showClear]="false"></p-dropdown>
+    </div>
+    <div class="scale-chart-container">
+        <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
+        <p-chart #chart type="line" [data]="data" [options]="options"></p-chart>
+    </div>
+</div>

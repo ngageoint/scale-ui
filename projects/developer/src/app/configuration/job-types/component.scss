@@ -1,0 +1,83 @@
+@import '../../../defaults/colors';
+
+.job-type__details {
+    h2 {
+        display: inline-block;
+    }
+
+    h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.3em;
+    }
+
+    h4 {
+        margin-top: 5px;
+        font-size: 1.1em;
+    }
+
+    p {
+        margin-top: 10px;
+    }
+
+    dl {
+        margin-top: 0;
+    }
+
+    .job-type__performance {
+        h3 {
+            text-align: center;
+        }
+    }
+
+    .job-type__title-container {
+        padding: 0 5px 0 0;
+
+        .job-type__title {
+            margin: 7px 0 0 7px;
+            display: block;
+        }
+    }
+
+    .job-type__scan {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+
+        button {
+            padding: 0.09em;
+            margin-left: 5px;
+        }
+    }
+
+    ::ng-deep .ui-treetable {
+        thead {
+            th {
+                text-align: left;
+                padding: 5px !important;
+            }
+        }
+
+        tbody td {
+            padding: 5px !important;
+        }
+
+        .ui-treetable-data {
+            .ui-treetable-child-table-container {
+                tbody:nth-child(even) {
+                    background-color: $clr-white !important;
+                }
+
+                tbody:nth-child(odd) {
+                    background-color: $clr-gray-95 !important;
+                }
+            }
+        }
+    }
+
+    ::ng-deep .ui-scrollpanel {
+        border-color: rgba(0, 0, 0, 0.125);
+        width: 100%;
+        height: 77vh;
+    }
+}

@@ -1,0 +1,28 @@
+@import '../navbar.component.scss';
+@import '../../../defaults/colors';
+
+
+.status {
+    color: $clr-gray-80;
+    height: $navbar-height;
+    padding-top: 7px;
+}
+
+.status__item {
+    display: flex;
+
+    .status__item-name {
+        display: inline;
+        font-size: 10px;
+        font-weight: bold;
+        line-height: 14px;
+        padding: 0;
+        text-align: right;
+        width: 50px;
+    }
+
+    .status__item-value {
+        flex: 1;
+        padding: 0 0.5em;
+    }
+}

@@ -1,0 +1,26 @@
+<div class="status">
+    <div class="status__item">
+        <div class="status__item-name">CPU</div>
+        <div class="status__item-value">
+            <dev-healthbar [percentage]="pctCpu"></dev-healthbar>
+        </div>
+    </div>
+    <div class="status__item">
+        <div class="status__item-name">Memory</div>
+        <div class="status__item-value">
+            <dev-healthbar [percentage]="pctMem"></dev-healthbar>
+        </div>
+    </div>
+    <div class="status__item">
+        <div class="status__item-name">Disk</div>
+        <div class="status__item-value">
+            <dev-healthbar [percentage]="pctDisk"></dev-healthbar>
+        </div>
+    </div>
+    <div class="status__item">
+        <div class="status__item-name">GPU</div>
+        <div class="status__item-value">
+            <dev-healthbar [percentage]="pctGpu"></dev-healthbar>
+        </div>
+    </div>
+</div>

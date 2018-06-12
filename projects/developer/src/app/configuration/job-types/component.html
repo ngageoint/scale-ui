@@ -1,0 +1,158 @@
+<div class="job-type__details">
+    <h2>Job Types</h2>
+    <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
+                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."
+                [showClear]="false"></p-dropdown>
+    <hr />
+    <div class="text-center" *ngIf="!selectedJobTypeDetail">
+        <h3>Select a job type to view its details</h3>
+    </div>
+    <div *ngIf="selectedJobTypeDetail">
+        <div class="ui-g">
+            <div class="ui-g-10">
+                <p-scrollPanel styleClass="scale-panel">
+                    <div class="scale-panel__title job-type__title-container">
+                        <div class="ui-panel-title">
+                            <div class="ui-g">
+                                <div class="ui-g-6">
+                                <span class="job-type__title">
+                                    <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
+                                    {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
+                                </span>
+                                </div>
+                                <div class="ui-g-6 text-right">
+                                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                                            (click)="menu.toggle($event)"></button>
+                                    <!-- <button pButton type="button" class="ui-button-secondary" [icon]="pauseBtnIcon" pTooltip="Pause Job Type"
+                                            tooltipPosition="bottom" (click)="onPauseClick()"></button>
+                                    <button pButton type="button" class="ui-button-secondary" icon="fa-edit" pTooltip="Edit Job Type"
+                                            tooltipPosition="bottom" (click)="onEditClick()"></button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scale-panel__body">
+                        <div class="ui-g">
+                            <div class="ui-g-8">
+                            <span>
+                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
+                                {{ selectedJobTypeDetail.manifest.job.description }}
+                            </span>
+                            </div>
+                            <div class="ui-g-4">
+                                <dl class="dl-horizontal">
+                                    <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.created">{{ selectedJobTypeDetail.created }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.last_modified">Last Modified:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.last_modified">{{ selectedJobTypeDetail.last_modified }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.archived">Archived:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.archived">{{ selectedJobTypeDetail.archived }}</dd>
+                                    <!-- <dt *ngIf="selectedJobTypeDetail.cpus_required">CPUs:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.cpus_required">{{ selectedJobTypeDetail.cpus_required }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.mem_required">Memory:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.mem_required">{{ selectedJobTypeDetail.mem_required_formatted }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.mem_required">Shared Memory:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.mem_required">{{ selectedJobTypeDetail.shared_mem_required_formatted }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.disk_out_const_required_formatted">Disk:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.disk_out_const_required_formatted">{{ selectedJobTypeDetail.disk_out_const_required_formatted }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.disk_out_mult_required">Input Size Multiplier:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.disk_out_mult_required">{{ selectedJobTypeDetail.disk_out_mult_required }}</dd> -->
+                                    <dt *ngIf="selectedJobTypeDetail.docker_image">Docker Image:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.docker_image">{{ selectedJobTypeDetail.docker_image }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.max_tries">Max Tries:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.max_tries">{{ selectedJobTypeDetail.max_tries }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.priority">Priority:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.priority">{{ selectedJobTypeDetail.priority }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.manifest.job.timeout">Timeout:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
+                                    <!-- <dt *ngIf="selectedJobTypeDetail.category">Category:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.category">{{ selectedJobTypeDetail.category }}</dd> -->
+                                    <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.is_system">{{ selectedJobTypeDetail.is_system }}</dd>
+                                    <!-- <dt *ngIf="selectedJobTypeDetail.is_long_running">Long Running:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.is_long_running">{{ selectedJobTypeDetail.is_long_running }}</dd> -->
+                                    <dt *ngIf="selectedJobTypeDetail.is_active">Active:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.is_active">{{ selectedJobTypeDetail.is_active }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.is_operational">Operational:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.is_operational">{{ selectedJobTypeDetail.is_operational }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.is_paused">Paused:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.is_paused">{{ selectedJobTypeDetail.is_paused }}</dd>
+                                    <dt *ngIf="selectedJobTypeDetail.paused">Paused Date:</dt>
+                                    <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <!--<div class="ui-g">-->
+                            <!--<div class="ui-g-12">-->
+                                <!--<h3>Interface</h3>-->
+                                <!--<table class="table table-striped margin-top-md margin-bottom-md"-->
+                                       <!--*ngIf="selectedJobTypeDetail.job_type_interface">-->
+                                    <!--<tbody>-->
+                                    <!--<tr *ngIf="selectedJobTypeDetail.job_type_interface.command">-->
+                                        <!--<td style="width: 25%">Command</td>-->
+                                        <!--<td>{{ selectedJobTypeDetail.job_type_interface.command }}</td>-->
+                                    <!--</tr>-->
+                                    <!--<tr *ngIf="selectedJobTypeDetail.job_type_interface.command_arguments">-->
+                                        <!--<td style="width: 25%">Command Arguments</td>-->
+                                        <!--<td>{{ selectedJobTypeDetail.job_type_interface.command_arguments }}</td>-->
+                                    <!--</tr>-->
+                                    <!--<tr *ngIf="selectedJobTypeDetail.job_type_interface.shared_resources && selectedJobTypeDetail.job_type_interface.shared_resources.length > 0">-->
+                                        <!--<td>Shared Resources</td>-->
+                                        <!--<td>{{ selectedJobTypeDetail.job_type_interface.share_resources }}</td>-->
+                                    <!--</tr>-->
+                                    <!--</tbody>-->
+                                <!--</table>-->
+                                <!--<div *ngIf="selectedJobTypeDetail.job_type_interface.input_data && selectedJobTypeDetail.job_type_interface.output_data">-->
+                                    <!--<p-treeTable [value]="interfaceData">-->
+                                        <!--<p-column field="name" header="Name"></p-column>-->
+                                        <!--<p-column field="type" header="Type"></p-column>-->
+                                        <!--<p-column header="Media">-->
+                                            <!--<ng-template let-node="rowData" pTemplate="body">-->
+                                                <!--<span *ngIf="node.data.media_types">{{ node.data.media_types }}</span>-->
+                                                <!--<span *ngIf="node.data.media_type">{{ node.data.media_type }}</span>-->
+                                            <!--</ng-template>-->
+                                        <!--</p-column>-->
+                                    <!--</p-treeTable>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    </div>
+                </p-scrollPanel>
+            </div>
+            <div class="ui-g-2">
+                <p-panel header="6 Hours" styleClass="margin-bottom-md">
+                    <span *ngIf="total6h === 0">No data available</span>
+                    <div *ngIf="total6h > 0">
+                        <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
+                    </div>
+                </p-panel>
+                <p-panel header="12 Hours" styleClass="margin-bottom-md">
+                    <span *ngIf="total12h === 0">No data available</span>
+                    <div *ngIf="total12h > 0">
+                        <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
+                    </div>
+                </p-panel>
+                <p-panel header="24 Hours">
+                    <span *ngIf="total24h === 0">No data available</span>
+                    <div *ngIf="total24h > 0">
+                        <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
+                    </div>
+                </p-panel>
+            </div>
+        </div>
+    </div>
+    <p-dialog [(visible)]="scanDisplay" [modal]="true" [dismissableMask]="true" (onHide)="onScanHide()">
+        <p-header>
+            <strong>Scan</strong>
+        </p-header>
+        Select a workspace to scan<br />
+        <div class="job-type__scan">
+            <p-dropdown [options]="workspaces" [autoWidth]="false" [(ngModel)]="selectedWorkspace" appendTo="body"
+                        [style]="{'width':'300px'}" placeholder="Select..." [showClear]="false"></p-dropdown>
+            <button pButton type="button" label="Scan" [icon]="scanBtnIcon" [disabled]="!selectedWorkspace"
+                    (click)="scanWorkspace()"></button>
+        </div>
+        <p-progressBar [value]="scanProgress" *ngIf="scanProgress > 0"></p-progressBar>
+    </p-dialog>
+</div>

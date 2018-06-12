@@ -1,0 +1,26 @@
+<div class="navbar-ctr">
+    <div class="navbar" (click)="selectNavItem($event, null)">
+
+        <div class="navbar__logo">
+            <a routerLink="/">
+                <dev-logo></dev-logo>
+            </a>
+        </div>
+
+        <div [class]="getNavItemStyles('processing')">
+            <a (click)="selectNavItem($event, 'processing')"><i class="fa fa-gears"></i> Processing</a>
+        </div>
+        <div [class]="getNavItemStyles('data')">
+            <a (click)="selectNavItem($event, 'data')"><i class="fa fa-hdd-o"></i> Data</a>
+        </div>
+        <div [class]="getNavItemStyles('configuration')">
+            <a (click)="selectNavItem($event, 'configuration')"><i class="fa fa-wrench"></i> Configuration</a>
+        </div>
+
+        <span class="navbar__status">
+            <dev-status></dev-status>
+        </span>
+    </div>
+</div>
+<dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
+<p-growl [(value)]="msgs"></p-growl>

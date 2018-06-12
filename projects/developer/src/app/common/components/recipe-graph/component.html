@@ -1,0 +1,147 @@
+<div class="ui-g" xmlns:svg="http://www.w3.org/1999/html">
+    <div class="ui-g-8 ui-lg-9 ui-g-nopad">
+        <div class="recipe-container">
+            <ngx-graph
+                class="chart-container"
+                [legend]="showLegend"
+                [links]="links"
+                [nodes]="nodes"
+                [orientation]="orientation"
+                [curve]="curve"
+                (select)="select($event)">
+
+                <ng-template #defsTemplate>
+                    <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
+                        <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+                    </svg:marker>
+                </ng-template>
+
+                <ng-template #nodeTemplate let-node>
+                    <svg:g class="node">
+                        <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.fillColor"
+                                  [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" [ngClass]="node.class" />
+                        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.5" class="node__label">
+                            <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
+                            <svg:tspan class="node__title">{{ node.label }}</svg:tspan>
+                        </svg:text>
+                    </svg:g>
+                </ng-template>
+
+                <ng-template #linkTemplate let-link>
+                    <svg:g class="edge">
+                        <svg:path
+                            class="line"
+                            stroke-width="2"
+                            marker-end="url(#arrow)">
+                        </svg:path>
+                        <svg:text class="edge-label" text-anchor="middle">
+                            <textPath
+                                class="text-path"
+                                [attr.href]="'#' + link.id"
+                                [style.dominant-baseline]="link.dominantBaseline"
+                                startOffset="50%">
+                                {{ link.label }}
+                            </textPath>
+                        </svg:text>
+                    </svg:g>
+                </ng-template>
+            </ngx-graph>
+        </div>
+    </div>
+    <div class="ui-g-4 ui-lg-3 ui-g-nopad">
+        <div class="job-type-interface" *ngIf="selectedJobType">
+            <h4 class="label label-primary">{{ selectedJobType.manifest.job.title }} v{{ selectedJobType.manifest.job.jobVersion }}</h4>
+            <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
+                        class="recipe-dependencies-container" emptyMessage="None">
+                <p-header>
+                    <div class="ui-g">
+                        <div class="ui-g-10 ui-g-nopad">
+                            <strong>Dependencies</strong>
+                        </div>
+                        <div class="ui-g-2 ui-g-nopad text-right">
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency()" *ngIf="isEditing"
+                                    pTooltip="Add Dependency"></button>
+                        </div>
+                    </div>
+                </p-header>
+                <ng-template let-dep pTemplate="item">
+                    <div class="ui-g recipe-io recipe-dependencies">
+                        <div class="ui-g-12">
+                            <button pButton class="ui-button-danger" icon="fa-remove" (click)="removeDependency(dep)"
+                                    *ngIf="isEditing"></button>
+                            {{ dep.name }}
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
+            <p-dataList [value]="selectedJobType.manifest.input_data" [scrollable]="true" scrollHeight="300px">
+                <p-header><strong>Inputs</strong></p-header>
+                <ng-template let-input pTemplate="item">
+                    <div class="recipe-io">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                {{ input.name }} <span *ngIf="input.required">*</span>
+                                <ul class="list-unstyled media-type-list">
+                                    <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
+                                </ul>
+                                <div class="connections" *ngIf="input.dependencies">
+                                    <h5>Connections</h5>
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let dependency of input.dependencies">
+                                            <button pButton class="ui-button-danger" icon="fa-remove"
+                                                    (click)="removeInputConnection(dependency)" *ngIf="isEditing"></button>
+                                            <strong>{{ dependency.name }}</strong>.<em>{{ dependency.output }}</em>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
+            <p-dataList [value]="selectedJobType.manifest.output_data" [scrollable]="true" scrollHeight="300px">
+                <p-header><strong>Outputs</strong></p-header>
+                <ng-template let-output pTemplate="item">
+                    <div class="ui-g recipe-io">
+                        <div class="ui-g-12">
+                            {{ output.name }} <span *ngIf="output.required">*</span>
+                            <div class="media-type-list">{{ output.media_type }}</div>
+                            <div class="connections" *ngIf="output.dependents">
+                                <h5>Connections</h5>
+                                <ul class="list-unstyled">
+                                    <li *ngFor="let dependent of output.dependents">
+                                        <strong>{{ dependent.name }}</strong>.<em>{{ dependent.input }}</em>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
+        </div>
+    </div>
+</div>
+<p-sidebar [(visible)]="sidebarDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+    <h2>{{ sidebarTitle }}</h2>
+    <p-table [columns]="columns" [value]="options" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
+             [rowHover]="true" #datatable>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                           class="column-filter">
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td>
+                    <div (click)="optionClick(rowData)">
+                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
+                        {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-sidebar>

@@ -1,0 +1,26 @@
+.sources__details {
+    h3, h4 {
+        margin: 5px 0;
+        padding: 0;
+    }
+
+    h2 {
+        .link-button {
+            font-size: .8em;
+            margin-left: 5px;
+            padding: 5px;
+        }
+    }
+
+    .ui-button {
+        display: inline;
+        width: auto;
+        font-size: .8em;
+    }
+
+    ::ng-deep .ui-scrollpanel {
+        border-color: rgba(0, 0, 0, 0.125);
+        width: 100%;
+        height: 28vh;
+    }
+}

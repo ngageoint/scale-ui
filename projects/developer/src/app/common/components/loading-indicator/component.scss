@@ -1,0 +1,16 @@
+.scale-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1001;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg path, svg rect {
+        fill: #000;
+    }
+}

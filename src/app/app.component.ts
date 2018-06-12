@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
-
+import {Component} from '@angular/core';
 
 @Component({
-    selector: 'app-root',
+    selector: 'scale-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-    title = 'Scale';
+    title = 'scale';
 }

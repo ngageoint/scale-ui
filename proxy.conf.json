@@ -1,6 +1,6 @@
 {
-  "/mocks": {
-    "target": "http://localhost:8081",
-    "secure": false
-  }
+    "/mocks": {
+        "target": "http://localhost:8081",
+        "secure": false
+    }
 }

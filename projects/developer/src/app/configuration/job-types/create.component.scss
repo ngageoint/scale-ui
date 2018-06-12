@@ -1,0 +1,73 @@
+.seed-image {
+    width: 33%;
+}
+.seed-header {
+    display: flex;
+    justify-content: space-between;
+
+    h3 {
+        margin: 0;
+        padding: 0;
+    }
+
+    button {
+        font-size: 0.8em;
+    }
+}
+
+::ng-deep .ui-inputtext {
+    width: 100%;
+}
+
+.seed-panel-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3em;
+
+    .ui-button {
+        font-size: 0.8em;
+    }
+}
+
+.ui-grid-row {
+    margin: 10px 0;
+
+    &:first-child {
+        margin-top: 0;
+    }
+}
+
+.algorithm-title {
+    font-weight: bold;
+    font-size: 1.1em;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+.mode-button {
+    float: right;
+}
+
+.validate-and-create {
+    .ui-button {
+        width: auto;
+        min-width: 175px;
+    }
+}
+
+.code {
+    padding: 5px;
+    margin: 10px 0;
+    background: #fafafa;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+
+    .ui-button {
+        width: auto;
+    }
+
+    pre {
+        margin: 0;
+    }
+}

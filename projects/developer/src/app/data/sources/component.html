@@ -1,0 +1,66 @@
+<h2>Sources</h2>
+<div class="sources__date-filter">
+    <div>
+        <label>From:</label>
+        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+    </div>
+    <div>
+        <label>To:</label>
+        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+    </div>
+    <div>
+        <label>Date Field:</label>
+        <p-dropdown [options]="timeFieldOptions" [(ngModel)]="datatableOptions.time_field" (onChange)="onTimeFieldChange($event)"
+                    [showClear]="false"></p-dropdown>
+    </div>
+</div>
+<p-table [value]="sources" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
+             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
+             [responsive]="true" resizableColumns="true" selectionMode="single" (onRowSelect)="onRowSelect($event)"
+             [loading]="datatableLoading" [autoLayout]="true" [style]="{'min-height':'300px'}" #datatable>
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+                {{ col.header }}
+                <p-sortIcon [field]="col.field"></p-sortIcon>
+                <div *ngSwitchCase="'file_name'">
+                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                           (click)="onFilterClick($event)" class="column-filter">
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <div *ngSwitchCase="'data_started'">
+                    <span [pTooltip]="dataService.formatDate(rowData.data_started)">
+                        {{ dataService.formatDate(rowData.data_started, true) }}
+                    </span>
+                </div>
+                <div *ngSwitchCase="'data_ended'">
+                    <span [pTooltip]="dataService.formatDate(rowData.data_ended)">
+                        {{ dataService.formatDate(rowData.data_ended, true) }}
+                    </span>
+                </div>
+                <div *ngSwitchCase="'last_modified'">
+                    <span [pTooltip]="dataService.formatDate(rowData.last_modified)">
+                        {{ dataService.formatDate(rowData.last_modified, true) }}
+                    </span>
+                </div>
+                <div *ngSwitchDefault>
+                    {{ rowData[col.field] }}
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length" class="text-center">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
+             (onPageChange)="paginate($event)"></p-paginator>
