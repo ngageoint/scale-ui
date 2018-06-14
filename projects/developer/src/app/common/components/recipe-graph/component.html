@@ -50,7 +50,9 @@
     </div>
     <div class="ui-g-4 ui-lg-3 ui-g-nopad">
         <div class="job-type-interface" *ngIf="selectedJobType">
-            <h4 class="label label-primary">{{ selectedJobType.manifest.job.title }} v{{ selectedJobType.manifest.job.jobVersion }}</h4>
+            <h4 class="label label-primary">
+                {{ selectedJobType.manifest.job.title }} v{{ selectedJobType.manifest.job.jobVersion }}
+            </h4>
             <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
                         class="recipe-dependencies-container" emptyMessage="None">
                 <p-header>
@@ -59,8 +61,8 @@
                             <strong>Dependencies</strong>
                         </div>
                         <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency($event)" *ngIf="isEditing"
-                                    pTooltip="Add Dependency"></button>
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency($event)"
+                                    *ngIf="isEditing" pTooltip="Add Dependency"></button>
                         </div>
                     </div>
                 </p-header>
@@ -74,7 +76,7 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.manifest.input_data" [scrollable]="true" scrollHeight="300px"
+            <p-dataList [value]="selectedJobType.manifest.job.interface.inputs" [scrollable]="true" scrollHeight="300px"
                         class="recipe-io-container">
                 <p-header>
                     <div class="ui-g">
@@ -82,8 +84,8 @@
                             <strong>Inputs</strong>
                         </div>
                         <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addInput($event)" *ngIf="isEditing"
-                                    pTooltip="Add Input"></button>
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addInput($event)"
+                                    *ngIf="isEditing" pTooltip="Add Input"></button>
                         </div>
                     </div>
                 </p-header>
@@ -95,12 +97,13 @@
                                 <ul class="list-unstyled media-type-list">
                                     <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
                                 </ul>
-                                <div class="connections" *ngIf="input.dependencies">
+                                <div class="connections" *ngIf="input.dependencies && input.dependencies.length > 0">
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
                                         <li *ngFor="let dependency of input.dependencies">
-                                            <button pButton class="ui-button-danger" icon="fa-remove"
-                                                    (click)="removeInputConnection(dependency)" *ngIf="isEditing"></button>
+                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa-remove"
+                                                    (click)="removeInputConnection(dependency)" *ngIf="isEditing">
+                                            </button>
                                             <strong>{{ dependency.name }}</strong>.<em>{{ dependency.output }}</em>
                                         </li>
                                     </ul>
@@ -134,7 +137,8 @@
 </div>
 <p-overlayPanel appendTo="body" #dependencyPanel>
     <ul class="recipe__option-list">
-        <li *ngFor="let option of dependencyOptions" (click)="optionClick(option)" [class]="option.disabled ? 'disabled' : ''">
+        <li *ngFor="let option of dependencyOptions" (click)="optionClick(option)"
+            [class]="option.disabled ? 'disabled' : ''">
             <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
             {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
         </li>
@@ -142,9 +146,12 @@
 </p-overlayPanel>
 <p-overlayPanel appendTo="body" #ioPanel>
     <div *ngFor="let job of ioJobs">
-        <strong>{{ job.name }}</strong>
+        <strong>{{ job.title }}</strong>
         <ul class="recipe__option-list">
-            <li *ngFor="let option of job.options">{{ option }}</li>
+            <li *ngFor="let option of job.options" (click)="addInputConnection(job.name, job.version, option)"
+                [class]="option.disabled ? 'disabled' : ''">
+                {{ option.name }}
+            </li>
         </ul>
     </div>
 </p-overlayPanel>
