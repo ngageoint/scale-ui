@@ -59,7 +59,7 @@
                             <strong>Dependencies</strong>
                         </div>
                         <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency()" *ngIf="isEditing"
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency($event)" *ngIf="isEditing"
                                     pTooltip="Add Dependency"></button>
                         </div>
                     </div>
@@ -74,8 +74,19 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.manifest.input_data" [scrollable]="true" scrollHeight="300px">
-                <p-header><strong>Inputs</strong></p-header>
+            <p-dataList [value]="selectedJobType.manifest.input_data" [scrollable]="true" scrollHeight="300px"
+                        class="recipe-io-container">
+                <p-header>
+                    <div class="ui-g">
+                        <div class="ui-g-10 ui-g-nopad">
+                            <strong>Inputs</strong>
+                        </div>
+                        <div class="ui-g-2 ui-g-nopad text-right">
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addInput()" *ngIf="isEditing"
+                                    pTooltip="Add Input"></button>
+                        </div>
+                    </div>
+                </p-header>
                 <ng-template let-input pTemplate="item">
                     <div class="recipe-io">
                         <div class="ui-g">
@@ -121,6 +132,14 @@
         </div>
     </div>
 </div>
+<p-overlayPanel appendTo="body" #dependencies>
+    <ul>
+        <li *ngFor="let option of options">
+            <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
+            {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
+        </li>
+    </ul>
+</p-overlayPanel>
 <p-sidebar [(visible)]="sidebarDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
     <h2>{{ sidebarTitle }}</h2>
     <p-table [columns]="columns" [value]="options" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
@@ -137,8 +156,13 @@
             <tr [pSelectableRow]="rowData">
                 <td>
                     <div (click)="optionClick(rowData)">
-                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
-                        {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
+                        <div *ngIf="checkType(rowData) === 'object'">
+                            <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
+                            {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
+                        </div>
+                        <div *ngIf="checkType(rowData) === 'string'">
+                            {{ rowData }}
+                        </div>
                     </div>
                 </td>
             </tr>

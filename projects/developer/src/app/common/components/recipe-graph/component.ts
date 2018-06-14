@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
+import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
@@ -13,6 +13,7 @@ import { DataService } from '../../services/data.service';
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
+    @ViewChild('dependencies') dependencyPanel: any;
 
     columns: any[];
     sidebarDisplay: boolean;
@@ -170,6 +171,63 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
+    private getIoMappings() {
+        if (this.recipeData.definition) {
+            _.forEach(this.recipeData.definition.jobs, job => {
+                // populate the current jobType
+                /*var thisJobType = _.find($scope.recipeType.job_types,{id: job.job_type_id});
+                 job.job_type = thisJobType;*/
+
+                // find dependents
+                if (job.job_type && job.job_type.job_type_interface) {
+                    _.forEach(job.job_type.job_type_interface.output_data, jobOutput => {
+                        if (jobOutput) {
+                            jobOutput.dependents = this.getDependents(job.name, jobOutput.name);
+                        }
+                    });
+                    // add dependency mappings
+                    _.forEach(job.job_type.job_type_interface.input_data, jobInput => {
+                        if (jobInput) {
+                            const inputMappings = [];
+                            _.forEach(job.dependencies, dependency => {
+                                _.forEach(dependency.connections, conn => {
+                                    if (conn.input === jobInput.name) {
+                                        inputMappings.push({
+                                            name: dependency.name,
+                                            output: conn.output,
+                                            input: conn.input
+                                        });
+                                    }
+                                });
+                            });
+                            _.forEach(job.recipe_inputs, recipeInput => {
+                                if (recipeInput.job_input === jobInput.name) {
+                                    inputMappings.push({
+                                        name: 'recipe',
+                                        output: recipeInput.recipe_input,
+                                        input: recipeInput.job_input
+                                    });
+                                }
+                            });
+                            jobInput.dependencies = inputMappings;
+                        }
+                    });
+
+                }
+            });
+        }
+
+    }
+
+    private getCurrJob() {
+        return _.find(this.recipeData.definition.jobs, {
+            job_type: {
+                name: this.selectedNode.job_type.manifest.job.name,
+                version: this.selectedNode.job_type.manifest.job.jobVersion
+            }
+        });
+    }
+
     select(e) {
         if (this.selectedNode) {
             this.selectedNode.options.stroke = '';
@@ -199,7 +257,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         return `&#x${code};`;
     }
 
-    addDependency() {
+    checkType(data) {
+        return typeof data;
+    }
+
+    addDependency(event, target) {
         // only show job types present in recipe
         this.options = _.filter(this.recipeData.job_types, jobType => {
             return jobType.id !== this.selectedJobType.id;
@@ -208,14 +270,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.options = _.filter(this.options, option => {
             return !_.find(this.selectedNode.dependencies, { name: option.name });
         });
-        this.sidebarTitle = 'Add Dependency';
-        this.sidebarDisplay = true;
+        // this.sidebarTitle = 'Add Dependency';
+        // this.sidebarDisplay = true;
+        this.dependencyPanel.show(event);
     }
 
     removeDependency(dependency) {
-        const currJob = _.find(this.recipeData.definition.jobs, {
-            job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
-        }});
+        const currJob = this.getCurrJob();
         if (currJob) {
             _.remove(currJob.dependencies, dependency);
             this.updateRecipe();
@@ -224,10 +285,45 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
+    addInput() {
+        this.options = [];
+        console.log('inspect dependencies and display possible inputs');
+        const currJob = this.getCurrJob();
+        const inputOptions = _.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output');
+        _.forEach(inputOptions, opt => {
+            this.options.push(`${currJob.name}: ${opt}`);
+        });
+        this.sidebarTitle = 'Add Input';
+        this.sidebarDisplay = true;
+    }
+
+    // mapInput(providerName, providerOutput) {
+    //     console.log('map selected job input to ' + providerName + '.' + providerOutput);
+    //     var dependency = _.find(vm.selectedJob.dependencies, {name: providerName});
+    //
+    //     if (dependency && dependency.connections && dependency.connections.length > 0) {
+    //         var conn = _.find(dependency.connections, { output: providerOutput, input: vm.selectedJobInput.name });
+    //         if (!conn) {
+    //             dependency.connections.push({ output: providerOutput, input: vm.selectedJobInput.name });
+    //         }
+    //     }
+    //     else if (!dependency) {
+    //         dependency = {name: providerName, connections: [{ output: providerOutput, input: vm.selectedJobInput.name }]};
+    //         vm.selectedJob.dependencies.push(dependency);
+    //     }
+    //     else {
+    //         dependency.connections = [{ output: providerOutput, input: vm.selectedJobInput.name }];
+    //     }
+    //     vm.selectedJob.depStart = false;
+    //     vm.editMode = '';
+    //     vm.selectedJobInput = null;
+    //     vm.selectedInputProvider = null;
+    //     enableSaveRecipe();
+    //     vm.redraw();
+    // }
+
     removeInputConnection(conn) {
-        const currJob = _.find(this.recipeData.definition.jobs, {
-            job_type: { name: this.selectedNode.job_type.name, version: this.selectedNode.job_type.version
-        }});
+        const currJob = this.getCurrJob();
         if (currJob) {
             const currDependency = _.find(currJob.dependencies, { name: conn.name });
             const currConn = _.find(currDependency.connections, { output: conn.output });
@@ -241,12 +337,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     optionClick(option) {
-        const currJob = _.find(this.recipeData.definition.jobs, {
-            job_type: {
-                name: this.selectedNode.job_type.manifest.job.name,
-                version: this.selectedNode.job_type.manifest.job.jobVersion
-            }
-        });
+        const currJob = this.getCurrJob();
         if (currJob) {
             currJob.dependencies.push({
                 connections: [],
@@ -269,5 +360,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        // this.getIoMappings();
     }
 }
