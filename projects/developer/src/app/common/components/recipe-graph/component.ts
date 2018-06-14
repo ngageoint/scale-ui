@@ -13,12 +13,12 @@ import { DataService } from '../../services/data.service';
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
-    @ViewChild('dependencies') dependencyPanel: any;
+    @ViewChild('dependencyPanel') dependencyPanel: any;
+    @ViewChild('ioPanel') ioPanel: any;
 
     columns: any[];
-    sidebarDisplay: boolean;
-    sidebarTitle: string;
-    options: any;
+    dependencyOptions = [];
+    ioJobs = [];
     nodes = [];
     links = [];
     height: number;
@@ -261,17 +261,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         return typeof data;
     }
 
-    addDependency(event, target) {
+    addDependency(event) {
         // only show job types present in recipe
-        this.options = _.filter(this.recipeData.job_types, jobType => {
+        this.dependencyOptions = _.filter(this.recipeData.job_types, jobType => {
             return jobType.id !== this.selectedJobType.id;
         });
         // only show job types that are not yet dependencies
-        this.options = _.filter(this.options, option => {
-            return !_.find(this.selectedNode.dependencies, { name: option.name });
+        _.forEach(this.dependencyOptions, option => {
+            option.disabled = _.find(this.selectedNode.dependencies, { name: option.manifest.job.name });
         });
-        // this.sidebarTitle = 'Add Dependency';
-        // this.sidebarDisplay = true;
         this.dependencyPanel.show(event);
     }
 
@@ -285,16 +283,25 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
-    addInput() {
-        this.options = [];
-        console.log('inspect dependencies and display possible inputs');
+    addInput(event) {
+        // inspect dependencies and display possible inputs
+        this.ioJobs = [];
         const currJob = this.getCurrJob();
-        const inputOptions = _.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output');
-        _.forEach(inputOptions, opt => {
-            this.options.push(`${currJob.name}: ${opt}`);
+        _.forEach(currJob.dependencies, dep => {
+            const job = {
+                name: dep.name,
+                options: []
+            };
+            _.forEach(dep.connections, conn => {
+                job.options.push(conn.output);
+            });
+            this.ioJobs.push(job);
         });
-        this.sidebarTitle = 'Add Input';
-        this.sidebarDisplay = true;
+        // const inputOptions = _.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output');
+        // _.forEach(inputOptions, opt => {
+        //     this.options.push(`${currJob.name}: ${opt}`);
+        // });
+        this.ioPanel.show(event);
     }
 
     // mapInput(providerName, providerOutput) {
@@ -337,18 +344,21 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     optionClick(option) {
+        if (option.disabled) {
+            return;
+        }
         const currJob = this.getCurrJob();
         if (currJob) {
             currJob.dependencies.push({
                 connections: [],
                 name: option.manifest.job.name
             });
+            option.disabled = true;
             // manually call updateRecipe
             this.updateRecipe();
         } else {
             console.log('job not found');
         }
-        this.sidebarDisplay = false;
     }
 
     ngOnChanges(changes) {

@@ -13,6 +13,31 @@
     min-height: 70vh;
 }
 
+.recipe__option-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+        padding: 7px;
+        border-bottom: 1px solid #ccc;
+
+        &:hover {
+            cursor: pointer;
+            color: #48ACFF;
+        }
+
+        &.disabled {
+            cursor: default;
+            color: #ccc;
+        }
+
+        &:last-of-type {
+            border-bottom: none;
+        }
+    }
+}
+
 .chart-container {
     .node {
         .node__label {

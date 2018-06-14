@@ -82,7 +82,7 @@
                             <strong>Inputs</strong>
                         </div>
                         <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addInput()" *ngIf="isEditing"
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addInput($event)" *ngIf="isEditing"
                                     pTooltip="Add Input"></button>
                         </div>
                     </div>
@@ -132,40 +132,19 @@
         </div>
     </div>
 </div>
-<p-overlayPanel appendTo="body" #dependencies>
-    <ul>
-        <li *ngFor="let option of options">
+<p-overlayPanel appendTo="body" #dependencyPanel>
+    <ul class="recipe__option-list">
+        <li *ngFor="let option of dependencyOptions" (click)="optionClick(option)" [class]="option.disabled ? 'disabled' : ''">
             <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
             {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
         </li>
     </ul>
 </p-overlayPanel>
-<p-sidebar [(visible)]="sidebarDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
-    <h2>{{ sidebarTitle }}</h2>
-    <p-table [columns]="columns" [value]="options" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
-             [rowHover]="true" #datatable>
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns">
-                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                           class="column-filter">
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData">
-                <td>
-                    <div (click)="optionClick(rowData)">
-                        <div *ngIf="checkType(rowData) === 'object'">
-                            <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
-                            {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
-                        </div>
-                        <div *ngIf="checkType(rowData) === 'string'">
-                            {{ rowData }}
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-sidebar>
+<p-overlayPanel appendTo="body" #ioPanel>
+    <div *ngFor="let job of ioJobs">
+        <strong>{{ job.name }}</strong>
+        <ul class="recipe__option-list">
+            <li *ngFor="let option of job.options">{{ option }}</li>
+        </ul>
+    </div>
+</p-overlayPanel>
