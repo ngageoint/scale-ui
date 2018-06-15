@@ -113,20 +113,36 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.manifest.output_data" [scrollable]="true" scrollHeight="300px">
-                <p-header><strong>Outputs</strong></p-header>
+            <p-dataList [value]="selectedJobType.manifest.job.interface.outputs" [scrollable]="true"
+                        scrollHeight="300px" class="recipe-io-container">
+                <p-header>
+                    <div class="ui-g">
+                        <div class="ui-g-10 ui-g-nopad">
+                            <strong>Outputs</strong>
+                        </div>
+                        <div class="ui-g-2 ui-g-nopad text-right">
+                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addOutput($event)"
+                                    *ngIf="isEditing" pTooltip="Add Output"></button>
+                        </div>
+                    </div>
+                </p-header>
                 <ng-template let-output pTemplate="item">
-                    <div class="ui-g recipe-io">
-                        <div class="ui-g-12">
-                            {{ output.name }} <span *ngIf="output.required">*</span>
-                            <div class="media-type-list">{{ output.media_type }}</div>
-                            <div class="connections" *ngIf="output.dependents">
-                                <h5>Connections</h5>
-                                <ul class="list-unstyled">
-                                    <li *ngFor="let dependent of output.dependents">
-                                        <strong>{{ dependent.name }}</strong>.<em>{{ dependent.input }}</em>
-                                    </li>
-                                </ul>
+                    <div class="recipe-io">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                {{ output.name }} <span *ngIf="output.required">*</span>
+                                <div class="media-type-list">{{ output.media_type }}</div>
+                                <div class="connections" *ngIf="output.dependents && output.dependents.length > 0">
+                                    <h5>Connections</h5>
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let dependent of output.dependents">
+                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa-remove"
+                                                    (click)="removeOutputConnection(dependent)" *ngIf="isEditing">
+                                            </button>
+                                            <strong>{{ dependent.name }}</strong>.<em>{{ dependent.input }}</em>
+                                        </li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -144,11 +160,22 @@
         </li>
     </ul>
 </p-overlayPanel>
-<p-overlayPanel appendTo="body" #ioPanel>
-    <div *ngFor="let job of ioJobs">
+<p-overlayPanel appendTo="body" #inputPanel>
+    <div *ngFor="let job of inputJobs">
         <strong>{{ job.title }}</strong>
         <ul class="recipe__option-list">
             <li *ngFor="let option of job.options" (click)="addInputConnection(job.name, job.version, option)"
+                [class]="option.disabled ? 'disabled' : ''">
+                {{ option.name }}
+            </li>
+        </ul>
+    </div>
+</p-overlayPanel>
+<p-overlayPanel appendTo="body" #outputPanel>
+    <div *ngFor="let job of outputJobs">
+        <strong>{{ job.title }}</strong>
+        <ul class="recipe__option-list">
+            <li *ngFor="let option of job.options" (click)="addOutputConnection(job.name, job.version, option)"
                 [class]="option.disabled ? 'disabled' : ''">
                 {{ option.name }}
             </li>

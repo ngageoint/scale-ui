@@ -13,11 +13,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
     @ViewChild('dependencyPanel') dependencyPanel: any;
-    @ViewChild('ioPanel') ioPanel: any;
+    @ViewChild('inputPanel') inputPanel: any;
+    @ViewChild('outputPanel') outputPanel: any;
 
     columns: any[];
     dependencyOptions = [];
-    ioJobs = [];
+    inputJobs = [];
+    outputJobs = [];
     nodes = [];
     links = [];
     height: number;
@@ -239,7 +241,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     addInput(event) {
         // inspect dependencies and display possible inputs
-        this.ioJobs = [];
+        this.inputJobs = [];
         const currJob = this.getCurrJob();
         _.forEach(currJob.dependencies, dep => {
             const jobType = _.find(this.recipeData.job_types, {
@@ -260,9 +262,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 output.disabled = _.includes(_.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output'), output.name);
                 job.options.push(output);
             });
-            this.ioJobs.push(job);
+            this.inputJobs.push(job);
         });
-        this.ioPanel.show(event);
+        this.inputPanel.show(event);
     }
 
     addInputConnection(providerName, providerVersion, providerOutput) {
@@ -312,6 +314,72 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (currJob) {
             const currDependency = _.find(currJob.dependencies, { name: conn.name });
             const currConn = _.find(currDependency.connections, { output: conn.output });
+            _.remove(currDependency.connections, currConn);
+            this.getIoMappings();
+        } else {
+            console.log('job not found');
+        }
+    }
+
+    addOutput(event) {
+        // inspect dependents and display possible outputs
+        this.outputJobs = [];
+        const currJob = this.getCurrJob();
+        const dependentJobs = _.filter(this.recipeData.definition.jobs, job => {
+            return _.find(job.dependencies, { name: currJob.job_type.name });
+        });
+        _.forEach(dependentJobs, dep => {
+            const jobType = _.find(this.recipeData.job_types, {
+                manifest: {
+                    job: {
+                        name: dep.name
+                    }
+                }
+            });
+            const job = {
+                title: jobType.manifest.job.title,
+                name: jobType.manifest.job.name,
+                version: jobType.manifest.job.jobVersion,
+                options: []
+            };
+            _.forEach(jobType.manifest.job.interface.inputs, input => {
+                // disable the input if it currently exists as a connection
+                const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs, 'dependents');
+                input.disabled = _.includes(_.map(_.flatten(currDeps), 'name'), job.name) &&
+                    _.includes(_.map(_.flatten(_.map(dep.dependencies, 'connections')), 'input'), input.name);
+                job.options.push(input);
+            });
+            this.outputJobs.push(job);
+        });
+        this.outputPanel.show(event);
+    }
+
+    addOutputConnection(receiverName, receiverInput) {
+        const currJob = this.getCurrJob();
+        const dependentJob = _.find(this.recipeData.definition.jobs, { job_type: { name: receiverName } } );
+        const dependency = _.find(dependentJob.dependencies, {name: currJob.name});
+        console.log(dependency);
+
+        // if (dependency && dependency.connections && dependency.connections.length > 0) {
+        //     const conn = _.find(dependency.connections, { output: currJob.name, input: receiverInput });
+        //     if (!conn) {
+        //         dependency.connections.push({output: vm.selectedJobOutput.name, input: receiverInput});
+        //     }
+        // } else if (!dependency) {
+        //     dependency = {name: vm.selectedJob.name, connections: [{output: vm.selectedJobOutput.name, input: receiverInput}]};
+        //     vm.selectedOutputReceiver.dependencies.push(dependency);
+        // } else {
+        //     dependency.connections = [{output: vm.selectedJobOutput.name, input: receiverInput}];
+        // }
+        // this.getIoMappings();
+    }
+
+    removeOutputConnection(conn) {
+        const currJob = this.getCurrJob();
+        const dependentJob = _.find(this.recipeData.definition.jobs, { name: conn.name });
+        if (dependentJob) {
+            const currDependency = _.find(dependentJob.dependencies, { name: currJob.name });
+            const currConn = _.find(currDependency.connections, { input: conn.input });
             _.remove(currDependency.connections, currConn);
             this.getIoMappings();
         } else {

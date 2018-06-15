@@ -273,7 +273,7 @@
                     "interface": {
                         "command": "./export_shapefile.sh",
                         "inputs": [{
-                            "media_types": ["application/octet-stream"],
+                            "media_types": ["image/nitf", "image/tiff"],
                             "required": true,
                             "type": "file",
                             "name": "infile"
