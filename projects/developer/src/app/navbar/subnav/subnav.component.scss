@@ -3,7 +3,7 @@
 @import '../../../defaults/colors';
 
 
-$subnav-height: 250px;
+$subnav-height: 47px;
 
 .blue-subnav {
     background: $clr-scale-blue2;
@@ -36,7 +36,32 @@ $subnav-height: 250px;
     display: flex;
     height: $subnav-height;
     min-height: $subnav-height;
-    padding: 2.0em 1.5em;
+    //padding: 2.0em 1.5em;
+
+    ul {
+        list-style-type: none;
+        margin: 14px 0 0 0;
+        padding: 0;
+
+        li {
+            display: inline-block;
+            margin: 0 30px 0 0;
+
+            a {
+                padding: 8px 10px;
+                text-decoration: none;
+                color: #fff;
+
+                &:hover {
+                    color: #000;
+                }
+
+                i {
+                    margin-right: 5px;
+                }
+            }
+        }
+    }
 
     .subnav__header {
         position: relative;
@@ -82,6 +107,24 @@ $subnav-height: 250px;
         display: inline-block;
         margin-bottom: 0.35em;
         padding: 0.5em;
+    }
+}
+
+.processing {
+    ul {
+        margin-left: $navbar-item-width + 10px;
+    }
+}
+
+.data {
+    ul {
+        margin-left: ($navbar-item-width * 2) + 78px;
+    }
+}
+
+.configuration {
+    ul {
+        margin-left: ($navbar-item-width * 3) + 82px;
     }
 }
 
