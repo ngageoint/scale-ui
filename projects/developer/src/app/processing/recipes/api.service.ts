@@ -46,7 +46,7 @@ export class RecipesApiService {
             const mapRequest = response => {
                 return ApiResults.transformer(response);
             };
-            return this.dataService.generatePoll(5000, request, mapRequest);
+            return this.dataService.generatePoll(500000, request, mapRequest);
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
             .pipe(
@@ -63,7 +63,7 @@ export class RecipesApiService {
             const mapRequest = response => {
                 return Recipe.transformer(response);
             };
-            return this.dataService.generatePoll(5000, request, mapRequest);
+            return this.dataService.generatePoll(500000, request, mapRequest);
         }
         return this.http.get<Recipe>(`${this.apiPrefix}/recipes/${id}/`)
             .pipe(

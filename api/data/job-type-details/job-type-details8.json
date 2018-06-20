@@ -21,8 +21,18 @@
             "timeout": 0,
             "interface": {
                 "command": "./ls8_ortho.py",
-                "inputs": {},
-                "outputs": {},
+                "inputs": [{
+                    "media_types": ["image/nitf"],
+                    "required": true,
+                    "type": "image",
+                    "name": "infile"
+                }],
+                "outputs": [{
+                    "media_type": "image/tiff",
+                    "required": true,
+                    "type": "file",
+                    "name": "ls8-corrected"
+                }],
                 "settings": []
             }
         },
