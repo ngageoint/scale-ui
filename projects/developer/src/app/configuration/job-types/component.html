@@ -1,9 +1,11 @@
-<div class="job-type__details">
+<div class="job-type__header">
     <h2>Job Types</h2>
     <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
-                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)" placeholder="Select..."
-                [showClear]="false"></p-dropdown>
-    <hr />
+                class="job-type__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
+                (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
+</div>
+<hr />
+<div class="job-type__details">
     <div class="text-center" *ngIf="!selectedJobTypeDetail">
         <h3>Select a job type to view its details</h3>
     </div>

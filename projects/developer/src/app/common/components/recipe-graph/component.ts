@@ -217,7 +217,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         return `&#x${code};`;
     }
 
-    addDependency(event) {
+    showDependencyOptions(event) {
         // only show job types present in recipe
         this.dependencyOptions = _.filter(this.recipeData.job_types, jobType => {
             return jobType.id !== this.selectedJobType.id;
@@ -227,6 +227,24 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             option.disabled = _.find(this.selectedNode.dependencies, { name: option.manifest.job.name });
         });
         this.dependencyPanel.show(event);
+    }
+
+    addDependency(dependency) {
+        if (dependency.disabled) {
+            return;
+        }
+        const currJob = this.getCurrJob();
+        if (currJob) {
+            currJob.dependencies.push({
+                connections: [],
+                name: dependency.manifest.job.name
+            });
+            dependency.disabled = true;
+            // manually call updateRecipe
+            this.updateRecipe();
+        } else {
+            console.log('job not found');
+        }
     }
 
     removeDependency(dependency) {
@@ -239,8 +257,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
-    addInput(event) {
-        // inspect dependencies and display possible inputs
+    showInputConnections(event, input) {
+        // inspect dependencies and display possible connections
         this.inputJobs = [];
         const currJob = this.getCurrJob();
         _.forEach(currJob.dependencies, dep => {
@@ -258,11 +276,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 options: []
             };
             _.forEach(jobType.manifest.job.interface.outputs, output => {
-                // disable the output if it currently exists as a connection
-                output.disabled = _.includes(_.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output'), output.name);
-                job.options.push(output);
+                // only show the option if the output media type is contained in the input media types
+                if (_.includes(input.media_types, output.media_type)) {
+                    // disable the output if it currently exists as a connection
+                    output.disabled = _.includes(_.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output'), output.name);
+                    job.options.push(output);
+                }
             });
-            this.inputJobs.push(job);
+            if (job.options.length > 0) {
+                this.inputJobs.push(job);
+            }
         });
         this.inputPanel.show(event);
     }
@@ -293,13 +316,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                         output: providerOutput.name
                     };
                     const currDependency = _.find(currJob.dependencies, { name: providerName });
-                    currDependency.connections.push(conn);
+                    if (currDependency) {
+                        currDependency.connections.push(conn);
 
-                    // set output as disabled to prevent duplicate mappings
-                    providerOutput.disabled = true;
-                    this.getIoMappings();
+                        // set output as disabled to prevent duplicate mappings
+                        providerOutput.disabled = true;
+                        this.getIoMappings();
+                    }
                 } else {
-                    console.log('no matching input found');
+                    console.log('compatible media type not found');
                 }
             } else {
                 console.log('job type not found');
@@ -321,8 +346,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
-    addOutput(event) {
-        // inspect dependents and display possible outputs
+    showOutputConnections(event, output) {
+        // inspect dependents and display possible connections
         this.outputJobs = [];
         const currJob = this.getCurrJob();
         const dependentJobs = _.filter(this.recipeData.definition.jobs, job => {
@@ -343,35 +368,68 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 options: []
             };
             _.forEach(jobType.manifest.job.interface.inputs, input => {
-                // disable the input if it currently exists as a connection
-                const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs, 'dependents');
-                input.disabled = _.includes(_.map(_.flatten(currDeps), 'name'), job.name) &&
-                    _.includes(_.map(_.flatten(_.map(dep.dependencies, 'connections')), 'input'), input.name);
-                job.options.push(input);
+                // only show the option if the output media type is contained in the input media types
+                if (_.includes(input.media_types, output.media_type)) {
+                    // disable the input if it currently exists as a connection
+                    const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs, 'dependents');
+                    input.disabled = _.includes(_.map(_.flatten(currDeps), 'name'), job.name) &&
+                        _.includes(_.map(_.flatten(_.map(dep.dependencies, 'connections')), 'input'), input.name);
+                    job.options.push(input);
+                }
             });
-            this.outputJobs.push(job);
+            if (job.options.length > 0) {
+                this.outputJobs.push(job);
+            }
         });
         this.outputPanel.show(event);
     }
 
-    addOutputConnection(receiverName, receiverInput) {
+    addOutputConnection(providerName, providerVersion, providerOutput) {
+        if (providerOutput.disabled) {
+            return;
+        }
         const currJob = this.getCurrJob();
-        const dependentJob = _.find(this.recipeData.definition.jobs, { job_type: { name: receiverName } } );
-        const dependency = _.find(dependentJob.dependencies, {name: currJob.name});
-        console.log(dependency);
+        if (currJob) {
+            const currJobType = _.find(this.recipeData.job_types, {
+                manifest: {
+                    job: {
+                        name: currJob.job_type.name,
+                        jobVersion: currJob.job_type.version
+                    }
+                }
+            });
+            const dependentJob = _.find(this.recipeData.definition.jobs, {
+                job_type: {
+                    name: providerName,
+                    version: providerVersion
+                }
+            });
+            if (dependentJob) {
+                const currOutput = _.find(currJobType.manifest.job.interface.outputs, output => {
+                    return _.includes(providerOutput.media_types, output.media_type);
+                });
+                if (currOutput) {
+                    const conn = {
+                        input: providerOutput.name,
+                        output: currOutput.name
+                    };
+                    const currDependent = _.find(dependentJob.dependencies, { name: currJob.name });
+                    if (currDependent) {
+                        currDependent.connections.push(conn);
 
-        // if (dependency && dependency.connections && dependency.connections.length > 0) {
-        //     const conn = _.find(dependency.connections, { output: currJob.name, input: receiverInput });
-        //     if (!conn) {
-        //         dependency.connections.push({output: vm.selectedJobOutput.name, input: receiverInput});
-        //     }
-        // } else if (!dependency) {
-        //     dependency = {name: vm.selectedJob.name, connections: [{output: vm.selectedJobOutput.name, input: receiverInput}]};
-        //     vm.selectedOutputReceiver.dependencies.push(dependency);
-        // } else {
-        //     dependency.connections = [{output: vm.selectedJobOutput.name, input: receiverInput}];
-        // }
-        // this.getIoMappings();
+                        // set output as disabled to prevent duplicate mappings
+                        providerOutput.disabled = true;
+                        this.getIoMappings();
+                    }
+                } else {
+                    console.log('compatible media type not found');
+                }
+            } else {
+                console.log('dependent job not found');
+            }
+        } else {
+            console.log('job not found');
+        }
     }
 
     removeOutputConnection(conn) {
@@ -382,24 +440,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             const currConn = _.find(currDependency.connections, { input: conn.input });
             _.remove(currDependency.connections, currConn);
             this.getIoMappings();
-        } else {
-            console.log('job not found');
-        }
-    }
-
-    optionClick(option) {
-        if (option.disabled) {
-            return;
-        }
-        const currJob = this.getCurrJob();
-        if (currJob) {
-            currJob.dependencies.push({
-                connections: [],
-                name: option.manifest.job.name
-            });
-            option.disabled = true;
-            // manually call updateRecipe
-            this.updateRecipe();
         } else {
             console.log('job not found');
         }

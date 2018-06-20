@@ -1,5 +1,27 @@
 @import '../../../defaults/colors';
 
+.job-type__header {
+    display: flex;
+    align-items: flex-end;
+
+    .job-type__options {
+        margin: 0 10px;
+
+        ::ng-deep .ui-dropdown {
+            width: 300px;
+            min-height: 36px;
+
+            .ui-dropdown-label {
+                padding-top: 0.5em;
+            }
+
+            .ui-dropdown-trigger {
+                padding: 0.25em;
+            }
+        }
+    }
+}
+
 .job-type__details {
     h2 {
         display: inline-block;

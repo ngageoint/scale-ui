@@ -1,7 +1,8 @@
 <div class="recipe-type__header">
     <h2>Recipe Types</h2>
     <p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
-                class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
+                class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."
+                [showClear]="false"></p-dropdown>
     <button pButton class="btn__new-recipe" icon="fa-plus-circle" label="New Recipe" (click)="createNewRecipe()"
             [disabled]="recipeTypeId === 0"></button>
 </div>

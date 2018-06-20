@@ -61,8 +61,9 @@
                             <strong>Dependencies</strong>
                         </div>
                         <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addDependency($event)"
-                                    *ngIf="isEditing" pTooltip="Add Dependency"></button>
+                            <button pButton class="ui-button-info" icon="fa-plus"
+                                    (click)="showDependencyOptions($event)" *ngIf="isEditing"
+                                    pTooltip="Add Dependency"></button>
                         </div>
                     </div>
                 </p-header>
@@ -79,20 +80,12 @@
             <p-dataList [value]="selectedJobType.manifest.job.interface.inputs" [scrollable]="true" scrollHeight="300px"
                         class="recipe-io-container">
                 <p-header>
-                    <div class="ui-g">
-                        <div class="ui-g-10 ui-g-nopad">
-                            <strong>Inputs</strong>
-                        </div>
-                        <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addInput($event)"
-                                    *ngIf="isEditing" pTooltip="Add Input"></button>
-                        </div>
-                    </div>
+                    <strong>Inputs</strong>
                 </p-header>
                 <ng-template let-input pTemplate="item">
                     <div class="recipe-io">
                         <div class="ui-g">
-                            <div class="ui-g-12">
+                            <div class="ui-g-10">
                                 {{ input.name }} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
                                     <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
@@ -109,6 +102,11 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="ui-g-2 ui-g-nopad text-right">
+                                <button pButton class="ui-button-info margin-top-md" icon="fa-plus"
+                                        (click)="showInputConnections($event, input)" *ngIf="isEditing"
+                                        pTooltip="Add Input Connection"></button>
+                            </div>
                         </div>
                     </div>
                 </ng-template>
@@ -116,20 +114,12 @@
             <p-dataList [value]="selectedJobType.manifest.job.interface.outputs" [scrollable]="true"
                         scrollHeight="300px" class="recipe-io-container">
                 <p-header>
-                    <div class="ui-g">
-                        <div class="ui-g-10 ui-g-nopad">
-                            <strong>Outputs</strong>
-                        </div>
-                        <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus" (click)="addOutput($event)"
-                                    *ngIf="isEditing" pTooltip="Add Output"></button>
-                        </div>
-                    </div>
+                    <strong>Outputs</strong>
                 </p-header>
                 <ng-template let-output pTemplate="item">
                     <div class="recipe-io">
                         <div class="ui-g">
-                            <div class="ui-g-12">
+                            <div class="ui-g-10">
                                 {{ output.name }} <span *ngIf="output.required">*</span>
                                 <div class="media-type-list">{{ output.media_type }}</div>
                                 <div class="connections" *ngIf="output.dependents && output.dependents.length > 0">
@@ -144,6 +134,12 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="ui-g-2 ui-g-nopad text-right">
+                                <button pButton class="ui-button-info margin-top-md" icon="fa-plus"
+                                        (click)="showOutputConnections($event, output)" *ngIf="isEditing"
+                                        pTooltip="Add Output Connection">
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </ng-template>
@@ -153,7 +149,7 @@
 </div>
 <p-overlayPanel appendTo="body" #dependencyPanel>
     <ul class="recipe__option-list">
-        <li *ngFor="let option of dependencyOptions" (click)="optionClick(option)"
+        <li *ngFor="let option of dependencyOptions" (click)="addDependency(option)"
             [class]="option.disabled ? 'disabled' : ''">
             <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
             {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
@@ -161,6 +157,9 @@
     </ul>
 </p-overlayPanel>
 <p-overlayPanel appendTo="body" #inputPanel>
+    <div *ngIf="inputJobs.length === 0">
+        <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
+    </div>
     <div *ngFor="let job of inputJobs">
         <strong>{{ job.title }}</strong>
         <ul class="recipe__option-list">
@@ -172,6 +171,9 @@
     </div>
 </p-overlayPanel>
 <p-overlayPanel appendTo="body" #outputPanel>
+    <div *ngIf="outputJobs.length === 0">
+        <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
+    </div>
     <div *ngFor="let job of outputJobs">
         <strong>{{ job.title }}</strong>
         <ul class="recipe__option-list">
