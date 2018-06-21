@@ -26,6 +26,7 @@ var status = require('./handlers/status');
 var jobInputs = require('./handlers/jobInputs');
 var products = require('./handlers/products');
 var jobExecutions = require('./handlers/jobExecutions');
+var batches = require('./handlers/batches');
 
 var apiVersion = 'v6';
 
@@ -209,6 +210,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/jobs/{id}/executions/',
             handler: jobExecutions
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/batches/',
+            handler: batches
         });
     }
 };

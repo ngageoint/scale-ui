@@ -14,6 +14,7 @@ import { SourceDetailsComponent } from './data/sources/details.component';
 import { FailureRatesComponent } from './processing/failure-rates/component';
 import { MetricsComponent } from './data/metrics/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
+import { BatchesComponent } from './processing/batches/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -22,6 +23,7 @@ const routes: Routes = [
     { path: 'processing/jobs/:id', component: JobDetailsComponent },
     { path: 'processing/running-jobs', component: RunningJobsComponent },
     { path: 'processing/failure-rates', component: FailureRatesComponent },
+    { path: 'processing/batches', component: BatchesComponent },
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:id', component: JobTypesComponent },
     { path: 'configuration/job-types/edit/:id', component: JobTypesCreateComponent },

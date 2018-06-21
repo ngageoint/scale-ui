@@ -76,6 +76,9 @@ import { LoadingIndicatorComponent } from './common/components/loading-indicator
 import { StatusApiService } from './navbar/status/api.service';
 import { ProductsApiService } from './common/components/products/api.service';
 import { ScansApiService } from './common/components/scans/api.service';
+import { BatchesComponent } from './processing/batches/component';
+import { BatchesApiService } from './processing/batches/api.service';
+import { BatchesDatatableService } from './processing/batches/datatable.service';
 
 
 @NgModule({
@@ -109,7 +112,8 @@ import { ScansApiService } from './common/components/scans/api.service';
         JobActivityComponent,
         DataFeedComponent,
         IngestComponent,
-        LoadingIndicatorComponent
+        LoadingIndicatorComponent,
+        BatchesComponent
     ],
     imports: [
         AppRoutingModule,
@@ -184,7 +188,9 @@ import { ScansApiService } from './common/components/scans/api.service';
         StatusApiService,
         ConfirmationService,
         ProductsApiService,
-        ScansApiService
+        ScansApiService,
+        BatchesApiService,
+        BatchesDatatableService
     ],
     bootstrap: [AppComponent]
 })
