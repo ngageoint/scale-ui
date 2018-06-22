@@ -79,6 +79,7 @@ import { ScansApiService } from './common/components/scans/api.service';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchesApiService } from './processing/batches/api.service';
 import { BatchesDatatableService } from './processing/batches/datatable.service';
+import { BatchesCreateComponent } from './processing/batches/create.component';
 
 
 @NgModule({
@@ -113,7 +114,8 @@ import { BatchesDatatableService } from './processing/batches/datatable.service'
         DataFeedComponent,
         IngestComponent,
         LoadingIndicatorComponent,
-        BatchesComponent
+        BatchesComponent,
+        BatchesCreateComponent
     ],
     imports: [
         AppRoutingModule,

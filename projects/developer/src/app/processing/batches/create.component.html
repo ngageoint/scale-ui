@@ -1,0 +1,93 @@
+<h2><i class="fa fa-files-o"></i> {{ batch.title }}</h2>
+<form [formGroup]="createForm" (ngSubmit)="createForm.value">
+    <p-messages [(value)]="msgs"></p-messages>
+    <div class="ui-g">
+        <div class="ui-g-6">
+            <label for="title">Title *:</label>
+            <input pInputText id="title" formControlName="title" placeholder="Required" [(ngModel)]="batch.title"/>
+            <div class="ui-message ui-messages-error ui-corner-all"
+                 *ngIf="!createForm.controls['title'].valid && createForm.controls['title'].dirty">
+                Title is required
+            </div>
+        </div>
+        <div class="ui-g-6">
+            <label for="recipeType">Recipe Type *:</label>
+            <p-dropdown id="recipeType" [options]="recipeTypeOptions" [(ngModel)]="batch.recipe_type"
+                        formControlName="recipeType" placeholder="Select..." autoWidth="false"
+                        [style]="{'width': '25%'}">
+                <ng-template let-recipeType p-template="item">
+                    {{ recipeType.title }} v{{ recipeType.version }}
+                </ng-template>
+            </p-dropdown>
+            <div class="ui-message ui-messages-error ui-corner-all"
+                 *ngIf="!createForm.controls['recipeType'].valid && createForm.controls['recipeType'].dirty">
+                Recipe Type is Required
+            </div>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <label for="description">Description:</label>
+            <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
+                      [(ngModel)]="batch.description"></textarea>
+        </div>
+    </div>
+    <p-panel header="Definition">
+        <div class="ui-g">
+            <div class="ui-g-6">
+                <label for="dateRangeType">Date Range Type</label>
+                <select id="dateRangeType" name="bDateRangeType" ngModel="batch.definition.date_range.type">
+                    <option value="created">Created</option>
+                    <option value="data">Data</option>
+                </select>
+                <p>"Created" matches recipes based on the timestamp of when they were originally created; "Data" matches recipes based on the timestamp of when its input files were collected.</p>
+                <label for="dateRangeStarted">Date Range Started</label>
+                <div class="ui-g">
+                    <div class="ui-g-6">
+                        <utc-datepicker id="dateRangeStarted" [date]="ended" [button]="true" (dateChange)="onDateRangeStartSelect($event)"></utc-datepicker>
+                    </div>
+                    <div class="ui-g-6">
+                        <div class="timepicker">
+                            <input type="tel" ngModel="startTime.hour" (change)="changeTime('startTime', 'hour')" (keypress)="keypress($event, 'hour', 'startTime')" [disabled]="!batch.definition.date_range.started" />
+                            <span>:</span>
+                            <input type="tel" ngModel="startTime.minute" (change)="changeTime('startTime', 'minute')" (keypress)="keypress($event, 'minute', 'startTime')" [disabled]="!batch.definition.date_range.started" />
+                            <span>:</span>
+                            <input type="tel" ngModel="startTime.second" (change)="changeTime('startTime', 'second')" (keypress)="keypress($event, 'second', 'startTime')" [disabled]="!batch.definition.date_range.started" />
+                        </div>
+                    </div>
+                </div>
+                <label for="dateRangeStarted">Date Range Ended</label>
+                <div class="ui-g">
+                    <div class="ui-g-6">
+                        <utc-datepicker id="dateRangeEnded" [date]="ended" [button]="true" (dateChange)="onDateRangeEndSelect($event)"></utc-datepicker>
+                    </div>
+                    <div class="ui-g-6">
+                        <div class="timepicker">
+                            <input type="tel" ngModel="endTime.hour" (change)="changeTime('endTime', 'hour')" (keypress)="keypress($event, 'hour', 'endTime')" [disabled]="!batch.definition.date_range.ended" />
+                            <span>:</span>
+                            <input type="tel" ngModel="endTime.minute" (change)="changeTime('endTime', 'minute')" (keypress)="keypress($event, 'minute', 'endTime')" [disabled]="!batch.definition.date_range.ended" />
+                            <span>:</span>
+                            <input type="tel" ngModel="endTime.second" (change)="changeTime('endTime', 'second')" (keypress)="keypress($event, 'second', 'endTime')" [disabled]="!batch.definition.date_range.ended" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g-6">
+                <div *ngIf="!batch.recipe_type">
+                    <label for="jobNames">Job Names</label><br />
+                    <p>Choose a recipe type in order to see relevant job names.</p>
+                </div>
+                <div *ngIf="batch.recipe_type">
+                    <label for="jobNames">Job Names</label><br />
+                    <p-multiSelect id="jobNames" [options]="jobTypes" [(ngModel)]="batch.definition.job_names" [style]="{'width':'100%'}"></p-multiSelect>
+                    <p>Additional jobs that did not have a revision change.</p>
+                </div>
+                <p-checkbox id="allJobs" [(ngModel)]="batch.definition.all_jobs" label="All Jobs"></p-checkbox>
+                <p>Re-process every job. This overrides the values included in "Job Names".</p>
+                <label for="priority">Priority</label>
+                <input id="priority" name="bPriority" type="number" [(ngModel)]="batch.definition.priority" placeholder="Priority">
+                <p>Indicates every job in the recipe should be queued with an override priority instead of the default priority defined by the job type.</p>
+            </div>
+        </div>
+    </p-panel>
+</form>

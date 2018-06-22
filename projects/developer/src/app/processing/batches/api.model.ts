@@ -30,6 +30,7 @@ export class Batch {
                 data.last_modified
             );
         }
+        return new Batch();
     }
     public static transformer(data) {
         if (data) {
@@ -38,30 +39,34 @@ export class Batch {
             }
             return Batch.build(data);
         }
-        return null;
+        return Batch.build({ title: 'Untitled Batch' });
     }
 
     constructor(
-        public id: number,
-        public title: string,
-        public description: string,
-        public status: any,
-        public recipe_type: any,
-        public event: any,
-        public creator_job: any,
-        public definition: any,
-        public created_count: number,
-        public failed_count: number,
-        public total_count: number,
-        public created: string,
-        public last_modified: string
+        public id?: number,
+        public title?: string,
+        public description?: string,
+        public status?: any,
+        public recipe_type?: any,
+        public event?: any,
+        public creator_job?: any,
+        public definition?: any,
+        public created_count?: number,
+        public failed_count?: number,
+        public total_count?: number,
+        public created?: string,
+        public last_modified?: string
     ) {
         this.dataService = new DataService();
-        this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
-        this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
-        this.createdTooltip = this.dataService.formatDate(this.created);
-        this.createdDisplay = this.dataService.formatDate(this.created, true);
-        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
-        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
+        if (this.created) {
+            this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
+            this.createdTooltip = this.dataService.formatDate(this.created);
+            this.createdDisplay = this.dataService.formatDate(this.created, true);
+        }
+        if (this.last_modified) {
+            this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
+            this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+            this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
+        }
     }
 }

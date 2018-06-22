@@ -180,7 +180,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     createBatch() {
-        // navigate to batch creation view
+        this.router.navigate(['/processing/batches/create']);
     }
     ngOnInit() {
         this.datatableLoading = true;
