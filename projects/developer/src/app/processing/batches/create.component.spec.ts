@@ -3,14 +3,13 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { FormBuilder } from '@angular/forms';
 
 import { DataService } from '../../common/services/data.service';
 import { BatchesApiService } from './api.service';
 import { BatchesCreateComponent } from './create.component';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
-describe('BatchesComponent', () => {
+describe('BatchesCreateComponent', () => {
     let component: BatchesCreateComponent;
     let fixture: ComponentFixture<BatchesCreateComponent>;
 
@@ -19,7 +18,7 @@ describe('BatchesComponent', () => {
             declarations: [BatchesCreateComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                DataService, BatchesApiService, MessageService, RecipeTypesApiService, FormBuilder,
+                DataService, BatchesApiService, MessageService, RecipeTypesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

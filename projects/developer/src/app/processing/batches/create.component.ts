@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Validators, FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import { Validators, FormControl, FormGroup } from '@angular/forms';
 import { Message, MenuItem, SelectItem } from 'primeng/api';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 
 import { Batch } from './api.model';
 import { BatchesApiService } from './api.service';
@@ -16,8 +17,10 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 })
 export class BatchesCreateComponent implements OnInit {
     batch: Batch;
-    recipeTypes: any;
-    createForm: FormGroup;
+    recipeTypeOptions: SelectItem[] = [];
+    jobOptions: SelectItem[] = [];
+    dateRangeStarted: any;
+    dateRangeEnded: any;
     msgs: Message[] = [];
     startTime = {
         hour: null,
@@ -29,31 +32,44 @@ export class BatchesCreateComponent implements OnInit {
         minute: null,
         second: null
     };
+    createForm = new FormGroup({
+        'title': new FormControl('', Validators.required),
+        'recipeType': new FormControl('', Validators.required),
+        'description': new FormControl(),
+        'dateRangeType': new FormControl(),
+        'startHour': new FormControl({value: '', disabled: true}),
+        'startMinute': new FormControl({value: '', disabled: true}),
+        'startSecond': new FormControl({value: '', disabled: true}),
+        'endHour': new FormControl({value: '', disabled: true}),
+        'endMinute': new FormControl({value: '', disabled: true}),
+        'endSecond': new FormControl({value: '', disabled: true}),
+        'jobNames': new FormControl(),
+        'allJobs': new FormControl(),
+        'priority': new FormControl()
+    });
 
     constructor(
         private batchesApiService: BatchesApiService,
         private dataService: DataService,
-        private recipeTypesApiService: RecipeTypesApiService,
-        private fb: FormBuilder,
-    ) {
-        this.batch = new Batch();
-        this.createForm = this.fb.group({
-            'title': new FormControl('', Validators.required),
-            'recipeType': new FormControl('', Validators.required),
-            'description': new FormControl('')
-        });
-    }
+        private recipeTypesApiService: RecipeTypesApiService
+    ) {}
 
     private getRecipeTypes() {
         return this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-            this.recipeTypes = RecipeType.transformer(data.results);
+            const recipeTypes = RecipeType.transformer(data.results);
+            _.forEach(recipeTypes, rt => {
+                this.recipeTypeOptions.push({
+                    label: rt.title,
+                    value: rt
+                });
+            });
         }, err => {
             console.log('Error retrieving recipe types: ' + err);
         });
     }
 
     setTime(type) {
-        if (type === 'started') {
+        if (type === 'start') {
             this.startTime = {
                 hour: ('0' + moment.utc(this.batch.definition.date_range[type]).hour()).slice(-2),
                 minute: ('0' + moment.utc(this.batch.definition.date_range[type]).minute()).slice(-2),
@@ -68,12 +84,34 @@ export class BatchesCreateComponent implements OnInit {
         }
     }
 
+    bindStartTime() {
+        this.createForm.get('startHour').setValue(this.startTime.hour);
+        this.createForm.get('startMinute').setValue(this.startTime.minute);
+        this.createForm.get('startSecond').setValue(this.startTime.second);
+    }
+
+    bindEndTime() {
+        this.createForm.get('endHour').setValue(this.endTime.hour);
+        this.createForm.get('endMinute').setValue(this.endTime.minute);
+        this.createForm.get('endSecond').setValue(this.endTime.second);
+    }
+
     onDateRangeStartSelect(event) {
-        console.log(event);
+        this.batch.definition.date_range.started = moment.utc(event, 'YYYY-MM-DD').toISOString();
+        this.setTime('start');
+        this.createForm.get('startHour').enable();
+        this.createForm.get('startMinute').enable();
+        this.createForm.get('startSecond').enable();
+        this.bindStartTime();
     }
 
     onDateRangeEndSelect(event) {
-        console.log(event);
+        this.batch.definition.date_range.ended = moment.utc(event, 'YYYY-MM-DD').toISOString();
+        this.setTime('end');
+        this.createForm.get('endHour').enable();
+        this.createForm.get('endMinute').enable();
+        this.createForm.get('endSecond').enable();
+        this.bindEndTime();
     }
 
     changeTime(type, unit) {
@@ -92,8 +130,8 @@ export class BatchesCreateComponent implements OnInit {
                     this[type].second = this[type].second > 59 ? 59 : 0;
                 }
                 const timeSet = type === 'startTime' ?
-                    moment.utc(this.batch.definition.date_range.started.toISOString()) :
-                    moment.utc(this.batch.definition.date_range.ended.toISOString());
+                    moment.utc(this.batch.definition.date_range.started, 'YYYY-MM-DD') :
+                    moment.utc(this.batch.definition.date_range.ended, 'YYYY-MM-DD');
                 timeSet.set({
                     'hour': (this[type].hour).slice(-2),
                     'minute': (this[type].minute).slice(-2),
@@ -101,16 +139,18 @@ export class BatchesCreateComponent implements OnInit {
                 });
                 if (type === 'startTime') {
                     this.batch.definition.date_range.started = timeSet.toDate();
+                    this.bindStartTime();
                     console.log('start time: ' + this.batch.definition.date_range.started.toISOString());
                 } else if (type === 'endTime') {
                     this.batch.definition.date_range.ended = timeSet.toDate();
+                    this.bindEndTime();
                     console.log('end time: ' + this.batch.definition.date_range.ended.toISOString());
                 }
             }
         }
     }
 
-    keypress($event, unit, type) {
+    keydown($event, unit, type) {
         let max = 0;
         if (unit === 'hour') {
             max = 23;
@@ -141,6 +181,7 @@ export class BatchesCreateComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.batch = new Batch();
         this.getRecipeTypes();
     }
 }
