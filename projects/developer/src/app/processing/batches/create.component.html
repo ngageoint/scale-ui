@@ -1,110 +1,99 @@
 <h2><i class="fa fa-files-o"></i> {{ batch.title }}</h2>
 <div class="batches__create-form-container">
-    <form [formGroup]="createForm" (ngSubmit)="createForm.value">
-        <p-messages [(value)]="msgs"></p-messages>
+    <div class="ui-g">
+        <div class="ui-g-6">
+            <label for="title">Title *:</label>
+            <input pInputText type="text" id="title" [(ngModel)]="batch.title"/>
+        </div>
+        <div class="ui-g-6">
+            <label for="recipeType">Recipe Type *:</label>
+            <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..." autoWidth="false"
+                        [(ngModel)]="batch.recipe_type" (onChange)="setJobs()" [style]="{'width': '25%'}">
+                <ng-template let-recipeType p-template="item">
+                    {{ recipeType.title }} v{{ recipeType.version }}
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="ui-g">
+        <div class="ui-g-12">
+            <label for="description">Description:</label>
+            <textarea pInputTextarea type="text" id="description" rows="8" [(ngModel)]="batch.description"></textarea>
+        </div>
+    </div>
+    <p-panel header="Definition">
         <div class="ui-g">
             <div class="ui-g-6">
-                <label for="title">Title *:</label>
-                <input pInputText type="text" id="title" formControlName="title" placeholder="Required"/>
-                <div class="ui-message ui-messages-error ui-corner-all"
-                     *ngIf="!createForm.controls['title'].valid && createForm.controls['title'].dirty">
-                    Title is required
+                <label for="dateRangeType">Date Range Type</label>
+                <select id="dateRangeType" name="dateRangeType" [(ngModel)]="batch.definition.date_range.type">
+                    <option value="created">Created</option>
+                    <option value="data">Data</option>
+                </select>
+                <p>"Created" matches recipes based on the timestamp of when they were originally created; "Data"
+                    matches recipes based on the timestamp of when its input files were collected.</p>
+                <label for="dateRangeStarted">Date Range Started</label>
+                <div class="ui-g">
+                    <div class="ui-g-6">
+                        <utc-datepicker id="dateRangeStarted" [button]="true"
+                                        (dateChange)="onDateRangeStartSelect($event)"></utc-datepicker>
+                    </div>
+                    <div class="ui-g-6">
+                        <div class="timepicker">
+                            <input pInputText type="tel" size="5" (change)="changeTime('startTime', 'hour')"
+                                   (keydown)="keydown($event, 'hour', 'startTime')" [(ngModel)]="startTime.hour"
+                                   [disabled]="!batch.definition.date_range.started"/>
+                            <span>:</span>
+                            <input pInputText type="tel" size="5" (change)="changeTime('startTime', 'minute')"
+                                   (keydown)="keydown($event, 'minute', 'startTime')" [(ngModel)]="startTime.minute"
+                                   [disabled]="!batch.definition.date_range.started"/>
+                            <span>:</span>
+                            <input pInputText type="tel" size="5" (change)="changeTime('startTime', 'second')"
+                                   (keydown)="keydown($event, 'second', 'startTime')" [(ngModel)]="startTime.second"
+                                   [disabled]="!batch.definition.date_range.started"/>
+                        </div>
+                    </div>
+                </div>
+                <label for="dateRangeStarted">Date Range Ended</label>
+                <div class="ui-g">
+                    <div class="ui-g-6">
+                        <utc-datepicker id="dateRangeEnded" [button]="true"
+                                        (dateChange)="onDateRangeEndSelect($event)"></utc-datepicker>
+                    </div>
+                    <div class="ui-g-6">
+                        <div class="timepicker">
+                            <input pInputText type="tel" size="5" (change)="changeTime('endTime', 'hour')"
+                                   (keydown)="keydown($event, 'hour', 'endTime')" [(ngModel)]="endTime.hour"
+                                   [disabled]="!batch.definition.date_range.ended"/>
+                            <span>:</span>
+                            <input pInputText type="tel" size="5" (change)="changeTime('endTime', 'minute')"
+                                   (keydown)="keydown($event, 'minute', 'endTime')" [(ngModel)]="endTime.minute"
+                                   [disabled]="!batch.definition.date_range.ended"/>
+                            <span>:</span>
+                            <input pInputText type="tel" size="5" (change)="changeTime('endTime', 'second')"
+                                   (keydown)="keydown($event, 'second', 'endTime')" [(ngModel)]="endTime.second"
+                                   [disabled]="!batch.definition.date_range.ended"/>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="ui-g-6">
-                <label for="recipeType">Recipe Type *:</label>
-                <p-dropdown id="recipeType" [options]="recipeTypeOptions" formControlName="recipeType"
-                            placeholder="Select..." autoWidth="false" [style]="{'width': '25%'}">
-                    <ng-template let-recipeType p-template="item">
-                        {{ recipeType.title }} v{{ recipeType.version }}
-                    </ng-template>
-                </p-dropdown>
-                <div class="ui-message ui-messages-error ui-corner-all"
-                     *ngIf="!createForm.controls['recipeType'].valid && createForm.controls['recipeType'].dirty">
-                    Recipe Type is Required
+                <div *ngIf="!batch.recipe_type">
+                    <label for="jobNames">Job Names</label><br />
+                    <p>Choose a recipe type in order to see relevant job names.</p>
                 </div>
+                <div *ngIf="batch.recipe_type">
+                    <label for="jobNames">Job Names</label><br />
+                    <p-multiSelect id="jobNames" [options]="jobOptions" [(ngModel)]="batch.definition.job_names"
+                                   [style]="{'width':'100%'}" [disabled]="batch.definition.all_jobs"></p-multiSelect>
+                    <p>Additional jobs that did not have a revision change.</p>
+                </div>
+                <p-checkbox id="allJobs" label="All Jobs" (onChange)="setAllJobs($event)"></p-checkbox>
+                <p>Re-process every job. This overrides the values included in "Job Names".</p>
+                <label for="priority">Priority</label>
+                <input pInputText id="priority" name="priority" type="number" [(ngModel)]="batch.definition.priority">
+                <p>Indicates every job in the recipe should be queued with an override priority instead of the default
+                    priority defined by the job type.</p>
             </div>
         </div>
-        <div class="ui-g">
-            <div class="ui-g-12">
-                <label for="description">Description:</label>
-                <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"></textarea>
-            </div>
-        </div>
-        <p-panel header="Definition">
-            <div class="ui-g">
-                <div class="ui-g-6">
-                    <label for="dateRangeType">Date Range Type</label>
-                    <select id="dateRangeType" name="dateRangeType" formControlName="dateRangeType">
-                        <option value="created">Created</option>
-                        <option value="data">Data</option>
-                    </select>
-                    <p>"Created" matches recipes based on the timestamp of when they were originally created; "Data"
-                        matches recipes based on the timestamp of when its input files were collected.</p>
-                    <label for="dateRangeStarted">Date Range Started</label>
-                    <div class="ui-g">
-                        <div class="ui-g-6">
-                            <utc-datepicker id="dateRangeStarted" [date]="dateRangeStarted" [button]="true"
-                                            (dateChange)="onDateRangeStartSelect($event)"></utc-datepicker>
-                        </div>
-                        <div class="ui-g-6">
-                            <div class="timepicker">
-                                <input pInputText type="tel" size="5" formControlName="startHour"
-                                       (change)="changeTime('startTime', 'hour')"
-                                       (keydown)="keydown($event, 'hour', 'startTime')"/>
-                                <span>:</span>
-                                <input pInputText type="tel" size="5" formControlName="startMinute"
-                                       (change)="changeTime('startTime', 'minute')"
-                                       (keydown)="keydown($event, 'minute', 'startTime')"/>
-                                <span>:</span>
-                                <input pInputText type="tel" size="5" formControlName="startSecond"
-                                       (change)="changeTime('startTime', 'second')"
-                                       (keydown)="keydown($event, 'second', 'startTime')"/>
-                            </div>
-                        </div>
-                    </div>
-                    <label for="dateRangeStarted">Date Range Ended</label>
-                    <div class="ui-g">
-                        <div class="ui-g-6">
-                            <utc-datepicker id="dateRangeEnded" [date]="dateRangeEnded" [button]="true"
-                                            (dateChange)="onDateRangeEndSelect($event)"></utc-datepicker>
-                        </div>
-                        <div class="ui-g-6">
-                            <div class="timepicker">
-                                <input pInputText type="tel" size="5" formControlName="endHour"
-                                       (change)="changeTime('endTime', 'hour')"
-                                       (keydown)="keydown($event, 'hour', 'endTime')"/>
-                                <span>:</span>
-                                <input pInputText type="tel" size="5" formControlName="endMinute"
-                                       (change)="changeTime('endTime', 'minute')"
-                                       (keydown)="keydown($event, 'minute', 'endTime')"/>
-                                <span>:</span>
-                                <input pInputText type="tel" size="5" formControlName="endSecond"
-                                       (change)="changeTime('endTime', 'second')"
-                                       (keydown)="keydown($event, 'second', 'endTime')"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="ui-g-6">
-                    <div *ngIf="!batch.recipe_type">
-                        <label for="jobNames">Job Names</label><br />
-                        <p>Choose a recipe type in order to see relevant job names.</p>
-                    </div>
-                    <div *ngIf="batch.recipe_type">
-                        <label for="jobNames">Job Names</label><br />
-                        <p-multiSelect id="jobNames" [options]="jobOptions" formControlName="jobNames"
-                                       [style]="{'width':'100%'}"></p-multiSelect>
-                        <p>Additional jobs that did not have a revision change.</p>
-                    </div>
-                    <p-checkbox id="allJobs" formControlName="allJobs" label="All Jobs"></p-checkbox>
-                    <p>Re-process every job. This overrides the values included in "Job Names".</p>
-                    <label for="priority">Priority</label>
-                    <input pInputText id="priority" name="priority" type="number" formControlName="priority">
-                    <p>Indicates every job in the recipe should be queued with an override priority instead of the default
-                        priority defined by the job type.</p>
-                </div>
-            </div>
-        </p-panel>
-    </form>
+    </p-panel>
 </div>

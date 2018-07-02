@@ -9,12 +9,14 @@ class BatchDefinition {
         public job_names?: any,
         public priority?: number,
         public trigger_rule?: any,
-        public data?: any
+        public data?: any,
+        public all_jobs?: boolean
     ) {
         this.version = this.version || null;
         this.date_range = this.date_range || {
             started: null,
-            ended: null
+            ended: null,
+            type: null
         };
         this.job_names = this.job_names || [];
         this.priority = this.priority || null;
