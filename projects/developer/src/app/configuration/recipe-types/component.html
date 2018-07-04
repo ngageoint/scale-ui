@@ -74,9 +74,10 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData">
+            <tr>
                 <td>
-                    <div class="recipe-type__job-type-row" (click)="addJobType(rowData)">
+                    <div [class]="rowData.disabled ? 'recipe-type__job-type-row disabled' : 'recipe-type__job-type-row'"
+                         (click)="addJobType(rowData)">
                         <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
                         {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
                     </div>

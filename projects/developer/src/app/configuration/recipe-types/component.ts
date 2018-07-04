@@ -100,6 +100,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.recipeTypesApiService.getRecipeType(id).subscribe(data => {
             this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
+            const jobNames = _.map(this.selectedRecipeTypeDetail.definition.jobs, 'name');
+            _.forEach(this.jobTypes, jt => {
+                jt.disabled = _.includes(jobNames, jt.manifest.job.name);
+            });
         }, err => {
             console.log(err);
             this.loadingRecipeType = false;
@@ -115,28 +119,31 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addJobType(jobType) {
-        // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.id).subscribe(data => {
-            const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-            if (!recipeData.job_types) {
-                recipeData.job_types = [];
-            }
-            recipeData.definition.jobs.push({
-                dependencies: [],
-                job_type: {
+        if (!jobType.disabled) {
+            jobType.disabled = true;
+            // get job type detail in order to obtain the interface
+            this.jobTypesApiService.getJobType(jobType.id).subscribe(data => {
+                const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+                if (!recipeData.job_types) {
+                    recipeData.job_types = [];
+                }
+                recipeData.definition.jobs.push({
+                    dependencies: [],
+                    job_type: {
+                        name: data.manifest.job.name,
+                        version: data.manifest.job.jobVersion
+                    },
                     name: data.manifest.job.name,
-                    version: data.manifest.job.jobVersion
-                },
-                name: data.manifest.job.name,
-                recipe_inputs: []
+                    recipe_inputs: []
+                });
+                recipeData.job_types.push(data);
+                this.selectedRecipeTypeDetail = recipeData;
+                this.addJobTypeDisplay = false;
+            }, err => {
+                // todo show growl message with error info
+                console.log(err);
             });
-            recipeData.job_types.push(data);
-            this.selectedRecipeTypeDetail = recipeData;
-            this.addJobTypeDisplay = false;
-        }, err => {
-            // todo show growl message with error info
-            console.log(err);
-        });
+        }
     }
 
     toggleEdit() {
@@ -163,6 +170,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     getUnicode(code) {
         return `&#x${code};`;
     }
+
     onRowSelect(e) {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/configuration/recipe-types/${e.value.id}`);
@@ -170,11 +178,13 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
         }
     }
+
     ngOnInit() {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = data.results;
         });
     }
+
     ngOnDestroy() {
         this.routerEvents.unsubscribe();
         this.routeParams.unsubscribe();

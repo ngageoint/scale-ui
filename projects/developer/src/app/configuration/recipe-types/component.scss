@@ -21,6 +21,11 @@
 
 .recipe-type__job-type-row {
     cursor: pointer;
+
+    &.disabled {
+        cursor: default;
+        color: #ccc;
+    }
 }
 
 .recipe-type-details {
