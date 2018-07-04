@@ -1,5 +1,3 @@
-@import '../../../defaults/colors';
-
 .job-type__header {
     display: flex;
     align-items: flex-end;
@@ -87,11 +85,11 @@
         .ui-treetable-data {
             .ui-treetable-child-table-container {
                 tbody:nth-child(even) {
-                    background-color: $clr-white !important;
+                    background-color: #fff !important;
                 }
 
                 tbody:nth-child(odd) {
-                    background-color: $clr-gray-95 !important;
+                    background-color: #ededed !important;
                 }
             }
         }

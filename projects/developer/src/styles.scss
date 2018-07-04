@@ -5,7 +5,7 @@
 
 // Defaults
 @import './defaults/animations';
-@import './defaults/colors';
+@import 'environments/environment';
 @import './defaults/primeng-theme';
 @import './defaults/tags';
 @import './defaults/typography';
@@ -84,7 +84,7 @@ a:not(.ui-button, .ui-paginator) {
     background: $clr-navbar-dark;
 
     a {
-        color: #fff;
+        color: $clr-navbar-text;
     }
 }
 
@@ -96,9 +96,9 @@ a:not(.ui-button, .ui-paginator) {
     .scale-panel__title {
         margin-right: 18px;
         border: 0 none;
-        border-bottom: 1px solid #e6e6e6;
+        border-bottom: 1px solid $clr-gray-90;
         padding: .75em 1.25em .5em 1.25em;
-        background-color: #f6f7f9;
+        background-color: $headerBgColor;
         border-top-left-radius: 0.25em;
         border-top-right-radius: 0.25em;
         border-bottom-left-radius: 0px;
@@ -170,7 +170,7 @@ a:not(.ui-button, .ui-paginator) {
     font-size: 75%;
     font-weight: bold;
     line-height: 1;
-    color: #fff;
+    color: $clr-label-text;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
@@ -183,7 +183,7 @@ a:not(.ui-button, .ui-paginator) {
 
 a.label {
     &:hover, &:focus {
-        color: #fff;
+        color: $clr-label-text;
         text-decoration: none;
         cursor: pointer;
     }
@@ -194,46 +194,46 @@ a.label {
 }
 
 label-default {
-    background-color: #777;
+    background-color: $clr-label-default;
 }
 .label-default[href]:hover,
 .label-default[href]:focus {
-    background-color: #5e5e5e;
+    background-color: $clr-label-default-hover;
 }
 .label-primary {
-    background-color: #337ab7;
+    background-color: $clr-label-primary;
 }
 .label-primary[href]:hover,
 .label-primary[href]:focus {
-    background-color: #286090;
+    background-color: $clr-label-primary-hover;
 }
 .label-success {
-    background-color: #5cb85c;
+    background-color: $clr-label-success;
 }
 .label-success[href]:hover,
 .label-success[href]:focus {
-    background-color: #449d44;
+    background-color: $clr-label-success-hover;
 }
 .label-info {
-    background-color: #5bc0de;
+    background-color: $clr-label-info;
 }
 .label-info[href]:hover,
 .label-info[href]:focus {
-    background-color: #31b0d5;
+    background-color: $clr-label-info-hover;
 }
 .label-warning {
-    background-color: #f0ad4e;
+    background-color: $clr-label-warning;
 }
 .label-warning[href]:hover,
 .label-warning[href]:focus {
-    background-color: #ec971f;
+    background-color: $clr-label-warning-hover;
 }
 .label-danger {
-    background-color: #d9534f;
+    background-color: $clr-label-danger;
 }
 .label-danger[href]:hover,
 .label-danger[href]:focus {
-    background-color: #c9302c;
+    background-color: $clr-label-danger-hover;
 }
 
 .label-data {
