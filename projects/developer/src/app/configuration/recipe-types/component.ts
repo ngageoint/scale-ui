@@ -9,7 +9,6 @@ import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
 import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
-import { JobType } from '../job-types/api.model';
 import { RecipeTypeDefinition } from './definition.model';
 
 @Component({
@@ -25,11 +24,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     loadingRecipeType: boolean;
     recipeTypeId: number;
     jobTypes: any;
+    selectedJobTypes = [];
     recipeTypes: SelectItem[];
     selectedRecipeType: SelectItem;
     selectedRecipeTypeDetail: any;
-    selectedJobType: JobType;
-    addJobTypeDisplay: boolean;
+    toggleJobTypeDisplay: boolean;
     isEditing: boolean;
 
     constructor(
@@ -100,10 +99,14 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.recipeTypesApiService.getRecipeType(id).subscribe(data => {
             this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
+            const jtArray = [];
             const jobNames = _.map(this.selectedRecipeTypeDetail.definition.jobs, 'name');
             _.forEach(this.jobTypes, jt => {
-                jt.disabled = _.includes(jobNames, jt.manifest.job.name);
+                if (_.includes(jobNames, jt.manifest.job.name)) {
+                    jtArray.push(jt);
+                }
             });
+            this.selectedJobTypes = jtArray;
         }, err => {
             console.log(err);
             this.loadingRecipeType = false;
@@ -114,36 +117,42 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.router.navigate(['/configuration/recipe-types/0']);
     }
 
-    showAddJobType() {
-        this.addJobTypeDisplay = true;
+    showToggleJobType() {
+        this.toggleJobTypeDisplay = true;
     }
 
-    addJobType(jobType) {
-        if (!jobType.disabled) {
-            jobType.disabled = true;
-            // get job type detail in order to obtain the interface
-            this.jobTypesApiService.getJobType(jobType.id).subscribe(data => {
-                const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-                if (!recipeData.job_types) {
-                    recipeData.job_types = [];
-                }
-                recipeData.definition.jobs.push({
-                    dependencies: [],
-                    job_type: {
-                        name: data.manifest.job.name,
-                        version: data.manifest.job.jobVersion
-                    },
+    addJobType(event) {
+        const jobType = event.data;
+        // get job type detail in order to obtain the interface
+        this.jobTypesApiService.getJobType(jobType.id).subscribe(data => {
+            const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+            if (!recipeData.job_types) {
+                recipeData.job_types = [];
+            }
+            recipeData.definition.jobs.push({
+                dependencies: [],
+                job_type: {
                     name: data.manifest.job.name,
-                    recipe_inputs: []
-                });
-                recipeData.job_types.push(data);
-                this.selectedRecipeTypeDetail = recipeData;
-                this.addJobTypeDisplay = false;
-            }, err => {
-                // todo show growl message with error info
-                console.log(err);
+                    version: data.manifest.job.jobVersion
+                },
+                name: data.manifest.job.name,
+                recipe_inputs: []
             });
-        }
+            recipeData.job_types.push(data);
+            this.selectedRecipeTypeDetail = recipeData;
+        }, err => {
+            // todo show growl message with error info
+            console.log(err);
+        });
+    }
+
+    removeJobType(event) {
+        const jobType = event.data;
+        const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+        _.remove(recipeData.definition.jobs, job => {
+            return job.job_type.name === jobType.manifest.job.name && job.job_type.version === jobType.manifest.job.jobVersion;
+        });
+        this.selectedRecipeTypeDetail = recipeData;
     }
 
     toggleEdit() {

@@ -58,7 +58,7 @@
             "manifest": {
                 "job": {
                     "name": "sam",
-                    "jobVersion": "1.0.0",
+                    "jobVersion": "1.0",
                     "packageVersion": "",
                     "title": "Spectral Angle Mapper",
                     "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
@@ -69,8 +69,23 @@
                     "timeout": 0,
                     "interface": {
                         "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
+                        "inputs": [{
+                            "media_types": ["image/nitf"],
+                            "required": true,
+                            "type": "file",
+                            "name": "image"
+                        },{
+                            "media_types": ["text/csv"],
+                            "required": true,
+                            "type": "file",
+                            "name": "signature"
+                        }],
+                        "outputs": [{
+                            "media_type": "image/tiff",
+                            "required": true,
+                            "type": "file",
+                            "name": "sam-detections"
+                        }],
                         "settings": []
                     }
                 },

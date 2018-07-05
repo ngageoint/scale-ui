@@ -45,8 +45,8 @@
                         <button class="btn__edit" pButton icon="fa-edit fa-fw" (click)="toggleEdit()"
                                 *ngIf="selectedRecipeType && !isEditing" pTooltip="Edit Recipe Type"></button>
                         <div class="recipe-type__menu">
-                            <button class="btn__menu ui-button-info" pButton icon="fa-plus fa-fw" (click)="showAddJobType()"
-                                    *ngIf="selectedRecipeType && isEditing" pTooltip="Add Job Type"></button>
+                            <button class="btn__menu ui-button-info" pButton icon="fa-cube fa-fw" (click)="showToggleJobType()"
+                                    *ngIf="selectedRecipeType && isEditing" pTooltip="Add/Remove Job Types"></button>
                             <button class="btn__menu ui-button-warning" pButton icon="fa-check fa-fw" (click)="validateRecipeType()"
                                     *ngIf="selectedRecipeType && isEditing" pTooltip="Validate Recipe Type"></button>
                             <button class="btn__menu ui-button-success" pButton icon="fa-save fa-fw" (click)="saveRecipeType()"
@@ -61,10 +61,11 @@
         <dev-recipe-graph [recipeData]="selectedRecipeTypeDetail" [isEditing]="isEditing"></dev-recipe-graph>
     </div>
 </div>
-<p-sidebar [(visible)]="addJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
-    <h2>Add Job Type</h2>
-    <p-table [columns]="columns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%" [rowHover]="true"
-             #datatable>
+<p-sidebar [(visible)]="toggleJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+    <h2>Add/Remove Job Types</h2>
+    <p-table [columns]="columns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
+             [rowHover]="true" (onRowSelect)="addJobType($event)" (onRowUnselect)="removeJobType($event)"
+             selectionMode="multiple" [(selection)]="selectedJobTypes" #datatable>
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">
@@ -74,10 +75,9 @@
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr>
+            <tr [pSelectableRow]="rowData">
                 <td>
-                    <div [class]="rowData.disabled ? 'recipe-type__job-type-row disabled' : 'recipe-type__job-type-row'"
-                         (click)="addJobType(rowData)">
+                    <div class="recipe-type__job-type-row">
                         <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
                         {{ rowData.manifest.job.title }} v{{ rowData.manifest.job.jobVersion }}
                     </div>
