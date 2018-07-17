@@ -102,7 +102,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             const jtArray = [];
             const jobNames = _.map(this.selectedRecipeTypeDetail.definition.jobs, 'name');
             _.forEach(this.jobTypes, jt => {
-                if (_.includes(jobNames, jt.manifest.job.name)) {
+                if (_.includes(jobNames, jt.name)) {
                     jtArray.push(jt);
                 }
             });

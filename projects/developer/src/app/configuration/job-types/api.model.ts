@@ -4,6 +4,10 @@ export class JobType {
             return new JobType(
                 data.manifest,
                 data.id,
+                data.name,
+                data.version,
+                data.title,
+                data.description,
                 data.timeout,
                 data.category,
                 data.is_system,
@@ -38,6 +42,10 @@ export class JobType {
     constructor(
         public manifest: any,
         public id?: number,
+        public name?: string,
+        public version?: string,
+        public title?: string,
+        public description?: string,
         public timeout?: any,
         public category?: string,
         public is_system?: boolean,
@@ -60,6 +68,10 @@ export class JobType {
     ) {
         this.manifest = this.manifest || null;
         this.id = this.id || null;
+        this.name = this.name || null;
+        this.version = this.version || null;
+        this.title = this.title || null;
+        this.description = this.description || null;
         this.category = this.category || null;
         this.is_system = this.is_system || null;
         this.is_active = this.is_active || null;

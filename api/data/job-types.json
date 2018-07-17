@@ -5,6 +5,10 @@
     "results":[
         {
             "id": 1,
+            "name": "landsat8-parse",
+            "version": "1.0.0",
+            "title": "Landsat 8 Parse",
+            "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
             "category": "landsat",
             "is_system": true,
             "is_long_running": false,
@@ -16,27 +20,6 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "landsat8-parse",
-                    "jobVersion": "1.0.0",
-                    "packageVersion": "",
-                    "title": "Landsat 8 Parse",
-                    "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
-                    "maintainer": {
-                        "name": "USGS",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
@@ -44,6 +27,10 @@
         },
         {
             "id": 2,
+            "name": "sam",
+            "version": "1.0",
+            "title": "Spectral Angle Mapper",
+            "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -55,48 +42,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "sam",
-                    "jobVersion": "1.0",
-                    "packageVersion": "",
-                    "title": "Spectral Angle Mapper",
-                    "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
-                    "maintainer": {
-                        "name": "Boardman",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": [{
-                            "media_types": ["image/nitf"],
-                            "required": true,
-                            "type": "file",
-                            "name": "image"
-                        },{
-                            "media_types": ["text/csv"],
-                            "required": true,
-                            "type": "file",
-                            "name": "signature"
-                        }],
-                        "outputs": [{
-                            "media_type": "image/tiff",
-                            "required": true,
-                            "type": "file",
-                            "name": "sam-detections"
-                        }],
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 3,
+            "name": "scm",
+            "version": "1.0",
+            "title": "Spectral Correlation Mapper",
+            "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -107,27 +62,6 @@
             "docker_image": null,
             "priority": 10,
             "timeout": 0,
-            "manifest": {
-                "job": {
-                    "name": "scm",
-                    "jobVersion": "1.0",
-                    "packageVersion": "",
-                    "title": "Spectral Correlation Mapper",
-                    "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
-                    "maintainer": {
-                        "name": "Universidade de Brasília",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "max_tries": 0,
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
@@ -135,6 +69,10 @@
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 4,
+            "name": "cem",
+            "version": "1.0",
+            "title": "Constrained Energy Minimization",
+            "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -146,33 +84,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "cem",
-                    "jobVersion": "1.0",
-                    "packageVersion": "",
-                    "title": "Constrained Energy Minimization",
-                    "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
-                    "maintainer": {
-                        "name": "DigitalGlobe",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 5,
+            "name": "wv2-parse",
+            "version": "1.0.1",
+            "title": "WorldView-2 Parse",
+            "description": "Parses WorldView-2 GeoTiffs",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -184,33 +105,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "wv2-parse",
-                    "jobVersion": "1.0.1",
-                    "packageVersion": "",
-                    "title": "WorldView-2 Parse",
-                    "description": "Parses WorldView-2 GeoTiffs",
-                    "maintainer": {
-                        "name": "DigitalGlobe",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 6,
+            "name": "wv2-atmosphere-corr",
+            "version": "1.0.1",
+            "title": "WorldView-2 Atmospheric Correction",
+            "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -222,33 +126,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "wv2-atmosphere-corr",
-                    "jobVersion": "1.0.1",
-                    "packageVersion": "",
-                    "title": "WorldView-2 Atmospheric Correction",
-                    "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
-                    "maintainer": {
-                        "name": "DigitalGlobe",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 7,
+            "name": "landsat8-atmos-corr",
+            "version": "2.1.9",
+            "title": "Landsat 8 Atmospheric Correction",
+            "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -260,33 +147,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "landsat8-atmos-corr",
-                    "jobVersion": "2.1.9",
-                    "packageVersion": "",
-                    "title": "Landsat 8 Atmospheric Correction",
-                    "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
-                    "maintainer": {
-                        "name": "Radiant Blue",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 8,
+            "name": "landsat8-ortho",
+            "version": "2.0",
+            "title": "Landsat 8 Ortho (OSSIM)",
+            "description": "Applies Orthorectification to Landsat 8 GeoTiffs",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -298,33 +168,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "landsat8-ortho",
-                    "jobVersion": "2.0",
-                    "packageVersion": "",
-                    "title": "Landsat 8 Ortho (OSSIM)",
-                    "description": "Applies Orthorectification to Landsat 8 GeoTiffs",
-                    "maintainer": {
-                        "name": "Radiant Blue",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 9,
+            "name": "wv2-ortho",
+            "version": "2.0",
+            "title": "WorldView-2 Rigorous Orthorectification",
+            "description": "Applies Orthorectification to WorldView-2 data",
             "category": "spectral",
             "is_system": true,
             "is_long_running": false,
@@ -336,33 +189,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "wv2-ortho",
-                    "jobVersion": "2.0",
-                    "packageVersion": "",
-                    "title": "WorldView-2 Rigorous Orthorectification",
-                    "description": "Applies Orthorectification to WorldView-2 data",
-                    "maintainer": {
-                        "name": "DigitalGlobe",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 10,
+            "name": "export-shp",
+            "version": "2.0",
+            "title": "Export Shapefile",
+            "description": "Creates shapefile (.shp) from raster data",
             "category": "export",
             "is_system": true,
             "is_long_running": false,
@@ -374,33 +210,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "export-shp",
-                    "jobVersion": "2.0",
-                    "packageVersion": "",
-                    "title": "Export Shapefile",
-                    "description": "Creates shapefile (.shp) from raster data",
-                    "maintainer": {
-                        "name": "AIS",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-03-11T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-03-11T00:00:00Z"
         },{
             "id": 11,
+            "name": "export-kml",
+            "version": "1.5",
+            "title": "Export KML",
+            "description": "Creates KML from data",
             "category": "export",
             "is_system": true,
             "is_long_running": false,
@@ -412,33 +231,16 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "export-kml",
-                    "jobVersion": "1.5",
-                    "packageVersion": "",
-                    "title": "Export KML",
-                    "description": "Creates KML from data",
-                    "maintainer": {
-                        "name": "AIS",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-05-10T00:00:00Z",
             "archived": null,
             "paused": null,
             "last_modified": "2015-05-10T00:00:00Z"
         },{
             "id": 12,
+            "name": "caffe-aircraft-detection",
+            "version": "1.0",
+            "title": "Caffe Aircraft Detection",
+            "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
             "category": "detect",
             "is_system": true,
             "is_long_running": false,
@@ -450,27 +252,6 @@
             "priority": 10,
             "timeout": 0,
             "max_tries": 0,
-            "manifest": {
-                "job": {
-                    "name": "caffe-aircraft-detection",
-                    "jobVersion": "1.0",
-                    "packageVersion": "",
-                    "title": "Caffe Aircraft Detection",
-                    "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
-                    "maintainer": {
-                        "name": "Yangqing Jia",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./parse_landsat.sh",
-                        "inputs": {},
-                        "outputs": {},
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            },
             "created": "2015-05-10T00:00:00Z",
             "archived": null,
             "paused": null,

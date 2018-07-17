@@ -57,7 +57,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     ) {
         this.isInitialized = false;
         this.columns = [
-            { field: 'job_type.manifest.job.name', header: 'Job Type' },
+            { field: 'job_type', header: 'Job Type' },
             { field: 'created', header: 'Created (Z)' },
             { field: 'last_modified', header: 'Last Modified (Z)' },
             { field: 'node.hostname', header: 'Node' },
@@ -142,7 +142,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
-                    label: jobType.manifest.job.title + ' ' + jobType.manifest.job.jobVersion,
+                    label: jobType.title + ' ' + jobType.version,
                     value: jobType.id
                 });
                 if (this.datatableOptions.job_type_id === jobType.id) {
