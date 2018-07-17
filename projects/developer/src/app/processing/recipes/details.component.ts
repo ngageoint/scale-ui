@@ -42,8 +42,8 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
                         // include current job instance in definition
                         const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
-                            return j.job_type.name === jobData.job.job_type.manifest.job.name &&
-                                j.job_type.version === jobData.job.job_type.manifest.job.jobVersion;
+                            return j.job_type.name === jobData.job.job_type.name &&
+                                j.job_type.version === jobData.job.job_type.version;
                         });
                         if (recipeTypeJob) {
                             recipeTypeJob.instance = jobData.job;
