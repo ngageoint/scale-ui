@@ -5,7 +5,6 @@
 $navbar-height: 68px;
 $navshadow: 0 0 0.5em $clr-black;
 $navbar-status-width: 250px;
-$navbar-item-width: 150px;
 
 
 .navbar-ctr {
@@ -15,7 +14,7 @@ $navbar-item-width: 150px;
 .navbar {
     align-items: stretch;
     background: $clr-navbar-dark;
-    //box-shadow: $navshadow;
+    box-shadow: $navshadow;
     display: flex;
     height: $navbar-height;
     justify-content: flex-start;
@@ -31,16 +30,15 @@ $navbar-item-width: 150px;
     display: flex;
     justify-content: center;
     user-select: none;
-    font-size: 1.2em;
 
     a {
         color: $clr-gray-85;
-        padding: 1.3em 1.1em 1.1em 1.1em;
+        padding: 1.5em 1.1em 1.1em 1.1em;
         text-align: center;
         text-decoration: none;
         text-shadow: 0 1px 0 $clr-navbar-dark;
         transition: $default-transition;
-        width: $navbar-item-width;
+        width: 125px;
 
         &:hover {
             background: $clr-navbar-light;
