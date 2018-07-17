@@ -30,12 +30,13 @@ $navbar-item-width: 150px;
     border-left: 1px solid $clr-navbar-light;
     display: flex;
     justify-content: center;
+    align-items: center;
     user-select: none;
-    font-size: 1.2em;
+    font-size: 1em;
 
     a {
         color: $clr-gray-85;
-        padding: 1.3em 1.1em 1.1em 1.1em;
+        padding: 1.6em 1.1em 1.5em 1.1em;
         text-align: center;
         text-decoration: none;
         text-shadow: 0 1px 0 $clr-navbar-dark;
