@@ -74,7 +74,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 this.jobTypesApiService.getJobTypes().subscribe(data => {
                     _.forEach(data.results, (result) => {
                         this.jobTypes.push({
-                            label: `${result.manifest.job.title} ${result.manifest.job.jobVersion}`,
+                            label: `${result.title} ${result.version}`,
                             value: result
                         });
                         if (id === result.id) {
