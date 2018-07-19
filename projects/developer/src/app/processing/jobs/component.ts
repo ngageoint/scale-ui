@@ -25,7 +25,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
     @Input() isChild: boolean;
     @Input() datatableOptions: JobsDatatable;
-    @Output() datatableChange = new EventEmitter<JobsDatatable>();
+    @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
 
     datatableLoading: boolean;
     columns: any[];

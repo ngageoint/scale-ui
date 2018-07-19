@@ -108,7 +108,8 @@ export class JobsApiService {
         const queryParams = new HttpParams({
             fromObject: { job_id: id.toString() }
         });
-        return this.http.get<ApiResults>(`${this.apiPrefix}/products/`, { params: queryParams })
+        const apiPrefix = this.dataService.getApiPrefix('products');
+        return this.http.get<ApiResults>(`${apiPrefix}/products/`, { params: queryParams })
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);
@@ -130,14 +131,15 @@ export class JobsApiService {
             );
     }
     getJobLoad(params, poll?: boolean): Observable<any> {
+        const apiPrefix = this.dataService.getApiPrefix('load');
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/load/`, { params: params });
+            const request = this.http.get(`${apiPrefix}/load/`, { params: params });
             const mapRequest = response => {
                 return ApiResults.transformer(response);
             };
             return this.dataService.generatePoll(600000, request, mapRequest);
         }
-        return this.http.get<ApiResults>(`${this.apiPrefix}/load/`, { params: params })
+        return this.http.get<ApiResults>(`${apiPrefix}/load/`, { params: params })
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);

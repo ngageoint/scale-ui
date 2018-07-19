@@ -1,7 +1,7 @@
 <div class="job__details" *ngIf="job">
     <h2>
         <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
-        {{ job.job_type.manifest.job.title }} v{{ job.job_type.manifest.job.jobVersion }}
+        {{ job.job_type.title }} v{{ job.job_type.version }}
         <i class="fa fa-fw fa-square" [ngClass]="job.statusClass" (mouseenter)="showStatus(status, $event)"
            (mouseleave)="hideStatus(status)"></i>
     </h2>

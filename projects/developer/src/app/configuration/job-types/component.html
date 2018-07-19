@@ -9,7 +9,7 @@
     <div class="text-center" *ngIf="!selectedJobTypeDetail">
         <h3>Select a job type to view its details</h3>
     </div>
-    <div *ngIf="selectedJobTypeDetail">
+    <div *ngIf="selectedJobTypeDetail && selectedJobTypeDetail.manifest.seedVersion">
         <div class="ui-g">
             <div class="ui-g-10">
                 <p-scrollPanel styleClass="scale-panel">
@@ -17,10 +17,10 @@
                         <div class="ui-panel-title">
                             <div class="ui-g">
                                 <div class="ui-g-6">
-                                <span class="job-type__title">
-                                    <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
-                                    {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
-                                </span>
+                                    <span class="job-type__title">
+                                        <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
+                                        {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
+                                    </span>
                                 </div>
                                 <div class="ui-g-6 text-right">
                                     <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
@@ -37,10 +37,10 @@
                     <div class="scale-panel__body">
                         <div class="ui-g">
                             <div class="ui-g-8">
-                            <span>
-                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
-                                {{ selectedJobTypeDetail.manifest.job.description }}
-                            </span>
+                                <span>
+                                    <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
+                                    {{ selectedJobTypeDetail.manifest.job.description }}
+                                </span>
                             </div>
                             <div class="ui-g-4">
                                 <dl class="dl-horizontal">
@@ -141,6 +141,33 @@
                         <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
                     </div>
                 </p-panel>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="selectedJobTypeDetail && !selectedJobTypeDetail.manifest.seedVersion">
+        <div class="ui-g">
+            <div class="ui-g-10">
+                <p-scrollPanel styleClass="scale-panel">
+                    <div class="scale-panel__title job-type__title-container">
+                        <div class="ui-panel-title">
+                            <div class="ui-g">
+                                <div class="ui-g-12">
+                                    <span class="job-type__title">
+                                        <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
+                                        {{ selectedJobTypeDetail.title }} v{{selectedJobTypeDetail.version }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scale-panel__body">
+                        <div class="ui-g">
+                            <div class="ui-g-12">
+                                This job type is incompatible with Seed. <a href="http://seed-spec.nga.wpafb.ic.gov/" target="_blank">Learn more</a>
+                            </div>
+                        </div>
+                    </div>
+                </p-scrollPanel>
             </div>
         </div>
     </div>

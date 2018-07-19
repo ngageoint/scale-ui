@@ -8,7 +8,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 export class SubnavComponent implements OnInit {
 
     @Input() sectionId: string;
-    @Output() navigateEvent = new EventEmitter();
+    @Output() navigateEvent: EventEmitter<any> = new EventEmitter();
     constructor() { }
 
     ngOnInit() {

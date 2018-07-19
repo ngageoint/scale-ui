@@ -3,7 +3,7 @@ import * as _ from 'lodash';
 
 @Injectable()
 export class DashboardJobsService {
-    @Output() favoritesUpdated = new EventEmitter();
+    @Output() favoritesUpdated: EventEmitter<any> = new EventEmitter();
     private FAVORITES_KEY = 'scale.dashboard.favorites';
     favorites = [];
     allJobs = [];
