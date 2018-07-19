@@ -15,7 +15,7 @@ import { SourcesDatatableService } from '../../../data/sources/datatable.service
     styleUrls: ['./component.scss']
 })
 export class ProcessingFormComponent implements OnInit {
-    @Output() search = new EventEmitter();
+    @Output() search: EventEmitter<any> = new EventEmitter();
     started: string;
     ended: string;
     jobTypes: any;
