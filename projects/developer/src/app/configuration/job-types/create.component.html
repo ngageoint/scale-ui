@@ -5,7 +5,7 @@
             <div class="seed-panel-title">
                 <span class="ui-panel-title job-type-title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
                 <span *ngIf="!jobType.manifest"></span>
-                <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa-code"
+                <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa fa-code"
                         iconPos="left" (click)="onModeClick()"></button>
             </div>
         </p-header>
@@ -23,7 +23,7 @@
                     <div class="ui-g-12">
                         <div class="seed-header">
                             <h3>{{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}</h3>
-                            <button pButton class="ui-button-danger margin-bottom-md" icon="fa-remove" pTooltip="Delete Seed Image"
+                            <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Delete Seed Image"
                                     (click)="onImageRemove()"></button>
                         </div>
                         {{ jobType.manifest.job.description }}
@@ -69,11 +69,11 @@
                 <ul class="list-unstyled">
                     <li><b>Description:</b> {{ jobType.manifest.job.description }}</li>
                 </ul>
-                <button class="ui-button-secondary" pButton icon="fa-check" label="Validate"
+                <button class="ui-button-secondary" pButton icon="fa fa-check" label="Validate"
                         (click)="onValidate()" *ngIf="!validated"></button>
-                <button class="ui-button-primary" pButton icon="fa-arrow-right" [label]="mode"
+                <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
                         (click)="onSubmit()" *ngIf="validated && !submitted"></button>
-                <a class="ui-button-success" pButton icon="fa-arrow-circle-right" label="View Job Type"
+                <a class="ui-button-success" pButton icon="fa fa-arrow-circle-right" label="View Job Type"
                    routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
                 <!--<div class="ui-g">-->
                 <!--<div class="ui-g-2">-->

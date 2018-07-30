@@ -104,6 +104,7 @@
         <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <div *ngSwitchCase="'job_type.id'">
+                    <i class="fa fa-fw" [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
                     {{ rowData.job_type.title }} {{ rowData.job_type.version }}
                 </div>
                 <div *ngSwitchCase="'twentyfour_hours'">

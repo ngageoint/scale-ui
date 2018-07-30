@@ -3,7 +3,7 @@
     <p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
                 class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."
                 [showClear]="false"></p-dropdown>
-    <button pButton class="btn__new-recipe" icon="fa-plus-circle" label="New Recipe" (click)="createNewRecipe()"
+    <button pButton class="btn__new-recipe" icon="fa fa-plus-circle" label="New Recipe" (click)="createNewRecipe()"
             [disabled]="recipeTypeId === 0"></button>
 </div>
 <hr />
@@ -42,17 +42,17 @@
                         </div>
                     </div>
                     <div class="ui-g-4 ui-g-nopad text-right">
-                        <button class="btn__edit" pButton icon="fa-edit fa-fw" (click)="toggleEdit()"
+                        <button class="btn__edit" pButton icon="fa fa-edit fa-fw" (click)="toggleEdit()"
                                 *ngIf="selectedRecipeType && !isEditing" pTooltip="Edit Recipe Type"></button>
                         <div class="recipe-type__menu">
-                            <button class="btn__menu ui-button-info" pButton icon="fa-cube fa-fw" (click)="showToggleJobType()"
+                            <button class="btn__menu ui-button-info" pButton icon="fa fa-cube fa-fw" (click)="showToggleJobType()"
                                     *ngIf="selectedRecipeType && isEditing" pTooltip="Add/Remove Job Types"></button>
-                            <button class="btn__menu ui-button-warning" pButton icon="fa-check fa-fw" (click)="validateRecipeType()"
+                            <button class="btn__menu ui-button-warning" pButton icon="fa fa-check fa-fw" (click)="validateRecipeType()"
                                     *ngIf="selectedRecipeType && isEditing" pTooltip="Validate Recipe Type"></button>
-                            <button class="btn__menu ui-button-success" pButton icon="fa-save fa-fw" (click)="saveRecipeType()"
+                            <button class="btn__menu ui-button-success" pButton icon="fa fa-save fa-fw" (click)="saveRecipeType()"
                                     *ngIf="selectedRecipeType && isEditing" pTooltip="Save Recipe Type"></button>
                         </div>
-                        <button class="ui-button-danger margin-left-md" pButton icon="fa-remove fa-fw" (click)="toggleEdit()"
+                        <button class="ui-button-danger margin-left-md" pButton icon="fa fa-remove fa-fw" (click)="toggleEdit()"
                                 *ngIf="selectedRecipeType && isEditing" pTooltip="Cancel Edit"></button>
                     </div>
                 </div>

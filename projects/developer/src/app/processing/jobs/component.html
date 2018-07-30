@@ -12,7 +12,7 @@
         <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
     </div>
     <div class="jobs__controls">
-        <button pButton type="button" class="ui-button-primary" icon="fa-repeat" pTooltip="Requeue All Jobs"
+        <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
                 (click)="requeueAllConfirm()"></button>
     </div>
 </div>
@@ -69,10 +69,10 @@
                 <div *ngSwitchCase="'status'">
                     <div class="pull-right">
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
-                        <button pButton type="button" icon="fa-ban" class="ui-button-secondary" (click)="cancelJob(rowData)"
+                        <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary" (click)="cancelJob(rowData)"
                                 pTooltip="Cancel Job"
                                 *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
-                        <button pButton type="button" icon="fa-repeat" class="ui-button-secondary"
+                        <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
                                 (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
                                 *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>
                     </div>
@@ -86,7 +86,7 @@
                 </div>
                 <div class="text-center" *ngSwitchCase="'id'">
                     <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showExeLog(rowData.id)"
-                            icon="fa-file-text"></button>
+                            icon="fa fa-file-text"></button>
                 </div>
                 <div *ngSwitchDefault>
                     {{ rowData[col.field] }}

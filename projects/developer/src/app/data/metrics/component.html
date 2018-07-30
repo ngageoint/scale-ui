@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <button pButton type="button" class="ui-button-primary metrics__filter-toggle" icon="fa-filter"
+    <button pButton type="button" class="ui-button-primary metrics__filter-toggle" icon="fa fa-filter"
             (click)="showFilters = !showFilters"></button>
 
     <p-sidebar [(visible)]="showFilters" position="left" [style]="{'width':'25vw'}" [blockScroll]="true" baseZIndex="1002">
@@ -44,7 +44,7 @@
             <label>Secondary Metric Display</label>
             <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         </div>
-        <button pButton icon="fa-refresh" label="Update Chart" (click)="updateChart()"
+        <button pButton icon="fa fa-refresh" label="Update Chart" (click)="updateChart()"
                 [disabled]="!selectedMetric1"></button>
     </p-sidebar>
 </div>

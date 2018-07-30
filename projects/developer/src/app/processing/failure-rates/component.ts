@@ -165,6 +165,9 @@ export class FailureRatesComponent implements OnInit {
             'rgba(' + rgb + ', ' + parseFloat((data.errorTotal / data.total).toFixed(2)) + ')' :
             'rgba(' + rgb + ', ' + ' 0)';
     }
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
     sortBy(field) {
         let sortField = this.datatableOptions.sortField.split('.');
         this.sortConfig[sortField[0]][sortField[1]].icon = 'hidden';

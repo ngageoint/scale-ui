@@ -35,18 +35,18 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     total24h: number;
     failed24h: number;
     options: any;
-    pauseBtnIcon = 'fa-pause';
+    pauseBtnIcon = 'fa fa-pause';
     items: MenuItem[] = [
-        { label: 'Pause', icon: 'fa-pause', command: () => { this.onPauseClick(); } },
-        { label: 'Edit', icon: 'fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa-barcode', command: () => { this.scanDisplay = true; } }
+        { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
     ];
     scanDisplay: boolean;
     workspaces: SelectItem[] = [];
     selectedWorkspace: any;
     isScanning: boolean;
     scanProgress = 0;
-    scanBtnIcon = 'fa-barcode';
+    scanBtnIcon = 'fa fa-barcode';
     private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
     private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
 
@@ -173,7 +173,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     private handleScanError(err) {
         console.log(err);
         this.isScanning = false;
-        this.scanBtnIcon = 'fa-barcode';
+        this.scanBtnIcon = 'fa fa-barcode';
         this.scanProgress = 0;
         this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
     }
@@ -192,7 +192,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
         this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
             this.selectedJobTypeDetail = data;
-            this.pauseBtnIcon = this.selectedJobTypeDetail.is_paused ? 'fa-play' : 'fa-pause';
+            this.pauseBtnIcon = this.selectedJobTypeDetail.is_paused ? 'fa fa-play' : 'fa fa-pause';
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
         });
@@ -224,7 +224,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         };
         this.isScanning = true;
         this.scanProgress = 33;
-        this.scanBtnIcon = 'fa-spinner fa-spin';
+        this.scanBtnIcon = 'fa fa-spinner fa-spin';
         this.jobTypesApiService.scanJobTypeWorkspace(scanObj).subscribe(() => {
             const rand = Math.floor(Math.random() * 1000000000);
             const scan = {

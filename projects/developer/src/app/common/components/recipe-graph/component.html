@@ -62,7 +62,7 @@
                             <strong>Dependencies</strong>
                         </div>
                         <div class="ui-g-2 ui-g-nopad text-right">
-                            <button pButton class="ui-button-info" icon="fa-plus"
+                            <button pButton class="ui-button-info" icon="fa fa-plus"
                                     (click)="showDependencyOptions($event)" *ngIf="isEditing"
                                     pTooltip="Add Dependency"></button>
                         </div>
@@ -71,7 +71,7 @@
                 <ng-template let-dep pTemplate="item">
                     <div class="ui-g recipe-io recipe-dependencies">
                         <div class="ui-g-12">
-                            <button pButton class="ui-button-danger" icon="fa-remove" (click)="removeDependency(dep)"
+                            <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
                             {{ dep.name }}
                         </div>
@@ -95,7 +95,7 @@
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
                                         <li *ngFor="let dependency of input.dependencies">
-                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa-remove"
+                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                     (click)="removeInputConnection(dependency)" *ngIf="isEditing">
                                             </button>
                                             <strong>{{ dependency.name }}</strong>.<em>{{ dependency.output }}</em>
@@ -104,7 +104,7 @@
                                 </div>
                             </div>
                             <div class="ui-g-2 ui-g-nopad text-right">
-                                <button pButton class="ui-button-info margin-top-md" icon="fa-plus"
+                                <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                         (click)="showInputConnections($event, input)" *ngIf="isEditing"
                                         pTooltip="Add Input Connection"></button>
                             </div>
@@ -127,7 +127,7 @@
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
                                         <li *ngFor="let dependent of output.dependents">
-                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa-remove"
+                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                     (click)="removeOutputConnection(dependent)" *ngIf="isEditing">
                                             </button>
                                             <strong>{{ dependent.name }}</strong>.<em>{{ dependent.input }}</em>
@@ -136,7 +136,7 @@
                                 </div>
                             </div>
                             <div class="ui-g-2 ui-g-nopad text-right">
-                                <button pButton class="ui-button-info margin-top-md" icon="fa-plus"
+                                <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                         (click)="showOutputConnections($event, output)" *ngIf="isEditing"
                                         pTooltip="Add Output Connection">
                                 </button>

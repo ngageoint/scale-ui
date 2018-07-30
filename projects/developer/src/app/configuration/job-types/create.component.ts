@@ -12,7 +12,7 @@ import { environment } from '../../../environments/environment';
 
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
-// import * as iconData from './font-awesome.json';
+import iconData from './font-awesome.json';
 import { WorkspacesApiService } from '../workspaces/api.service';
 
 @Component({
@@ -102,7 +102,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     readOnly: 'nocursor',
                     viewportMargin: Infinity
                 };
-                const iconData = [];
                 _.forEach(iconData, d => {
                     this.icons.push({
                         label: d.label,
