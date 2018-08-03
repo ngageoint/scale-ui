@@ -39,6 +39,7 @@
     "js-beautify": "^1.6.14",
     "lodash": "^4.17.4",
     "moment": "^2.21.0",
+    "node-sass": "^4.9.2",
     "normalize.css": "^7.0.0",
     "primeicons": "^1.0.0-beta.10",
     "primeng": "^6.0.2",
