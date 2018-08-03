@@ -40,6 +40,14 @@
     display: none;
 }
 
+.ui-dropdown {
+    line-height: normal;
+}
+
+.ui-multiselect .ui-multiselect-label {
+    padding: .6em 2em .6em 2em;
+}
+
 .seed-jobs .results .ui-panel:hover {
     background: $clr-highlight !important;
 

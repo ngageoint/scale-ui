@@ -17,6 +17,16 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 export class BatchesCreateComponent implements OnInit {
     batch = new Batch();
     recipeTypeOptions: SelectItem[] = [];
+    dateRangeOptions: SelectItem[] = [
+        {
+            label: 'Created',
+            value: 'created'
+        },
+        {
+            label: 'Data',
+            value: 'data'
+        }
+    ];
     jobOptions: SelectItem[] = [];
     startTime = {
         hour: '00',

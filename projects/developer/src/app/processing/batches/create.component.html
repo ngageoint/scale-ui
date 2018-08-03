@@ -1,15 +1,17 @@
-<h2><i class="fa fa-files-o"></i> {{ batch.title }}</h2>
 <div class="batches__create-form-container">
-    <p-panel header="General Information" styleClass="margin-bottom-lg">
+    <p-panel>
+        <p-header>
+            <h2><i class="fa fa-files-o"></i> {{ batch.title }}</h2>
+        </p-header>
         <div class="ui-g">
             <div class="ui-g-6">
                 <label for="title">Title *:</label>
-                <input pInputText type="text" id="title" [(ngModel)]="batch.title"/>
+                <input pInputText type="text" id="title" [(ngModel)]="batch.title" class="full-width"/>
             </div>
             <div class="ui-g-6">
                 <label for="recipeType">Recipe Type *:</label>
                 <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..." autoWidth="false"
-                            [(ngModel)]="batch.recipe_type" (onChange)="setJobs()" [style]="{'width': '25%'}">
+                            [(ngModel)]="batch.recipe_type" (onChange)="setJobs()" [style]="{'width': '100%'}">
                     <ng-template let-recipeType p-template="item">
                         {{ recipeType.title }} v{{ recipeType.version }}
                     </ng-template>
@@ -19,18 +21,17 @@
         <div class="ui-g">
             <div class="ui-g-12">
                 <label for="description">Description:</label>
-                <textarea pInputTextarea type="text" id="description" rows="8" [(ngModel)]="batch.description"></textarea>
+                <textarea pInputTextarea type="text" id="description" rows="8" [(ngModel)]="batch.description"
+                          class="full-width"></textarea>
             </div>
         </div>
-    </p-panel>
-    <p-panel header="Definition">
+        <h3>Definition</h3>
         <div class="ui-g">
             <div class="ui-g-6">
                 <label for="dateRangeType">Date Range Type</label>
-                <select id="dateRangeType" name="dateRangeType" [(ngModel)]="batch.definition.date_range.type">
-                    <option value="created">Created</option>
-                    <option value="data">Data</option>
-                </select>
+                <p-dropdown id="dateRangeType" name="dateRangeType" [options]="dateRangeOptions" placeholder="Select..."
+                            autoWidth="false" [(ngModel)]="batch.definition.date_range.type" [style]="{'width': '100%'}">
+                </p-dropdown>
                 <p>"Created" matches recipes based on the timestamp of when they were originally created; "Data"
                     matches recipes based on the timestamp of when its input files were collected.</p>
                 <label for="dateRangeStarted">Date Range Started</label>
@@ -80,19 +81,21 @@
             </div>
             <div class="ui-g-6">
                 <div *ngIf="!batch.recipe_type">
-                    <label for="jobNames">Job Names</label><br />
+                    <label for="jobNames">Job Names</label>
                     <p>Choose a recipe type in order to see relevant job names.</p>
                 </div>
                 <div *ngIf="batch.recipe_type">
-                    <label for="jobNames">Job Names</label><br />
+                    <label for="jobNames">Job Names</label>
                     <p-multiSelect id="jobNames" [options]="jobOptions" [(ngModel)]="batch.definition.job_names"
-                                   [style]="{'width':'100%'}" [disabled]="batch.definition.all_jobs"></p-multiSelect>
-                    <p>Additional jobs that did not have a revision change.</p>
+                                   [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                   [disabled]="batch.definition.all_jobs"></p-multiSelect>
+                    <!--<p>Additional jobs that did not have a revision change.</p>-->
                 </div>
                 <p-checkbox id="allJobs" label="All Jobs" (onChange)="setAllJobs($event)"></p-checkbox>
                 <p>Re-process every job. This overrides the values included in "Job Names".</p>
                 <label for="priority">Priority</label>
-                <input pInputText id="priority" name="priority" type="number" [(ngModel)]="batch.definition.priority">
+                <input pInputText id="priority" name="priority" type="number" [(ngModel)]="batch.definition.priority"
+                       class="full-width">
                 <p>Indicates every job in the recipe should be queued with an override priority instead of the default
                     priority defined by the job type.</p>
             </div>
