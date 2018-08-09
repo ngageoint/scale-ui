@@ -18,5 +18,6 @@ install:
 - npm install -g @angular/cli
 script:
 - export CHROME_BIN=chromium-browser
-- xvfb-run -a ng test -- --browsers=ChromeNoSandbox --code-coverage --watch=false
-- xvfb-run -a ng run e2e -- 
+- ng test
+- ng e2e
+- bg build
