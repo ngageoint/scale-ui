@@ -18,6 +18,6 @@ install:
 - npm install -g @angular/cli
 script:
 - export CHROME_BIN=chromium-browser
-- ng test
-- ng e2e
-- bg build
+- ng test --browsers ChromeHeadless
+- ng e2e --browsers ChromeHeadless
+- ng build
