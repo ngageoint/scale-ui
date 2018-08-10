@@ -2,14 +2,9 @@ dist: trusty
 sudo: false
 language: node_js
 node_js:
-- '9'
+- '8'
 addons:
   chrome: stable
-  apt:
-    sources:
-    - google-chrome
-    packages:
-    - google-chrome-stable
 cache:
   directories:
   - "./node_modules"
@@ -17,7 +12,5 @@ install:
 - npm install
 - npm install -g @angular/cli
 script:
-- export CHROME_BIN=chromium-browser
-- ng test --browsers ChromeHeadless
-- ng e2e --browsers ChromeHeadless
-- ng build
+- ng test developer --browsers ChromeTravisCi --single-run
+- ng build developer --prod
