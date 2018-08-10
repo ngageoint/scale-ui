@@ -18,6 +18,7 @@ install:
 - npm install -g @angular/cli
 script:
 - export CHROME_BIN=chromium-browser
-- ng test --browsers ChromeHeadless
-- ng e2e --browsers ChromeHeadless
-- ng build
+- google-chrome-stable --headless --disable-gpu --no-sandbox http://localhost &
+- ng test 
+- ng e2e
+- ng build developer --prod
