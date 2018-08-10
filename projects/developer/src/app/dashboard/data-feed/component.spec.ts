@@ -11,7 +11,7 @@ import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { ProductsApiService } from '../../common/components/products/api.service';
+import { ProductsApiService } from '../../common/services/products/api.service';
 
 describe('DataFeedComponent', () => {
     let component: DataFeedComponent;

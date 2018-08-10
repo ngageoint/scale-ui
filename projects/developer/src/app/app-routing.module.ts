@@ -16,6 +16,7 @@ import { MetricsComponent } from './data/metrics/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchesCreateComponent } from './processing/batches/create.component';
+import { IngestComponent } from './data/ingest/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -35,6 +36,7 @@ const routes: Routes = [
     { path: 'configuration/recipe-types/:id', component: RecipeTypesComponent },
     { path: 'data/sources', component: SourcesComponent },
     { path: 'data/sources/:id', component: SourceDetailsComponent },
+    { path: 'data/ingest', component: IngestComponent },
     { path: 'data/metrics', component: MetricsComponent }
 ];
 
