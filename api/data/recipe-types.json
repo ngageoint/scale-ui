@@ -11,90 +11,65 @@
             "description": "Process Landsat 8 sensor data",
             "is_active": true,
             "definition": {
-                "input_data": [{
-                    "name": "input_file",
-                    "required": true,
-                    "type": "file",
-                    "media_types": ["image/tiff"]
-                }],
-                "version": "1.0",
-                "jobs": [{
-                    "recipe_inputs": [],
-                    "name": "landsat8-parse",
-                    "job_type": {
-                        "name": "landsat8-parse",
-                        "version": "1.0.0"
+                "input": {
+                    "files": [{"name": "input_file"}]
+                },
+                "nodes": {
+                    "landsat8-parse": {
+                        "dependencies": [],
+                        "input": {
+                            "input_file": {"type": "recipe", "input": "input_file"}
+                        },
+                        "node_type": {
+                            "node_type": "job",
+                            "job_type_name": "landsat8-parse",
+                            "job_type_version": "1.0.0",
+                            "job_type_revision": 1
+                        }
                     },
-                    "dependencies": []
-                }, {
-                    "recipe_inputs": [],
-                    "name": "landsat8-atmos-corr",
-                    "job_type": {
-                        "name": "landsat8-atmos-corr",
-                        "version": "2.1.9"
+                    "landsat8-atmos-corr": {
+                        "dependencies": [{"name": "landsat8-parse"}],
+                        "input": {
+                            "infile": {"type": "dependency", "node": "landsat8-parse", "output": "thermal"}
+                        },
+                        "node_type": {
+                            "node_type": "job",
+                            "job_type_name": "landsat8-atmos-corr",
+                            "job_type_version": "2.1.9",
+                            "job_type_revision": 1
+                        }
                     },
-                    "dependencies": [{
-                        "name": "landsat8-parse",
-                        "connections": [{
-                            "output": "thermal",
-                            "input": "infile"
-                        }]
-                    }]
-                }, {
-                    "recipe_inputs": [],
-                    "name": "landsat8-ortho",
-                    "job_type": {
-                        "name": "landsat8-ortho",
-                        "version": "2.0"
+                    "landsat8-ortho": {
+                        "dependencies": [{"name": "landsat8-parse"}],
+                        "input": {
+                            "infile": {"type": "dependency", "node": "landsat8-parse", "output": "panchromatic"}
+                        },
+                        "node_type": {
+                            "node_type": "job",
+                            "job_type_name": "landsat8-ortho",
+                            "job_type_version": "2.0",
+                            "job_type_revision": 1
+                        }
                     },
-                    "dependencies": [{
-                        "name": "landsat8-parse",
-                        "connections": [{
-                            "output": "panchromatic",
-                            "input": "infile"
-                        }]
-                    }]
-                }, {
-                    "recipe_inputs": [],
-                    "name": "export-shp",
-                    "job_type": {
-                        "name": "export-shp",
-                        "version": "2.0"
-                    },
-                    "dependencies": [{
-                        "name": "landsat8-atmos-corr",
-                        "connections": [{
-                            "output": "ls8-corrected",
-                            "input": "infile"
-                        }]
-                    }, {
-                        "name": "landsat8-ortho",
-                        "connections": [{
-                            "output": "ls8-corrected",
-                            "input": "infile"
-                        }]
-                    }]
-                }]
+                    "export-shp": {
+                        "dependencies": [{"name": "landsat8-atmos-corr"}, {"name": "landsat8-ortho"}],
+                        "input": {
+                            "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "outout": "ls8-corrected"},
+                            "panchromatic": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"}
+                        },
+                        "node_type": {
+                            "node_type": "job",
+                            "job_type_name": "export-shp",
+                            "job_type_version": "2.0",
+                            "job_type_revision": 1
+                        }
+                    }
+                }
             },
             "revision_num": 1,
             "created": "2015-06-15T19:03:26.346Z",
             "last_modified": "2015-06-15T19:03:26.346Z",
-            "archived": null,
-            "trigger_rule": {
-                "type": "INGEST",
-                "name": "landsat",
-                "is_active": true,
-                "configuration": {
-                    "condition": {
-                        "media_type": "",
-                        "data_types": ["landsat"]
-                    },
-                    "data": {
-                        "workspace_name": "products",
-                        "input_data_name": "input_file"
-                    }
-                }
-            }
+            "archived": null
         },
         {
             "id": 2,
@@ -166,22 +141,7 @@
             "revision_num": 1,
             "created": "2016-04-29T19:03:26.346Z",
             "last_modified": "2016-04-29T19:03:26.346Z",
-            "archived": null,
-            "trigger_rule": {
-                "type": "INGEST",
-                "name": "spectral",
-                "is_active": true,
-                "configuration": {
-                    "condition": {
-                        "media_type": "",
-                        "data_types": ["spectral"]
-                    },
-                    "data": {
-                        "workspace_name": "products",
-                        "input_data_name": "input_file"
-                    }
-                }
-            }
+            "archived": null
         },
         {
             "id": 3,
