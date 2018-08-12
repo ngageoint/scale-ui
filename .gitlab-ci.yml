@@ -1,0 +1,22 @@
+image: node:8
+
+before_script:
+  - npm install
+  - npm install -g @angular/cli
+
+cache:
+  paths:
+  - node_modules/
+
+test_ui:
+  stage: test
+  tags:
+    - linux
+  script:
+    - ng test developer --browsers ChromeHeadlessCi
+    - ng build developer --prod
+  artifacts:
+    paths:
+      - dist/developer
+    expire_in: 1 day
+    

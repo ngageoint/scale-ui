@@ -25,11 +25,11 @@ module.exports = function (config) {
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
-        browsers: ['Chrome','ChromeTravisCi'],
+        browsers: ['Chrome','ChromeHeadlessCi'],
 	customLaunchers: {
-		ChromeTravisCi: {
+		ChromeHeadlessCi: {
 			base: 'ChromeHeadless',
-			flags: ['--no-sandbox', '--disable-gpu']
+			flags: ['--no-sandbox', '--disable-gpu', '--single-run']
 		}
 	},
         singleRun: false

@@ -12,5 +12,5 @@ install:
 - npm install
 - npm install -g @angular/cli
 script:
-- ng test developer --browsers ChromeTravisCi --single-run
+- ng test developer --browsers ChromeHeadlessCi
 - ng build developer --prod
