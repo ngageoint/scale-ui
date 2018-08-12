@@ -13,7 +13,7 @@ test_ui:
   tags:
     - linux
   script:
-    - ng test developer --browsers ChromeHeadlessCi --no-sandbox
+    - ng test developer --browsers ChromeHeadlessCi
     - ng build developer --prod
   artifacts:
     paths:
