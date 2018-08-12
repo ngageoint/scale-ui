@@ -1,12 +1,8 @@
-image: node:8
+image: avatsaev/angular-chrome-headless
 
 before_script:
   - npm install
   - npm install -g @angular/cli
-  - echo "deb http://dl.google.com/linux/chrome/deb/ stable main" | tee -a /etc/apt/sources.list
-  - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add -
-  - apt-get -qq update -y
-  - apt-get -qq install -y google-chrome-stable
 
 cache:
   paths:
@@ -17,7 +13,7 @@ test_ui:
   tags:
     - linux
   script:
-    - ng test developer --browsers ChromeHeadlessCi
+    - ng test developer --browsers ChromeHeadlessCi --no-sandbox
     - ng build developer --prod
   artifacts:
     paths:
