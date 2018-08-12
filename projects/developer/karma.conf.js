@@ -26,12 +26,12 @@ module.exports = function (config) {
         logLevel: config.LOG_INFO,
         autoWatch: true,
         browsers: ['Chrome','ChromeHeadlessCi'],
-	customLaunchers: {
-		ChromeHeadlessCi: {
-			base: 'ChromeHeadless',
-			flags: ['--no-sandbox', '--disable-gpu', '--single-run']
-		}
-	},
+        customLaunchers: {
+            ChromeHeadlessCi: {
+                base: 'ChromeHeadless',
+                flags: ['--no-sandbox', '--disable-gpu']
+            }
+        },
         singleRun: false
     });
 };
