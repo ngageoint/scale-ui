@@ -1,0 +1,40 @@
+h2 {
+    .ui-button {
+        font-size: 0.7em;
+    }
+}
+label {
+    font-weight: bold;
+    display: block;
+}
+.ingest__header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .ingest__date-filter {
+        display: flex;
+
+        div {
+            margin-right: 20px;
+        }
+
+        .ingest__date-filter-btn {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 20px;
+        }
+    }
+}
+.ingest__table {
+    .ui-button {
+        font-size: .7em !important;
+        padding: 0 !important;
+    }
+}
+.label-info {
+    padding: .2em .6em .1em .6em;
+}
+::ng-deep .ingest__error-tooltip.ui-tooltip {
+    max-width: 50%;
+}

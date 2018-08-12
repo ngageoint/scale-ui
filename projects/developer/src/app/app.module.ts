@@ -72,14 +72,16 @@ import { JobActivityComponent } from './dashboard/job-activity/component';
 import { DataFeedComponent } from './dashboard/data-feed/component';
 import { IngestComponent } from './data/ingest/component';
 import { IngestApiService } from './data/ingest/api.service';
+import { IngestDatatableService } from './data/ingest/datatable.service';
 import { LoadingIndicatorComponent } from './common/components/loading-indicator/component';
 import { StatusApiService } from './navbar/status/api.service';
-import { ProductsApiService } from './common/components/products/api.service';
-import { ScansApiService } from './common/components/scans/api.service';
+import { ProductsApiService } from './common/services/products/api.service';
+import { ScansApiService } from './common/services/scans/api.service';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchesApiService } from './processing/batches/api.service';
 import { BatchesDatatableService } from './processing/batches/datatable.service';
 import { BatchesCreateComponent } from './processing/batches/create.component';
+import { StrikesApiService } from './common/services/strikes/api.service';
 
 
 @NgModule({
@@ -187,12 +189,14 @@ import { BatchesCreateComponent } from './processing/batches/create.component';
         RunningJobsDatatableService,
         LogViewerApiService,
         IngestApiService,
+        IngestDatatableService,
         StatusApiService,
         ConfirmationService,
         ProductsApiService,
         ScansApiService,
         BatchesApiService,
-        BatchesDatatableService
+        BatchesDatatableService,
+        StrikesApiService
     ],
     bootstrap: [AppComponent]
 })
