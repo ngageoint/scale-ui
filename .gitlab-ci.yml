@@ -13,8 +13,8 @@ test_ui:
   tags:
     - linux
   script:
-    - ng test:ci developer
-    - ng build developer --prod
+    - npm run testdev:ci
+    - npm run builddev:prod
   artifacts:
     paths:
       - dist/developer
