@@ -19,11 +19,12 @@ import { StrikesApiService } from '../../common/services/strikes/api.service';
 })
 export class IngestComponent implements OnInit, OnDestroy {
     ingests: any;
+    selectedIngest: any;
     datatableOptions: IngestDatatable;
     datatableLoading: boolean;
     columns: any[];
     strikeValues: SelectItem[] = [];
-    selectedStrike: string;
+    selectedStrike: any;
     statusValues: SelectItem[];
     selectedStatus: string;
     count: number;
@@ -229,4 +230,3 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.unsubscribe();
     }
 }
-
