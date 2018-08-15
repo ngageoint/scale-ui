@@ -1,6 +1,6 @@
 variables:
-  PROJECT_ID=1746474
-  GITLAB_BASE=https://gitlab.com/api/v4/projects
+  PROJECT_ID: 1746474
+  GITLAB_BASE: https://gitlab.com/api/v4/projects
   
 image: avatsaev/angular-chrome-headless
 
