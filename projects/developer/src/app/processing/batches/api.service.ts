@@ -29,9 +29,10 @@ export class BatchesApiService {
             page_size: params.rows ? params.rows.toString() : null,
             started: params.started,
             ended: params.ended,
-            status: params.status,
-            job_type_id: params.job_type_id,
-            recipe_type_id: params.recipe_type_id
+            recipe_type_id: params.recipe_type_id,
+            is_creation_done: params.is_creation_done,
+            is_superseded: params.is_superseded,
+            root_batch_id: params.root_batch_id
         };
         apiParams = _.pickBy(apiParams, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';

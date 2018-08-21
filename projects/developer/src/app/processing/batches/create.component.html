@@ -11,7 +11,7 @@
             <div class="ui-g-6">
                 <label for="recipeType">Recipe Type *:</label>
                 <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..." autoWidth="false"
-                            [(ngModel)]="batch.recipe_type" (onChange)="setJobs()" [style]="{'width': '100%'}">
+                            [(ngModel)]="batch.recipe_type" [style]="{'width': '100%'}">
                     <ng-template let-recipeType p-template="item">
                         {{ recipeType.title }} v{{ recipeType.version }}
                     </ng-template>
@@ -28,76 +28,6 @@
         <h3>Definition</h3>
         <div class="ui-g">
             <div class="ui-g-6">
-                <label for="dateRangeType">Date Range Type</label>
-                <p-dropdown id="dateRangeType" name="dateRangeType" [options]="dateRangeOptions" placeholder="Select..."
-                            autoWidth="false" [(ngModel)]="batch.definition.date_range.type" [style]="{'width': '100%'}">
-                </p-dropdown>
-                <p>"Created" matches recipes based on the timestamp of when they were originally created; "Data"
-                    matches recipes based on the timestamp of when its input files were collected.</p>
-                <label for="dateRangeStarted">Date Range Started</label>
-                <div class="ui-g">
-                    <div class="ui-g-6">
-                        <utc-datepicker id="dateRangeStarted" [button]="true"
-                                        (dateChange)="onDateRangeStartSelect($event)"></utc-datepicker>
-                    </div>
-                    <div class="ui-g-6">
-                        <div class="timepicker">
-                            <input pInputText type="tel" size="5" (change)="changeTime('startTime', 'hour')"
-                                   (keydown)="keydown($event, 'hour', 'startTime')" [(ngModel)]="startTime.hour"
-                                   [disabled]="!batch.definition.date_range.started"/>
-                            <span>:</span>
-                            <input pInputText type="tel" size="5" (change)="changeTime('startTime', 'minute')"
-                                   (keydown)="keydown($event, 'minute', 'startTime')" [(ngModel)]="startTime.minute"
-                                   [disabled]="!batch.definition.date_range.started"/>
-                            <span>:</span>
-                            <input pInputText type="tel" size="5" (change)="changeTime('startTime', 'second')"
-                                   (keydown)="keydown($event, 'second', 'startTime')" [(ngModel)]="startTime.second"
-                                   [disabled]="!batch.definition.date_range.started"/>
-                        </div>
-                    </div>
-                </div>
-                <label for="dateRangeStarted">Date Range Ended</label>
-                <div class="ui-g">
-                    <div class="ui-g-6">
-                        <utc-datepicker id="dateRangeEnded" [button]="true"
-                                        (dateChange)="onDateRangeEndSelect($event)"></utc-datepicker>
-                    </div>
-                    <div class="ui-g-6">
-                        <div class="timepicker">
-                            <input pInputText type="tel" size="5" (change)="changeTime('endTime', 'hour')"
-                                   (keydown)="keydown($event, 'hour', 'endTime')" [(ngModel)]="endTime.hour"
-                                   [disabled]="!batch.definition.date_range.ended"/>
-                            <span>:</span>
-                            <input pInputText type="tel" size="5" (change)="changeTime('endTime', 'minute')"
-                                   (keydown)="keydown($event, 'minute', 'endTime')" [(ngModel)]="endTime.minute"
-                                   [disabled]="!batch.definition.date_range.ended"/>
-                            <span>:</span>
-                            <input pInputText type="tel" size="5" (change)="changeTime('endTime', 'second')"
-                                   (keydown)="keydown($event, 'second', 'endTime')" [(ngModel)]="endTime.second"
-                                   [disabled]="!batch.definition.date_range.ended"/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui-g-6">
-                <div *ngIf="!batch.recipe_type">
-                    <label for="jobNames">Job Names</label>
-                    <p>Choose a recipe type in order to see relevant job names.</p>
-                </div>
-                <div *ngIf="batch.recipe_type">
-                    <label for="jobNames">Job Names</label>
-                    <p-multiSelect id="jobNames" [options]="jobOptions" [(ngModel)]="batch.definition.job_names"
-                                   [style]="{'width':'100%', 'margin-bottom':'10px'}"
-                                   [disabled]="batch.definition.all_jobs"></p-multiSelect>
-                    <!--<p>Additional jobs that did not have a revision change.</p>-->
-                </div>
-                <p-checkbox id="allJobs" label="All Jobs" (onChange)="setAllJobs($event)"></p-checkbox>
-                <p>Re-process every job. This overrides the values included in "Job Names".</p>
-                <label for="priority">Priority</label>
-                <input pInputText id="priority" name="priority" type="number" [(ngModel)]="batch.definition.priority"
-                       class="full-width">
-                <p>Indicates every job in the recipe should be queued with an override priority instead of the default
-                    priority defined by the job type.</p>
             </div>
         </div>
     </p-panel>

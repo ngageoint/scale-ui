@@ -26,7 +26,7 @@
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
-                <div *ngSwitchCase="'recipe_type.id'">
+                <div *ngSwitchCase="'recipe_type.name'">
                     <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType" (onChange)="onRecipeTypeChange($event)"
                                 [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
                                 [showClear]="false">
@@ -34,11 +34,6 @@
                             {{ recipeType.label }}
                         </ng-template>
                     </p-dropdown>
-                </div>
-                <div *ngSwitchCase="'status'">
-                    <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" (onChange)="onStatusChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
-                                [showClear]="false"></p-dropdown>
                 </div>
             </th>
         </tr>
