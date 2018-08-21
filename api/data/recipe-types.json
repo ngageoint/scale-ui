@@ -6,7 +6,6 @@
         {
             "id": 1,
             "name": "landsat8",
-            "version": "1.0.0",
             "title": "Landsat8",
             "description": "Process Landsat 8 sensor data",
             "is_active": true,
@@ -69,7 +68,7 @@
             "revision_num": 1,
             "created": "2015-06-15T19:03:26.346Z",
             "last_modified": "2015-06-15T19:03:26.346Z",
-            "archived": null
+            "deprecated": null
         },
         {
             "id": 2,
@@ -141,7 +140,22 @@
             "revision_num": 1,
             "created": "2016-04-29T19:03:26.346Z",
             "last_modified": "2016-04-29T19:03:26.346Z",
-            "archived": null
+            "archived": null,
+            "trigger_rule": {
+                "type": "INGEST",
+                "name": "spectral",
+                "is_active": true,
+                "configuration": {
+                    "condition": {
+                        "media_type": "",
+                        "data_types": ["spectral"]
+                    },
+                    "data": {
+                        "workspace_name": "products",
+                        "input_data_name": "input_file"
+                    }
+                }
+            }
         },
         {
             "id": 3,

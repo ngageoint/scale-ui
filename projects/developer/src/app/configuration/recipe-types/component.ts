@@ -55,7 +55,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
                     _.forEach(data.results, (result) => {
                         this.recipeTypes.push({
-                            label: result.title + ' ' + result.version,
+                            label: result.title,
                             value: result
                         });
                         if (this.recipeTypeId === result.id) {
@@ -73,12 +73,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                                     null,
                                     'new-recipe',
                                     'New Recipe',
-                                    '1.0',
                                     'Description of a new recipe',
                                     true,
-                                    new RecipeTypeDefinition([], '1.0', []),
-                                    null,
-                                    null,
+                                    new RecipeTypeDefinition({}, {}),
                                     null,
                                     null,
                                     null,
@@ -100,7 +97,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
             const jtArray = [];
-            const jobNames = _.map(this.selectedRecipeTypeDetail.definition.jobs, 'name');
+            const jobNames = _.map(_.values(this.selectedRecipeTypeDetail.definition.nodes), 'node_type.job_type_name');
             _.forEach(this.jobTypes, jt => {
                 if (_.includes(jobNames, jt.name)) {
                     jtArray.push(jt);
