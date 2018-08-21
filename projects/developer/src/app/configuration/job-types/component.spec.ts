@@ -8,7 +8,7 @@ import { DataService } from '../../common/services/data.service';
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
-import { ScansApiService } from '../../common/components/scans/api.service';
+import { ScansApiService } from '../../common/services/scans/api.service';
 import { JobTypesComponent } from './component';
 
 

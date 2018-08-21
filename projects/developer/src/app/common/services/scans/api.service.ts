@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 
-import { DataService } from '../../services/data.service';
+import { DataService } from '../data.service';
 import { ApiResults } from '../../models/api-results.model';
 
 @Injectable()

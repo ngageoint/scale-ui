@@ -1,7 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { DataService } from '../../services/data.service';
+import { DataService } from '../data.service';
 import { ProductsApiService } from './api.service';
 
 

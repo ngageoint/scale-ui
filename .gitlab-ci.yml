@@ -1,0 +1,31 @@
+variables:
+  PROJECT_ID: 1746474
+  GITLAB_BASE: https://gitlab.com/api/v4/projects
+  
+image: avatsaev/angular-chrome-headless
+
+before_script:
+  - npm install
+  - npm install -g @angular/cli
+
+cache:
+  paths:
+  - node_modules/
+
+test_ui:
+  stage: test
+  tags:
+    - linux
+  script:
+    - npm run testdev:ci
+    - npm run builddev:prod
+  artifacts:
+    paths:
+      - dist/developer
+    expire_in: 1 day
+    
+trigger_build:
+  stage: deploy
+  script:
+    - "curl -X POST -F token=${TOKEN} -F ref=master ${GITLAB_BASE}/${PROJECT_ID}/trigger/pipeline"
+    
