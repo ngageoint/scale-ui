@@ -4,6 +4,8 @@ import { environment } from '../../../environments/environment';
 
 export class Batch {
     dataService: DataService;
+    creation_progress: any;
+    creation_progress_tooltip: any;
     created_formatted: string;
     last_modified_formatted: string;
     statusClass: string;
@@ -96,6 +98,12 @@ export class Batch {
             this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
             this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
         }
+        this.creation_progress = this.is_creation_done ?
+            (this.recipes_completed / this.recipes_total) * 100 :
+            (this.recipes_total / this.recipes_estimated) * 100;
+        this.creation_progress_tooltip = this.is_creation_done ?
+            `Completed: ${this.recipes_completed}, Total: ${this.recipes_total}` :
+            `Total: ${this.recipes_total}, Estimated: ${this.recipes_estimated}`;
         this.id = this.id || null;
         this.title = this.title || null;
         this.description = this.description || null;

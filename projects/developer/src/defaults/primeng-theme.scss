@@ -132,6 +132,12 @@
     }
 }
 
+.ui-progressbar {
+    .ui-progressbar-value {
+        background: $stateHighlightBgColor;
+    }
+}
+
 /* Forms */
 .ui-inputtext {
     background: $inputBgColor;

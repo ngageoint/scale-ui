@@ -41,6 +41,19 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <div *ngSwitchCase="'title'">
+                    <span [pTooltip]="rowData.description">
+                        {{ rowData.title }}
+                    </span>
+                </div>
+                <div *ngSwitchCase="'recipe_type'">
+                    <span [pTooltip]="rowData.recipe_type.description">
+                        {{ rowData.recipe_type.title }}
+                    </span>
+                </div>
+                <div *ngSwitchCase="'is_creation_done'" [pTooltip]="rowData.creation_progress_tooltip">
+                    <p-progressBar [value]="rowData.creation_progress"></p-progressBar>
+                </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">
                         {{ rowData.createdDisplay }}

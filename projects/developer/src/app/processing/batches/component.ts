@@ -46,8 +46,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.isInitialized = false;
         this.columns = [
             { field: 'title', header: 'Title' },
-            { field: 'recipe_type.name', header: 'Recipe Type' },
-            { field: 'is_creation_done', header: 'Creation Done' },
+            { field: 'recipe_type', header: 'Recipe Type' },
+            { field: 'is_creation_done', header: 'Recipes' },
             { field: 'jobs_total', header: 'Total Jobs' },
             { field: 'recipes_total', header: 'Total Recipes' },
             { field: 'created', header: 'Created (Z)' },
