@@ -54,6 +54,10 @@
                 <div *ngSwitchCase="'is_creation_done'" [pTooltip]="rowData.creation_progress_tooltip">
                     <p-progressBar [value]="rowData.creation_progress"></p-progressBar>
                 </div>
+                <div *ngSwitchCase="'jobs_total'" [pTooltip]="rowData.jobs_data_tooltip"
+                     [tooltipDisabled]="!rowData.is_creation_done" [escape]="false">
+                    <p-progressBar [value]="rowData.jobs_data" *ngIf="rowData.is_creation_done"></p-progressBar>
+                </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">
                         {{ rowData.createdDisplay }}

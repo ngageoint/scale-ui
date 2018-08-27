@@ -13,6 +13,8 @@ export class Batch {
     createdDisplay: any;
     lastModifiedTooltip: any;
     lastModifiedDisplay: any;
+    jobs_data: any;
+    jobs_data_tooltip: any;
 
     private static build(data) {
         if (data) {
@@ -114,14 +116,14 @@ export class Batch {
         this.root_batch = this.root_batch || null;
         this.superseded_batch = this.superseded_batch || null;
         this.is_creation_done = this.is_creation_done || null;
-        this.jobs_total = this.jobs_total || null;
-        this.jobs_pending = this.jobs_pending || null;
-        this.jobs_blocked = this.jobs_blocked || null;
-        this.jobs_queued = this.jobs_queued || null;
-        this.jobs_running = this.jobs_running || null;
-        this.jobs_failed = this.jobs_failed || null;
-        this.jobs_completed = this.jobs_completed || null;
-        this.jobs_canceled = this.jobs_canceled || null;
+        this.jobs_total = this.jobs_total || 0;
+        this.jobs_pending = this.jobs_pending || 0;
+        this.jobs_blocked = this.jobs_blocked || 0;
+        this.jobs_queued = this.jobs_queued || 0;
+        this.jobs_running = this.jobs_running || 0;
+        this.jobs_failed = this.jobs_failed || 0;
+        this.jobs_completed = this.jobs_completed || 0;
+        this.jobs_canceled = this.jobs_canceled || 0;
         this.recipes_estimated = this.recipes_estimated || null;
         this.recipes_total = this.recipes_total || null;
         this.recipes_completed = this.recipes_completed || null;
@@ -131,5 +133,7 @@ export class Batch {
         this.definition = this.definition || null;
         this.configuration = this.configuration || null;
         this.job_metrics = this.job_metrics || null;
+        this.jobs_data = (this.jobs_completed / this.jobs_total) * 100;
+        this.jobs_data_tooltip = `Blocked: ${this.jobs_blocked}<br />Queued: ${this.jobs_queued}<br />Running: ${this.jobs_running}<br />Failed: ${this.jobs_failed}<br />Canceled: ${this.jobs_canceled}<br />Completed: ${this.jobs_completed}<hr />Total: ${this.jobs_total}`; // tslint:disable-line:max-line-length
     }
 }
