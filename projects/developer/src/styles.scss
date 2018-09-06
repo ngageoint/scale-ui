@@ -331,3 +331,9 @@ label-default {
 .running {
     color: $clr-status-running;
 }
+.blocked {
+    color: $clr-status-blocked;
+}
+.canceled {
+    color: $clr-status-canceled;
+}

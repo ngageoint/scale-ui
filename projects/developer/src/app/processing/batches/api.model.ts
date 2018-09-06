@@ -1,5 +1,6 @@
 import { DataService } from '../../common/services/data.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
 import { environment } from '../../../environments/environment';
 
 export class Batch {
@@ -13,8 +14,14 @@ export class Batch {
     createdDisplay: any;
     lastModifiedTooltip: any;
     lastModifiedDisplay: any;
-    jobs_data: any;
-    jobs_data_tooltip: any;
+    jobs_blocked_percentage: any;
+    jobs_queued_percentage: any;
+    jobs_running_percentage: any;
+    jobs_failed_percentage: any;
+    jobs_canceled_percentage: any;
+    jobs_completed_percentage: any;
+    jobs_data: any = [];
+    jobs_data_tooltip: any = '';
 
     private static build(data) {
         if (data) {
@@ -133,7 +140,28 @@ export class Batch {
         this.definition = this.definition || null;
         this.configuration = this.configuration || null;
         this.job_metrics = this.job_metrics || null;
-        this.jobs_data = (this.jobs_completed / this.jobs_total) * 100;
-        this.jobs_data_tooltip = `Blocked: ${this.jobs_blocked}<br />Queued: ${this.jobs_queued}<br />Running: ${this.jobs_running}<br />Failed: ${this.jobs_failed}<br />Canceled: ${this.jobs_canceled}<br />Completed: ${this.jobs_completed}<hr />Total: ${this.jobs_total}`; // tslint:disable-line:max-line-length
+        this.jobs_blocked_percentage = (this.jobs_blocked / this.jobs_total) * 100;
+        this.jobs_queued_percentage = (this.jobs_queued / this.jobs_total) * 100;
+        this.jobs_running_percentage = (this.jobs_running / this.jobs_total) * 100;
+        this.jobs_failed_percentage = (this.jobs_failed / this.jobs_total) * 100;
+        this.jobs_canceled_percentage = (this.jobs_canceled / this.jobs_total) * 100;
+        this.jobs_completed_percentage = (this.jobs_completed / this.jobs_total) * 100;
+        let jobsArr = _.filter([
+            { key: 'blocked', percentage: this.jobs_blocked_percentage, value: 0, field: 'jobs_blocked' },
+            { key: 'queued', percentage: this.jobs_queued_percentage, value: 0, field: 'jobs_queued' },
+            { key: 'running', percentage: this.jobs_running_percentage, value: 0, field: 'jobs_running' },
+            { key: 'failed', percentage: this.jobs_failed_percentage, value: 0, field: 'jobs_failed' },
+            { key: 'canceled', percentage: this.jobs_canceled_percentage, value: 0, field: 'jobs_canceled' },
+            { key: 'completed', percentage: this.jobs_completed_percentage, value: 0, field: 'jobs_completed' }
+        ], d => d.percentage > 0);
+        jobsArr = _.reverse(_.sortBy(jobsArr, 'percentage'));
+        _.forEach(jobsArr, data => {
+            const sum = _.sum(_.map(this.jobs_data, 'percentage'));
+            data.value = data.percentage + sum;
+            this.jobs_data.push(data);
+            const icon = `<span class="${data.key}"><i class="fa fa-square"></i></span>`;
+            this.jobs_data_tooltip = this.jobs_data_tooltip === '' ? `${icon} ${_.capitalize(data.key)}: ${this[data.field]}` : `${this.jobs_data_tooltip}<br />${icon} ${_.capitalize(data.key)}: ${this[data.field]}`; // tslint:disable-line:max-line-length
+        });
+        this.jobs_data = _.reverse(_.sortBy(this.jobs_data, 'value'));
     }
 }

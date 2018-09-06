@@ -135,6 +135,30 @@
 .ui-progressbar {
     .ui-progressbar-value {
         background: $stateHighlightBgColor;
+
+        &.blocked {
+            background: $clr-status-blocked;
+        }
+
+        &.queued {
+            background: $clr-status-queued;
+        }
+
+        &.running {
+            background: $clr-status-running;
+        }
+
+        &.Failed {
+            background: $clr-status-failed;
+        }
+
+        &.canceled {
+            background: $clr-status-canceled;
+        }
+
+        &.completed {
+            background: $clr-status-completed;
+        }
     }
 }
 
