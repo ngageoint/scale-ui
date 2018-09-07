@@ -3,6 +3,8 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { environment } from '../../../environments/environment';
 
+import { RecipeType } from '../../configuration/recipe-types/api.model';
+
 export class Batch {
     dataService: DataService;
     creation_progress: any;
@@ -117,7 +119,7 @@ export class Batch {
         this.title = this.title || null;
         this.description = this.description || null;
         this.recipe_type = this.recipe_type || null;
-        this.recipe_type_rev = this.recipe_type_rev || null;
+        this.recipe_type_rev = this.recipe_type_rev ? RecipeType.transformer(this.recipe_type_rev) : null;
         this.event = this.event || null;
         this.is_superseded = this.is_superseded || null;
         this.root_batch = this.root_batch || null;

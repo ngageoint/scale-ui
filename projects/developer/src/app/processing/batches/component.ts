@@ -161,9 +161,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     onFilterClick(e) {
         e.stopPropagation();
     }
-    createBatch() {
-        this.router.navigate(['/processing/batches/create']);
-    }
     ngOnInit() {
         this.datatableLoading = true;
         if (!this.datatableOptions) {
