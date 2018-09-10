@@ -161,7 +161,7 @@ export class Batch {
             const sum = _.sum(_.map(this.jobs_data, 'percentage'));
             data.value = data.percentage + sum;
             this.jobs_data.push(data);
-            const icon = `<span class="${data.key}"><i class="fa fa-square"></i></span>`;
+            const icon = `<span class="${data.key}-text"><i class="fa fa-square"></i></span>`;
             this.jobs_data_tooltip = this.jobs_data_tooltip === '' ? `${icon} ${_.capitalize(data.key)}: ${this[data.field]}` : `${this.jobs_data_tooltip}<br />${icon} ${_.capitalize(data.key)}: ${this[data.field]}`; // tslint:disable-line:max-line-length
         });
         this.jobs_data = _.reverse(_.sortBy(this.jobs_data, 'value'));
