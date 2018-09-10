@@ -15,272 +15,62 @@
         },
         "revision_num": 1,
         "definition": {
-            "input_data": [
-                {
-                    "media_types": [
-                        "image/tiff"
-                    ],
-                    "required": true,
-                    "type": "file",
-                    "name": "input_file"
-                }
-            ],
-            "version": "1.0.0",
-            "jobs": [
-                {
-                    "recipe_inputs": [],
-                    "name": "landsat8-parse",
-                    "job_type": {
-                        "name": "landsat8-parse",
-                        "version": "1.0.0"
-                    },
-                    "dependencies": []
-                },
-                {
-                    "recipe_inputs": [],
-                    "name": "landsat8-atmos-corr",
-                    "job_type": {
-                        "name": "landsat8-atmos-corr",
-                        "version": "2.1.9"
-                    },
-                    "dependencies": [
-                        {
-                            "name": "landsat8-parse",
-                            "connections": [
-                                {
-                                    "output": "thermal",
-                                    "input": "infile"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "recipe_inputs": [],
-                    "name": "landsat8-ortho",
-                    "job_type": {
-                        "name": "landsat8-ortho",
-                        "version": "2.0"
-                    },
-                    "dependencies": [
-                        {
-                            "name": "landsat8-parse",
-                            "connections": [
-                                {
-                                    "output": "panchromatic",
-                                    "input": "infile"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "recipe_inputs": [],
-                    "name": "export-shp",
-                    "job_type": {
-                        "name": "export-shp",
-                        "version": "2.0"
-                    },
-                    "dependencies": [
-                        {
-                            "name": "landsat8-ortho",
-                            "connections": [
-                                {
-                                    "output": "ls8-corrected",
-                                    "input": "infile"
-                                }
-                            ]
-                        },
-                        {
-                            "name": "landsat8-atmos-corr",
-                            "connections": [
-                                {
-                                    "output": "ls8-corrected",
-                                    "input": "infile"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        "created": "1970-01-01T00:00:00Z",
-        "job_types": [
-            {
-                "id": 1,
-                "is_operational": true,
-                "icon_code": "f248",
-                "docker_privileged": false,
-                "docker_image": "10.4.4.10:5000/landsat-parse_1.0:dev",
-                "priority": 1,
-                "timeout": 30,
-                "max_tries": 3,
-                "manifest": {
-                    "job": {
-                        "name": "landsat8-parse",
-                        "jobVersion": "1.0.0",
-                        "packageVersion": "",
-                        "title": "Landsat 8 Parse",
-                        "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
-                        "maintainer": {
-                            "name": "USGS",
-                            "email": ""
-                        },
-                        "timeout": 0,
-                        "interface": {
-                            "command": "./parse_landsat.sh",
-                            "inputs": [{
-                                "media_types": ["application/octet-stream"],
-                                "required": true,
-                                "type": "file",
-                                "name": "infile"
-                            }],
-                            "outputs": [{
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "multispectral"
-                            }, {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "panchromatic"
-                            }, {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "thermal"
-                            }],
-                            "settings": []
-                        }
-                    },
-                    "seedVersion": "1.0"
-                }
+            "input": {
+                "files": [{"name": "input_file"}]
             },
-            {
-                "id": 7,
-                "is_operational": true,
-                "icon_code": "f00c",
-                "docker_privileged": false,
-                "docker_image": "10.4.4.10:5000/ls8-atmos-corr:2.1.9",
-                "priority": 1,
-                "timeout": 30,
-                "max_tries": 3,
-                "manifest": {
-                    "job": {
-                        "name": "landsat8-atmos-corr",
-                        "jobVersion": "2.1.9",
-                        "packageVersion": "",
-                        "title": "Landsat 8 Atmospheric Correction",
-                        "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
-                        "maintainer": {
-                            "name": "USGS",
-                            "email": ""
-                        },
-                        "timeout": 0,
-                        "interface": {
-                            "command": "./correct_ls8.sh",
-                            "inputs": [{
-                                "media_types": ["image/tiff"],
-                                "required": true,
-                                "type": "file",
-                                "name": "infile"
-                            }],
-                            "outputs": [{
-                                "media_type": "image/nitf",
-                                "required": true,
-                                "type": "image",
-                                "name": "ls8-corrected"
-                            }],
-                            "settings": []
-                        }
+            "nodes": {
+                "landsat8-parse": {
+                    "dependencies": [],
+                    "input": {
+                        "input_file": {"type": "recipe", "input": "input_file"}
                     },
-                    "seedVersion": "1.0"
-                }
-            },
-            {
-                "id": 8,
-                "is_operational": true,
-                "icon_code": "f1c0",
-                "docker_privileged": false,
-                "docker_image": "10.4.4.10:5000/ls8-ortho:2.1.9",
-                "priority": 1,
-                "timeout": 30,
-                "max_tries": 3,
-                "manifest": {
-                    "job": {
-                        "name": "landsat8-ortho",
-                        "jobVersion": "2.0",
-                        "packageVersion": "",
-                        "title": "Landsat 8 Ortho (OSSIM)",
-                        "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
-                        "maintainer": {
-                            "name": "Radiant Blue",
-                            "email": ""
-                        },
-                        "timeout": 0,
-                        "interface": {
-                            "command": "./ls8_ortho.py",
-                            "inputs": [{
-                                "media_types": ["image/nitf"],
-                                "required": true,
-                                "type": "image",
-                                "name": "infile"
-                            }],
-                            "outputs": [{
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "ls8-corrected"
-                            }],
-                            "settings": []
-                        }
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "landsat8-parse",
+                        "job_type_version": "1.0.0",
+                        "job_type_revision": 1
+                    }
+                },
+                "landsat8-atmos-corr": {
+                    "dependencies": [{"name": "landsat8-parse"}],
+                    "input": {
+                        "infile": {"type": "dependency", "node": "landsat8-parse", "output": "thermal"}
                     },
-                    "seedVersion": "1.0"
-                }
-            },
-            {
-                "id": 10,
-                "is_operational": true,
-                "icon_code": "f06e",
-                "docker_privileged": false,
-                "docker_image": "10.4.4.10:5000/wv2-ortho:2.0",
-                "priority": 1,
-                "timeout": 30,
-                "max_tries": 3,
-                "manifest": {
-                    "job": {
-                        "name": "export-shp",
-                        "jobVersion": "2.0",
-                        "packageVersion": "",
-                        "title": "Export Shapefile",
-                        "description": "Creates shapefile (.shp) from raster data",
-                        "maintainer": {
-                            "name": "USGS",
-                            "email": ""
-                        },
-                        "timeout": 0,
-                        "interface": {
-                            "command": "./export_shapefile.sh",
-                            "inputs": [{
-                                "media_types": ["image/nitf", "image/tiff"],
-                                "required": true,
-                                "type": "file",
-                                "name": "infile"
-                            }],
-                            "outputs": [{
-                                "media_type": "application/xml",
-                                "required": true,
-                                "type": "file",
-                                "name": "shapefile"
-                            }],
-                            "settings": []
-                        }
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "landsat8-atmos-corr",
+                        "job_type_version": "2.1.9",
+                        "job_type_revision": 1
+                    }
+                },
+                "landsat8-ortho": {
+                    "dependencies": [{"name": "landsat8-parse"}],
+                    "input": {
+                        "infile": {"type": "dependency", "node": "landsat8-parse", "output": "panchromatic"}
                     },
-                    "seedVersion": "1.0"
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "landsat8-ortho",
+                        "job_type_version": "2.0",
+                        "job_type_revision": 1
+                    }
+                },
+                "export-shp": {
+                    "dependencies": [{"name": "landsat8-atmos-corr"}, {"name": "landsat8-ortho"}],
+                    "input": {
+                        "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "outout": "ls8-corrected"},
+                        "panchromatic": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"}
+                    },
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "export-shp",
+                        "job_type_version": "2.0",
+                        "job_type_revision": 1
+                    }
                 }
             }
-        ]
+        },
+        "created": "1970-01-01T00:00:00Z"
     },
     "event": {
         "id": 4000,
@@ -328,7 +118,7 @@
         "priority": 100
     },
     "job_metrics": {
-        "job_a": {
+        "landsat8-parse": {
             "jobs_total": 10,
             "jobs_pending": 0,
             "jobs_blocked": 0,

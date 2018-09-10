@@ -62,7 +62,6 @@
         </tr>
     </ng-template>
 </p-table>
-<div *ngIf="batchDetails.recipe_type_rev">
-    <h3>Recipe</h3>
+<div *ngIf="batchDetails.recipe_type_rev" class="margin-top-md">
     <dev-recipe-graph [recipeData]="batchDetails.recipe_type_rev" [isEditing]="false"></dev-recipe-graph>
 </div>

@@ -110,8 +110,12 @@ export class Batch {
             this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
         }
         this.creation_progress = this.is_creation_done ?
-            (this.recipes_completed / this.recipes_total) * 100 :
-            (this.recipes_total / this.recipes_estimated) * 100;
+            this.recipes_total > 0 ?
+                (this.recipes_completed / this.recipes_total) * 100 :
+                0 :
+            this.recipes_estimated > 0 ?
+                (this.recipes_total / this.recipes_estimated) * 100 :
+                0;
         this.creation_progress_tooltip = this.is_creation_done ?
             `Completed: ${this.recipes_completed}, Total: ${this.recipes_total}` :
             `Total: ${this.recipes_total}, Estimated: ${this.recipes_estimated}`;
