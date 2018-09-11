@@ -281,6 +281,22 @@
     }
 }
 
+.ui-button-secondary {
+    color: $clr-gray-20;
+    background-color: $clr-light;
+    border: 1px solid darken($clr-light, 10%);
+    -moz-transition: background-color 0.3s;
+    -o-transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+    transition: background-color 0.3s;
+
+    &:focus, &:enabled:hover {
+        color: $clr-gray-20;
+        outline: 0 none;
+        background-color: darken($clr-light, 15%);
+    }
+}
+
 .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
     @include hover-element();
 }

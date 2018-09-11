@@ -10,6 +10,7 @@
             <th>Recipes</th>
             <th>Jobs</th>
             <th>Priority</th>
+            <th>References</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-batch>
@@ -59,6 +60,10 @@
                 </div>
             </td>
             <td><span *ngIf="batch.configuration">{{ batch.configuration.priority }}</span></td>
+            <td>
+                <a pButton class="ui-button-secondary margin-right-md" routerLink="/processing/jobs/" [queryParams]="{batch_id: batch.id}" icon="fa fa-cube" pTooltip="Batch Jobs" tooltipPosition="bottom"></a>
+                <a pButton class="ui-button-secondary margin-right-md" routerLink="/processing/recipes/" [queryParams]="{batch_id: batch.id}" icon="fa fa-cubes" pTooltip="Batch Recipes" tooltipPosition="bottom"></a>
+            </td>
         </tr>
     </ng-template>
 </p-table>
