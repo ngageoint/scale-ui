@@ -16,7 +16,7 @@ import { MetricsComponent } from './data/metrics/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
-import { BatchesCreateComponent } from './processing/batches/create.component';
+import { BatchesEditComponent } from './processing/batches/edit.component';
 import { IngestComponent } from './data/ingest/component';
 
 const routes: Routes = [
@@ -28,7 +28,7 @@ const routes: Routes = [
     { path: 'processing/failure-rates', component: FailureRatesComponent },
     { path: 'processing/batches', component: BatchesComponent },
     { path: 'processing/batches/:id', component: BatchDetailsComponent },
-    { path: 'processing/batches/edit/:id', component: BatchesCreateComponent },
+    { path: 'processing/batches/edit/:id', component: BatchesEditComponent },
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:id', component: JobTypesComponent },
     { path: 'configuration/job-types/edit/:id', component: JobTypesCreateComponent },

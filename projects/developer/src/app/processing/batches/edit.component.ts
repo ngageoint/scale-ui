@@ -10,13 +10,14 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
 @Component({
-    selector: 'dev-batches-create',
-    templateUrl: './create.component.html',
-    styleUrls: ['./create.component.scss']
+    selector: 'dev-batches-edit',
+    templateUrl: './edit.component.html',
+    styleUrls: ['./edit.component.scss']
 })
-export class BatchesCreateComponent implements OnInit {
+export class BatchesEditComponent implements OnInit {
     batch = new Batch();
     recipeTypeOptions: SelectItem[] = [];
+    previousBatchOptions: SelectItem[] = [];
 
     constructor(
         private batchesApiService: BatchesApiService,

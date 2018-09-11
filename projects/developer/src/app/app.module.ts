@@ -80,7 +80,7 @@ import { ScansApiService } from './common/services/scans/api.service';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchesApiService } from './processing/batches/api.service';
 import { BatchesDatatableService } from './processing/batches/datatable.service';
-import { BatchesCreateComponent } from './processing/batches/create.component';
+import { BatchesEditComponent } from './processing/batches/edit.component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { StrikesApiService } from './common/services/strikes/api.service';
 
@@ -118,7 +118,7 @@ import { StrikesApiService } from './common/services/strikes/api.service';
         IngestComponent,
         LoadingIndicatorComponent,
         BatchesComponent,
-        BatchesCreateComponent,
+        BatchesEditComponent,
         BatchDetailsComponent
     ],
     imports: [

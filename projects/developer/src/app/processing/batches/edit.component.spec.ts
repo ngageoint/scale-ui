@@ -6,16 +6,16 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
 import { BatchesApiService } from './api.service';
-import { BatchesCreateComponent } from './create.component';
+import { BatchesEditComponent } from './edit.component';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
-describe('BatchesCreateComponent', () => {
-    let component: BatchesCreateComponent;
-    let fixture: ComponentFixture<BatchesCreateComponent>;
+describe('BatchesEditComponent', () => {
+    let component: BatchesEditComponent;
+    let fixture: ComponentFixture<BatchesEditComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [BatchesCreateComponent],
+            declarations: [BatchesEditComponent],
             imports: [HttpClientTestingModule],
             providers: [
                 DataService, BatchesApiService, MessageService, RecipeTypesApiService,
@@ -29,7 +29,7 @@ describe('BatchesCreateComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(BatchesCreateComponent);
+        fixture = TestBed.createComponent(BatchesEditComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

@@ -139,6 +139,16 @@ a:not(.ui-button, .ui-paginator) {
     text-decoration: none;
 }
 
+.flexed {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    &.space-between {
+        justify-content: space-between;
+    }
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
