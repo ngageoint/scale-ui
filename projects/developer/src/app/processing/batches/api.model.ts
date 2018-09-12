@@ -143,8 +143,8 @@ export class Batch {
         this.created = this.created || null;
         this.superseded = this.superseded || null;
         this.last_modified = this.last_modified || null;
-        this.definition = this.definition || null;
-        this.configuration = this.configuration || null;
+        this.definition = this.definition || { previous_batch: { root_batch_id: null, job_names: null, all_jobs: null } };
+        this.configuration = this.configuration || {priority: null};
         this.job_metrics = this.job_metrics || null;
         this.jobs_blocked_percentage = (this.jobs_blocked / this.jobs_total) * 100;
         this.jobs_queued_percentage = (this.jobs_queued / this.jobs_total) * 100;

@@ -18,6 +18,8 @@ export class BatchesEditComponent implements OnInit {
     batch = new Batch();
     recipeTypeOptions: SelectItem[] = [];
     previousBatchOptions: SelectItem[] = [];
+    jobOptions: SelectItem[] = [];
+    isValidated = false;
 
     constructor(
         private batchesApiService: BatchesApiService,
@@ -38,6 +40,39 @@ export class BatchesEditComponent implements OnInit {
             });
         }, err => {
             console.log('Error retrieving recipe types: ' + err);
+        });
+    }
+
+    handleRecipeTypeChange(event) {
+        this.batchesApiService.getBatches({recipe_type_id: event.value.id}).subscribe(data => {
+            const batches = Batch.transformer(data.results);
+            _.forEach(batches, b => {
+                this.previousBatchOptions.push({
+                    label: b.title,
+                    value: b.root_batch.id
+                });
+            });
+        });
+        _.forEach(this.batch.recipe_type.definition.jobs, job => {
+            this.jobOptions.push({
+                label: job.name,
+                value: job.name
+            });
+        });
+    }
+
+    setAllJobs(event) {
+        this.batch.definition.all_jobs = event;
+    }
+
+    validateBatch() {
+        const batchToValidate = {
+            recipe_type_id: this.batch.recipe_type.id,
+            definition: this.batch.definition,
+            configuration: this.batch.configuration
+        };
+        this.batchesApiService.validateBatch(batchToValidate).subscribe(data => {
+            this.isValidated = data.is_valid;
         });
     }
 

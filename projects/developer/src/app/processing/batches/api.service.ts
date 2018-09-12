@@ -66,4 +66,14 @@ export class BatchesApiService {
                 catchError(this.dataService.handleError)
             );
     }
+
+    validateBatch(batch): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/batches/validation/`, batch)
+            .pipe(
+                map(response => {
+                    return response;
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
 }
