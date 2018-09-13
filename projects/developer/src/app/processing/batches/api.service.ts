@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
+import { Batch } from './api.model';
 import { BatchesDatatable } from './datatable.model';
 
 @Injectable()
@@ -51,6 +52,26 @@ export class BatchesApiService {
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    getBatch(id): Observable<any> {
+        return this.http.get<Batch>(`${this.apiPrefix}/batches/${id}/`)
+            .pipe(
+                map(response => {
+                    return Batch.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    validateBatch(batch): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/batches/validation/`, batch)
+            .pipe(
+                map(response => {
+                    return response;
                 }),
                 catchError(this.dataService.handleError)
             );

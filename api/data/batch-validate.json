@@ -1,0 +1,23 @@
+{
+    "is_valid": true,
+    "errors": [],
+    "warnings": [{"name": "EXAMPLE_WARNING", "description": "This is an example warning."}],
+    "recipes_estimated": 10,
+    "recipe_type": {
+        "id": 208,
+        "name": "my-recipe-type",
+        "title": "My Recipe Type",
+        "description": "My Recipe Type Description",
+        "revision_num": 1
+    },
+    "prev_batch": {
+        "recipe_type_rev": {
+            "id": 4,
+            "recipe_type": {
+                "id": 208
+            },
+            "revision_num": 1
+        },
+        "diff": {}
+    }
+}

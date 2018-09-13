@@ -139,6 +139,16 @@ a:not(.ui-button, .ui-paginator) {
     text-decoration: none;
 }
 
+.flexed {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    &.space-between {
+        justify-content: space-between;
+    }
+}
+
 .table {
     width: 100%;
     border-collapse: collapse;
@@ -316,18 +326,46 @@ label-default {
     }
 }
 
-.completed {
+.completed-text {
     color: $clr-status-completed;
 }
-.failed {
+.failed-text {
     color: $clr-status-failed;
 }
-.pending {
+.pending-text {
     color: $clr-status-pending;
 }
-.queued {
+.queued-text {
     color: $clr-status-queued;
 }
-.running {
+.running-text {
     color: $clr-status-running;
+}
+.blocked-text {
+    color: $clr-status-blocked;
+}
+.canceled-text {
+    color: $clr-status-canceled;
+}
+
+.completed {
+    background: $clr-status-completed !important;
+}
+.failed {
+    background: $clr-status-failed !important;
+}
+.pending {
+    background: $clr-status-pending !important;
+}
+.queued {
+    background: $clr-status-queued !important;
+}
+.running {
+    background: $clr-status-running !important;
+}
+.blocked {
+    background: $clr-status-blocked !important;
+}
+.canceled {
+    background: $clr-status-canceled !important;
 }

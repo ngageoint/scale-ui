@@ -46,10 +46,9 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.isInitialized = false;
         this.columns = [
             { field: 'title', header: 'Title' },
-            { field: 'recipe_type.name', header: 'Recipe Type' },
-            { field: 'is_creation_done', header: 'Creation Done' },
-            { field: 'jobs_total', header: 'Total Jobs' },
-            { field: 'recipes_total', header: 'Total Recipes' },
+            { field: 'recipe_type', header: 'Recipe Type' },
+            { field: 'is_creation_done', header: 'Recipes' },
+            { field: 'jobs_total', header: 'Jobs' },
             { field: 'created', header: 'Created (Z)' },
             { field: 'last_modified', header: 'Last Modified (Z)' }
         ];
@@ -161,9 +160,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     }
     onFilterClick(e) {
         e.stopPropagation();
-    }
-    createBatch() {
-        this.router.navigate(['/processing/batches/create']);
     }
     ngOnInit() {
         this.datatableLoading = true;

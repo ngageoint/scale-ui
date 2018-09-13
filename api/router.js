@@ -27,6 +27,8 @@ var jobInputs = require('./handlers/jobInputs');
 var products = require('./handlers/products');
 var jobExecutions = require('./handlers/jobExecutions');
 var batches = require('./handlers/batches');
+var batchDetails = require('./handlers/batchDetails');
+var batchValidate = require('./handlers/batchValidate');
 var strikes = require('./handlers/strikes');
 var ingests = require('./handlers/ingests');
 
@@ -218,6 +220,18 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/batches/',
             handler: batches
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/batches/{id}/',
+            handler: batchDetails
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/batches/validation/',
+            handler: batchValidate
         });
 
         server.route({
