@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import * as moment from 'moment';
 import * as _ from 'lodash';
 
+import { MessageService } from 'primeng/api';
 import { Batch } from './api.model';
 import { BatchesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
@@ -22,6 +22,7 @@ export class BatchesEditComponent implements OnInit {
     isValidated = false;
 
     constructor(
+        private messageService: MessageService,
         private batchesApiService: BatchesApiService,
         private dataService: DataService,
         private recipeTypesApiService: RecipeTypesApiService
@@ -73,6 +74,20 @@ export class BatchesEditComponent implements OnInit {
         };
         this.batchesApiService.validateBatch(batchToValidate).subscribe(data => {
             this.isValidated = data.is_valid;
+            if (data.errors.length > 0) {
+                const errors = [];
+                _.forEach(data.errors, error => {
+                    errors.push({severity: 'error', summary: error.name, detail: error.description});
+                });
+                this.messageService.addAll(errors);
+            }
+            if (data.warnings.length > 0) {
+                const warnings = [];
+                _.forEach(data.warnings, error => {
+                    warnings.push({severity: 'warning', summary: error.name, detail: error.description});
+                });
+                this.messageService.addAll(warnings);
+            }
         });
     }
 
