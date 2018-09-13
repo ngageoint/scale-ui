@@ -83,6 +83,7 @@ import { BatchesDatatableService } from './processing/batches/datatable.service'
 import { BatchesEditComponent } from './processing/batches/edit.component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { StrikesApiService } from './common/services/strikes/api.service';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -165,7 +166,8 @@ import { StrikesApiService } from './common/services/strikes/api.service';
         GrowlModule,
         TableModule,
         MenuModule,
-        ProgressBarModule
+        ProgressBarModule,
+        ToastModule
     ],
     exports: [
         DropdownModule,

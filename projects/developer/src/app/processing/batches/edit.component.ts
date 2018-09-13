@@ -77,14 +77,14 @@ export class BatchesEditComponent implements OnInit {
             if (data.errors.length > 0) {
                 const errors = [];
                 _.forEach(data.errors, error => {
-                    errors.push({severity: 'error', summary: error.name, detail: error.description});
+                    errors.push({severity: 'error', summary: error.name, detail: error.description, sticky: true});
                 });
                 this.messageService.addAll(errors);
             }
             if (data.warnings.length > 0) {
                 const warnings = [];
                 _.forEach(data.warnings, error => {
-                    warnings.push({severity: 'warning', summary: error.name, detail: error.description});
+                    warnings.push({severity: 'warn', summary: error.name, detail: error.description, sticky: true});
                 });
                 this.messageService.addAll(warnings);
             }
