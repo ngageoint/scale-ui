@@ -1,4 +1,3 @@
-var hello = require('./handlers/hello');
 var jobLoad = require('./handlers/jobload');
 var recipes = require('./handlers/recipes');
 var recipeTypes = require('./handlers/recipeTypes');
@@ -36,12 +35,6 @@ var apiVersion = 'v6';
 
 module.exports = {
     init: function(server) {
-        server.route({
-            method: 'GET',
-            path: '/mocks/' + apiVersion + '/hello',
-            handler: hello
-        });
-
         server.route({
             method: 'GET',
             path: '/mocks/' + apiVersion + '/load/',

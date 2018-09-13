@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const strikes = require('../data/strikes.json');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var data = _.clone(strikes);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
@@ -19,5 +19,5 @@ module.exports = function (request, reply) {
         }
     }
 
-    reply(data);
+    return data;
 };

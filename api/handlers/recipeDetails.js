@@ -1,4 +1,3 @@
-module.exports = function (request, reply) {
-    const recipeDetails = require('../data/recipe-details/recipe-details' + request.params.id + '.json');
-    reply(recipeDetails);
+module.exports = function (request) {
+    return require('../data/recipe-details/recipe-details' + request.params.id + '.json');
 };

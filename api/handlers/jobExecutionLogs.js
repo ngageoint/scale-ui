@@ -1,6 +1,6 @@
 var moment = require('moment');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var params = request.url.query;
     var maxLines = params.started ? 2 : 500;
     var log = {
@@ -24,5 +24,5 @@ module.exports = function (request, reply) {
             }
         });
     }
-    reply(log);
+    return log;
 };

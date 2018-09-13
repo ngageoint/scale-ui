@@ -4,8 +4,7 @@ const env = process.env;
 const router = require('./router');
 
 
-const server = new Hapi.Server();
-server.connection({
+const server = new Hapi.Server({
     port: 8081,
     host: env.IP || 'localhost'
 });
