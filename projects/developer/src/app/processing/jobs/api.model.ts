@@ -110,12 +110,12 @@ export class Job {
             this.dataService.calculateDuration(moment.utc().toISOString(), moment.utc().add(this.timeout, 's').toISOString()) :
             'Unknown';
         this.statusClass = this.status === 'RUNNING' ?
-            `${this.status.toLowerCase()} throb-text` :
-            this.status.toLowerCase();
+            `${this.status.toLowerCase()}-text throb-text` :
+            `${this.status.toLowerCase()}-text`;
         if (this.execution) {
             this.exeStatusClass = this.execution.status === 'RUNNING' ?
-                `${this.execution.status.toLowerCase()} throb-text` :
-                this.execution.status.toLowerCase();
+                `${this.execution.status.toLowerCase()}-text throb-text` :
+                `${this.execution.status.toLowerCase()}-text`;
         }
         this.createdTooltip = this.dataService.formatDate(this.created);
         this.createdDisplay = this.dataService.formatDate(this.created, true);

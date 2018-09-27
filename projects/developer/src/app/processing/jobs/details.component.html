@@ -1,18 +1,15 @@
 <div class="job__details" *ngIf="job">
     <h2>
         <i class="fa fa-fw" [innerHtml]="getUnicode(job.job_type.icon_code)"></i>
-        {{ job.job_type.title }} v{{ job.job_type.version }}
+        {{ job.job_type.manifest.job.title }} v{{ job.job_type.manifest.job.jobVersion }}
         <i class="fa fa-fw fa-square" [ngClass]="job.statusClass" (mouseenter)="showStatus(status, $event)"
            (mouseleave)="hideStatus(status)"></i>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
     <div class="ui-g">
         <div class="ui-g-4">
-            <p-scrollPanel styleClass="scale-panel">
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Overview</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel header="Overview">
+                <p-scrollPanel>
                     <table class="table table-striped">
                         <tbody>
                         <tr *ngIf="job.recipe">
@@ -37,25 +34,25 @@
                             <td>
                                 {{ job.event.type }}
                                 <span [pTooltip]="job.occurredTooltip">
-                                    {{ job.occurredDisplay }}
-                                </span>
+                                {{ job.occurredDisplay }}
+                            </span>
                             </td>
                         </tr>
                         <tr><td>Priority:</td><td>{{ job.priority }}</td></tr>
                         <tr>
                             <td>Created:</td>
                             <td>
-                                <span [pTooltip]="job.createdTooltip">
-                                    {{ job.createdDisplay }}
-                                </span>
+                            <span [pTooltip]="job.createdTooltip">
+                                {{ job.createdDisplay }}
+                            </span>
                             </td>
                         </tr>
                         <tr>
                             <td>Last Updated:</td>
                             <td>
-                                <span [pTooltip]="job.lastModifiedTooltip">
-                                    {{ job.lastModifiedDisplay }}
-                                </span>
+                            <span [pTooltip]="job.lastModifiedTooltip">
+                                {{ job.lastModifiedDisplay }}
+                            </span>
                             </td>
                         </tr>
                         <tr><td>Num Executions:</td><td>{{ job.num_exes }}</td></tr>
@@ -63,37 +60,31 @@
                         <tr *ngIf="job.timeout"><td>Timeout:</td><td>{{ job.timeout_formatted }}</td></tr>
                         </tbody>
                     </table>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
         <div class="ui-g-5">
-            <p-scrollPanel styleClass="scale-panel">
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Timeline</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel header="Timeline">
+                <p-scrollPanel>
                     <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
                     <div class="text-center margin-top-lg job__latest-exe">
                         <strong>
                             <span class="fa fa-fw fa-square" [ngClass]="job.exeStatusClass"></span>
                             Latest execution
                             <span [pTooltip]="job.exeEndedTooltip" tooltipPosition="bottom">
-                                {{ exeStatus }}
-                            </span>
-                            <button pButton class="ui-button-secondary" icon="fa-file-text" label="View Log"
+                            {{ exeStatus }}
+                        </span>
+                            <button pButton class="ui-button-secondary" icon="fa fa-file-text" label="View Log"
                                     (click)="showExeLog($event, job.execution)"></button>
                         </strong>
                     </div>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
         <div class="ui-g-3">
-            <p-scrollPanel styleClass="scale-panel">
-                <dev-loading-indicator [loading]="loadingExecutions"></dev-loading-indicator>
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Executions</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel header="Executions">
+                <p-scrollPanel>
+                    <dev-loading-indicator [loading]="loadingExecutions"></dev-loading-indicator>
                     <table class="table">
                         <thead>
                         <tr>
@@ -121,18 +112,15 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
     </div>
     <div class="ui-g">
         <div class="ui-g-6">
-            <p-scrollPanel styleClass="scale-panel">
-                <dev-loading-indicator [loading]="loadingInputs"></dev-loading-indicator>
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Inputs</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel header="Inputs">
+                <p-scrollPanel>
+                    <dev-loading-indicator [loading]="loadingInputs"></dev-loading-indicator>
                     <div *ngIf="jobInputs.length === 0">
                         No records found.
                     </div>
@@ -155,28 +143,25 @@
                             </td>
                             <td>{{ calculateFileSize(input.file_size) }}</td>
                             <td>
-                                <span [pTooltip]="input.createdTooltip">
-                                    {{ input.createdDisplay }}
-                                </span>
+                            <span [pTooltip]="input.createdTooltip">
+                                {{ input.createdDisplay }}
+                            </span>
                             </td>
                             <td>
-                                <span [pTooltip]="input.lastModifiedTooltip" tooltipPosition="left">
-                                    {{ input.lastModifiedDisplay }}
-                                </span>
+                            <span [pTooltip]="input.lastModifiedTooltip" tooltipPosition="left">
+                                {{ input.lastModifiedDisplay }}
+                            </span>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
         <div class="ui-g-6">
-            <p-scrollPanel styleClass="scale-panel">
-                <dev-loading-indicator [loading]="loadingOutputs"></dev-loading-indicator>
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Outputs</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel header="Outputs">
+                <p-scrollPanel styleClass="scale-panel">
+                    <dev-loading-indicator [loading]="loadingOutputs"></dev-loading-indicator>
                     <div *ngIf="jobOutputs.length === 0">
                         No records found.
                     </div>
@@ -199,20 +184,20 @@
                             </td>
                             <td>{{ calculateFileSize(output.file_size) }}</td>
                             <td>
-                                <span [pTooltip]="output.createdTooltip">
-                                    {{ output.createdDisplay }}
-                                </span>
+                            <span [pTooltip]="output.createdTooltip">
+                                {{ output.createdDisplay }}
+                            </span>
                             </td>
                             <td>
-                                <span [pTooltip]="output.lastModifiedTooltip" tooltipPosition="left">
-                                    {{ output.lastModifiedDisplay }}
-                                </span>
+                            <span [pTooltip]="output.lastModifiedTooltip" tooltipPosition="left">
+                                {{ output.lastModifiedDisplay }}
+                            </span>
                             </td>
                         </tr>
                         </tbody>
                     </table>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
     </div>
     <p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true" (onAfterHide)="hideExeLog()">

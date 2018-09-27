@@ -1,11 +1,8 @@
 <div class="dashboard">
     <div class="ui-g">
         <div class="ui-g-3 dashboard__favs-container">
-            <p-scrollPanel styleClass="scale-panel">
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Favorites ({{ favoriteJobTypes.length }})</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
+                <p-scrollPanel>
                     <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
                              #datatable>
                         <ng-template pTemplate="header" let-columns>
@@ -33,18 +30,18 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
         <div class="ui-g-7">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="dataFeedChartTitle" [style]="{height: '444px'}">
+                <p-panel [header]="dataFeedChartTitle">
                     <dev-data-feed></dev-data-feed>
                 </p-panel>
             </div>
         </div>
         <div class="ui-g-2 dashboard__error-charts">
-            <p-panel header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes" [style]="{height: '444px'}">
+            <p-panel header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes">
                 <div class="dashboard__error-chart" *ngIf="dataFavs">
                     <h3>Favorites</h3>
                     <h4 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0">{{ failedFavs }} Failure(s) / {{ totalFavs }} Total</h4>
@@ -73,11 +70,8 @@
     </div>
     <div class="ui-g">
         <div class="ui-g-3 dashboard__all-container">
-            <p-scrollPanel styleClass="scale-panel">
-                <div class="scale-panel__title">
-                    <span class="ui-panel-title">Job Types ({{ allJobTypes.length }})</span>
-                </div>
-                <div class="scale-panel__body">
+            <p-panel [header]="'Job Types (' + allJobTypes.length + ')'">
+                <p-scrollPanel>
                     <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
                         <ng-template pTemplate="header" let-columns>
                             <tr>
@@ -95,8 +89,8 @@
                             </tr>
                         </ng-template>
                     </p-table>
-                </div>
-            </p-scrollPanel>
+                </p-scrollPanel>
+            </p-panel>
         </div>
         <div class="ui-g-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">

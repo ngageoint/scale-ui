@@ -12,35 +12,25 @@
     <div *ngIf="selectedJobTypeDetail && selectedJobTypeDetail.manifest.seedVersion">
         <div class="ui-g">
             <div class="ui-g-10">
-                <p-scrollPanel styleClass="scale-panel">
-                    <div class="scale-panel__title job-type__title-container">
-                        <div class="ui-panel-title">
-                            <div class="ui-g">
-                                <div class="ui-g-6">
-                                    <span class="job-type__title">
-                                        <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
-                                        {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
-                                    </span>
-                                </div>
-                                <div class="ui-g-6 text-right">
-                                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                                            (click)="menu.toggle($event)"></button>
-                                    <!-- <button pButton type="button" class="ui-button-secondary" [icon]="pauseBtnIcon" pTooltip="Pause Job Type"
-                                            tooltipPosition="bottom" (click)="onPauseClick()"></button>
-                                    <button pButton type="button" class="ui-button-secondary" icon="fa-edit" pTooltip="Edit Job Type"
-                                            tooltipPosition="bottom" (click)="onEditClick()"></button> -->
-                                </div>
-                            </div>
+                <p-panel>
+                    <p-header class="job-type__title">
+                        <div>
+                            <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
+                            {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
                         </div>
-                    </div>
-                    <div class="scale-panel__body">
+                        <div>
+                            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                            <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                                    (click)="menu.toggle($event)"></button>
+                        </div>
+                    </p-header>
+                    <p-scrollPanel>
                         <div class="ui-g">
                             <div class="ui-g-8">
-                                <span>
-                                    <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
-                                    {{ selectedJobTypeDetail.manifest.job.description }}
-                                </span>
+                            <span>
+                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
+                                {{ selectedJobTypeDetail.manifest.job.description }}
+                            </span>
                             </div>
                             <div class="ui-g-4">
                                 <dl class="dl-horizontal">
@@ -119,8 +109,8 @@
                                 <!--</div>-->
                             <!--</div>-->
                         <!--</div>-->
-                    </div>
-                </p-scrollPanel>
+                    </p-scrollPanel>
+                </p-panel>
             </div>
             <div class="ui-g-2">
                 <p-panel header="6 Hours" styleClass="margin-bottom-md">

@@ -20,6 +20,12 @@
     }
 }
 
+.job-type__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .job-type__details {
     h2 {
         display: inline-block;
@@ -98,6 +104,6 @@
     ::ng-deep .ui-scrollpanel {
         border-color: rgba(0, 0, 0, 0.125);
         width: 100%;
-        height: 77vh;
+        height: 70vh;
     }
 }
