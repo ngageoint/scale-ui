@@ -3,6 +3,7 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { JobTypesApiService } from '../../../configuration/job-types/api.service';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -16,6 +17,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('outputPanel') outputPanel: any;
 
+    jobTypes: any;
     columns: any[];
     dependencyOptions = [];
     inputJobs = [];
@@ -30,7 +32,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedNode: any;
 
     constructor(
-        private colorService: ColorService
+        private colorService: ColorService,
+        private jobTypesApiService: JobTypesApiService
     ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -40,79 +43,67 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.showLegend = false;
     }
 
-    private getDependents(name, outputName) {
-        const results = [];
+    // private getDependents(name, outputName) {
+    //     const results = [];
+    //
+    //     _.forEach(this.recipeData.definition.jobs, (job) => {
+    //         if (job.name !== name) {
+    //             _.forEach(job.dependencies, (dependency) => {
+    //                 if (dependency.name === name) {
+    //                     _.forEach(dependency.connections, (conn) => {
+    //                         if (conn.output === outputName) {
+    //                             results.push({
+    //                                 name: job.name,
+    //                                 output: conn.output,
+    //                                 input: conn.input
+    //                             });
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     });
+    //     return results;
+    // }
 
-        _.forEach(this.recipeData.definition.jobs, (job) => {
-            if (job.name !== name) {
-                _.forEach(job.dependencies, (dependency) => {
-                    if (dependency.name === name) {
-                        _.forEach(dependency.connections, (conn) => {
-                            if (conn.output === outputName) {
-                                results.push({
-                                    name: job.name,
-                                    output: conn.output,
-                                    input: conn.input
-                                });
-                            }
-                        });
-                    }
-                });
-            }
-        });
-        return results;
-    }
-
-    private getIoMappings() {
-        if (this.recipeData.definition) {
-            _.forEach(this.recipeData.definition.jobs, job => {
-                // find dependents
-                const jobType = _.find(this.recipeData.job_types, {
-                    manifest: {
-                        job: {
-                            name: job.job_type.name,
-                            jobVersion: job.job_type.version
-                        }
-                    }
-                });
-                if (jobType) {
-                    _.forEach(jobType.manifest.job.interface.outputs, jobOutput => {
-                        if (jobOutput) {
-                            jobOutput.dependents = this.getDependents(job.name, jobOutput.name);
-                        }
-                    });
-                    // add dependency mappings
-                    _.forEach(jobType.manifest.job.interface.inputs, jobInput => {
-                        if (jobInput) {
-                            const inputMappings = [];
-                            _.forEach(job.dependencies, dependency => {
-                                _.forEach(dependency.connections, conn => {
-                                    if (conn.input === jobInput.name) {
-                                        inputMappings.push({
-                                            name: dependency.name,
-                                            output: conn.output,
-                                            input: conn.input
-                                        });
-                                    }
-                                });
-                            });
-                            _.forEach(job.recipe_inputs, recipeInput => {
-                                if (recipeInput.job_input === jobInput.name) {
-                                    inputMappings.push({
-                                        name: 'recipe',
-                                        output: recipeInput.recipe_input,
-                                        input: recipeInput.job_input
-                                    });
-                                }
-                            });
-                            jobInput.dependencies = inputMappings;
-                        }
-                    });
-
-                }
-            });
-        }
-    }
+    // private getIoMappings() {
+    //     if (this.recipeData.definition) {
+    //         _.forEach(this.recipeData.definition.nodes, node => {
+    //             _.forEach(jobType.manifest.job.interface.outputs, jobOutput => {
+    //                 if (jobOutput) {
+    //                     jobOutput.dependents = this.getDependents(node.node_type.job_type_name, jobOutput.name);
+    //                 }
+    //             });
+    //             // add dependency mappings
+    //             _.forEach(jobType.manifest.job.interface.inputs, jobInput => {
+    //                 if (jobInput) {
+    //                     const inputMappings = [];
+    //                     _.forEach(node.dependencies, dependency => {
+    //                         _.forEach(dependency.connections, conn => {
+    //                             if (conn.input === jobInput.name) {
+    //                                 inputMappings.push({
+    //                                     name: dependency.name,
+    //                                     output: conn.output,
+    //                                     input: conn.input
+    //                                 });
+    //                             }
+    //                         });
+    //                     });
+    //                     _.forEach(node.recipe_inputs, recipeInput => {
+    //                         if (recipeInput.job_input === jobInput.name) {
+    //                             inputMappings.push({
+    //                                 name: 'recipe',
+    //                                 output: recipeInput.recipe_input,
+    //                                 input: recipeInput.job_input
+    //                             });
+    //                         }
+    //                     });
+    //                     jobInput.dependencies = inputMappings;
+    //                 }
+    //             });
+    //         });
+    //     }
+    // }
 
     private updateRecipe() {
         if (this.recipeData) {
@@ -121,7 +112,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 id: 'start',
                 label: 'Start',
                 name: 'start',
-                job_type: null,
                 icon: null,
                 dependencies: [],
                 visible: true,
@@ -129,31 +119,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }];
             this.links = [];
 
-            _.forEach(this.recipeData.definition.jobs, (job) => {
-                const jobType = _.find(this.recipeData.job_types, {
-                    manifest: {
-                        job: {
-                            name: job.job_type.name,
-                            jobVersion: job.job_type.version
-                        }
-                    }
+            _.forEach(this.recipeData.definition.nodes, node => {
+                this.nodes.push({
+                    id: _.camelCase(node.node_type.job_type_name), // id can't have dashes or anything
+                    label: `${node.node_type.job_type_name} v${node.node_type.job_type_version}`,
+                    icon: String.fromCharCode(parseInt(node.node_type.icon_code, 16)),
+                    dependencies: node.dependencies,
+                    visible: true,
+                    fillColor: node.instance ? this.colorService[node.instance.status] : this.colorService.RECIPE_NODE,
+                    class: node.instance ? node.instance.status === 'RUNNING' ? 'throb-svg' : null : null,
+                    node_type: node.node_type
                 });
-                if (jobType) {
-                    this.nodes.push({
-                        id: _.camelCase(job.name), // id can't have dashes or anything
-                        label: jobType.manifest.job.name + ' v' + jobType.manifest.job.jobVersion,
-                        name: job.name,
-                        job_type: jobType,
-                        icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
-                        dependencies: job.dependencies,
-                        visible: true,
-                        fillColor: job.instance ? this.colorService[job.instance.status] : this.colorService.RECIPE_NODE,
-                        class: job.instance ? job.instance.status === 'RUNNING' ? 'throb-svg' : null : null
-                    });
-                }
             });
 
-            _.forEach(this.nodes, (node) => {
+            _.forEach(this.nodes, node => {
                 if (node.id !== 'start' && node.id !== 'end') {
                     if (node.dependencies.length === 0) {
                         // job has no dependencies, so link it to start
@@ -164,7 +143,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                             visible: true
                         });
                     } else {
-                        _.forEach(node.dependencies, (dependency) => {
+                        _.forEach(node.dependencies, dependency => {
                             this.links.push({
                                 source: _.camelCase(dependency.name),
                                 target: node.id,
@@ -175,7 +154,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     }
                 }
             });
-            this.getIoMappings();
+            // this.getIoMappings();
         }
     }
 
@@ -189,27 +168,23 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     select(e) {
+        const shouldDeselect = _.isEqual(this.selectedNode, e);
         if (this.selectedNode) {
             this.selectedNode.options.stroke = '';
             this.selectedNode = null;
         }
-        if (e.job_type) {
-            if (this.selectedJobType &&
-                    e.job_type.manifest.job.name === this.selectedJobType.name &&
-                    e.job_type.manifest.job.jobVersion === this.selectedJobType.version) {
-                this.selectedJobType = null;
-            } else {
-                this.selectedNode = e;
+        if (!shouldDeselect) {
+            this.selectedNode = e;
+            this.jobTypesApiService.getJobType(
+                this.selectedNode.node_type.job_type_name,
+                this.selectedNode.node_type.job_type_version
+            ).subscribe(data => {
                 this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
-                this.selectedJobType = _.find(this.recipeData.job_types, {
-                    manifest: {
-                        job: {
-                            name: e.job_type.manifest.job.name,
-                            jobVersion: e.job_type.manifest.job.jobVersion
-                        }
-                    }
-                });
-            }
+                this.selectedJobType = data;
+            }, err => {
+                console.log(err);
+                // this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
+            });
         }
     }
 
@@ -321,7 +296,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
                         // set output as disabled to prevent duplicate mappings
                         providerOutput.disabled = true;
-                        this.getIoMappings();
+                        // this.getIoMappings();
                     }
                 } else {
                     console.log('compatible media type not found');
@@ -340,7 +315,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             const currDependency = _.find(currJob.dependencies, { name: conn.name });
             const currConn = _.find(currDependency.connections, { output: conn.output });
             _.remove(currDependency.connections, currConn);
-            this.getIoMappings();
+            // this.getIoMappings();
         } else {
             console.log('job not found');
         }
@@ -419,7 +394,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
                         // set output as disabled to prevent duplicate mappings
                         providerOutput.disabled = true;
-                        this.getIoMappings();
+                        // this.getIoMappings();
                     }
                 } else {
                     console.log('compatible media type not found');
@@ -439,7 +414,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             const currDependency = _.find(dependentJob.dependencies, { name: currJob.name });
             const currConn = _.find(currDependency.connections, { input: conn.input });
             _.remove(currDependency.connections, currConn);
-            this.getIoMappings();
+            // this.getIoMappings();
         } else {
             console.log('job not found');
         }
@@ -447,9 +422,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     ngOnChanges(changes) {
         if (changes.recipeData) {
-            this.selectedJobType = null;
-            this.selectedNode = null;
-            this.updateRecipe();
+            this.jobTypesApiService.getJobTypes().subscribe(data => {
+                this.jobTypes = data.results;
+                this.selectedJobType = null;
+                this.selectedNode = null;
+                this.updateRecipe();
+            }, err => {
+                console.log(err);
+            });
         }
     }
 

@@ -21,8 +21,18 @@
             "timeout": 0,
             "interface": {
                 "command": "./export_shapefile.sh",
-                "inputs": {},
-                "outputs": {},
+                "inputs": [{
+                    "media_types": ["application/octet-stream"],
+                    "required": true,
+                    "type": "file",
+                    "name": "infile"
+                }],
+                "outputs": [{
+                    "media_type": "application/xml",
+                    "required": true,
+                    "type": "file",
+                    "name": "shapefile"
+                }],
                 "settings": []
             }
         },

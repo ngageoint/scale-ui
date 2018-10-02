@@ -52,8 +52,8 @@ export class JobTypesApiService {
             );
     }
 
-    getJobType(id: number): Observable<any> {
-        return this.http.get<JobType>(`${this.apiPrefix}/job-types/${id}/`)
+    getJobType(name: string, version: string): Observable<any> {
+        return this.http.get<JobType>(`${this.apiPrefix}/job-types/${name}/${version}/`)
             .pipe(
                 map(response => {
                     return JobType.transformer(response);

@@ -50,7 +50,7 @@
         </div>
     </div>
     <div class="ui-g-4 ui-lg-3 ui-g-nopad">
-        <div class="job-type-interface" *ngIf="selectedJobType">
+        <div class="job-type-interface" *ngIf="selectedNode && selectedJobType">
             <h4 class="label label-primary">
                 {{ selectedJobType.manifest.job.title }} v{{ selectedJobType.manifest.job.jobVersion }}
             </h4>

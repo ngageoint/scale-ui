@@ -121,7 +121,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addJobType(event) {
         const jobType = event.data;
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.id).subscribe(data => {
+        this.jobTypesApiService.getJobType(jobType.manifest.job.name, jobType.manifest.job.jobVersion).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
             if (!recipeData.job_types) {
                 recipeData.job_types = [];

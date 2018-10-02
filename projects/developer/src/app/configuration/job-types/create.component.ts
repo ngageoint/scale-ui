@@ -55,15 +55,17 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 filter((event) => event instanceof NavigationEnd),
                 map(() => this.route)
             ).subscribe(() => {
-                let id = null;
+                let name = null;
+                let version = null;
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
-                        id = +params.get('id');
+                        name = params.get('name');
+                        version = params.get('version');
                     });
                 }
-                if (id > 0) {
+                if (name && version) {
                     this.mode = 'Edit';
-                    this.jobTypesApiService.getJobType(id).subscribe(data => {
+                    this.jobTypesApiService.getJobType(name, version).subscribe(data => {
                         this.jobType = data;
                     });
                 } else {
