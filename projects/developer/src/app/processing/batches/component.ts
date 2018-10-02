@@ -28,8 +28,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     recipeTypes: any;
     recipeTypeOptions: SelectItem[];
     selectedRecipeType: string;
-    statusValues: SelectItem[];
-    selectedStatus: string;
     count: number;
     started: string;
     ended: string;
@@ -48,22 +46,12 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.isInitialized = false;
         this.columns = [
             { field: 'title', header: 'Title' },
-            { field: 'recipe_type.name', header: 'Recipe Type' },
-            { field: 'status', header: 'Status' },
-            { field: 'created_count', header: 'Job Creation Rate' },
+            { field: 'recipe_type', header: 'Recipe Type' },
+            { field: 'is_creation_done', header: 'Recipes' },
+            { field: 'jobs_total', header: 'Jobs' },
             { field: 'created', header: 'Created (Z)' },
             { field: 'last_modified', header: 'Last Modified (Z)' }
         ];
-        this.statusValues = [{
-            label: 'View All',
-            value: ''
-        }, {
-            label: 'Submitted',
-            value: 'SUBMITTED'
-        }, {
-            label: 'Created',
-            value: 'CREATED'
-        }];
     }
 
     private updateData() {
@@ -149,12 +137,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
-    onStatusChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            status: e.value
-        });
-        this.updateOptions();
-    }
     onRowSelect(e) {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/processing/batches/${e.data.id}`);
@@ -179,9 +161,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     onFilterClick(e) {
         e.stopPropagation();
     }
-    createBatch() {
-        this.router.navigate(['/processing/batches/create']);
-    }
     ngOnInit() {
         this.datatableLoading = true;
         if (!this.datatableOptions) {
@@ -197,12 +176,12 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
-                    status: params.status || null,
-                    job_type_id: params.job_type_id ? parseInt(params.job_type_id, 10) : null,
-                    recipe_type_id: params.recipe_type_id ? parseInt(params.recipe_type_id, 10) : null
+                    recipe_type_id: params.recipe_type_id ? parseInt(params.recipe_type_id, 10) : null,
+                    is_creation_done: params.is_creation_done ? params.is_creation_done === 'true' : null,
+                    is_superseded: params.is_superseded ? params.is_superseded === 'true' : null,
+                    root_batch_id: params.root_batch_id ? +params.root_batch_id : null
                 };
             }
-            this.selectedStatus = this.datatableOptions.status;
             this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
             this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
             this.getRecipeTypes();

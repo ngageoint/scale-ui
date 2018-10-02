@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const jobTypes = require('../data/job-types.json');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var jobTypeData = _.clone(jobTypes);
     var params = request.url.query;
     var data = {
@@ -159,5 +159,5 @@ module.exports = function (request, reply) {
         }
     }
 
-    reply(data);
+    return data;
 };

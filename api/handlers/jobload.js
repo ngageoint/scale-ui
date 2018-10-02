@@ -1,7 +1,7 @@
 const moment = require('moment');
 const _ = require('lodash');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var params = request.url.query;
     var numHours = moment.utc(params.ended).diff(moment.utc(params.started), 'h');
     var data = {
@@ -20,5 +20,5 @@ module.exports = function (request, reply) {
         });
     }
 
-    reply(data);
+    return data;
 };

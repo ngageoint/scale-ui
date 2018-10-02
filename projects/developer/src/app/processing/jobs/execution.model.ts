@@ -73,7 +73,7 @@ export class JobExecution {
         this.ended_formatted = moment.utc(this.ended).format(environment.dateFormat);
         this.last_modified_formatted = moment.utc(this.last_modified_formatted).format(environment.dateFormat);
         this.statusClass = this.status === 'RUNNING' ?
-            `${this.status.toLowerCase()} throb-text` :
-            this.status.toLowerCase();
+            `${this.status.toLowerCase()}-text throb-text` :
+            `${this.status.toLowerCase()}-text`;
     }
 }

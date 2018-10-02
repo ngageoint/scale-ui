@@ -1,4 +1,4 @@
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var warnings = [];
     if (!request.payload.manifest) {
         warnings.push({
@@ -6,7 +6,7 @@ module.exports = function (request, reply) {
             details: 'Job Type Seed Manifest is undefined'
         });
     }
-    reply({
+    return {
         warnings: warnings
-    });
+    };
 };

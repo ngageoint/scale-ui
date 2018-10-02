@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var params = request.url.query;
     var data = {
         count: 2,
@@ -109,5 +109,5 @@ module.exports = function (request, reply) {
     getValues(processor1);
     getValues(processor2);
 
-    reply(data);
+    return data;
 };

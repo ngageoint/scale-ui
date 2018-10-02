@@ -9,36 +9,32 @@
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-secondary batches__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
+        <button pButton class="ui-button-secondary batches__date-filter-btn" label="Apply"
+                (click)="onDateFilterApply()"></button>
     </div>
     <div class="batches__controls">
-        <button pButton type="button" class="ui-button-primary" icon="fa fa-plus" pTooltip="Create Batch"
-                (click)="createBatch()"></button>
+        <a pButton routerLink="/processing/batches/edit/0" class="ui-button-primary" icon="fa fa-plus"
+           pTooltip="Create Batch"></a>
     </div>
 </div>
 <p-table [value]="batches" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
          [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedBatch"
-         (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}" [autoLayout]="true"
-         class="batches__table" #datatable>
+         (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
+         [autoLayout]="true" class="batches__table" #datatable>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
-                <div *ngSwitchCase="'recipe_type.id'">
-                    <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType" (onChange)="onRecipeTypeChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
-                                [showClear]="false">
+                <div *ngSwitchCase="'recipe_type'">
+                    <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType"
+                                (onChange)="onRecipeTypeChange($event)" [autoWidth]="false" styleClass="column-filter"
+                                (click)="onFilterClick($event)" appendTo="body" [showClear]="false">
                         <ng-template let-recipeType p-template="item">
                             {{ recipeType.label }}
                         </ng-template>
                     </p-dropdown>
-                </div>
-                <div *ngSwitchCase="'status'">
-                    <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" (onChange)="onStatusChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
-                                [showClear]="false"></p-dropdown>
                 </div>
             </th>
         </tr>
@@ -46,6 +42,31 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <div *ngSwitchCase="'title'">
+                    <span [pTooltip]="rowData.description">
+                        {{ rowData.title }}
+                    </span>
+                </div>
+                <div *ngSwitchCase="'recipe_type'">
+                    <span [pTooltip]="rowData.recipe_type.description">
+                        {{ rowData.recipe_type.title }}
+                    </span>
+                </div>
+                <div *ngSwitchCase="'is_creation_done'" [pTooltip]="rowData.creation_progress_tooltip">
+                    <p-progressBar [value]="rowData.creation_progress"></p-progressBar>
+                </div>
+                <div *ngSwitchCase="'jobs_total'" [pTooltip]="rowData.jobs_data_tooltip"
+                     [tooltipDisabled]="!rowData.is_creation_done" [escape]="false">
+                    <div aria-valuemax="100" aria-valuemin="0" role="progressbar"
+                         class="ui-progressbar ui-widget ui-widget-content ui-corner-all ui-progressbar-determinate">
+                        <div *ngFor="let jd of rowData.jobs_data">
+                            <div class="ui-progressbar-value ui-progressbar-value-animate ui-widget-header"
+                                 [ngClass]="jd.key"
+                                 style="display: block"
+                                 [ngStyle]="{'width': jd.value + '%'}"></div>
+                        </div>
+                    </div>
+                </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">
                         {{ rowData.createdDisplay }}
@@ -70,5 +91,5 @@
         </tr>
     </ng-template>
 </p-table>
-<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
-             (onPageChange)="paginate($event)"></p-paginator>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
+             [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>

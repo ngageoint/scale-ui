@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const recipes = require('../data/recipes.json');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var data = _.clone(recipes);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
@@ -30,5 +30,5 @@ module.exports = function (request, reply) {
         }
     }
 
-    reply(data);
+    return data;
 };

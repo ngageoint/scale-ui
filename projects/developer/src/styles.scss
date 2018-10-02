@@ -1,4 +1,4 @@
-@charset 'utf-8';
+@charset "utf-8";
 
 // Libraries
 @import '~normalize.css/normalize';
@@ -92,27 +92,6 @@ a:not(.ui-button, .ui-paginator) {
     position: relative;
 }
 
-.scale-panel {
-    .scale-panel__title {
-        margin-right: 18px;
-        border: 0 none;
-        border-bottom: 1px solid $clr-gray-90;
-        padding: .75em 1.25em .5em 1.25em;
-        background-color: $headerBgColor;
-        border-top-left-radius: 0.25em;
-        border-top-right-radius: 0.25em;
-        border-bottom-left-radius: 0px;
-        border-bottom-right-radius: 0px;
-        font-weight: bold;
-    }
-
-    .scale-panel__body {
-        margin-right: 18px;
-        margin-bottom: 18px;
-        padding: 10px;
-    }
-}
-
 .text-left {
     text-align: left !important;
 }
@@ -137,6 +116,16 @@ a:not(.ui-button, .ui-paginator) {
     padding: 7px;
     border-radius: 3px;
     text-decoration: none;
+}
+
+.flexed {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    &.space-between {
+        justify-content: space-between;
+    }
 }
 
 .table {
@@ -316,18 +305,46 @@ label-default {
     }
 }
 
-.completed {
+.completed-text {
     color: $clr-status-completed;
 }
-.failed {
+.failed-text {
     color: $clr-status-failed;
 }
-.pending {
+.pending-text {
     color: $clr-status-pending;
 }
-.queued {
+.queued-text {
     color: $clr-status-queued;
 }
-.running {
+.running-text {
     color: $clr-status-running;
+}
+.blocked-text {
+    color: $clr-status-blocked;
+}
+.canceled-text {
+    color: $clr-status-canceled;
+}
+
+.completed {
+    background: $clr-status-completed !important;
+}
+.failed {
+    background: $clr-status-failed !important;
+}
+.pending {
+    background: $clr-status-pending !important;
+}
+.queued {
+    background: $clr-status-queued !important;
+}
+.running {
+    background: $clr-status-running !important;
+}
+.blocked {
+    background: $clr-status-blocked !important;
+}
+.canceled {
+    background: $clr-status-canceled !important;
 }

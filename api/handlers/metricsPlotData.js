@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const metricsJobTypes = require('../data/metricsJobTypes.json');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var params = request.url.query;
     if (_.keys(params).length > 0) {
         var random = 0;
@@ -67,5 +67,5 @@ module.exports = function (request, reply) {
         });
     }
 
-    reply(returnObj);
+    return returnObj;
 };

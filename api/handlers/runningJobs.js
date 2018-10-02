@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const runningJobs = require('../data/running-jobs.json');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var data = _.clone(runningJobs);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
@@ -12,5 +12,5 @@ module.exports = function (request, reply) {
         }
     }
 
-    reply(data);
+    return data;
 };

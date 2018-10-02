@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
     selector: 'dev-navbar',
@@ -7,20 +6,11 @@ import { MessageService } from 'primeng/components/common/messageservice';
     styleUrls: ['./navbar.component.scss']
 })
 
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
     selectedId = null;
     subscription: any;
-    msgs: any = [];
 
-    constructor(
-        private messageService: MessageService
-    ) {}
-
-    ngOnInit() {
-        this.subscription = this.messageService.messageObserver.subscribe(data => {
-            this.msgs.push(data);
-        });
-    }
+    constructor() {}
 
     selectNavItem(event, itemId) {
         event.stopPropagation();

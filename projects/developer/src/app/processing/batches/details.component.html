@@ -1,0 +1,74 @@
+<div class="flexed space-between margin-bottom-md">
+    <h2><i class="fa fa-files-o"></i> Batch Details</h2>
+    <a pButton routerLink="/processing/batches/edit/0" class="ui-button-primary" icon="fa fa-plus"
+       pTooltip="Create Batch"></a>
+</div>
+<p-table [value]="[batchDetails]">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Title</th>
+            <th>Recipe Type</th>
+            <th>Root Batch</th>
+            <th>Previous Batch</th>
+            <th>Recipes</th>
+            <th>Jobs</th>
+            <th>Priority</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-batch>
+        <tr>
+            <td>
+                <span [pTooltip]="batch.description">{{ batch.title }}</span>
+            </td>
+            <td>
+                <span *ngIf="batch.recipe_type">
+                    <a routerLink="/configuration/recipe-types/{{ batch.recipe_type.id }}">
+                    <span [pTooltip]="batch.recipe_type.description">{{ batch.recipe_type.title }}</span>
+                </a>
+                </span>
+            </td>
+            <td>
+                <span *ngIf="batch.root_batch">
+                    <a routerLink="/processing/batches/{{ batch.root_batch.id }}">
+                        <span [pTooltip]="batch.root_batch.description">{{ batch.root_batch.title }}</span>
+                    </a>
+                </span>
+                <span *ngIf="!batch.root_batch"><em>None</em></span>
+            </td>
+            <td>
+                <span *ngIf="batch.superseded_batch">
+                    <a routerLink="/processing/batches/{{ batch.superseded_batch.id }}">
+                        <span [pTooltip]="batch.superseded_batch.description">{{ batch.superseded_batch.title }}</span>
+                    </a>
+                </span>
+                <span *ngIf="!batch.root_batch"><em>None</em></span>
+            </td>
+            <td>
+                <div [pTooltip]="batch.creation_progress_tooltip">
+                    <a routerLink="/processing/recipes/" [queryParams]="{batch_id: batch.id}">
+                        <p-progressBar [value]="batch.creation_progress"></p-progressBar>
+                    </a>
+                </div>
+            </td>
+            <td>
+                <div [pTooltip]="batch.jobs_data_tooltip" [tooltipDisabled]="!batch.is_creation_done" [escape]="false">
+                    <a routerLink="/processing/jobs/" [queryParams]="{batch_id: batch.id}">
+                        <div aria-valuemax="100" aria-valuemin="0" role="progressbar"
+                             class="ui-progressbar ui-widget ui-widget-content ui-corner-all ui-progressbar-determinate">
+                            <div *ngFor="let jd of batch.jobs_data">
+                                <div class="ui-progressbar-value ui-progressbar-value-animate ui-widget-header"
+                                     [ngClass]="jd.key"
+                                     style="display: block"
+                                     [ngStyle]="{'width': jd.value + '%'}"></div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </td>
+            <td><span *ngIf="batch.configuration">{{ batch.configuration.priority }}</span></td>
+        </tr>
+    </ng-template>
+</p-table>
+<div *ngIf="batchDetails.recipe_type_rev" class="margin-top-md">
+    <dev-recipe-graph [recipeData]="batchDetails.recipe_type_rev" [isEditing]="false"></dev-recipe-graph>
+</div>

@@ -1,4 +1,3 @@
-module.exports = function (request, reply) {
-    const sourceDetails = require('../data/source-details.json');
-    reply(sourceDetails);
+module.exports = function (request) {
+    return require('../data/source-details.json');
 };

@@ -1,7 +1,7 @@
 var _ = require('lodash');
 var jobTypes = require('../data/job-types.json');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var data = _.clone(jobTypes);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
@@ -19,5 +19,5 @@ module.exports = function (request, reply) {
         }
     }
 
-    reply(data);
+    return data;
 };

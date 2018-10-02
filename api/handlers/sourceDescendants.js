@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const moment = require('moment');
 
-module.exports = function (request, reply) {
+module.exports = function (request) {
     var sourceDescendants = null;
     if (request.params.type === 'jobs') {
         sourceDescendants = require('../data/jobs.json');
@@ -41,5 +41,5 @@ module.exports = function (request, reply) {
         }
     }
 
-    reply(data);
+    return data;
 };
