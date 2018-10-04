@@ -120,10 +120,18 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.links = [];
 
             _.forEach(this.recipeData.definition.nodes, node => {
+                const jobType = _.find(this.recipeData.job_types, {
+                    manifest: {
+                        job: {
+                            name: node.node_type.job_type_name,
+                            jobVersion: node.node_type.job_type_version
+                        }
+                    }
+                });
                 this.nodes.push({
                     id: _.camelCase(node.node_type.job_type_name), // id can't have dashes or anything
-                    label: `${node.node_type.job_type_name} v${node.node_type.job_type_version}`,
-                    icon: String.fromCharCode(parseInt(node.node_type.icon_code, 16)),
+                    label: `${jobType.manifest.job.title} v${jobType.manifest.job.jobVersion}`,
+                    icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
                     dependencies: node.dependencies,
                     visible: true,
                     fillColor: node.instance ? this.colorService[node.instance.status] : this.colorService.RECIPE_NODE,
@@ -175,15 +183,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         if (!shouldDeselect) {
             this.selectedNode = e;
-            this.jobTypesApiService.getJobType(
-                this.selectedNode.node_type.job_type_name,
-                this.selectedNode.node_type.job_type_version
-            ).subscribe(data => {
-                this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
-                this.selectedJobType = data;
-            }, err => {
-                console.log(err);
-                // this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
+            this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
+            this.selectedJobType = _.find(this.recipeData.job_types, {
+                manifest: {
+                    job: {
+                        name: this.selectedNode.node_type.job_type_name,
+                        jobVersion: this.selectedNode.node_type.job_type_version
+                    }
+                }
             });
         }
     }
@@ -193,15 +200,26 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     showDependencyOptions(event) {
+        this.dependencyOptions = [];
         // only show job types present in recipe
-        this.dependencyOptions = _.filter(this.recipeData.job_types, jobType => {
-            return jobType.id !== this.selectedJobType.id;
+        _.forEach(this.recipeData.definition.nodes, node => {
+            if (node.node_type.job_type_name !== this.selectedJobType.manifest.job.name) {
+                const jobType = _.find(this.recipeData.job_types, {
+                    manifest: {
+                        job: {
+                            name: node.node_type.job_type_name,
+                            jobVersion: node.node_type.job_type_version
+                        }
+                    }
+                });
+                if (jobType) {
+                    // only show job types that are not yet dependencies
+                    jobType.disabled = _.find(this.selectedNode.dependencies, { name: jobType.manifest.job.name });
+                    this.dependencyOptions.push(jobType);
+                }
+            }
         });
-        // only show job types that are not yet dependencies
-        _.forEach(this.dependencyOptions, option => {
-            option.disabled = _.find(this.selectedNode.dependencies, { name: option.manifest.job.name });
-        });
-        this.dependencyPanel.show(event);
+        this.dependencyPanel.toggle(event);
     }
 
     addDependency(dependency) {
@@ -235,8 +253,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     showInputConnections(event, input) {
         // inspect dependencies and display possible connections
         this.inputJobs = [];
-        const currJob = this.getCurrJob();
-        _.forEach(currJob.dependencies, dep => {
+        _.forEach(this.selectedNode.dependencies, dep => {
             const jobType = _.find(this.recipeData.job_types, {
                 manifest: {
                     job: {
@@ -250,11 +267,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 version: jobType.manifest.job.jobVersion,
                 options: []
             };
-            _.forEach(jobType.manifest.job.interface.outputs, output => {
+            _.forEach(jobType.manifest.job.interface.outputs.files, output => {
                 // only show the option if the output media type is contained in the input media types
-                if (_.includes(input.media_types, output.media_type)) {
+                if (_.includes(input.mediaTypes, output.mediaType)) {
                     // disable the output if it currently exists as a connection
-                    output.disabled = _.includes(_.map(_.flatten(_.map(currJob.dependencies, 'connections')), 'output'), output.name);
+                    output.disabled = _.includes(
+                        _.map(_.flatten(_.map(this.selectedNode.dependencies, 'connections')), 'output'),
+                        output.name
+                    );
                     job.options.push(output);
                 }
             });
@@ -262,7 +282,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.inputJobs.push(job);
             }
         });
-        this.inputPanel.show(event);
+        this.inputPanel.toggle(event);
     }
 
     addInputConnection(providerName, providerVersion, providerOutput) {
@@ -324,15 +344,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     showOutputConnections(event, output) {
         // inspect dependents and display possible connections
         this.outputJobs = [];
-        const currJob = this.getCurrJob();
-        const dependentJobs = _.filter(this.recipeData.definition.jobs, job => {
-            return _.find(job.dependencies, { name: currJob.job_type.name });
+        const dependentJobs = [];
+        const nodes = _.values(this.recipeData.definition.nodes);
+        _.forEach(nodes, node => {
+            if (_.find(node.dependencies, { name: this.selectedNode.node_type.job_type_name })) {
+                dependentJobs.push(node);
+            }
         });
         _.forEach(dependentJobs, dep => {
             const jobType = _.find(this.recipeData.job_types, {
                 manifest: {
                     job: {
-                        name: dep.name
+                        name: dep.node_type.job_type_name,
+                        jobVersion: dep.node_type.job_type_version
                     }
                 }
             });
@@ -342,11 +366,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 version: jobType.manifest.job.jobVersion,
                 options: []
             };
-            _.forEach(jobType.manifest.job.interface.inputs, input => {
+            _.forEach(jobType.manifest.job.interface.inputs.files, input => {
                 // only show the option if the output media type is contained in the input media types
-                if (_.includes(input.media_types, output.media_type)) {
+                if (_.includes(input.mediaTypes, output.mediaType)) {
                     // disable the input if it currently exists as a connection
-                    const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs, 'dependents');
+                    const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs.files, 'dependents');
                     input.disabled = _.includes(_.map(_.flatten(currDeps), 'name'), job.name) &&
                         _.includes(_.map(_.flatten(_.map(dep.dependencies, 'connections')), 'input'), input.name);
                     job.options.push(input);
@@ -356,7 +380,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.outputJobs.push(job);
             }
         });
-        this.outputPanel.show(event);
+        this.outputPanel.toggle(event);
     }
 
     addOutputConnection(providerName, providerVersion, providerOutput) {

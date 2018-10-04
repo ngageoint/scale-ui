@@ -21,28 +21,41 @@
             "timeout": 0,
             "interface": {
                 "command": "./parse_landsat.sh",
-                "inputs": [{
-                    "media_types": ["application/octet-stream"],
-                    "required": true,
-                    "type": "file",
-                    "name": "infile"
-                }],
-                "outputs": [{
-                    "media_type": "image/tiff",
-                    "required": true,
-                    "type": "file",
-                    "name": "multispectral"
-                }, {
-                    "media_type": "image/tiff",
-                    "required": true,
-                    "type": "file",
-                    "name": "panchromatic"
-                }, {
-                    "media_type": "image/tiff",
-                    "required": true,
-                    "type": "file",
-                    "name": "thermal"
-                }],
+                "inputs": {
+                    "files": [
+                        {
+                            "name": "infile",
+                            "required": true,
+                            "mediaTypes": ["application/octet-stream"]
+                        }
+                    ]
+                },
+                "outputs": {
+                    "files": [
+                        {
+                            "name": "multispectral",
+                            "mediaType": "image/tiff",
+                            "multiple": true,
+                            "pattern": "multispectral*.tiff",
+                            "required": true
+                        },
+                        {
+                            "name": "panchromatic",
+                            "mediaType": "image/tiff",
+                            "multiple": true,
+                            "pattern": "panchromatic*.tiff",
+                            "required": true
+                        },
+                        {
+                            "name": "thermal",
+                            "mediaType": "image/tiff",
+                            "multiple": true,
+                            "pattern": "thermal*.tiff",
+                            "required": true
+                        }
+                    ]
+                },
+                "mounts": [],
                 "settings": []
             }
         },

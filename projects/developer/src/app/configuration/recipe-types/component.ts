@@ -79,6 +79,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                                     null,
                                     null,
                                     null,
+                                    null,
                                     null
                                 )
                             };

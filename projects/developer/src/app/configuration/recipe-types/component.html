@@ -24,36 +24,42 @@
                         <div *ngIf="isEditing">
                             <div class="ui-g ui-g-nopad">
                                 <div class="ui-g-4 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.name" pInputText>
+                                    <input class="recipe-type__metadata" type="text"
+                                           [(ngModel)]="selectedRecipeTypeDetail.name" pInputText>
                                 </div>
                                 <div class="ui-g-4 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.title" pInputText>
+                                    <input class="recipe-type__metadata" type="text"
+                                           [(ngModel)]="selectedRecipeTypeDetail.title" pInputText>
                                 </div>
                                 <div class="ui-g-4 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.version" pInputText>
+                                    <input class="recipe-type__metadata" type="text"
+                                           [(ngModel)]="selectedRecipeTypeDetail.version" pInputText>
                                 </div>
                             </div>
                             <div class="ui-g ui-g-nopad">
                                 <div class="ui-g-12 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text" [(ngModel)]="selectedRecipeTypeDetail.description"
-                                           pInputText>
+                                    <input class="recipe-type__metadata" type="text"
+                                           [(ngModel)]="selectedRecipeTypeDetail.description" pInputText>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="ui-g-4 ui-g-nopad text-right">
-                        <button class="btn__edit" pButton icon="fa fa-edit fa-fw" (click)="toggleEdit()"
-                                *ngIf="selectedRecipeType && !isEditing" pTooltip="Edit Recipe Type"></button>
-                        <div class="recipe-type__menu">
-                            <button class="btn__menu ui-button-info" pButton icon="fa fa-cube fa-fw" (click)="showToggleJobType()"
-                                    *ngIf="selectedRecipeType && isEditing" pTooltip="Add/Remove Job Types"></button>
-                            <button class="btn__menu ui-button-warning" pButton icon="fa fa-check fa-fw" (click)="validateRecipeType()"
-                                    *ngIf="selectedRecipeType && isEditing" pTooltip="Validate Recipe Type"></button>
-                            <button class="btn__menu ui-button-success" pButton icon="fa fa-save fa-fw" (click)="saveRecipeType()"
-                                    *ngIf="selectedRecipeType && isEditing" pTooltip="Save Recipe Type"></button>
-                        </div>
-                        <button class="ui-button-danger margin-left-md" pButton icon="fa fa-remove fa-fw" (click)="toggleEdit()"
-                                *ngIf="selectedRecipeType && isEditing" pTooltip="Cancel Edit"></button>
+                    <div class="ui-g-4 ui-g-nopad recipe-type__menu">
+                        <button class="ui-button-info" pButton icon="fa fa-edit fa-fw" (click)="toggleEdit()"
+                                *ngIf="selectedRecipeType && !isEditing" pTooltip="Edit Recipe Type"
+                                tooltipPosition="bottom"></button>
+                        <button class="ui-button-info" pButton icon="fa fa-cube fa-fw" (click)="showToggleJobType()"
+                                *ngIf="selectedRecipeType && isEditing" pTooltip="Add/Remove Job Types"
+                                tooltipPosition="bottom"></button>
+                        <button class="ui-button-warning" pButton icon="fa fa-check fa-fw"
+                                (click)="validateRecipeType()" *ngIf="selectedRecipeType && isEditing"
+                                pTooltip="Validate Recipe Type" tooltipPosition="bottom"></button>
+                        <button class="ui-button-success" pButton icon="fa fa-save fa-fw" (click)="saveRecipeType()"
+                                *ngIf="selectedRecipeType && isEditing" pTooltip="Save Recipe Type"
+                                tooltipPosition="bottom"></button>
+                        <button class="ui-button-danger" pButton icon="fa fa-remove fa-fw" (click)="toggleEdit()"
+                                *ngIf="selectedRecipeType && isEditing" pTooltip="Cancel Edit"
+                                tooltipPosition="bottom"></button>
                     </div>
                 </div>
             </div>
@@ -69,7 +75,8 @@
         <ng-template pTemplate="header" let-columns>
             <tr>
                 <th *ngFor="let col of columns">
-                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                    <input pInputText type="text"
+                           (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
                            class="column-filter">
                 </th>
             </tr>

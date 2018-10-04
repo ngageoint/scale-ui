@@ -78,7 +78,7 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.manifest.job.interface.inputs" [scrollable]="true" scrollHeight="300px"
+            <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.files" [scrollable]="true" scrollHeight="300px"
                         class="recipe-io-container">
                 <p-header>
                     <strong>Inputs</strong>
@@ -89,7 +89,7 @@
                             <div class="ui-g-10">
                                 {{ input.name }} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
-                                    <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
+                                    <li *ngFor="let mediaType of input.mediaTypes">{{ mediaType }}</li>
                                 </ul>
                                 <div class="connections" *ngIf="input.dependencies && input.dependencies.length > 0">
                                     <h5>Connections</h5>
@@ -112,7 +112,7 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.manifest.job.interface.outputs" [scrollable]="true"
+            <p-dataList [value]="selectedJobType.manifest.job.interface.outputs.files" [scrollable]="true"
                         scrollHeight="300px" class="recipe-io-container">
                 <p-header>
                     <strong>Outputs</strong>
@@ -122,7 +122,7 @@
                         <div class="ui-g">
                             <div class="ui-g-10">
                                 {{ output.name }} <span *ngIf="output.required">*</span>
-                                <div class="media-type-list">{{ output.media_type }}</div>
+                                <div class="media-type-list">{{ output.mediaType }}</div>
                                 <div class="connections" *ngIf="output.dependents && output.dependents.length > 0">
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
