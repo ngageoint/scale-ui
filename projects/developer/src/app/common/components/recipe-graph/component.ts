@@ -30,6 +30,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     curve: any;
     selectedJobType: any;
     selectedNode: any;
+    selectedNodeConnections: any;
 
     constructor(
         private colorService: ColorService,
@@ -136,7 +137,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     visible: true,
                     fillColor: node.instance ? this.colorService[node.instance.status] : this.colorService.RECIPE_NODE,
                     class: node.instance ? node.instance.status === 'RUNNING' ? 'throb-svg' : null : null,
-                    node_type: node.node_type
+                    node_type: node.node_type,
+                    input: node.input
                 });
             });
 
@@ -191,6 +193,23 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                         jobVersion: this.selectedNode.node_type.job_type_version
                     }
                 }
+            });
+            this.selectedNodeConnections = [];
+            _.forEach(this.selectedNode.input, i => {
+                const dependency = this.recipeData.definition.nodes[i.node];
+                const dependencyJobType = _.find(this.recipeData.job_types, {
+                    manifest: {
+                        job: {
+                            name: dependency.node_type.job_type_name,
+                            jobVersion: dependency.node_type.job_type_version
+                        }
+                    }
+                });
+                const connection = _.find(dependencyJobType.manifest.job.interface.outputs.files, { name: i.output });
+                this.selectedNodeConnections.push({
+                    name: dependency.node_type.job_type_name,
+                    output: connection.name
+                });
             });
         }
     }
@@ -341,108 +360,108 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
-    showOutputConnections(event, output) {
-        // inspect dependents and display possible connections
-        this.outputJobs = [];
-        const dependentJobs = [];
-        const nodes = _.values(this.recipeData.definition.nodes);
-        _.forEach(nodes, node => {
-            if (_.find(node.dependencies, { name: this.selectedNode.node_type.job_type_name })) {
-                dependentJobs.push(node);
-            }
-        });
-        _.forEach(dependentJobs, dep => {
-            const jobType = _.find(this.recipeData.job_types, {
-                manifest: {
-                    job: {
-                        name: dep.node_type.job_type_name,
-                        jobVersion: dep.node_type.job_type_version
-                    }
-                }
-            });
-            const job = {
-                title: jobType.manifest.job.title,
-                name: jobType.manifest.job.name,
-                version: jobType.manifest.job.jobVersion,
-                options: []
-            };
-            _.forEach(jobType.manifest.job.interface.inputs.files, input => {
-                // only show the option if the output media type is contained in the input media types
-                if (_.includes(input.mediaTypes, output.mediaType)) {
-                    // disable the input if it currently exists as a connection
-                    const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs.files, 'dependents');
-                    input.disabled = _.includes(_.map(_.flatten(currDeps), 'name'), job.name) &&
-                        _.includes(_.map(_.flatten(_.map(dep.dependencies, 'connections')), 'input'), input.name);
-                    job.options.push(input);
-                }
-            });
-            if (job.options.length > 0) {
-                this.outputJobs.push(job);
-            }
-        });
-        this.outputPanel.toggle(event);
-    }
-
-    addOutputConnection(providerName, providerVersion, providerOutput) {
-        if (providerOutput.disabled) {
-            return;
-        }
-        const currJob = this.getCurrJob();
-        if (currJob) {
-            const currJobType = _.find(this.recipeData.job_types, {
-                manifest: {
-                    job: {
-                        name: currJob.job_type.name,
-                        jobVersion: currJob.job_type.version
-                    }
-                }
-            });
-            const dependentJob = _.find(this.recipeData.definition.jobs, {
-                job_type: {
-                    name: providerName,
-                    version: providerVersion
-                }
-            });
-            if (dependentJob) {
-                const currOutput = _.find(currJobType.manifest.job.interface.outputs, output => {
-                    return _.includes(providerOutput.media_types, output.media_type);
-                });
-                if (currOutput) {
-                    const conn = {
-                        input: providerOutput.name,
-                        output: currOutput.name
-                    };
-                    const currDependent = _.find(dependentJob.dependencies, { name: currJob.name });
-                    if (currDependent) {
-                        currDependent.connections.push(conn);
-
-                        // set output as disabled to prevent duplicate mappings
-                        providerOutput.disabled = true;
-                        // this.getIoMappings();
-                    }
-                } else {
-                    console.log('compatible media type not found');
-                }
-            } else {
-                console.log('dependent job not found');
-            }
-        } else {
-            console.log('job not found');
-        }
-    }
-
-    removeOutputConnection(conn) {
-        const currJob = this.getCurrJob();
-        const dependentJob = _.find(this.recipeData.definition.jobs, { name: conn.name });
-        if (dependentJob) {
-            const currDependency = _.find(dependentJob.dependencies, { name: currJob.name });
-            const currConn = _.find(currDependency.connections, { input: conn.input });
-            _.remove(currDependency.connections, currConn);
-            // this.getIoMappings();
-        } else {
-            console.log('job not found');
-        }
-    }
+    // showOutputConnections(event, output) {
+    //     // inspect dependents and display possible connections
+    //     this.outputJobs = [];
+    //     const dependentJobs = [];
+    //     const nodes = _.values(this.recipeData.definition.nodes);
+    //     _.forEach(nodes, node => {
+    //         if (_.find(node.dependencies, { name: this.selectedNode.node_type.job_type_name })) {
+    //             dependentJobs.push(node);
+    //         }
+    //     });
+    //     _.forEach(dependentJobs, dep => {
+    //         const jobType = _.find(this.recipeData.job_types, {
+    //             manifest: {
+    //                 job: {
+    //                     name: dep.node_type.job_type_name,
+    //                     jobVersion: dep.node_type.job_type_version
+    //                 }
+    //             }
+    //         });
+    //         const job = {
+    //             title: jobType.manifest.job.title,
+    //             name: jobType.manifest.job.name,
+    //             version: jobType.manifest.job.jobVersion,
+    //             options: []
+    //         };
+    //         _.forEach(jobType.manifest.job.interface.inputs.files, input => {
+    //             // only show the option if the output media type is contained in the input media types
+    //             if (_.includes(input.mediaTypes, output.mediaType)) {
+    //                 // disable the input if it currently exists as a connection
+    //                 const currDeps = _.map(this.selectedJobType.manifest.job.interface.outputs.files, 'dependents');
+    //                 input.disabled = _.includes(_.map(_.flatten(currDeps), 'name'), job.name) &&
+    //                     _.includes(_.map(_.flatten(_.map(dep.dependencies, 'connections')), 'input'), input.name);
+    //                 job.options.push(input);
+    //             }
+    //         });
+    //         if (job.options.length > 0) {
+    //             this.outputJobs.push(job);
+    //         }
+    //     });
+    //     this.outputPanel.toggle(event);
+    // }
+    //
+    // addOutputConnection(providerName, providerVersion, providerOutput) {
+    //     if (providerOutput.disabled) {
+    //         return;
+    //     }
+    //     const currJob = this.getCurrJob();
+    //     if (currJob) {
+    //         const currJobType = _.find(this.recipeData.job_types, {
+    //             manifest: {
+    //                 job: {
+    //                     name: currJob.job_type.name,
+    //                     jobVersion: currJob.job_type.version
+    //                 }
+    //             }
+    //         });
+    //         const dependentJob = _.find(this.recipeData.definition.jobs, {
+    //             job_type: {
+    //                 name: providerName,
+    //                 version: providerVersion
+    //             }
+    //         });
+    //         if (dependentJob) {
+    //             const currOutput = _.find(currJobType.manifest.job.interface.outputs, output => {
+    //                 return _.includes(providerOutput.media_types, output.media_type);
+    //             });
+    //             if (currOutput) {
+    //                 const conn = {
+    //                     input: providerOutput.name,
+    //                     output: currOutput.name
+    //                 };
+    //                 const currDependent = _.find(dependentJob.dependencies, { name: currJob.name });
+    //                 if (currDependent) {
+    //                     currDependent.connections.push(conn);
+    //
+    //                     // set output as disabled to prevent duplicate mappings
+    //                     providerOutput.disabled = true;
+    //                     // this.getIoMappings();
+    //                 }
+    //             } else {
+    //                 console.log('compatible media type not found');
+    //             }
+    //         } else {
+    //             console.log('dependent job not found');
+    //         }
+    //     } else {
+    //         console.log('job not found');
+    //     }
+    // }
+    //
+    // removeOutputConnection(conn) {
+    //     const currJob = this.getCurrJob();
+    //     const dependentJob = _.find(this.recipeData.definition.jobs, { name: conn.name });
+    //     if (dependentJob) {
+    //         const currDependency = _.find(dependentJob.dependencies, { name: currJob.name });
+    //         const currConn = _.find(currDependency.connections, { input: conn.input });
+    //         _.remove(currDependency.connections, currConn);
+    //         // this.getIoMappings();
+    //     } else {
+    //         console.log('job not found');
+    //     }
+    // }
 
     ngOnChanges(changes) {
         if (changes.recipeData) {
