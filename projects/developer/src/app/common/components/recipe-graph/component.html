@@ -70,7 +70,7 @@
                 </p-header>
                 <ng-template let-dep pTemplate="item">
                     <div class="ui-g recipe-io recipe-dependencies">
-                        <div class="ui-g-12">
+                        <div class="ui-g-12 ui-g-nopad">
                             <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
                             {{ dep.name }}
@@ -78,27 +78,32 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.files" [scrollable]="true" scrollHeight="300px"
-                        class="recipe-io-container">
+            <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.files" [scrollable]="true"
+                        scrollHeight="300px" class="recipe-io-container">
                 <p-header>
                     <strong>Inputs</strong>
                 </p-header>
                 <ng-template let-input pTemplate="item">
                     <div class="recipe-io">
                         <div class="ui-g">
-                            <div class="ui-g-10">
+                            <div class="ui-g-10 ui-g-nopad">
                                 {{ input.name }} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
                                     <li *ngFor="let mediaType of input.mediaTypes">{{ mediaType }}</li>
                                 </ul>
-                                <div class="connections" *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
+                                <div class="connections"
+                                     *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
-                                        <li *ngFor="let connection of selectedNodeConnections">
-                                            <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
-                                                    (click)="removeInputConnection(connection)" *ngIf="isEditing">
-                                            </button>
-                                            <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                        <li *ngFor="let connection of selectedNodeConnections" class="connection">
+                                            <div>
+                                                <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
+                                                        (click)="removeInputConnection(connection)" *ngIf="isEditing">
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                            </div>
                                         </li>
                                     </ul>
                                 </div>
@@ -112,39 +117,6 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <!--<p-dataList [value]="selectedJobType.manifest.job.interface.outputs.files" [scrollable]="true"-->
-                        <!--scrollHeight="300px" class="recipe-io-container">-->
-                <!--<p-header>-->
-                    <!--<strong>Outputs</strong>-->
-                <!--</p-header>-->
-                <!--<ng-template let-output pTemplate="item">-->
-                    <!--<div class="recipe-io">-->
-                        <!--<div class="ui-g">-->
-                            <!--<div class="ui-g-10">-->
-                                <!--{{ output.name }} <span *ngIf="output.required">*</span>-->
-                                <!--<div class="media-type-list">{{ output.mediaType }}</div>-->
-                                <!--<div class="connections" *ngIf="output.dependents && output.dependents.length > 0">-->
-                                    <!--<h5>Connections</h5>-->
-                                    <!--<ul class="list-unstyled">-->
-                                        <!--<li *ngFor="let dependent of output.dependents">-->
-                                            <!--<button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"-->
-                                                    <!--(click)="removeOutputConnection(dependent)" *ngIf="isEditing">-->
-                                            <!--</button>-->
-                                            <!--<strong>{{ dependent.name }}</strong>.<em>{{ dependent.input }}</em>-->
-                                        <!--</li>-->
-                                    <!--</ul>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                            <!--<div class="ui-g-2 ui-g-nopad text-right">-->
-                                <!--<button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"-->
-                                        <!--(click)="showOutputConnections($event, output)" *ngIf="isEditing"-->
-                                        <!--pTooltip="Add Output Connection">-->
-                                <!--</button>-->
-                            <!--</div>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</ng-template>-->
-            <!--</p-dataList>-->
         </div>
     </div>
 </div>
@@ -171,17 +143,3 @@
         </ul>
     </div>
 </p-overlayPanel>
-<!--<p-overlayPanel appendTo="body" #outputPanel>-->
-    <!--<div *ngIf="outputJobs.length === 0">-->
-        <!--<div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>-->
-    <!--</div>-->
-    <!--<div *ngFor="let job of outputJobs">-->
-        <!--<strong>{{ job.title }}</strong>-->
-        <!--<ul class="recipe__option-list">-->
-            <!--<li *ngFor="let option of job.options" (click)="addOutputConnection(job.name, job.version, option)"-->
-                <!--[class]="option.disabled ? 'disabled' : ''">-->
-                <!--{{ option.name }}-->
-            <!--</li>-->
-        <!--</ul>-->
-    <!--</div>-->
-<!--</p-overlayPanel>-->

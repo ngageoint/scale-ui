@@ -41,9 +41,9 @@
                         },
                         {
                             "name": "panchromatic",
-                            "mediaType": "image/tiff",
+                            "mediaType": "image/nitf",
                             "multiple": true,
-                            "pattern": "panchromatic*.tiff",
+                            "pattern": "panchromatic*.nitf",
                             "required": true
                         },
                         {

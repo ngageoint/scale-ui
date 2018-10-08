@@ -21,18 +21,25 @@
             "timeout": 0,
             "interface": {
                 "command": "./correct_ls8.sh",
-                "inputs": [{
-                    "media_types": ["image/tiff"],
-                    "required": true,
-                    "type": "file",
-                    "name": "infile"
-                }],
-                "outputs": [{
-                    "media_type": "image/nitf",
-                    "required": true,
-                    "type": "image",
-                    "name": "ls8-corrected"
-                }],
+                "inputs": {
+                    "files": [
+                        {
+                            "name": "infile",
+                            "required": true,
+                            "mediaTypes": ["image/tiff"]
+                        }
+                    ]
+                },
+                "outputs": {
+                    "files": [
+                        {
+                            "name": "ls8-corrected",
+                            "required": true,
+                            "mediaType": "image/nitf"
+
+                        }
+                    ]
+                },
                 "settings": []
             }
         },
