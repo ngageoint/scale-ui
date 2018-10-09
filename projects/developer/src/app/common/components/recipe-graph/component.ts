@@ -104,10 +104,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     private getCurrJob() {
-        return _.find(this.recipeData.definition.jobs, {
-            job_type: {
-                name: this.selectedNode.job_type.manifest.job.name,
-                version: this.selectedNode.job_type.manifest.job.jobVersion
+        return _.find(this.recipeData.definition.nodes, {
+            node_type: {
+                job_type_name: this.selectedNode.node_type.job_type_name,
+                job_type_version: this.selectedNode.node_type.job_type_version
             }
         });
     }

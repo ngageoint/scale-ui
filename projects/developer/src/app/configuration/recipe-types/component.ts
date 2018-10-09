@@ -122,20 +122,25 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addJobType(event) {
         const jobType = event.data;
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.manifest.job.name, jobType.manifest.job.jobVersion).subscribe(data => {
+        this.jobTypesApiService.getJobType(jobType.name, jobType.version).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
             if (!recipeData.job_types) {
                 recipeData.job_types = [];
             }
-            recipeData.definition.jobs.push({
-                dependencies: [],
-                job_type: {
-                    name: data.manifest.job.name,
-                    version: data.manifest.job.jobVersion
-                },
-                name: data.manifest.job.name,
-                recipe_inputs: []
+            const input = {};
+            _.forEach(data.manifest.job.interface.inputs.files, file => {
+                input[file.name] = {};
             });
+            recipeData.definition.nodes[data.manifest.job.name] = {
+                dependencies: [],
+                input: input,
+                node_type: {
+                    node_type: 'job',
+                    job_type_name: data.manifest.job.name,
+                    job_type_version: data.manifest.job.jobVersion,
+                    job_type_revision: data.revision_num
+                }
+            };
             recipeData.job_types.push(data);
             this.selectedRecipeTypeDetail = recipeData;
         }, err => {
@@ -147,9 +152,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     removeJobType(event) {
         const jobType = event.data;
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-        _.remove(recipeData.definition.jobs, job => {
-            return job.job_type.name === jobType.manifest.job.name && job.job_type.version === jobType.manifest.job.jobVersion;
-        });
+        delete recipeData.definition.nodes[jobType.name];
         this.selectedRecipeTypeDetail = recipeData;
     }
 

@@ -21,8 +21,25 @@
             "timeout": 0,
             "interface": {
                 "command": "./parse_wv2.sh",
-                "inputs": {},
-                "outputs": {},
+                "inputs": {
+                    "files": [
+                        {
+                            "name": "input_file",
+                            "required": true,
+                            "mediaTypes": ["application/octet-stream"]
+                        }
+                    ]
+                },
+                "outputs": {
+                    "files": [
+                        {
+                            "name": "output_file",
+                            "mediaType": "image/tiff",
+                            "pattern": "output_file*.tiff",
+                            "required": true
+                        }
+                    ]
+                },
                 "settings": []
             }
         },
