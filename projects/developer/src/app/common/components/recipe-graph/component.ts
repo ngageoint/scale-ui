@@ -28,7 +28,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     curve: any;
     selectedJobType: any;
     selectedNode: any;
-    selectedNodeConnections: any;
+    selectedNodeConnections = [];
 
     constructor(
         private colorService: ColorService,
@@ -131,20 +131,22 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             });
             this.selectedNodeConnections = [];
             _.forEach(this.selectedNode.input, i => {
-                const dependency = this.recipeData.definition.nodes[i.node];
-                const dependencyJobType = _.find(this.recipeData.job_types, {
-                    manifest: {
-                        job: {
-                            name: dependency.node_type.job_type_name,
-                            jobVersion: dependency.node_type.job_type_version
+                if (i.node) {
+                    const dependency = this.recipeData.definition.nodes[i.node];
+                    const dependencyJobType = _.find(this.recipeData.job_types, {
+                        manifest: {
+                            job: {
+                                name: dependency.node_type.job_type_name,
+                                jobVersion: dependency.node_type.job_type_version
+                            }
                         }
-                    }
-                });
-                const connection = _.find(dependencyJobType.manifest.job.interface.outputs.files, { name: i.output });
-                this.selectedNodeConnections.push({
-                    name: dependency.node_type.job_type_name,
-                    output: connection.name
-                });
+                    });
+                    const connection = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                    this.selectedNodeConnections.push({
+                        name: dependency.node_type.job_type_name,
+                        output: connection.name
+                    });
+                }
             });
         }
     }
@@ -247,29 +249,28 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             const currJobType = _.find(this.recipeData.job_types, {
                 manifest: {
                     job: {
-                        name: currJob.job_type.name,
-                        jobVersion: currJob.job_type.version
+                        name: currJob.node_type.job_type_name,
+                        jobVersion: currJob.node_type.job_type_version
                     }
                 }
             });
             if (currJobType) {
-                const currInput = _.find(currJobType.manifest.job.interface.inputs, input => {
-                    return _.includes(input.media_types, providerOutput.media_type);
+                const currInput = _.find(currJobType.manifest.job.interface.inputs.files, file => {
+                    return _.includes(file.mediaTypes, providerOutput.mediaType);
                 });
                 if (currInput) {
                     // matching input exists, so add the connection
-                    const conn = {
-                        input: currInput.name,
+                    this.selectedNodeConnections.push({
+                        name: providerName,
+                        output: providerOutput.name
+                    });
+                    currJob.input[currInput.name] = {
+                        type: 'dependency',
+                        node: providerName,
                         output: providerOutput.name
                     };
-                    const currDependency = _.find(currJob.dependencies, { name: providerName });
-                    if (currDependency) {
-                        currDependency.connections.push(conn);
-
-                        // set output as disabled to prevent duplicate mappings
-                        providerOutput.disabled = true;
-                        // this.getIoMappings();
-                    }
+                    // set output as disabled to prevent duplicate mappings
+                    providerOutput.disabled = true;
                 } else {
                     console.log('compatible media type not found');
                 }
@@ -284,10 +285,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     removeInputConnection(conn) {
         const currJob = this.getCurrJob();
         if (currJob) {
-            const currDependency = _.find(currJob.dependencies, { name: conn.name });
-            const currConn = _.find(currDependency.connections, { output: conn.output });
-            _.remove(currDependency.connections, currConn);
-            // this.getIoMappings();
+            const currInput = _.findKey(currJob.input, { node: conn.name, output: conn.output });
+            if (currInput) {
+                // remove input
+                _.remove(this.selectedNodeConnections, { name: conn.name, output: conn.output });
+                currJob.input[currInput] = {};
+            } else {
+                console.log('input not found');
+            }
         } else {
             console.log('job not found');
         }
