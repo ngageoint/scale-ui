@@ -136,3 +136,9 @@
         }
     }
 }
+
+::ng-deep .ui-dialog {
+    .ui-dialog-content {
+        padding: 12px 12px 0 0 !important;
+    }
+}
