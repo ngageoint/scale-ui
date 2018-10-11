@@ -42,22 +42,12 @@
     }
 
     .recipe-type__menu {
-        display: inline-block;
+        display: flex;
+        justify-content: flex-end;
 
-        .btn__menu {
-            margin: 0 -1px 0 0;
-            border-right: 1px solid #ccc;
-            border-radius: 0;
-
-            &:first-of-type {
-                border-radius: 0.25em 0 0 0.25em;
-            }
-
-            &:last-of-type {
-                margin: 0;
-                border-radius: 0 0.25em 0.25em 0;
-                border-right: 1px solid transparent;
-            }
+        button {
+            margin: 0 0 0 3px;
+            max-height: 32px;
         }
     }
 

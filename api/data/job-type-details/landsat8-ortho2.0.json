@@ -1,38 +1,45 @@
 {
-    "id": 7,
+    "id": 8,
     "is_operational": true,
-    "icon_code": "f00c",
+    "icon_code": "f1c0",
     "docker_privileged": false,
-    "docker_image": "10.4.4.10:5000/ls8-atmos-corr:2.1.9",
+    "docker_image": "10.4.4.10:5000/ls8-ortho:2.1.9",
     "priority": 1,
     "timeout": 30,
     "max_tries": 3,
     "manifest": {
         "job": {
-            "name": "landsat8-atmos-corr",
-            "jobVersion": "2.1.9",
+            "name": "landsat8-ortho",
+            "jobVersion": "2.0",
             "packageVersion": "",
-            "title": "Landsat 8 Atmospheric Correction",
-            "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
+            "title": "Landsat 8 Ortho (OSSIM)",
+            "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
             "maintainer": {
-                "name": "USGS",
+                "name": "Radiant Blue",
                 "email": ""
             },
             "timeout": 0,
             "interface": {
-                "command": "./correct_ls8.sh",
-                "inputs": [{
-                    "media_types": ["image/tiff"],
-                    "required": true,
-                    "type": "file",
-                    "name": "infile"
-                }],
-                "outputs": [{
-                    "media_type": "image/nitf",
-                    "required": true,
-                    "type": "image",
-                    "name": "ls8-corrected"
-                }],
+                "command": "./ls8_ortho.py",
+                "inputs": {
+                    "files": [
+                        {
+                            "name": "infile",
+                            "required": true,
+                            "mediaTypes": ["image/nitf"]
+
+                        }
+                    ]
+                },
+                "outputs": {
+                    "files": [
+                        {
+                            "name": "ls8-corrected",
+                            "required": true,
+                            "mediaType": "image/tiff"
+                        }
+                    ]
+                },
                 "settings": []
             }
         },

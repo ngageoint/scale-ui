@@ -103,7 +103,7 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/' + apiVersion + '/job-types/{id}/',
+            path: '/mocks/' + apiVersion + '/job-types/{name}/{version}/',
             handler: jobTypeDetails
         });
 

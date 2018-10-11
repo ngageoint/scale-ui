@@ -65,24 +65,26 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 map(() => this.route)
             ).subscribe(() => {
                 this.jobTypes = [];
-                let id = null;
+                let name = null;
+                let version = null;
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
-                        id = +params.get('id');
+                        name = params.get('name');
+                        version = params.get('version');
                     });
                 }
                 this.jobTypesApiService.getJobTypes().subscribe(data => {
-                    _.forEach(data.results, (result) => {
+                    _.forEach(data.results, result => {
                         this.jobTypes.push({
                             label: `${result.title} ${result.version}`,
                             value: result
                         });
-                        if (id === result.id) {
+                        if (name === result.name && version === result.version) {
                             this.selectedJobType = result;
                         }
                     });
-                    if (id) {
-                        this.getJobTypeDetail(id);
+                    if (name && version) {
+                        this.getJobTypeDetail(name, version);
                     }
                 }, err => {
                     console.log(err);
@@ -124,8 +126,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             return jobCount.status === 'FAILED';
         }), 'count'));
     }
-    private getJobTypeDetail(id: number) {
-        this.jobTypesApiService.getJobType(id).subscribe(data => {
+    private getJobTypeDetail(name: string, version: string) {
+        this.jobTypesApiService.getJobType(name, version).subscribe(data => {
             // this.interfaceData = [
             //     {
             //         data: {

@@ -65,6 +65,10 @@
     ::ng-deep .ui-datalist {
         margin-bottom: 15px;
 
+        .ui-datalist-content {
+            padding: 0;
+        }
+
         .ui-datalist-header {
             padding: 0.25em;
             text-align: left;
@@ -77,12 +81,12 @@
 
     .recipe-io {
         border-bottom: 1px solid #e1e1e1;
-        margin: 0 5px;
+        margin: 5px 5px 0 5px;
 
         button {
             font-size: 9px;
-            top: -3px;
             padding: 0;
+            margin-right: 3px;
         }
 
         &:last-of-type {
@@ -102,6 +106,11 @@
             padding: 8px 5px 5px 5px;
             background: #f0f0f0;
             border-radius: 3px;
+
+            .connection {
+                display: flex;
+                align-items: center;
+            }
         }
     }
 
@@ -116,7 +125,7 @@
         }
 
         .recipe-dependencies {
-            margin-bottom: -15px;
+            margin-bottom: -10px;
         }
     }
 
@@ -125,5 +134,11 @@
             font-size: 9px;
             padding: 0;
         }
+    }
+}
+
+::ng-deep .ui-dialog {
+    .ui-dialog-content {
+        padding: 12px 12px 0 0 !important;
     }
 }

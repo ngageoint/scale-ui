@@ -1,5 +1,5 @@
-import { JobType } from '../job-types/api.model';
 import { RecipeTypeDefinition } from './definition.model';
+import {JobType} from '../job-types/api.model';
 
 export class RecipeType {
     private static build(data) {
@@ -7,7 +7,6 @@ export class RecipeType {
             return new RecipeType(
                 data.id,
                 data.name,
-                data.version,
                 data.title,
                 data.description,
                 data.is_active,
@@ -15,8 +14,7 @@ export class RecipeType {
                 data.revision_num,
                 data.created,
                 data.last_modified,
-                data.archived,
-                data.trigger_rule,
+                data.deprecated,
                 data.job_types
             );
         }
@@ -33,7 +31,6 @@ export class RecipeType {
     constructor(
         public id: number,
         public name: string,
-        public version: string,
         public title: string,
         public description: string,
         public is_active: boolean,
@@ -41,8 +38,7 @@ export class RecipeType {
         public revision_num: number,
         public created: string,
         public last_modified: string,
-        public archived: string,
-        public trigger_rule: object,
+        public deprecated: string,
         public job_types: JobType[]
     ) {}
 }

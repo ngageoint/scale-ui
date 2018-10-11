@@ -1,28 +1,45 @@
 {
-    "id": 10,
+    "id": 7,
     "is_operational": true,
-    "icon_code": "f06e",
+    "icon_code": "f00c",
     "docker_privileged": false,
-    "docker_image": "10.4.4.10:5000/export-shp:2.0",
+    "docker_image": "10.4.4.10:5000/ls8-atmos-corr:2.1.9",
     "priority": 1,
     "timeout": 30,
     "max_tries": 3,
     "manifest": {
         "job": {
-            "name": "export-shp",
-            "jobVersion": "2.0",
+            "name": "landsat8-atmos-corr",
+            "jobVersion": "2.1.9",
             "packageVersion": "",
-            "title": "Export Shapefile",
-            "description": "Creates shapefile (.shp) from raster data",
+            "title": "Landsat 8 Atmospheric Correction",
+            "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
             "maintainer": {
                 "name": "USGS",
                 "email": ""
             },
             "timeout": 0,
             "interface": {
-                "command": "./export_shapefile.sh",
-                "inputs": {},
-                "outputs": {},
+                "command": "./correct_ls8.sh",
+                "inputs": {
+                    "files": [
+                        {
+                            "name": "infile",
+                            "required": true,
+                            "mediaTypes": ["image/tiff"]
+                        }
+                    ]
+                },
+                "outputs": {
+                    "files": [
+                        {
+                            "name": "ls8-corrected",
+                            "required": true,
+                            "mediaType": "image/nitf"
+
+                        }
+                    ]
+                },
                 "settings": []
             }
         },
