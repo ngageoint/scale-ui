@@ -22,7 +22,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private routeParams: any;
     columns: any[];
     loadingRecipeType: boolean;
-    recipeTypeId: number;
+    recipeTypeName: string;
+    recipeTypeRevisionNum: number;
     jobTypes: any;
     selectedJobTypes = [];
     recipeTypes: SelectItem[];
@@ -49,7 +50,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.recipeTypes = [];
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
-                        this.recipeTypeId = params.get('id') ? +params.get('id') : null;
+                        this.recipeTypeName = params.get('name');
+                        this.recipeTypeRevisionNum = params.get('revision_num') ? +params.get('revision_num') : null;
                     });
                 }
                 this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
@@ -58,15 +60,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                             label: result.title,
                             value: result
                         });
-                        if (this.recipeTypeId === result.id) {
+                        if (this.recipeTypeName === result.name && this.recipeTypeRevisionNum === result.revision_num) {
                             this.selectedRecipeType = _.clone(result);
                         }
                     });
-                    if (this.recipeTypeId) {
+                    if (this.recipeTypeName && this.recipeTypeRevisionNum) {
                         this.isEditing = false;
-                        this.getRecipeTypeDetail(this.recipeTypeId);
+                        this.getRecipeTypeDetail(this.recipeTypeName, this.recipeTypeRevisionNum);
                     } else {
-                        if (this.recipeTypeId === 0) {
+                        if (this.recipeTypeName === 'new' && !this.recipeTypeRevisionNum) {
                             this.selectedRecipeType = {
                                 label: 'New Recipe',
                                 value: new RecipeType(
@@ -92,9 +94,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getRecipeTypeDetail(id: number) {
+    private getRecipeTypeDetail(name: string, revision_num: number) {
         this.loadingRecipeType = true;
-        this.recipeTypesApiService.getRecipeType(id).subscribe(data => {
+        this.recipeTypesApiService.getRecipeType(name, revision_num).subscribe(data => {
             this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
             const jtArray = [];
@@ -159,12 +161,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     toggleEdit() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
-        if (this.recipeTypeId === 0) {
+        if (!this.recipeTypeName || !this.recipeTypeRevisionNum) {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
             if (!this.isEditing) {
                 // reset recipe type
-                this.getRecipeTypeDetail(this.recipeTypeId);
+                this.getRecipeTypeDetail(this.recipeTypeName, this.recipeTypeRevisionNum);
             }
         }
     }
@@ -183,9 +185,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     onRowSelect(e) {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/recipe-types/${e.value.id}`);
+            window.open(`/configuration/recipe-types/${e.value.name}/${e.value.revision_num}`);
         } else {
-            this.router.navigate([`/configuration/recipe-types/${e.value.id}`]);
+            this.router.navigate([`/configuration/recipe-types/${e.value.name}/${e.value.revision_num}`]);
         }
     }
 

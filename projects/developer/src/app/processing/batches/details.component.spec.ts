@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { BatchesApiService } from './api.service';
 import { BatchDetailsComponent } from './details.component';
 
@@ -17,7 +18,7 @@ describe('BatchDetailsComponent', () => {
             declarations: [BatchDetailsComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                DataService, MessageService, BatchesApiService,
+                DataService, MessageService, RecipeTypesApiService, BatchesApiService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

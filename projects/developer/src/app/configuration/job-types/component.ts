@@ -185,9 +185,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onRowSelect(e) {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/job-types/${e.value.id}`);
+            window.open(`/configuration/job-types/${e.value.name}/${e.value.version}`);
         } else {
-            this.router.navigate([`/configuration/job-types/${e.value.id}`]);
+            this.router.navigate([`/configuration/job-types/${e.value.name}/${e.value.version}`]);
         }
     }
     onPauseClick() {
