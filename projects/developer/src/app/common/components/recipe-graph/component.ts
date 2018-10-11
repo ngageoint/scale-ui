@@ -298,6 +298,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
+    hideDialog(event) {
+        console.log(event);
+    }
+
     ngOnChanges(changes) {
         if (changes.recipeData) {
             this.jobTypesApiService.getJobTypes().subscribe(data => {
