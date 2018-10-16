@@ -51,7 +51,8 @@
         </div>
     </div>
 </div>
-<p-dialog [(visible)]="selectedNode && selectedJobType" [width]="500" (onHide)="hideDialog($event)">
+<p-dialog #recipeDialog [(visible)]="selectedNode && selectedJobType" [width]="500" (onHide)="hideDialog()"
+          (onShow)="showDialog()">
     <p-header>
         <span *ngIf="selectedNode && selectedJobType">
             <strong>{{ selectedJobType.manifest.job.title }} v{{ selectedJobType.manifest.job.jobVersion }}</strong>

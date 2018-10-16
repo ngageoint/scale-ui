@@ -15,6 +15,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() isEditing: boolean;
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
+    @ViewChild('recipeDialog') recipeDialog: any;
 
     jobTypes: any;
     columns: any[];
@@ -29,6 +30,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedJobType: any;
     selectedNode: any;
     selectedNodeConnections = [];
+    recipeDialogX: number;
+    recipeDialogY: number;
 
     constructor(
         private colorService: ColorService,
@@ -298,8 +301,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     }
 
-    hideDialog(event) {
-        console.log(event);
+    showDialog() {
+        if (this.recipeDialogX && this.recipeDialogY) {
+            this.recipeDialog.positionLeft = this.recipeDialogX;
+            this.recipeDialog.positionTop = this.recipeDialogY;
+        }
+    }
+
+    hideDialog() {
+        this.recipeDialogX = this.recipeDialog.lastPageX || null;
+        this.recipeDialogY = this.recipeDialog.lastPageY || null;
+        if (this.selectedNode) {
+            this.selectedNode.options.stroke = '';
+            this.selectedNode = null;
+        }
     }
 
     ngOnChanges(changes) {

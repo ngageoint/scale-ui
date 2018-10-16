@@ -46,7 +46,7 @@
     "node-sass": "^4.9.3",
     "normalize.css": "^7.0.0",
     "primeicons": "^1.0.0-beta.10",
-    "primeng": "^6.1.4",
+    "primeng": "^6.1.5",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.0.0-rc.0",
     "seed-images": "^4.4.1",

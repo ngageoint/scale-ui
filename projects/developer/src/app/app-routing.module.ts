@@ -32,6 +32,7 @@ const routes: Routes = [
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:name/:version', component: JobTypesComponent },
     { path: 'configuration/job-types/edit/:name/:version', component: JobTypesCreateComponent },
+    { path: 'configuration/job-types/create', component: JobTypesCreateComponent },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
