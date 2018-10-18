@@ -112,19 +112,19 @@ $subnav-height: 47px;
 
 .processing {
     ul {
-        margin-left: $navbar-item-width + 10px;
+        margin-left: $navbar-item-width;
     }
 }
 
 .data {
     ul {
-        margin-left: ($navbar-item-width * 2) + 78px;
+        margin-left: $navbar-item-width * 2;
     }
 }
 
 .configuration {
     ul {
-        margin-left: ($navbar-item-width * 3) + 82px;
+        margin-left: $navbar-item-width * 3;
     }
 }
 
