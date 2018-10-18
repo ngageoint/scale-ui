@@ -18,6 +18,7 @@ import { BatchesComponent } from './processing/batches/component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesEditComponent } from './processing/batches/edit.component';
 import { IngestComponent } from './data/ingest/component';
+import { IngestDetailsComponent } from './data/ingest/details.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -40,6 +41,7 @@ const routes: Routes = [
     { path: 'data/sources', component: SourcesComponent },
     { path: 'data/sources/:id', component: SourceDetailsComponent },
     { path: 'data/ingest', component: IngestComponent },
+    { path: 'data/ingest/:id', component: IngestDetailsComponent },
     { path: 'data/metrics', component: MetricsComponent }
 ];
 
