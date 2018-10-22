@@ -35,6 +35,16 @@ export class IngestApiService {
             );
     }
 
+    getIngest(id: number): Observable<any> {
+        return this.http.get<any>(`${this.apiPrefix}/ingests/${id}/`)
+            .pipe(
+                map(response => {
+                    return response;
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
     getIngestStatus(params: any, poll?: boolean): Observable<any> {
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params });

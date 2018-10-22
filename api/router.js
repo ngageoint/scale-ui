@@ -12,9 +12,6 @@ var jobTypeDetails = require('./handlers/jobTypeDetails');
 var jobTypeUpdate = require('./handlers/jobTypeUpdate');
 var recipeTypeDetails = require('./handlers/recipeTypeDetails');
 var workspaces = require('./handlers/workspaces');
-var sources = require('./handlers/sources');
-var sourceDetails = require('./handlers/sourceDetails');
-var sourceDescendants = require('./handlers/sourceDescendants');
 var metrics = require('./handlers/metrics');
 var metricsDataTypes = require('./handlers/metricsDataTypeOptions');
 var metricsPlotData = require('./handlers/metricsPlotData');
@@ -30,6 +27,7 @@ var batchDetails = require('./handlers/batchDetails');
 var batchValidate = require('./handlers/batchValidate');
 var strikes = require('./handlers/strikes');
 var ingests = require('./handlers/ingests');
+var ingestDetails = require('./handlers/ingestDetails');
 
 var apiVersion = 'v6';
 
@@ -117,24 +115,6 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/workspaces/',
             handler: workspaces
-        });
-
-        server.route({
-            method: 'GET',
-            path: '/mocks/' + apiVersion + '/sources/',
-            handler: sources
-        });
-
-        server.route({
-            method: 'GET',
-            path: '/mocks/' + apiVersion + '/sources/{id}/',
-            handler: sourceDetails
-        });
-
-        server.route({
-            method: 'GET',
-            path: '/mocks/' + apiVersion + '/sources/{id}/{type}/',
-            handler: sourceDescendants
         });
 
         server.route({
@@ -237,6 +217,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/ingests/',
             handler: ingests
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/ingests/{id}/',
+            handler: ingestDetails
         });
     }
 };

@@ -7,7 +7,6 @@ import { DataService } from '../../../common/services/data.service';
 import { ProcessingFormComponent } from './component';
 import { JobTypesApiService } from '../../../configuration/job-types/api.service';
 import { JobsDatatableService } from '../../../processing/jobs/datatable.service';
-import { SourcesDatatableService } from '../../../data/sources/datatable.service';
 
 
 describe('ProcessingformComponent', () => {
@@ -19,7 +18,7 @@ describe('ProcessingformComponent', () => {
             declarations: [ProcessingFormComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                DataService, JobTypesApiService, JobsDatatableService, SourcesDatatableService,
+                DataService, JobTypesApiService, JobsDatatableService,
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

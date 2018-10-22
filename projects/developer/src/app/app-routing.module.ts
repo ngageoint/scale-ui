@@ -9,8 +9,6 @@ import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesCreateComponent } from './configuration/job-types/create.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
-import { SourcesComponent } from './data/sources/component';
-import { SourceDetailsComponent } from './data/sources/details.component';
 import { FailureRatesComponent } from './processing/failure-rates/component';
 import { MetricsComponent } from './data/metrics/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
@@ -38,8 +36,6 @@ const routes: Routes = [
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
     { path: 'configuration/recipe-types/:name/:revision_num', component: RecipeTypesComponent },
-    { path: 'data/sources', component: SourcesComponent },
-    { path: 'data/sources/:id', component: SourceDetailsComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/ingest/:id', component: IngestDetailsComponent },
     { path: 'data/metrics', component: MetricsComponent }

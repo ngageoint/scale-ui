@@ -52,10 +52,6 @@ import { JobTypeItemComponent } from './dashboard/job-type-item/component';
 import { WorkspacesComponent } from './configuration/workspaces/component';
 import { WorkspacesApiService } from './configuration/workspaces/api.service';
 import { JobHistoryComponent } from './dashboard/job-history/component';
-import { SourcesComponent } from './data/sources/component';
-import { SourcesApiService } from './data/sources/api.service';
-import { SourcesDatatableService } from './data/sources/datatable.service';
-import { SourceDetailsComponent } from './data/sources/details.component';
 import { DataService } from './common/services/data.service';
 import { ProcessingFormComponent } from './navbar/subnav/processing-form/component';
 import { FailureRatesComponent } from './processing/failure-rates/component';
@@ -107,8 +103,6 @@ import { IngestDetailsComponent } from './data/ingest/details.component';
         JobTypeItemComponent,
         WorkspacesComponent,
         JobHistoryComponent,
-        SourcesComponent,
-        SourceDetailsComponent,
         ProcessingFormComponent,
         FailureRatesComponent,
         MetricsComponent,
@@ -186,8 +180,6 @@ import { IngestDetailsComponent } from './data/ingest/details.component';
         DashboardJobsService,
         RecipeTypesApiService,
         WorkspacesApiService,
-        SourcesApiService,
-        SourcesDatatableService,
         DataService,
         FailureRatesDatatableService,
         MetricsApiService,

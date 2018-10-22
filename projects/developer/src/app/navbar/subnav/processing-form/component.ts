@@ -7,7 +7,6 @@ import * as moment from 'moment';
 import { JobTypesApiService } from '../../../configuration/job-types/api.service';
 import { JobType } from '../../../configuration/job-types/api.model';
 import { JobsDatatableService } from '../../../processing/jobs/datatable.service';
-import { SourcesDatatableService } from '../../../data/sources/datatable.service';
 
 @Component({
     selector: 'dev-processing-form',
@@ -27,8 +26,7 @@ export class ProcessingFormComponent implements OnInit {
     constructor(
         private router: Router,
         private jobTypesApiService: JobTypesApiService,
-        private jobsDatatableService: JobsDatatableService,
-        private sourcesDatatableService: SourcesDatatableService
+        private jobsDatatableService: JobsDatatableService
     ) {
         this.timeFieldOptions = [
             {
@@ -63,12 +61,6 @@ export class ProcessingFormComponent implements OnInit {
                 job_type_id: this.selectedJobType
             });
             this.router.navigate(['/processing/jobs']);
-        } else if (this.sourceFile) {
-            Object.assign(this.sourcesDatatableService.getSourcesDatatableOptions(), {
-                file_name: this.sourceFile,
-                time_field: this.timeField
-            });
-            this.router.navigate(['/data/sources']);
         }
         this.search.emit();
     }
