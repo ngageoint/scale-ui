@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import * as moment from 'moment';
+import * as _ from 'lodash';
 
 import { IngestApiService } from './api.service';
+import { Ingest } from './api.model';
 
 @Component({
     selector: 'dev-ingest-details',
@@ -11,7 +14,8 @@ import { IngestApiService } from './api.service';
 export class IngestDetailsComponent implements OnInit, OnDestroy {
     loading: boolean;
     subscription: any;
-    ingest: any;
+    ingest: Ingest;
+    ingestStatus: any;
 
     constructor(
         private route: ActivatedRoute,
@@ -22,8 +26,21 @@ export class IngestDetailsComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.subscription = this.ingestApiService.getIngest(id).subscribe(data => {
             this.loading = false;
-            console.log(data);
+            this.ingest = data;
+            const now = moment.utc();
+            const lastStatus = this.ingest.last_modified ? moment.utc(this.ingest.last_modified) : null;
+            this.ingestStatus = lastStatus ?
+                `${_.capitalize(this.ingest.status)} ${lastStatus.from(now)}` :
+                _.capitalize(this.ingest.status);
         });
+    }
+
+    showStatus(statusPanel, $event) {
+        statusPanel.show($event);
+    }
+
+    hideStatus(statusPanel) {
+        statusPanel.hide();
     }
 
     unsubscribe() {

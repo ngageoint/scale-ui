@@ -12,6 +12,7 @@ export class Ingest {
     ingestEndedDisplay: any;
     bytesTransferredFormatted: any;
     fileSizeFormatted: any;
+    statusClass: any;
 
     private static build(data) {
         if (data) {
@@ -88,5 +89,8 @@ export class Ingest {
         this.ingestEndedDisplay = this.dataService.formatDate(this.ingest_ended, true);
         this.bytesTransferredFormatted = this.dataService.calculateFileSizeFromBytes(this.bytes_transferred, 2);
         this.fileSizeFormatted = this.dataService.calculateFileSizeFromBytes(this.file_size, 2);
+        this.statusClass = this.status === 'RUNNING' ?
+            `${this.status.toLowerCase()}-text throb-text` :
+            `${this.status.toLowerCase()}-text`;
     }
 }

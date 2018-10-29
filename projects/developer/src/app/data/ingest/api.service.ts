@@ -6,6 +6,7 @@ import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
+import { Ingest } from './api.model';
 
 @Injectable()
 export class IngestApiService {
@@ -39,7 +40,7 @@ export class IngestApiService {
         return this.http.get<any>(`${this.apiPrefix}/ingests/${id}/`)
             .pipe(
                 map(response => {
-                    return response;
+                    return Ingest.transformer(response);
                 }),
                 catchError(this.dataService.handleError)
             );

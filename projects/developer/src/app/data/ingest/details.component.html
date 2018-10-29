@@ -1,3 +1,20 @@
-<p>
-  details works!
-</p>
+<div class="ingest__details" *ngIf="ingest">
+    <p-panel>
+        <p-header>
+            {{ ingest.file_name }}
+            <i class="fa fa-fw fa-square" [ngClass]="ingest.statusClass" (mouseenter)="showStatus(status, $event)"
+               (mouseleave)="hideStatus(status)"></i>
+        </p-header>
+        <table class="table table-striped">
+            <tbody>
+            <tr>
+                <td>Job</td>
+                <td><a routerLink="/processing/jobs/{{ ingest.job.id }}/">{{ ingest.job.id }}</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </p-panel>
+    <p-overlayPanel #status appendTo="body">
+        <strong>{{ ingestStatus }}</strong>
+    </p-overlayPanel>
+</div>
