@@ -138,11 +138,11 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     private getJobTypes() {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
-            this.jobTypes = JobType.transformer(data.results);
+            this.jobTypes = data.results;
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
-                    label: jobType.title + ' ' + jobType.version,
+                    label: jobType.title + ' ' + jobType.latest_version,
                     value: jobType.id
                 });
                 if (this.datatableOptions.job_type_id === jobType.id) {

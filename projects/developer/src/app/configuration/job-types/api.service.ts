@@ -45,7 +45,6 @@ export class JobTypesApiService {
             .pipe(
                 map(response => {
                     const returnObj = ApiResults.transformer(response);
-                    returnObj.results = JobType.transformer(returnObj.results);
                     return returnObj;
                 }),
                 catchError(this.dataService.handleError)
