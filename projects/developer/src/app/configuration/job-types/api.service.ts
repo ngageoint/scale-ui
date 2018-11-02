@@ -7,6 +7,7 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { JobType } from './api.model';
+import { JobTypeName } from './api.name.model';
 import { RunningJobsDatatable } from '../../processing/running-jobs/datatable.model';
 
 @Injectable()
@@ -45,6 +46,7 @@ export class JobTypesApiService {
             .pipe(
                 map(response => {
                     const returnObj = ApiResults.transformer(response);
+                    returnObj.results = JobTypeName.transformer(returnObj.results);
                     return returnObj;
                 }),
                 catchError(this.dataService.handleError)
