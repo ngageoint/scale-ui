@@ -59,7 +59,7 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/' + apiVersion + '/recipe-types/{name}/{revision_num}/',
+            path: '/mocks/' + apiVersion + '/recipe-types/{name}/',
             handler: recipeTypeDetails
         });
 

@@ -9,62 +9,7 @@
             "title": "Landsat8",
             "description": "Process Landsat 8 sensor data",
             "is_active": true,
-            "definition": {
-                "input": {
-                    "files": [{"name": "input_file"}]
-                },
-                "nodes": {
-                    "landsat8-parse": {
-                        "dependencies": [],
-                        "input": {
-                            "input_file": {"type": "recipe", "input": "input_file"}
-                        },
-                        "node_type": {
-                            "node_type": "job",
-                            "job_type_name": "landsat8-parse",
-                            "job_type_version": "1.0.0",
-                            "job_type_revision": 1
-                        }
-                    },
-                    "landsat8-atmos-corr": {
-                        "dependencies": [{"name": "landsat8-parse"}],
-                        "input": {
-                            "infile": {"type": "dependency", "node": "landsat8-parse", "output": "thermal"}
-                        },
-                        "node_type": {
-                            "node_type": "job",
-                            "job_type_name": "landsat8-atmos-corr",
-                            "job_type_version": "2.1.9",
-                            "job_type_revision": 1
-                        }
-                    },
-                    "landsat8-ortho": {
-                        "dependencies": [{"name": "landsat8-parse"}],
-                        "input": {
-                            "infile": {"type": "dependency", "node": "landsat8-parse", "output": "panchromatic"}
-                        },
-                        "node_type": {
-                            "node_type": "job",
-                            "job_type_name": "landsat8-ortho",
-                            "job_type_version": "2.0",
-                            "job_type_revision": 1
-                        }
-                    },
-                    "export-shp": {
-                        "dependencies": [{"name": "landsat8-atmos-corr"}, {"name": "landsat8-ortho"}],
-                        "input": {
-                            "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "outout": "ls8-corrected"},
-                            "panchromatic": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"}
-                        },
-                        "node_type": {
-                            "node_type": "job",
-                            "job_type_name": "export-shp",
-                            "job_type_version": "2.0",
-                            "job_type_revision": 1
-                        }
-                    }
-                }
-            },
+            "is_system": null,
             "revision_num": 1,
             "created": "2015-06-15T19:03:26.346Z",
             "last_modified": "2015-06-15T19:03:26.346Z",
@@ -77,85 +22,11 @@
             "title": "Spectral Analysis",
             "description": "Perform spectral analysis on a NITF",
             "is_active": true,
-            "definition":{
-                "input_data": [{
-                    "name": "input_file",
-                    "required": true,
-                    "type": "file",
-                    "media_types": ["image/nitf"]
-                }],
-                "version": "1.0",
-                "jobs": [{
-                    "recipe_inputs": [],
-                    "name": "sam",
-                    "job_type": {
-                        "name": "sam",
-                        "version": "1.0"
-                    },
-                    "dependencies": []
-                }, {
-                    "recipe_inputs": [],
-                    "name": "scm",
-                    "job_type": {
-                        "name": "scm",
-                        "version": "1.0"
-                    },
-                    "dependencies": []
-                }, {
-                    "recipe_inputs": [],
-                    "name": "cem",
-                    "job_type": {
-                        "name": "cem",
-                        "version": "1.0"
-                    },
-                    "dependencies": []
-                }, {
-                    "recipe_inputs": [],
-                    "name": "export-shp",
-                    "job_type": {
-                        "name": "export-shp",
-                        "version": "2.0"
-                    },
-                    "dependencies": [{
-                        "name": "cem",
-                        "connections": [{
-                            "output": "cem-detections",
-                            "input": "infile"
-                        }]
-                    }, {
-                        "name": "scm",
-                        "connections": [{
-                            "output": "scm-detections",
-                            "input": "infile"
-                        }]
-                    }, {
-                        "name": "sam",
-                        "connections": [{
-                            "output": "sam-detections",
-                            "input": "infile"
-                        }]
-                    }]
-                }]
-            },
+            "is_system": null,
             "revision_num": 1,
             "created": "2016-04-29T19:03:26.346Z",
             "last_modified": "2016-04-29T19:03:26.346Z",
-            "archived": null,
-            "trigger_rule": {
-                "type": "INGEST",
-                "name": "spectral",
-                "is_active": true,
-                "configuration": {
-                    "condition": {
-                        "media_type": "",
-                        "data_types": ["spectral"]
-                    },
-                    "data": {
-                        "workspace_name": "products",
-                        "input_data_name": "input_file"
-                    }
-                }
-            }
+            "deprecated": null
         },
         {
             "id": 3,
@@ -164,71 +35,11 @@
             "title": "WorldView",
             "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
             "is_active": true,
-            "definition": {
-                "input_data": [{
-                    "name": "input_file",
-                    "required": true,
-                    "type": "file",
-                    "media_types": ["image/nitf"]
-                }],
-                "version": "1.0",
-                "jobs": [{
-                    "recipe_inputs": [],
-                    "name": "wv2-parse",
-                    "job_type": {
-                        "name": "wv2-parse",
-                        "version": "1.0.1"
-                    },
-                    "dependencies": []
-                }, {
-                    "recipe_inputs": [],
-                    "name": "wv2-atmosphere-corr",
-                    "job_type": {
-                        "name": "wv2-atmosphere-corr",
-                        "version": "1.0.1"
-                    },
-                    "dependencies": [{
-                        "name": "wv2-parse",
-                        "connections": [{
-                            "output": "wv2-parsed",
-                            "input": "infile"
-                        }]
-                    }]
-                }, {
-                    "recipe_inputs": [],
-                    "name": "wv2-ortho",
-                    "job_type": {
-                        "name": "wv2-ortho",
-                        "version": "2.0"
-                    },
-                    "dependencies": [{
-                        "name": "wv2-parse",
-                        "connections": [{
-                            "output": "wv2-parsed",
-                            "input": "infile"
-                        }]
-                    }]
-                }]
-            },
+            "is_system": null,
             "revision_num": 1,
             "created": "2016-04-30T19:03:26.346Z",
             "last_modified": "2016-04-30T19:03:26.346Z",
-            "archived": null,
-            "trigger_rule": {
-                "type": "INGEST",
-                "name": "worldview",
-                "is_active": true,
-                "configuration": {
-                    "condition": {
-                        "media_type": "",
-                        "data_types": ["worldview"]
-                    },
-                    "data": {
-                        "workspace_name": "products",
-                        "input_data_name": "input_file"
-                    }
-                }
-            }
+            "deprecated": null
         },
         {
             "id": 4,
@@ -237,57 +48,11 @@
             "title": "Oil Detection",
             "description": "Detect oil on the surface of water",
             "is_active": true,
-            "definition": {
-                "input_data": [{
-                    "media_types": ["image/tiff"],
-                    "required": true,
-                    "type": "file",
-                    "name": "input_file"
-                }],
-                "version": "1.0",
-                "jobs": [{
-                    "recipe_inputs": [],
-                    "name": "sam",
-                    "job_type": {
-                        "name": "sam",
-                        "version": "1.0"
-                    },
-                    "dependencies": []
-                }, {
-                    "recipe_inputs": [],
-                    "name": "export-kml",
-                    "job_type": {
-                        "name": "export-kml",
-                        "version": "1.5"
-                    },
-                    "dependencies": [{
-                        "name": "sam",
-                        "connections": [{
-                            "output": "sam-detections",
-                            "input": "infile"
-                        }]
-                    }]
-                }]
-            },
+            "is_system": null,
             "revision_num": 1,
             "created": "2016-05-15T19:03:26.346Z",
             "last_modified": "2016-05-15T19:03:26.346Z",
-            "archived": null,
-            "trigger_rule": {
-                "type": "INGEST",
-                "name": "oil",
-                "is_active": true,
-                "configuration": {
-                    "condition": {
-                        "media_type": "",
-                        "data_types": ["spectral"]
-                    },
-                    "data": {
-                        "workspace_name": "products",
-                        "input_data_name": "input_file"
-                    }
-                }
-            }
+            "deprecated": null
         },
         {
             "id": 5,
@@ -296,46 +61,11 @@
             "title": "Caffe Aircraft Detection",
             "description": "Detect aircraft using BVL Caffe deep learning algorithms",
             "is_active": true,
-            "definition": {
-                "input_data": [{
-                    "media_types": ["image/nitf"],
-                    "required": true,
-                    "type": "file",
-                    "name": "input_file"
-                }],
-                "version": "1.0",
-                "jobs": [{
-                    "recipe_inputs": [{
-                        "job_input": "input_file",
-                        "recipe_input": "input_file"
-                    }],
-                    "name": "caffe-aircraft-detection",
-                    "job_type": {
-                        "name": "caffe-aircraft-detection",
-                        "version": "1.0"
-                    },
-                    "dependencies": []
-                }]
-            },
+            "is_system": null,
             "revision_num": 1,
             "created": "2016-05-10T21:19:16.320Z",
             "last_modified": "2016-05-10T21:19:16.320Z",
-            "archived": null,
-            "trigger_rule": {
-                "type": "INGEST",
-                "name": "aircraft",
-                "is_active": true,
-                "configuration": {
-                    "condition": {
-                        "media_type": "",
-                        "data_types": ["image/nitf"]
-                    },
-                    "data": {
-                        "workspace_name": "products",
-                        "input_data_name": "input_file"
-                    }
-                }
-            }
+            "deprecated": null
         }
     ]
 }
