@@ -2,42 +2,12 @@
     "id": 3,
     "job_type": {
         "id": 3,
-        "category": "spectral",
-        "is_system": true,
-        "is_long_running": false,
-        "is_active": true,
-        "is_operational": true,
-        "is_paused": false,
-        "icon_code": "f101",
-        "docker_image": null,
-        "priority": 10,
-        "timeout": 0,
-        "manifest": {
-            "job": {
-                "name": "scm",
-                "jobVersion": "1.0",
-                "packageVersion": "",
-                "title": "Spectral Correlation Mapper",
-                "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
-                "maintainer": {
-                    "name": "Universidade de Brasília",
-                    "email": ""
-                },
-                "timeout": 0,
-                "interface": {
-                    "command": "./parse_landsat.sh",
-                    "inputs": {},
-                    "outputs": {},
-                    "settings": []
-                }
-            },
-            "seedVersion": "1.0"
-        },
-        "max_tries": 0,
-        "created": "2015-03-11T00:00:00Z",
-        "archived": null,
-        "paused": null,
-        "last_modified": "2015-03-11T00:00:00Z"
+        "name": "scm",
+        "version": "1.0",
+        "title": "Spectral Correlation Mapper",
+        "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
+        "revision_num": 1,
+        "icon_code": "f101"
     },
     "job_type_rev": {
         "id": 5,

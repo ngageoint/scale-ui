@@ -96,4 +96,8 @@ body {
         border: 1px solid #ccc;
         border-radius: 0;
     }
+
+    .angular-utc-datepicker_datepicker .angular-utc-datepicker_calendar-popup .angular-utc-datepicker_day-names .angular-utc-datepicker_name {
+        height: 21px !important;
+    }
 }

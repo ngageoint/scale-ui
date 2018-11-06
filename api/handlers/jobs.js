@@ -20,7 +20,7 @@ module.exports = function (request) {
         var statusValue = statusValues[Math.floor(Math.random() * (statusValues.length))];
         data.results.push({
             id: jobTypeIdx + 1,
-            job_type: _.find(jobTypeData.results, { id: jobTypeIdx + 1 }),
+            job_type: jobTypeData.results[jobTypeIdx],
             job_type_rev: {
                 id: 56,
                 job_type: {
