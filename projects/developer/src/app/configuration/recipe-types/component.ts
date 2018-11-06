@@ -23,7 +23,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     columns: any[];
     loadingRecipeType: boolean;
     recipeTypeName: string;
-    recipeTypeRevisionNum: number;
     jobTypes: any;
     selectedJobTypes = [];
     recipeTypes: SelectItem[];
@@ -51,7 +50,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
                         this.recipeTypeName = params.get('name');
-                        this.recipeTypeRevisionNum = params.get('revision_num') ? +params.get('revision_num') : null;
                     });
                 }
                 this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
@@ -60,15 +58,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                             label: result.title,
                             value: result
                         });
-                        if (this.recipeTypeName === result.name && this.recipeTypeRevisionNum === result.revision_num) {
+                        if (this.recipeTypeName === result.name) {
                             this.selectedRecipeType = _.clone(result);
                         }
                     });
-                    if (this.recipeTypeName && this.recipeTypeRevisionNum) {
+                    if (this.recipeTypeName) {
                         this.isEditing = false;
                         this.getRecipeTypeDetail(this.recipeTypeName);
                     } else {
-                        if (this.recipeTypeName === 'new' && !this.recipeTypeRevisionNum) {
+                        if (this.recipeTypeName === 'new') {
                             this.selectedRecipeType = {
                                 label: 'New Recipe',
                                 value: new RecipeType(
@@ -161,7 +159,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     toggleEdit() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
-        if (!this.recipeTypeName || !this.recipeTypeRevisionNum) {
+        if (!this.recipeTypeName) {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
             if (!this.isEditing) {
