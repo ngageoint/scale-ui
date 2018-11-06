@@ -66,7 +66,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     });
                     if (this.recipeTypeName && this.recipeTypeRevisionNum) {
                         this.isEditing = false;
-                        this.getRecipeTypeDetail(this.recipeTypeName, this.recipeTypeRevisionNum);
+                        this.getRecipeTypeDetail(this.recipeTypeName);
                     } else {
                         if (this.recipeTypeName === 'new' && !this.recipeTypeRevisionNum) {
                             this.selectedRecipeType = {
@@ -94,9 +94,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getRecipeTypeDetail(name: string, revision_num: number) {
+    private getRecipeTypeDetail(name: string) {
         this.loadingRecipeType = true;
-        this.recipeTypesApiService.getRecipeType(name, revision_num).subscribe(data => {
+        this.recipeTypesApiService.getRecipeType(name).subscribe(data => {
             this.loadingRecipeType = false;
             this.selectedRecipeTypeDetail = data;
             const jtArray = [];
@@ -166,7 +166,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         } else {
             if (!this.isEditing) {
                 // reset recipe type
-                this.getRecipeTypeDetail(this.recipeTypeName, this.recipeTypeRevisionNum);
+                this.getRecipeTypeDetail(this.recipeTypeName);
             }
         }
     }
