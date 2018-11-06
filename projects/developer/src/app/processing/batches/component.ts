@@ -176,7 +176,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
-                    recipe_type_id: params.recipe_type_id ? parseInt(params.recipe_type_id, 10) : null,
+                    recipe_type_name: params.recipe_type_name ? params.recipe_type_name : null,
                     is_creation_done: params.is_creation_done ? params.is_creation_done === 'true' : null,
                     is_superseded: params.is_superseded ? params.is_superseded === 'true' : null,
                     root_batch_id: params.root_batch_id ? +params.root_batch_id : null

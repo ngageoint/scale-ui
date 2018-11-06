@@ -45,7 +45,7 @@ export class BatchesEditComponent implements OnInit {
     }
 
     handleRecipeTypeChange(event) {
-        this.batchesApiService.getBatches({recipe_type_id: event.value.id}).subscribe(data => {
+        this.batchesApiService.getBatches({recipe_type_name: event.value.name}).subscribe(data => {
             const batches = Batch.transformer(data.results);
             _.forEach(batches, b => {
                 this.previousBatchOptions.push({

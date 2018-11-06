@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -12,7 +12,6 @@ import { Job } from './api.model';
 import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { JobType } from '../../configuration/job-types/api.model';
 import { JobExecution } from './execution.model';
 
 @Component({
@@ -129,7 +128,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             // component is not a child, so update datatable options, querystring, and data
             this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
             this.router.navigate(['/processing/jobs'], {
-                queryParams: this.datatableOptions,
+                queryParams: this.datatableOptions as Params,
                 replaceUrl: true
             });
 
@@ -149,7 +148,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                     this.selectedJobType = jobType.id;
                 }
             });
-            this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
+            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
             this.jobTypeOptions.unshift({
                 label: 'View All',
                 value: ''
