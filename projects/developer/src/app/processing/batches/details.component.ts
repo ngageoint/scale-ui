@@ -26,8 +26,7 @@ export class BatchDetailsComponent implements OnInit {
             this.batchesApiService.getBatch(id).subscribe(data => {
                 this.batchDetails = data;
                 this.recipeTypesApiService.getRecipeType(
-                    data.recipe_type.name,
-                    data.recipe_type_rev.revision_num
+                    data.recipe_type.name
                 ).subscribe(recipeTypeData => {
                     this.recipeType = recipeTypeData;
                 });

@@ -85,11 +85,11 @@ export class BatchesComponent implements OnInit, OnDestroy {
             const selectItems = [];
             _.forEach(this.recipeTypes, recipeType => {
                 selectItems.push({
-                    label: recipeType.title + ' ' + recipeType.version,
-                    value: recipeType.id
+                    label: recipeType.title,
+                    value: recipeType.name
                 });
-                if (this.datatableOptions.recipe_type_id === recipeType.id) {
-                    this.selectedRecipeType = recipeType.id;
+                if (this.datatableOptions.recipe_type_name === recipeType.name) {
+                    this.selectedRecipeType = recipeType.name;
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);

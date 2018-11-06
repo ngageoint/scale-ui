@@ -35,7 +35,7 @@ const routes: Routes = [
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
-    { path: 'configuration/recipe-types/:name/:revision_num', component: RecipeTypesComponent },
+    { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/ingest/:id', component: IngestDetailsComponent },
     { path: 'data/metrics', component: MetricsComponent }

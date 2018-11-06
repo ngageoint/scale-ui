@@ -8,7 +8,7 @@ export class BatchesDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
-        public recipe_type_id?: any,
+        public recipe_type_name?: any,
         public is_creation_done?: any,
         public is_superseded?: any,
         public root_batch_id?: any

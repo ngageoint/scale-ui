@@ -22,7 +22,7 @@
             </td>
             <td>
                 <span *ngIf="batch.recipe_type">
-                    <a routerLink="/configuration/recipe-types/{{ batch.recipe_type.id }}">
+                    <a routerLink="/configuration/recipe-types/{{ batch.recipe_type.name }}">
                     <span [pTooltip]="batch.recipe_type.description">{{ batch.recipe_type.title }}</span>
                 </a>
                 </span>

@@ -34,8 +34,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
             const id = +this.route.snapshot.paramMap.get('id');
             this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(data => {
                 this.recipeTypesApiService.getRecipeType(
-                    data.recipe_type.name,
-                    data.recipe_type_rev.revision_num
+                    data.recipe_type.name
                 ).subscribe(recipeTypeData => {
                     this.recipeType = RecipeType.transformer(recipeTypeData);
                     const jobTypes = [];
