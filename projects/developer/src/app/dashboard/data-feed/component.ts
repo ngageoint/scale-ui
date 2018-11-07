@@ -136,7 +136,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             if (this.dataFeeds.length > 0) {
                 if (this.selectedDataFeed) {
                     // use value from dataFeeds array to ensure object equality for primeng dropdown
-                    const dataFeed = _.find(this.dataFeeds, { label: this.selectedDataFeed.strike.title });
+                    const dataFeed: any = _.find(this.dataFeeds, { label: this.selectedDataFeed.strike.title });
                     this.selectedDataFeed = dataFeed ? dataFeed.value : this.dataFeeds[0].value;
                 } else {
                     this.selectedDataFeed = this.dataFeeds[0].value;
@@ -319,7 +319,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                                 // Below is extra data used for toggling the datasets
                                 datasetIndex: i
                             };
-                        }, this) : [];
+                        }) : [];
                     }
                 }
             }

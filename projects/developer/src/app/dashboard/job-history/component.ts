@@ -85,7 +85,8 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
                     datalabels: {
                         color: 'white',
                         display: context => {
-                            return (context.dataset.data[context.dataIndex] / _.max(context.dataset.data)) > 0.15;
+                            const max: any = _.max(context.dataset.data);
+                            return (context.dataset.data[context.dataIndex] / max) > 0.15;
                         },
                         font: {
                             weight: 'bold',

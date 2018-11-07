@@ -22,7 +22,7 @@ export class StrikesApiService {
     getStrikes(params?: any): Observable<ApiResults> {
         const sortStr = params ? params.sortOrder < 0 ? '-' + params.sortField : params.sortField : null;
         const page = params && params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        let apiParams = {
+        let apiParams: any = {
             page: page.toString(),
             page_size: params && params.rows ? params.rows.toString() : null,
             started: params ? params.started : null,

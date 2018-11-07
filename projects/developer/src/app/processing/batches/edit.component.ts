@@ -33,7 +33,7 @@ export class BatchesEditComponent implements OnInit {
     private getRecipeTypes() {
         return this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
             const recipeTypes = RecipeType.transformer(data.results);
-            _.forEach(recipeTypes, rt => {
+            _.forEach(recipeTypes, (rt: any) => {
                 this.recipeTypeOptions.push({
                     label: rt.title,
                     value: rt
@@ -47,7 +47,7 @@ export class BatchesEditComponent implements OnInit {
     handleRecipeTypeChange(event) {
         this.batchesApiService.getBatches({recipe_type_name: event.value.name}).subscribe(data => {
             const batches = Batch.transformer(data.results);
-            _.forEach(batches, b => {
+            _.forEach(batches, (b: any) => {
                 this.previousBatchOptions.push({
                     label: b.title,
                     value: b.root_batch.id

@@ -22,7 +22,7 @@ export class ScansApiService {
     getScans(params: any): Observable<ApiResults> {
         const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        let apiParams = {
+        let apiParams: any = {
             page: page.toString(),
             page_size: params.rows ? params.rows.toString() : null,
             started: params.started,

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -70,12 +70,12 @@ export class RecipesComponent implements OnInit, OnDestroy {
     private updateOptions() {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
-        });
+        }) as RecipesDatatable;
         this.recipesDatatableService.setRecipesDatatableOptions(this.datatableOptions);
 
         // update querystring
         this.router.navigate(['/processing/recipes'], {
-            queryParams: this.datatableOptions,
+            queryParams: this.datatableOptions as Params,
             replaceUrl: true
         });
 
@@ -86,16 +86,16 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.recipeTypes = data.results as RecipeType[];
             const self = this;
             const selectItems = [];
-            _.forEach(this.recipeTypes, function (recipeType) {
+            _.forEach(this.recipeTypes, (recipeType: any) => {
                 selectItems.push({
-                    label: recipeType.title + ' ' + recipeType.version,
+                    label: `${recipeType.title} ${recipeType.version}`,
                     value: recipeType.name
                 });
                 if (self.datatableOptions.type_name === recipeType.name) {
                     self.selectedRecipeType = recipeType.name;
                 }
             });
-            this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
+            this.recipeTypeOptions = _.orderBy(selectItems, 'label', 'asc');
             this.recipeTypeOptions.unshift({
                 label: 'All',
                 value: ''

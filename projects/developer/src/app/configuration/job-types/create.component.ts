@@ -119,8 +119,8 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         }
     }
     private stripObject(obj: object) {
-        const strippedObj = _.cloneDeep(obj);
-        _.pickBy(obj, (value, key) => {
+        const strippedObj: any = _.cloneDeep(obj);
+        _.pickBy(obj, (value: any, key: any): any => {
             if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
                 const childObj = this.stripObject(value);
                 if (_.keys(childObj).length > 0) {

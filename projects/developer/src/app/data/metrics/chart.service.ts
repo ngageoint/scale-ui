@@ -44,7 +44,7 @@ export class ChartService {
             _.forEach(data.results, (result) => {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
-                const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
+                const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];
@@ -72,7 +72,7 @@ export class ChartService {
                             // info we have
                             resultObj[params.choice_id[0]] = _.toPairs(groupedResult)[0][1];
                         }
-                        _.forEach(_.toPairs(resultObj), (d) => {
+                        _.forEach(_.toPairs(resultObj), (d: any) => {
                             valueArr = [];
                             // d[0] will be choice id, d[1] will be values
                             // if only one filter was selected, d[0] will return as string 'undefined' since no id is included in this case
@@ -104,7 +104,8 @@ export class ChartService {
                         const label = filter.version ?
                             `${filter.title} ${filter.version} ${result.column.title}` :
                             `${filter.title} ${result.column.title}`;
-                        const stackHeight = _.filter(datasets, { stack: `stack${idx.toString()}` }).length;
+                        const stackId: any = { stack: `stack${idx.toString()}` };
+                        const stackHeight = _.filter(datasets, stackId).length;
                         const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
                         const bgColor = colorObj ?
                             this.colorService.getRgba(colorObj.color, opacity) :
@@ -136,7 +137,7 @@ export class ChartService {
             _.forEach(data.results, (result) => {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
-                const colorObj = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
+                const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];

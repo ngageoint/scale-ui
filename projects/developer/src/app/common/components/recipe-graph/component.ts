@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
 import { JobTypesApiService } from '../../../configuration/job-types/api.service';
+import {JobType} from '../../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -60,7 +61,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.links = [];
 
             _.forEach(this.recipeData.definition.nodes, node => {
-                const jobType = _.find(this.recipeData.job_types, {
+                const jobType: JobType = _.find(this.recipeData.job_types, {
                     manifest: {
                         job: {
                             name: node.node_type.job_type_name,
@@ -136,7 +137,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             _.forEach(this.selectedNode.input, i => {
                 if (i.node) {
                     const dependency = this.recipeData.definition.nodes[i.node];
-                    const dependencyJobType = _.find(this.recipeData.job_types, {
+                    const dependencyJobType: JobType = _.find(this.recipeData.job_types, {
                         manifest: {
                             job: {
                                 name: dependency.node_type.job_type_name,
@@ -144,7 +145,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                             }
                         }
                     });
-                    const connection = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                    const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
                     this.selectedNodeConnections.push({
                         name: dependency.node_type.job_type_name,
                         output: connection.name
@@ -163,7 +164,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // only show job types present in recipe
         _.forEach(this.recipeData.definition.nodes, node => {
             if (node.node_type.job_type_name !== this.selectedJobType.manifest.job.name) {
-                const jobType = _.find(this.recipeData.job_types, {
+                const jobType: any = _.find(this.recipeData.job_types, {
                     manifest: {
                         job: {
                             name: node.node_type.job_type_name,
@@ -185,7 +186,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (dependency.disabled) {
             return;
         }
-        const currJob = this.getCurrJob();
+        const currJob: any = this.getCurrJob();
         if (currJob) {
             currJob.dependencies.push({
                 connections: [],
@@ -200,7 +201,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     removeDependency(dependency) {
-        const currJob = this.getCurrJob();
+        const currJob: any = this.getCurrJob();
         if (currJob) {
             _.remove(currJob.dependencies, dependency);
             this.updateRecipe();
@@ -213,7 +214,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // inspect dependencies and display possible connections
         this.inputJobs = [];
         _.forEach(this.selectedNode.dependencies, dep => {
-            const jobType = _.find(this.recipeData.job_types, {
+            const jobType: JobType = _.find(this.recipeData.job_types, {
                 manifest: {
                     job: {
                         name: dep.name
@@ -246,10 +247,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (providerOutput.disabled) {
             return;
         }
-        const currJob = this.getCurrJob();
+        const currJob: any = this.getCurrJob();
         if (currJob) {
             // look for the current job input that matches the dependency's output
-            const currJobType = _.find(this.recipeData.job_types, {
+            const currJobType: JobType = _.find(this.recipeData.job_types, {
                 manifest: {
                     job: {
                         name: currJob.node_type.job_type_name,
@@ -258,7 +259,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 }
             });
             if (currJobType) {
-                const currInput = _.find(currJobType.manifest.job.interface.inputs.files, file => {
+                const currInput: any = _.find(currJobType.manifest.job.interface.inputs.files, file => {
                     return _.includes(file.mediaTypes, providerOutput.mediaType);
                 });
                 if (currInput) {
@@ -286,7 +287,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     removeInputConnection(conn) {
-        const currJob = this.getCurrJob();
+        const currJob: any = this.getCurrJob();
         if (currJob) {
             const currInput = _.findKey(currJob.input, { node: conn.name, output: conn.output });
             if (currInput) {

@@ -183,9 +183,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     onRowSelect(e) {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/recipe-types/${e.value.name}/${e.value.revision_num}`);
+            window.open(`/configuration/recipe-types/${e.value.name}`);
         } else {
-            this.router.navigate([`/configuration/recipe-types/${e.value.name}/${e.value.revision_num}`]);
+            this.router.navigate([`/configuration/recipe-types/${e.value.name}`]);
         }
     }
 

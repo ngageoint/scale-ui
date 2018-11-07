@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
@@ -57,13 +57,13 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         });
     }
     private updateOptions() {
-        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
+        this.datatableOptions = _.pickBy(this.datatableOptions, (d: any) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
-        });
+        }) as RunningJobsDatatable;
         this.runningJobsDatatableService.setRunningJobsDatatableOptions(this.datatableOptions);
 
         this.router.navigate(['/processing/running-jobs'], {
-            queryParams: this.datatableOptions,
+            queryParams: this.datatableOptions as Params,
             replaceUrl: true
         });
 
