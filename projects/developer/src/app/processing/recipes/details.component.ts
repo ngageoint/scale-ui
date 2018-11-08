@@ -37,22 +37,22 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                     data.recipe_type.name
                 ).subscribe(recipeTypeData => {
                     this.recipeType = RecipeType.transformer(recipeTypeData);
-                    const jobTypes = [];
-                    _.forEach(data.jobs, (jobData) => {
-                        // attach revision interface to each job type
-                        jobTypes.push(jobData.job.job_type);
-
-                        // include current job instance in definition
-                        const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
-                            return j.job_type.name === jobData.job.job_type.name &&
-                                j.job_type.version === jobData.job.job_type.version;
-                        });
-                        if (recipeTypeJob) {
-                            recipeTypeJob.instance = jobData.job;
-                        }
-                    });
-                    // build recipe type details with revision definition and adjusted job types
-                    this.recipeType.job_types = jobTypes;
+                    // const jobTypes = [];
+                    // _.forEach(data.jobs, (jobData) => {
+                    //     // attach revision interface to each job type
+                    //     jobTypes.push(jobData.job.job_type);
+                    //
+                    //     // include current job instance in definition
+                    //     const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
+                    //         return j.job_type.name === jobData.job.job_type.name &&
+                    //             j.job_type.version === jobData.job.job_type.version;
+                    //     });
+                    //     if (recipeTypeJob) {
+                    //         recipeTypeJob.instance = jobData.job;
+                    //     }
+                    // });
+                    // // build recipe type details with revision definition and adjusted job types
+                    // this.recipeType.job_types = jobTypes;
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type', detail: err.statusText});
                 });

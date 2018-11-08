@@ -64,23 +64,25 @@
                 "timeout": 30,
                 "interface": {
                     "command": "./sam.sh",
-                    "inputs": [{
-                        "media_types": ["image/nitf"],
-                        "required": true,
-                        "type": "file",
-                        "name": "image"
-                    },{
-                        "media_types": ["text/csv"],
-                        "required": true,
-                        "type": "file",
-                        "name": "signature"
-                    }],
-                    "outputs": [{
-                        "media_type": "image/tiff",
-                        "required": true,
-                        "type": "file",
-                        "name": "sam-detections"
-                    }],
+                    "inputs": {
+                        "files": [
+                            {
+                                "name": "image",
+                                "required": true,
+                                "mediaTypes": ["image/nitf"]
+                            }
+                        ]
+                    },
+                    "outputs": {
+                        "files": [
+                            {
+                                "name": "sam-detections",
+                                "mediaType": "image/tiff",
+                                "pattern": "detections*.tiff",
+                                "required": true
+                            }
+                        ]
+                    },
                     "settings": []
                 },
                 "errors": {},

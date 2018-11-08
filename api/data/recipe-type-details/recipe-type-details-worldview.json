@@ -90,38 +90,31 @@
                     "timeout": 0,
                     "interface": {
                         "command": "./parse_wv2.sh",
-                        "inputs": [
-                            {
-                                "media_types": [
-                                    "image/nitf"
-                                ],
-                                "required": true,
-                                "type": "file",
-                                "name": "image"
-                            },
-                            {
-                                "media_types": [
-                                    "text/csv"
-                                ],
-                                "required": true,
-                                "type": "file",
-                                "name": "signature"
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "wv2-corrected"
-                            },
-                            {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "wv2-ortho-out"
-                            }
-                        ],
+                        "inputs": {
+                            "files": [
+                                {
+                                    "name": "image",
+                                    "required": true,
+                                    "mediaTypes": ["image/nitf"]
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "files": [
+                                {
+                                    "name": "wv2-corrected",
+                                    "mediaType": "image/tiff",
+                                    "pattern": "corrected*.tiff",
+                                    "required": true
+                                },
+                                {
+                                    "name": "wv2-ortho-out",
+                                    "mediaType": "image/tiff",
+                                    "pattern": "ortho*.tiff",
+                                    "required": true
+                                }
+                            ]
+                        },
                         "settings": []
                     }
                 },
@@ -149,24 +142,31 @@
                     "timeout": 0,
                     "interface": {
                         "command": "./correct_wv2.sh",
-                        "inputs": [
-                            {
-                                "media_types": [
-                                    "image/tiff"
-                                ],
-                                "required": true,
-                                "type": "file",
-                                "name": "image"
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "wv2-corrected"
-                            }
-                        ],
+                        "inputs": {
+                            "files": [
+                                {
+                                    "name": "image",
+                                    "required": true,
+                                    "mediaTypes": ["image/tiff"]
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "files": [
+                                {
+                                    "name": "wv2-corrected",
+                                    "mediaType": "image/tiff",
+                                    "pattern": "corrected*.tiff",
+                                    "required": true
+                                },
+                                {
+                                    "name": "wv2-out",
+                                    "mediaType": "image/tiff",
+                                    "pattern": "wv2*.tiff",
+                                    "required": true
+                                }
+                            ]
+                        },
                         "settings": []
                     }
                 },
@@ -196,24 +196,31 @@
                     "timeout": 0,
                     "interface": {
                         "command": "./wv2_ortho.py",
-                        "inputs": [
-                            {
-                                "media_types": [
-                                    "image/tiff"
-                                ],
-                                "required": true,
-                                "type": "file",
-                                "name": "image"
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "wv2-ortho-out"
-                            }
-                        ],
+                        "inputs": {
+                            "files": [
+                                {
+                                    "name": "image",
+                                    "required": true,
+                                    "mediaTypes": ["image/tiff"]
+                                }
+                            ]
+                        },
+                        "outputs": {
+                            "files": [
+                                {
+                                    "name": "wv2-ortho-out",
+                                    "mediaType": "image/tiff",
+                                    "pattern": "ortho*.tiff",
+                                    "required": true
+                                },
+                                {
+                                    "name": "wv2-out",
+                                    "mediaType": "image/tiff",
+                                    "pattern": "wv2*.tiff",
+                                    "required": true
+                                }
+                            ]
+                        },
                         "settings": []
                     }
                 },
@@ -257,7 +264,7 @@
                                 {
                                     "name": "shapefile",
                                     "mediaType": "application/xml",
-                                    "pattern": "shamefile*.shp",
+                                    "pattern": "shapefile*.shp",
                                     "required": true
                                 }
                             ]

@@ -145,16 +145,16 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            started: moment.utc(e, 'YYYY-MM-DD').toISOString()
-        });
-        this.updateOptions();
+        this.started = e;
     }
     onEndSelect(e) {
+        this.ended = e;
+    }
+    onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            ended: moment.utc(e, 'YYYY-MM-DD').toISOString()
+            started: moment.utc(this.started, 'YYYY-MM-DD').startOf('d').toISOString(),
+            ended: moment.utc(this.ended, 'YYYY-MM-DD').endOf('d').toISOString()
         });
         this.updateOptions();
     }

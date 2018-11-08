@@ -1,12 +1,15 @@
 <h2><i class="fa fa-cubes"></i> Recipes</h2>
-<div class="recipes__date-filter">
-    <div>
-        <label>From:</label>
-        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
-    </div>
-    <div>
-        <label>To:</label>
-        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+<div class="recipes__header">
+    <div class="recipes__date-filter">
+        <div>
+            <label>From:</label>
+            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+        </div>
+        <div>
+            <label>To:</label>
+            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+        </div>
+        <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
     </div>
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
