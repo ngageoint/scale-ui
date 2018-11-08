@@ -1,19 +1,19 @@
 {
-    "id": 3,
-    "name": "worldview",
-    "title": "WorldView",
-    "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
+    "id": 2,
+    "name": "spectral-analysis",
+    "title": "Spectral Analysis",
+    "description": "Perform spectral analysis using SAM, SCM, and CEM algorithms",
     "is_active": true,
     "revision_num": 1,
-    "created": "2016-05-02T02:58:23.221Z",
-    "last_modified": "2016-05-02T02:58:23.221Z",
+    "created": "2016-05-02T02:54:52.820Z",
+    "last_modified": "2016-05-02T02:54:52.820Z",
     "deprecated": null,
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]
         },
         "nodes": {
-            "wv2-parse": {
+            "sam": {
                 "dependencies": [],
                 "input": {
                     "input_file": {
@@ -23,40 +23,40 @@
                 },
                 "node_type": {
                     "node_type": "job",
-                    "job_type_name": "wv2-parse",
-                    "job_type_version": "1.0.1",
+                    "job_type_name": "sam",
+                    "job_type_version": "1.0",
                     "job_type_revision": 1
                 }
             },
-            "wv2-atmosphere-corr": {
-                "dependencies": [{"name": "wv2-parse"}],
+            "scm": {
+                "dependencies": [{"name": "sam"}],
                 "input": {
-                    "infile": {"type": "dependency", "node": "wv2-parse", "output": "wv2-corrected"}
+                    "infile": {"type": "dependency", "node": "sam", "output": "scm-data"}
                 },
                 "node_type": {
                     "node_type": "job",
-                    "job_type_name": "wv2-atmosphere-corr",
-                    "job_type_version": "1.0.1",
+                    "job_type_name": "scm",
+                    "job_type_version": "1.0",
                     "job_type_revision": 1
                 }
             },
-            "wv2-ortho": {
-                "dependencies": [{"name": "wv2-parse"}],
+            "cem": {
+                "dependencies": [{"name": "sam"}],
                 "input": {
-                    "infile": {"type": "dependency", "node": "wv2-parse", "output": "wv2-ortho-out"}
+                    "infile": {"type": "dependency", "node": "sam", "output": "cem-data"}
                 },
                 "node_type": {
                     "node_type": "job",
-                    "job_type_name": "wv2-ortho",
-                    "job_type_version": "1.0.1",
+                    "job_type_name": "cem",
+                    "job_type_version": "1.0",
                     "job_type_revision": 1
                 }
             },
             "export-shp": {
-                "dependencies": [{"name": "wv2-atmosphere-corr"}, {"name": "wv2-ortho"}],
+                "dependencies": [{"name": "scm"}, {"name": "cem"}],
                 "input": {
-                    "wv2-corrected": {"type": "dependency", "node": "wv2-atmosphere-corr", "output": "wv2-out"},
-                    "wv2-ortho-out": {"type": "dependency", "node": "wv2-ortho", "output": "wv2-out"}
+                    "scm-data": {"type": "dependency", "node": "scm", "output": "sa-corrected"},
+                    "cem-data": {"type": "dependency", "node": "cem", "output": "sa-corrected"}
                 },
                 "node_type": {
                     "node_type": "job",
@@ -69,27 +69,27 @@
     },
     "job_types": [
         {
-            "id": 5,
+            "id": 2,
             "is_operational": true,
-            "icon_code": "f0c2",
-            "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
+            "icon_code": "f0e7",
+            "docker_image": "10.4.4.10:5000/sam:1.0",
             "priority": 1,
             "timeout": 30,
             "max_tries": 3,
             "manifest": {
                 "job": {
-                    "name": "wv2-parse",
-                    "jobVersion": "1.0.1",
+                    "name": "sam",
+                    "jobVersion": "1.0",
                     "packageVersion": "",
-                    "title": "WorldView-2 Parse",
-                    "description": "Parses WorldView-2 imagery. WorldView-2 is a commercial Earth observation satellite owned by DigitalGlobe. WorldView-2 provides commercially available panchromatic imagery of .46 m resolution, and eight-band multispectral imagery with 1.84 m (6 ft 0 in) resolution. It was launched October 8, 2009 to become DigitalGlobe's third satellite in orbit, joining WorldView-1 which was launched in 2007 and QuickBird which was launched in 2001. It takes a new photograph of any place on Earth every 1.1 days.",
+                    "title": "Spectral Angle Mapper",
+                    "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra. This technique, developed by J.W. Boardman, determines the spectral similarity between given reference spectra, r, (i.e., the image endmember in this case) and the spectra found at each pixel, t (Kruse, et al., 1992). The result of the comparison is reported as the angular difference (in radians) between the two spectra. Each pair of spectra is treated as a vector in nb-space, allowing the similarity of the spectra to be determined without regard to their relative brightness values. The result of the SAM calculation is an image for each reference spectrum, with high values (displayed in brighter values) corresponding to a better match between reference and test spectra.",
                     "maintainer": {
-                        "name": "DigitalGlobe",
+                        "name": "Boardman",
                         "email": ""
                     },
-                    "timeout": 0,
+                    "timeout": 30,
                     "interface": {
-                        "command": "./parse_wv2.sh",
+                        "command": "./sam.sh",
                         "inputs": [
                             {
                                 "media_types": [
@@ -113,13 +113,13 @@
                                 "media_type": "image/tiff",
                                 "required": true,
                                 "type": "file",
-                                "name": "wv2-corrected"
+                                "name": "scm-data"
                             },
                             {
                                 "media_type": "image/tiff",
                                 "required": true,
                                 "type": "file",
-                                "name": "wv2-ortho-out"
+                                "name": "cem-data"
                             }
                         ],
                         "settings": []
@@ -129,73 +129,27 @@
             }
         },
         {
-            "id": 6,
+            "id": 3,
             "is_operational": true,
-            "icon_code": "f14e",
-            "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
-            "priority": 1,
-            "timeout": 30,
-            "manifest": {
-                "job": {
-                    "name": "wv2-atmosphere-corr",
-                    "jobVersion": "1.0.1",
-                    "packageVersion": "",
-                    "title": "WorldView-2 Atmospheric Correction",
-                    "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
-                    "maintainer": {
-                        "name": "DigitalGlobe",
-                        "email": ""
-                    },
-                    "timeout": 0,
-                    "interface": {
-                        "command": "./correct_wv2.sh",
-                        "inputs": [
-                            {
-                                "media_types": [
-                                    "image/tiff"
-                                ],
-                                "required": true,
-                                "type": "file",
-                                "name": "image"
-                            }
-                        ],
-                        "outputs": [
-                            {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "wv2-corrected"
-                            }
-                        ],
-                        "settings": []
-                    }
-                },
-                "seedVersion": "1.0"
-            }
-        },
-        {
-            "id": 9,
-            "is_operational": true,
-            "icon_code": "f219",
-            "docker_privileged": false,
-            "docker_image": "10.4.4.10:5000/wv2-ortho:2.0",
+            "icon_code": "f140",
+            "docker_image": "10.4.4.10:5000/scm:1.0",
             "priority": 1,
             "timeout": 30,
             "max_tries": 3,
             "manifest": {
                 "job": {
-                    "name": "wv2-ortho",
-                    "jobVersion": "1.0.1",
+                    "name": "scm",
+                    "jobVersion": "1.0",
                     "packageVersion": "",
-                    "title": "WorldView-2 Rigorous Orthorectification",
-                    "description": "Applies Orthorectification to WorldView-2 data",
+                    "title": "Spectral Correlation Mapper",
+                    "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity. The Spectral Correlation Mapper (SCM) method is a derivative of Pearsonian Correlation Coefficient that eliminates negative correlation and maintains the SAM characteristic of minimizing the shading effect resulting in better results. The SCM varies from –1 to 1 and cos (SAM) varies from 0 to 1. Figure 1 – Graphic area in relation to the deviations beginning at x mean and y mean. Figure 2 – Exemplification of correlation: a) positive – with the major part of points presenting signals similar in relation at x mean and y mean; b) negative – with the major part of points with apposite signals in relation at x mean and y mean. The SCM algorithm method, similar to SAM, uses the reference spectrum defined by the investigator, in accordance with the image s/he wants to classify.",
                     "maintainer": {
-                        "name": "DigitalGlobe",
+                        "name": "Universidade de Brasília",
                         "email": ""
                     },
                     "timeout": 0,
                     "interface": {
-                        "command": "./wv2_ortho.py",
+                        "command": "./scm.sh",
                         "inputs": [
                             {
                                 "media_types": [
@@ -211,7 +165,53 @@
                                 "media_type": "image/tiff",
                                 "required": true,
                                 "type": "file",
-                                "name": "wv2-ortho-out"
+                                "name": "scm-output"
+                            }
+                        ],
+                        "settings": []
+                    }
+                },
+                "seedVersion": "1.0"
+            }
+        },
+        {
+            "id": 4,
+            "is_operational": true,
+            "icon_code": "f185",
+            "docker_image": "10.4.4.10:5000/cem:1.0",
+            "priority": 1,
+            "timeout": 30,
+            "max_tries": 3,
+            "manifest": {
+                "job": {
+                    "name": "cem",
+                    "jobVersion": "1.0",
+                    "packageVersion": "",
+                    "title": "Constrained Energy Minimization",
+                    "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
+                    "maintainer": {
+                        "name": "DigitalGlobe",
+                        "email": ""
+                    },
+                    "timeout": 0,
+                    "interface": {
+                        "command": "./cem.sh",
+                        "inputs": [
+                            {
+                                "media_types": [
+                                    "image/tiff"
+                                ],
+                                "required": true,
+                                "type": "file",
+                                "name": "image"
+                            }
+                        ],
+                        "outputs": [
+                            {
+                                "media_type": "image/tiff",
+                                "required": true,
+                                "type": "file",
+                                "name": "cem-output"
                             }
                         ],
                         "settings": []

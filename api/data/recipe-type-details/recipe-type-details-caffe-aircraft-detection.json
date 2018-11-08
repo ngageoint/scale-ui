@@ -3,64 +3,53 @@
     "name": "caffe-aircraft-detection",
     "title": "Caffe Aircraft Detection",
     "description": "Detect aircraft using BVL Caffe deep learning algorithms",
-    "revision_num": 1,
     "is_active": true,
-    "is_system": false,
-    "definition": {
-        "input_data": [{
-            "media_types": ["image/nitf"],
-            "required": true,
-            "type": "file",
-            "name": "input_file"
-        }],
-        "version": "1.0",
-        "jobs": [{
-            "recipe_inputs": [{
-                "job_input": "input_file",
-                "recipe_input": "input_file"
-            }],
-            "name": "caffe-aircraft-detection",
-            "job_type": {
-                "name": "caffe-aircraft-detection",
-                "version": "1.0"
-            },
-            "dependencies": []
-        }]
-    },
+    "revision_num": 1,
     "created": "2016-05-10T21:19:16.320Z",
-    "deprecated": null,
     "last_modified": "2016-05-10T21:19:16.320Z",
+    "deprecated": null,
+    "definition": {
+        "input": {
+            "files": [{"name": "input_file"}]
+        },
+        "nodes": {
+            "caffe-aircraft-detection": {
+                "dependencies": [],
+                "input": {
+                    "input_file": {"type": "recipe", "input": "input_file"}
+                },
+                "node_type": {
+                    "node_type": "job",
+                    "job_type_name": "caffe-aircraft-detection",
+                    "job_type_version": "1.0",
+                    "job_type_revision": 1
+                }
+            }
+        }
+    },
     "job_types": [{
         "id": 12,
-        "name": "caffe-aircraft-detection",
-        "version": "1.0",
-        "title": "Caffe Aircraft Detection",
-        "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
+        "is_operational": true,
         "icon_code": "f072",
-        "is_active": true,
-        "is_paused": false,
-        "is_system": false,
-        "max_scheduled": null,
-        "revision_num": 1,
         "docker_image": "10.4.4.10:5000/caffe-aircraft-detection:1.0",
-        "created": "",
-        "deprecated": null,
-        "paused": null,
-        "last_modified": "",
+        "priority": 1,
+        "timeout": 30,
+        "max_tries": 3,
         "manifest": {
             "job": {
-                "errors": {},
+                "name": "caffe-aircraft-detection",
+                "jobVersion": "1.0",
+                "packageVersion": "",
+                "title": "Caffe Aircraft Detection",
+                "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
                 "maintainer": {
                     "organization": "",
                     "name": "Yangqing Jia",
                     "email": ""
                 },
-                "name": "caffe-aircraft-detection",
-                "title": "Caffe Aircraft Detection",
-                "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
-                "tags": [],
                 "timeout": 3600,
                 "interface": {
+                    "command": "./aircraft.py",
                     "inputs": {
                         "files": [
                             {
@@ -74,13 +63,6 @@
                             }
                         ]
                     },
-                    "command": "./aircraft.py",
-                    "settings": [
-                        {
-                            "secret": false,
-                            "name": "MY_SETTING"
-                        }
-                    ],
                     "outputs": {
                         "files": [
                             {
@@ -91,11 +73,13 @@
                                 "mediaType": "image/nitf"
                             }
                         ]
-                    }
+                    },
+                    "mounts": [],
+                    "settings": []
                 },
-                "packageVersion": "",
-                "resources": {},
-                "jobVersion": "1.0"
+                "errors": {},
+                "tags": [],
+                "resources": {}
             },
             "seedVersion": "1.0"
         },

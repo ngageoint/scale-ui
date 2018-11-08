@@ -4,6 +4,10 @@
     "title": "Landsat 8",
     "description": "Process Landsat 8 sensor data",
     "is_active": true,
+    "revision_num": 1,
+    "created": "2016-05-02T02:45:28.075Z",
+    "last_modified": "2016-05-02T02:45:28.075Z",
+    "deprecated": null,
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]
@@ -48,8 +52,8 @@
             "export-shp": {
                 "dependencies": [{"name": "landsat8-atmos-corr"}, {"name": "landsat8-ortho"}],
                 "input": {
-                    "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "outout": "ls8-corrected"},
-                    "panchromatic": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"}
+                    "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"},
+                    "panchromatic": {"type": "dependency", "node": "landsat8-ortho", "output": "ls8-corrected"}
                 },
                 "node_type": {
                     "node_type": "job",
@@ -60,16 +64,11 @@
             }
         }
     },
-    "revision_num": 1,
-    "created": "2016-05-02T02:45:28.075Z",
-    "last_modified": "2016-05-02T02:45:28.075Z",
-    "deprecated": null,
     "job_types": [
         {
             "id": 1,
             "is_operational": true,
             "icon_code": "f248",
-            "docker_privileged": false,
             "docker_image": "10.4.4.10:5000/landsat-parse_1.0:dev",
             "priority": 1,
             "timeout": 30,
@@ -124,7 +123,10 @@
                         },
                         "mounts": [],
                         "settings": []
-                    }
+                    },
+                    "errors": {},
+                    "tags": [],
+                    "resources": {}
                 },
                 "seedVersion": "1.0"
             }
@@ -276,5 +278,6 @@
                 "seedVersion": "1.0"
             }
         }
-    ]
+    ],
+    "sub_recipe_types": []
 }

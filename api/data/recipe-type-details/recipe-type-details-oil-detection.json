@@ -1,57 +1,44 @@
 {
     "id": 4,
     "name": "oil-detection",
-    "version": "1.0",
     "title": "Oil Detection",
     "description": "Detect oil on the surface of water",
     "is_active": true,
-    "definition": {
-        "input_data": [{
-            "media_types": ["image/tiff"],
-            "required": true,
-            "type": "file",
-            "name": "input_file"
-        }],
-        "version": "1.0",
-        "jobs": [{
-            "recipe_inputs": [],
-            "name": "sam",
-            "job_type": {
-                "name": "sam",
-                "version": "1.0"
-            },
-            "dependencies": []
-        }, {
-            "recipe_inputs": [],
-            "name": "export-kml",
-            "job_type": {
-                "name": "export-kml",
-                "version": "1.5"
-            },
-            "dependencies": [{
-                "name": "sam",
-                "connections": [{
-                    "output": "sam-detections",
-                    "input": "infile"
-                }]
-            }]
-        }]
-    },
+    "revision_num": 1,
     "created": "2016-05-10T16:32:31.718Z",
     "last_modified": "2016-05-10T16:32:31.718Z",
-    "archived": null,
-    "trigger_rule": {
-        "type": "INGEST",
-        "name": "oil",
-        "is_active": true,
-        "configuration": {
-            "condition": {
-                "media_type": "",
-                "data_types": ["spectral"]
+    "deprecated": null,
+    "definition": {
+        "input": {
+            "files": [{"name": "input_file"}]
+        },
+        "nodes": {
+            "sam": {
+                "dependencies": [],
+                "input": {
+                    "input_file": {
+                        "type": "recipe",
+                        "input": "input_file"
+                    }
+                },
+                "node_type": {
+                    "node_type": "job",
+                    "job_type_name": "sam",
+                    "job_type_version": "1.0",
+                    "job_type_revision": 1
+                }
             },
-            "data": {
-                "workspace_name": "products",
-                "input_data_name": "input_file"
+            "export-kml": {
+                "dependencies": [{"name": "sam"}],
+                "input": {
+                    "infile": {"type": "dependency", "node": "sam", "output": "sam-detections"}
+                },
+                "node_type": {
+                    "node_type": "job",
+                    "job_type_name": "export-kml",
+                    "job_type_version": "1.0.0",
+                    "job_type_revision": 1
+                }
             }
         }
     },
@@ -59,7 +46,6 @@
         "id": 2,
         "is_operational": true,
         "icon_code": "f0e7",
-        "docker_privileged": false,
         "docker_image": "10.4.4.10:5000/sam:1.0",
         "priority": 1,
         "timeout": 30,
@@ -96,7 +82,10 @@
                         "name": "sam-detections"
                     }],
                     "settings": []
-                }
+                },
+                "errors": {},
+                "tags": [],
+                "resources": {}
             },
             "seedVersion": "1.0"
         }
@@ -104,7 +93,6 @@
         "id": 10,
         "is_operational": true,
         "icon_code": "f0ac",
-        "docker_privileged": false,
         "docker_image": "10.4.4.10:5000/export-kml:2.0",
         "priority": 1,
         "timeout": 30,
@@ -124,12 +112,24 @@
                 "interface": {
                     "command": "./export_kml.sh",
                     "inputs": {},
-                    "outputs": {},
+                    "outputs": {
+                        "files": [
+                            {
+                                "name": "export.kml",
+                                "mediaType": "application/kml",
+                                "pattern": "export*.kml",
+                                "required": true
+                            }
+                        ]
+                    },
                     "settings": []
-                }
+                },
+                "errors": {},
+                "tags": [],
+                "resources": {}
             },
             "seedVersion": "1.0"
         }
     }],
-    "modified": false
+    "sub_recipe_types": []
 }
