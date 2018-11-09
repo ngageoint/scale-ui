@@ -3,13 +3,28 @@
     <div class="jobs__date-filter">
         <div>
             <label>From:</label>
-            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+            <utc-datepicker [date]="started" [button]="true" format="YYYY-MM-DD HH:mm:ss"
+                            (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
         <div>
             <label>To:</label>
-            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+            <utc-datepicker [date]="ended" [button]="true" format="YYYY-MM-DD HH:mm:ss"
+                            (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
+        <button pButton class="ui-button-primary jobs__date-filter-btn" label="Apply" (click)="onDateFilterApply()">
+        </button>
+        <div class="jobs__date-filter-ranges">
+            <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 6 Hours"
+                    (click)="setDateFilterRange('h', 6)"></button>
+            <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 12 Hours"
+                    (click)="setDateFilterRange('h', 12)"></button>
+            <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 24 Hours"
+                    (click)="setDateFilterRange('h', 24)"></button>
+            <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 3 Days"
+                    (click)="setDateFilterRange('d', 3)"></button>
+            <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 7 Days"
+                    (click)="setDateFilterRange('d', 7)"></button>
+        </div>
     </div>
     <div class="jobs__controls">
         <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
@@ -17,18 +32,19 @@
     </div>
 </div>
 <p-table [value]="jobs" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
-             [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
-             [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
-             (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}" [autoLayout]="true"
-             class="jobs__table" #datatable>
+         [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
+         [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
+         (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
+         [autoLayout]="true" class="jobs__table" #datatable>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type'">
-                    <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onJobTypeChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
+                    <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
+                                (onChange)="onJobTypeChange($event)" [autoWidth]="false" styleClass="column-filter"
+                                (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body"
                                 [showClear]="false">
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
@@ -36,14 +52,15 @@
                     </p-dropdown>
                 </div>
                 <div *ngSwitchCase="'status'">
-                    <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" (onChange)="onStatusChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
-                                [showClear]="false"></p-dropdown>
+                    <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus"
+                                (onChange)="onStatusChange($event)" [autoWidth]="false" styleClass="column-filter"
+                                (click)="onFilterClick($event)" appendTo="body" [showClear]="false"></p-dropdown>
                 </div>
                 <div *ngSwitchCase="'error.category'">
                     <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
-                                (onChange)="onErrorCategoryChange($event)" [autoWidth]="false" styleClass="column-filter"
-                                (click)="onFilterClick($event)" appendTo="body" [showClear]="false"></p-dropdown>
+                                (onChange)="onErrorCategoryChange($event)" [autoWidth]="false"
+                                styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
+                                [showClear]="false"></p-dropdown>
                 </div>
             </th>
         </tr>
@@ -69,8 +86,8 @@
                 <div *ngSwitchCase="'status'">
                     <div class="pull-right">
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
-                        <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary" (click)="cancelJob(rowData)"
-                                pTooltip="Cancel Job"
+                        <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
+                                (click)="cancelJob(rowData)" pTooltip="Cancel Job"
                                 *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
                         <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
                                 (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
@@ -79,8 +96,8 @@
                     {{ rowData.status }}
                 </div>
                 <div *ngSwitchCase="'error.title'">
-                    <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}" tooltipPosition="left" appendTo="body"
-                         tooltipStyleClass="jobs__error-tooltip">
+                    <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}" tooltipPosition="left"
+                         appendTo="body" tooltipStyleClass="jobs__error-tooltip">
                         {{ rowData.error.title }}
                     </div>
                 </div>
@@ -97,15 +114,16 @@
     <ng-template pTemplate="emptymessage" let-columns>
         <tr>
             <td [attr.colspan]="columns.length" class="text-center">
-                No records found
+                Update filters to view results
             </td>
         </tr>
     </ng-template>
 </p-table>
-<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
-             (onPageChange)="paginate($event)"></p-paginator>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
+             [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
 <p-confirmDialog></p-confirmDialog>
-<p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true" (onAfterHide)="hideExeLog()">
+<p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true"
+           (onAfterHide)="hideExeLog()">
         <span *ngIf="selectedJobExe">
             <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
         </span>

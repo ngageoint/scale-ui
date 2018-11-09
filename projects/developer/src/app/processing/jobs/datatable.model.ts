@@ -10,8 +10,8 @@ export class JobsDatatable {
         public ended?: string,
         public status?: any,
         public job_id?: number,
-        public job_type_id?: any,
         public job_type_name?: string,
+        public job_type_version?: string,
         public job_type_category?: string,
         public batch_id?: number,
         public error_category?: string,
@@ -24,6 +24,6 @@ export const initialJobsDatatable: JobsDatatable = {
     rows: 20,
     sortField: 'last_modified',
     sortOrder: -1,
-    started: moment.utc().subtract(1, 'd').startOf('d').toISOString(),
-    ended: moment.utc().endOf('d').toISOString()
+    started: moment.utc().subtract(24, 'h').toISOString(),
+    ended: moment.utc().toISOString()
 };

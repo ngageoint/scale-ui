@@ -87,15 +87,16 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    private fetchJobsData(job_type_id: number, chartData: any): Promise<any> {
+    private fetchJobsData(job_type_name: string, job_type_version: string, chartData: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.jobsApiService.getJobs({
                 started: moment.utc().startOf('d').toISOString(),
                 ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
                 status: 'COMPLETED',
-                job_type_id: job_type_id
+                job_type_name: job_type_name,
+                job_type_version: job_type_version
             }).subscribe(jobData => {
-                let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { id: job_type_id }));
+                let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { name: job_type_name, version: job_type_version }));
                 chartDataIdx = chartDataIdx > -1 ? chartDataIdx : 0;
                 // remove last element, since that will always have a 0 count
                 chartData.data[chartDataIdx].data.pop();
@@ -185,7 +186,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     d1.borderColor = '#d0eaff';
                     // get completed counts for the current day
                     // need to use the jobs api for this, since metrics only does 1 full day at a time
-                    promises.push(this.fetchJobsData(d1.id, chartData));
+                    promises.push(this.fetchJobsData(d1.name, d1.version, chartData));
                 });
                 Promise.all(promises).then(values => {
                     // use unique objects from data arrays

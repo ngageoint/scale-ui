@@ -13,6 +13,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
+import { JobTypeName } from '../../configuration/job-types/api.name.model';
 
 @Component({
     selector: 'dev-jobs',
@@ -31,7 +32,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
-    selectedJobType: string;
+    selectedJobType: JobTypeName;
     selectedJobExe: JobExecution;
     logDisplay: boolean;
     statusValues: SelectItem[];
@@ -142,10 +143,13 @@ export class JobsComponent implements OnInit, OnDestroy {
             _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.latest_version,
-                    value: jobType.id
+                    value: jobType
                 });
-                if (this.datatableOptions.job_type_id === jobType.id) {
-                    this.selectedJobType = jobType.id;
+                if (
+                    this.datatableOptions.job_type_name === jobType.name &&
+                    this.datatableOptions.job_type_version === jobType.latest_version
+                ) {
+                    this.selectedJobType = jobType;
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
@@ -153,7 +157,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 label: 'View All',
                 value: ''
             });
-            this.updateOptions();
+            // this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
@@ -192,7 +196,8 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     onJobTypeChange(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            job_type_id: e.value
+            job_type_name: e.value.name,
+            job_type_version: e.value.latest_version
         });
         this.updateOptions();
     }
@@ -216,18 +221,23 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = e;
+        this.started = moment.utc(e, 'YYYY-MM-DD HH:mm:ss').startOf('d').format('YYYY-MM-DD HH:mm:ss');
     }
     onEndSelect(e) {
-        this.ended = e;
+        this.ended = moment.utc(e, 'YYYY-MM-DD HH:mm:ss').endOf('d').format('YYYY-MM-DD HH:mm:ss');
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, 'YYYY-MM-DD').startOf('d').toISOString(),
-            ended: moment.utc(this.ended, 'YYYY-MM-DD').endOf('d').toISOString()
+            started: moment.utc(this.started, 'YYYY-MM-DD HH:mm:ss').toISOString(),
+            ended: moment.utc(this.ended, 'YYYY-MM-DD HH:mm:ss').toISOString()
         });
         this.updateOptions();
+    }
+    setDateFilterRange(unit: any, range: any) {
+        this.started = moment.utc().subtract(range, unit).toISOString();
+        this.ended = moment.utc().toISOString();
+        this.onDateFilterApply();
     }
     cancelJob(job: Job) {
         const originalStatus = job.status;
@@ -249,7 +259,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 status: this.datatableOptions.status === 'CANCELED' || this.datatableOptions.status === 'FAILED' ?
                     this.datatableOptions.status :
                     null,
-                job_type_ids: this.datatableOptions.job_type_id ? [this.datatableOptions.job_type_id] : null
+                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
             };
             // remove null properties
             jobsParams = _.pickBy(jobsParams);
@@ -299,7 +309,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             });
     }
     ngOnInit() {
-        this.datatableLoading = true;
+        // this.datatableLoading = true;
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         }
@@ -315,8 +325,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
                     status: params.status || null,
                     job_id: params.job_id ? parseInt(params.job_id, 10) : null,
-                    job_type_id: params.job_type_id ? parseInt(params.job_type_id, 10) : null,
                     job_type_name: params.job_type_name || null,
+                    job_type_version: params.job_type_version || null,
                     job_type_category: params.job_type_category || null,
                     batch_id: params.batch_id ? parseInt(params.batch_id, 10) : null,
                     error_category: params.error_category || null,
@@ -325,8 +335,8 @@ export class JobsComponent implements OnInit, OnDestroy {
             }
             this.selectedStatus = this.datatableOptions.status;
             this.selectedErrorCategory = this.datatableOptions.error_category;
-            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD HH:mm:ss');
+            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD HH:mm:ss');
             this.getJobTypes();
         });
     }

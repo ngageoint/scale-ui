@@ -25,6 +25,13 @@ label {
             margin-top: 20px;
         }
     }
+    .jobs__date-filter-ranges {
+        margin-left: 20px;
+
+        button {
+            margin-left: 3px;
+        }
+    }
     .jobs__controls {
         display: flex;
         flex-direction: column-reverse;
