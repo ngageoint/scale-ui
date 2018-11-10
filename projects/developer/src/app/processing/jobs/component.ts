@@ -221,16 +221,16 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, 'YYYY-MM-DD HH:mm:ss').startOf('d').format('YYYY-MM-DD HH:mm:ss');
+        this.started = moment.utc(e, 'YYYY-MM-DD HH:mm:ss[Z]').startOf('d').format('YYYY-MM-DD HH:mm:ss[Z]');
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, 'YYYY-MM-DD HH:mm:ss').endOf('d').format('YYYY-MM-DD HH:mm:ss');
+        this.ended = moment.utc(e, 'YYYY-MM-DD HH:mm:ss[Z]').endOf('d').format('YYYY-MM-DD HH:mm:ss[Z]');
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, 'YYYY-MM-DD HH:mm:ss').toISOString(),
-            ended: moment.utc(this.ended, 'YYYY-MM-DD HH:mm:ss').toISOString()
+            started: moment.utc(this.started, 'YYYY-MM-DD HH:mm:ss[Z]').toISOString(),
+            ended: moment.utc(this.ended, 'YYYY-MM-DD HH:mm:ss[Z]').toISOString()
         });
         this.updateOptions();
     }
@@ -335,8 +335,8 @@ export class JobsComponent implements OnInit, OnDestroy {
             }
             this.selectedStatus = this.datatableOptions.status;
             this.selectedErrorCategory = this.datatableOptions.error_category;
-            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD HH:mm:ss');
-            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD HH:mm:ss');
+            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD HH:mm:ss[Z]');
+            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD HH:mm:ss[Z]');
             this.getJobTypes();
         });
     }
