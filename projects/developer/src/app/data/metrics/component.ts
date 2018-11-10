@@ -242,7 +242,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     fontSize: 16
                 },
                 legend: {
-                    position: 'top'
+                    position: 'right',
+                    display: this.filtersApplied.length > 1 || this.selectedMetric2
                 },
                 plugins: {
                     datalabels: {
