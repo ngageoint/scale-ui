@@ -12,6 +12,7 @@ import { environment } from '../../../environments/environment';
 
 @Injectable()
 export class DataService {
+    selectedJobRows = [];
 
     constructor() {
     }
@@ -149,5 +150,13 @@ export class DataService {
             concatMap(() => concat(request, whenToRefresh)),
             catchError(this.handleError)
         );
+    }
+
+    getSelectedJobRows() {
+        return this.selectedJobRows;
+    }
+
+    setSelectedJobRows(data) {
+        this.selectedJobRows.push(data);
     }
 }

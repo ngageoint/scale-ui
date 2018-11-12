@@ -53,7 +53,8 @@ export class Job {
                 JobExecution.transformer(data.execution),
                 data.recipe,
                 data.inputs,
-                data.outputs
+                data.outputs,
+                data.selected
             );
         }
     }
@@ -98,7 +99,8 @@ export class Job {
         public execution: any,
         public recipe: any,
         public inputs: any,
-        public outputs: any
+        public outputs: any,
+        public selected: boolean
     ) {
         this.dataService = new DataService();
         this.created_formatted = moment.utc(this.created).format(environment.dateFormat);

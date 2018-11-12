@@ -34,6 +34,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     selectedJob: Job;
     selectedJobType: JobTypeName;
     selectedJobExe: JobExecution;
+    selectedRows: any;
     logDisplay: boolean;
     statusValues: SelectItem[];
     selectedStatus: string;
@@ -56,6 +57,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         private messageService: MessageService
     ) {
         this.isInitialized = false;
+        this.selectedRows = this.dataService.getSelectedJobRows();
         this.columns = [
             { field: 'job_type', header: 'Job Type' },
             { field: 'created', header: 'Created (Z)' },
@@ -110,6 +112,10 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
+            _.forEach(data.results, result => {
+                const job = _.find(this.selectedRows, { data: { id: result.id } });
+                result.selected =  !!job;
+            });
             this.jobs = Job.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -214,6 +220,9 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     onRowSelect(e) {
+        if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
+            this.dataService.setSelectedJobRows(e);
+        }
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/processing/jobs/${e.data.id}`);
         } else {
