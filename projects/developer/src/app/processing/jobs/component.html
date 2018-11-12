@@ -42,25 +42,24 @@
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type'">
-                    <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
-                                (onChange)="onJobTypeChange($event)" [autoWidth]="false" styleClass="column-filter"
-                                (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body"
-                                [showClear]="false">
+                    <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
+                                (onChange)="onJobTypeChange($event)" styleClass="column-filter" maxSelectedLabels="1"
+                                (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
                         </ng-template>
-                    </p-dropdown>
+                    </p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'status'">
-                    <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus"
-                                (onChange)="onStatusChange($event)" [autoWidth]="false" styleClass="column-filter"
-                                (click)="onFilterClick($event)" appendTo="body" [showClear]="false"></p-dropdown>
+                    <p-multiSelect [options]="statusValues" [(ngModel)]="selectedStatus"
+                                (onChange)="onStatusChange($event)" styleClass="column-filter" maxSelectedLabels="1"
+                                (click)="onFilterClick($event)" appendTo="body"></p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'error.category'">
-                    <p-dropdown [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
-                                (onChange)="onErrorCategoryChange($event)" [autoWidth]="false"
-                                styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
-                                [showClear]="false"></p-dropdown>
+                    <p-multiSelect [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
+                                   (onChange)="onErrorCategoryChange($event)" styleClass="column-filter"
+                                   maxSelectedLabels="1" (click)="onFilterClick($event)"
+                                   appendTo="body"></p-multiSelect>
                 </div>
             </th>
         </tr>

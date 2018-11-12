@@ -13,7 +13,6 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
-import { JobTypeName } from '../../configuration/job-types/api.name.model';
 
 @Component({
     selector: 'dev-jobs',
@@ -32,14 +31,14 @@ export class JobsComponent implements OnInit, OnDestroy {
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
-    selectedJobType: JobTypeName;
+    selectedJobType: any = [];
     selectedJobExe: JobExecution;
     selectedRows: any;
     logDisplay: boolean;
     statusValues: SelectItem[];
-    selectedStatus: string;
+    selectedStatus: any = [];
     errorCategoryValues: SelectItem[];
-    selectedErrorCategory: string;
+    selectedErrorCategory: any = [];
     count: number;
     started: string;
     ended: string;
@@ -70,9 +69,6 @@ export class JobsComponent implements OnInit, OnDestroy {
             { field: 'id', header: 'Log' }
         ];
         this.statusValues = [{
-            label: 'View All',
-            value: ''
-        }, {
             label: 'Canceled',
             value: 'CANCELED'
         }, {
@@ -92,9 +88,6 @@ export class JobsComponent implements OnInit, OnDestroy {
             value: 'RUNNING'
         }];
         this.errorCategoryValues = [{
-            label: 'View All',
-            value: ''
-        }, {
             label: 'System',
             value: 'SYSTEM'
         }, {
@@ -143,6 +136,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     private getJobTypes() {
+        this.selectedJobType = [];
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = data.results;
             const selectItems = [];
@@ -152,17 +146,13 @@ export class JobsComponent implements OnInit, OnDestroy {
                     value: jobType
                 });
                 if (
-                    this.datatableOptions.job_type_name === jobType.name &&
-                    this.datatableOptions.job_type_version === jobType.latest_version
+                    _.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
+                    _.indexOf(this.datatableOptions.job_type_version, jobType.latest_version) >= 0
                 ) {
-                    this.selectedJobType = jobType;
+                    this.selectedJobType.push(jobType);
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
-            this.jobTypeOptions.unshift({
-                label: 'View All',
-                value: ''
-            });
             // this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
@@ -201,22 +191,18 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onJobTypeChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            job_type_name: e.value.name,
-            job_type_version: e.value.latest_version
-        });
+        const name = _.map(e.value, 'name');
+        const version = _.map(e.value, 'latest_version');
+        this.datatableOptions.job_type_name = name.length > 0 ? name : null;
+        this.datatableOptions.job_type_version = version.length > 0 ? version : null;
         this.updateOptions();
     }
     onStatusChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            status: e.value
-        });
+        this.datatableOptions.status = e.value.length > 0 ? e.value : null;
         this.updateOptions();
     }
     onErrorCategoryChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            error_category: e.value
-        });
+        this.datatableOptions.error_category = e.value.length > 0 ? e.value : null;
         this.updateOptions();
     }
     onRowSelect(e) {
@@ -332,18 +318,42 @@ export class JobsComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
-                    status: params.status || null,
+                    status: params.status ?
+                        Array.isArray(params.status) ?
+                            params.status :
+                            [params.status]
+                        : null,
                     job_id: params.job_id ? parseInt(params.job_id, 10) : null,
-                    job_type_name: params.job_type_name || null,
-                    job_type_version: params.job_type_version || null,
+                    job_type_name: params.job_type_name ?
+                        Array.isArray(params.job_type_name) ?
+                            params.job_type_name :
+                            [params.job_type_name]
+                        : null,
+                    job_type_version: params.job_type_version ?
+                        Array.isArray(params.job_type_version) ?
+                            params.job_type_version :
+                            [params.job_type_version]
+                        : null,
                     job_type_category: params.job_type_category || null,
                     batch_id: params.batch_id ? parseInt(params.batch_id, 10) : null,
-                    error_category: params.error_category || null,
+                    error_category: params.error_category ?
+                        Array.isArray(params.error_category) ?
+                            params.error_category :
+                            [params.error_category]
+                        : null,
                     include_superseded: params.include_superseded || null
                 };
             }
-            this.selectedStatus = this.datatableOptions.status;
-            this.selectedErrorCategory = this.datatableOptions.error_category;
+            this.selectedStatus = this.datatableOptions.status ?
+                Array.isArray(this.datatableOptions.status) ?
+                    this.datatableOptions.status :
+                    [this.datatableOptions.status]
+                : null;
+            this.selectedErrorCategory = this.datatableOptions.error_category ?
+                Array.isArray(this.datatableOptions.error_category) ?
+                    this.datatableOptions.error_category :
+                    [this.datatableOptions.error_category]
+                : null;
             this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD HH:mm:ss[Z]');
             this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD HH:mm:ss[Z]');
             this.getJobTypes();
