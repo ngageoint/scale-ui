@@ -6,12 +6,12 @@
             <th *ngFor="let col of columns" [ngSwitch]="col.field">
                 {{ col.header }}
                 <div *ngSwitchCase="'job_type.id'">
-                    <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" (onChange)="onChange($event)" [autoWidth]="false"
-                                appendTo="body" styleClass="column-filter" [showClear]="false">
+                    <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType" [maxSelectedLabels]="1"
+                                   (onChange)="onChange($event)" appendTo="body" styleClass="column-filter">
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
                         </ng-template>
-                    </p-dropdown>
+                    </p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'twentyfour_hours'">
                     <div class="ui-g">
@@ -105,7 +105,7 @@
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <div *ngSwitchCase="'job_type.id'">
                     <i class="fa fa-fw" [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
-                    {{ rowData.job_type.title }} {{ rowData.job_type.version }}
+                    {{ rowData.job_type.title }} {{ rowData.job_type.latest_version }}
                 </div>
                 <div *ngSwitchCase="'twentyfour_hours'">
                     <div class="ui-g">

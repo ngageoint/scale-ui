@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { JobType } from '../../configuration/job-types/api.model';
+import { JobTypeName } from '../../configuration/job-types/api.name.model';
 import { FailureRatesDatatableService } from './datatable.service';
 import { FailureRatesDatatable } from './datatable.model';
 import { MetricsApiService } from '../../data/metrics/api.service';
@@ -21,7 +21,7 @@ export class FailureRatesComponent implements OnInit {
     columns: any[];
     jobTypes: any;
     jobTypeOptions: SelectItem[];
-    selectedJobType: JobType;
+    selectedJobType: any = [];
     performanceData: any[];
     sortConfig: any;
     datatableLoading: boolean;
@@ -133,25 +133,25 @@ export class FailureRatesComponent implements OnInit {
         }
     }
     private getJobTypes() {
+        this.selectedJobType = [];
         this.datatableLoading = true;
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.datatableLoading = false;
-            this.jobTypes = JobType.transformer(data.results);
+            this.jobTypes = JobTypeName.transformer(data.results);
             const selectItems = [];
             _.forEach(this.jobTypes, (jobType) => {
                 selectItems.push({
-                    label: `${jobType.title} ${jobType.version}`,
+                    label: `${jobType.title} ${jobType.latest_version}`,
                     value: jobType
                 });
-                if (this.datatableOptions.name === jobType.name && this.datatableOptions.version === jobType.version) {
-                    this.selectedJobType = jobType;
+                if (
+                    _.indexOf(this.datatableOptions.name, jobType.name) >= 0 &&
+                    _.indexOf(this.datatableOptions.version, jobType.latest_version) >= 0
+                ) {
+                    this.selectedJobType.push(jobType);
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
-            this.jobTypeOptions.unshift({
-                label: 'All',
-                value: null
-            });
             this.updateOptions();
         });
     }
@@ -186,11 +186,10 @@ export class FailureRatesComponent implements OnInit {
         this.updateOptions(true);
     }
     onChange(e) {
-        this.selectedJobType = e.value;
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            name: this.selectedJobType ? this.selectedJobType.name : null,
-            version: this.selectedJobType ? this.selectedJobType.version : null
-        });
+        const name = _.map(e.value, 'name');
+        const version = _.map(e.value, 'latest_version');
+        this.datatableOptions.name = name.length > 0 ? name : null;
+        this.datatableOptions.version = version.length > 0 ? version : null;
         this.updateOptions();
     }
     ngOnInit() {

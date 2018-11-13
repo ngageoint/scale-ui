@@ -2,8 +2,8 @@ export class FailureRatesDatatable {
     constructor(
         public sortField: string,
         public sortOrder: number,
-        public name: string,
-        public version: string,
+        public name: any,
+        public version: any,
         public category: string
     ) {}
 }
