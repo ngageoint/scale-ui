@@ -27,7 +27,8 @@ export class Recipe {
                 data.last_modified,
                 data.data,
                 data.inputs,
-                data.jobs
+                data.jobs,
+                data.selected
             );
         }
     }
@@ -55,7 +56,8 @@ export class Recipe {
         public last_modified: string,
         public data: object,
         public inputs: Array<object>,
-        public jobs: Array<object>
+        public jobs: Array<object>,
+        public selected: boolean
     ) {
         this.dataService = new DataService();
         this.created_formatted = moment.utc(this.created).format(environment.dateFormat);

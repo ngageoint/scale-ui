@@ -7,7 +7,7 @@ export class RecipesDatatable {
         public started: string,
         public ended: string,
         public type_id: number,
-        public type_name: string,
+        public type_name: any,
         public batch_id: number,
         public include_superseded: boolean
     ) {}

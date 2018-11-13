@@ -14,27 +14,27 @@
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [responsive]="true"
-         resizableColumns="true" selectionMode="single" [(selection)]="selectedRecipe" [loading]="datatableLoading" [autoLayout]="true"
-         (onRowSelect)="onRowSelect($event)" [style]="{'min-height':'300px'}">
+         resizableColumns="true" selectionMode="single" [(selection)]="selectedRecipe" [loading]="datatableLoading"
+         [autoLayout]="true" (onRowSelect)="onRowSelect($event)" class="recipes__table">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'recipe_type.name'">
-                    <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType" (onChange)="onChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" appendTo="body" (click)="onClick($event)"
-                                [showClear]="false">
+                    <p-multiSelect [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType"
+                                   (onChange)="onChange($event)" [maxSelectedLabels]="1"
+                                   styleClass="column-filter" appendTo="body" (click)="onClick($event)">
                         <ng-template let-recipeType p-template="item">
                             {{ recipeType.label }}
                         </ng-template>
-                    </p-dropdown>
+                    </p-multiSelect>
                 </div>
             </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
+        <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'recipe__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <div *ngSwitchCase="'recipe_type.name'">
                     {{ rowData.recipe_type.title }} {{ rowData.recipe_type.version }}

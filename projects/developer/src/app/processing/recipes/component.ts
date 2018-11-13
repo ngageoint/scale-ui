@@ -27,7 +27,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
     selectedRecipe: Recipe;
-    selectedRecipeType: string;
+    selectedRecipeType: any = [];
+    selectedRows: any;
     first: number;
     count: number;
     started: string;
@@ -52,6 +53,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
             { field: 'completed', header: 'Completed (Z)' }
         ];
         this.isInitialized = false;
+        this.selectedRows = this.dataService.getSelectedRecipeRows();
         this.datatableOptions = recipesDatatableService.getRecipesDatatableOptions();
     }
 
@@ -61,6 +63,10 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.subscription = this.recipesApiService.getRecipes(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
+            _.forEach(data.results, result => {
+                const recipe = _.find(this.selectedRows, { data: { id: result.id } });
+                result.selected =  !!recipe;
+            });
             this.recipes = Recipe.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -82,25 +88,20 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.updateData();
     }
     private getRecipeTypes() {
+        this.selectedRecipeType = [];
         this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
             this.recipeTypes = data.results as RecipeType[];
-            const self = this;
             const selectItems = [];
             _.forEach(this.recipeTypes, (recipeType: any) => {
                 selectItems.push({
-                    label: `${recipeType.title} ${recipeType.version}`,
-                    value: recipeType.name
+                    label: `${recipeType.title}`,
+                    value: recipeType
                 });
-                if (self.datatableOptions.type_name === recipeType.name) {
-                    self.selectedRecipeType = recipeType.name;
+                if (_.indexOf(this.datatableOptions.type_name, recipeType.name) >= 0) {
+                    this.selectedRecipeType.push(recipeType);
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, 'label', 'asc');
-            this.recipeTypeOptions.unshift({
-                label: 'All',
-                value: ''
-            });
-            this.updateOptions();
         });
     }
 
@@ -131,13 +132,14 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }
     }
     onChange(e) {
-        e.originalEvent.preventDefault();
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            type_name: e.value
-        });
+        const name = _.map(e.value, 'name');
+        this.datatableOptions.type_name = name.length > 0 ? name : null;
         this.updateOptions();
     }
     onRowSelect(e) {
+        if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
+            this.dataService.setSelectedRecipeRows(e);
+        }
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/processing/recipes/${e.data.id}`);
         } else {
@@ -162,7 +164,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     ngOnInit() {
-        this.datatableLoading = true;
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {
@@ -173,7 +174,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
                     type_id: +params.type_id || null,
-                    type_name: params.type_name || null,
+                    type_name: params.type_name ?
+                        Array.isArray(params.type_name) ?
+                            params.type_name :
+                            [params.type_name]
+                        : null,
                     batch_id: +params.batch_id || null,
                     include_superseded: params.include_superseded || null
                 };

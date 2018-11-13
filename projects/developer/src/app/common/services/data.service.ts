@@ -13,6 +13,7 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class DataService {
     selectedJobRows = [];
+    selectedRecipeRows = [];
 
     constructor() {
     }
@@ -158,5 +159,13 @@ export class DataService {
 
     setSelectedJobRows(data) {
         this.selectedJobRows.push(data);
+    }
+
+    getSelectedRecipeRows() {
+        return this.selectedRecipeRows;
+    }
+
+    setSelectedRecipeRows(data) {
+        this.selectedRecipeRows.push(data);
     }
 }

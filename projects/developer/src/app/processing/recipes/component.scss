@@ -5,7 +5,6 @@ label {
 .recipes__header {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 10px;
 
     .recipes__date-filter {
         display: flex;
@@ -20,5 +19,12 @@ label {
             padding-bottom: 0;
             margin-top: 20px;
         }
+    }
+}
+.recipes__table {
+    min-height: 300px;
+
+    .recipe__selected {
+        color: #999;
     }
 }

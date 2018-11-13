@@ -43,7 +43,7 @@
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type'">
                     <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
-                                (onChange)="onJobTypeChange($event)" styleClass="column-filter" maxSelectedLabels="1"
+                                (onChange)="onJobTypeChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
                                 (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
@@ -52,13 +52,13 @@
                 </div>
                 <div *ngSwitchCase="'status'">
                     <p-multiSelect [options]="statusValues" [(ngModel)]="selectedStatus"
-                                (onChange)="onStatusChange($event)" styleClass="column-filter" maxSelectedLabels="1"
+                                (onChange)="onStatusChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
                                 (click)="onFilterClick($event)" appendTo="body"></p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'error.category'">
                     <p-multiSelect [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
                                    (onChange)="onErrorCategoryChange($event)" styleClass="column-filter"
-                                   maxSelectedLabels="1" (click)="onFilterClick($event)"
+                                   [maxSelectedLabels]="1" (click)="onFilterClick($event)"
                                    appendTo="body"></p-multiSelect>
                 </div>
             </th>
