@@ -109,7 +109,7 @@ export class DataService {
     }
 
     getApiPrefix(endpoint) {
-        const versionObj = _.find(environment.apiVersions, { endpoint: endpoint });
+        const versionObj: any = _.find(environment.apiVersions, { endpoint: endpoint });
         const version = versionObj ? versionObj.version : environment.apiDefaultVersion;
         return `${environment.apiPrefix}/${version}`;
     }
