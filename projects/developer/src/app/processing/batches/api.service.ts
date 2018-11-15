@@ -9,6 +9,7 @@ import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { Batch } from './api.model';
 import { BatchesDatatable } from './datatable.model';
+import polling from 'rx-polling';
 
 @Injectable()
 export class BatchesApiService {
@@ -42,11 +43,12 @@ export class BatchesApiService {
             fromObject: apiParams
         });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/batches/`, { params: queryParams });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/batches/`, { params: queryParams })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                }));
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/batches/`, { params: queryParams })
             .pipe(

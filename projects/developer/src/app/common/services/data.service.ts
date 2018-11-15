@@ -131,28 +131,6 @@ export class DataService {
             'Something bad happened; please try again later.');
     }
 
-    generatePoll(delayValue, request, mapResponse?) {
-        // Set up a poll that will only start a subsequent request when the current request has resolved
-        // Reference: https://blog.strongbrew.io/rxjs-polling/
-        const load = new BehaviorSubject(''); // initial value in BehaviorSubject causes the stream to start when subscribed
-        const whenToRefresh = of('').pipe( // create a stream using the static of. This will fire an event immediately when subscribed
-            delay(delayValue), // delay the event by the specified value
-            tap(() => load.next('')), // use a tap to actually trigger the next request
-            skip(1) // skip since we do not want to use the '' event anywhere, it was just a trigger
-        );
-        if (mapResponse) {
-            return load.pipe(
-                concatMap(() => concat(request, whenToRefresh)),
-                map(mapResponse),
-                catchError(this.handleError)
-            );
-        }
-        return load.pipe(
-            concatMap(() => concat(request, whenToRefresh)),
-            catchError(this.handleError)
-        );
-    }
-
     getSelectedJobRows() {
         return this.selectedJobRows;
     }

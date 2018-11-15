@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import polling from 'rx-polling';
 
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
@@ -89,11 +90,14 @@ export class JobTypesApiService {
 
     getJobTypeStatus(poll?: Boolean): Observable<any> {
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/job-types/status/`);
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/job-types/status/`)
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/status/`)
             .pipe(
@@ -114,11 +118,11 @@ export class JobTypesApiService {
         });
 
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(5000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
+                .pipe(map(response => {
+                    return ApiResults.transformer(response);
+                }));
+            return polling(request, { interval: 5000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
             .pipe(

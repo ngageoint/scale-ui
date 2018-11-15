@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import polling from 'rx-polling';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
@@ -42,11 +43,14 @@ export class RecipesApiService {
             fromObject: apiParams
         });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(500000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 500000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
             .pipe(
@@ -59,11 +63,14 @@ export class RecipesApiService {
 
     getRecipe(id: number, poll?: Boolean): any {
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/recipes/${id}/`);
-            const mapRequest = response => {
-                return Recipe.transformer(response);
-            };
-            return this.dataService.generatePoll(500000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/recipes/${id}/`)
+                .pipe(
+                    map(response => {
+                        return Recipe.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 500000 });
         }
         return this.http.get<Recipe>(`${this.apiPrefix}/recipes/${id}/`)
             .pipe(

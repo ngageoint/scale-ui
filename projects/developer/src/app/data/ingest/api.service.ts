@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import polling from 'rx-polling';
 
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
@@ -21,11 +22,14 @@ export class IngestApiService {
 
     getIngests(params: any, poll?: boolean): Observable<any> {
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/ingests/`, { params: params });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/ingests/`, { params: params })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/`, { params: params })
             .pipe(
@@ -48,11 +52,14 @@ export class IngestApiService {
 
     getIngestStatus(params: any, poll?: boolean): Observable<any> {
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/status/`, { params: params })
             .pipe(

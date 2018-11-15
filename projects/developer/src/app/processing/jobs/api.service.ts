@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import polling from 'rx-polling';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
@@ -47,11 +48,14 @@ export class JobsApiService {
             fromObject: apiParams
         });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/jobs/`, { params: queryParams });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/jobs/`, { params: queryParams })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/jobs/`, { params: queryParams })
             .pipe(
@@ -63,11 +67,14 @@ export class JobsApiService {
     }
     getJob(id: number, poll?: Boolean): Observable<any> {
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/jobs/${id}/`);
-            const mapRequest = response => {
-                return Job.transformer(response);
-            };
-            return this.dataService.generatePoll(300000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/jobs/${id}/`)
+                .pipe(
+                    map(response => {
+                        return Job.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<Job>(`${this.apiPrefix}/jobs/${id}/`)
             .pipe(
@@ -133,11 +140,14 @@ export class JobsApiService {
     getJobLoad(params, poll?: boolean): Observable<any> {
         const apiPrefix = this.dataService.getApiPrefix('load');
         if (poll) {
-            const request = this.http.get(`${apiPrefix}/load/`, { params: params });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${apiPrefix}/load/`, { params: params })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${apiPrefix}/load/`, { params: params })
             .pipe(

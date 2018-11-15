@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import polling from 'rx-polling';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
@@ -43,11 +44,14 @@ export class ProductsApiService {
             fromObject: apiParams
         });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/products/`, { params: queryParams });
-            const mapRequest = response => {
-                return ApiResults.transformer(response);
-            };
-            return this.dataService.generatePoll(600000, request, mapRequest);
+            const request = this.http.get(`${this.apiPrefix}/products/`, { params: queryParams })
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/products/`, { params: queryParams })
             .pipe(

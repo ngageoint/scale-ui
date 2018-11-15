@@ -47,6 +47,7 @@
     "normalize.css": "^7.0.0",
     "primeicons": "^1.0.0",
     "primeng": "^7.0.0-beta.1",
+    "rx-polling": "^1.0.1",
     "rxjs": "^6.3.3",
     "rxjs-compat": "^6.3.3",
     "seed-images": "^4.5.0",
