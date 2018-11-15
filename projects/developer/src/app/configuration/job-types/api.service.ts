@@ -119,9 +119,12 @@ export class JobTypesApiService {
 
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
-                .pipe(map(response => {
-                    return ApiResults.transformer(response);
-                }));
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
             return polling(request, { interval: 5000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/running/`, { params: queryParams })

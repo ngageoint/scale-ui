@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import polling from 'rx-polling';
 
 import { Observable } from 'rxjs';
-import { catchError, map } from 'rxjs/internal/operators';
+import { catchError } from 'rxjs/internal/operators';
 
 import { DataService } from '../../services/data.service';
 

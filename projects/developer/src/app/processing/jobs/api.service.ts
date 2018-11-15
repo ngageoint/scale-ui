@@ -113,10 +113,10 @@ export class JobsApiService {
     }
     getJobOutputs(id: number): Observable<ApiResults> {
         const queryParams = new HttpParams({
-            fromObject: { job_id: id.toString() }
+            fromObject: { job_id: id.toString(), sortField: 'last_modified', sortOrder: 'desc' }
         });
-        const apiPrefix = this.dataService.getApiPrefix('products');
-        return this.http.get<ApiResults>(`${apiPrefix}/products/`, { params: queryParams })
+        const apiPrefix = this.dataService.getApiPrefix('files');
+        return this.http.get<ApiResults>(`${apiPrefix}/files/`, { params: queryParams })
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);

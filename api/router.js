@@ -20,7 +20,7 @@ var jobExecution = require('./handlers/jobExecution');
 var ingestsStatus = require('./handlers/ingestsStatus');
 var status = require('./handlers/status');
 var jobInputs = require('./handlers/jobInputs');
-var products = require('./handlers/products');
+var files = require('./handlers/files');
 var jobExecutions = require('./handlers/jobExecutions');
 var batches = require('./handlers/batches');
 var batchDetails = require('./handlers/batchDetails');
@@ -28,6 +28,7 @@ var batchValidate = require('./handlers/batchValidate');
 var strikes = require('./handlers/strikes');
 var ingests = require('./handlers/ingests');
 var ingestDetails = require('./handlers/ingestDetails');
+var fileDetails = require('./handlers/fileDetails');
 
 var apiVersion = 'v6';
 
@@ -179,8 +180,8 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/' + apiVersion + '/products/',
-            handler: products
+            path: '/mocks/' + apiVersion + '/files/',
+            handler: files
         });
 
         server.route({
@@ -223,6 +224,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/ingests/{id}/',
             handler: ingestDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/files/{id}/',
+            handler: fileDetails
         });
     }
 };

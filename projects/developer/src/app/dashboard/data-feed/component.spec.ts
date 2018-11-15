@@ -11,7 +11,7 @@ import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { ProductsApiService } from '../../common/services/products/api.service';
+import { FilesApiService } from '../../common/services/files/api.service';
 
 describe('DataFeedComponent', () => {
     let component: DataFeedComponent;
@@ -23,7 +23,7 @@ describe('DataFeedComponent', () => {
             imports: [HttpClientTestingModule],
             providers: [
                 DataService, MessageService, IngestApiService, DashboardJobsService, ChartService, MetricsApiService, ColorService,
-                JobsApiService, ProductsApiService
+                JobsApiService, FilesApiService
             ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]

@@ -71,7 +71,7 @@ import { IngestApiService } from './data/ingest/api.service';
 import { IngestDatatableService } from './data/ingest/datatable.service';
 import { LoadingIndicatorComponent } from './common/components/loading-indicator/component';
 import { StatusApiService } from './navbar/status/api.service';
-import { ProductsApiService } from './common/services/products/api.service';
+import { FilesApiService } from './common/services/files/api.service';
 import { ScansApiService } from './common/services/scans/api.service';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchesApiService } from './processing/batches/api.service';
@@ -190,7 +190,7 @@ import { IngestDetailsComponent } from './data/ingest/details.component';
         IngestDatatableService,
         StatusApiService,
         ConfirmationService,
-        ProductsApiService,
+        FilesApiService,
         ScansApiService,
         BatchesApiService,
         BatchesDatatableService,
