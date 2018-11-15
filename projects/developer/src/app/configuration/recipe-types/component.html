@@ -4,10 +4,10 @@
                 class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."
                 [showClear]="false"></p-dropdown>
     <button pButton class="btn__new-recipe" icon="fa fa-plus-circle" label="New Recipe" (click)="createNewRecipe()"
-            [disabled]="recipeTypeId === 0"></button>
+            [disabled]="recipeTypeName === 'new'"></button>
 </div>
 <hr />
-<div class="text-center" *ngIf="!selectedRecipeTypeDetail && !recipeTypeId">
+<div class="text-center" *ngIf="!selectedRecipeTypeDetail && recipeTypeName !== 'new'">
     <h3>Select a recipe type to view its details</h3>
 </div>
 <div class="scale-chart-container">
