@@ -22,7 +22,7 @@ module.exports = function (request) {
                 media_type: 'text/plain',
                 data_type: '',
                 meta_data: {},
-                url: null,
+                url: 'http://localhost/foo.bar',
                 source_started: moment.utc(date).subtract(5, 'm').toISOString(),
                 source_ended: moment.utc(date).subtract(2, 'm').toISOString(),
                 data_started: moment.utc(date).subtract(4, 'm').toISOString(),

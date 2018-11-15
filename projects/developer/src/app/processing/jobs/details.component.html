@@ -137,9 +137,11 @@
                         <tr *ngFor="let input of jobInputs">
                             <td>
                                 <a *ngIf="input.url" href="{{ input.url }}" target="_jobfile">
+                                    <i class="fa fa-fw fa-download"></i>
+                                </a>
+                                <a routerLink="/data/ingest/{{ input.id }}">
                                     {{ input.file_name }}
                                 </a>
-                                <span *ngIf="!input.url">{{ input.file_name }}</span>
                             </td>
                             <td>{{ calculateFileSize(input.file_size) }}</td>
                             <td>
@@ -178,9 +180,9 @@
                         <tr *ngFor="let output of jobOutputs">
                             <td>
                                 <a *ngIf="output.url" href="{{ output.url }}" target="_jobfile">
-                                    {{ output.file_name }}
+                                    <i class="fa fa-fw fa-download"></i>
                                 </a>
-                                <span *ngIf="!output.url">{{ output.file_name }}</span>
+                                {{ output.file_name }}
                             </td>
                             <td>{{ calculateFileSize(output.file_size) }}</td>
                             <td>
