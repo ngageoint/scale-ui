@@ -3,13 +3,28 @@
     <div class="recipes__date-filter">
         <div>
             <label>From:</label>
-            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"
+                            [format]="dateFormat"></utc-datepicker>
         </div>
         <div>
             <label>To:</label>
-            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"
+                            [format]="dateFormat"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
+        <button pButton class="ui-button-primary recipes__date-filter-btn" label="Apply"
+                (click)="onDateFilterApply()"></button>
+        <div class="recipes__date-filter-ranges">
+            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 6 Hours"
+                    (click)="setDateFilterRange('h', 6)"></button>
+            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 12 Hours"
+                    (click)="setDateFilterRange('h', 12)"></button>
+            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 24 Hours"
+                    (click)="setDateFilterRange('h', 24)"></button>
+            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 3 Days"
+                    (click)="setDateFilterRange('d', 3)"></button>
+            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 7 Days"
+                    (click)="setDateFilterRange('d', 7)"></button>
+        </div>
     </div>
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
@@ -63,10 +78,10 @@
     <ng-template pTemplate="emptymessage" let-columns>
         <tr>
             <td [attr.colspan]="columns.length" class="text-center">
-                No records found
+                Update filters to view results
             </td>
         </tr>
     </ng-template>
 </p-table>
-<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count" [rowsPerPageOptions]="[10,20,50,100]"
-             (onPageChange)="paginate($event)"></p-paginator>
+<p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
+             [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>

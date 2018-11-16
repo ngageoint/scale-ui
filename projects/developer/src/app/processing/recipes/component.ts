@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
+import { environment } from '../../../environments/environment';
 import { DataService } from '../../common/services/data.service';
 import { RecipesApiService } from './api.service';
 import { Recipe } from './api.model';
@@ -20,6 +21,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 })
 
 export class RecipesComponent implements OnInit, OnDestroy {
+    dateFormat: string = environment.dateFormat;
     datatableOptions: RecipesDatatable;
     datatableLoading: boolean;
     columns: any[];
@@ -147,18 +149,23 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = e;
+        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
     }
     onEndSelect(e) {
-        this.ended = e;
+        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, 'YYYY-MM-DD').startOf('d').toISOString(),
-            ended: moment.utc(this.ended, 'YYYY-MM-DD').endOf('d').toISOString()
+            started: moment.utc(this.started, this.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, this.dateFormat).toISOString()
         });
         this.updateOptions();
+    }
+    setDateFilterRange(unit: any, range: any) {
+        this.started = moment.utc().subtract(range, unit).toISOString();
+        this.ended = moment.utc().toISOString();
+        this.onDateFilterApply();
     }
     onClick(e) {
         e.stopPropagation();
@@ -185,8 +192,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
             } else {
                 this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
             }
-            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
             this.getRecipeTypes();
         });
     }

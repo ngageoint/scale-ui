@@ -6,6 +6,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
+import { environment } from '../../../environments/environment';
 import { DataService } from '../../common/services/data.service';
 import { JobsApiService } from './api.service';
 import { Job } from './api.model';
@@ -26,6 +27,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
 
+    dateFormat: string = environment.dateFormat;
     datatableLoading: boolean;
     columns: any[];
     jobTypes: any;
@@ -215,16 +217,16 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, 'YYYY-MM-DD HH:mm:ss[Z]').startOf('d').format('YYYY-MM-DD HH:mm:ss[Z]');
+        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, 'YYYY-MM-DD HH:mm:ss[Z]').endOf('d').format('YYYY-MM-DD HH:mm:ss[Z]');
+        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, 'YYYY-MM-DD HH:mm:ss[Z]').toISOString(),
-            ended: moment.utc(this.ended, 'YYYY-MM-DD HH:mm:ss[Z]').toISOString()
+            started: moment.utc(this.started, this.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, this.dateFormat).toISOString()
         });
         this.updateOptions();
     }
@@ -352,8 +354,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     this.datatableOptions.error_category :
                     [this.datatableOptions.error_category]
                 : null;
-            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD HH:mm:ss[Z]');
-            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD HH:mm:ss[Z]');
+            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
             this.getJobTypes();
         });
     }

@@ -3,12 +3,12 @@
     <div class="jobs__date-filter">
         <div>
             <label>From:</label>
-            <utc-datepicker [date]="started" [button]="true" format="YYYY-MM-DD HH:mm:ss[Z]"
+            <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
                             (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
         <div>
             <label>To:</label>
-            <utc-datepicker [date]="ended" [button]="true" format="YYYY-MM-DD HH:mm:ss[Z]"
+            <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
                             (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
         <button pButton class="ui-button-primary jobs__date-filter-btn" label="Apply" (click)="onDateFilterApply()">
