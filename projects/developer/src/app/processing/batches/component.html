@@ -9,8 +9,20 @@
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-secondary batches__date-filter-btn" label="Apply"
+        <button pButton class="ui-button-primary batches__date-filter-btn" label="Apply"
                 (click)="onDateFilterApply()"></button>
+        <div class="batches__date-filter-ranges">
+            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 6 Hours"
+                    (click)="setDateFilterRange('h', 6)"></button>
+            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 12 Hours"
+                    (click)="setDateFilterRange('h', 12)"></button>
+            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 24 Hours"
+                    (click)="setDateFilterRange('h', 24)"></button>
+            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 3 Days"
+                    (click)="setDateFilterRange('d', 3)"></button>
+            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 7 Days"
+                    (click)="setDateFilterRange('d', 7)"></button>
+        </div>
     </div>
     <div class="batches__controls">
         <a pButton routerLink="/processing/batches/edit/0" class="ui-button-primary" icon="fa fa-plus"
@@ -28,19 +40,19 @@
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'recipe_type'">
-                    <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType"
-                                (onChange)="onRecipeTypeChange($event)" [autoWidth]="false" styleClass="column-filter"
-                                (click)="onFilterClick($event)" appendTo="body" [showClear]="false">
+                    <p-multiSelect [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType"
+                                   [maxSelectedLabels]="1" (onChange)="onRecipeTypeChange($event)"
+                                   styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body">
                         <ng-template let-recipeType p-template="item">
                             {{ recipeType.label }}
                         </ng-template>
-                    </p-dropdown>
+                    </p-multiSelect>
                 </div>
             </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
+        <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'batch__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <div *ngSwitchCase="'title'">
                     <span [pTooltip]="rowData.description">
@@ -86,7 +98,7 @@
     <ng-template pTemplate="emptymessage" let-columns>
         <tr>
             <td [attr.colspan]="columns.length" class="text-center">
-                No records found
+                Update filters to view results
             </td>
         </tr>
     </ng-template>

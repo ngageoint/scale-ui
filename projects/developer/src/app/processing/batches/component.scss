@@ -24,6 +24,14 @@ label {
             padding-bottom: 0;
             margin-top: 20px;
         }
+
+        .batches__date-filter-ranges {
+            margin-left: 20px;
+
+            button {
+                margin-left: 3px;
+            }
+        }
     }
     .batches__controls {
         display: flex;
@@ -34,6 +42,10 @@ label {
     .ui-button {
         font-size: .7em !important;
         padding: 0 !important;
+    }
+
+    .batch__selected {
+        color: #999;
     }
 }
 .label-info {

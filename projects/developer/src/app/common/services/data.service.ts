@@ -3,10 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { catchError } from 'rxjs/internal/operators';
-import { BehaviorSubject } from 'rxjs';
-import { concatMap, map, tap, delay, skip } from 'rxjs/operators';
-import { concat, of, throwError } from 'rxjs/index';
+import { throwError } from 'rxjs/index';
 
 import { environment } from '../../../environments/environment';
 
@@ -14,6 +11,7 @@ import { environment } from '../../../environments/environment';
 export class DataService {
     selectedJobRows = [];
     selectedRecipeRows = [];
+    selectedBatchRows = [];
 
     constructor() {
     }
@@ -145,5 +143,13 @@ export class DataService {
 
     setSelectedRecipeRows(data) {
         this.selectedRecipeRows.push(data);
+    }
+
+    getSelectedBatchRows() {
+        return this.selectedBatchRows;
+    }
+
+    setSelectedBatchRows(data) {
+        this.selectedBatchRows.push(data);
     }
 }

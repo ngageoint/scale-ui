@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
+import { environment } from '../../../environments/environment';
 import { DataService } from '../../common/services/data.service';
 import { BatchesApiService } from './api.service';
 import { Batch } from './api.model';
@@ -20,14 +21,16 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 })
 
 export class BatchesComponent implements OnInit, OnDestroy {
+    dateFormat: string = environment.dateFormat;
     batches: any;
     selectedBatch: any;
+    selectedRows: any;
     datatableLoading: boolean;
     datatableOptions: BatchesDatatable;
     columns: any[];
     recipeTypes: any;
     recipeTypeOptions: SelectItem[];
-    selectedRecipeType: string;
+    selectedRecipeType: any = [];
     count: number;
     started: string;
     ended: string;
@@ -44,6 +47,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
         private messageService: MessageService
     ) {
         this.isInitialized = false;
+        this.selectedRows = this.dataService.getSelectedBatchRows();
         this.columns = [
             { field: 'title', header: 'Title' },
             { field: 'recipe_type', header: 'Recipe Type' },
@@ -60,6 +64,10 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.subscription = this.batchesApiService.getBatches(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
+            _.forEach(data.results, result => {
+                const batch = _.find(this.selectedRows, { data: { id: result.id } });
+                result.selected =  !!batch;
+            });
             this.batches = Batch.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -80,24 +88,20 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.updateData();
     }
     private getRecipeTypes() {
+        this.selectedRecipeType = [];
         this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
             this.recipeTypes = RecipeType.transformer(data.results);
             const selectItems = [];
             _.forEach(this.recipeTypes, recipeType => {
                 selectItems.push({
                     label: recipeType.title,
-                    value: recipeType.name
+                    value: recipeType
                 });
-                if (this.datatableOptions.recipe_type_name === recipeType.name) {
-                    this.selectedRecipeType = recipeType.name;
+                if (_.indexOf(this.datatableOptions.recipe_type_name, recipeType.name) >= 0) {
+                    this.selectedRecipeType.push(recipeType);
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
-            this.recipeTypeOptions.unshift({
-                label: 'View All',
-                value: ''
-            });
-            this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
@@ -132,12 +136,14 @@ export class BatchesComponent implements OnInit, OnDestroy {
         }
     }
     onRecipeTypeChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            recipe_type_id: e.value
-        });
+        const name = _.map(e.value, 'name');
+        this.datatableOptions.recipe_type_name = name.length > 0 ? name : null;
         this.updateOptions();
     }
     onRowSelect(e) {
+        if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
+            this.dataService.setSelectedBatchRows(e);
+        }
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/processing/batches/${e.data.id}`);
         } else {
@@ -145,24 +151,28 @@ export class BatchesComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = e;
+        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
     }
     onEndSelect(e) {
-        this.ended = e;
+        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, 'YYYY-MM-DD').startOf('d').toISOString(),
-            ended: moment.utc(this.ended, 'YYYY-MM-DD').endOf('d').toISOString()
+            started: moment.utc(this.started, this.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, this.dateFormat).toISOString()
         });
         this.updateOptions();
+    }
+    setDateFilterRange(unit: any, range: any) {
+        this.started = moment.utc().subtract(range, unit).toISOString();
+        this.ended = moment.utc().toISOString();
+        this.onDateFilterApply();
     }
     onFilterClick(e) {
         e.stopPropagation();
     }
     ngOnInit() {
-        this.datatableLoading = true;
         if (!this.datatableOptions) {
             this.datatableOptions = this.batchesDatatableService.getBatchesDatatableOptions();
         }
@@ -176,14 +186,18 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
-                    recipe_type_name: params.recipe_type_name ? params.recipe_type_name : null,
+                    recipe_type_name: params.recipe_type_name ?
+                        Array.isArray(params.recipe_type_name) ?
+                            params.recipe_type_name :
+                            [params.recipe_type_name]
+                        : null,
                     is_creation_done: params.is_creation_done ? params.is_creation_done === 'true' : null,
                     is_superseded: params.is_superseded ? params.is_superseded === 'true' : null,
                     root_batch_id: params.root_batch_id ? +params.root_batch_id : null
                 };
             }
-            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
             this.getRecipeTypes();
         });
     }

@@ -54,7 +54,8 @@ export class Batch {
                 data.last_modified,
                 data.definition,
                 data.configuration,
-                data.job_metrics
+                data.job_metrics,
+                data.selected
             );
         }
         return new Batch();
@@ -96,7 +97,8 @@ export class Batch {
         public last_modified?: string,
         public definition?: any,
         public configuration?: any,
-        public job_metrics?: any
+        public job_metrics?: any,
+        public selected?: boolean
     ) {
         this.dataService = new DataService();
         if (this.created) {

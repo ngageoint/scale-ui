@@ -1,5 +1,5 @@
 <div *ngIf="recipeType">
     <h2>{{ recipeType.title }}</h2>
-    <a routerLink="/processing/recipes">&lt; Recipes List</a>
+    <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
     <dev-recipe-graph [recipeData]="recipeType"></dev-recipe-graph>
 </div>
