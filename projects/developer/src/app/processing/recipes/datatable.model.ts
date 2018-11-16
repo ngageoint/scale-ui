@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export class RecipesDatatable {
     constructor(
         public first: number,
@@ -18,8 +20,8 @@ export const initialRecipesDatatable: RecipesDatatable = {
     rows: 20,
     sortField: 'last_modified',
     sortOrder: -1,
-    started: null,
-    ended: null,
+    started: moment.utc().subtract(24, 'h').toISOString(),
+    ended: moment.utc().toISOString(),
     type_id: null,
     type_name: null,
     batch_id: null,

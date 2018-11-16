@@ -139,9 +139,9 @@
                                 <a *ngIf="input.url" href="{{ input.url }}" target="_jobfile">
                                     <i class="fa fa-fw fa-download"></i>
                                 </a>
-                                <a routerLink="/data/ingest/{{ input.id }}">
+                                <!-- <a routerLink="/data/ingest/{{ input.id }}"> -->
                                     {{ input.file_name }}
-                                </a>
+                                <!-- </a> -->
                             </td>
                             <td>{{ calculateFileSize(input.file_size) }}</td>
                             <td>

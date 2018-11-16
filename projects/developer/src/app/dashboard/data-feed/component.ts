@@ -187,37 +187,43 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 Promise.all(promises).then(values => {
                     // use unique objects from data arrays
                     this.jobsDatasets = _.uniq(_.flatten(_.map(values, 'data')));
+                    this.updateFeedData();
                     this.chartLoading = false;
-                    this.filesApiService.getFiles({
-                        page: 1,
-                        modified_started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
-                        modified_ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
-                        job_type_id: _.map(this.favorites, 'id'),
-                        sortOrder: 1,
-                        sortField: 'created'
-                    }).subscribe(filesData => {
-                        this.filesDataset = {
-                            label: 'Files',
-                            fill: false,
-                            borderColor: this.colorService.WARNING,
-                            backgroundColor: this.colorService.WARNING,
-                            borderWidth: 2,
-                            pointRadius: 2,
-                            pointBackgroundColor: this.colorService.WARNING,
-                            data: []
-                        };
-                        const files = _.toPairs(_.groupBy(filesData.results, r => {
-                            return moment.utc(r.created).startOf('d').toISOString();
-                        }));
-                        _.forEach(files, f => {
-                            this.filesDataset.data.push({
-                                x: f[0],
-                                y: f[1].length
-                            });
-                        });
-                        this.updateFeedData();
-                        this.chartLoading = false;
-                    });
+                    // if (this.favorites && this.favorites.length > 0) {
+                    //     this.filesApiService.getFiles({
+                    //         page: 1,
+                    //         modified_started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
+                    //         modified_ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
+                    //         job_type_id: _.map(this.favorites, 'id'),
+                    //         sortOrder: 1,
+                    //         sortField: 'created'
+                    //     }).subscribe(filesData => {
+                    //         this.filesDataset = {
+                    //             label: 'Files',
+                    //             fill: false,
+                    //             borderColor: this.colorService.WARNING,
+                    //             backgroundColor: this.colorService.WARNING,
+                    //             borderWidth: 2,
+                    //             pointRadius: 2,
+                    //             pointBackgroundColor: this.colorService.WARNING,
+                    //             data: []
+                    //         };
+                    //         const files = _.toPairs(_.groupBy(filesData.results, r => {
+                    //             return moment.utc(r.created).startOf('d').toISOString();
+                    //         }));
+                    //         _.forEach(files, f => {
+                    //             this.filesDataset.data.push({
+                    //                 x: f[0],
+                    //                 y: f[1].length
+                    //             });
+                    //         });
+                    //         this.updateFeedData();
+                    //         this.chartLoading = false;
+                    //     });
+                    // } else {
+                    //     this.updateFeedData();
+                    //     this.chartLoading = false;
+                    // }
                 });
             });
         }, err => {
