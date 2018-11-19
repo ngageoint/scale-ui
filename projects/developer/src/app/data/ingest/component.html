@@ -9,7 +9,20 @@
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-secondary ingest__date-filter-btn" label="Apply" (click)="onDateFilterApply()"></button>
+        <button pButton class="ui-button-primary ingest__date-filter-btn" label="Apply"
+                (click)="onDateFilterApply()"></button>
+        <div class="ingest__date-filter-ranges">
+            <button pButton class="ui-button-secondary ingest__date-filter-btn" label="Last 6 Hours"
+                    (click)="setDateFilterRange('h', 6)"></button>
+            <button pButton class="ui-button-secondary ingest__date-filter-btn" label="Last 12 Hours"
+                    (click)="setDateFilterRange('h', 12)"></button>
+            <button pButton class="ui-button-secondary ingest__date-filter-btn" label="Last 24 Hours"
+                    (click)="setDateFilterRange('h', 24)"></button>
+            <button pButton class="ui-button-secondary ingest__date-filter-btn" label="Last 3 Days"
+                    (click)="setDateFilterRange('d', 3)"></button>
+            <button pButton class="ui-button-secondary ingest__date-filter-btn" label="Last 7 Days"
+                    (click)="setDateFilterRange('d', 7)"></button>
+        </div>
     </div>
 </div>
 <p-table [value]="ingests" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"

@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
+import { environment } from '../../../environments/environment';
 import { DataService } from '../../common/services/data.service';
 import { IngestApiService } from './api.service';
 import { Ingest } from './api.model';
@@ -18,6 +19,7 @@ import { StrikesApiService } from '../../common/services/strikes/api.service';
     styleUrls: ['./component.scss']
 })
 export class IngestComponent implements OnInit, OnDestroy {
+    dateFormat: string = environment.dateFormat;
     ingests: any;
     selectedIngest: any;
     datatableOptions: IngestDatatable;
@@ -182,18 +184,23 @@ export class IngestComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = e;
+        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
     }
     onEndSelect(e) {
-        this.ended = e;
+        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, 'YYYY-MM-DD').startOf('d').toISOString(),
-            ended: moment.utc(this.ended, 'YYYY-MM-DD').endOf('d').toISOString()
+            started: moment.utc(this.started, this.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, this.dateFormat).toISOString()
         });
         this.updateOptions();
+    }
+    setDateFilterRange(unit: any, range: any) {
+        this.started = moment.utc().subtract(range, unit).toISOString();
+        this.ended = moment.utc().toISOString();
+        this.onDateFilterApply();
     }
     onFilterClick(e) {
         e.stopPropagation();
@@ -221,8 +228,8 @@ export class IngestComponent implements OnInit, OnDestroy {
             }
             this.selectedStrike = this.datatableOptions.strike_id;
             this.selectedStatus = this.datatableOptions.status;
-            this.started = moment.utc(this.datatableOptions.started).format('YYYY-MM-DD');
-            this.ended = moment.utc(this.datatableOptions.ended).format('YYYY-MM-DD');
+            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
             this.getStrikes();
         });
     }
