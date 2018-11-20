@@ -39,7 +39,8 @@ export class Ingest {
                 data.data_started,
                 data.data_ended,
                 data.created,
-                data.last_modified
+                data.last_modified,
+                data.selected
             );
         }
     }
@@ -76,7 +77,8 @@ export class Ingest {
         public data_started: any,
         public data_ended: any,
         public created: any,
-        public last_modified: any
+        public last_modified: any,
+        public selected?: boolean
     ) {
         this.dataService = new DataService();
         this.transferStartedTooltip = this.dataService.formatDate(this.transfer_started);

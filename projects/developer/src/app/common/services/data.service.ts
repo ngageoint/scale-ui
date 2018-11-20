@@ -12,6 +12,7 @@ export class DataService {
     selectedJobRows = [];
     selectedRecipeRows = [];
     selectedBatchRows = [];
+    selectedIngestRows = [];
 
     constructor() {
     }
@@ -151,5 +152,13 @@ export class DataService {
 
     setSelectedBatchRows(data) {
         this.selectedBatchRows.push(data);
+    }
+
+    getSelectedIngestRows() {
+        return this.selectedIngestRows;
+    }
+
+    setSelectedIngestRows(data) {
+        this.selectedIngestRows.push(data);
     }
 }

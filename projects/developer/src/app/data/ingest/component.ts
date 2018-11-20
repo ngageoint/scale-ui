@@ -22,13 +22,14 @@ export class IngestComponent implements OnInit, OnDestroy {
     dateFormat: string = environment.dateFormat;
     ingests: any;
     selectedIngest: any;
+    selectedRows: any;
     datatableOptions: IngestDatatable;
     datatableLoading: boolean;
     columns: any[];
-    strikeValues: SelectItem[] = [];
-    selectedStrike: any;
+    strikeValues: SelectItem[];
+    selectedStrike: any = [];
     statusValues: SelectItem[];
-    selectedStatus: string;
+    selectedStatus: any = [];
     count: number;
     started: string;
     ended: string;
@@ -46,6 +47,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         private messageService: MessageService
     ) {
         this.isInitialized = false;
+        this.selectedRows = this.dataService.getSelectedIngestRows();
         this.columns = [
             { field: 'file_name', header: 'File Name' },
             { field: 'file_size', header: 'File Size' },
@@ -57,9 +59,6 @@ export class IngestComponent implements OnInit, OnDestroy {
             { field: 'ingest_ended', header: 'Ingest Ended (Z)' }
         ];
         this.statusValues = [{
-            label: 'View All',
-            value: ''
-        }, {
             label: 'Transfering',
             value: 'TRANSFERING'
         }, {
@@ -92,6 +91,10 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.subscription = this.ingestApiService.getIngests(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
+            _.forEach(data.results, result => {
+                const ingest = _.find(this.selectedRows, { data: { id: result.id } });
+                result.selected =  !!ingest;
+            });
             this.ingests = Ingest.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -112,22 +115,19 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.updateData();
     }
     private getStrikes() {
+        this.selectedStrike = [];
         this.strikesApiService.getStrikes().subscribe(data => {
-            _.forEach(data.results, result => {
-                this.strikeValues.push({
-                    label: result.title,
-                    value: result.id
+            const selectItems = [];
+            _.forEach(data.results, strike => {
+                selectItems.push({
+                    label: strike.title,
+                    value: strike
                 });
-                if (this.datatableOptions.scan_id === result.id) {
-                    this.selectedStrike = result.id;
+                if (_.indexOf(this.datatableOptions.strike_id, strike.id) >= 0) {
+                    this.selectedStrike.push(strike);
                 }
             });
-            this.strikeValues = _.orderBy(this.strikeValues, ['title'], ['asc']);
-            this.strikeValues.unshift({
-                label: 'View All',
-                value: ''
-            });
-            this.updateOptions();
+            this.strikeValues = _.orderBy(selectItems, ['title'], ['asc']);
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
         });
@@ -165,18 +165,18 @@ export class IngestComponent implements OnInit, OnDestroy {
         }
     }
     onStrikeChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            strike_id: e.value
-        });
+        const strikeId = _.map(e.value, 'id');
+        this.datatableOptions.strike_id = strikeId.length > 0 ? strikeId : null;
         this.updateOptions();
     }
     onStatusChange(e) {
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            status: e.value
-        });
+        this.datatableOptions.status = e.value || null;
         this.updateOptions();
     }
     onRowSelect(e) {
+        if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
+            this.dataService.setSelectedIngestRows(e);
+        }
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/data/ingest/${e.data.id}`);
         } else {
@@ -206,7 +206,6 @@ export class IngestComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     ngOnInit() {
-        this.datatableLoading = true;
         if (!this.datatableOptions) {
             this.datatableOptions = this.ingestDatatableService.getIngestDatatableOptions();
         }
@@ -220,14 +219,28 @@ export class IngestComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
-                    status: params.status || null,
+                    status: params.status ?
+                        Array.isArray(params.status) ?
+                            params.status :
+                            [params.status]
+                        : null,
                     scan_id: params.scan_id ? +params.scan_id : null,
-                    strike_id: params.strike_id ? +params.strike_id : null,
+                    strike_id: params.strike_id ?
+                        Array.isArray(params.strike_id) ?
+                            params.strike_id.map(id => {
+                                return +id;
+                            }) :
+                            [+params.strike_id]
+                        : null,
                     file_name: params.file_name || null
                 };
             }
-            this.selectedStrike = this.datatableOptions.strike_id;
-            this.selectedStatus = this.datatableOptions.status;
+            this.selectedStatus = [];
+            _.forEach(this.statusValues, status => {
+                if (_.indexOf(this.datatableOptions.status, status.value) >= 0) {
+                    this.selectedStatus.push(status.value);
+                }
+            });
             this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
             this.getStrikes();

@@ -28,28 +28,28 @@
 <p-table [value]="ingests" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
          [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedIngest"
-         (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}" [autoLayout]="true"
-         class="ingest__table" #datatable>
+         (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
+         [autoLayout]="true" class="ingest__table" #datatable>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'status'">
-                    <p-dropdown [options]="statusValues" [(ngModel)]="selectedStatus" (onChange)="onStatusChange($event)"
-                                [autoWidth]="false" styleClass="column-filter" (click)="onFilterClick($event)" appendTo="body"
-                                [showClear]="false"></p-dropdown>
+                    <p-multiSelect [options]="statusValues" [(ngModel)]="selectedStatus" [maxSelectedLabels]="1"
+                                   (onChange)="onStatusChange($event)" styleClass="column-filter"
+                                   (click)="onFilterClick($event)" appendTo="body"></p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'strike.id'">
-                    <p-dropdown [options]="strikeValues" [(ngModel)]="selectedStrike"
-                                (onChange)="onStrikeChange($event)" [autoWidth]="false" styleClass="column-filter"
-                                (click)="onFilterClick($event)" appendTo="body" [showClear]="false"></p-dropdown>
+                    <p-multiSelect [options]="strikeValues" [(ngModel)]="selectedStrike" [maxSelectedLabels]="1"
+                                   (onChange)="onStrikeChange($event)" styleClass="column-filter"
+                                   (click)="onFilterClick($event)" appendTo="body"></p-multiSelect>
                 </div>
             </th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-rowData let-columns="columns">
-        <tr [pSelectableRow]="rowData">
+        <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'ingest__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <div *ngSwitchCase="'file_size'">
                     {{ rowData.fileSizeFormatted }}
@@ -86,7 +86,7 @@
     <ng-template pTemplate="emptymessage" let-columns>
         <tr>
             <td [attr.colspan]="columns.length" class="text-center">
-                No records found
+                Update filters to view results
             </td>
         </tr>
     </ng-template>
