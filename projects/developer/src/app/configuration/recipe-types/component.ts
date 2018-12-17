@@ -75,6 +75,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                                     'New Recipe',
                                     'Description of a new recipe',
                                     true,
+                                    false,
+                                    null,
                                     new RecipeTypeDefinition({}, {}),
                                     null,
                                     null,
