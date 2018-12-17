@@ -53,7 +53,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     });
                 }
                 this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-                    _.forEach(data.results, (result) => {
+                    _.forEach(data.results, result => {
                         this.recipeTypes.push({
                             label: result.title,
                             value: result
