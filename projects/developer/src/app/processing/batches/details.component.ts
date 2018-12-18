@@ -29,6 +29,8 @@ export class BatchDetailsComponent implements OnInit {
                     data.recipe_type.name
                 ).subscribe(recipeTypeData => {
                     this.recipeType = recipeTypeData;
+                }, err => {
+                    console.log(err);
                 });
             });
         }

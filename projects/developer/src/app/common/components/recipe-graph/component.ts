@@ -14,6 +14,7 @@ import { JobType } from '../../../configuration/job-types/api.model';
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
+    @Input() jobMetrics: any;
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
@@ -33,6 +34,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedNodeConnections = [];
     recipeDialogX: number;
     recipeDialogY: number;
+    metricData: any;
+    chartOptions = {
+        legend: {
+            display: false
+        }
+    };
 
     constructor(
         private colorService: ColorService,
@@ -152,6 +159,36 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     });
                 }
             });
+
+            if (this.jobMetrics) {
+                const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
+                this.metricData = {
+                    labels: ['Pending', 'Blocked', 'Queued', 'Running', 'Failed', 'Completed', 'Canceled'],
+                    datasets: [
+                        {
+                            data: [
+                                rawData.jobs_pending,
+                                rawData.jobs_blocked,
+                                rawData.jobs_queued,
+                                rawData.jobs_running,
+                                rawData.jobs_failed,
+                                rawData.jobs_completed,
+                                rawData.jobs_canceled
+                            ],
+                            backgroundColor: [
+                                this.colorService.PENDING,
+                                this.colorService.BLOCKED,
+                                this.colorService.QUEUED,
+                                this.colorService.RUNNING,
+                                this.colorService.FAILED,
+                                this.colorService.COMPLETED,
+                                this.colorService.CANCELED
+                            ],
+                            label: 'Jobs'
+                        }
+                    ]
+                };
+            }
         }
     }
 
