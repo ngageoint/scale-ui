@@ -11,7 +11,7 @@
     </div>
     <div *ngIf="selectedJobTypeDetail && selectedJobTypeDetail.manifest.seedVersion">
         <div class="ui-g">
-            <div class="ui-g-10">
+            <div class="ui-g-12">
                 <p-panel>
                     <p-header class="job-type__title">
                         <div>
@@ -110,26 +110,6 @@
                             <!--</div>-->
                         <!--</div>-->
                     </p-scrollPanel>
-                </p-panel>
-            </div>
-            <div class="ui-g-2">
-                <p-panel header="6 Hours" styleClass="margin-bottom-md">
-                    <span *ngIf="total6h === 0">No data available</span>
-                    <div *ngIf="total6h > 0">
-                        <p-chart type="doughnut" [data]="chartData6h" [options]="options"></p-chart>
-                    </div>
-                </p-panel>
-                <p-panel header="12 Hours" styleClass="margin-bottom-md">
-                    <span *ngIf="total12h === 0">No data available</span>
-                    <div *ngIf="total12h > 0">
-                        <p-chart type="doughnut" [data]="chartData12h" [options]="options"></p-chart>
-                    </div>
-                </p-panel>
-                <p-panel header="24 Hours">
-                    <span *ngIf="total24h === 0">No data available</span>
-                    <div *ngIf="total24h > 0">
-                        <p-chart type="doughnut" [data]="chartData24h" [options]="options"></p-chart>
-                    </div>
                 </p-panel>
             </div>
         </div>

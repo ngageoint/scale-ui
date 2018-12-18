@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
 import { JobTypesApiService } from '../../../configuration/job-types/api.service';
-import {JobType} from '../../../configuration/job-types/api.model';
+import { JobType } from '../../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -310,8 +310,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     hideDialog() {
-        this.recipeDialogX = this.recipeDialog.lastPageX || null;
-        this.recipeDialogY = this.recipeDialog.lastPageY || null;
+        const recipeDialogDiv: HTMLElement = document.querySelector('.recipe-dialog');
+        this.recipeDialogX = recipeDialogDiv ? parseInt(recipeDialogDiv.style.left, 10) : null;
+        this.recipeDialogY = recipeDialogDiv ? parseInt(recipeDialogDiv.style.top, 10) : null;
+
         if (this.selectedNode) {
             this.selectedNode.options.stroke = '';
             this.selectedNode = null;
