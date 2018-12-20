@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs/Subject';
 import { MessageService } from 'primeng/api';
 
 import { DataService } from '../../common/services/data.service';
@@ -9,7 +10,6 @@ import { IngestDatatableService } from './datatable.service';
 import { IngestApiService } from './api.service';
 import { StrikesApiService } from '../../common/services/strikes/api.service';
 import { IngestComponent } from './component';
-import {Subject} from 'rxjs/Subject';
 
 describe('IngestComponent', () => {
     let component: IngestComponent;

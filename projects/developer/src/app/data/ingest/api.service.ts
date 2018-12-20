@@ -50,7 +50,7 @@ export class IngestApiService {
             );
     }
 
-    getIngestStatus(params: any, poll?: boolean): Observable<any> {
+    getIngestStatus(params: any, poll?: boolean, interval?): Observable<any> {
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/ingests/status/`, { params: params })
                 .pipe(
@@ -59,7 +59,7 @@ export class IngestApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 600000 });
+            return polling(request, { interval: interval || 600000 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/status/`, { params: params })
             .pipe(

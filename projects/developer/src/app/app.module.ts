@@ -81,6 +81,7 @@ import { BatchDetailsComponent } from './processing/batches/details.component';
 import { StrikesApiService } from './common/services/strikes/api.service';
 import { ToastModule } from 'primeng/toast';
 import { IngestDetailsComponent } from './data/ingest/details.component';
+import { FeedComponent } from './data/feed/component';
 
 
 @NgModule({
@@ -116,7 +117,8 @@ import { IngestDetailsComponent } from './data/ingest/details.component';
         BatchesComponent,
         BatchesEditComponent,
         BatchDetailsComponent,
-        IngestDetailsComponent
+        IngestDetailsComponent,
+        FeedComponent
     ],
     imports: [
         AppRoutingModule,

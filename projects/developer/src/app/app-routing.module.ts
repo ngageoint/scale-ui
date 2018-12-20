@@ -17,6 +17,7 @@ import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesEditComponent } from './processing/batches/edit.component';
 import { IngestComponent } from './data/ingest/component';
 import { IngestDetailsComponent } from './data/ingest/details.component';
+import { FeedComponent } from './data/feed/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -36,6 +37,7 @@ const routes: Routes = [
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
     { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent },
+    { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/ingest/:id', component: IngestDetailsComponent },
     { path: 'data/metrics', component: MetricsComponent }
