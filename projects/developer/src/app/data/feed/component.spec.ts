@@ -7,6 +7,7 @@ import { Subject } from 'rxjs';
 import { IngestApiService } from '../ingest/api.service';
 import { StrikesApiService } from '../../common/services/strikes/api.service';
 import { DataService } from '../../common/services/data.service';
+import { ColorService } from '../../common/services/color.service';
 
 import { FeedComponent } from './component';
 
@@ -19,7 +20,7 @@ describe('FeedComponent', () => {
             declarations: [FeedComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                IngestApiService, StrikesApiService, DataService,
+                IngestApiService, StrikesApiService, DataService, ColorService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

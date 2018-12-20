@@ -1,4 +1,24 @@
-<h2><i class="fa fa-line-chart"></i> Data Feed</h2>
-<div class="feed__container">
-    <p-chart #feedChart type="bar" [options]="options" [data]="data"></p-chart>
+<div class="feed__header">
+    <h2><i class="fa fa-line-chart"></i> Data Feed</h2>
+    <p-dropdown [options]="strikes" [autoWidth]="false" [(ngModel)]="selectedStrike" (onChange)="getLatestData()"
+                [style]="{'width':'300px', 'margin-left':'10px', 'margin-right':'10px'}" placeholder="Select..."
+                [showClear]="false"></p-dropdown>
+    <p-dropdown [options]="timeValues" [autoWidth]="false" [(ngModel)]="selectedTimeValue" (onChange)="getLatestData()"
+                [style]="{'width':'150px', 'margin-left':'10px', 'margin-right':'10px'}" placeholder="Select..."
+                [showClear]="false"></p-dropdown>
+    <button pButton class="ui-button-primary feed__date-filter-btn" label="Older"
+            (click)="viewOlder()"></button>
+    <button pButton class="ui-button-primary feed__date-filter-btn" label="Newer"
+            (click)="viewNewer()" [disabled]="viewingLatest"></button>
+    <button pButton class="ui-button-primary feed__date-filter-btn" icon="fa fa-step-forward"
+            (click)="viewLatest()" [disabled]="viewingLatest"></button>
 </div>
+<p-panel>
+    <p-header>
+        Completed Ingests for {{ started }} &ndash; {{ ended }}
+    </p-header>
+    <div class="feed__container">
+        <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
+        <p-chart #feedChart type="bar" [options]="options" [data]="data" height="85vh"></p-chart>
+    </div>
+</p-panel>
