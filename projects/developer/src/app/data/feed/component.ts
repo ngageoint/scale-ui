@@ -23,9 +23,12 @@ export class FeedComponent implements OnInit, OnDestroy {
     options: any;
     data = {
         datasets: [{
-            fill: false,
             backgroundColor: '#cae3fd',
             borderColor: this.colorService.SCALE_BLUE3,
+            borderWidth: 1,
+            pointBackgroundColor: this.colorService.SCALE_BLUE3,
+            pointRadius: 2,
+            lineTension: 0,
             data: []
         }]
     };
@@ -81,10 +84,13 @@ export class FeedComponent implements OnInit, OnDestroy {
 
         const params = {
             page_size: 1000,
-            started: moment.utc(this.started, this.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, this.dateFormat).toISOString(),
             use_ingest_time: this.selectedTimeValue === 'ingest'
         };
+
+        if (!this.viewingLatest) {
+            params['started'] = moment.utc(this.started, this.dateFormat).toISOString();
+            params['ended'] = moment.utc(this.ended, this.dateFormat).toISOString();
+        }
 
         this.chartLoading = true;
         this.subscription = this.ingestApiService.getIngestStatus(params, true, 5000).subscribe(data => {

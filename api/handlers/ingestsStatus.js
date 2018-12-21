@@ -91,8 +91,8 @@ module.exports = function (request) {
     };
 
     var getValues = function (processor) {
-        var started = moment.utc(params.started).startOf('d'),
-            ended = moment.utc(params.ended).startOf('h'),
+        var started = params.started ? moment.utc(params.started).startOf('d') : moment.utc().subtract(7, 'd').startOf('d'),
+            ended = params.ended ? moment.utc(params.ended).startOf('h') : moment.utc().startOf('h'),
             numHours = ended.diff(started, 'h');
 
         for (var i = 0; i < numHours; i++) {
