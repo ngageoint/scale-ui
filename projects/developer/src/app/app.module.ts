@@ -82,6 +82,8 @@ import { StrikesApiService } from './common/services/strikes/api.service';
 import { ToastModule } from 'primeng/toast';
 import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
+import { NodesComponent } from './system/nodes/component';
+import { NodesApiService } from './system/nodes/api.service';
 
 
 @NgModule({
@@ -118,7 +120,8 @@ import { FeedComponent } from './data/feed/component';
         BatchesEditComponent,
         BatchDetailsComponent,
         IngestDetailsComponent,
-        FeedComponent
+        FeedComponent,
+        NodesComponent
     ],
     imports: [
         AppRoutingModule,
@@ -196,7 +199,8 @@ import { FeedComponent } from './data/feed/component';
         ScansApiService,
         BatchesApiService,
         BatchesDatatableService,
-        StrikesApiService
+        StrikesApiService,
+        NodesApiService
     ],
     bootstrap: [AppComponent]
 })

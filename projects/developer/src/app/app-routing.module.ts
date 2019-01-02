@@ -18,6 +18,7 @@ import { BatchesEditComponent } from './processing/batches/edit.component';
 import { IngestComponent } from './data/ingest/component';
 import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
+import { NodesComponent } from './system/nodes/component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -40,7 +41,8 @@ const routes: Routes = [
     { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/ingest/:id', component: IngestDetailsComponent },
-    { path: 'data/metrics', component: MetricsComponent }
+    { path: 'data/metrics', component: MetricsComponent },
+    { path: 'system/nodes', component: NodesComponent }
 ];
 
 @NgModule({

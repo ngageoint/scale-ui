@@ -1,0 +1,5 @@
+<p-dataList [value]="nodes" [scrollable]="true" scrollHeight="300px" emptyMessage="None">
+    <ng-template let-node pTemplate="item">
+        {{ node.hostname }}
+    </ng-template>
+</p-dataList>

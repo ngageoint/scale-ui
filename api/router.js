@@ -29,6 +29,8 @@ var strikes = require('./handlers/strikes');
 var ingests = require('./handlers/ingests');
 var ingestDetails = require('./handlers/ingestDetails');
 var fileDetails = require('./handlers/fileDetails');
+var nodes = require('./handlers/nodes');
+var nodeDetails = require('./handlers/nodeDetails');
 
 var apiVersion = 'v6';
 
@@ -230,6 +232,18 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/files/{id}/',
             handler: fileDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/nodes/',
+            handler: nodes
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/nodes/{id}/',
+            handler: nodeDetails
         });
     }
 };
