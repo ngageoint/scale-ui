@@ -23,6 +23,7 @@ import { MenuModule } from 'primeng/menu';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
+import { DataViewModule } from 'primeng/dataview';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -168,7 +169,8 @@ import { NodesApiService } from './system/nodes/api.service';
         TableModule,
         MenuModule,
         ProgressBarModule,
-        ToastModule
+        ToastModule,
+        DataViewModule
     ],
     exports: [
         DropdownModule,

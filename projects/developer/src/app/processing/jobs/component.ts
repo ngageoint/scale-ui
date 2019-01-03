@@ -23,7 +23,6 @@ import { JobExecution } from './execution.model';
 
 export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
-    @Input() isChild: boolean;
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
 
@@ -122,20 +121,13 @@ export class JobsComponent implements OnInit, OnDestroy {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
 
-        if (this.isChild) {
-            // notify the parent that the datatable options (filtering/sorting/etc.) have changed
-            this.datatableChange.emit(this.datatableOptions);
-            this.datatableLoading = false;
-        } else {
-            // component is not a child, so update datatable options, querystring, and data
-            this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
-            this.router.navigate(['/processing/jobs'], {
-                queryParams: this.datatableOptions as Params,
-                replaceUrl: true
-            });
+        this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
+        this.router.navigate(['/processing/jobs'], {
+            queryParams: this.datatableOptions as Params,
+            replaceUrl: true
+        });
 
-            this.updateData();
-        }
+        this.updateData();
     }
     private getJobTypes() {
         this.selectedJobType = [];

@@ -32,7 +32,7 @@
       "agent_id": "b004b6ef-eaa0-4d3a-a24c-699837fb4549",
       "is_paused": false,
       "is_paused_errors": true,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-04-09T07:16:54Z",
       "last_modified": "2015-07-22T04:27:42Z"
     },
@@ -43,7 +43,7 @@
       "agent_id": "038d8b71-9866-4efd-9f91-44b84b03f082",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-04T06:39:06Z",
       "last_modified": "2015-08-23T02:01:29Z"
     },
@@ -87,7 +87,7 @@
       "agent_id": "47b05f75-5d04-4ef1-af7c-94062539428b",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-01-26T13:54:46Z",
       "last_modified": "2015-11-20T12:35:56Z"
     },
@@ -98,7 +98,7 @@
       "agent_id": "254d78c2-5a2e-44e3-b7e0-fe4ab3fee71f",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-09-28T02:55:33Z",
       "last_modified": "2016-04-06T13:41:47Z"
     },
@@ -109,7 +109,7 @@
       "agent_id": "948a3f9a-8d57-494f-84cf-d937e0a80e13",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-05T10:04:32Z",
       "last_modified": "2015-10-06T22:37:43Z"
     },
@@ -120,7 +120,7 @@
       "agent_id": "1a70063c-08bd-4cc8-a2e6-6adcb65c8622",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-27T05:57:40Z",
       "last_modified": "2016-01-04T11:11:26Z"
     },
@@ -131,7 +131,7 @@
       "agent_id": "5e36b81a-7f2f-4659-bcec-6579c50ef678",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-05-31T02:46:10Z",
       "last_modified": "2015-11-29T11:14:26Z"
     },
@@ -142,7 +142,7 @@
       "agent_id": "ee0a6509-e8bc-4e8a-aee4-2b6a3cce3bf5",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-05-29T12:42:46Z",
       "last_modified": "2016-02-03T00:49:34Z"
     },
@@ -153,7 +153,7 @@
       "agent_id": "9d2ff04c-8203-417e-8ae5-802acf51743a",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-09-25T07:42:01Z",
       "last_modified": "2016-03-25T07:47:13Z"
     },
@@ -164,7 +164,7 @@
       "agent_id": "8fdd353c-029a-4f8b-93e2-405dce420815",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-08T10:42:47Z",
       "last_modified": "2015-07-02T00:41:49Z"
     },
@@ -175,7 +175,7 @@
       "agent_id": "c1c9657e-07f7-4a36-86da-30d345a346e9",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-11-16T15:44:30Z",
       "last_modified": "2015-06-06T23:39:09Z"
     },
@@ -219,7 +219,7 @@
       "agent_id": "1309d014-ded9-487e-bbb8-cc19eb4c055a",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-18T17:29:22Z",
       "last_modified": "2015-07-10T22:17:10Z"
     },
@@ -230,7 +230,7 @@
       "agent_id": "ea2e13e9-3229-4f2b-ba5e-6b37f4f1dddd",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-18T16:03:32Z",
       "last_modified": "2016-02-20T09:07:16Z"
     },
@@ -241,7 +241,7 @@
       "agent_id": "b3fd9726-035f-4ed5-b840-b799a0f5dbf9",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-03-31T08:03:40Z",
       "last_modified": "2015-08-17T06:25:49Z"
     },
@@ -252,7 +252,7 @@
       "agent_id": "bc9da03b-5776-4591-8b23-b661b6adec56",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-04-05T15:05:20Z",
       "last_modified": "2015-07-29T21:12:34Z"
     },
@@ -263,7 +263,7 @@
       "agent_id": "465dba1e-1ef1-4bde-ba63-4a2c6f730dd8",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-12-17T23:01:34Z",
       "last_modified": "2015-09-08T23:53:21Z"
     },
@@ -274,7 +274,7 @@
       "agent_id": "f78bb149-4f21-4ab1-b78f-396f0b537787",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-09-22T22:23:57Z",
       "last_modified": "2015-11-05T00:42:30Z"
     },
@@ -285,7 +285,7 @@
       "agent_id": "21f0d45f-5e30-4c74-b855-d4dd8ce3d174",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-02-05T11:56:59Z",
       "last_modified": "2015-11-12T12:49:47Z"
     },
@@ -296,7 +296,7 @@
       "agent_id": "23897a06-899c-4df3-a6fd-34ba4e64e24f",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-08-09T16:35:37Z",
       "last_modified": "2016-04-01T22:48:22Z"
     },
@@ -307,7 +307,7 @@
       "agent_id": "6fb3dd92-7147-453e-8047-b54007870d48",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-12-23T10:02:14Z",
       "last_modified": "2015-10-08T10:54:39Z"
     },
@@ -340,7 +340,7 @@
       "agent_id": "f3979ad8-0174-41cd-b4f7-d57050a95e8f",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-05-30T03:03:32Z",
       "last_modified": "2015-10-14T16:33:19Z"
     },
@@ -351,7 +351,7 @@
       "agent_id": "05b0f69d-7915-4378-a692-eba1b50606dc",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-11T19:42:40Z",
       "last_modified": "2015-12-30T07:14:06Z"
     },
@@ -384,7 +384,7 @@
       "agent_id": "a92a4734-3450-494d-8a4d-4f3760a5fedb",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-02-03T10:39:55Z",
       "last_modified": "2015-07-22T15:08:32Z"
     },
@@ -395,7 +395,7 @@
       "agent_id": "51ed6ae1-6110-41cf-82ae-0265dcfd68f1",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-03-17T12:42:11Z",
       "last_modified": "2015-05-17T20:50:52Z"
     },
@@ -406,7 +406,7 @@
       "agent_id": "51a187e3-4c06-4e2f-9c5b-4a49d3f3ac70",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-01-21T08:48:41Z",
       "last_modified": "2015-12-12T19:45:46Z"
     },
@@ -417,7 +417,7 @@
       "agent_id": "4d36cf6f-b43b-4be1-86c9-565703e71cad",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-21T03:33:36Z",
       "last_modified": "2015-06-30T09:01:13Z"
     },
@@ -428,7 +428,7 @@
       "agent_id": "0d5a1f54-4b45-4932-a496-fbd87bbbf303",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-02-19T22:17:10Z",
       "last_modified": "2015-12-07T23:15:41Z"
     },
@@ -439,7 +439,7 @@
       "agent_id": "08c1ad01-7564-4e00-b98d-04e61e1213bd",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-08T15:07:47Z",
       "last_modified": "2015-12-04T03:17:46Z"
     },
@@ -450,7 +450,7 @@
       "agent_id": "f908ea6f-aac6-4934-9302-afcc111c66b9",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-01-02T01:56:28Z",
       "last_modified": "2015-04-27T22:02:13Z"
     },
@@ -494,7 +494,7 @@
       "agent_id": "026f4ae0-b84d-40bb-b4bf-0f37684f5ee6",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-03-01T00:05:12Z",
       "last_modified": "2016-01-09T09:46:04Z"
     },
@@ -538,7 +538,7 @@
       "agent_id": "5161ba12-7eda-41cc-b572-5eb53e59f1b7",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-11-12T22:53:04Z",
       "last_modified": "2016-03-12T06:38:37Z"
     },
@@ -560,7 +560,7 @@
       "agent_id": "87b35cec-a26d-4db7-af97-13b94446a1df",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-08T21:42:49Z",
       "last_modified": "2016-02-24T05:45:06Z"
     },
@@ -571,7 +571,7 @@
       "agent_id": "10169a1f-2194-43d5-88fe-3dde06fa67d9",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-24T23:25:12Z",
       "last_modified": "2015-07-23T18:24:50Z"
     },
@@ -637,7 +637,7 @@
       "agent_id": "e42480f9-07c8-4fd6-89c3-f5e4979ec11f",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-11-20T15:12:07Z",
       "last_modified": "2015-07-20T17:46:55Z"
     },
@@ -769,7 +769,7 @@
       "agent_id": "4db92074-bc5f-4032-bf39-23e7381be299",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-04-08T07:07:49Z",
       "last_modified": "2015-06-20T02:31:28Z"
     },
@@ -846,7 +846,7 @@
       "agent_id": "112b01bc-24f7-483a-98c5-a5bf2117f476",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-03-17T21:19:33Z",
       "last_modified": "2016-02-23T14:12:26Z"
     },
@@ -879,7 +879,7 @@
       "agent_id": "a67df1d0-fb95-4182-9659-456a5d300015",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-01-02T17:02:22Z",
       "last_modified": "2015-07-01T00:19:48Z"
     },
@@ -890,7 +890,7 @@
       "agent_id": "02666f5b-81c8-413b-b908-45f2fcf9da04",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-02-14T19:55:35Z",
       "last_modified": "2015-07-26T02:28:56Z"
     },
@@ -1088,7 +1088,7 @@
       "agent_id": "bccffb76-a50a-438c-a8ed-af66cd8746ca",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-23T22:01:15Z",
       "last_modified": "2015-05-23T15:04:22Z"
     },
@@ -1110,7 +1110,7 @@
       "agent_id": "85fc85d9-8a6c-415b-bfd1-266051658b14",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-14T10:28:57Z",
       "last_modified": "2016-01-24T04:09:33Z"
     },
@@ -1132,7 +1132,7 @@
       "agent_id": "e41098c4-737c-49cd-b44c-814241890346",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-12-06T06:37:25Z",
       "last_modified": "2016-04-16T00:32:07Z"
     },
@@ -1165,7 +1165,7 @@
       "agent_id": "1e46f048-3ba9-4366-ad19-b2a308fa05c3",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-11-28T04:25:43Z",
       "last_modified": "2015-05-05T00:45:54Z"
     },
@@ -1176,7 +1176,7 @@
       "agent_id": "c8c0fbe3-7013-4000-a6c8-0a204713b074",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-12T09:03:37Z",
       "last_modified": "2015-10-24T07:14:40Z"
     },
@@ -1242,7 +1242,7 @@
       "agent_id": "cb49e399-d94a-4c56-9d4f-efde76c4b913",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-04T08:08:01Z",
       "last_modified": "2015-11-24T19:57:43Z"
     },
@@ -1253,7 +1253,7 @@
       "agent_id": "72a73732-82ee-4af2-a30d-8a580ff50c60",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-05-28T02:15:21Z",
       "last_modified": "2015-12-02T23:34:32Z"
     },
@@ -1264,7 +1264,7 @@
       "agent_id": "e4a251fb-9554-4f3d-9aeb-50557aefa2d1",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-02T10:20:51Z",
       "last_modified": "2015-08-30T11:24:17Z"
     },
@@ -1275,7 +1275,7 @@
       "agent_id": "8b80281a-8a22-465a-a509-31b7f74a446a",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-05-04T03:15:21Z",
       "last_modified": "2015-08-03T09:00:21Z"
     },
@@ -1286,7 +1286,7 @@
       "agent_id": "5789b393-c916-48a2-a382-fe937db68b8e",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-12-02T08:35:09Z",
       "last_modified": "2015-07-22T22:23:00Z"
     },
@@ -1297,7 +1297,7 @@
       "agent_id": "15caf041-c7df-492c-a86f-42808a92850a",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-08-18T10:28:55Z",
       "last_modified": "2015-07-02T18:25:09Z"
     },
@@ -1352,7 +1352,7 @@
       "agent_id": "0048a78c-22ba-43cd-b19f-57417742c82e",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-12-08T18:16:44Z",
       "last_modified": "2016-01-10T11:31:21Z"
     },
@@ -1385,7 +1385,7 @@
       "agent_id": "2a839a47-753f-4747-87f5-d9d4130c75c7",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-08-15T03:14:38Z",
       "last_modified": "2015-05-19T07:26:34Z"
     },
@@ -1451,7 +1451,7 @@
       "agent_id": "4b04a8b9-5366-4ead-98ea-a5d5c5538001",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-11-07T11:54:52Z",
       "last_modified": "2016-03-11T17:13:56Z"
     },
@@ -1462,7 +1462,7 @@
       "agent_id": "e3a13c78-b7d3-4eec-9e02-365ec7fc10b7",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-01T22:01:21Z",
       "last_modified": "2015-10-20T15:23:13Z"
     },
@@ -1517,7 +1517,7 @@
       "agent_id": "22f6f25d-086a-40a9-9b39-d9df4c6a0512",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-26T18:06:21Z",
       "last_modified": "2016-02-24T20:27:15Z"
     },
@@ -1550,7 +1550,7 @@
       "agent_id": "0c8fdf79-4909-4501-99e4-e85063477071",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-01-20T06:51:19Z",
       "last_modified": "2016-03-17T07:24:11Z"
     },
@@ -1561,7 +1561,7 @@
       "agent_id": "9b65c482-ff96-4aef-8a78-58124a0edaa7",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-12-02T00:25:58Z",
       "last_modified": "2016-04-05T08:16:06Z"
     },
@@ -1605,7 +1605,7 @@
       "agent_id": "45e7bd63-4d79-4c30-9503-e8fd5a1710d5",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-11-05T22:57:17Z",
       "last_modified": "2015-06-09T03:57:28Z"
     },
@@ -1627,7 +1627,7 @@
       "agent_id": "310437bf-91fd-4e0c-93c5-5b2a0016e5a8",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-02-16T11:31:01Z",
       "last_modified": "2016-03-24T15:59:18Z"
     },
@@ -1671,7 +1671,7 @@
       "agent_id": "6e5d052d-3846-4c82-9baa-2572acc994a0",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-02-12T14:31:00Z",
       "last_modified": "2016-01-01T02:59:21Z"
     },
@@ -1682,7 +1682,7 @@
       "agent_id": "240b0cbc-f72a-409c-8567-c21b24338c5b",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-09-09T07:17:21Z",
       "last_modified": "2015-11-02T23:05:31Z"
     },
@@ -1737,7 +1737,7 @@
       "agent_id": "f3490c46-e3c2-4425-9c8b-27869831a408",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-30T16:52:38Z",
       "last_modified": "2015-12-01T03:00:43Z"
     },
@@ -1792,7 +1792,7 @@
       "agent_id": "0703408f-348b-43c9-a563-3710f140c50a",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-26T11:19:26Z",
       "last_modified": "2015-11-28T14:42:19Z"
     },
@@ -1803,7 +1803,7 @@
       "agent_id": "7a8f9fc2-93c2-4030-8e53-b1e892d1b328",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-05-28T09:44:46Z",
       "last_modified": "2015-07-02T11:55:54Z"
     },
@@ -1814,7 +1814,7 @@
       "agent_id": "86b455d5-e333-42fe-81ea-3a252db9331b",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-27T20:21:45Z",
       "last_modified": "2015-05-17T21:52:39Z"
     },
@@ -1847,7 +1847,7 @@
       "agent_id": "8cca1512-915a-4b0a-b9ca-e06dd7e8133f",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-07-13T16:26:01Z",
       "last_modified": "2016-02-23T01:40:40Z"
     },
@@ -1880,7 +1880,7 @@
       "agent_id": "ef0dd2e7-bc3a-4dfb-849e-7cbce0a4c313",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-06T14:26:14Z",
       "last_modified": "2015-06-13T22:26:19Z"
     },
@@ -1990,7 +1990,7 @@
       "agent_id": "d0ac466a-0469-46ad-af36-c6a31cc37de0",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-09-29T02:21:48Z",
       "last_modified": "2015-08-27T02:21:51Z"
     },
@@ -2001,7 +2001,7 @@
       "agent_id": "013e1243-d0f4-4ebd-8daa-fcc8a0dc9415",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-05T00:06:12Z",
       "last_modified": "2015-12-31T09:04:22Z"
     },
@@ -2012,7 +2012,7 @@
       "agent_id": "a50aea10-9baa-4756-bba2-0a6b689e2e50",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-03-29T03:05:58Z",
       "last_modified": "2015-07-13T02:50:57Z"
     },
@@ -2023,7 +2023,7 @@
       "agent_id": "6b6161c1-679f-4159-869f-d0c77e9eeaf8",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2016-03-07T18:28:51Z",
       "last_modified": "2015-06-02T07:01:22Z"
     },
@@ -2034,7 +2034,7 @@
       "agent_id": "3f7d961e-b872-4ba6-b47b-40d42dd70147",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-06-20T10:26:40Z",
       "last_modified": "2015-06-09T19:30:09Z"
     },
@@ -2100,7 +2100,7 @@
       "agent_id": "55699835-485d-4bb4-b65c-5efb2d7f8490",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-10-31T00:40:15Z",
       "last_modified": "2015-10-21T16:35:48Z"
     },
@@ -2166,7 +2166,7 @@
       "agent_id": "4e7b2e0d-b959-4c82-9a8b-ddecb576878d",
       "is_paused": false,
       "is_paused_errors": false,
-      "is_active": true,
+      "is_active": false,
       "created": "2015-04-27T21:24:06Z",
       "last_modified": "2015-10-25T18:31:55Z"
     },

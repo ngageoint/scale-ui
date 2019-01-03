@@ -1,5 +1,24 @@
-<p-dataList [value]="nodes" [scrollable]="true" scrollHeight="300px" emptyMessage="None">
-    <ng-template let-node pTemplate="item">
-        {{ node.hostname }}
+<div class="flexed">
+    <h2><i class="fa fa-circle-o"></i> Nodes ({{ count }})</h2>
+    <p-inputSwitch [(ngModel)]="showActive" [pTooltip]="activeLabel" (onChange)="toggleShowActive()"
+                   styleClass="margin-left-sm"></p-inputSwitch>
+</div>
+<p-dataView [value]="nodes">
+    <p-header>
+        <div class="nodes__header">
+            <div *ngIf="showActive">{{ totalActive }} Active / {{ totalDeprecated }} Deprecated</div>
+            <div *ngIf="!showActive">{{ totalDeprecated }} Deprecated / {{ totalActive }} Active</div>
+            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
+        </div>
+    </p-header>
+    <ng-template let-node pTemplate="listItem">
+        <div>
+            {{ node.hostname }}
+        </div>
     </ng-template>
-</p-dataList>
+    <ng-template let-node pTemplate="gridItem">
+        <div class="ui-g-12 ui-md-3">
+            {{ node.hostname }}
+        </div>
+    </ng-template>
+</p-dataView>
