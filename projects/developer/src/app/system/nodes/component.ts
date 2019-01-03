@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
-import { NodesApiService } from './api.service';
-import * as moment from '../../data/ingest/component';
+import { StatusApiService } from '../../common/services/status/api.service';
 
 @Component({
     selector: 'dev-nodes',
@@ -18,10 +17,27 @@ export class NodesComponent implements OnInit {
     activeLabel: string;
     totalActive = 0;
     totalDeprecated = 0;
+    chartOptions = {
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
+        },
+        plugins: {
+            datalabels: {
+                display: false
+            }
+        }
+    };
     constructor(
         private router: Router,
         private route: ActivatedRoute,
-        private nodesApiService: NodesApiService
+        private statusApiService: StatusApiService
     ) {}
 
     private formatNodes() {
@@ -34,12 +50,8 @@ export class NodesComponent implements OnInit {
     }
 
     private getNodes() {
-        const params = {
-            page: 1,
-            page_size: 1000
-        };
-        this.nodesApiService.getNodes(params).subscribe(data => {
-            this.allNodes = data.results;
+        this.statusApiService.getStatus().subscribe(data => {
+            this.allNodes = data.nodes;
             this.formatNodes();
         });
     }

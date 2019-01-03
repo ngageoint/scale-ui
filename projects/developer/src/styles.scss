@@ -237,6 +237,22 @@ label-default {
     background-color: $clr-failure-algorithm;
 }
 
+.label-ready {
+    background-color: $clr-label-success;
+}
+
+.label-paused {
+    background-color: $clr-label-warning;
+}
+
+.label-busy {
+    background-color: $clr-label-info;
+}
+
+.label-waiting {
+    background-color: $clr-label-danger;
+}
+
 .no-margin {
     margin: 0;
 }
@@ -325,6 +341,12 @@ label-default {
 }
 .canceled-text {
     color: $clr-status-canceled;
+}
+.warning-text {
+    color: $clr-label-warning;
+}
+.error-text {
+    color: $clr-label-danger;
 }
 
 .completed {

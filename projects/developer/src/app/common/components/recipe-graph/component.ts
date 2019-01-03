@@ -18,7 +18,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
-
     jobTypes: any;
     columns: any[];
     dependencyOptions = [];
@@ -38,9 +37,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     chartOptions = {
         legend: {
             display: false
+        },
+        plugins: {
+            datalabels: {
+                display: false
+            }
         }
     };
-
     constructor(
         private colorService: ColorService,
         private jobTypesApiService: JobTypesApiService

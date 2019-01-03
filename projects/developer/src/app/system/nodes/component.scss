@@ -1,9 +1,11 @@
+.nodes__title {
+    &.flexed {
+        align-items: flex-end;
+    }
+}
+
 .nodes__header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.flexed {
-    align-items: flex-end;
 }
