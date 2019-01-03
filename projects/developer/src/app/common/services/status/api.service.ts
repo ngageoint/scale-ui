@@ -5,7 +5,7 @@ import polling from 'rx-polling';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators';
 
-import { DataService } from '../../common/services/data.service';
+import { DataService } from '../data.service';
 
 @Injectable()
 export class StatusApiService {
