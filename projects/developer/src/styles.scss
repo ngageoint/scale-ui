@@ -126,6 +126,10 @@ a:not(.ui-button, .ui-paginator) {
     &.space-between {
         justify-content: space-between;
     }
+
+    &.center {
+        justify-content: center;
+    }
 }
 
 .table {
