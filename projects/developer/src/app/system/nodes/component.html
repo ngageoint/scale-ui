@@ -5,7 +5,7 @@
 </div>
 <p-dataView [value]="nodes" layout="grid">
     <p-header>
-        <div class="nodes__header">
+        <div class="flexed space-between">
             <div *ngIf="showActive">{{ totalActive }} Active / {{ totalDeprecated }} Deprecated</div>
             <div *ngIf="!showActive">{{ totalDeprecated }} Deprecated / {{ totalActive }} Active</div>
             <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
