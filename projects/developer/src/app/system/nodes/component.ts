@@ -12,17 +12,21 @@ import { StatusApiService } from '../../common/services/status/api.service';
 export class NodesComponent implements OnInit {
     allNodes: any = [];
     nodes: any = [];
-    count = 0;
+    count = '';
     showActive: boolean;
     activeLabel: string;
     totalActive = 0;
     totalDeprecated = 0;
-    chartOptions = {
+    jobExeOptions = {
         legend: {
             display: false
         },
+        title: {
+            display: true,
+            text: 'Job Executions'
+        },
         scales: {
-            yAxes: [{
+            xAxes: [{
                 ticks: {
                     beginAtZero: true
                 }
@@ -34,6 +38,21 @@ export class NodesComponent implements OnInit {
             }
         }
     };
+    runningJobOptions = {
+        legend: {
+            display: false
+        },
+        title: {
+            display: true,
+            text: 'Running Jobs'
+        },
+        plugins: {
+            datalabels: {
+                display: false
+            }
+        }
+    };
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -44,9 +63,11 @@ export class NodesComponent implements OnInit {
         this.nodes = _.filter(this.allNodes, result => {
             return result.is_active === this.showActive;
         });
-        this.count = this.nodes.length;
         this.totalActive = this.showActive ? this.nodes.length : this.allNodes.length - this.nodes.length;
         this.totalDeprecated = !this.showActive ? this.nodes.length : this.allNodes.length - this.nodes.length;
+        this.count = this.showActive ?
+            `${this.totalActive} Active / ${this.totalDeprecated} Deprecated` :
+            `${this.totalDeprecated} Deprecated / ${this.totalActive} Active`;
     }
 
     private getNodes() {

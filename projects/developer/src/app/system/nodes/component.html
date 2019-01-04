@@ -3,44 +3,41 @@
     <p-inputSwitch [(ngModel)]="showActive" [pTooltip]="activeLabel" (onChange)="toggleShowActive()"
                    styleClass="margin-left-sm"></p-inputSwitch>
 </div>
-<p-dataView [value]="nodes" layout="grid">
-    <p-header>
-        <div class="flexed space-between">
-            <div *ngIf="showActive">{{ totalActive }} Active / {{ totalDeprecated }} Deprecated</div>
-            <div *ngIf="!showActive">{{ totalDeprecated }} Deprecated / {{ totalActive }} Active</div>
-            <p-dataViewLayoutOptions></p-dataViewLayoutOptions>
-        </div>
-    </p-header>
-    <ng-template let-node pTemplate="listItem">
-        <div class="flexed center">
-            <h3>{{ node.hostname }}</h3>
-            <div class="label margin-left-sm" [ngClass]="node.stateClass" [pTooltip]="node.state.description">
-                {{ node.state.title }}
-            </div>
-            <div class="margin-left-sm" *ngIf="node.errors.length > 0">
-                <span class="fa fa-exclamation-triangle error-text" [pTooltip]="node.errorTooltip"></span>
-            </div>
-            <div class="margin-left-sm" *ngIf="node.warnings.length > 0">
-                <span class="fa fa-exclamation-triangle warning-text" [pTooltip]="node.warningTooltip"></span>
-            </div>
-        </div>
-        <p-chart type="bar" [data]="node.jobExeData" [options]="chartOptions"></p-chart>
-    </ng-template>
+<p-dataView [value]="nodes" layout="grid" styleClass="nodes__dataview">
     <ng-template let-node pTemplate="gridItem">
         <div class="ui-g-12 ui-md-3">
-            <div class="flexed center">
-                <h3>{{ node.hostname }}</h3>
-                <div class="label margin-left-sm" [ngClass]="node.stateClass" [pTooltip]="node.state.description">
-                    {{ node.state.title }}
+            <p-panel>
+                <p-header>
+                    <div class="flexed">
+                        <div>{{ node.hostname }}</div>
+                        <div class="label margin-left-sm" [ngClass]="node.stateClass"
+                             [pTooltip]="node.state.description">
+                            {{ node.state.title }}
+                        </div>
+                        <div class="margin-left-sm" *ngIf="node.errors.length > 0">
+                            <span class="fa fa-exclamation-triangle error-text" [pTooltip]="node.errorTooltip"></span>
+                        </div>
+                        <div class="margin-left-sm" *ngIf="node.warnings.length > 0">
+                            <span class="fa fa-exclamation-triangle warning-text"
+                                  [pTooltip]="node.warningTooltip"></span>
+                        </div>
+                    </div>
+                </p-header>
+                <div class="flexed center">
+                    <div *ngIf="node.jobExeData.datasets.length > 0">
+                        <p-chart type="horizontalBar" [data]="node.jobExeData" [options]="jobExeOptions"></p-chart>
+                    </div>
+                    <div *ngIf="node.jobExeData.datasets.length === 0">
+                        There have been no job executions in the past 3 hours
+                    </div>
+                    <div *ngIf="node.runningJobData.datasets.length > 0">
+                        <p-chart type="doughnut" [data]="node.runningJobData" [options]="runningJobOptions"></p-chart>
+                    </div>
+                    <div *ngIf="node.runningJobData.datasets.length === 0">
+                        No jobs are running on this node
+                    </div>
                 </div>
-                <div class="margin-left-sm" *ngIf="node.errors.length > 0">
-                    <span class="fa fa-exclamation-triangle error-text" [pTooltip]="node.errorTooltip"></span>
-                </div>
-                <div class="margin-left-sm" *ngIf="node.warnings.length > 0">
-                    <span class="fa fa-exclamation-triangle warning-text" [pTooltip]="node.warningTooltip"></span>
-                </div>
-            </div>
-            <p-chart type="bar" [data]="node.jobExeData" [options]="chartOptions"></p-chart>
+            </p-panel>
         </div>
     </ng-template>
 </p-dataView>

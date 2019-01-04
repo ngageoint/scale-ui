@@ -15,6 +15,17 @@
 
 // Components & Pages loaded separately
 
+.nodes__dataview {
+    .ui-dataview-header {
+        display: none !important;
+    }
+
+    .ui-dataview-content {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+}
+
 .throb-text, .throb-background, .throb-svg {
     animation-duration: 0.6s;
     animation-timing-function: ease-out;
