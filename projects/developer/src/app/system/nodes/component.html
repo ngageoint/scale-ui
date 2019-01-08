@@ -5,35 +5,42 @@
 </div>
 <p-dataView [value]="nodes" layout="grid" styleClass="nodes__dataview">
     <ng-template let-node pTemplate="gridItem">
-        <div class="ui-g-12 ui-md-3">
+        <div class="ui-g-12 ui-md-4" *ngIf="node.status">
             <p-panel>
                 <p-header>
-                    <div class="flexed">
-                        <div>{{ node.hostname }}</div>
-                        <div class="label margin-left-sm" [ngClass]="node.stateClass"
-                             [pTooltip]="node.state.description">
-                            {{ node.state.title }}
+                    <div class="flexed space-between">
+                        <div class="flexed">
+                            <div>{{ node.hostname }}</div>
+                            <div class="label margin-left-sm" [ngClass]="node.stateClass"
+                                 [pTooltip]="node.status.state.description">
+                                {{ node.status.state.title }}
+                            </div>
+                            <div class="margin-left-sm" *ngIf="node.status.errors.length > 0">
+                                <span class="fa fa-exclamation-triangle error-text" [pTooltip]="node.status.errorTooltip"></span>
+                            </div>
+                            <div class="margin-left-sm" *ngIf="node.status.warnings.length > 0">
+                                <span class="fa fa-exclamation-triangle warning-text"
+                                      [pTooltip]="node.status.warningTooltip"></span>
+                            </div>
                         </div>
-                        <div class="margin-left-sm" *ngIf="node.errors.length > 0">
-                            <span class="fa fa-exclamation-triangle error-text" [pTooltip]="node.errorTooltip"></span>
-                        </div>
-                        <div class="margin-left-sm" *ngIf="node.warnings.length > 0">
-                            <span class="fa fa-exclamation-triangle warning-text"
-                                  [pTooltip]="node.warningTooltip"></span>
+                        <div>
+                            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                            <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                                    (click)="menu.toggle($event)"></button>
                         </div>
                     </div>
                 </p-header>
-                <div class="flexed center">
-                    <div *ngIf="node.jobExeData.datasets.length > 0">
-                        <p-chart type="horizontalBar" [data]="node.jobExeData" [options]="jobExeOptions"></p-chart>
+                <div class="ui-g">
+                    <div class="ui-g-6" *ngIf="node.status.jobExeData.datasets.length > 0">
+                        <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
-                    <div *ngIf="node.jobExeData.datasets.length === 0">
+                    <div class="ui-g-6" *ngIf="node.status.jobExeData.datasets.length === 0">
                         There have been no job executions in the past 3 hours
                     </div>
-                    <div *ngIf="node.runningJobData.datasets.length > 0">
-                        <p-chart type="doughnut" [data]="node.runningJobData" [options]="runningJobOptions"></p-chart>
+                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets.length > 0">
+                        <p-chart type="doughnut" [data]="node.status.runningJobData" [options]="runningJobOptions"></p-chart>
                     </div>
-                    <div *ngIf="node.runningJobData.datasets.length === 0">
+                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets.length === 0">
                         No jobs are running on this node
                     </div>
                 </div>

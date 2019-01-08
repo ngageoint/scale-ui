@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 
 import { NodesComponent } from './component';
+import { NodesApiService } from './api.service';
 import { StatusApiService } from '../../common/services/status/api.service';
 import { DataService } from '../../common/services/data.service';
 
@@ -17,7 +18,7 @@ describe('NodesComponent', () => {
             declarations: [NodesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                StatusApiService, DataService,
+                NodesApiService, StatusApiService, DataService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
