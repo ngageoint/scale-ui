@@ -23,10 +23,7 @@ export class JobType {
                 data.created,
                 data.archived,
                 data.paused,
-                data.last_modified,
-                data.job_counts_6h,
-                data.job_counts_12h,
-                data.job_counts_24h
+                data.last_modified
             );
         }
     }
@@ -61,10 +58,7 @@ export class JobType {
         public created?: string,
         public archived?: string,
         public paused?: string,
-        public last_modified?: string,
-        public job_counts_6h?: object[],
-        public job_counts_12h?: object[],
-        public job_counts_24h?: object[]
+        public last_modified?: string
     ) {
         this.manifest = this.manifest || null;
         this.id = this.id || null;
@@ -87,8 +81,5 @@ export class JobType {
         this.archived = this.archived || null;
         this.paused = this.paused || null;
         this.last_modified = this.last_modified || null;
-        this.job_counts_6h = this.job_counts_6h || null;
-        this.job_counts_12h = this.job_counts_12h || null;
-        this.job_counts_24h = this.job_counts_24h || null;
     }
 }

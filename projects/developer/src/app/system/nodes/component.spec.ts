@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
 
 import { NodesComponent } from './component';
@@ -18,7 +19,7 @@ describe('NodesComponent', () => {
             declarations: [NodesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                NodesApiService, StatusApiService, DataService,
+                MessageService, NodesApiService, StatusApiService, DataService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

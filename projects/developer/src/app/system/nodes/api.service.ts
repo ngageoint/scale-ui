@@ -5,6 +5,7 @@ import polling from 'rx-polling';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 
+import { Node } from './api.model';
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 
@@ -21,12 +22,18 @@ export class NodesApiService {
         this.apiPrefix = this.dataService.getApiPrefix('nodes');
     }
 
-    getNodes(params: any, poll?: boolean): Observable<any> {
+    getNodes(params?: any, poll?: boolean): Observable<any> {
+        params = params || {
+            page: 1,
+            pageSize: 1000
+        };
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/nodes/`, { params: params })
                 .pipe(
                     map(response => {
-                        return ApiResults.transformer(response);
+                        const returnObj = ApiResults.transformer(response);
+                        returnObj.results = Node.transformer(returnObj.results);
+                        return returnObj;
                     }),
                     catchError(this.dataService.handleError)
                 );
@@ -35,8 +42,29 @@ export class NodesApiService {
         return this.http.get<ApiResults>(`${this.apiPrefix}/nodes/`, { params: params })
             .pipe(
                 map(response => {
-                    return ApiResults.transformer(response);
+                    const returnObj = ApiResults.transformer(response);
+                    returnObj.results = Node.transformer(returnObj.results);
+                    return returnObj;
                 }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    getNode(id: number): Observable<any> {
+        return this.http.get<ApiResults>(`${this.apiPrefix}/nodes/${id}`)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    updateNode(node: any): Observable<any> {
+        const updatedNode = {
+            is_paused: node.is_paused,
+            pause_reason: node.pause_reason,
+            is_active: node.is_active
+        };
+        return this.http.patch<any>(`${this.apiPrefix}/nodes/${node.id}/`, updatedNode)
+            .pipe(
                 catchError(this.dataService.handleError)
             );
     }

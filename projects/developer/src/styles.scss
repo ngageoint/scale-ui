@@ -24,6 +24,12 @@
         padding-top: 15px !important;
         padding-bottom: 15px !important;
     }
+
+    .node__paused {
+        .ui-panel-titlebar {
+            background: $clr-label-warning;
+        }
+    }
 }
 
 .throb-text, .throb-background, .throb-svg {

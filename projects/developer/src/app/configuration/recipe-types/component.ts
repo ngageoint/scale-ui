@@ -198,7 +198,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.routerEvents.unsubscribe();
-        this.routeParams.unsubscribe();
+        if (this.routerEvents) {
+            this.routerEvents.unsubscribe();
+        }
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
     }
 }

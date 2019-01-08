@@ -31,6 +31,7 @@ var ingestDetails = require('./handlers/ingestDetails');
 var fileDetails = require('./handlers/fileDetails');
 var nodes = require('./handlers/nodes');
 var nodeDetails = require('./handlers/nodeDetails');
+var nodeUpdate = require('./handlers/nodeUpdate');
 
 var apiVersion = 'v6';
 
@@ -244,6 +245,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/nodes/{id}/',
             handler: nodeDetails
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/' + apiVersion + '/nodes/{id}/',
+            handler: nodeUpdate
         });
     }
 };

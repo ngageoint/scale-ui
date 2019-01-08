@@ -155,9 +155,15 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.routerEvents.unsubscribe();
-        this.routeParams.unsubscribe();
-        this.msgSubscription.unsubscribe();
+        if (this.routerEvents) {
+            this.routerEvents.unsubscribe();
+        }
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
+        if (this.msgSubscription) {
+            this.msgSubscription.unsubscribe();
+        }
     }
 
     getUnicode(code) {

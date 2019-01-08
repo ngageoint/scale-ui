@@ -3,15 +3,15 @@
     <p-inputSwitch [(ngModel)]="showActive" [pTooltip]="activeLabel" (onChange)="toggleShowActive()"
                    styleClass="margin-left-sm"></p-inputSwitch>
 </div>
-<p-dataView [value]="nodes" layout="grid" styleClass="nodes__dataview">
+<p-dataView [value]="nodes" layout="grid" [loading]="loading" styleClass="nodes__dataview">
     <ng-template let-node pTemplate="gridItem">
         <div class="ui-g-12 ui-md-4" *ngIf="node.status">
-            <p-panel>
+            <p-panel [styleClass]="node.headerClass">
                 <p-header>
                     <div class="flexed space-between">
                         <div class="flexed">
                             <div>{{ node.hostname }}</div>
-                            <div class="label margin-left-sm" [ngClass]="node.stateClass"
+                            <div class="label margin-left-sm" [ngClass]="node.status.stateClass"
                                  [pTooltip]="node.status.state.description">
                                 {{ node.status.state.title }}
                             </div>
@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div>
-                            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                            <p-menu #menu [popup]="true" [model]="node.menuItems" appendTo="body"></p-menu>
                             <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
                                     (click)="menu.toggle($event)"></button>
                         </div>
@@ -48,3 +48,16 @@
         </div>
     </ng-template>
 </p-dataView>
+<p-dialog [(visible)]="pauseDisplay" [modal]="true" [dismissableMask]="true" *ngIf="nodeToPause">
+    <p-header>
+        <strong>Pause node</strong>
+    </p-header>
+    Specify a reason for pausing this node<br />
+    <input id="input" type="text" size="30" pInputText [(ngModel)]="nodeToPause.pause_reason">
+    <p-footer>
+        <button pButton type="button" class="ui-button-danger" label="Cancel" icon="fa fa-remove"
+                iconPos="right" (click)="pauseDisplay = false"></button>
+        <button pButton type="button" class="ui-button-success" label="Continue" icon="fa fa-check"
+                iconPos="right" (click)="updateNode(nodeToPause)"></button>
+    </p-footer>
+</p-dialog>

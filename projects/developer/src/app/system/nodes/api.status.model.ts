@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { ColorService } from '../services/color.service';
+import { ColorService } from '../../common/services/color.service';
 
 export class NodeStatus {
     stateClass: string;
@@ -53,7 +53,6 @@ export class NodeStatus {
     ) {
         this.colorService = new ColorService();
         this.stateClass = `label-${this.state.name.toLowerCase()}`;
-        debugger;
         this.errorTooltip = this.errors.length === 1 ? this.errors[0].description : this.errors.length + ' Errors';
         this.warningTooltip = this.warnings.length === 1 ? this.warnings[0].description : this.warnings.length + ' Warnings';
         this.jobExeData = {

@@ -276,7 +276,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.getWorkspaces();
     }
     ngOnDestroy() {
-        this.routerEvents.unsubscribe();
-        this.routeParams.unsubscribe();
+        if (this.routerEvents) {
+            this.routerEvents.unsubscribe();
+        }
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
     }
 }
