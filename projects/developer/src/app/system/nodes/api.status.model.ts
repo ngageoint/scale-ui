@@ -55,26 +55,34 @@ export class NodeStatus {
         this.stateClass = `label-${this.state.name.toLowerCase()}`;
         this.errorTooltip = this.errors.length === 1 ? this.errors[0].description : this.errors.length + ' Errors';
         this.warningTooltip = this.warnings.length === 1 ? this.warnings[0].description : this.warnings.length + ' Warnings';
-        this.jobExeData = {
-            labels: ['SYS', 'ALG', 'DATA', 'COMP'],
-            datasets: [
-                {
-                    data: [
-                        this.job_executions.failed.system.total,
-                        this.job_executions.failed.algorithm.total,
-                        this.job_executions.failed.data.total,
-                        this.job_executions.completed.total
-                    ],
-                    backgroundColor: [
-                        this.colorService.ERROR_SYSTEM,
-                        this.colorService.ERROR_ALGORITHM,
-                        this.colorService.ERROR_DATA,
-                        this.colorService.SCALE_BLUE2
-                    ],
-                    label: 'Total'
-                }
-            ]
-        };
+        if (!this.job_executions.failed.system.total &&
+            !this.job_executions.failed.algorithm.total &&
+            !this.job_executions.failed.data.total &&
+            !this.job_executions.completed.total)
+        {
+            this.jobExeData = null;
+        } else {
+            this.jobExeData = {
+                labels: ['SYS', 'ALG', 'DATA', 'COMP'],
+                datasets: [
+                    {
+                        data: [
+                            this.job_executions.failed.system.total,
+                            this.job_executions.failed.algorithm.total,
+                            this.job_executions.failed.data.total,
+                            this.job_executions.completed.total
+                        ],
+                        backgroundColor: [
+                            this.colorService.ERROR_SYSTEM,
+                            this.colorService.ERROR_ALGORITHM,
+                            this.colorService.ERROR_DATA,
+                            this.colorService.SCALE_BLUE2
+                        ],
+                        label: 'Total'
+                    }
+                ]
+            };
+        }
         const labels = [];
         _.forEach(this.job_executions.running.by_job_type, jt => {
             const jobType: any = _.find(this.job_types, { id: jt.job_type_id });

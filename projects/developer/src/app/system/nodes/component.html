@@ -5,20 +5,20 @@
 </div>
 <p-dataView [value]="nodes" layout="grid" [loading]="loading" styleClass="nodes__dataview">
     <ng-template let-node pTemplate="gridItem">
-        <div class="ui-g-12 ui-md-4" *ngIf="node.status">
+        <div class="ui-g-12 ui-md-4">
             <p-panel [styleClass]="node.headerClass">
                 <p-header>
                     <div class="flexed space-between">
                         <div class="flexed">
                             <div>{{ node.hostname }}</div>
                             <div class="label margin-left-sm" [ngClass]="node.status.stateClass"
-                                 [pTooltip]="node.status.state.description">
+                                 [pTooltip]="node.status.state.description" *ngIf="node.status">
                                 {{ node.status.state.title }}
                             </div>
-                            <div class="margin-left-sm" *ngIf="node.status.errors.length > 0">
+                            <div class="margin-left-sm" *ngIf="node.status && node.status.errors.length > 0">
                                 <span class="fa fa-exclamation-triangle error-text" [pTooltip]="node.status.errorTooltip"></span>
                             </div>
-                            <div class="margin-left-sm" *ngIf="node.status.warnings.length > 0">
+                            <div class="margin-left-sm" *ngIf="node.status && node.status.warnings.length > 0">
                                 <span class="fa fa-exclamation-triangle warning-text"
                                       [pTooltip]="node.status.warningTooltip"></span>
                             </div>
@@ -30,18 +30,18 @@
                         </div>
                     </div>
                 </p-header>
-                <div class="ui-g">
-                    <div class="ui-g-6" *ngIf="node.status.jobExeData.datasets.length > 0">
+                <div class="ui-g" *ngIf="node.status">
+                    <div class="ui-g-6" *ngIf="node.status.jobExeData">
                         <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6" *ngIf="node.status.jobExeData.datasets.length === 0">
-                        There have been no job executions in the past 3 hours
+                    <div class="ui-g-6" *ngIf="!node.status.jobExeData">
+                        <span class="label label-info">No job executions during the past 3 hours</span>
                     </div>
-                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets.length > 0">
+                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
                         <p-chart type="doughnut" [data]="node.status.runningJobData" [options]="runningJobOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets.length === 0">
-                        No jobs are running on this node
+                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length === 0">
+                        <span class="label label-info">No jobs are running on this node</span>
                     </div>
                 </div>
             </p-panel>

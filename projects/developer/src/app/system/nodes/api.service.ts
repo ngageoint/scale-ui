@@ -25,7 +25,7 @@ export class NodesApiService {
     getNodes(params?: any, poll?: boolean): Observable<any> {
         params = params || {
             page: 1,
-            pageSize: 1000
+            page_size: 1000
         };
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/nodes/`, { params: params })
