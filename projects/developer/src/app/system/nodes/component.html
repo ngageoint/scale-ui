@@ -31,8 +31,10 @@
                         </div>
                     </div>
                 </p-header>
-                Created: <span [pTooltip]="node.createdTooltip">{{ node.createdDisplay }}</span>;
-                Last Modified: <span [pTooltip]="node.lastModifiedTooltip">{{ node.lastModifiedDisplay }}</span>
+                <div class="margin-bottom-sm">
+                    Created: <span [pTooltip]="node.createdTooltip">{{ node.createdDisplay }}</span>;
+                    Last Modified: <span [pTooltip]="node.lastModifiedTooltip">{{ node.lastModifiedDisplay }}</span>
+                </div>
                 <div class="ui-g" *ngIf="node.status">
                     <div class="ui-g-6" *ngIf="node.status.jobExeData">
                         <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
@@ -48,7 +50,7 @@
                         <span class="label label-info">No jobs are running on this node</span>
                     </div>
                 </div>
-                <div *ngIf="node.status">
+                <div class="margin-top-lg" *ngIf="node.status">
                     <div class="node__resource-bar" *ngIf="node.status.memFields">
                         <h3>Memory ({{ node.status.memTotal }})</h3>
                         <dev-candy-bar [dataArr]="node.status.memArr"

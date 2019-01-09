@@ -193,6 +193,6 @@ export class NodeStatus {
                 lastUpdatedDisplay: this.dataService.formatDate(warning.last_updated, true),
                 lastUpdatedTooltip: this.dataService.formatDate(warning.last_updated)
             });
-        })
+        });
     }
 }
