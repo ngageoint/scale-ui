@@ -3,3 +3,22 @@
         align-items: flex-end;
     }
 }
+
+.node__resource-bar {
+    position: relative;
+    margin: 0 0 5px 0;
+
+    h3 {
+        position: absolute;
+        top: -13px;
+        left: 5px;
+        z-index: 1000;
+        color: #fff;
+        font-size: 1.1em;
+    }
+}
+
+.node__errors, .node__warnings {
+    cursor: pointer;
+    margin-left: 5px;
+}

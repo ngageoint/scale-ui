@@ -28,6 +28,7 @@ $clr-blue-drk: #273662;
 $clr-green: #00cd8c;
 $clr-orange: #cf6a34;
 $clr-red: #fb4719;
+$clr-yellow: #fdb813;
 
 $clr-scale-blue1: #48ACFF;
 $clr-scale-blue2: #0071BC;
@@ -62,6 +63,9 @@ $clr-status-canceled: $clr-black;
 $clr-failure-system: #67000d;
 $clr-failure-algorithm: #cb181d;
 $clr-failure-data: #f16913;
+$clr-offered: $clr-gray-80;
+$clr-free: $clr-status-good;
+$clr-unavailable: $clr-failure-system;
 
 $clr-label-text: #fff;
 $clr-label-default: #777;

@@ -85,6 +85,7 @@ import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { NodesApiService } from './system/nodes/api.service';
+import { CandyBarComponent } from './common/components/candy-bar/component';
 
 
 @NgModule({
@@ -122,7 +123,8 @@ import { NodesApiService } from './system/nodes/api.service';
         BatchDetailsComponent,
         IngestDetailsComponent,
         FeedComponent,
-        NodesComponent
+        NodesComponent,
+        CandyBarComponent
     ],
     imports: [
         AppRoutingModule,

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
-import { Node } from './api.model';
 import { NodesApiService } from './api.service';
 import { StatusApiService } from '../../common/services/status/api.service';
 
@@ -25,6 +23,10 @@ export class NodesComponent implements OnInit {
     totalDeprecated = 0;
     pauseDisplay = false;
     nodeToPause: any;
+    errorDisplay = false;
+    nodeErrors: any;
+    warningDisplay = false;
+    nodeWarnings: any;
     jobExeOptions = {
         legend: {
             display: false
@@ -168,6 +170,16 @@ export class NodesComponent implements OnInit {
     onDeprecateClick(node) {
         node.is_active = !node.is_active;
         this.updateNode(node, 'deprecate');
+    }
+
+    onErrorsClick(node) {
+        this.nodeErrors = node.status.errorData;
+        this.errorDisplay = true;
+    }
+
+    onWarningsClick(node) {
+        this.nodeWarnings = node.status.warningData;
+        this.warningDisplay = true;
     }
 
     toggleShowActive() {

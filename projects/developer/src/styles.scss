@@ -25,10 +25,40 @@
         padding-bottom: 15px !important;
     }
 
+    .ui-panel-titlebar {
+        padding: 0.2em 0.5em !important;
+    }
+
     .node__paused {
         .ui-panel-titlebar {
-            background: $clr-label-warning;
+            background: $clr-gray-60;
+            color: #fff;
         }
+    }
+}
+
+.node__errors, .node__warnings {
+    &.ui-dialog {
+        width: 33vw !important;
+    }
+    .ui-dialog-titlebar {
+        color: #fff !important;
+
+        .ui-dialog-titlebar-icon {
+            color: #fff !important;
+        }
+    }
+}
+
+.node__errors {
+    .ui-dialog-titlebar {
+        background: $clr-label-danger !important;
+    }
+}
+
+.node__warnings {
+    .ui-dialog-titlebar {
+        background: $clr-label-warning !important;
     }
 }
 
@@ -369,6 +399,15 @@ label-default {
 .error-text {
     color: $clr-label-danger;
 }
+.offered-text {
+    color: $clr-offered;
+}
+.free-text {
+    color: $clr-free;
+}
+.unavailable-text {
+    color: $clr-unavailable;
+}
 
 .completed {
     background: $clr-status-completed !important;
@@ -390,4 +429,13 @@ label-default {
 }
 .canceled {
     background: $clr-status-canceled !important;
+}
+.offered {
+    background: $clr-offered !important;
+}
+.free {
+    background: $clr-free !important;
+}
+.unavailable {
+    background: $clr-unavailable !important;
 }

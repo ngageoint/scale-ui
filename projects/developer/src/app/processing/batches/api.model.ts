@@ -22,9 +22,8 @@ export class Batch {
     jobs_failed_percentage: any;
     jobs_canceled_percentage: any;
     jobs_completed_percentage: any;
-    jobs_data: any = [];
-    jobs_data_tooltip: any = '';
-
+    jobsArr: any;
+    jobsFields: any;
     private static build(data) {
         if (data) {
             return new Batch(
@@ -154,7 +153,7 @@ export class Batch {
         this.jobs_failed_percentage = (this.jobs_failed / this.jobs_total) * 100;
         this.jobs_canceled_percentage = (this.jobs_canceled / this.jobs_total) * 100;
         this.jobs_completed_percentage = (this.jobs_completed / this.jobs_total) * 100;
-        let jobsArr = _.filter([
+        this.jobsArr = _.filter([
             { key: 'blocked', percentage: this.jobs_blocked_percentage, value: 0, field: 'jobs_blocked' },
             { key: 'queued', percentage: this.jobs_queued_percentage, value: 0, field: 'jobs_queued' },
             { key: 'running', percentage: this.jobs_running_percentage, value: 0, field: 'jobs_running' },
@@ -162,14 +161,13 @@ export class Batch {
             { key: 'canceled', percentage: this.jobs_canceled_percentage, value: 0, field: 'jobs_canceled' },
             { key: 'completed', percentage: this.jobs_completed_percentage, value: 0, field: 'jobs_completed' }
         ], d => d.percentage > 0);
-        jobsArr = _.reverse(_.sortBy(jobsArr, 'percentage'));
-        _.forEach(jobsArr, data => {
-            const sum = _.sum(_.map(this.jobs_data, 'percentage'));
-            data.value = data.percentage + sum;
-            this.jobs_data.push(data);
-            const icon = `<span class="${data.key}-text"><i class="fa fa-square"></i></span>`;
-            this.jobs_data_tooltip = this.jobs_data_tooltip === '' ? `${icon} ${_.capitalize(data.key)}: ${this[data.field]}` : `${this.jobs_data_tooltip}<br />${icon} ${_.capitalize(data.key)}: ${this[data.field]}`; // tslint:disable-line:max-line-length
-        });
-        this.jobs_data = _.reverse(_.sortBy(this.jobs_data, 'value'));
+        this.jobsFields = {
+            jobs_blocked: this.jobs_blocked,
+            jobs_queued: this.jobs_queued,
+            jobs_running: this.jobs_running,
+            jobs_failed: this.jobs_failed,
+            jobs_canceled: this.jobs_canceled,
+            jobs_completed: this.jobs_completed
+        };
     }
 }

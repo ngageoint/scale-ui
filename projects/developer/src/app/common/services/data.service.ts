@@ -121,9 +121,10 @@ export class DataService {
         } else {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
+            const body = error.error ? error.error.message : error;
             console.error(
                 `Backend returned code ${error.status}, ` +
-                `body was: ${error.error.message}`);
+                `body was: ${body}`);
         }
         // return an observable with a user-facing error message
         return throwError({
