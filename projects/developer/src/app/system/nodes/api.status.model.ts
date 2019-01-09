@@ -58,8 +58,7 @@ export class NodeStatus {
         if (!this.job_executions.failed.system.total &&
             !this.job_executions.failed.algorithm.total &&
             !this.job_executions.failed.data.total &&
-            !this.job_executions.completed.total)
-        {
+            !this.job_executions.completed.total) {
             this.jobExeData = null;
         } else {
             this.jobExeData = {

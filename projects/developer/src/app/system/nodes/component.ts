@@ -124,20 +124,34 @@ export class NodesComponent implements OnInit {
         });
     }
 
-    updateNode(node) {
-        this.pauseDisplay = false;
-        console.log(node.pause_reason);
-        this.nodesApiService.updateNode(node).subscribe(data => {
-            node.pauseLabel = data.is_paused ? 'Resume' : 'Pause';
-            node.pauseIcon = data.is_paused ? 'fa fa-play' : 'fa fa-pause';
-            node.menuItems[0].label = node.pauseLabel;
-            node.menuItems[0].icon = node.pauseIcon;
-            node.headerClass = data.is_paused ? 'node__paused' : '';
-            this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
-        }, err => {
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error updating node', detail: err.statusText});
-        });
+    updateNode(node: any, action: string) {
+        if (action === 'pause') {
+            // handle pause update
+            this.pauseDisplay = false;
+            this.nodesApiService.updateNode(node).subscribe(data => {
+                node.pauseLabel = data.is_paused ? 'Resume' : 'Pause';
+                node.pauseIcon = data.is_paused ? 'fa fa-play' : 'fa fa-pause';
+                node.menuItems[0].label = node.pauseLabel;
+                node.menuItems[0].icon = node.pauseIcon;
+                node.headerClass = data.is_paused ? 'node__paused' : '';
+                this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error updating node', detail: err.statusText});
+            });
+        } else {
+            // handle deprecate update
+            this.nodesApiService.updateNode(node).subscribe(data => {
+                node.deprecateLabel = data.is_active ? 'Deprecate' : 'Activate';
+                node.deprecateIcon = data.is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
+                node.menuItems[1].label = node.deprecateLabel;
+                node.menuItems[1].icon = node.deprecateIcon;
+                this.formatNodes();
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error updating node', detail: err.statusText});
+            });
+        }
     }
 
     onPauseClick(node) {
@@ -147,17 +161,13 @@ export class NodesComponent implements OnInit {
             this.nodeToPause.pause_reason = '';
             this.pauseDisplay = true;
         } else {
-            this.updateNode(node);
+            this.updateNode(node, 'pause');
         }
     }
 
     onDeprecateClick(node) {
         node.is_active = !node.is_active;
-        node.deprecateLabel = node.is_active ? 'Deprecate' : 'Activate';
-        node.deprecateIcon = node.is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
-        node.menuItems[1].label = node.deprecateLabel;
-        node.menuItems[1].icon = node.deprecateIcon;
-        this.updateNode(node);
+        this.updateNode(node, 'deprecate');
     }
 
     toggleShowActive() {
