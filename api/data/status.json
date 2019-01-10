@@ -293,9 +293,9 @@
                     "unavailable": 3072.0
                 },
                 "gpus": {
-                    "offered": 0.0,
-                    "total": 0.0,
-                    "running": 0.0,
+                    "offered": 2.0,
+                    "total": 6.0,
+                    "running": 4.0,
                     "free": 0.0,
                     "unavailable": 0.0
                 },

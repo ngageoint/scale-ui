@@ -60,6 +60,10 @@ body {
         padding: .6em 2em .6em .6em;
     }
 
+    p-inputswitch {
+        line-height: 0;
+    }
+
     .seed-jobs .results .ui-panel:hover {
         background: $clr-highlight !important;
 

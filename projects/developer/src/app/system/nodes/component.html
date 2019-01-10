@@ -1,33 +1,63 @@
-<div class="nodes__title flexed">
+<div class="flexed">
     <h2><i class="fa fa-circle-o"></i> Nodes ({{ count }})</h2>
-    <p-inputSwitch [(ngModel)]="showActive" [pTooltip]="activeLabel" (onChange)="toggleShowActive()"
-                   styleClass="margin-left-sm"></p-inputSwitch>
 </div>
-<p-dataView [value]="nodes" layout="grid" [loading]="loading" styleClass="nodes__dataview">
+<p-dataView [value]="filteredNodes" layout="grid" [loading]="loading" styleClass="nodes__dataview">
+    <p-header>
+        <div class="flexed space-between">
+            <div class="node__filters">
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="readyBtnClass" [icon]="readyBtnIcon"
+                        [label]="readyBtnLabel" [disabled]="!showActive" (click)="onFilterBtnClick('ready')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="pausedBtnClass"
+                        [icon]="pausedBtnIcon" [label]="pausedBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('paused')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="busyBtnClass" [icon]="busyBtnIcon"
+                        [label]="busyBtnLabel" [disabled]="!showActive" (click)="onFilterBtnClick('busy')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="waitingBtnClass"
+                        [icon]="waitingBtnIcon" [label]="waitingBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('waiting')"></button>
+            </div>
+            <div class="flexed">
+                <p-inputSwitch [(ngModel)]="showActive" [pTooltip]="activeLabel" (onChange)="toggleShowActive()"
+                               class="margin-right-md"></p-inputSwitch>
+                <button pButton type="button" class="ui-button-rounded ui-button-secondary node__collapse"
+                        [icon]="collapseIcon" (click)="onCollapseBtnClick()" [pTooltip]="collapseTooltip"></button>
+            </div>
+        </div>
+    </p-header>
     <ng-template let-node pTemplate="gridItem">
         <div class="ui-g-12 ui-md-4">
-            <p-panel [styleClass]="node.headerClass">
+            <p-panel [styleClass]="node.headerClass" [collapsed]="collapsed" [toggleable]="true" toggler="header">
                 <p-header>
                     <div class="flexed space-between">
                         <div class="flexed">
                             <div>{{ node.hostname }}</div>
-                            <div class="label margin-left-sm" [ngClass]="node.status.stateClass"
+                            <div class="margin-left-sm"
                                  [pTooltip]="node.status.state.description" *ngIf="node.status">
-                                {{ node.status.state.title }}
+                                <span class="label" [ngClass]="node.status.stateClass">
+                                    {{ node.status.state.title }}
+                                </span>
                             </div>
-                            <div class="node__errors" *ngIf="node.status && node.status.errors.length > 0">
-                                <span class="fa fa-exclamation-triangle error-text"
-                                      [pTooltip]="node.status.errorTooltip" (click)="onErrorsClick(node)"></span>
+                            <div class="node__errors"
+                                 (click)="onErrorsClick(node, $event)"
+                                 [pTooltip]="node.status.errorTooltip"
+                                 *ngIf="node.status && node.status.errors.length > 0">
+                                <span class="label label-danger">
+                                    <i class="fa fa-exclamation-triangle"></i> {{ node.status.errors.length }}
+                                </span>
                             </div>
-                            <div class="node__warnings" *ngIf="node.status && node.status.warnings.length > 0">
-                                <span class="fa fa-exclamation-triangle warning-text"
-                                      [pTooltip]="node.status.warningTooltip" (click)="onWarningsClick(node)"></span>
+                            <div class="node__warnings"
+                                 (click)="onWarningsClick(node, $event)"
+                                 [pTooltip]="node.status.warningTooltip"
+                                 *ngIf="node.status && node.status.warnings.length > 0">
+                                <span class="label label-warning">
+                                    <i class="fa fa-exclamation-triangle"></i> {{ node.status.warnings.length }}
+                                </span>
                             </div>
                         </div>
                         <div>
                             <p-menu #menu [popup]="true" [model]="node.menuItems" appendTo="body"></p-menu>
                             <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                                    (click)="menu.toggle($event)"></button>
+                                    (click)="onMenuClick($event)"></button>
                         </div>
                     </div>
                 </p-header>
@@ -47,7 +77,7 @@
                                  [options]="runningJobOptions"></p-chart>
                     </div>
                     <div class="ui-g-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">
-                        There are currently no jobs running on this node
+                        There are no jobs running on this node
                     </div>
                 </div>
                 <div class="margin-top-lg" *ngIf="node.status">
@@ -92,7 +122,7 @@
 <p-dialog [(visible)]="errorDisplay" [modal]="true" [dismissableMask]="true" [blockScroll]="true"
           styleClass="node__errors" *ngIf="nodeErrors">
     <p-header>
-        <strong><i class="fa fa-exclamation-triangle"></i> Errors</strong>
+        <strong><i class="fa fa-exclamation-triangle"></i> Errors ({{ nodeErrors.length }})</strong>
     </p-header>
     <p-scrollPanel [style]="{width: '100%', height: '250px'}">
         <ul class="list-unstyled">
@@ -106,7 +136,7 @@
 <p-dialog [(visible)]="warningDisplay" [modal]="true" [dismissableMask]="true" [blockScroll]="true"
           styleClass="node__warnings" *ngIf="nodeWarnings">
     <p-header>
-        <strong><i class="fa fa-exclamation-triangle"></i> Warnings</strong>
+        <strong><i class="fa fa-exclamation-triangle"></i> Warnings ({{ nodeWarnings.length }})</strong>
     </p-header>
     <p-scrollPanel [style]="{width: '100%', height: '250px'}">
         <ul class="list-unstyled">

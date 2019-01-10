@@ -71,10 +71,10 @@ export class NodeStatus {
         this.dataService = new DataService();
         this.stateClass = `label-${this.state.name.toLowerCase()}`;
         this.errorTooltip = this.errors ?
-            this.errors.length === 1 ? this.errors[0].description : this.errors.length + ' Errors' :
+            this.errors.length === 1 ? this.errors.length + ' Error' : this.errors.length + ' Errors' :
             null;
         this.warningTooltip = this.warnings ?
-            this.warnings.length === 1 ? this.warnings[0].description : this.warnings.length + ' Warnings' :
+            this.warnings.length === 1 ? this.warnings.length + ' Warning' : this.warnings.length + ' Warnings' :
             null;
         if (!this.job_executions.failed.system.total &&
             !this.job_executions.failed.algorithm.total &&
@@ -96,7 +96,7 @@ export class NodeStatus {
                             this.colorService.ERROR_SYSTEM,
                             this.colorService.ERROR_ALGORITHM,
                             this.colorService.ERROR_DATA,
-                            this.colorService.SCALE_BLUE2
+                            this.colorService.COMPLETED
                         ],
                         label: 'Total'
                     }

@@ -81,6 +81,11 @@ $clr-label-warning-hover: #ec971f;
 $clr-label-danger: #d9534f;
 $clr-label-danger-hover: #c9302c;
 
+$clr-ready: $clr-status-good;
+$clr-paused: $clr-status-pending;
+$clr-busy: $clr-status-running;
+$clr-waiting: $clr-status-blocked;
+
 
 //--------------------- PrimeNG vars ---------------------//
 

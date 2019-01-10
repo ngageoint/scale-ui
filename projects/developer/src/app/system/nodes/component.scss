@@ -1,7 +1,13 @@
-.nodes__title {
-    &.flexed {
-        align-items: flex-end;
+.node__filters {
+    button {
+        margin-right: 5px;
+        padding: 0;
+        font-size: 0.8em;
     }
+}
+
+.node__collapse {
+    font-size: 0.8em;
 }
 
 .node__resource-bar {
@@ -31,4 +37,5 @@
     color: #777;
     font-size: 0.9em;
     text-align: center;
+    line-height: 1.2em;
 }

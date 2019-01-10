@@ -17,7 +17,10 @@
 
 .nodes__dataview {
     .ui-dataview-header {
-        display: none !important;
+        .ui-button-secondary {
+            background-color: #ccc !important;
+            border: 1px solid #ccc !important;
+        }
     }
 
     .ui-dataview-content {
@@ -29,9 +32,13 @@
         padding: 0.2em 0.5em !important;
     }
 
+    .ui-panel-titlebar-toggler {
+        display: none !important;
+    }
+
     .node__paused {
         .ui-panel-titlebar {
-            background: $clr-gray-60;
+            background: $clr-paused;
             color: #fff;
         }
     }
@@ -177,6 +184,10 @@ a:not(.ui-button, .ui-paginator) {
     &.center {
         justify-content: center;
     }
+
+    &.flex-end {
+        justify-content: flex-end;
+    }
 }
 
 .table {
@@ -206,7 +217,7 @@ a:not(.ui-button, .ui-paginator) {
 
 .label {
     display: inline;
-    padding: .2em .6em .3em;
+    padding: .2em .6em .2em;
     font-size: 75%;
     font-weight: bold;
     line-height: 1;
@@ -289,19 +300,19 @@ label-default {
 }
 
 .label-ready {
-    background-color: $clr-label-success;
+    background-color: $clr-ready;
 }
 
 .label-paused {
-    background-color: $clr-label-warning;
+    background-color: $clr-paused;
 }
 
 .label-busy {
-    background-color: $clr-label-info;
+    background-color: $clr-busy;
 }
 
 .label-waiting {
-    background-color: $clr-label-danger;
+    background-color: $clr-waiting;
 }
 
 .no-margin {
@@ -438,4 +449,21 @@ label-default {
 }
 .unavailable {
     background: $clr-unavailable !important;
+}
+
+.ui-button-ready {
+    background-color: $clr-ready !important;
+    border: 1px solid $clr-ready !important;
+}
+.ui-button-paused {
+    background-color: $clr-paused !important;
+    border: 1px solid $clr-paused !important;
+}
+.ui-button-busy {
+    background-color: $clr-busy !important;
+    border: 1px solid $clr-busy !important;
+}
+.ui-button-waiting {
+    background-color: $clr-waiting !important;
+    border: 1px solid $clr-waiting !important;
 }
