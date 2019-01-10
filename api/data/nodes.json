@@ -15,7 +15,7 @@
     {
       "id": 2,
       "hostname": "scale.dcos.aisohio.node2",
-      "is_paused": true,
+      "is_paused": false,
       "deprecated": null,
       "is_active": true,
       "created": "2015-12-22T09:39:55Z",
@@ -24,7 +24,7 @@
     {
       "id": 3,
       "hostname": "scale.dcos.aisohio.node3",
-      "is_paused": false,
+      "is_paused": true,
       "deprecated": "2016-05-09T07:16:54Z",
       "is_active": false,
       "created": "2016-04-09T07:16:54Z",

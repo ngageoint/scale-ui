@@ -82,7 +82,7 @@
     "nodes": [
         {
             "id": 1,
-            "hostname": "my-host",
+            "hostname": "scale.dcos.aisohio.node1",
             "agent_id": "my-agent",
             "is_active": true,
             "state": {
@@ -251,6 +251,106 @@
                                 "count": 3
                             }
                         ]
+                    }
+                }
+            }
+        },
+        {
+            "id": 2,
+            "hostname": "scale.dcos.aisohio.node2",
+            "agent_id": "my-agent",
+            "is_active": true,
+            "state": {
+                "name": "READY",
+                "title": "Ready",
+                "description": "Node is ready to run new jobs."
+            },
+            "errors": [],
+            "warnings": [],
+            "node_tasks": [
+                {
+                    "type": "cleanup",
+                    "title": "Node Cleanup",
+                    "description": "Performs Docker container and volume cleanup on the node",
+                    "count": 1
+                }
+            ],
+            "system_tasks": [
+                {
+                    "type": "message-handler",
+                    "title": "Message Handler",
+                    "description": "Processes messages from Scale's backend messaging system",
+                    "count": 1
+                }
+            ],
+            "num_offers": 1,
+            "resources": {
+                "mem": {
+                    "offered": 1974.0,
+                    "total": 29965.0,
+                    "running": 16823.0,
+                    "free": 8096.0,
+                    "unavailable": 3072.0
+                },
+                "gpus": {
+                    "offered": 0.0,
+                    "total": 0.0,
+                    "running": 0.0,
+                    "free": 0.0,
+                    "unavailable": 0.0
+                },
+                "disk": {
+                    "offered": 59522.0,
+                    "total": 96577.0,
+                    "running": 12932.0,
+                    "free": 23099.0,
+                    "unavailable": 1024.0
+                },
+                "cpus": {
+                    "offered": 2.0,
+                    "total": 12.0,
+                    "running": 4.0,
+                    "free": 2.0,
+                    "unavailable": 4.0
+                }
+            },
+            "job_executions": {
+                "running": {
+                    "total": 0,
+                    "by_job_type": []
+                },
+                "completed": {
+                    "total": 20,
+                    "by_job_type": [
+                        {
+                            "job_type_id": 3,
+                            "count": 20
+                        }
+                    ]
+                },
+                "failed": {
+                    "total": 2,
+                    "data": {
+                        "total": 1,
+                        "by_job_type": [
+                            {
+                                "job_type_id": 1,
+                                "count": 1
+                            }
+                        ]
+                    },
+                    "algorithm": {
+                        "total": 1,
+                        "by_job_type": [
+                            {
+                                "job_type_id": 2,
+                                "count": 1
+                            }
+                        ]
+                    },
+                    "system": {
+                        "total": 0,
+                        "by_job_type": []
                     }
                 }
             }

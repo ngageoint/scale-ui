@@ -39,15 +39,15 @@
                     <div class="ui-g-6" *ngIf="node.status.jobExeData">
                         <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6" *ngIf="!node.status.jobExeData">
-                        <span class="label label-info">No job executions during the past 3 hours</span>
+                    <div class="ui-g-6 node__empty-data" *ngIf="!node.status.jobExeData">
+                        No job executions found within the past 3 hours
                     </div>
                     <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
                         <p-chart type="doughnut" [data]="node.status.runningJobData"
                                  [options]="runningJobOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length === 0">
-                        <span class="label label-info">No jobs are running on this node</span>
+                    <div class="ui-g-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">
+                        There are currently no jobs running on this node
                     </div>
                 </div>
                 <div class="margin-top-lg" *ngIf="node.status">

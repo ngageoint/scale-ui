@@ -70,8 +70,12 @@ export class NodeStatus {
         this.colorService = new ColorService();
         this.dataService = new DataService();
         this.stateClass = `label-${this.state.name.toLowerCase()}`;
-        this.errorTooltip = this.errors.length === 1 ? this.errors[0].description : this.errors.length + ' Errors';
-        this.warningTooltip = this.warnings.length === 1 ? this.warnings[0].description : this.warnings.length + ' Warnings';
+        this.errorTooltip = this.errors ?
+            this.errors.length === 1 ? this.errors[0].description : this.errors.length + ' Errors' :
+            null;
+        this.warningTooltip = this.warnings ?
+            this.warnings.length === 1 ? this.warnings[0].description : this.warnings.length + ' Warnings' :
+            null;
         if (!this.job_executions.failed.system.total &&
             !this.job_executions.failed.algorithm.total &&
             !this.job_executions.failed.data.total &&

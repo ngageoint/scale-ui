@@ -22,3 +22,13 @@
     cursor: pointer;
     margin-left: 5px;
 }
+
+.node__empty-data {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: #777;
+    font-size: 0.9em;
+    text-align: center;
+}
