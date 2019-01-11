@@ -25,7 +25,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
-
     dateFormat: string = environment.dateFormat;
     datatableLoading: boolean;
     columns: any[];
@@ -45,7 +44,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized: boolean;
     subscription: any;
-
     constructor(
         private dataService: DataService,
         private jobsDatatableService: JobsDatatableService,

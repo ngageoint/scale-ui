@@ -137,24 +137,4 @@ export class JobsApiService {
                 catchError(this.dataService.handleError)
             );
     }
-    getJobLoad(params, poll?: boolean): Observable<any> {
-        const apiPrefix = this.dataService.getApiPrefix('load');
-        if (poll) {
-            const request = this.http.get(`${apiPrefix}/load/`, { params: params })
-                .pipe(
-                    map(response => {
-                        return ApiResults.transformer(response);
-                    }),
-                    catchError(this.dataService.handleError)
-                );
-            return polling(request, { interval: 600000 });
-        }
-        return this.http.get<ApiResults>(`${apiPrefix}/load/`, { params: params })
-            .pipe(
-                map(response => {
-                    return ApiResults.transformer(response);
-                }),
-                catchError(this.dataService.handleError)
-            );
-    }
 }

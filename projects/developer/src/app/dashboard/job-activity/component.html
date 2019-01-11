@@ -1,4 +1,2 @@
-<div class="scale-chart-container">
-    <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
-    <p-chart #chart type="line" [data]="data" [options]="options"></p-chart>
-</div>
+<dev-queue-load [started]="params.started" [ended]="params.ended" [jobTypeIds]="params.job_type_id"
+                [maintainAspectRatio]="false" (chartLoaded)="onChartLoaded($event)"></dev-queue-load>

@@ -1,4 +1,3 @@
-var jobLoad = require('./handlers/jobload');
 var recipes = require('./handlers/recipes');
 var recipeTypes = require('./handlers/recipeTypes');
 var recipeDetails = require('./handlers/recipeDetails');
@@ -32,17 +31,12 @@ var fileDetails = require('./handlers/fileDetails');
 var nodes = require('./handlers/nodes');
 var nodeDetails = require('./handlers/nodeDetails');
 var nodeUpdate = require('./handlers/nodeUpdate');
+var queueLoad = require('./handlers/queueLoad');
 
 var apiVersion = 'v6';
 
 module.exports = {
     init: function(server) {
-        server.route({
-            method: 'GET',
-            path: '/mocks/' + apiVersion + '/load/',
-            handler: jobLoad
-        });
-
         server.route({
             method: 'GET',
             path: '/mocks/' + apiVersion + '/recipes/',
@@ -251,6 +245,12 @@ module.exports = {
             method: 'PATCH',
             path: '/mocks/' + apiVersion + '/nodes/{id}/',
             handler: nodeUpdate
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/load/',
+            handler: queueLoad
         });
     }
 };

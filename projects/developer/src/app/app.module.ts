@@ -86,6 +86,8 @@ import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { NodesApiService } from './system/nodes/api.service';
 import { CandyBarComponent } from './common/components/candy-bar/component';
+import { QueueLoadComponent } from './common/components/queue-load/component';
+import { QueueApiService } from './common/services/queue/api.service';
 
 
 @NgModule({
@@ -124,7 +126,8 @@ import { CandyBarComponent } from './common/components/candy-bar/component';
         IngestDetailsComponent,
         FeedComponent,
         NodesComponent,
-        CandyBarComponent
+        CandyBarComponent,
+        QueueLoadComponent
     ],
     imports: [
         AppRoutingModule,
@@ -204,7 +207,8 @@ import { CandyBarComponent } from './common/components/candy-bar/component';
         BatchesApiService,
         BatchesDatatableService,
         StrikesApiService,
-        NodesApiService
+        NodesApiService,
+        QueueApiService
     ],
     bootstrap: [AppComponent]
 })
