@@ -17,7 +17,8 @@
                         (click)="onFilterBtnClick('waiting')"></button>
             </div>
             <div class="flexed">
-                <p-inputSwitch [(ngModel)]="showActive" [pTooltip]="activeLabel" (onChange)="toggleShowActive()"
+                <span class="node__type-label">{{ activeLabel }}</span>
+                <p-inputSwitch [(ngModel)]="showActive" (onChange)="toggleShowActive()"
                                class="margin-right-md"></p-inputSwitch>
                 <button pButton type="button" class="ui-button-rounded ui-button-secondary node__collapse"
                         [icon]="collapseIcon" (click)="onCollapseBtnClick()" [pTooltip]="collapseTooltip"></button>
