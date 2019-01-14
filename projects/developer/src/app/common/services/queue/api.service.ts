@@ -30,7 +30,7 @@ export class QueueApiService {
             })
         });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/load/`, { params: queryParams })
+            const request = this.http.get(`${this.loadApiPrefix}/load/`, { params: queryParams })
                 .pipe(
                     map(response => {
                         return ApiResults.transformer(response);
@@ -39,7 +39,27 @@ export class QueueApiService {
                 );
             return polling(request, { interval: 600000 });
         }
-        return this.http.get<ApiResults>(`${this.apiPrefix}/load/`, {params: queryParams})
+        return this.http.get<ApiResults>(`${this.loadApiPrefix}/load/`, {params: queryParams})
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    getQueueStatus(poll?: boolean): Observable<ApiResults> {
+        if (poll) {
+            const request = this.http.get(`${this.apiPrefix}/queue/status/`)
+                .pipe(
+                    map(response => {
+                        return ApiResults.transformer(response);
+                    }),
+                    catchError(this.dataService.handleError)
+                );
+            return polling(request, { interval: 600000 });
+        }
+        return this.http.get<ApiResults>(`${this.apiPrefix}/queue/status/`)
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);

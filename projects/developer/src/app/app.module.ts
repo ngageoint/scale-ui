@@ -88,6 +88,7 @@ import { NodesApiService } from './system/nodes/api.service';
 import { CandyBarComponent } from './common/components/candy-bar/component';
 import { QueueLoadComponent } from './common/components/queue-load/component';
 import { QueueApiService } from './common/services/queue/api.service';
+import { QueuedJobsComponent } from './processing/queued-jobs/component';
 
 
 @NgModule({
@@ -127,7 +128,8 @@ import { QueueApiService } from './common/services/queue/api.service';
         FeedComponent,
         NodesComponent,
         CandyBarComponent,
-        QueueLoadComponent
+        QueueLoadComponent,
+        QueuedJobsComponent
     ],
     imports: [
         AppRoutingModule,

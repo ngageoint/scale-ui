@@ -32,6 +32,7 @@ var nodes = require('./handlers/nodes');
 var nodeDetails = require('./handlers/nodeDetails');
 var nodeUpdate = require('./handlers/nodeUpdate');
 var queueLoad = require('./handlers/queueLoad');
+var queueStatus = require('./handlers/queueStatus');
 
 var apiVersion = 'v6';
 
@@ -252,5 +253,11 @@ module.exports = {
             path: '/mocks/' + apiVersion + '/load/',
             handler: queueLoad
         });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/queue/status/',
+            handler: queueStatus
+        })
     }
 };
