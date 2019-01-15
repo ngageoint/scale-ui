@@ -134,7 +134,7 @@ export class NodeStatus {
             ]
         };
         const calculateResource = (resource, isMib) => {
-            if (this.resources[resource].total > 0) {
+            if (this.resoruces && this.resources[resource].total > 0) {
                 const offeredPercentage = (this.resources[resource].offered / this.resources[resource].total) * 100;
                 const runningPercentage = (this.resources[resource].running / this.resources[resource].total) * 100;
                 const freePercentage = (this.resources[resource].free / this.resources[resource].total) * 100;
@@ -172,16 +172,16 @@ export class NodeStatus {
         const cpuData = calculateResource('cpus', false);
         this.memArr = memData ? memData.arr : null;
         this.memFields = memData ? memData.fields : null;
-        this.memTotal = this.dataService.calculateFileSizeFromMib(this.resources.mem.total);
+        this.memTotal = this.resources ? this.dataService.calculateFileSizeFromMib(this.resources.mem.total) : 0;
         this.gpusArr = gpuData ? gpuData.arr : null;
         this.gpusFields = gpuData ? gpuData.fields : null;
-        this.gpusTotal = this.resources.gpus.total;
+        this.gpusTotal = this.resources ? this.resources.gpus.total : 0;
         this.diskArr = diskData ? diskData.arr : null;
         this.diskFields = diskData ? diskData.fields : null;
-        this.diskTotal = this.dataService.calculateFileSizeFromMib(this.resources.disk.total);
+        this.diskTotal = this.resources ? this.dataService.calculateFileSizeFromMib(this.resources.disk.total) : 0;
         this.cpusArr = cpuData ? cpuData.arr : null;
         this.cpusFields = cpuData ? cpuData.fields : null;
-        this.cpusTotal = this.resources.cpus.total;
+        this.cpusTotal = this.resources ? this.resources.cpus.total : 0;
         _.forEach(this.errors, error => {
             this.errorData.push({
                 title: error.title,

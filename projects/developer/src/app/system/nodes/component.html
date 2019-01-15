@@ -71,7 +71,7 @@
                         <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
                     <div class="ui-g-6 node__empty-data" *ngIf="!node.status.jobExeData">
-                        No job executions found within the past 3 hours
+                        No job executions during the past 3 hours
                     </div>
                     <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
                         <p-chart type="doughnut" [data]="node.status.runningJobData"
