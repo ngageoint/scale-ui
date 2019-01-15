@@ -8,6 +8,7 @@ export class Strike {
     createdTooltip: string;
     lastModifiedDisplay: string;
     lastModifiedTooltip: string;
+    configurationDisplay: string;
     private static build(data) {
         if (data) {
             return new Strike(
@@ -46,5 +47,8 @@ export class Strike {
         this.createdTooltip = this.dataService.formatDate(this.created);
         this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
         this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+        if (this.configuration) {
+            this.configurationDisplay = JSON.stringify(this.configuration, null, 4);
+        }
     }
 }

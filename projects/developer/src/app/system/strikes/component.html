@@ -18,14 +18,36 @@
                             {{ selectedStrikeDetail.title }}
                         </div>
                         <div>
-                            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                            <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                                    (click)="menu.toggle($event)"></button>
+                            <button pButton type="button" class="ui-button-primary" icon="fa fa-edit"
+                                    pTooltip="Edit" (click)="onEditClick()"></button>
                         </div>
                     </p-header>
-                    <p-scrollPanel>
-                        {{ selectedStrikeDetail.description }}
-                    </p-scrollPanel>
+                    <dl>
+                        <dt>Description:</dt>
+                        <dd>{{ selectedStrikeDetail.description }}</dd>
+                        <dt *ngIf="selectedStrikeDetail.job.id">Job:</dt>
+                        <dd *ngIf="selectedStrikeDetail.job.id">
+                            <a routerLink="/jobs/job/{{ selectedStrikeDetail.job.id }}">
+                                <i class="fa"
+                                   [innerHtml]="getUnicode(selectedStrikeDetail.job.job_type.icon_code)"></i>
+                                View Job Details ({{ selectedStrike.job.status }})
+                            </a>
+                        </dd>
+                        <dt>Created:</dt>
+                        <dd>
+                            <span [pTooltip]="selectedStrikeDetail.createdTooltip">
+                                {{ selectedStrikeDetail.createdDisplay }}
+                            </span>
+                        </dd>
+                        <dt>Last Modified:</dt>
+                        <dd>
+                            <span [pTooltip]="selectedStrikeDetail.lastModifiedTooltip">
+                                {{ selectedStrikeDetail.lastModifiedDisplay }}
+                            </span>
+                        </dd>
+                        <dt>Configuration:</dt>
+                        <dd><pre>{{ selectedStrikeDetail.configurationDisplay }}</pre></dd>
+                    </dl>
                 </p-panel>
             </div>
         </div>

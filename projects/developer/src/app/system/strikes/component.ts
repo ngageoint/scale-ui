@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router, ActivatedRoute, NavigationEnd} from '@angular/router';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { StrikesApiService } from './api.service';
@@ -20,9 +20,6 @@ export class StrikesComponent implements OnInit {
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
     selectedStrikeDetail: Strike;
-    items: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
-    ];
 
     constructor(
         private router: Router,
