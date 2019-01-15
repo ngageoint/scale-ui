@@ -4,7 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { DataService } from '../../common/services/data.service';
 import { NodesApiService } from './api.service';
 
-describe('IngestApiService', () => {
+describe('NodesApiService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],

@@ -1,0 +1,30 @@
+{
+    "id": 1,
+    "name": "worldview",
+    "title": "Worldview Processor",
+    "description": "This strike process handles WorldView data",
+    "job": {
+        "id": 4,
+        "job_type": {
+            "id": 2,
+            "name": "scale-strike",
+            "title": "Scale Strike",
+            "description": "Monitors a directory for incoming source files to ingest",
+            "revision_num": 1,
+            "icon_code": "f013"
+        },
+        "status": "RUNNING"
+    },
+    "created": "2016-04-26T00:00:00.000Z",
+    "last_modified": "2016-04-26T01:00:00.000Z",
+    "configuration": {
+        "workspace": "rs",
+        "monitor": {
+            "type": "dir-watcher",
+            "transfer_suffix": "_tmp"
+        },
+        "files_to_ingest": [{
+            "filename_regex": ".*txt"
+        }]
+    }
+}

@@ -11,7 +11,7 @@ import { IngestApiService } from './api.service';
 import { Ingest } from './api.model';
 import { IngestDatatable } from './datatable.model';
 import { IngestDatatableService } from './datatable.service';
-import { StrikesApiService } from '../../common/services/strikes/api.service';
+import { StrikesApiService } from '../../system/strikes/api.service';
 
 @Component({
     selector: 'dev-ingest',

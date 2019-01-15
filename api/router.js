@@ -25,6 +25,7 @@ var batches = require('./handlers/batches');
 var batchDetails = require('./handlers/batchDetails');
 var batchValidate = require('./handlers/batchValidate');
 var strikes = require('./handlers/strikes');
+var strikeDetails = require('./handlers/strikeDetails');
 var ingests = require('./handlers/ingests');
 var ingestDetails = require('./handlers/ingestDetails');
 var fileDetails = require('./handlers/fileDetails');
@@ -210,6 +211,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/strikes/',
             handler: strikes
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/strikes/{id}/',
+            handler: strikeDetails
         });
 
         server.route({

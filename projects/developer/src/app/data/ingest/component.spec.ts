@@ -8,7 +8,7 @@ import { MessageService } from 'primeng/api';
 import { DataService } from '../../common/services/data.service';
 import { IngestDatatableService } from './datatable.service';
 import { IngestApiService } from './api.service';
-import { StrikesApiService } from '../../common/services/strikes/api.service';
+import { StrikesApiService } from '../../system/strikes/api.service';
 import { IngestComponent } from './component';
 
 describe('IngestComponent', () => {

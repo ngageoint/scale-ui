@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 
 import { environment } from '../../../environments/environment';
 import { IngestApiService } from '../ingest/api.service';
-import { StrikesApiService } from '../../common/services/strikes/api.service';
+import { StrikesApiService } from '../../system/strikes/api.service';
 import { DataService } from '../../common/services/data.service';
 import { ColorService } from '../../common/services/color.service';
 

@@ -1,0 +1,33 @@
+<div class="strikes__header">
+    <h2><i class="fa fa-bolt"></i> Strikes</h2>
+    <p-dropdown [options]="strikes" [autoWidth]="false" [(ngModel)]="selectedStrike" filter="filter"
+                class="strikes__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
+                (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
+</div>
+<hr />
+<div class="strikes__details">
+    <div class="text-center" *ngIf="!selectedStrike">
+        <h3>Select a strike to view its details</h3>
+    </div>
+    <div *ngIf="selectedStrikeDetail">
+        <div class="ui-g">
+            <div class="ui-g-12">
+                <p-panel>
+                    <p-header class="strikes__title">
+                        <div>
+                            {{ selectedStrikeDetail.title }}
+                        </div>
+                        <div>
+                            <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                            <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                                    (click)="menu.toggle($event)"></button>
+                        </div>
+                    </p-header>
+                    <p-scrollPanel>
+                        {{ selectedStrikeDetail.description }}
+                    </p-scrollPanel>
+                </p-panel>
+            </div>
+        </div>
+    </div>
+</div>

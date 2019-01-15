@@ -5,66 +5,57 @@ import polling from 'rx-polling';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 
-import { Node } from './api.model';
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
+import { Strike } from './api.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class NodesApiService {
+export class StrikesApiService {
     apiPrefix: string;
 
     constructor(
         private http: HttpClient,
         private dataService: DataService
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('nodes');
+        this.apiPrefix = this.dataService.getApiPrefix('strikes');
     }
 
-    getNodes(params?: any, poll?: boolean): Observable<any> {
+    getStrikes(params?: any, poll?: boolean): Observable<any> {
         params = params || {
             page: 1,
             page_size: 1000
         };
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/nodes/`, { params: params })
+            const request = this.http.get(`${this.apiPrefix}/strikes/`, { params: params })
                 .pipe(
                     map(response => {
                         const returnObj = ApiResults.transformer(response);
-                        returnObj.results = Node.transformer(returnObj.results);
+                        returnObj.results = Strike.transformer(returnObj.results);
                         return returnObj;
                     }),
                     catchError(this.dataService.handleError)
                 );
             return polling(request, { interval: 600000 });
         }
-        return this.http.get<ApiResults>(`${this.apiPrefix}/nodes/`, { params: params })
+        return this.http.get<ApiResults>(`${this.apiPrefix}/strikes/`, { params: params })
             .pipe(
                 map(response => {
                     const returnObj = ApiResults.transformer(response);
-                    returnObj.results = Node.transformer(returnObj.results);
+                    returnObj.results = Strike.transformer(returnObj.results);
                     return returnObj;
                 }),
                 catchError(this.dataService.handleError)
             );
     }
 
-    getNode(id: number): Observable<any> {
-        return this.http.get<ApiResults>(`${this.apiPrefix}/nodes/${id}`)
+    getStrike(id: number): Observable<any> {
+        return this.http.get<ApiResults>(`${this.apiPrefix}/strikes/${id}/`)
             .pipe(
-                catchError(this.dataService.handleError)
-            );
-    }
-
-    updateNode(node: any): Observable<any> {
-        const updatedNode = {
-            is_paused: node.is_paused,
-            pause_reason: node.pause_reason,
-            is_active: node.is_active
-        };
-        return this.http.patch<any>(`${this.apiPrefix}/nodes/${node.id}/`, updatedNode)
-            .pipe(
+                map(response => {
+                    return Strike.transformer(response);
+                }),
                 catchError(this.dataService.handleError)
             );
     }

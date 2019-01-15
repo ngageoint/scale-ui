@@ -1,0 +1,43 @@
+{
+    "id": 2,
+    "name": "landsat",
+    "title": "Landsat Processor",
+    "description": "This strike process handles Landsat data",
+    "job": {
+        "id": 12345,
+        "job_type": {
+            "id": 2,
+            "name": "scale-strike",
+            "title": "Scale Strike",
+            "description": "Monitors a directory for incoming source files to ingest",
+            "revision_num": 1,
+            "icon_code": "f013"
+        },
+        "status": "RUNNING"
+    },
+    "created": "2016-04-13T00:00:00.000Z",
+    "last_modified": "2016-04-13T01:00:00.000Z",
+    "configuration": {
+        "workspace": "products",
+        "monitor": {
+            "type": "s3",
+            "sqs_name": "my-sqs",
+            "credentials": {
+                "access_key_id": "AKIAIOSFODNN7EXAMPLE",
+                "secret_access_key": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
+            },
+            "region_name": "us-east-1"
+        },
+        "files_to_ingest": [
+            {
+                "filename_regex": "*.h5",
+                "data_types": [
+                    "data type 1",
+                    "data type 2"
+                ],
+                "new_workspace": "my-new-workspace",
+                "new_file_path": "/new/file/path"
+            }
+        ]
+    }
+}

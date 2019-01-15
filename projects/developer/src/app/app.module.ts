@@ -79,7 +79,7 @@ import { BatchesApiService } from './processing/batches/api.service';
 import { BatchesDatatableService } from './processing/batches/datatable.service';
 import { BatchesEditComponent } from './processing/batches/edit.component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
-import { StrikesApiService } from './common/services/strikes/api.service';
+import { StrikesApiService } from './system/strikes/api.service';
 import { ToastModule } from 'primeng/toast';
 import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
@@ -89,6 +89,7 @@ import { CandyBarComponent } from './common/components/candy-bar/component';
 import { QueueLoadComponent } from './common/components/queue-load/component';
 import { QueueApiService } from './common/services/queue/api.service';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
+import { StrikesComponent } from './system/strikes/component';
 
 
 @NgModule({
@@ -129,7 +130,8 @@ import { QueuedJobsComponent } from './processing/queued-jobs/component';
         NodesComponent,
         CandyBarComponent,
         QueueLoadComponent,
-        QueuedJobsComponent
+        QueuedJobsComponent,
+        StrikesComponent
     ],
     imports: [
         AppRoutingModule,

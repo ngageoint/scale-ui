@@ -2,25 +2,23 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
 
-import { IngestApiService } from '../ingest/api.service';
-import { StrikesApiService } from '../../system/strikes/api.service';
+import { StrikesComponent } from './component';
+import { StrikesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
-import { ColorService } from '../../common/services/color.service';
 
-import { FeedComponent } from './component';
-
-describe('FeedComponent', () => {
-    let component: FeedComponent;
-    let fixture: ComponentFixture<FeedComponent>;
+describe('StrikesComponent', () => {
+    let component: StrikesComponent;
+    let fixture: ComponentFixture<StrikesComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [FeedComponent],
+            declarations: [StrikesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                IngestApiService, StrikesApiService, DataService, ColorService,
+                MessageService, StrikesApiService, DataService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
@@ -37,7 +35,7 @@ describe('FeedComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(FeedComponent);
+        fixture = TestBed.createComponent(StrikesComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
