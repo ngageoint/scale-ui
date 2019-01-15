@@ -134,7 +134,7 @@ export class NodeStatus {
             ]
         };
         const calculateResource = (resource, isMib) => {
-            if (this.resoruces && this.resources[resource].total > 0) {
+            if (this.resources && this.resources[resource].total > 0) {
                 const offeredPercentage = (this.resources[resource].offered / this.resources[resource].total) * 100;
                 const runningPercentage = (this.resources[resource].running / this.resources[resource].total) * 100;
                 const freePercentage = (this.resources[resource].free / this.resources[resource].total) * 100;
