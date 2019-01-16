@@ -21,7 +21,6 @@ import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { StrikesComponent } from './system/strikes/component';
-import { StrikesCreateComponent } from './system/strikes/create.component';
 
 const routes: Routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
@@ -48,8 +47,7 @@ const routes: Routes = [
     { path: 'data/metrics', component: MetricsComponent },
     { path: 'system/nodes', component: NodesComponent },
     { path: 'system/strikes', component: StrikesComponent },
-    { path: 'system/strikes/:id', component: StrikesComponent },
-    { path: 'system/strikes/edit/:id', component: StrikesCreateComponent }
+    { path: 'system/strikes/:id', component: StrikesComponent }
 ];
 
 @NgModule({

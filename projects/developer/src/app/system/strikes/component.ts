@@ -1,12 +1,15 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { SelectItem } from 'primeng/api';
+import { FormBuilder } from '@angular/forms';
+import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import * as _ from 'lodash';
 
+import { filter, map } from 'rxjs/operators';
+
+import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
 import { StrikesApiService } from './api.service';
 import { Strike } from './api.model';
-import {filter, map} from 'rxjs/operators';
-import * as _ from 'lodash';
 
 @Component({
     selector: 'dev-strikes',
@@ -17,14 +20,46 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
     loading: boolean;
+    mode: string;
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
-    selectedStrikeDetail: Strike;
+    selectedStrikeDetail: any;
+    workspaces: SelectItem[] = [];
+    createForm = this.fb.group({
+        name: [''],
+        title: [''],
+        description: [''],
+        configuration: this.fb.group({
+            workspace: [''],
+            monitor: this.fb.group({
+                type: [''],
+                transfer_suffix: [''],
+                sqs_name: [''],
+                credentials: this.fb.group({
+                    access_key_id: [''],
+                    secret_access_key: ['']
+                }),
+                region_name: ['']
+            }),
+            files_to_ingest: ['']
+        })
+    });
+    ingestFileForm = this.fb.group({
+        filename_regex: [''],
+        data_types: [''],
+        new_workspace: [''],
+        new_file_path: ['']
+    });
+    items: MenuItem[] = [
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
+    ];
 
     constructor(
+        private fb: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
+        private workspacesApiService: WorkspacesApiService,
         private strikesApiService: StrikesApiService
     ) {
         if (this.router.events) {
@@ -74,16 +109,55 @@ export class StrikesComponent implements OnInit, OnDestroy {
         });
     }
 
+    private validateForm() {
+        console.log('validate form');
+    }
+
     getUnicode(code) {
         return `&#x${code};`;
     }
 
-    onEditClick(e) {
-        if (e.ctrlKey || e.metaKey) {
-            window.open(`/system/strikes/edit/${this.selectedStrikeDetail.id}`);
+    onEditClick() {
+        if (this.selectedStrikeDetail) {
+            this.items = [
+                { label: 'Validate', icon: 'fa fa-check', command: () => { this.onValidateClick(); } },
+                { label: 'Save', icon: 'fa fa-save', command: () => { this.onSaveClick(); } },
+                { separator: true },
+                { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.onCancelClick(); } }
+            ];
+            this.mode = 'edit';
+            this.createForm.get('name').disable();
+            this.createForm.get('configuration.monitor.type').disable();
+            this.createForm.patchValue(this.selectedStrikeDetail);
+            // set a friendly name for the monitor type
+            const monitorType = this.selectedStrikeDetail.configuration.monitor ?
+                this.selectedStrikeDetail.configuration.monitor.type === 's3' ? 'S3' : 'Directory Watcher' :
+                '';
+            this.createForm.get('configuration.monitor.type').setValue(monitorType);
         } else {
-            this.router.navigate([`/system/strikes/edit/${this.selectedStrikeDetail.id}`]);
+            this.mode = 'Create';
+            this.selectedStrikeDetail = Strike.transformer(null);
+            this.createForm.patchValue(this.selectedStrikeDetail);
         }
+        this.createForm.valueChanges.subscribe(changes => {
+            this.validateForm();
+            console.log(changes);
+        });
+    }
+
+    onValidateClick() {
+        console.log('validate');
+    }
+
+    onSaveClick() {
+        console.log('save');
+    }
+
+    onCancelClick() {
+        this.mode = null;
+        this.items = [
+            { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
+        ];
     }
 
     onRowSelect(e) {
@@ -95,6 +169,17 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
+            _.forEach(workspaces.results, workspace => {
+                this.workspaces.push({
+                    label: workspace.title,
+                    value: workspace.name
+                });
+            });
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+        });
     }
 
     ngOnDestroy() {

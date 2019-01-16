@@ -90,7 +90,6 @@ import { QueueLoadComponent } from './common/components/queue-load/component';
 import { QueueApiService } from './common/services/queue/api.service';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { StrikesComponent } from './system/strikes/component';
-import { StrikesCreateComponent } from './system/strikes/create.component';
 
 
 @NgModule({
@@ -132,8 +131,7 @@ import { StrikesCreateComponent } from './system/strikes/create.component';
         CandyBarComponent,
         QueueLoadComponent,
         QueuedJobsComponent,
-        StrikesComponent,
-        StrikesCreateComponent
+        StrikesComponent
     ],
     imports: [
         AppRoutingModule,
