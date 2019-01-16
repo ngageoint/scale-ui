@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Router, ActivatedRoute, NavigationEnd} from '@angular/router';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
@@ -13,7 +13,7 @@ import * as _ from 'lodash';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class StrikesComponent implements OnInit {
+export class StrikesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
     loading: boolean;
@@ -78,8 +78,12 @@ export class StrikesComponent implements OnInit {
         return `&#x${code};`;
     }
 
-    onEditClick() {
-        console.log('edit');
+    onEditClick(e) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open(`/system/strikes/edit/${this.selectedStrikeDetail.id}`);
+        } else {
+            this.router.navigate([`/system/strikes/edit/${this.selectedStrikeDetail.id}`]);
+        }
     }
 
     onRowSelect(e) {
@@ -91,5 +95,14 @@ export class StrikesComponent implements OnInit {
     }
 
     ngOnInit() {
+    }
+
+    ngOnDestroy() {
+        if (this.routerEvents) {
+            this.routerEvents.unsubscribe();
+        }
+        if (this.routeParams) {
+            this.routeParams.unsubscribe();
+        }
     }
 }

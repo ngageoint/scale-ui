@@ -30,7 +30,7 @@ export class Strike {
             }
             return Strike.build(data);
         }
-        return null;
+        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, null);
     }
     constructor(
         public id: number,
