@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { catchError, map } from 'rxjs/internal/operators';
+import { Workspace } from './api.model';
 
 @Injectable()
 export class WorkspacesApiService {
@@ -36,6 +37,16 @@ export class WorkspacesApiService {
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    getWorkspace(id: number): Observable<any> {
+        return this.http.get<any>(`${this.apiPrefix}/workspaces/${id}/`)
+            .pipe(
+                map(response => {
+                    return Workspace.transformer(response);
                 }),
                 catchError(this.dataService.handleError)
             );

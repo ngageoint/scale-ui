@@ -49,56 +49,96 @@
                     <dd><pre>{{ selectedStrikeDetail.configurationDisplay }}</pre></dd>
                 </dl>
             </div>
-            <div *ngIf="mode === 'edit'">
+            <div *ngIf="(mode === 'edit' || mode === 'create') && editedStrikeDetail">
                 <div [formGroup]="createForm">
-                    <label>
-                        Name
-                        <input pInputText formControlName="name"/>
-                    </label>
-                    <label>
-                        Title
-                        <input pInputText formControlName="title"/>
-                    </label>
-                    <label>
-                        Description
-                        <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
-                                  [autoResize]="true"></textarea>
-                    </label>
-                    <div formGroupName="configuration">
-                        <label>
-                            Workspace
-                            <p-dropdown [options]="workspaces" [autoWidth]="false" formControlName="workspace"
-                                        [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false"></p-dropdown>
-                        </label>
-                        <div formGroupName="monitor">
+                    <div class="ui-g">
+                        <div class="ui-g-6">
                             <label>
-                                Monitor Type
-                                <input pInputText formControlName="type"/>
+                                <span>Name</span>
+                                <input type="text" pInputText formControlName="name"/>
                             </label>
+                        </div>
+                        <div class="ui-g-6">
                             <label>
-                                Transfer Suffix
-                                <input pInputText formControlName="transfer_suffix"/>
-                            </label>
-                            <label>
-                                SQS Name
-                                <input pInputText formControlName="sqs_name"/>
-                            </label>
-                            <div formGroupName="credentials">
-                                <label>
-                                    Access Key ID
-                                    <input pInputText formControlName="access_key_id"/>
-                                </label>
-                                <label>
-                                    Secret Access Key
-                                    <input pInputText formControlName="secret_access_key"/>
-                                </label>
-                            </div>
-                            <label>
-                                Region Name
-                                <input pInputText formControlName="region_name"/>
+                                <span>Title</span>
+                                <input type="text" pInputText formControlName="title"/>
                             </label>
                         </div>
                     </div>
+                    <div class="ui-g">
+                        <div class="ui-g-6">
+                            <label>
+                                <span>Description</span>
+                                <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
+                                          [autoResize]="true"></textarea>
+                            </label>
+                        </div>
+                        <div class="ui-g-6" formGroupName="configuration">
+                            <label>
+                                <span>Workspace</span>
+                                <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
+                                            formControlName="workspace" (onChange)="onWorkspaceChange()"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                    </div>
+                    <div formGroupName="configuration">
+                        <div class="ui-g" formGroupName="monitor">
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>Monitor Type</span>
+                                    <input type="text" pInputText formControlName="type"/>
+                                </label>
+                            </div>
+                            <div class="ui-g-6">
+                                <label *ngIf="editedStrikeDetail.configuration.monitor.type === 'dir-watcher'">
+                                    <span>Transfer Suffix</span>
+                                    <input type="text" pInputText formControlName="transfer_suffix"/>
+                                </label>
+                                <label *ngIf="editedStrikeDetail.configuration.monitor.type === 's3'">
+                                    <span>SQS Name</span>
+                                    <input type="text" pInputText formControlName="sqs_name"/>
+                                </label>
+                                <div formGroupName="credentials"
+                                     *ngIf="editedStrikeDetail.configuration.monitor.type === 's3'">
+                                    <label>
+                                        <span>Access Key ID</span>
+                                        <input type="text" pInputText formControlName="access_key_id"/>
+                                    </label>
+                                    <label>
+                                        <span>Secret Access Key</span>
+                                        <input type="text" pInputText formControlName="secret_access_key"/>
+                                    </label>
+                                </div>
+                                <label *ngIf="editedStrikeDetail.configuration.monitor.type === 's3'">
+                                    <span>Region Name</span>
+                                    <input type="text" pInputText formControlName="region_name"/>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div [formGroup]="ingestFileForm">
+                    <p-panel header="Ingest File Rules">
+                        <div class="ui-g">
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>Filename Regex</span>
+                                    <input type="text" pInputText formControlName="filename_regex"/>
+                                </label>
+                            </div>
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>Data Types</span>
+                                    <span class="ui-inputgroup">
+                                        <input type="text" pInputText formControlName="data_types">
+                                        <button pButton type="button" icon="fa fa-plus"></button>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+                    </p-panel>
                 </div>
             </div>
         </p-panel>

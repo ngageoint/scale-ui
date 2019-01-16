@@ -19,12 +19,23 @@ import { Strike } from './api.model';
 export class StrikesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    private viewMenu: MenuItem[] = [
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
+    ];
+    private editMenu: MenuItem[] = [
+        { label: 'Validate', icon: 'fa fa-check', command: () => { this.onValidateClick(); } },
+        { label: 'Save', icon: 'fa fa-save', command: () => { this.onSaveClick(); } },
+        { separator: true },
+        { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.onCancelClick(); } }
+    ];
     loading: boolean;
     mode: string;
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
     selectedStrikeDetail: any;
-    workspaces: SelectItem[] = [];
+    editedStrikeDetail: any;
+    workspaces: any;
+    workspacesOptions: SelectItem[] = [];
     createForm = this.fb.group({
         name: [''],
         title: [''],
@@ -50,9 +61,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         new_workspace: [''],
         new_file_path: ['']
     });
-    items: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
-    ];
+    items: MenuItem[] = _.clone(this.viewMenu);
 
     constructor(
         private fb: FormBuilder,
@@ -103,6 +112,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
         this.strikesApiService.getStrike(id).subscribe(data => {
             this.loading = false;
             this.selectedStrikeDetail = data;
+            if (this.mode === 'edit') {
+                this.initEdit();
+            }
         }, err => {
             this.loading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
@@ -113,35 +125,60 @@ export class StrikesComponent implements OnInit, OnDestroy {
         console.log('validate form');
     }
 
+    private setMonitorTypeDisplay() {
+        // set a friendly name for the monitor type
+        const monitorType = this.editedStrikeDetail.configuration.monitor ?
+            this.editedStrikeDetail.configuration.monitor.type === 's3' ? 'S3' : 'Directory Watcher' :
+            '';
+        this.createForm.get('configuration.monitor.type').setValue(monitorType);
+    }
+
+    private initEdit() {
+        this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
+            // set up workspaces
+            this.workspaces = workspaces.results;
+            _.forEach(workspaces.results, workspace => {
+                this.workspacesOptions.push({
+                    label: workspace.title,
+                    value: workspace.name
+                });
+            });
+
+            // set up form
+            if (this.selectedStrikeDetail) {
+                this.items = _.clone(this.editMenu);
+                this.editedStrikeDetail = _.clone(this.selectedStrikeDetail);
+                this.mode = 'edit';
+                this.createForm.get('name').disable();
+                this.createForm.get('configuration.monitor.type').disable();
+                this.createForm.patchValue(this.editedStrikeDetail);
+                this.setMonitorTypeDisplay();
+            } else {
+                this.mode = 'Create';
+                this.editedStrikeDetail = Strike.transformer(null);
+                this.createForm.patchValue(this.editedStrikeDetail);
+            }
+            this.createForm.valueChanges.subscribe(changes => {
+                _.merge(this.editedStrikeDetail, changes);
+                this.validateForm();
+            });
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+        });
+    }
+
     getUnicode(code) {
         return `&#x${code};`;
     }
 
     onEditClick() {
-        if (this.selectedStrikeDetail) {
-            this.items = [
-                { label: 'Validate', icon: 'fa fa-check', command: () => { this.onValidateClick(); } },
-                { label: 'Save', icon: 'fa fa-save', command: () => { this.onSaveClick(); } },
-                { separator: true },
-                { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.onCancelClick(); } }
-            ];
-            this.mode = 'edit';
-            this.createForm.get('name').disable();
-            this.createForm.get('configuration.monitor.type').disable();
-            this.createForm.patchValue(this.selectedStrikeDetail);
-            // set a friendly name for the monitor type
-            const monitorType = this.selectedStrikeDetail.configuration.monitor ?
-                this.selectedStrikeDetail.configuration.monitor.type === 's3' ? 'S3' : 'Directory Watcher' :
-                '';
-            this.createForm.get('configuration.monitor.type').setValue(monitorType);
-        } else {
-            this.mode = 'Create';
-            this.selectedStrikeDetail = Strike.transformer(null);
-            this.createForm.patchValue(this.selectedStrikeDetail);
-        }
-        this.createForm.valueChanges.subscribe(changes => {
-            this.validateForm();
-            console.log(changes);
+        this.initEdit();
+        this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
+            queryParams: {
+                mode: this.mode
+            },
+            replaceUrl: true
         });
     }
 
@@ -155,9 +192,37 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onCancelClick() {
         this.mode = null;
-        this.items = [
-            { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
-        ];
+        this.items = _.clone(this.viewMenu);
+        this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
+            queryParams: {
+                mode: null
+            },
+            replaceUrl: true
+        });
+    }
+
+    onWorkspaceChange() {
+        const workspaceObj: any = _.find(this.workspaces, { name: this.editedStrikeDetail.configuration.workspace });
+        if (workspaceObj) {
+            this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
+                if (data.json_config.broker.type === 'host') {
+                    this.editedStrikeDetail.configuration.monitor.type = 'dir-watcher';
+                    this.editedStrikeDetail.configuration.monitor.sqs_name = null;
+                    this.editedStrikeDetail.configuration.monitor.credentials = {};
+                    this.editedStrikeDetail.configuration.monitor.region_name = null;
+                } else if (data.json_config.broker.type === 's3') {
+                    this.editedStrikeDetail.configuration.monitor.type = 's3';
+                    this.editedStrikeDetail.configuration.monitor.transfer_suffix = null;
+                } else {
+                    this.editedStrikeDetail.configuration.monitor.type = null;
+                }
+                this.createForm.patchValue(this.editedStrikeDetail);
+                this.setMonitorTypeDisplay();
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error retrieving workspace details', detail: err.statusText});
+            });
+        }
     }
 
     onRowSelect(e) {
@@ -169,16 +234,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
-            _.forEach(workspaces.results, workspace => {
-                this.workspaces.push({
-                    label: workspace.title,
-                    value: workspace.name
-                });
-            });
-        }, err => {
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+        this.route.queryParams.subscribe(params => {
+            this.mode = params.mode || null;
         });
     }
 
