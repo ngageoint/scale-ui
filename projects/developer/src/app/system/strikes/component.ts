@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { FormBuilder } from '@angular/forms';
+import {FormBuilder, FormControl} from '@angular/forms';
+import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -40,26 +41,26 @@ export class StrikesComponent implements OnInit, OnDestroy {
     newWorkspacesOptions: SelectItem[] = [];
     ingestFile: any;
     createForm = this.fb.group({
-        name: [''],
-        title: [''],
+        name: ['', Validators.required],
+        title: ['', Validators.required],
         description: [''],
         configuration: this.fb.group({
             workspace: [''],
             monitor: this.fb.group({
-                type: [''],
-                transfer_suffix: [''],
-                sqs_name: [''],
+                type: ['', Validators.required],
+                transfer_suffix: ['', Validators.required],
+                sqs_name: ['', Validators.required],
                 credentials: this.fb.group({
                     access_key_id: [''],
-                    secret_access_key: ['']
+                    secret_access_key: ['', Validators.required]
                 }),
                 region_name: ['']
             }),
-            files_to_ingest: ['']
+            files_to_ingest: this.fb.array([], Validators.required)
         })
     });
     ingestFileForm = this.fb.group({
-        filename_regex: [''],
+        filename_regex: ['', Validators.required],
         data_types: [''],
         new_workspace: [''],
         new_file_path: ['']
@@ -129,11 +130,23 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private setMonitorTypeDisplay() {
-        // set a friendly name for the monitor type
-        const monitorType = this.editedStrikeDetail.configuration.monitor ?
-            this.editedStrikeDetail.configuration.monitor.type === 's3' ? 'S3' : 'Directory Watcher' :
-            '';
-        this.createForm.get('configuration.monitor.type').setValue(monitorType);
+        let monitorType: string;
+        if (this.editedStrikeDetail.configuration.monitor) {
+            if (this.editedStrikeDetail.configuration.monitor.type === 's3') {
+                monitorType = 'S3';
+                this.createForm.get('configuration.monitor.sqs_name').enable();
+                this.createForm.get('configuration.monitor.credentials').enable();
+                this.createForm.get('configuration.monitor.region_name').enable();
+                this.createForm.get('configuration.monitor.transfer_suffix').disable();
+            } else if (this.editedStrikeDetail.configuration.monitor.type === 'dir-watcher') {
+                monitorType = 'Directory Watcher';
+                this.createForm.get('configuration.monitor.transfer_suffix').enable();
+                this.createForm.get('configuration.monitor.sqs_name').disable();
+                this.createForm.get('configuration.monitor.credentials').disable();
+                this.createForm.get('configuration.monitor.region_name').disable();
+            }
+            this.createForm.get('configuration.monitor.type').setValue(monitorType);
+        }
     }
 
     private initEdit() {
@@ -156,6 +169,10 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 this.createForm.get('name').disable();
                 this.createForm.get('configuration.monitor.type').disable();
                 this.createForm.patchValue(this.editedStrikeDetail);
+                const control: any = this.createForm.get('configuration.files_to_ingest');
+                _.forEach(this.editedStrikeDetail.configuration.files_to_ingest, f => {
+                    control.push(new FormControl(f));
+                });
                 this.setMonitorTypeDisplay();
             } else {
                 this.mode = 'create';
@@ -168,7 +185,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
             });
             this.ingestFileForm.valueChanges.subscribe(changes => {
                 this.ingestFile = StrikeIngestFile.transformer(changes);
-                console.log(this.ingestFile);
+                console.log(changes);
             });
         }, err => {
             console.log(err);
@@ -243,11 +260,20 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onAddRuleClick() {
-        this.editedStrikeDetail.configuration.addFileIngest(this.ingestFile);
+        const addedFile = this.editedStrikeDetail.configuration.addFileIngest(this.ingestFile);
+        const control: any = this.createForm.get('configuration.files_to_ingest');
+        control.push(new FormControl(addedFile));
+        console.log(control.value);
     }
 
     onRemoveRuleClick(file) {
-        this.editedStrikeDetail.configuration.removeFileIngest(file);
+        const removedFile = this.editedStrikeDetail.configuration.removeFileIngest(file);
+        const control: any = this.createForm.get('configuration.files_to_ingest');
+        const idx = _.findIndex(control.value, removedFile);
+        if (idx >= 0) {
+            control.removeAt(idx);
+        }
+        console.log(control.value);
     }
 
     onRowSelect(e) {

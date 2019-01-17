@@ -50,18 +50,19 @@
                 </dl>
             </div>
             <div *ngIf="(mode === 'edit' || mode === 'create') && editedStrikeDetail">
+                {{ createForm.status }}
                 <div [formGroup]="createForm">
                     <div class="ui-g">
                         <div class="ui-g-6">
                             <label>
                                 <span>Name</span>
-                                <input type="text" pInputText formControlName="name"/>
+                                <input type="text" pInputText formControlName="name" required/>
                             </label>
                         </div>
                         <div class="ui-g-6">
                             <label>
                                 <span>Title</span>
-                                <input type="text" pInputText formControlName="title"/>
+                                <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
                     </div>
@@ -88,30 +89,30 @@
                             <div class="ui-g-6">
                                 <label>
                                     <span>Monitor Type</span>
-                                    <input type="text" pInputText formControlName="type"/>
+                                    <input type="text" pInputText formControlName="type" required/>
                                 </label>
                             </div>
                             <div class="ui-g-6">
-                                <label *ngIf="editedStrikeDetail.configuration.monitor.type === 'dir-watcher'">
+                                <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
                                     <span>Transfer Suffix</span>
-                                    <input type="text" pInputText formControlName="transfer_suffix"/>
+                                    <input type="text" pInputText formControlName="transfer_suffix" required/>
                                 </label>
-                                <label *ngIf="editedStrikeDetail.configuration.monitor.type === 's3'">
+                                <label *ngIf="createForm.get('configuration.monitor.sqs_name').enabled">
                                     <span>SQS Name</span>
-                                    <input type="text" pInputText formControlName="sqs_name"/>
+                                    <input type="text" pInputText formControlName="sqs_name" required/>
                                 </label>
                                 <div formGroupName="credentials"
-                                     *ngIf="editedStrikeDetail.configuration.monitor.type === 's3'">
+                                     *ngIf="createForm.get('configuration.monitor.credentials').enabled">
                                     <label>
                                         <span>Access Key ID</span>
                                         <input type="text" pInputText formControlName="access_key_id"/>
                                     </label>
                                     <label>
                                         <span>Secret Access Key</span>
-                                        <input type="text" pInputText formControlName="secret_access_key"/>
+                                        <input type="text" pInputText formControlName="secret_access_key" required/>
                                     </label>
                                 </div>
-                                <label *ngIf="editedStrikeDetail.configuration.monitor.type === 's3'">
+                                <label *ngIf="createForm.get('configuration.monitor.region_name').enabled">
                                     <span>Region Name</span>
                                     <input type="text" pInputText formControlName="region_name"/>
                                 </label>
@@ -119,13 +120,13 @@
                         </div>
                     </div>
                 </div>
-                <div [formGroup]="ingestFileForm">
+                <div [formGroup]="ingestFileForm" class="margin-top-lg">
                     <p-panel header="Ingest File Rules" styleClass="ui-panel-primary">
                         <div class="ui-g">
                             <div class="ui-g-6">
                                 <label>
                                     <span>Filename Regex</span>
-                                    <input type="text" pInputText formControlName="filename_regex"/>
+                                    <input type="text" pInputText formControlName="filename_regex" required/>
                                     <div class="help-block">
                                         A regular expression to check against the names of newly copied files (required)
                                     </div>
