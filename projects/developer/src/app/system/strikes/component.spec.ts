@@ -29,7 +29,7 @@ describe('StrikesComponent', () => {
                     }
                 },
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }},
-                {provide: FormBuilder, useClass: class { group = jasmine.createSpy('group'); }}
+                {provide: FormBuilder, useClass: class { group = jasmine.createSpy('group'); array = jasmine.createSpy('array'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]

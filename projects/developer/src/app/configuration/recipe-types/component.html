@@ -45,21 +45,12 @@
                         </div>
                     </div>
                     <div class="ui-g-4 ui-g-nopad recipe-type__menu">
-                        <button class="ui-button-info" pButton icon="fa fa-edit fa-fw" (click)="toggleEdit()"
-                                *ngIf="selectedRecipeType && !isEditing" pTooltip="Edit Recipe Type"
-                                tooltipPosition="bottom"></button>
                         <button class="ui-button-info" pButton icon="fa fa-cube fa-fw" (click)="showToggleJobType()"
                                 *ngIf="selectedRecipeType && isEditing" pTooltip="Add/Remove Job Types"
                                 tooltipPosition="bottom"></button>
-                        <button class="ui-button-warning" pButton icon="fa fa-check fa-fw"
-                                (click)="validateRecipeType()" *ngIf="selectedRecipeType && isEditing"
-                                pTooltip="Validate Recipe Type" tooltipPosition="bottom"></button>
-                        <button class="ui-button-success" pButton icon="fa fa-save fa-fw" (click)="saveRecipeType()"
-                                *ngIf="selectedRecipeType && isEditing" pTooltip="Save Recipe Type"
-                                tooltipPosition="bottom"></button>
-                        <button class="ui-button-danger" pButton icon="fa fa-remove fa-fw" (click)="toggleEdit()"
-                                *ngIf="selectedRecipeType && isEditing" pTooltip="Cancel Edit"
-                                tooltipPosition="bottom"></button>
+                        <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                        <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                            (click)="menu.toggle($event)"></button>
                     </div>
                 </div>
             </div>

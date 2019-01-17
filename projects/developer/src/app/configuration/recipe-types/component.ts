@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import { SelectItem } from 'primeng/api';
+import { MenuItem, SelectItem } from 'primeng/api';
 import * as _ from 'lodash';
 
 import { map, filter } from 'rxjs/operators';
@@ -20,6 +20,15 @@ import { RecipeTypeDefinition } from './definition.model';
 export class RecipeTypesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    private viewMenu: MenuItem[] = [
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.toggleEdit(); } }
+    ];
+    private editMenu: MenuItem[] = [
+        { label: 'Validate', icon: 'fa fa-check', command: () => { this.validateRecipeType(); } },
+        { label: 'Save', icon: 'fa fa-save', command: () => { this.saveRecipeType(); } },
+        { separator: true },
+        { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
+    ];
     columns: any[];
     loadingRecipeType: boolean;
     recipeTypeName: string;
@@ -30,6 +39,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedRecipeTypeDetail: any;
     toggleJobTypeDisplay: boolean;
     isEditing: boolean;
+    items: MenuItem[] = _.clone(this.viewMenu);
 
     constructor(
         private recipeTypesApiService: RecipeTypesApiService,
@@ -62,11 +72,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                             this.selectedRecipeType = _.clone(result);
                         }
                     });
-                    if (this.recipeTypeName) {
+                    if (this.recipeTypeName && this.recipeTypeName !== 'create') {
                         this.isEditing = false;
                         this.getRecipeTypeDetail(this.recipeTypeName);
                     } else {
-                        if (this.recipeTypeName === 'new') {
+                        if (this.recipeTypeName === 'create') {
                             this.selectedRecipeType = {
                                 label: 'New Recipe',
                                 value: new RecipeType(
@@ -86,6 +96,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                                 )
                             };
                             this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
+                            this.items = _.clone(this.editMenu);
                             this.isEditing = true;
                         }
                     }
@@ -114,7 +125,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     createNewRecipe() {
-        this.router.navigate(['/configuration/recipe-types/0']);
+        this.router.navigate(['/configuration/recipe-types/create']);
     }
 
     showToggleJobType() {
@@ -124,7 +135,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addJobType(event) {
         const jobType = event.data;
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.name, jobType.version).subscribe(data => {
+        this.jobTypesApiService.getJobType(jobType.name, jobType.latest_version).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
             if (!recipeData.job_types) {
                 recipeData.job_types = [];
@@ -161,7 +172,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     toggleEdit() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
-        if (!this.recipeTypeName) {
+        this.items = this.isEditing ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+        if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
             if (!this.isEditing) {
