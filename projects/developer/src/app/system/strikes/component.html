@@ -120,7 +120,7 @@
                     </div>
                 </div>
                 <div [formGroup]="ingestFileForm">
-                    <p-panel header="Ingest File Rules">
+                    <p-panel header="Ingest File Rules" styleClass="ui-panel-primary">
                         <div class="ui-g">
                             <div class="ui-g-6">
                                 <label>
@@ -167,7 +167,7 @@
                             </div>
                         </div>
                         <div class="text-center">
-                            <button pButton class="ui-button-secondary" icon="fa fa-plus"
+                            <button pButton class="ui-button-secondary" icon="fa fa-plus" (click)="onAddRuleClick()"
                                     label="Add Rule to Configuration"></button>
                         </div>
                         <div>

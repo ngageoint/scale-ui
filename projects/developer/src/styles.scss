@@ -506,3 +506,15 @@ label-default {
     background-color: $clr-waiting !important;
     border: 1px solid $clr-waiting !important;
 }
+
+.ui-panel-primary {
+    .ui-panel-titlebar {
+        background-color: $clr-label-primary !important;
+        padding: .5em 1.25em .5em 1em !important;
+
+        .ui-panel-title {
+            color: #fff !important;
+            font-weight: bold;
+        }
+    }
+}

@@ -158,7 +158,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 this.createForm.patchValue(this.editedStrikeDetail);
                 this.setMonitorTypeDisplay();
             } else {
-                this.mode = 'Create';
+                this.mode = 'create';
                 this.editedStrikeDetail = Strike.transformer(null);
                 this.createForm.patchValue(this.editedStrikeDetail);
             }
@@ -187,6 +187,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onEditClick() {
         this.initEdit();
+        if (!this.mode) {
+            this.mode = 'edit';
+        }
         this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
             queryParams: {
                 mode: this.mode
@@ -239,14 +242,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
     }
 
+    onAddRuleClick() {
+        this.editedStrikeDetail.configuration.addFileIngest(this.ingestFile);
+    }
+
     onRemoveRuleClick(file) {
-        // remove from both files_to_ingest and files_to_ingest_display
-        _.remove(this.editedStrikeDetail.configuration.files_to_ingest, f => {
-            return _.isEqual(f, file);
-        });
-        _.remove(this.editedStrikeDetail.configuration.files_to_ingest_display, (f: any) => {
-            return _.isEqual(f.value, file);
-        });
+        this.editedStrikeDetail.configuration.removeFileIngest(file);
     }
 
     onRowSelect(e) {

@@ -20,6 +20,27 @@ export class StrikeConfiguration {
         }
         return null;
     }
+    public addFileIngest(file) {
+        if (!this.files_to_ingest) {
+            this.files_to_ingest = [];
+        }
+        file = _.pickBy(file, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        this.files_to_ingest.push(file);
+        this.files_to_ingest_display.push({
+            label: JSON.stringify(file, null, 4),
+            value: file
+        });
+    }
+    public removeFileIngest(file) {
+        _.remove(this.files_to_ingest, f => {
+            return _.isEqual(f, file);
+        });
+        _.remove(this.files_to_ingest_display, (f: any) => {
+            return _.isEqual(f.value, file);
+        });
+    }
     constructor(
         public workspace: string,
         public monitor: any,
