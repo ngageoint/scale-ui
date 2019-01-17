@@ -126,16 +126,61 @@
                                 <label>
                                     <span>Filename Regex</span>
                                     <input type="text" pInputText formControlName="filename_regex"/>
+                                    <div class="help-block">
+                                        A regular expression to check against the names of newly copied files (required)
+                                    </div>
                                 </label>
                             </div>
                             <div class="ui-g-6">
                                 <label>
                                     <span>Data Types</span>
-                                    <span class="ui-inputgroup">
-                                        <input type="text" pInputText formControlName="data_types">
-                                        <button pButton type="button" icon="fa fa-plus"></button>
-                                    </span>
+                                    <p-chips formControlName="data_types" [style]="{'width':'100%'}"
+                                             [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
+                                    <div class="help-block">
+                                        Any file that matches the corresponding file name regular expression will have
+                                        these data type strings "tagged" with the file (optional)
+                                    </div>
                                 </label>
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>New Workspace</span>
+                                    <p-dropdown [options]="newWorkspacesOptions" [autoWidth]="false"
+                                                formControlName="new_workspace" [style]="{'width':'100%'}"
+                                                placeholder="Select..." [showClear]="false">
+                                    </p-dropdown>
+                                    <div class="help-block">
+                                        New workspace to which the file should be copied (optional)
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>New File Path</span>
+                                    <input pInputText type="text" formControlName="new_file_path"/>
+                                    <div class="help-block">
+                                        String that specifies a new relative path for storing new files (optional)
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button pButton class="ui-button-secondary" icon="fa fa-plus"
+                                    label="Add Rule to Configuration"></button>
+                        </div>
+                        <div>
+                            <h3>Current Rules</h3>
+                            <span *ngIf="editedStrikeDetail.configuration.files_to_ingest_display.length === 0">
+                                No files in configuration.
+                            </span>
+                            <div *ngFor="let file of editedStrikeDetail.configuration.files_to_ingest_display">
+                                <pre class="flexed space-between">
+                                    <span>{{ file.label }}</span>
+                                    <button pButton class="ui-button-danger" icon="fa fa-remove"
+                                            pTooltip="Remove Rule" (click)="onRemoveRuleClick(file.value)"></button>
+                                </pre>
                             </div>
                         </div>
                     </p-panel>

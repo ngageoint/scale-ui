@@ -64,6 +64,10 @@ body {
         line-height: 0;
     }
 
+    .ui-chips>ul.ui-inputtext {
+        width: 100%;
+    }
+
     .seed-jobs .results .ui-panel:hover {
         background: $clr-highlight !important;
 

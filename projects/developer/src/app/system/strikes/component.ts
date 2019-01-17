@@ -10,6 +10,7 @@ import { filter, map } from 'rxjs/operators';
 import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
 import { StrikesApiService } from './api.service';
 import { Strike } from './api.model';
+import { StrikeIngestFile } from './api.ingest-file.model';
 
 @Component({
     selector: 'dev-strikes',
@@ -36,6 +37,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     editedStrikeDetail: any;
     workspaces: any;
     workspacesOptions: SelectItem[] = [];
+    newWorkspacesOptions: SelectItem[] = [];
+    ingestFile: any;
     createForm = this.fb.group({
         name: [''],
         title: [''],
@@ -143,6 +146,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     value: workspace.name
                 });
             });
+            this.initNewWorkspacesOptions(this.selectedStrikeDetail.configuration.workspace);
 
             // set up form
             if (this.selectedStrikeDetail) {
@@ -162,10 +166,19 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 _.merge(this.editedStrikeDetail, changes);
                 this.validateForm();
             });
+            this.ingestFileForm.valueChanges.subscribe(changes => {
+                this.ingestFile = StrikeIngestFile.transformer(changes);
+                console.log(this.ingestFile);
+            });
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
         });
+    }
+
+    private initNewWorkspacesOptions(workspaceObj) {
+        this.newWorkspacesOptions = _.clone(this.workspacesOptions);
+        _.remove(this.newWorkspacesOptions, { value: workspaceObj });
     }
 
     getUnicode(code) {
@@ -204,6 +217,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     onWorkspaceChange() {
         const workspaceObj: any = _.find(this.workspaces, { name: this.editedStrikeDetail.configuration.workspace });
         if (workspaceObj) {
+            this.initNewWorkspacesOptions(workspaceObj.name);
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
                 if (data.json_config.broker.type === 'host') {
                     this.editedStrikeDetail.configuration.monitor.type = 'dir-watcher';
@@ -223,6 +237,16 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspace details', detail: err.statusText});
             });
         }
+    }
+
+    onRemoveRuleClick(file) {
+        // remove from both files_to_ingest and files_to_ingest_display
+        _.remove(this.editedStrikeDetail.configuration.files_to_ingest, f => {
+            return _.isEqual(f, file);
+        });
+        _.remove(this.editedStrikeDetail.configuration.files_to_ingest_display, (f: any) => {
+            return _.isEqual(f.value, file);
+        });
     }
 
     onRowSelect(e) {
