@@ -32,11 +32,11 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     mode: string;
+    paramId: number;
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
     selectedStrikeDetail: any;
-    editedStrikeDetail: any;
-    workspaces: any;
+    workspaces: any = [];
     workspacesOptions: SelectItem[] = [];
     newWorkspacesOptions: SelectItem[] = [];
     ingestFile: any;
@@ -47,7 +47,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         configuration: this.fb.group({
             workspace: [''],
             monitor: this.fb.group({
-                type: ['', Validators.required],
+                type: [{value: '', disabled: true}, Validators.required],
                 transfer_suffix: ['', Validators.required],
                 sqs_name: ['', Validators.required],
                 credentials: this.fb.group({
@@ -81,70 +81,40 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 filter(event => event instanceof NavigationEnd),
                 map(() => this.route)
             ).subscribe(() => {
-                this.strikes = [];
                 let id = null;
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
+                        // get id from url, and convert to an int if not null
                         id = params.get('id');
                         id = id !== null ? +id : id;
                     });
-                }
-                this.loading = true;
-                this.strikesApiService.getStrikes().subscribe(data => {
-                    _.forEach(data.results, result => {
-                        this.strikes.push({
-                            label: result.title,
-                            value: result
-                        });
-                        if (id === result.id) {
-                            this.selectedStrike = result;
-                        }
-                    });
-                    if (id !== null) {
-                        if (id > 0) {
-                            this.getStrikeDetail(id);
-                        } else {
-                            this.loading = false;
-                            this.selectedStrikeDetail = Strike.transformer(null);
-                            this.initEdit();
-                        }
-                    } else {
-                        this.loading = false;
+                    if (this.strikes.length === 0) {
+                        this.getStrikes(id);
                     }
-                }, err => {
-                    this.loading = false;
-                    console.log(err);
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
-                });
+                    this.getStrikeDetail(id);
+                }
             });
         }
     }
 
-    private getStrikeDetail(id: number) {
-        this.strikesApiService.getStrike(id).subscribe(data => {
-            this.loading = false;
-            this.selectedStrikeDetail = data;
-            if (this.mode === 'edit') {
-                this.initEdit();
-            } else {
-                this.items = _.clone(this.viewMenu);
-            }
-        }, err => {
-            this.loading = false;
-            this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
+    private initNewWorkspacesOptions() {
+        // remove currently selected workspace from new_workspace dropdown
+        this.newWorkspacesOptions = _.clone(this.workspacesOptions);
+        _.remove(this.newWorkspacesOptions, {
+            value: this.selectedStrikeDetail.configuration.workspace
         });
     }
 
-    private setMonitorTypeDisplay() {
-        let monitorType: string;
-        if (this.editedStrikeDetail.configuration.monitor) {
-            if (this.editedStrikeDetail.configuration.monitor.type === 's3') {
+    private initMonitor() {
+        let monitorType: string = null;
+        if (this.selectedStrikeDetail.configuration.monitor) {
+            if (this.selectedStrikeDetail.configuration.monitor.type === 's3') {
                 monitorType = 'S3';
                 this.createForm.get('configuration.monitor.sqs_name').enable();
                 this.createForm.get('configuration.monitor.credentials').enable();
                 this.createForm.get('configuration.monitor.region_name').enable();
                 this.createForm.get('configuration.monitor.transfer_suffix').disable();
-            } else if (this.editedStrikeDetail.configuration.monitor.type === 'dir-watcher') {
+            } else if (this.selectedStrikeDetail.configuration.monitor.type === 'dir-watcher') {
                 monitorType = 'Directory Watcher';
                 this.createForm.get('configuration.monitor.transfer_suffix').enable();
                 this.createForm.get('configuration.monitor.sqs_name').disable();
@@ -155,71 +125,158 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private initNewWorkspacesOptions(workspaceObj) {
-        this.newWorkspacesOptions = _.clone(this.workspacesOptions);
-        _.remove(this.newWorkspacesOptions, { value: workspaceObj });
+    private initValidation() {
+        // enable/disable validate and save actions based on form status
+        const validateItem = _.find(this.items, { label: 'Validate' });
+        if (validateItem) {
+            validateItem.disabled = this.createForm.status === 'INVALID';
+        }
+        const saveItem = _.find(this.items, { label: 'Save' });
+        if (saveItem) {
+            saveItem.disabled = this.createForm.status === 'INVALID';
+        }
+
+        // change ingest file panel based on createForm, because that's where files_to_ingest lives
+        const status = this.createForm.status === 'INVALID' && this.selectedStrikeDetail.configuration.files_to_ingest.length === 0;
+        this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
     }
 
-    private initEdit() {
-        this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
-            // set up workspaces
-            this.workspaces = workspaces.results;
-            _.forEach(workspaces.results, workspace => {
+    private initForm() {
+        if (this.selectedStrikeDetail && this.mode === 'edit') {
+            this.workspacesOptions = [];
+            _.forEach(this.workspaces, workspace => {
                 this.workspacesOptions.push({
                     label: workspace.title,
                     value: workspace.name
                 });
             });
 
-            // set up form
-            if (this.selectedStrikeDetail) {
-                this.initNewWorkspacesOptions(this.selectedStrikeDetail.configuration.workspace);
-                const control: any = this.createForm.get('configuration.files_to_ingest');
-                _.forEach(this.selectedStrikeDetail.configuration.files_to_ingest, f => {
-                    control.push(new FormControl(f));
-                });
-                this.items = _.clone(this.editMenu);
-                this.editedStrikeDetail = _.clone(this.selectedStrikeDetail);
-                this.mode = 'edit';
-                if (this.editedStrikeDetail.id) {
-                    // editing an existing strike, so disable the name field
-                    this.createForm.get('name').disable();
-                }
-                this.createForm.get('configuration.monitor.type').disable();
-                this.createForm.patchValue(this.editedStrikeDetail);
-                this.setMonitorTypeDisplay();
+            // remove currently selected workspace from new_workspace dropdown
+            this.initNewWorkspacesOptions();
+
+            // disable the name field if editing an existing strike
+            if (this.selectedStrikeDetail.id) {
+                this.createForm.get('name').disable();
             }
-            this.createForm.valueChanges.subscribe(changes => {
-                // need to merge these changes because there are fields in the model that aren't in the form
-                _.merge(this.editedStrikeDetail, changes);
 
-                // enable/disable validate and save actions based on form status
-                const validateItem = _.find(this.items, { label: 'Validate' });
-                if (validateItem) {
-                    validateItem.disabled = this.createForm.status === 'INVALID';
-                }
-                const saveItem = _.find(this.items, { label: 'Save' });
-                if (saveItem) {
-                    saveItem.disabled = this.createForm.status === 'INVALID';
-                }
+            // determine what to show in monitor input, and which monitor fields to display
+            this.initMonitor();
 
-                // change ingest file panel based on createForm, because that's where files_to_ingest lives
-                const status = this.createForm.status === 'INVALID' && this.editedStrikeDetail.configuration.files_to_ingest.length === 0;
-                this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
+            // populate form fields with model data
+            this.createForm.get('name').setValue(this.selectedStrikeDetail.name);
+            this.createForm.get('title').setValue(this.selectedStrikeDetail.title);
+            this.createForm.get('description').setValue(this.selectedStrikeDetail.description);
+            this.createForm.get('configuration.workspace').setValue(
+                this.selectedStrikeDetail.configuration.workspace || null
+            );
+            this.createForm.get('configuration.monitor.type').setValue(
+                this.selectedStrikeDetail.configuration.monitor.type || null
+            );
+            this.createForm.get('configuration.monitor.transfer_suffix').setValue(
+                this.selectedStrikeDetail.configuration.monitor.transfer_suffix || null
+            );
+            this.createForm.get('configuration.monitor.sqs_name').setValue(
+                this.selectedStrikeDetail.configuration.monitor.sqs_name || null
+            );
+            if (this.selectedStrikeDetail.configuration.monitor.credentials) {
+                this.createForm.get('configuration.monitor.credentials.access_key_id').setValue(
+                    this.selectedStrikeDetail.configuration.monitor.credentials.access_key_id || null
+                );
+                this.createForm.get('configuration.monitor.credentials.secret_access_key').setValue(
+                    this.selectedStrikeDetail.configuration.monitor.credentials.secret_access_key || null
+                );
+            }
+            this.createForm.get('configuration.monitor.region_name').setValue(
+                this.selectedStrikeDetail.configuration.monitor.region_name || null
+            );
+            // iterate over files_to_ingest and add to form array
+            const control: any = this.createForm.get('configuration.files_to_ingest');
+            _.forEach(this.selectedStrikeDetail.configuration.files_to_ingest, f => {
+                control.push(new FormControl(f));
             });
-            this.ingestFileForm.valueChanges.subscribe(changes => {
-                this.ingestFile = StrikeIngestFile.transformer(changes);
+            // this.createForm.patchValue(this.selectedStrikeDetail);
+            this.initValidation();
+        }
+
+        // listen for changes to createForm fields
+        this.createForm.valueChanges.subscribe(changes => {
+            // need to merge these changes because there are fields in the model that aren't in the form
+            _.merge(this.selectedStrikeDetail, changes);
+            this.initValidation();
+        });
+
+        // listen to changes to ingestFileForm fields
+        this.ingestFileForm.valueChanges.subscribe(changes => {
+            this.ingestFile = StrikeIngestFile.transformer(changes);
+        });
+    }
+
+    private initEdit() {
+        if (this.workspaces.length === 0) {
+            this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
+                this.loading = false;
+
+                // set up workspaces
+                this.workspaces = workspaces.results;
+
+                // set up the form
+                this.initForm();
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+            });
+        } else {
+            // already have workspaces, so just set up the form
+            this.initForm();
+        }
+    }
+
+    private getStrikes(id: number) {
+        this.strikes = [];
+        this.loading = true;
+        this.strikesApiService.getStrikes().subscribe(data => {
+            this.loading = false;
+            _.forEach(data.results, result => {
+                this.strikes.push({
+                    label: result.title,
+                    value: result
+                });
+                if (id && id === result.id) {
+                    this.selectedStrike = result;
+                }
             });
         }, err => {
+            this.loading = false;
             console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+            this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
         });
+    }
+
+    private getStrikeDetail(id: number) {
+        if (id > 0) {
+            this.loading = true;
+            this.strikesApiService.getStrike(id).subscribe(data => {
+                this.selectedStrikeDetail = data;
+                if (this.mode === 'edit') {
+                    this.initEdit();
+                } else {
+                    // just looking, so all done
+                    this.loading = false;
+                }
+            }, err => {
+                this.loading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
+            });
+        } else {
+            // creating a new strike
+            this.selectedStrike = null;
+            this.selectedStrikeDetail = Strike.transformer(null);
+            this.initEdit();
+        }
     }
 
     private redirect(id?: number) {
         id = id || this.selectedStrikeDetail.id;
-        this.mode = null;
-        this.items = _.clone(this.viewMenu);
         const url = id ? `/system/strikes/${id}` : '/system/strikes';
         this.router.navigate([url], {
             queryParams: {
@@ -234,20 +291,16 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onEditClick() {
-        this.initEdit();
-        if (!this.mode) {
-            this.mode = 'edit';
-        }
         this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
             queryParams: {
-                mode: this.mode
+                mode: 'edit'
             },
             replaceUrl: true
         });
     }
 
     onValidateClick() {
-        this.strikesApiService.validateStrike(this.editedStrikeDetail.clean()).subscribe(data => {
+        this.strikesApiService.validateStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
             if (data.is_valid) {
                 if (data.warnings.length > 0) {
                     _.forEach(data.warnings, warning => {
@@ -268,17 +321,17 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
-        if (this.editedStrikeDetail.id) {
+        if (this.selectedStrikeDetail.id) {
             // edit strike
-            this.strikesApiService.editStrike(this.editedStrikeDetail.id, this.editedStrikeDetail.clean()).subscribe(data => {
-                this.redirect(this.editedStrikeDetail.id);
+            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail.clean()).subscribe(data => {
+                this.redirect(this.selectedStrikeDetail.id);
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error editing strike', detail: err.statusText});
             });
         } else {
             // create strike
-            this.strikesApiService.createStrike(this.editedStrikeDetail.clean()).subscribe(data => {
+            this.strikesApiService.createStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
@@ -292,8 +345,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onCreateClick() {
-        this.mode = 'edit';
-        this.items = _.clone(this.editMenu);
         this.router.navigate([`/system/strikes/0`], {
             queryParams: {
                 mode: 'edit'
@@ -303,23 +354,27 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onWorkspaceChange() {
-        const workspaceObj: any = _.find(this.workspaces, { name: this.editedStrikeDetail.configuration.workspace });
+        const workspaceObj: any = _.find(this.workspaces, { name: this.selectedStrikeDetail.configuration.workspace });
         if (workspaceObj) {
-            this.initNewWorkspacesOptions(workspaceObj.name);
+            // remove currently selected workspace from new_workspace dropdown
+            this.initNewWorkspacesOptions();
+
+            // get workspace detail to obtain json_config data
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
                 if (data.json_config.broker.type === 'host') {
-                    this.editedStrikeDetail.configuration.monitor.type = 'dir-watcher';
-                    this.editedStrikeDetail.configuration.monitor.sqs_name = null;
-                    this.editedStrikeDetail.configuration.monitor.credentials = {};
-                    this.editedStrikeDetail.configuration.monitor.region_name = null;
+                    this.selectedStrikeDetail.configuration.monitor.type = 'dir-watcher';
+                    this.selectedStrikeDetail.configuration.monitor.sqs_name = null;
+                    this.selectedStrikeDetail.configuration.monitor.credentials = {};
+                    this.selectedStrikeDetail.configuration.monitor.region_name = null;
                 } else if (data.json_config.broker.type === 's3') {
-                    this.editedStrikeDetail.configuration.monitor.type = 's3';
-                    this.editedStrikeDetail.configuration.monitor.transfer_suffix = null;
+                    this.selectedStrikeDetail.configuration.monitor.type = 's3';
+                    this.selectedStrikeDetail.configuration.monitor.transfer_suffix = null;
                 } else {
-                    this.editedStrikeDetail.configuration.monitor.type = null;
+                    this.selectedStrikeDetail.configuration.monitor.type = null;
                 }
-                this.createForm.patchValue(this.editedStrikeDetail);
-                this.setMonitorTypeDisplay();
+                // this.createForm.patchValue(this.selectedStrikeDetail);
+                // determine what to show in monitor input, and which monitor fields to display
+                this.initMonitor();
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspace details', detail: err.statusText});
@@ -328,14 +383,14 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onAddRuleClick() {
-        const addedFile = this.editedStrikeDetail.configuration.addFileIngest(this.ingestFile);
+        const addedFile = this.selectedStrikeDetail.configuration.addFileIngest(this.ingestFile);
         const control: any = this.createForm.get('configuration.files_to_ingest');
         control.push(new FormControl(addedFile));
         console.log(control.value);
     }
 
     onRemoveRuleClick(file) {
-        const removedFile = this.editedStrikeDetail.configuration.removeFileIngest(file);
+        const removedFile = this.selectedStrikeDetail.configuration.removeFileIngest(file);
         const control: any = this.createForm.get('configuration.files_to_ingest');
         const idx = _.findIndex(control.value, removedFile);
         if (idx >= 0) {
@@ -355,6 +410,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
             this.mode = params.mode || null;
+            this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
         });
     }
 

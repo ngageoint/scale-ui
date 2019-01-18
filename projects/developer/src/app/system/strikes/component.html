@@ -22,7 +22,7 @@
                             (click)="menu.toggle($event)"></button>
                 </div>
             </p-header>
-            <div *ngIf="mode !== 'edit'">
+            <div *ngIf="mode !== 'edit' && selectedStrikeDetail.id">
                 <dl>
                     <dt>Description:</dt>
                     <dd>{{ selectedStrikeDetail.description }}</dd>
@@ -50,7 +50,7 @@
                     <dd><pre>{{ selectedStrikeDetail.configurationDisplay }}</pre></dd>
                 </dl>
             </div>
-            <div *ngIf="mode === 'edit' && editedStrikeDetail">
+            <div *ngIf="mode === 'edit' && selectedStrikeDetail">
                 <div [formGroup]="createForm">
                     <div class="ui-g">
                         <div class="ui-g-6">
@@ -174,11 +174,11 @@
                         </div>
                         <div>
                             <h3>Current Rules</h3>
-                            <div *ngIf="editedStrikeDetail.configuration">
-                                <span *ngIf="editedStrikeDetail.configuration.files_to_ingest_display.length === 0">
+                            <div *ngIf="selectedStrikeDetail.configuration">
+                                <span *ngIf="selectedStrikeDetail.configuration.files_to_ingest_display.length === 0">
                                     No files in configuration.
                                 </span>
-                                <div *ngFor="let file of editedStrikeDetail.configuration.files_to_ingest_display">
+                                <div *ngFor="let file of selectedStrikeDetail.configuration.files_to_ingest_display">
                                     <pre class="flexed space-between">
                                         <span>{{ file.label }}</span>
                                         <button pButton class="ui-button-danger" icon="fa fa-remove"
@@ -186,7 +186,7 @@
                                     </pre>
                                 </div>
                             </div>
-                            <div *ngIf="!editedStrikeDetail.configuration">
+                            <div *ngIf="!selectedStrikeDetail.configuration">
                                 No files in configuration.
                             </div>
                         </div>

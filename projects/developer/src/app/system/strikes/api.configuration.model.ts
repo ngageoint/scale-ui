@@ -20,7 +20,7 @@ export class StrikeConfiguration {
         if (data) {
             return StrikeConfiguration.build(data);
         }
-        return new StrikeConfiguration('', '', []);
+        return new StrikeConfiguration('', {}, []);
     }
 
     public addFileIngest(file): object {
