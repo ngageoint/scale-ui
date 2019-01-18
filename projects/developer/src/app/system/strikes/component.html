@@ -50,7 +50,6 @@
                 </dl>
             </div>
             <div *ngIf="(mode === 'edit' || mode === 'create') && editedStrikeDetail">
-                {{ createForm.status }}
                 <div [formGroup]="createForm">
                     <div class="ui-g">
                         <div class="ui-g-6">
@@ -169,7 +168,8 @@
                         </div>
                         <div class="text-center">
                             <button pButton class="ui-button-secondary" icon="fa fa-plus" (click)="onAddRuleClick()"
-                                    label="Add Rule to Configuration"></button>
+                                    label="Add Rule to Configuration"
+                                    [disabled]="ingestFileForm.status === 'INVALID'"></button>
                         </div>
                         <div>
                             <h3>Current Rules</h3>
