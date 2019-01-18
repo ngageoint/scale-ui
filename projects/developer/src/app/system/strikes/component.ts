@@ -126,6 +126,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
             this.selectedStrikeDetail = data;
             if (this.mode === 'edit') {
                 this.initEdit();
+            } else {
+                this.items = _.clone(this.viewMenu);
             }
         }, err => {
             this.loading = false;
