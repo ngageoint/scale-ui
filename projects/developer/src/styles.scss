@@ -507,14 +507,37 @@ label-default {
     border: 1px solid $clr-waiting !important;
 }
 
-.ui-panel-primary {
+.ui-panel-primary, .ui-panel-danger {
     .ui-panel-titlebar {
-        background-color: $clr-label-primary !important;
         padding: .5em 1.25em .5em 1em !important;
 
         .ui-panel-title {
             color: #fff !important;
             font-weight: bold;
+        }
+    }
+}
+
+.ui-panel-primary {
+    .ui-panel-titlebar {
+        background-color: $clr-label-primary !important;
+    }
+}
+
+.ui-panel-danger {
+    .ui-panel-titlebar {
+        background-color: $clr-label-danger !important;
+    }
+}
+
+.strikes__details {
+    .ui-panel-primary, .ui-panel-danger {
+        .ui-panel-content {
+            background-color: #f5f5f5 !important;
+
+            pre {
+                background: #fff;
+            }
         }
     }
 }

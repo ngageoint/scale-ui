@@ -27,6 +27,9 @@ var batchDetails = require('./handlers/batchDetails');
 var batchValidate = require('./handlers/batchValidate');
 var strikes = require('./handlers/strikes');
 var strikeDetails = require('./handlers/strikeDetails');
+var strikeValidate = require('./handlers/strikeValidate');
+var strikeEdit = require('./handlers/strikeEdit');
+var strikeCreate = require('./handlers/strikeCreate');
 var ingests = require('./handlers/ingests');
 var ingestDetails = require('./handlers/ingestDetails');
 var fileDetails = require('./handlers/fileDetails');
@@ -227,6 +230,24 @@ module.exports = {
         });
 
         server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/strikes/validation/',
+            handler: strikeValidate
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/' + apiVersion + '/strikes/${id}/',
+            handler: strikeEdit
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/strikes/',
+            handler: strikeCreate
+        });
+
+        server.route({
             method: 'GET',
             path: '/mocks/' + apiVersion + '/ingests/',
             handler: ingests
@@ -272,6 +293,6 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/queue/status/',
             handler: queueStatus
-        })
+        });
     }
 };

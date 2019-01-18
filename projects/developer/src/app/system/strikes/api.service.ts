@@ -59,4 +59,25 @@ export class StrikesApiService {
                 catchError(this.dataService.handleError)
             );
     }
+
+    validateStrike(strike: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/strikes/validation/`, strike)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    editStrike(id: number, strike: any): Observable<any> {
+        return this.http.patch<any>(`${this.apiPrefix}/strikes/${id}/`, strike)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    createStrike(strike: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/strikes/`, strike)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
 }

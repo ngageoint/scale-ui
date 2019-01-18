@@ -1,0 +1,5 @@
+{
+    "is_valid": false,
+    "errors": [{"name": "EXAMPLE_FAILURE", "description": "This is an example failure."}],
+    "warnings": [{"name": "EXAMPLE_WARNING", "description": "This is an example warning."}]
+}

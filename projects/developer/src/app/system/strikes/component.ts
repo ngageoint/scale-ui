@@ -22,13 +22,13 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } }
+        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
     ];
     private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', command: () => { this.onValidateClick(); } },
-        { label: 'Save', icon: 'fa fa-save', command: () => { this.onSaveClick(); } },
+        { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
+        { label: 'Save', icon: 'fa fa-save', disabled: false, command: () => { this.onSaveClick(); } },
         { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.onCancelClick(); } }
+        { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
     ];
     loading: boolean;
     mode: string;
@@ -65,6 +65,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         new_workspace: [''],
         new_file_path: ['']
     });
+    ingestFilePanelClass = 'ui-panel-primary';
     items: MenuItem[] = _.clone(this.viewMenu);
 
     constructor(
@@ -84,7 +85,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 let id = null;
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
-                        id = +params.get('id');
+                        id = params.get('id');
+                        id = id !== null ? +id : id;
                     });
                 }
                 this.loading = true;
@@ -98,8 +100,14 @@ export class StrikesComponent implements OnInit, OnDestroy {
                             this.selectedStrike = result;
                         }
                     });
-                    if (id) {
-                        this.getStrikeDetail(id);
+                    if (id !== null) {
+                        if (id > 0) {
+                            this.getStrikeDetail(id);
+                        } else {
+                            this.loading = false;
+                            this.selectedStrikeDetail = Strike.transformer(null);
+                            this.initEdit();
+                        }
                     } else {
                         this.loading = false;
                     }
@@ -125,10 +133,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private validateForm() {
-        console.log('validate form');
-    }
-
     private setMonitorTypeDisplay() {
         let monitorType: string;
         if (this.editedStrikeDetail.configuration.monitor) {
@@ -149,6 +153,11 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
     }
 
+    private initNewWorkspacesOptions(workspaceObj) {
+        this.newWorkspacesOptions = _.clone(this.workspacesOptions);
+        _.remove(this.newWorkspacesOptions, { value: workspaceObj });
+    }
+
     private initEdit() {
         this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
             // set up workspaces
@@ -159,33 +168,45 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     value: workspace.name
                 });
             });
-            this.initNewWorkspacesOptions(this.selectedStrikeDetail.configuration.workspace);
 
             // set up form
             if (this.selectedStrikeDetail) {
+                this.initNewWorkspacesOptions(this.selectedStrikeDetail.configuration.workspace);
+                const control: any = this.createForm.get('configuration.files_to_ingest');
+                _.forEach(this.selectedStrikeDetail.configuration.files_to_ingest, f => {
+                    control.push(new FormControl(f));
+                });
                 this.items = _.clone(this.editMenu);
                 this.editedStrikeDetail = _.clone(this.selectedStrikeDetail);
                 this.mode = 'edit';
-                this.createForm.get('name').disable();
+                if (this.editedStrikeDetail.id) {
+                    // editing an existing strike, so disable the name field
+                    this.createForm.get('name').disable();
+                }
                 this.createForm.get('configuration.monitor.type').disable();
                 this.createForm.patchValue(this.editedStrikeDetail);
-                const control: any = this.createForm.get('configuration.files_to_ingest');
-                _.forEach(this.editedStrikeDetail.configuration.files_to_ingest, f => {
-                    control.push(new FormControl(f));
-                });
                 this.setMonitorTypeDisplay();
-            } else {
-                this.mode = 'create';
-                this.editedStrikeDetail = Strike.transformer(null);
-                this.createForm.patchValue(this.editedStrikeDetail);
             }
             this.createForm.valueChanges.subscribe(changes => {
+                // need to merge these changes because there are fields in the model that aren't in the form
                 _.merge(this.editedStrikeDetail, changes);
-                this.validateForm();
+
+                // enable/disable validate and save actions based on form status
+                const validateItem = _.find(this.items, { label: 'Validate' });
+                if (validateItem) {
+                    validateItem.disabled = this.createForm.status === 'INVALID';
+                }
+                const saveItem = _.find(this.items, { label: 'Save' });
+                if (saveItem) {
+                    saveItem.disabled = this.createForm.status === 'INVALID';
+                }
+
+                // change ingest file panel based on createForm, because that's where files_to_ingest lives
+                const status = this.createForm.status === 'INVALID' && this.editedStrikeDetail.configuration.files_to_ingest.length === 0;
+                this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
             });
             this.ingestFileForm.valueChanges.subscribe(changes => {
                 this.ingestFile = StrikeIngestFile.transformer(changes);
-                console.log(changes);
             });
         }, err => {
             console.log(err);
@@ -193,9 +214,17 @@ export class StrikesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private initNewWorkspacesOptions(workspaceObj) {
-        this.newWorkspacesOptions = _.clone(this.workspacesOptions);
-        _.remove(this.newWorkspacesOptions, { value: workspaceObj });
+    private redirect(id?: number) {
+        id = id || this.selectedStrikeDetail.id;
+        this.mode = null;
+        this.items = _.clone(this.viewMenu);
+        const url = id ? `/system/strikes/${id}` : '/system/strikes';
+        this.router.navigate([url], {
+            queryParams: {
+                mode: null
+            },
+            replaceUrl: true
+        });
     }
 
     getUnicode(code) {
@@ -216,19 +245,56 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        console.log('validate');
+        this.strikesApiService.validateStrike(this.editedStrikeDetail.clean()).subscribe(data => {
+            if (data.is_valid) {
+                if (data.warnings.length > 0) {
+                    _.forEach(data.warnings, warning => {
+                        this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+                    });
+                } else {
+                    this.messageService.add({severity: 'success', summary: 'Strike is valid'});
+                }
+            } else {
+                _.forEach(data.errors, error => {
+                    this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                });
+            }
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error validating strike', detail: err.statusText});
+        });
     }
 
     onSaveClick() {
-        console.log('save');
+        if (this.editedStrikeDetail.id) {
+            // edit strike
+            this.strikesApiService.editStrike(this.editedStrikeDetail.id, this.editedStrikeDetail.clean()).subscribe(data => {
+                this.redirect(this.editedStrikeDetail.id);
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error editing strike', detail: err.statusText});
+            });
+        } else {
+            // create strike
+            this.strikesApiService.createStrike(this.editedStrikeDetail.clean()).subscribe(data => {
+                this.redirect(data.id);
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error creating strike', detail: err.statusText});
+            });
+        }
     }
 
     onCancelClick() {
-        this.mode = null;
-        this.items = _.clone(this.viewMenu);
-        this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
+        this.redirect(this.selectedStrikeDetail.id);
+    }
+
+    onCreateClick() {
+        this.mode = 'edit';
+        this.items = _.clone(this.editMenu);
+        this.router.navigate([`/system/strikes/0`], {
             queryParams: {
-                mode: null
+                mode: 'edit'
             },
             replaceUrl: true
         });

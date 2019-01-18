@@ -9,6 +9,7 @@ export class Strike {
     lastModifiedDisplay: string;
     lastModifiedTooltip: string;
     configurationDisplay: string;
+
     private static build(data) {
         if (data) {
             return new Strike(
@@ -19,10 +20,11 @@ export class Strike {
                 data.job,
                 data.created,
                 data.last_modified,
-                StrikeConfiguration.transformer(data.configuration)
+                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration
             );
         }
     }
+
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
@@ -30,8 +32,18 @@ export class Strike {
             }
             return Strike.build(data);
         }
-        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, null);
+        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null));
     }
+
+    public clean(): object {
+        return {
+            name: this.name,
+            title: this.title,
+            description: this.description,
+            configuration: this.configuration
+        };
+    }
+
     constructor(
         public id: number,
         public name: string,
@@ -40,7 +52,7 @@ export class Strike {
         public job: Job,
         public created: string,
         public last_modified: string,
-        public configuration: StrikeConfiguration
+        public configuration: any
     ) {
         this.dataService = new DataService();
         this.createdDisplay = this.dataService.formatDate(this.created, true);

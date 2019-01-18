@@ -5,6 +5,7 @@ import { StrikeIngestFile } from './api.ingest-file.model';
 
 export class StrikeConfiguration {
     files_to_ingest_display: SelectItem[] = [];
+
     private static build(data) {
         if (data) {
             return new StrikeConfiguration(
@@ -14,12 +15,14 @@ export class StrikeConfiguration {
             );
         }
     }
+
     public static transformer(data) {
         if (data) {
             return StrikeConfiguration.build(data);
         }
-        return null;
+        return new StrikeConfiguration('', '', []);
     }
+
     public addFileIngest(file): object {
         if (!this.files_to_ingest) {
             this.files_to_ingest = [];
@@ -35,6 +38,7 @@ export class StrikeConfiguration {
         });
         return fileToAdd;
     }
+
     public removeFileIngest(file): object {
         const fileToRemove = StrikeIngestFile.transformer(file);
         _.remove(this.files_to_ingest, f => {
@@ -45,6 +49,7 @@ export class StrikeConfiguration {
         });
         return fileToRemove;
     }
+
     constructor(
         public workspace: string,
         public monitor: any,
