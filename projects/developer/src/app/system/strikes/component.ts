@@ -32,7 +32,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     mode: string;
-    paramId: number;
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
     selectedStrikeDetail: any;
@@ -40,31 +39,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     workspacesOptions: SelectItem[] = [];
     newWorkspacesOptions: SelectItem[] = [];
     ingestFile: any;
-    createForm = this.fb.group({
-        name: ['', Validators.required],
-        title: ['', Validators.required],
-        description: [''],
-        configuration: this.fb.group({
-            workspace: [''],
-            monitor: this.fb.group({
-                type: [{value: '', disabled: true}, Validators.required],
-                transfer_suffix: ['', Validators.required],
-                sqs_name: ['', Validators.required],
-                credentials: this.fb.group({
-                    access_key_id: [''],
-                    secret_access_key: ['', Validators.required]
-                }),
-                region_name: ['']
-            }),
-            files_to_ingest: this.fb.array([], Validators.required)
-        })
-    });
-    ingestFileForm = this.fb.group({
-        filename_regex: ['', Validators.required],
-        data_types: [''],
-        new_workspace: [''],
-        new_file_path: ['']
-    });
+    createForm: any;
+    ingestFileForm: any;
     ingestFilePanelClass = 'ui-panel-primary';
     items: MenuItem[] = _.clone(this.viewMenu);
 
@@ -81,6 +57,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 filter(event => event instanceof NavigationEnd),
                 map(() => this.route)
             ).subscribe(() => {
+                this.initFormGroups();
                 let id = null;
                 if (this.route && this.route.paramMap) {
                     this.routeParams = this.route.paramMap.subscribe(params => {
@@ -95,6 +72,34 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 }
             });
         }
+    }
+
+    private initFormGroups() {
+        this.createForm = this.fb.group({
+            name: ['', Validators.required],
+            title: ['', Validators.required],
+            description: [''],
+            configuration: this.fb.group({
+                workspace: [''],
+                monitor: this.fb.group({
+                    type: [{value: '', disabled: true}, Validators.required],
+                    transfer_suffix: ['', Validators.required],
+                    sqs_name: ['', Validators.required],
+                    credentials: this.fb.group({
+                        access_key_id: [''],
+                        secret_access_key: ['', Validators.required]
+                    }),
+                    region_name: ['']
+                }),
+                files_to_ingest: this.fb.array([], Validators.required)
+            })
+        });
+        this.ingestFileForm = this.fb.group({
+            filename_regex: ['', Validators.required],
+            data_types: [''],
+            new_workspace: [''],
+            new_file_path: ['']
+        });
     }
 
     private initNewWorkspacesOptions() {
@@ -141,7 +146,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
     }
 
-    private initForm() {
+    private initStrikeForm() {
         if (this.selectedStrikeDetail && this.mode === 'edit') {
             this.workspacesOptions = [];
             _.forEach(this.workspaces, workspace => {
@@ -162,39 +167,15 @@ export class StrikesComponent implements OnInit, OnDestroy {
             // determine what to show in monitor input, and which monitor fields to display
             this.initMonitor();
 
-            // populate form fields with model data
-            this.createForm.get('name').setValue(this.selectedStrikeDetail.name);
-            this.createForm.get('title').setValue(this.selectedStrikeDetail.title);
-            this.createForm.get('description').setValue(this.selectedStrikeDetail.description);
-            this.createForm.get('configuration.workspace').setValue(
-                this.selectedStrikeDetail.configuration.workspace || null
-            );
-            this.createForm.get('configuration.monitor.type').setValue(
-                this.selectedStrikeDetail.configuration.monitor.type || null
-            );
-            this.createForm.get('configuration.monitor.transfer_suffix').setValue(
-                this.selectedStrikeDetail.configuration.monitor.transfer_suffix || null
-            );
-            this.createForm.get('configuration.monitor.sqs_name').setValue(
-                this.selectedStrikeDetail.configuration.monitor.sqs_name || null
-            );
-            if (this.selectedStrikeDetail.configuration.monitor.credentials) {
-                this.createForm.get('configuration.monitor.credentials.access_key_id').setValue(
-                    this.selectedStrikeDetail.configuration.monitor.credentials.access_key_id || null
-                );
-                this.createForm.get('configuration.monitor.credentials.secret_access_key').setValue(
-                    this.selectedStrikeDetail.configuration.monitor.credentials.secret_access_key || null
-                );
-            }
-            this.createForm.get('configuration.monitor.region_name').setValue(
-                this.selectedStrikeDetail.configuration.monitor.region_name || null
-            );
             // iterate over files_to_ingest and add to form array
             const control: any = this.createForm.get('configuration.files_to_ingest');
             _.forEach(this.selectedStrikeDetail.configuration.files_to_ingest, f => {
                 control.push(new FormControl(f));
             });
-            // this.createForm.patchValue(this.selectedStrikeDetail);
+            // add the remaining values from the object
+            this.createForm.patchValue(this.selectedStrikeDetail);
+
+            // modify form actions based on status
             this.initValidation();
         }
 
@@ -220,14 +201,14 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 this.workspaces = workspaces.results;
 
                 // set up the form
-                this.initForm();
+                this.initStrikeForm();
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
             });
         } else {
             // already have workspaces, so just set up the form
-            this.initForm();
+            this.initStrikeForm();
         }
     }
 
@@ -400,6 +381,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(e) {
+        this.createForm.reset();
+        this.ingestFileForm.reset();
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/system/strikes/${e.value.id}`);
         } else {
