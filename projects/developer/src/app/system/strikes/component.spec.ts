@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { StrikesComponent } from './component';
 import { StrikesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
-import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
+import { WorkspacesApiService } from '../workspaces/api.service';
 
 describe('StrikesComponent', () => {
     let component: StrikesComponent;

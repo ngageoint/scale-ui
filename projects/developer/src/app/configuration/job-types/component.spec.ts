@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { DataService } from '../../common/services/data.service';
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
-import { WorkspacesApiService } from '../workspaces/api.service';
+import { WorkspacesApiService } from '../../system/workspaces/api.service';
 import { ScansApiService } from '../../system/scans/api.service';
 import { JobTypesComponent } from './component';
 

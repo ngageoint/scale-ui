@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import iconData from './font-awesome.json';
-import { WorkspacesApiService } from '../workspaces/api.service';
+import { WorkspacesApiService } from '../../system/workspaces/api.service';
 
 @Component({
     selector: 'dev-job-types-create',

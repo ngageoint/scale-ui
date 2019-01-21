@@ -9,7 +9,7 @@ import { Subject } from 'rxjs';
 import { ScanDetailsComponent } from './details.component';
 import { ScansApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
-import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
+import { WorkspacesApiService } from '../workspaces/api.service';
 
 describe('ScanDetailsComponent', () => {
     let component: ScanDetailsComponent;

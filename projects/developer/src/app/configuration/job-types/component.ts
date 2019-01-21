@@ -9,7 +9,7 @@ import { map, filter } from 'rxjs/operators';
 
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
-import { WorkspacesApiService } from '../workspaces/api.service';
+import { WorkspacesApiService } from '../../system/workspaces/api.service';
 import { ScansApiService } from '../../system/scans/api.service';
 
 @Component({

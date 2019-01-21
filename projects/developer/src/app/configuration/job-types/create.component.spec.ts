@@ -8,7 +8,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { DataService } from '../../common/services/data.service';
 import { JobTypesApiService } from './api.service';
 import { JobTypesCreateComponent } from './create.component';
-import { WorkspacesApiService } from '../workspaces/api.service';
+import { WorkspacesApiService } from '../../system/workspaces/api.service';
 
 
 describe('JobTypesCreateComponent', () => {

@@ -3,7 +3,7 @@
     <p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
                 class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."
                 [showClear]="false"></p-dropdown>
-    <button pButton class="btn__new-recipe" icon="fa fa-plus-circle" label="New Recipe" (click)="createNewRecipe()"
+    <button pButton class="btn__new-recipe" icon="fa fa-plus" (click)="createNewRecipe()"
             [disabled]="recipeTypeName === 'new'"></button>
 </div>
 <hr />

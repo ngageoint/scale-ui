@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 
 import { filter, map } from 'rxjs/operators';
 
-import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
+import { WorkspacesApiService } from '../workspaces/api.service';
 import { StrikesApiService } from './api.service';
 import { Strike } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
