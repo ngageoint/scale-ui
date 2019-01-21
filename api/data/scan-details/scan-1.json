@@ -42,6 +42,7 @@
             "type": "dir",
             "transfer_suffix": "my-transfer-suffix"
         },
+        "recursive": true,
         "files_to_ingest": [{
             "filename_regex": ".*txt",
             "data_types": [],

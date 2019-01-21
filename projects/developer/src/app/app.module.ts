@@ -92,6 +92,7 @@ import { StrikesComponent } from './system/strikes/component';
 import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
 import { ScansApiService } from './system/scans/api.service';
+import { ScansDatatableService } from './system/scans/datatable.service';
 
 
 @NgModule({
@@ -216,7 +217,8 @@ import { ScansApiService } from './system/scans/api.service';
         BatchesDatatableService,
         StrikesApiService,
         NodesApiService,
-        QueueApiService
+        QueueApiService,
+        ScansDatatableService
     ],
     bootstrap: [AppComponent]
 })

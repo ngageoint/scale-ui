@@ -41,6 +41,7 @@
         "scanner": {
             "type": "s3"
         },
+        "recursive": false,
         "files_to_ingest": [{
             "filename_regex": ".*txt",
             "data_types": [],

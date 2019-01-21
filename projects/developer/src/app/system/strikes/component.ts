@@ -325,13 +325,17 @@ export class StrikesComponent implements OnInit, OnDestroy {
         this.redirect(this.selectedStrikeDetail.id);
     }
 
-    onCreateClick() {
-        this.router.navigate([`/system/strikes/0`], {
-            queryParams: {
-                mode: 'edit'
-            },
-            replaceUrl: true
-        });
+    onCreateClick(e) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open('/system/strikes/0?mode=edit');
+        } else {
+            this.router.navigate([`/system/strikes/0`], {
+                queryParams: {
+                    mode: 'edit'
+                },
+                replaceUrl: true
+            });
+        }
     }
 
     onWorkspaceChange() {

@@ -6,18 +6,18 @@ import { FormBuilder } from '@angular/forms';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
 
-import { ScansComponent } from './component';
+import { ScanDetailsComponent } from './details.component';
 import { ScansApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
 import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
 
-describe('ScansComponent', () => {
-    let component: ScansComponent;
-    let fixture: ComponentFixture<ScansComponent>;
+describe('ScanDetailsComponent', () => {
+    let component: ScanDetailsComponent;
+    let fixture: ComponentFixture<ScanDetailsComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [ScansComponent],
+            declarations: [ScanDetailsComponent],
             imports: [HttpClientTestingModule],
             providers: [
                 MessageService, ScansApiService, DataService, WorkspacesApiService,
@@ -38,7 +38,7 @@ describe('ScansComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(ScansComponent);
+        fixture = TestBed.createComponent(ScanDetailsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

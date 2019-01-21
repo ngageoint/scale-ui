@@ -63,6 +63,9 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                         id = params.get('id');
                         id = id !== null ? +id : id;
                     });
+                    if (id === 0 && !this.mode) {
+                        this.mode = 'edit';
+                    }
                     this.getScanDetail(id);
                 }
             });
@@ -143,7 +146,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
-            // disable the name field if editing an existing strike
+            // disable the name field if editing an existing scan
             if (this.scan.id) {
                 this.createForm.get('name').disable();
             }
@@ -250,7 +253,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                         this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
                     });
                 } else {
-                    this.messageService.add({severity: 'success', summary: 'Strike is valid'});
+                    this.messageService.add({severity: 'success', summary: 'Scan is valid'});
                 }
             } else {
                 _.forEach(data.errors, error => {
@@ -259,7 +262,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             }
         }, err => {
             console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error validating strike', detail: err.statusText});
+            this.messageService.add({severity: 'error', summary: 'Error validating scan', detail: err.statusText});
         });
     }
 
@@ -289,13 +292,17 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         this.redirect(this.scan.id);
     }
 
-    onCreateClick() {
-        this.router.navigate([`/system/scans/0`], {
-            queryParams: {
-                mode: 'edit'
-            },
-            replaceUrl: true
-        });
+    onCreateClick(e) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open('/system/scans/0?mode=edit');
+        } else {
+            this.router.navigate([`/system/scans/0`], {
+                queryParams: {
+                    mode: 'edit'
+                },
+                replaceUrl: true
+            });
+        }
     }
 
     onWorkspaceChange() {
@@ -340,9 +347,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     onRecursiveClick(e) {
-        console.log(e.checked);
-        // this.scan.configuration.recursive = !this.scan.configuration.recursive;
-        // this.createForm.get('configuration.recursive').setValue(this.scan.configuration.recursive);
+        e.originalEvent.preventDefault();
     }
 
     ngOnInit() {

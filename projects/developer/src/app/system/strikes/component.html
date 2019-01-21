@@ -3,7 +3,7 @@
     <p-dropdown [options]="strikes" [autoWidth]="false" [(ngModel)]="selectedStrike" filter="filter"
                 class="strikes__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
                 (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
-    <button pButton type="button" icon="fa fa-plus" label="Create Strike" (click)="onCreateClick()"></button>
+    <button pButton type="button" icon="fa fa-plus" label="Create Strike" (click)="onCreateClick($event)"></button>
 </div>
 <hr />
 <div class="strikes__details">

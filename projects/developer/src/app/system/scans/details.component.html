@@ -1,4 +1,7 @@
-<h2><i class="fa fa-barcode"></i> Scans</h2>
+<div class="flexed space-between">
+    <h2><i class="fa fa-barcode"></i> Scan Details</h2>
+    <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>
+</div>
 <a routerLink="/system/scans"><i class="fa fa-caret-left"></i> Scans List</a>
 <div class="scans__details">
     <div *ngIf="scan">
