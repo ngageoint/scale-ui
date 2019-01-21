@@ -1,32 +1,10 @@
-.strikes__header {
-    display: flex;
-    align-items: flex-end;
-
-    .strikes__options {
-        margin: 0 10px;
-
-        ::ng-deep .ui-dropdown {
-            width: 300px;
-            min-height: 36px;
-
-            .ui-dropdown-label {
-                padding-top: 0.5em;
-            }
-
-            .ui-dropdown-trigger {
-                padding: 0.25em;
-            }
-        }
-    }
-}
-
-.strikes__title {
+.scans__title {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.strikes__details {
+.scans__details {
     h2 {
         display: inline-block;
     }
@@ -64,7 +42,7 @@
         line-height: 1.5em;
     }
 
-    .strikes__title-container {
+    .scans__title-container {
         padding: 0 5px 0 0;
 
         .job-type__title {

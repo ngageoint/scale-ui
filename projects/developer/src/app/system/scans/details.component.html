@@ -1,0 +1,177 @@
+<h2><i class="fa fa-barcode"></i> Scans</h2>
+<a routerLink="/system/scans"><i class="fa fa-caret-left"></i> Scans List</a>
+<div class="scans__details">
+    <div *ngIf="scan">
+        <p-panel>
+            <p-header class="scans__title">
+                <div>
+                    {{ scan.title }}
+                </div>
+                <div>
+                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                            (click)="menu.toggle($event)"></button>
+                </div>
+            </p-header>
+            <div *ngIf="mode !== 'edit' && scan.id">
+                <dl>
+                    <dt>Description:</dt>
+                    <dd>{{ scan.description }}</dd>
+                    <dt *ngIf="scan.job.id">Job:</dt>
+                    <dd *ngIf="scan.job.id">
+                        <a routerLink="/jobs/job/{{ scan.job.id }}">
+                            <i class="fa"
+                               [innerHtml]="getUnicode(scan.job.job_type.icon_code)"></i>
+                            View Job Details ({{ scan.job.status }})
+                        </a>
+                    </dd>
+                    <dt>Created:</dt>
+                    <dd>
+                        <span [pTooltip]="scan.createdTooltip">
+                            {{ scan.createdDisplay }}
+                        </span>
+                    </dd>
+                    <dt>Last Modified:</dt>
+                    <dd>
+                        <span [pTooltip]="scan.lastModifiedTooltip">
+                            {{ scan.lastModifiedDisplay }}
+                        </span>
+                    </dd>
+                    <dt>Configuration:</dt>
+                    <dd><pre>{{ scan.configurationDisplay }}</pre></dd>
+                </dl>
+            </div>
+            <div *ngIf="mode === 'edit' && scan">
+                <div [formGroup]="createForm">
+                    <div class="ui-g">
+                        <div class="ui-g-6">
+                            <label>
+                                <span>Name</span>
+                                <input type="text" pInputText formControlName="name" required/>
+                            </label>
+                        </div>
+                        <div class="ui-g-6">
+                            <label>
+                                <span>Title</span>
+                                <input type="text" pInputText formControlName="title" required/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="ui-g">
+                        <div class="ui-g-6">
+                            <label>
+                                <span>Description</span>
+                                <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
+                                          [autoResize]="true"></textarea>
+                            </label>
+                        </div>
+                        <div class="ui-g-6" formGroupName="configuration">
+                            <label>
+                                <span>Workspace</span>
+                                <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
+                                            formControlName="workspace" (onChange)="onWorkspaceChange()"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
+                            </label>
+                            <div class="ui-g">
+                                <div class="ui-g-4" formGroupName="scanner" style="padding-left: 0">
+                                    <label>
+                                        <span>Scanner Type</span>
+                                        <input type="text" pInputText formControlName="type" required/>
+                                    </label>
+                                </div>
+                                <div class="ui-g-4" formGroupName="scanner">
+                                    <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
+                                        <span>Transfer Suffix</span>
+                                        <input type="text" pInputText formControlName="transfer_suffix" required/>
+                                    </label>
+                                </div>
+                                <div class="ui-g-4" style="padding-right: 0">
+                                    <label>
+                                        <span>Recursive</span>
+                                        <p-toggleButton formControlName="recursive" onLabel="True" offLabel="False"
+                                                        onIcon="fa fa-check" offIcon="fa fa-remove"
+                                                        [style]="{'width':'100%', 'display':'block'}"
+                                                        (onChange)="onRecursiveClick($event)"></p-toggleButton>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div [formGroup]="ingestFileForm" class="margin-top-lg">
+                    <p-panel header="Ingest File Rules (at least 1 is required)" [styleClass]="ingestFilePanelClass">
+                        <div class="ui-g">
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>Filename Regex</span>
+                                    <input type="text" pInputText formControlName="filename_regex" required/>
+                                    <div class="help-block">
+                                        A regular expression to check against the names of newly copied files (required)
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>Data Types</span>
+                                    <p-chips formControlName="data_types" [style]="{'width':'100%'}"
+                                             [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
+                                    <div class="help-block">
+                                        Any file that matches the corresponding file name regular expression will have
+                                        these data type strings "tagged" with the file (optional)
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="ui-g">
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>New Workspace</span>
+                                    <p-dropdown [options]="newWorkspacesOptions" [autoWidth]="false"
+                                                formControlName="new_workspace" [style]="{'width':'100%'}"
+                                                placeholder="Select..." [showClear]="false">
+                                    </p-dropdown>
+                                    <div class="help-block">
+                                        New workspace to which the file should be copied (optional)
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="ui-g-6">
+                                <label>
+                                    <span>New File Path</span>
+                                    <input pInputText type="text" formControlName="new_file_path"/>
+                                    <div class="help-block">
+                                        String that specifies a new relative path for storing new files (optional)
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button pButton icon="fa fa-plus" (click)="onAddRuleClick()"
+                                    label="Add Rule to Configuration"
+                                    [disabled]="ingestFileForm.status === 'INVALID'"></button>
+                        </div>
+                        <div>
+                            <h3>Current Rules</h3>
+                            <div *ngIf="scan.configuration">
+                                <span *ngIf="scan.configuration.files_to_ingest_display.length === 0">
+                                    No files in configuration.
+                                </span>
+                                <div *ngFor="let file of scan.configuration.files_to_ingest_display">
+                                    <pre class="flexed space-between">
+                                        <span>{{ file.label }}</span>
+                                        <button pButton class="ui-button-danger" icon="fa fa-remove"
+                                                pTooltip="Remove Rule" (click)="onRemoveRuleClick(file.value)"></button>
+                                    </pre>
+                                </div>
+                            </div>
+                            <div *ngIf="!scan.configuration">
+                                No files in configuration.
+                            </div>
+                        </div>
+                    </p-panel>
+                </div>
+            </div>
+        </p-panel>
+    </div>
+</div>

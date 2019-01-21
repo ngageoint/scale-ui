@@ -9,16 +9,16 @@ import * as _ from 'lodash';
 import { filter, map } from 'rxjs/operators';
 
 import { WorkspacesApiService } from '../../configuration/workspaces/api.service';
-import { StrikesApiService } from './api.service';
-import { Strike } from './api.model';
+import { ScansApiService } from './api.service';
+import { Scan } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
 
 @Component({
-    selector: 'dev-strikes',
-    templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    selector: 'dev-scan-details',
+    templateUrl: './details.component.html',
+    styleUrls: ['./details.component.scss']
 })
-export class StrikesComponent implements OnInit, OnDestroy {
+export class ScanDetailsComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
@@ -32,9 +32,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     mode: string;
-    strikes: SelectItem[] = [];
-    selectedStrike: Strike;
-    selectedStrikeDetail: any;
+    scan: any;
     workspaces: any = [];
     workspacesOptions: SelectItem[] = [];
     newWorkspacesOptions: SelectItem[] = [];
@@ -50,7 +48,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService,
-        private strikesApiService: StrikesApiService
+        private scansApiService: ScansApiService
     ) {
         if (this.router.events) {
             this.routerEvents = this.router.events.pipe(
@@ -65,10 +63,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                         id = params.get('id');
                         id = id !== null ? +id : id;
                     });
-                    if (this.strikes.length === 0) {
-                        this.getStrikes(id);
-                    }
-                    this.getStrikeDetail(id);
+                    this.getScanDetail(id);
                 }
             });
         }
@@ -81,16 +76,11 @@ export class StrikesComponent implements OnInit, OnDestroy {
             description: [''],
             configuration: this.fb.group({
                 workspace: [''],
-                monitor: this.fb.group({
+                scanner: this.fb.group({
                     type: [{value: '', disabled: true}, Validators.required],
-                    transfer_suffix: ['', Validators.required],
-                    sqs_name: ['', Validators.required],
-                    credentials: this.fb.group({
-                        access_key_id: [''],
-                        secret_access_key: ['', Validators.required]
-                    }),
-                    region_name: ['']
+                    transfer_suffix: ['', Validators.required]
                 }),
+                recursive: [''],
                 files_to_ingest: this.fb.array([], Validators.required)
             })
         });
@@ -106,27 +96,21 @@ export class StrikesComponent implements OnInit, OnDestroy {
         // remove currently selected workspace from new_workspace dropdown
         this.newWorkspacesOptions = _.clone(this.workspacesOptions);
         _.remove(this.newWorkspacesOptions, {
-            value: this.selectedStrikeDetail.configuration.workspace
+            value: this.scan.configuration.workspace
         });
     }
 
-    private initMonitor() {
-        let monitorType: string = null;
-        if (this.selectedStrikeDetail.configuration.monitor) {
-            if (this.selectedStrikeDetail.configuration.monitor.type === 's3') {
-                monitorType = 'S3';
-                this.createForm.get('configuration.monitor.sqs_name').enable();
-                this.createForm.get('configuration.monitor.credentials').enable();
-                this.createForm.get('configuration.monitor.region_name').enable();
-                this.createForm.get('configuration.monitor.transfer_suffix').disable();
-            } else if (this.selectedStrikeDetail.configuration.monitor.type === 'dir-watcher') {
-                monitorType = 'Directory Watcher';
-                this.createForm.get('configuration.monitor.transfer_suffix').enable();
-                this.createForm.get('configuration.monitor.sqs_name').disable();
-                this.createForm.get('configuration.monitor.credentials').disable();
-                this.createForm.get('configuration.monitor.region_name').disable();
+    private initScanner() {
+        let scannerType: string = null;
+        if (this.scan.configuration.scanner) {
+            if (this.scan.configuration.scanner.type === 's3') {
+                scannerType = 'S3';
+                this.createForm.get('configuration.scanner.transfer_suffix').disable();
+            } else if (this.scan.configuration.scanner.type === 'dir') {
+                scannerType = 'Directory';
+                this.createForm.get('configuration.scanner.transfer_suffix').enable();
             }
-            this.createForm.get('configuration.monitor.type').setValue(monitorType);
+            this.createForm.get('configuration.scanner.type').setValue(scannerType);
         }
     }
 
@@ -142,12 +126,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
 
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
-        const status = this.createForm.status === 'INVALID' && this.selectedStrikeDetail.configuration.files_to_ingest.length === 0;
+        const status = this.createForm.status === 'INVALID' && this.scan.configuration.files_to_ingest.length === 0;
         this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
     }
 
-    private initStrikeForm() {
-        if (this.selectedStrikeDetail && this.mode === 'edit') {
+    private initScanForm() {
+        if (this.scan && this.mode === 'edit') {
             this.workspacesOptions = [];
             _.forEach(this.workspaces, workspace => {
                 this.workspacesOptions.push({
@@ -160,20 +144,20 @@ export class StrikesComponent implements OnInit, OnDestroy {
             this.initNewWorkspacesOptions();
 
             // disable the name field if editing an existing strike
-            if (this.selectedStrikeDetail.id) {
+            if (this.scan.id) {
                 this.createForm.get('name').disable();
             }
 
-            // determine what to show in monitor input, and which monitor fields to display
-            this.initMonitor();
+            // determine what to show in scanner input, and which scanner fields to display
+            this.initScanner();
 
             // iterate over files_to_ingest and add to form array
             const control: any = this.createForm.get('configuration.files_to_ingest');
-            _.forEach(this.selectedStrikeDetail.configuration.files_to_ingest, f => {
+            _.forEach(this.scan.configuration.files_to_ingest, f => {
                 control.push(new FormControl(f));
             });
             // add the remaining values from the object
-            this.createForm.patchValue(this.selectedStrikeDetail);
+            this.createForm.patchValue(this.scan);
 
             // modify form actions based on status
             this.initValidation();
@@ -182,7 +166,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         // listen for changes to createForm fields
         this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
-            _.merge(this.selectedStrikeDetail, changes);
+            _.merge(this.scan, changes);
             this.initValidation();
         });
 
@@ -201,43 +185,22 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 this.workspaces = workspaces.results;
 
                 // set up the form
-                this.initStrikeForm();
+                this.initScanForm();
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
             });
         } else {
             // already have workspaces, so just set up the form
-            this.initStrikeForm();
+            this.initScanForm();
         }
     }
 
-    private getStrikes(id: number) {
-        this.strikes = [];
-        this.loading = true;
-        this.strikesApiService.getStrikes().subscribe(data => {
-            this.loading = false;
-            _.forEach(data.results, result => {
-                this.strikes.push({
-                    label: result.title,
-                    value: result
-                });
-                if (id && id === result.id) {
-                    this.selectedStrike = result;
-                }
-            });
-        }, err => {
-            this.loading = false;
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
-        });
-    }
-
-    private getStrikeDetail(id: number) {
+    private getScanDetail(id: number) {
         if (id > 0) {
             this.loading = true;
-            this.strikesApiService.getStrike(id).subscribe(data => {
-                this.selectedStrikeDetail = data;
+            this.scansApiService.getScan(id).subscribe(data => {
+                this.scan = data;
                 if (this.mode === 'edit') {
                     this.initEdit();
                 } else {
@@ -246,19 +209,18 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 }
             }, err => {
                 this.loading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error retrieving scan details', detail: err.statusText});
             });
         } else if (id === 0) {
-            // creating a new strike
-            this.selectedStrike = null;
-            this.selectedStrikeDetail = Strike.transformer(null);
+            // creating a new scan
+            this.scan = Scan.transformer(null);
             this.initEdit();
         }
     }
 
     private redirect(id?: number) {
-        id = id || this.selectedStrikeDetail.id;
-        const url = id ? `/system/strikes/${id}` : '/system/strikes';
+        id = id || this.scan.id;
+        const url = id ? `/system/scans/${id}` : '/system/scans';
         this.router.navigate([url], {
             queryParams: {
                 mode: null
@@ -272,7 +234,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onEditClick() {
-        this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
+        this.router.navigate([`/system/scans/${this.scan.id}`], {
             queryParams: {
                 mode: 'edit'
             },
@@ -281,7 +243,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        this.strikesApiService.validateStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
+        this.scansApiService.validateScan(this.scan.clean()).subscribe(data => {
             if (data.is_valid) {
                 if (data.warnings.length > 0) {
                     _.forEach(data.warnings, warning => {
@@ -302,31 +264,33 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
-        if (this.selectedStrikeDetail.id) {
-            // edit strike
-            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail.clean()).subscribe(data => {
-                this.redirect(this.selectedStrikeDetail.id);
+        this.createForm.reset();
+        this.ingestFileForm.reset();
+        if (this.scan.id) {
+            // edit scan
+            this.scansApiService.editScan(this.scan.id, this.scan.clean()).subscribe(data => {
+                this.redirect(this.scan.id);
             }, err => {
                 console.log(err);
-                this.messageService.add({severity: 'error', summary: 'Error editing strike', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error editing scan', detail: err.statusText});
             });
         } else {
-            // create strike
-            this.strikesApiService.createStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
+            // create scan
+            this.scansApiService.createScan(this.scan.clean()).subscribe(data => {
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
-                this.messageService.add({severity: 'error', summary: 'Error creating strike', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
             });
         }
     }
 
     onCancelClick() {
-        this.redirect(this.selectedStrikeDetail.id);
+        this.redirect(this.scan.id);
     }
 
     onCreateClick() {
-        this.router.navigate([`/system/strikes/0`], {
+        this.router.navigate([`/system/scans/0`], {
             queryParams: {
                 mode: 'edit'
             },
@@ -335,7 +299,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onWorkspaceChange() {
-        const workspaceObj: any = _.find(this.workspaces, { name: this.selectedStrikeDetail.configuration.workspace });
+        const workspaceObj: any = _.find(this.workspaces, { name: this.scan.configuration.workspace });
         if (workspaceObj) {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
@@ -343,19 +307,16 @@ export class StrikesComponent implements OnInit, OnDestroy {
             // get workspace detail to obtain json_config data
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
                 if (data.json_config.broker.type === 'host') {
-                    this.selectedStrikeDetail.configuration.monitor.type = 'dir-watcher';
-                    this.selectedStrikeDetail.configuration.monitor.sqs_name = null;
-                    this.selectedStrikeDetail.configuration.monitor.credentials = {};
-                    this.selectedStrikeDetail.configuration.monitor.region_name = null;
+                    this.scan.configuration.scanner.type = 'dir';
                 } else if (data.json_config.broker.type === 's3') {
-                    this.selectedStrikeDetail.configuration.monitor.type = 's3';
-                    this.selectedStrikeDetail.configuration.monitor.transfer_suffix = null;
+                    this.scan.configuration.scanner.type = 's3';
+                    this.scan.configuration.scanner.transfer_suffix = null;
                 } else {
-                    this.selectedStrikeDetail.configuration.monitor.type = null;
+                    this.scan.configuration.scanner.type = null;
                 }
 
-                // determine what to show in monitor input, and which monitor fields to display
-                this.initMonitor();
+                // determine what to show in scanner input, and which scanner fields to display
+                this.initScanner();
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspace details', detail: err.statusText});
@@ -364,13 +325,13 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onAddRuleClick() {
-        const addedFile = this.selectedStrikeDetail.configuration.addIngestFile(this.ingestFile);
+        const addedFile = this.scan.configuration.addIngestFile(this.ingestFile);
         const control: any = this.createForm.get('configuration.files_to_ingest');
         control.push(new FormControl(addedFile));
     }
 
     onRemoveRuleClick(file) {
-        const removedFile = this.selectedStrikeDetail.configuration.removeIngestFile(file);
+        const removedFile = this.scan.configuration.removeIngestFile(file);
         const control: any = this.createForm.get('configuration.files_to_ingest');
         const idx = _.findIndex(control.value, removedFile);
         if (idx >= 0) {
@@ -378,14 +339,10 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
     }
 
-    onRowSelect(e) {
-        this.createForm.reset();
-        this.ingestFileForm.reset();
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/system/strikes/${e.value.id}`);
-        } else {
-            this.router.navigate([`/system/strikes/${e.value.id}`]);
-        }
+    onRecursiveClick(e) {
+        console.log(e.checked);
+        // this.scan.configuration.recursive = !this.scan.configuration.recursive;
+        // this.createForm.get('configuration.recursive').setValue(this.scan.configuration.recursive);
     }
 
     ngOnInit() {

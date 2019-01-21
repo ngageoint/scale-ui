@@ -1,7 +1,7 @@
-export class StrikeIngestFile {
+export class IngestFile {
     private static build(data) {
         if (data) {
-            return new StrikeIngestFile(
+            return new IngestFile(
                 data.filename_regex,
                 data.data_types,
                 data.new_workspace,
@@ -12,11 +12,11 @@ export class StrikeIngestFile {
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
-                return data.map(item => StrikeIngestFile.build(item));
+                return data.map(item => IngestFile.build(item));
             }
-            return StrikeIngestFile.build(data);
+            return IngestFile.build(data);
         }
-        return new StrikeIngestFile('', [], '', '');
+        return new IngestFile('', [], '', '');
     }
     constructor(
         public filename_regex: string,

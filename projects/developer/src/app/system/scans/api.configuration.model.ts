@@ -3,14 +3,15 @@ import * as _ from 'lodash';
 
 import { IngestFile } from '../../common/models/api.ingest-file.model';
 
-export class StrikeConfiguration {
+export class ScanConfiguration {
     files_to_ingest_display: SelectItem[] = [];
 
     private static build(data) {
         if (data) {
-            return new StrikeConfiguration(
+            return new ScanConfiguration(
                 data.workspace,
-                data.monitor,
+                data.scanner,
+                data.recursive,
                 IngestFile.transformer(data.files_to_ingest)
             );
         }
@@ -18,9 +19,9 @@ export class StrikeConfiguration {
 
     public static transformer(data) {
         if (data) {
-            return StrikeConfiguration.build(data);
+            return ScanConfiguration.build(data);
         }
-        return new StrikeConfiguration('', {}, []);
+        return new ScanConfiguration('', {}, false, []);
     }
 
     public addIngestFile(file): object {
@@ -52,7 +53,8 @@ export class StrikeConfiguration {
 
     constructor(
         public workspace: string,
-        public monitor: any,
+        public scanner: any,
+        public recursive: boolean,
         public files_to_ingest: any
     ) {
         if (this.files_to_ingest) {

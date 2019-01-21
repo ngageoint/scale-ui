@@ -38,6 +38,11 @@ var nodeDetails = require('./handlers/nodeDetails');
 var nodeUpdate = require('./handlers/nodeUpdate');
 var queueLoad = require('./handlers/queueLoad');
 var queueStatus = require('./handlers/queueStatus');
+var scans = require('./handlers/scans');
+var scanDetails = require('./handlers/scanDetails');
+var scanCreate = require('./handlers/scanCreate');
+var scanEdit = require('./handlers/scanEdit');
+var scanValidate = require('./handlers/scanValidate');
 
 var apiVersion = 'v6';
 
@@ -293,6 +298,36 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/queue/status/',
             handler: queueStatus
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/scans/',
+            handler: scans
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/scans/{id}/',
+            handler: scanDetails
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/scans/validation/',
+            handler: scanValidate
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/' + apiVersion + '/scans/${id}/',
+            handler: scanEdit
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/scans/',
+            handler: scanCreate
         });
     }
 };

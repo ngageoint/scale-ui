@@ -10,7 +10,7 @@ import { map, filter } from 'rxjs/operators';
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
-import { ScansApiService } from '../../common/services/scans/api.service';
+import { ScansApiService } from '../../system/scans/api.service';
 
 @Component({
     selector: 'dev-job-types',

@@ -73,7 +73,6 @@ import { IngestDatatableService } from './data/ingest/datatable.service';
 import { LoadingIndicatorComponent } from './common/components/loading-indicator/component';
 import { StatusApiService } from './common/services/status/api.service';
 import { FilesApiService } from './common/services/files/api.service';
-import { ScansApiService } from './common/services/scans/api.service';
 import { BatchesComponent } from './processing/batches/component';
 import { BatchesApiService } from './processing/batches/api.service';
 import { BatchesDatatableService } from './processing/batches/datatable.service';
@@ -90,6 +89,9 @@ import { QueueLoadComponent } from './common/components/queue-load/component';
 import { QueueApiService } from './common/services/queue/api.service';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { StrikesComponent } from './system/strikes/component';
+import { ScansComponent } from './system/scans/component';
+import { ScanDetailsComponent } from './system/scans/details.component';
+import { ScansApiService } from './system/scans/api.service';
 
 
 @NgModule({
@@ -131,7 +133,9 @@ import { StrikesComponent } from './system/strikes/component';
         CandyBarComponent,
         QueueLoadComponent,
         QueuedJobsComponent,
-        StrikesComponent
+        StrikesComponent,
+        ScansComponent,
+        ScanDetailsComponent
     ],
     imports: [
         AppRoutingModule,
