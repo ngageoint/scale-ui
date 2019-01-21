@@ -24,6 +24,7 @@ export class Workspace {
             );
         }
     }
+
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
@@ -31,8 +32,31 @@ export class Workspace {
             }
             return Workspace.build(data);
         }
-        return null;
+        return new Workspace(
+            null,
+            'untitled-workspace',
+            'Untitled Workspace',
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            WorkspaceConfiguration.transformer(null)
+        );
     }
+
+    public clean(): object {
+        return {
+            name: this.name,
+            title: this.title,
+            description: this.description,
+            base_url: this.base_url,
+            is_active: this.is_active,
+            configuration: this.configuration
+        };
+    }
+
     constructor(
         public id: number,
         public name: string,

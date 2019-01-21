@@ -21,6 +21,7 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
 export class StrikesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    private queryParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
     ];
@@ -59,16 +60,21 @@ export class StrikesComponent implements OnInit, OnDestroy {
             ).subscribe(() => {
                 this.initFormGroups();
                 let id = null;
-                if (this.route && this.route.paramMap) {
-                    this.routeParams = this.route.paramMap.subscribe(params => {
-                        // get id from url, and convert to an int if not null
-                        id = params.get('id');
-                        id = id !== null ? +id : id;
+                if (this.route && this.route.queryParams && this.route.paramMap) {
+                    this.queryParams = this.route.queryParams.subscribe(queryParams => {
+                        this.mode = queryParams.mode || null;
+                        this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+                        this.routeParams = this.route.paramMap.subscribe(routeParams => {
+                            // get id from url, and convert to an int if not null
+                            id = routeParams.get('id');
+                            id = id !== null ? +id : id;
+
+                            if (this.strikes.length === 0) {
+                                this.getStrikes(id);
+                            }
+                            this.getStrikeDetail(id);
+                        });
                     });
-                    if (this.strikes.length === 0) {
-                        this.getStrikes(id);
-                    }
-                    this.getStrikeDetail(id);
                 }
             });
         }
@@ -393,10 +399,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.mode = params.mode || null;
-            this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
-        });
     }
 
     ngOnDestroy() {
@@ -405,6 +407,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
+        }
+        if (this.queryParams) {
+            this.queryParams.unsubscribe();
         }
     }
 }

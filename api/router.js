@@ -12,6 +12,9 @@ var jobTypeUpdate = require('./handlers/jobTypeUpdate');
 var recipeTypeDetails = require('./handlers/recipeTypeDetails');
 var workspaces = require('./handlers/workspaces');
 var workspaceDetails = require('./handlers/workspaceDetails');
+var workspaceCreate = require('./handlers/workspaceCreate');
+var workspaceEdit = require('./handlers/workspaceEdit');
+var workspaceValidate = require('./handlers/workspaceValidate');
 var metrics = require('./handlers/metrics');
 var metricsDataTypes = require('./handlers/metricsDataTypeOptions');
 var metricsPlotData = require('./handlers/metricsPlotData');
@@ -130,6 +133,24 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/workspaces/{id}/',
             handler: workspaceDetails
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/workspaces/validation/',
+            handler: workspaceValidate
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/' + apiVersion + '/workspaces/${id}/',
+            handler: workspaceEdit
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/workspaces/',
+            handler: workspaceCreate
         });
 
         server.route({

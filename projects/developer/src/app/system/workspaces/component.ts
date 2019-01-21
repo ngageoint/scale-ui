@@ -19,6 +19,7 @@ import { Workspace } from './api.model';
 export class WorkspacesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
+    private queryParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
     ];
@@ -37,12 +38,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     items: MenuItem[] = _.clone(this.viewMenu);
     typeOptions: SelectItem[] = [
         {
-            label: 'NFS',
-            value: 'nfs'
-        },
-        {
             label: 'Host',
             value: 'host'
+        },
+        {
+            label: 'NFS',
+            value: 'nfs'
         },
         {
             label: 'S3',
@@ -61,19 +62,25 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             this.routerEvents = this.router.events.pipe(
                 filter(event => event instanceof NavigationEnd),
                 map(() => this.route)
-            ).subscribe(() => {
+            ).subscribe(d => {
                 this.initFormGroups();
-                let id = null;
-                if (this.route && this.route.paramMap) {
-                    this.routeParams = this.route.paramMap.subscribe(params => {
-                        // get id from url, and convert to an int if not null
-                        id = params.get('id');
-                        id = id !== null ? +id : id;
+                if (this.route && this.route.queryParams && this.route.paramMap) {
+                    this.queryParams = this.route.queryParams.subscribe(queryParams => {
+                        this.mode = queryParams.mode || null;
+                        this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+                        let id = null;
+
+                        this.routeParams = this.route.paramMap.subscribe(routeParams => {
+                            // get id from url, and convert to an int if not null
+                            id = routeParams.get('id');
+                            id = id !== null ? +id : id;
+
+                            if (this.workspaces.length === 0) {
+                                this.getWorkspaces(id);
+                            }
+                            this.getWorkspaceDetail(id);
+                        });
                     });
-                    if (this.workspaces.length === 0) {
-                        this.getWorkspaces(id);
-                    }
-                    this.getWorkspaceDetail(id);
                 }
             });
         }
@@ -295,17 +302,19 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     onTypeChange() {
         if (this.selectedWorkspaceDetail.configuration.broker.type === 's3') {
-            this.selectedWorkspaceDetail.configuration.broker.nfs_path = null;
+            this.createForm.get('configuration.broker.nfs_path').setValue(null);
         } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
-            this.selectedWorkspaceDetail.configuration.broker.bucket_name = null;
-            this.selectedWorkspaceDetail.configuration.broker.region_name = null;
-            this.selectedWorkspaceDetail.configuration.broker.credentials = {};
-            this.selectedWorkspaceDetail.configuration.broker.nfs_path = null;
+            this.createForm.get('configuration.broker.bucket_name').setValue(null);
+            this.createForm.get('configuration.broker.region_name').setValue(null);
+            this.createForm.get('configuration.broker.credentials.access_key_id').setValue(null);
+            this.createForm.get('configuration.broker.credentials.secret_access_key').setValue(null);
+            this.createForm.get('configuration.broker.nfs_path').setValue(null);
         } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'nfs') {
-            this.selectedWorkspaceDetail.configuration.broker.bucket_name = null;
-            this.selectedWorkspaceDetail.configuration.broker.region_name = null;
-            this.selectedWorkspaceDetail.configuration.broker.credentials = {};
-            this.selectedWorkspaceDetail.configuration.broker.host = null;
+            this.createForm.get('configuration.broker.bucket_name').setValue(null);
+            this.createForm.get('configuration.broker.region_name').setValue(null);
+            this.createForm.get('configuration.broker.credentials.access_key_id').setValue(null);
+            this.createForm.get('configuration.broker.credentials.secret_access_key').setValue(null);
+            this.createForm.get('configuration.broker.host_path').setValue(null);
         }
 
         // determine which broker fields to display
@@ -326,10 +335,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.mode = params.mode || null;
-            this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
-        });
     }
 
     ngOnDestroy() {
@@ -338,6 +343,9 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
+        }
+        if (this.queryParams) {
+            this.queryParams.unsubscribe();
         }
     }
 }

@@ -42,7 +42,7 @@ export class WorkspaceConfiguration {
         if (data) {
             return WorkspaceConfiguration.build(data);
         }
-        return new WorkspaceConfiguration(null);
+        return new WorkspaceConfiguration(Broker.transformer(null));
     }
 
     constructor(
