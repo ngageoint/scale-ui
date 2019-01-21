@@ -19,20 +19,20 @@ export class WorkspacesApiService {
         this.apiPrefix = this.dataService.getApiPrefix('workspaces');
     }
 
-    getWorkspaces(params?: object): Observable<ApiResults> {
-        const queryParams = {};
-        // if (params) {
-        //     const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        //     const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        //     queryParams = {
-        //         order: sortStr,
-        //         page: page,
-        //         page_size: params.rows,
-        //         started: params.started,
-        //         ended: params.ended,
-        //         name: params.name
-        //     };
-        // }
+    getWorkspaces(params?: any): Observable<ApiResults> {
+        let queryParams = {};
+        if (params) {
+            const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            queryParams = {
+                order: sortStr,
+                page: page,
+                page_size: params.rows,
+                started: params.started,
+                ended: params.ended,
+                name: params.name
+            };
+        }
         return this.http.get<ApiResults>(`${this.apiPrefix}/workspaces/`, { params: queryParams })
             .pipe(
                 map(response => {
@@ -48,6 +48,27 @@ export class WorkspacesApiService {
                 map(response => {
                     return Workspace.transformer(response);
                 }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    validateWorkspace(workspace: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/workspaces/validation/`, workspace)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    editWorkspace(id: number, workspace: any): Observable<any> {
+        return this.http.patch<any>(`${this.apiPrefix}/workspaces/${id}/`, workspace)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    createWorkspace(workspace: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/workspaces/`, workspace)
+            .pipe(
                 catchError(this.dataService.handleError)
             );
     }

@@ -8,7 +8,7 @@
     "created": "2015-10-05T21:26:04.876Z",
     "deprecated": null,
     "last_modified": "2015-10-05T21:26:04.876Z",
-    "json_config": {
+    "configuration": {
         "broker": {
             "type": "s3",
             "bucket_name": "my_bucket.domain.com",

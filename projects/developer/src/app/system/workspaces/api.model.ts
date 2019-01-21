@@ -1,4 +1,13 @@
+import { WorkspaceConfiguration } from './api.configuration.model';
+import {DataService} from '../../common/services/data.service';
+
 export class Workspace {
+    dataService: DataService;
+    createdDisplay: string;
+    createdTooltip: string;
+    lastModifiedDisplay: string;
+    lastModifiedTooltip: string;
+
     private static build(data) {
         if (data) {
             return new Workspace(
@@ -11,7 +20,7 @@ export class Workspace {
                 data.created,
                 data.deprecated,
                 data.last_modified,
-                data.json_config
+                WorkspaceConfiguration.transformer(data.configuration)
             );
         }
     }
@@ -34,7 +43,13 @@ export class Workspace {
         public created: string,
         public deprecated: string,
         public last_modified: string,
-        public json_config: object
-    ) {}
+        public configuration: WorkspaceConfiguration
+    ) {
+        this.dataService = new DataService();
+        this.createdDisplay = this.dataService.formatDate(this.created, true);
+        this.createdTooltip = this.dataService.formatDate(this.created);
+        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
+        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+    }
 }
 

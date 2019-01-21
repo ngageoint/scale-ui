@@ -1,0 +1,106 @@
+.workspaces__header {
+    display: flex;
+    align-items: flex-end;
+
+    .workspaces__options {
+        margin: 0 10px;
+
+        ::ng-deep .ui-dropdown {
+            width: 300px;
+            min-height: 36px;
+
+            .ui-dropdown-label {
+                padding-top: 0.5em;
+            }
+
+            .ui-dropdown-trigger {
+                padding: 0.25em;
+            }
+        }
+    }
+}
+
+.workspaces__title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.workspaces__details {
+    h2 {
+        display: inline-block;
+    }
+
+    h3 {
+        margin: 0 0 5px 0;
+        font-size: 1.3em;
+    }
+
+    h4 {
+        margin-top: 5px;
+        font-size: 1.1em;
+    }
+
+    p {
+        margin-top: 10px;
+    }
+
+    dl {
+        margin-top: 0;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin: 0 0 10px 0;
+
+        input, textarea, select {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    button, input, optgroup, select, textarea {
+        line-height: 1.5em;
+    }
+
+    .workspaces__title-container {
+        padding: 0 5px 0 0;
+
+        .job-type__title {
+            margin: 7px 0 0 7px;
+            display: block;
+        }
+    }
+
+    ::ng-deep .ui-treetable {
+        thead {
+            th {
+                text-align: left;
+                padding: 5px !important;
+            }
+        }
+
+        tbody td {
+            padding: 5px !important;
+        }
+
+        .ui-treetable-data {
+            .ui-treetable-child-table-container {
+                tbody:nth-child(even) {
+                    background-color: #fff !important;
+                }
+
+                tbody:nth-child(odd) {
+                    background-color: #ededed !important;
+                }
+            }
+        }
+    }
+
+    ::ng-deep .ui-scrollpanel {
+        border-color: rgba(0, 0, 0, 0.125);
+        width: 100%;
+        height: 70vh;
+    }
+}
