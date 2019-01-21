@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
-import {FormBuilder, FormControl} from '@angular/forms';
+import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -248,7 +248,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 this.loading = false;
                 this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
             });
-        } else {
+        } else if (id === 0) {
             // creating a new strike
             this.selectedStrike = null;
             this.selectedStrikeDetail = Strike.transformer(null);

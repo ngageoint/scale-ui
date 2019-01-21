@@ -530,6 +530,14 @@ label-default {
     }
 }
 
+.strikes__header {
+    .ui-button {
+        .ui-button-text {
+            padding: 0.529em 1em 0.529em 2em !important;
+        }
+    }
+}
+
 .strikes__details {
     .ui-panel-primary, .ui-panel-danger {
         .ui-panel-content {
