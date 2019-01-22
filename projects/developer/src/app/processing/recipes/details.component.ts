@@ -14,6 +14,7 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 })
 export class RecipeDetailsComponent implements OnInit, OnDestroy {
     recipeType: any;
+    recipe: any;
     subscription: any;
 
     constructor(
@@ -32,27 +33,31 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (this.route.snapshot) {
             const id = +this.route.snapshot.paramMap.get('id');
-            this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(data => {
-                this.recipeTypesApiService.getRecipeType(
-                    data.recipe_type.name
-                ).subscribe(recipeTypeData => {
-                    this.recipeType = RecipeType.transformer(recipeTypeData);
-                    // const jobTypes = [];
-                    // _.forEach(data.jobs, (jobData) => {
-                    //     // attach revision interface to each job type
-                    //     jobTypes.push(jobData.job.job_type);
-                    //
-                    //     // include current job instance in definition
-                    //     const recipeTypeJob = _.find(this.recipeType.definition.jobs, j => {
-                    //         return j.job_type.name === jobData.job.job_type.name &&
-                    //             j.job_type.version === jobData.job.job_type.version;
-                    //     });
-                    //     if (recipeTypeJob) {
-                    //         recipeTypeJob.instance = jobData.job;
-                    //     }
-                    // });
-                    // // build recipe type details with revision definition and adjusted job types
-                    // this.recipeType.job_types = jobTypes;
+            this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(recipe => {
+                this.recipe = recipe;
+                // get full recipe type to retrieve job types with manifests
+                this.recipeTypesApiService.getRecipeType(recipe.recipe_type.name).subscribe(recipeType => {
+                    // add recipe detail data to nodes
+                    _.forEach(recipe.recipe_type_rev.definition.nodes, node => {
+                        _.merge(node.node_type, this.recipe.details.nodes[node.node_type.job_type_name].node_type);
+                    });
+                    // create recipe type, using mostly data from recipe_type_rev
+                    this.recipeType = RecipeType.transformer(
+                        {
+                            id: recipe.recipe_type_rev.recipe_type.id,
+                            name: recipe.recipe_type_rev.recipe_type.name,
+                            title: recipe.recipe_type_rev.recipe_type.title,
+                            description: recipe.recipe_type_rev.recipe_type.description,
+                            is_active: recipe.recipe_type_rev.recipe_type.is_active,
+                            revision_num: recipe.recipe_type_rev.revision_num,
+                            definition: recipe.recipe_type_rev.definition,
+                            job_types: recipeType.job_types,
+                            sub_recipe_types: recipe.sub_recipe_types,
+                            created: recipe.recipe_type_rev.recipe_type.created,
+                            deprecated: recipe.recipe_type_rev.recipe_type.deprecated,
+                            last_modified: recipe.recipe_type_rev.recipe_type.last_modified
+                        }
+                    );
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type', detail: err.statusText});
                 });

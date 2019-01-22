@@ -4,10 +4,11 @@
     "title": "Oil Detection",
     "description": "Detect oil on the surface of water",
     "is_active": true,
+    "is_system": false,
     "revision_num": 1,
     "created": "2016-05-10T16:32:31.718Z",
-    "last_modified": "2016-05-10T16:32:31.718Z",
     "deprecated": null,
+    "last_modified": "2016-05-10T16:32:31.718Z",
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]

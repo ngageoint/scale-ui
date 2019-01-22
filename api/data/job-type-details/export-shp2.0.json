@@ -1,12 +1,16 @@
 {
     "id": 10,
-    "is_operational": true,
+    "name": "export-shp",
+    "version": "2.0",
+    "title": "Export Shapefile",
+    "description": "Creates shapefile (.shp) from raster data",
     "icon_code": "f06e",
-    "docker_privileged": false,
+    "is_active": true,
+    "is_paused": false,
+    "is_system": false,
+    "max_scheduled": 1,
+    "revision_num": 1,
     "docker_image": "10.4.4.10:5000/export-shp:2.0",
-    "priority": 1,
-    "timeout": 30,
-    "max_tries": 3,
     "manifest": {
         "job": {
             "name": "export-shp",
@@ -38,46 +42,9 @@
         },
         "seedVersion": "1.0"
     },
-    "job_counts_6h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_12h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 225,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_24h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 419,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "FAILED",
-            "count": 89,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": "SYSTEM"
-        }
-    ]
+    "configuration": {},
+    "created": "2015-08-02T09:23:33.254Z",
+    "deprecated": null,
+    "paused": null,
+    "last_modified": "2015-08-02T09:23:33.254Z"
 }

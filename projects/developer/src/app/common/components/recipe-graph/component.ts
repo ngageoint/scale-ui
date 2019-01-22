@@ -85,8 +85,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
                     dependencies: node.dependencies,
                     visible: true,
-                    fillColor: node.instance ? this.colorService[node.instance.status] : this.colorService.RECIPE_NODE,
-                    class: node.instance ? node.instance.status === 'RUNNING' ? 'throb-svg' : null : null,
+                    fillColor: node.node_type.status ? this.colorService[node.node_type.status] : this.colorService.RECIPE_NODE,
+                    class: node.node_type.status ? node.node_type.status === 'RUNNING' ? 'throb-svg' : null : null,
                     node_type: node.node_type,
                     input: node.input
                 });

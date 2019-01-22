@@ -1,12 +1,16 @@
 {
     "id": 4,
-    "is_operational": true,
+    "name": "cem",
+    "version": "1.0",
+    "title": "Constrained Energy Minimization",
+    "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
     "icon_code": "f185",
-    "docker_privileged": false,
+    "is_active": true,
+    "is_paused": false,
+    "is_system": false,
+    "max_scheduled": 1,
+    "revision_num": 1,
     "docker_image": "10.4.4.10:5000/cem:1.0",
-    "priority": 1,
-    "timeout": 30,
-    "max_tries": 3,
     "manifest": {
         "job": {
             "name": "cem",
@@ -21,53 +25,31 @@
             "timeout": 0,
             "interface": {
                 "command": "./cem.sh",
-                "inputs": {},
-                "outputs": {},
+                "inputs": [{
+                    "media_types": ["image/nitf"],
+                    "required": true,
+                    "type": "file",
+                    "name": "image"
+                },{
+                    "media_types": ["text/csv"],
+                    "required": true,
+                    "type": "file",
+                    "name": "signature"
+                }],
+                "outputs": [{
+                    "media_type": "image/tiff",
+                    "required": true,
+                    "type": "file",
+                    "name": "cem-detections"
+                }],
                 "settings": []
             }
         },
         "seedVersion": "1.0"
     },
-    "job_counts_6h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_12h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 225,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_24h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 419,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "FAILED",
-            "count": 89,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": "SYSTEM"
-        }
-    ]
+    "configuration": {},
+    "created": "2015-04-25T16:34:12.321Z",
+    "deprecated": null,
+    "paused": null,
+    "last_modified": "2015-04-25T16:34:12.321Z"
 }

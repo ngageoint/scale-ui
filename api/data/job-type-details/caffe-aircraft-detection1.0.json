@@ -1,12 +1,16 @@
 {
     "id": 12,
-    "is_operational": true,
+    "name": "caffe-aircraft-detection",
+    "version": "1.0",
+    "title": "Caffe Aircraft Detection",
+    "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
     "icon_code": "f072",
-    "docker_privileged": false,
+    "is_active": true,
+    "is_paused" false,
+    "is_system": false,
+    "max_scheduled": 1,
+    "revision_num": 1,
     "docker_image": "10.4.4.10:5000/caffe-aircraft-detection:1.0",
-    "priority": 1,
-    "timeout": 30,
-    "max_tries": 3,
     "manifest": {
         "job": {
             "name": "caffe-aircraft-detection",
@@ -28,46 +32,9 @@
         },
         "seedVersion": "1.0"
     },
-    "job_counts_6h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_12h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 225,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_24h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 419,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "FAILED",
-            "count": 89,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": "SYSTEM"
-        }
-    ]
+    "configuration": {},
+    "created": "2015-06-01T14:22:38.384Z",
+    "deprecated": null,
+    "paused": null,
+    "last_modified": "2015-06-01T14:22:38.384Z"
 }

@@ -4,10 +4,11 @@
     "title": "Spectral Analysis",
     "description": "Perform spectral analysis using SAM, SCM, and CEM algorithms",
     "is_active": true,
+    "is_system": false,
     "revision_num": 1,
     "created": "2016-05-02T02:54:52.820Z",
-    "last_modified": "2016-05-02T02:54:52.820Z",
     "deprecated": null,
+    "last_modified": "2016-05-02T02:54:52.820Z",
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]

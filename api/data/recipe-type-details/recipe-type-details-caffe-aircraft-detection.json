@@ -4,10 +4,11 @@
     "title": "Caffe Aircraft Detection",
     "description": "Detect aircraft using BVL Caffe deep learning algorithms",
     "is_active": true,
+    "is_system": false,
     "revision_num": 1,
     "created": "2016-05-10T21:19:16.320Z",
-    "last_modified": "2016-05-10T21:19:16.320Z",
     "deprecated": null,
+    "last_modified": "2016-05-10T21:19:16.320Z",
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]

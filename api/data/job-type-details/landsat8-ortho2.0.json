@@ -1,12 +1,16 @@
 {
     "id": 8,
-    "is_operational": true,
+    "name": "landsat8-ortho",
+    "version": "2.0",
+    "title": "Landsat 8 Ortho (OSSIM)",
+    "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
     "icon_code": "f1c0",
-    "docker_privileged": false,
+    "is_active": true,
+    "is_paused": false,
+    "is_system": false,
+    "max_scheduled": 1,
+    "revision_num": 1,
     "docker_image": "10.4.4.10:5000/ls8-ortho:2.1.9",
-    "priority": 1,
-    "timeout": 30,
-    "max_tries": 3,
     "manifest": {
         "job": {
             "name": "landsat8-ortho",
@@ -45,46 +49,9 @@
         },
         "seedVersion": "1.0"
     },
-    "job_counts_6h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_12h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 225,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_24h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 419,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "FAILED",
-            "count": 89,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": "SYSTEM"
-        }
-    ]
+    "configuration": {},
+    "created": "2015-01-30T22:58:00.000Z",
+    "deprecated": null,
+    "paused": null,
+    "last_modified": "2015-01-30T22:58:00.000Z"
 }

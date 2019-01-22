@@ -4,10 +4,11 @@
     "title": "Landsat 8",
     "description": "Process Landsat 8 sensor data",
     "is_active": true,
+    "is_system": false,
     "revision_num": 1,
     "created": "2016-05-02T02:45:28.075Z",
-    "last_modified": "2016-05-02T02:45:28.075Z",
     "deprecated": null,
+    "last_modified": "2016-05-02T02:45:28.075Z",
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]

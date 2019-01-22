@@ -1,11 +1,16 @@
 {
     "id": 6,
-    "is_operational": true,
+    "name": "wv2-atmosphere-corr",
+    "version": "1.0.1",
+    "title": "WorldView-2 Atmospheric Correction",
+    "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
     "icon_code": "f14e",
-    "docker_privileged": false,
+    "is_active": true,
+    "is_paused": false,
+    "is_system": false,
+    "max_scheduled": 1,
+    "revision_num": 1,
     "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
-    "priority": 1,
-    "timeout": 30,
     "manifest": {
         "job": {
             "name": "wv2-atmosphere-corr",
@@ -27,49 +32,9 @@
         },
         "seedVersion": "1.0"
     },
-    "error_mapping": {},
-    "trigger_rule": {},
-    "errors": [],
-    "job_counts_6h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_12h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 225,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        }
-    ],
-    "job_counts_24h": [
-        {
-            "status": "QUEUED",
-            "count": 3,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "COMPLETED",
-            "count": 419,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": null
-        },
-        {
-            "status": "FAILED",
-            "count": 89,
-            "most_recent": "2015-09-16T18:36:12.278Z",
-            "category": "SYSTEM"
-        }
-    ]
+    "configuration": {},
+    "created": "2015-03-31T07:54:09.492Z",
+    "deprecated": null,
+    "paused": null,
+    "last_modified": "2015-03-31T07:54:09.492Z"
 }

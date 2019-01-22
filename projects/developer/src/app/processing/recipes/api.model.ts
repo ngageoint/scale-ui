@@ -1,13 +1,15 @@
-import { environment } from '../../../environments/environment';
 import { DataService } from '../../common/services/data.service';
-import * as moment from 'moment';
 
 export class Recipe {
     dataService: DataService;
-    created_formatted: string;
-    completed_formatted: string;
-    superseded_formatted: string;
-    last_modified_formatted: string;
+    createdDisplay: string;
+    createdTooltip: string;
+    completedDisplay: string;
+    completedTooltip: string;
+    supersededDisplay: string;
+    supersededTooltip: string;
+    lastModifiedDisplay: string;
+    lastModifiedTooltip: string;
     duration: string;
 
     private static build(data) {
@@ -42,7 +44,12 @@ export class Recipe {
                 data.created,
                 data.completed,
                 data.superseded,
-                data.last_modified
+                data.last_modified,
+                data.superseded_by_recipe,
+                data.input,
+                data.details,
+                data.job_types,
+                data.sub_recipe_types
             );
         }
     }
@@ -85,13 +92,22 @@ export class Recipe {
         public created: string,
         public completed: string,
         public superseded: string,
-        public last_modified: string
+        public last_modified: string,
+        public superseded_by_recipe: any,
+        public input: any,
+        public details: any,
+        public job_types: any,
+        public sub_recipe_types: any
     ) {
         this.dataService = new DataService();
-        this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
-        this.completed_formatted = this.completed ? moment.utc(this.completed).format(environment.dateFormat) : '';
-        this.superseded_formatted = moment.utc(this.superseded).format(environment.dateFormat);
-        this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
+        this.createdDisplay = this.dataService.formatDate(this.created, true);
+        this.createdTooltip = this.dataService.formatDate(this.created);
+        this.completedDisplay = this.dataService.formatDate(this.completed, true);
+        this.completedTooltip = this.dataService.formatDate(this.completed);
+        this.supersededDisplay = this.dataService.formatDate(this.superseded, true);
+        this.supersededTooltip = this.dataService.formatDate(this.superseded);
+        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
+        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
         this.duration = this.dataService.calculateDuration(this.created, this.last_modified);
     }
 }

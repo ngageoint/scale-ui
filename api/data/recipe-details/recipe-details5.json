@@ -3,63 +3,45 @@
     "recipe_type": {
         "id": 5,
         "name": "caffe-aircraft-detection",
-        "version": "1.0",
         "title": "Caffe Aircraft Detection",
         "description": "Detect aircraft using BVL Caffe deep learning algorithms",
-        "is_active": true,
-        "definition": {
-            "input_data": [{
-                "media_types": ["image/nitf"],
-                "required": true,
-                "type": "file",
-                "name": "input_file"
-            }],
-            "version": "1.0",
-            "jobs": [{
-                "recipe_inputs": [{
-                    "job_input": "input_file",
-                    "recipe_input": "input_file"
-                }],
-                "name": "caffe-aircraft-detection",
-                "job_type": {
-                    "name": "caffe-aircraft-detection",
-                    "version": "1.0"
-                },
-                "dependencies": []
-            }]
-        },
-        "created": "2016-05-11T16:32:31.718Z",
-        "last_modified": "2016-05-11T16:32:31.718Z",
-        "archived": null
+        "revision_num": 1
     },
     "recipe_type_rev": {
-        "id":5,
+        "id": 104,
         "recipe_type": {
-            "id": 5
+            "id": 5,
+            "name": "caffe-aircraft-detection",
+            "title": "Caffe Aircraft Detection",
+            "description": "Detect aircraft using BVL Caffe deep learning algorithms",
+            "is_active": true,
+            "is_system": false,
+            "revision_num": 1,
+            "created": "2019-01-20T10:26:32Z",
+            "deprecated": null,
+            "last_modified": "2019-01-20T10:32:49Z"
         },
-        "revision_num": 3,
+        "revision_num": 1,
+        "created": "2019-01-20T10:26:32Z",
         "definition": {
-            "input_data": [{
-                "media_types": ["image/nitf"],
-                "required": true,
-                "type": "file",
-                "name": "input_file"
-            }],
-            "version": "1.0",
-            "jobs": [{
-                "recipe_inputs": [{
-                    "job_input": "input_file",
-                    "recipe_input": "input_file"
-                }],
-                "name": "caffe-aircraft-detection",
-                "job_type": {
-                    "name": "caffe-aircraft-detection",
-                    "version": "1.0"
-                },
-                "dependencies": []
-            }]
-        },
-        "created": "2016-05-11T16:32:31.718Z"
+            "input": {
+                "files": [{"name": "input_file"}]
+            },
+            "nodes": {
+                "caffe-aircraft-detection": {
+                    "dependencies": [],
+                    "input": {
+                        "input_file": {"type": "recipe", "input": "input_file"}
+                    },
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "caffe-aircraft-detection",
+                        "job_type_version": "1.0",
+                        "job_type_revision": 1
+                    }
+                }
+            }
+        }
     },
     "event": {
         "id": 7,
@@ -95,135 +77,65 @@
             "parse_id": 1
         }
     },
-    "created": "2016-04-15T19:03:26.346Z",
+    "batch": null,
+    "recipe": null,
+    "is_superseded": false,
+    "superseded_recipe": null,
+    "input_file_size": null,
+    "source_started": null,
+    "source_ended": null,
+    "source_sensor_class": null,
+    "source_sensor": null,
+    "source_collection": null,
+    "source_task": null,
+    "jobs_total": 0,
+    "jobs_pending": 0,
+    "jobs_blocked": 0,
+    "jobs_queued": 0,
+    "jobs_running": 0,
+    "jobs_failed": 0,
+    "jobs_completed": 0,
+    "jobs_canceled": 0,
+    "sub_recipes_total": 0,
+    "sub_recipes_completed": 0,
+    "is_completed": true,
+    "created": "2019-01-20T10:26:32Z",
     "completed": "2016-05-15T19:03:26.346Z",
-    "last_modified": "2016-05-15T19:03:26.346Z",
-    "data": {
-        "input_data": [
-            {
-                "name": "input_file",
-                "file_id": 4
-            }
-        ],
-        "version": "1.0",
-        "workspace_id": 2
+    "superseded": null,
+    "last_modified": "2019-01-20T10:32:49Z",
+    "superseded_by_recipe": null,
+    "input": {
+        "files": {
+            "input_file": [
+                34567890
+            ]
+        },
+        "json": {}
     },
-    "input_files": [
+    "details": {
+        "nodes": {
+            "caffe-aircraft-detection": {
+                "node_type": {
+                    "status": "COMPLETED",
+                    "job_type_revision": 1,
+                    "job_type_name": "caffe-aircraft-detection",
+                    "job_type_version": "1.0",
+                    "node_type": "job",
+                    "job_id": 123456
+                },
+                "dependencies": []
+            }
+        }
+    },
+    "job_types": [
         {
-            "id": 4,
-            "workspace": {
-                "id": 1,
-                "name": "products"
-            },
-            "file_name": "image.nitf",
-            "media_type": "image/nitf",
-            "file_size": 7346298,
-            "data_type": ["nitf"],
-            "is_deleted": false,
-            "uuid": "d897wae9y80u9af9y8afhiuadfihouas",
-            "url": "./test/data/input/caffe-aircraft-detection.png",
-            "created": "2016-04-10T15:24:53.962Z",
-            "deleted": null,
-            "data_started": "2016-04-10T15:24:53.962Z",
-            "data_ended": "2016-04-10T15:24:53.962Z",
-            "geometry": null,
-            "center_point": null,
-            "meta_data": {},
-            "last_modified": "2016-04-10T15:24:53.962Z"
+            "id": 12,
+            "name": "caffe-aircraft-detection",
+            "version": "1.0",
+            "title": "Caffe Aircraft Detection",
+            "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
+            "icon_code": "f072"
         }
     ],
-    "jobs": [
-        {
-            "job_name": "caffe-aircraft-detection",
-            "job": {
-                "id": 12,
-                "job_type": {
-                    "id": 12,
-                    "manifest": {
-                        "job": {
-                            "name": "caffe-aircraft-detection",
-                            "jobVersion": "1.0",
-                            "packageVersion": "",
-                            "title": "Caffe Aircraft Detection",
-                            "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
-                            "maintainer": {
-                                "name": "Yangqing Jia",
-                                "email": ""
-                            },
-                            "timeout": 0,
-                            "interface": {
-                                "command": "./aircraft.py",
-                                "inputs": {},
-                                "outputs": {},
-                                "settings": []
-                            }
-                        },
-                        "seedVersion": "1.0"
-                    },
-                    "is_system": false,
-                    "is_long_running": false,
-                    "is_active": true,
-                    "is_operational": true,
-                    "is_paused": false,
-                    "icon_code": "f072"
-                },
-                "job_type_rev": {
-                    "id": 1,
-                    "job_type": {
-                        "id": 1
-                    },
-                    "revision_num": 1,
-                    "interface": {
-                        "output_data": [
-                            {
-                                "media_type": "image/tiff",
-                                "required": true,
-                                "type": "file",
-                                "name": "geotiff"
-                            }
-                        ],
-                        "shared_resources": [],
-                        "command_arguments": "",
-                        "input_data": [
-                            {
-                                "media_types": [
-                                    "image/tiff"
-                                ],
-                                "required": true,
-                                "type": "file",
-                                "name": "input_file"
-                            }
-                        ],
-                        "version": "1.0",
-                        "command": ""
-                    },
-                    "created": "2016-01-01T00:00:00.000Z"
-                },
-                "event": {
-                    "id": 7,
-                    "type": "INGEST",
-                    "rule": {
-                        "id": 8
-                    },
-                    "occurred": "2016-05-14T15:31:59.054Z"
-                },
-                "error": null,
-                "status": "COMPLETED",
-                "priority": 10,
-                "num_exes": 1,
-                "timeout": 1800,
-                "max_tries": 3,
-                "cpus_required": 0.25,
-                "mem_required": 512,
-                "disk_in_required": 2.0,
-                "disk_out_required": 16.0,
-                "created": "2016-05-12T00:00:00Z",
-                "queued": "2016-05-12T00:00:00Z",
-                "started": "2016-05-12T00:00:00Z",
-                "ended": "2016-05-12T00:00:00Z",
-                "last_status_change": "2016-06-11T00:00:00Z",
-                "last_modified": "2016-05-12T00:00:00Z"
-            }
-        }
-    ]
+    "sub_recipe_types": []
 }

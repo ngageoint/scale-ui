@@ -4,10 +4,11 @@
     "title": "WorldView",
     "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
     "is_active": true,
+    "is_system": false,
     "revision_num": 1,
     "created": "2016-05-02T02:58:23.221Z",
-    "last_modified": "2016-05-02T02:58:23.221Z",
     "deprecated": null,
+    "last_modified": "2016-05-02T02:58:23.221Z",
     "definition": {
         "input": {
             "files": [{"name": "input_file"}]
@@ -185,7 +186,7 @@
             "manifest": {
                 "job": {
                     "name": "wv2-ortho",
-                    "jobVersion": "1.0.1",
+                    "jobVersion": "2.0",
                     "packageVersion": "",
                     "title": "WorldView-2 Rigorous Orthorectification",
                     "description": "Applies Orthorectification to WorldView-2 data",

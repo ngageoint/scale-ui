@@ -1,5 +1,10 @@
-<div *ngIf="recipeType">
-    <h2>{{ recipeType.title }}</h2>
+<div *ngIf="recipe && recipeType">
+    <h2>
+        {{ recipe.recipe_type_rev.recipe_type.title }}
+        <span class="label label-success" *ngIf="recipe.completed" [pTooltip]="recipe.completedTooltip">
+            Completed {{ recipe.completedDisplay }}
+        </span>
+    </h2>
     <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
     <dev-recipe-graph [recipeData]="recipeType"></dev-recipe-graph>
 </div>
