@@ -1,0 +1,201 @@
+{
+    "id": 1,
+    "recipe_type": {
+        "id": 1,
+        "name": "landsat8",
+        "title": "Landsat 8",
+        "description": "Process Landsat 8 sensor data",
+        "revision_num": 1
+    },
+    "recipe_type_rev": {
+        "id": 100,
+        "recipe_type": {
+            "id": 1,
+            "name": "landsat8",
+            "title": "Landsat 8",
+            "description": "Process Landsat 8 sensor data",
+            "is_active": true,
+            "is_system": false,
+            "revision_num": 1,
+            "created": "2016-05-15T17:27:49.461Z",
+            "deprecated": null,
+            "last_modified": "2016-05-15T17:27:49.461Z"
+        },
+        "revision_num": 1,
+        "created": "2016-05-15T17:27:49.461Z",
+        "definition": {
+            "input": {
+                "files": [{"name": "input_file"}]
+            },
+            "nodes": {
+                "landsat8-parse": {
+                    "dependencies": [],
+                    "input": {
+                        "input_file": {"type": "recipe", "input": "input_file"}
+                    },
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "landsat8-parse",
+                        "job_type_version": "1.0.0",
+                        "job_type_revision": 1
+                    }
+                },
+                "landsat8-atmos-corr": {
+                    "dependencies": [{"name": "landsat8-parse"}],
+                    "input": {
+                        "infile": {"type": "dependency", "node": "landsat8-parse", "output": "thermal"}
+                    },
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "landsat8-atmos-corr",
+                        "job_type_version": "2.1.9",
+                        "job_type_revision": 1
+                    }
+                },
+                "landsat8-ortho": {
+                    "dependencies": [{"name": "landsat8-parse"}],
+                    "input": {
+                        "infile": {"type": "dependency", "node": "landsat8-parse", "output": "panchromatic"}
+                    },
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "landsat8-ortho",
+                        "job_type_version": "2.0",
+                        "job_type_revision": 1
+                    }
+                },
+                "export-shp": {
+                    "dependencies": [{"name": "landsat8-atmos-corr"}, {"name": "landsat8-ortho"}],
+                    "input": {
+                        "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"},
+                        "panchromatic": {"type": "dependency", "node": "landsat8-ortho", "output": "ls8-corrected"}
+                    },
+                    "node_type": {
+                        "node_type": "job",
+                        "job_type_name": "export-shp",
+                        "job_type_version": "2.0",
+                        "job_type_revision": 1
+                    }
+                }
+            }
+        }
+    },
+    "event": {
+        "id": 7,
+        "type": "INGEST",
+        "rule": {
+            "id": 8,
+            "type": "INGEST",
+            "is_active": true,
+            "configuration": {
+                "trigger": {
+                    "media_type": "",
+                    "data_types": [
+                        "landsat8"
+                    ]
+                },
+                "create": {
+                    "recipes": [
+                        {
+                            "recipe_type": {
+                                "name": "landsat8",
+                                "version": "1.0.0"
+                            },
+                            "file_input_name": "input_file",
+                            "workspace_name": "products"
+                        }
+                    ]
+                },
+                "version": "1.0.0"
+            }
+        },
+        "occurred": "2016-04-28T19:03:59.054Z",
+        "description": {
+            "file_name": "data-file.png",
+            "version": "1.0",
+            "parse_id": 1
+        }
+    },
+    "batch": null,
+    "recipe": null,
+    "is_superseded": false,
+    "superseded_recipe": null,
+    "input_file_size": null,
+    "source_started": null,
+    "source_ended": null,
+    "source_sensor_class": null,
+    "source_sensor": null,
+    "source_collection": null,
+    "source_task": null,
+    "jobs_total": 0,
+    "jobs_pending": 0,
+    "jobs_blocked": 0,
+    "jobs_queued": 0,
+    "jobs_running": 0,
+    "jobs_failed": 0,
+    "jobs_completed": 0,
+    "jobs_canceled": 0,
+    "sub_recipes_total": 0,
+    "sub_recipes_completed": 0,
+    "is_completed": true,
+    "created": "2016-04-15T19:03:26.346Z",
+    "completed": "",
+    "superseded": null,
+    "last_modified": "2016-04-15T19:03:26.346Z",
+    "superseded_by_recipe": {
+        "id": 6,
+        "recipe_type": {
+            "title": "Landsat 8",
+            "version": "1.0.1"
+        }
+    },
+    "input": {
+        "files": {
+            "input_file": [
+                12345678
+            ]
+        },
+        "json": {}
+    },
+    "details": {
+        "nodes": {
+            "landsat8-parse": {
+                "node_type": {
+                    "status": "COMPLETED",
+                    "job_type_revision": 1,
+                    "job_type_name": "landsat8-parse",
+                    "job_type_version": 1,
+                    "node_type": "job",
+                    "job_id": 123456
+                },
+                "dependencies": []
+            },
+            "landsat8-atmos-corr": {
+                "node_type": {
+                    "status": "COMPLETED",
+                    "job_type_revision": 1,
+                    "job_type_name": "landsat8-atmos-corr",
+                    "job_type_version": 1,
+                    "node_type": "job",
+                    "job_id": 2345678
+                },
+                "dependencies": [
+                    {
+                        "name": "landsat8-parse"
+                    }
+                ]
+            }
+        }
+    },
+    "job_types": [
+        {
+            "id": 1,
+            "name": "landsat8-parse",
+            "version": "1",
+            "title": "Landsat 8 Parse",
+            "description": "Parses landsat files",
+            "icon_code": "fe07"
+        }
+    ],
+    "sub_recipe_types": []
+}
