@@ -4,14 +4,15 @@
     "previous": null,
     "results":[
         {
+            "id": 1,
             "name": "landsat8-parse",
             "title": "Landsat 8 Parse",
             "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
             "icon_code": "f090",
             "num_versions": 1,
             "latest_version": "1.0.0"
-        },
-        {
+        },{
+            "id": 2,
             "name": "sam",
             "title": "Spectral Angle Mapper",
             "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
@@ -19,6 +20,7 @@
             "num_versions": 1,
             "latest_version": "1.0"
         },{
+            "id": 3,
             "name": "scm",
             "title": "Spectral Correlation Mapper",
             "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
@@ -26,6 +28,7 @@
             "num_versions": 1,
             "latest_version": "1.0"
         },{
+            "id": 4,
             "name": "cem",
             "title": "Constrained Energy Minimization",
             "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
@@ -33,6 +36,7 @@
             "num_versions": 1,
             "latest_version": "1.0"
         },{
+            "id": 5,
             "name": "wv2-parse",
             "title": "WorldView-2 Parse",
             "description": "Parses WorldView-2 GeoTiffs",
@@ -40,6 +44,7 @@
             "num_versions": 1,
             "latest_version": "1.0.1"
         },{
+            "id": 6,
             "name": "wv2-atmosphere-corr",
             "title": "WorldView-2 Atmospheric Correction",
             "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
@@ -47,12 +52,14 @@
             "num_versions": 1,
             "latest_version": "1.0.1"
         },{
+            "id": 7,
             "name": "landsat8-atmos-corr",
             "title": "Landsat 8 Atmospheric Correction",
             "icon_code": "f0c2",
             "num_versions": 1,
             "latest_version": "2.1.9"
         },{
+            "id": 8,
             "name": "landsat8-ortho",
             "title": "Landsat 8 Ortho (OSSIM)",
             "description": "Applies Orthorectification to Landsat 8 GeoTiffs",
@@ -60,6 +67,7 @@
             "num_versions": 1,
             "latest_version": "2.0"
         },{
+            "id": 9,
             "name": "wv2-ortho",
             "title": "WorldView-2 Rigorous Orthorectification",
             "description": "Applies Orthorectification to WorldView-2 data",
@@ -67,6 +75,7 @@
             "num_versions": 1,
             "latest_version": "2.0"
         },{
+            "id": 10,
             "name": "export-shp",
             "title": "Export Shapefile",
             "description": "Creates shapefile (.shp) from raster data",
@@ -74,13 +83,14 @@
             "num_versions": 1,
             "latest_version": "2.0"
         },{
+            "id": 11,
             "name": "export-kml",
             "title": "Export KML",
             "description": "Creates KML from data",
             "icon_code": "f0ac",
             "num_versions": 1,
             "latest_version": "1.5"
-        },{
+        },{"id": 12,
             "name": "caffe-aircraft-detection",
             "title": "Caffe Aircraft Detection",
             "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
