@@ -6,5 +6,38 @@
         </span>
     </h2>
     <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
-    <dev-recipe-graph [recipeData]="recipeType"></dev-recipe-graph>
+    <p-table [value]="[recipe]">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Recipe Type</th>
+                <th>Revision</th>
+                <th>Jobs</th>
+                <th>Created</th>
+                <th>Last Modified</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-recipe>
+            <tr>
+                <td>
+                    <a routerLink="/configuration/recipe-types/{{ recipe.recipe_type.name }}">
+                        <span [pTooltip]="recipe.recipe_type.description">{{ recipe.recipe_type.title }}</span>
+                    </a>
+                </td>
+                <td>
+                    {{ recipe.recipe_type_rev.revision_num }}
+                </td>
+                <td>
+                    <dev-candy-bar [dataArr]="recipe.jobsArr" [dataFields]="recipe.jobsFields"></dev-candy-bar>
+                </td>
+                <td>
+                    <span [pTooltip]="recipe.createdTooltip">{{ recipe.createdDisplay }}</span>
+                </td>
+                <td>
+                    <span [pTooltip]="recipe.lastModifiedTooltip">{{ recipe.lastModifiedDisplay }}</span>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <dev-recipe-graph [recipeData]="recipeType" [jobMetrics]="recipe.jobMetrics" jobMetricsTitle="Node Jobs">
+    </dev-recipe-graph>
 </div>

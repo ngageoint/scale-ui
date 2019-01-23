@@ -15,6 +15,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
     @Input() jobMetrics: any;
+    @Input() jobMetricsTitle: any;
+    @Input() hideDetails: boolean;
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
@@ -34,9 +36,21 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     recipeDialogX: number;
     recipeDialogY: number;
     metricData: any;
-    chartOptions = {
+    chartOptions: any = {
         legend: {
             display: false
+        },
+        scales: {
+            xAxes: [{
+                ticks: {
+                    display: false
+                }
+            }],
+            yAxes: [{
+                ticks: {
+                    beginAtZero: true
+                }
+            }]
         },
         plugins: {
             datalabels: {
@@ -361,6 +375,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes) {
+        if (changes.jobMetricsTitle) {
+            this.chartOptions.title = {
+                display: !!changes.jobMetricsTitle.currentValue,
+                    text: changes.jobMetricsTitle.currentValue
+            };
+        }
         if (changes.recipeData) {
             this.jobTypesApiService.getJobTypes().subscribe(data => {
                 this.jobTypes = data.results;

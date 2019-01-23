@@ -59,13 +59,11 @@
         </span>
     </p-header>
     <div *ngIf="jobMetrics">
-        <!--job metrics data from batch details-->
         <div class="job-type-content">
             <p-chart type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
         </div>
     </div>
-    <div *ngIf="!jobMetrics">
-        <!--just show the regular recipe data-->
+    <div *ngIf="!hideDetails">
         <div class="job-type-content" *ngIf="selectedNode && selectedJobType">
             <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
                         class="recipe-dependencies-container" emptyMessage="None">

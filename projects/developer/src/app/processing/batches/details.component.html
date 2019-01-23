@@ -52,24 +52,13 @@
                 </div>
             </td>
             <td>
-                <div [pTooltip]="batch.jobs_data_tooltip" [tooltipDisabled]="!batch.is_creation_done" [escape]="false">
-                    <a routerLink="/processing/jobs/" [queryParams]="{batch_id: batch.id}">
-                        <div aria-valuemax="100" aria-valuemin="0" role="progressbar"
-                             class="ui-progressbar ui-widget ui-widget-content ui-corner-all ui-progressbar-determinate">
-                            <div *ngFor="let jd of batch.jobs_data">
-                                <div class="ui-progressbar-value ui-progressbar-value-animate ui-widget-header"
-                                     [ngClass]="jd.key"
-                                     style="display: block"
-                                     [ngStyle]="{'width': jd.value + '%'}"></div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                <dev-candy-bar [dataArr]="batch.jobsArr" [dataFields]="batch.jobsFields"></dev-candy-bar>
             </td>
             <td><span *ngIf="batch.configuration">{{ batch.configuration.priority }}</span></td>
         </tr>
     </ng-template>
 </p-table>
 <div *ngIf="batchDetails.recipe_type_rev" class="margin-top-md">
-    <dev-recipe-graph [recipeData]="recipeType" [jobMetrics]="batchDetails.job_metrics" [isEditing]="false"></dev-recipe-graph>
+    <dev-recipe-graph [recipeData]="recipeType" [jobMetrics]="batchDetails.job_metrics" jobMetricsTitle="Node Jobs"
+                      [hideDetails]="true" [isEditing]="false"></dev-recipe-graph>
 </div>

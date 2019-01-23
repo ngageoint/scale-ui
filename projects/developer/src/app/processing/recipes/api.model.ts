@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 import { DataService } from '../../common/services/data.service';
 
 export class Recipe {
@@ -11,6 +13,16 @@ export class Recipe {
     lastModifiedDisplay: string;
     lastModifiedTooltip: string;
     duration: string;
+    jobMetrics: any;
+    jobs_pending_percentage: any;
+    jobs_blocked_percentage: any;
+    jobs_queued_percentage: any;
+    jobs_running_percentage: any;
+    jobs_failed_percentage: any;
+    jobs_completed_percentage: any;
+    jobs_canceled_percentage: any;
+    jobsArr: any;
+    jobsFields: any;
 
     private static build(data) {
         if (data) {
@@ -109,5 +121,45 @@ export class Recipe {
         this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
         this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
         this.duration = this.dataService.calculateDuration(this.created, this.last_modified);
+        this.jobMetrics = {};
+        if (this.details) {
+            _.forEach(this.details.nodes, node => {
+                this.jobMetrics[node.node_type.job_type_name] = {
+                    jobs_total: node.node_type.jobs_total ? node.node_type.jobs_total : 0,
+                    jobs_pending: node.node_type.jobs_pending ? node.node_type.jobs_pending : 0,
+                    jobs_blocked: node.node_type.jobs_blocked ? node.node_type.jobs_blocked : 0,
+                    jobs_queued: node.node_type.jobs_queued ? node.node_type.jobs_queued : 0,
+                    jobs_running: node.node_type.jobs_running ? node.node_type.jobs_running : 0,
+                    jobs_failed: node.node_type.jobs_failed ? node.node_type.jobs_failed : 0,
+                    jobs_completed: node.node_type.jobs_completed ? node.node_type.jobs_completed : 0,
+                    jobs_canceled: node.node_type.jobs_canceled ? node.node_type.jobs_canceled : 0
+                };
+            });
+        }
+        this.jobs_pending_percentage = (this.jobs_pending / this.jobs_total) * 100;
+        this.jobs_blocked_percentage = (this.jobs_blocked / this.jobs_total) * 100;
+        this.jobs_queued_percentage = (this.jobs_queued / this.jobs_total) * 100;
+        this.jobs_running_percentage = (this.jobs_running / this.jobs_total) * 100;
+        this.jobs_failed_percentage = (this.jobs_failed / this.jobs_total) * 100;
+        this.jobs_completed_percentage = (this.jobs_completed / this.jobs_total) * 100;
+        this.jobs_canceled_percentage = (this.jobs_canceled / this.jobs_total) * 100;
+        this.jobsArr = _.filter([
+            { key: 'pending', percentage: this.jobs_pending_percentage, value: 0, field: 'jobs_pending' },
+            { key: 'blocked', percentage: this.jobs_blocked_percentage, value: 0, field: 'jobs_blocked' },
+            { key: 'queued', percentage: this.jobs_queued_percentage, value: 0, field: 'jobs_queued' },
+            { key: 'running', percentage: this.jobs_running_percentage, value: 0, field: 'jobs_running' },
+            { key: 'failed', percentage: this.jobs_failed_percentage, value: 0, field: 'jobs_failed' },
+            { key: 'completed', percentage: this.jobs_completed_percentage, value: 0, field: 'jobs_completed' },
+            { key: 'canceled', percentage: this.jobs_canceled_percentage, value: 0, field: 'jobs_canceled' }
+        ], d => d.percentage > 0);
+        this.jobsFields = {
+            jobs_pending: this.jobs_pending,
+            jobs_blocked: this.jobs_blocked,
+            jobs_queued: this.jobs_queued,
+            jobs_running: this.jobs_running,
+            jobs_failed: this.jobs_failed,
+            jobs_completed: this.jobs_completed,
+            jobs_canceled: this.jobs_canceled
+        };
     }
 }
