@@ -32,7 +32,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
     ];
     loading: boolean;
-    mode: string;
+    isEditing: boolean;
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
     selectedStrikeDetail: any;
@@ -63,17 +63,17 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 let id = null;
                 if (this.route && this.route.queryParams && this.route.paramMap) {
                     this.queryParams = this.route.queryParams.subscribe(queryParams => {
-                        this.mode = queryParams.mode || null;
-                        this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
                         this.routeParams = this.route.paramMap.subscribe(routeParams => {
                             // get id from url, and convert to an int if not null
                             id = routeParams.get('id');
-                            id = id !== null ? +id : id;
+                            id = id !== null && id !== 'create' ? +id : id;
 
-                            if (this.strikes.length === 0) {
-                                this.getStrikes(id);
+                            if (id === 'create') {
+                                this.isEditing = true;
+                                this.items = _.clone(this.editMenu);
                             }
-                            this.getStrikeDetail(id);
+
+                            this.getStrikes(id);
                         });
                     });
                 }
@@ -154,7 +154,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private initStrikeForm() {
-        if (this.selectedStrikeDetail && this.mode === 'edit') {
+        if (this.selectedStrikeDetail) {
             this.workspacesOptions = [];
             _.forEach(this.workspaces, workspace => {
                 this.workspacesOptions.push({
@@ -219,7 +219,29 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getStrikes(id: number) {
+    private getStrikeDetail(id: any) {
+        if (id > 0) {
+            this.loading = true;
+            this.strikesApiService.getStrike(id).subscribe(data => {
+                this.selectedStrikeDetail = data;
+                if (this.selectedStrikeDetail) {
+                    this.strikeJobIcon = this.getUnicode(this.selectedStrikeDetail.job.job_type.icon_code);
+                }
+                this.loading = false;
+            }, err => {
+                this.loading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
+            });
+        } else if (id === 'create') {
+            // creating a new strike
+            this.isEditing = true;
+            this.selectedStrike = null;
+            this.selectedStrikeDetail = Strike.transformer(null);
+            this.initEdit();
+        }
+    }
+
+    private getStrikes(id: any) {
         this.strikes = [];
         this.loading = true;
         this.strikesApiService.getStrikes({ sortField: 'title' }).subscribe(data => {
@@ -233,6 +255,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     this.selectedStrike = result;
                 }
             });
+            this.getStrikeDetail(id);
         }, err => {
             this.loading = false;
             console.log(err);
@@ -240,41 +263,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private getStrikeDetail(id: number) {
-        if (id > 0) {
-            this.loading = true;
-            this.strikesApiService.getStrike(id).subscribe(data => {
-                this.selectedStrikeDetail = data;
-                if (this.mode === 'edit') {
-                    this.initEdit();
-                } else {
-                    // just looking, so all done
-                    if (this.selectedStrikeDetail) {
-                        this.strikeJobIcon = this.getUnicode(this.selectedStrikeDetail.job.job_type.icon_code);
-                    }
-                    this.loading = false;
-                }
-            }, err => {
-                this.loading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving strike details', detail: err.statusText});
-            });
-        } else if (id === 0) {
-            // creating a new strike
-            this.selectedStrike = null;
-            this.selectedStrikeDetail = Strike.transformer(null);
-            this.initEdit();
-        }
-    }
-
-    private redirect(id?: number) {
+    private redirect(id?: any) {
+        this.isEditing = false;
+        this.items = _.clone(this.viewMenu);
         id = id || this.selectedStrikeDetail.id;
-        const url = id ? `/system/strikes/${id}` : '/system/strikes';
-        this.router.navigate([url], {
-            queryParams: {
-                mode: null
-            },
-            replaceUrl: true
-        });
+        const url = id ? id === 'create' ? '/system/strikes' : `/system/strikes/${id}` : '/system/strikes';
+        this.router.navigate([url]);
     }
 
     getUnicode(code) {
@@ -282,12 +276,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onEditClick() {
-        this.router.navigate([`/system/strikes/${this.selectedStrikeDetail.id}`], {
-            queryParams: {
-                mode: 'edit'
-            },
-            replaceUrl: true
-        });
+        this.isEditing = true;
+        this.items = _.clone(this.editMenu);
+        this.initEdit();
     }
 
     onValidateClick() {
@@ -337,14 +328,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onCreateClick(e) {
         if (e.ctrlKey || e.metaKey) {
-            window.open('/system/strikes/0?mode=edit');
+            window.open('/system/strikes/create');
         } else {
-            this.router.navigate([`/system/strikes/0`], {
-                queryParams: {
-                    mode: 'edit'
-                },
-                replaceUrl: true
-            });
+            this.router.navigate([`/system/strikes/create`]);
         }
     }
 
@@ -393,6 +379,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(e) {
+        this.isEditing = false;
+        this.items = _.clone(this.viewMenu);
         this.createForm.reset();
         this.ingestFileForm.reset();
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {

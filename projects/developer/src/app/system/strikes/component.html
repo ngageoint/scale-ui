@@ -7,7 +7,7 @@
 </div>
 <hr />
 <div class="strikes__details">
-    <div class="text-center" *ngIf="!selectedStrike && mode !== 'edit'">
+    <div class="text-center" *ngIf="!selectedStrike && !isEditing">
         <h3>Select a strike to view its details</h3>
     </div>
     <div *ngIf="selectedStrikeDetail">
@@ -22,7 +22,7 @@
                             (click)="menu.toggle($event)"></button>
                 </div>
             </p-header>
-            <div *ngIf="mode !== 'edit' && selectedStrikeDetail.id">
+            <div *ngIf="!isEditing && selectedStrikeDetail.id">
                 <dl>
                     <dt>Description:</dt>
                     <dd>{{ selectedStrikeDetail.description }}</dd>
@@ -49,7 +49,7 @@
                     <dd><pre>{{ selectedStrikeDetail.configurationDisplay }}</pre></dd>
                 </dl>
             </div>
-            <div *ngIf="mode === 'edit' && selectedStrikeDetail">
+            <div *ngIf="isEditing && selectedStrikeDetail">
                 <div [formGroup]="createForm">
                     <div class="ui-g">
                         <div class="ui-g-6">
