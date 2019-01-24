@@ -58,7 +58,7 @@
             <strong>{{ selectedJobType.title }} v{{ selectedJobType.version }}</strong>
         </span>
     </p-header>
-    <div *ngIf="jobMetrics && metricTotal">
+    <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="job-type-content">
             <p-chart type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
         </div>
