@@ -140,9 +140,11 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
 
     ngAfterViewInit() {
-        this.codemirror.codeMirror.on('change', e => {
-            this.codemirror.codeMirror.focus();
-            this.codemirror.codeMirror.setCursor(this.scrollToLine, 0);
-        });
+        if (this.codemirror) {
+            this.codemirror.codeMirror.on('change', e => {
+                this.codemirror.codeMirror.focus();
+                this.codemirror.codeMirror.setCursor(this.scrollToLine, 0);
+            });
+        }
     }
 }
