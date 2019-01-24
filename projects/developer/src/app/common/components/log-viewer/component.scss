@@ -3,8 +3,13 @@
 .scale-log__container {
     .scale-log__viewer {
         .scale-log__title {
-            width: 49%;
-            margin-top: 0;
+            margin: 0;
+        }
+
+        ::ng-deep .ui-button {
+            font-size: .7em !important;
+            padding: 0 !important;
+            margin-left: 10px !important;
         }
 
         ::ng-deep .CodeMirror {

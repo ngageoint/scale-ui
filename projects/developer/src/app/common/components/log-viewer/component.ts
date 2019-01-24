@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
+import * as Clipboard from 'clipboard';
 import * as _ from 'lodash';
 
 import { JobExecution } from '../../../processing/jobs/execution.model';
@@ -10,7 +11,7 @@ import { LogViewerApiService } from './api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
+export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     @Input() execution: JobExecution;
     @Input() visible: boolean;
     @ViewChild('codemirror') codemirror: any;
@@ -20,6 +21,11 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
     execLog: any[];
     execLogStr: string;
     latestScaleOrderNum = 0;
+    clipboardLog = new Clipboard('.scale-log__copy-btn', {
+        text: () => {
+            return this.codemirror.codeMirror.getValue();
+        }
+    });
     jsonConfig = {
         mode: {name: 'text/plain', json: false},
         indentUnit: 4,
@@ -60,6 +66,8 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
                 _.forEach(this.execLog, line => {
                     this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
                 });
+                // this.codemirror.codeMirror.focus();
+                // this.codemirror.codeMirror.setCursor(1e8, 0);
             } else {
                 this.execLogStr = 'Waiting for log output...';
             }
@@ -91,13 +99,6 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
         this.scrollToLine = bottomVisibleLine < this.codemirror.codeMirror.lineCount() ? bottomVisibleLine - 1 : 1e8;
     }
 
-    onCursorActivity() {
-        if (this.codemirror) {
-            this.codemirror.codeMirror.focus();
-            this.codemirror.codeMirror.setCursor(this.scrollToLine, 0);
-        }
-    }
-
     unsubscribe() {
         if (this.subscription) {
             console.log('unsubscribe');
@@ -107,6 +108,9 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnInit() {
         this.logViewerApiService.setLogArgs([]);
+        this.clipboardLog.on('success', () => {
+            this.messageService.add({severity: 'success', summary: 'Success!', detail: 'Log copied to clipboard.'});
+        });
     }
 
     ngOnChanges(changes) {
@@ -133,5 +137,12 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngAfterViewInit() {
+        this.codemirror.codeMirror.on('change', e => {
+            this.codemirror.codeMirror.focus();
+            this.codemirror.codeMirror.setCursor(this.scrollToLine, 0);
+        });
     }
 }
