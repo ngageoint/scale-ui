@@ -36,6 +36,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     recipeDialogX: number;
     recipeDialogY: number;
     metricData: any;
+    metricTotal = 0;
     chartOptions: any = {
         legend: {
             display: false
@@ -85,17 +86,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.links = [];
 
             _.forEach(this.recipeData.definition.nodes, node => {
-                const jobType: JobType = _.find(this.recipeData.job_types, {
-                    manifest: {
-                        job: {
-                            name: node.node_type.job_type_name,
-                            jobVersion: node.node_type.job_type_version
-                        }
-                    }
+                const jobType: any = _.find(this.recipeData.job_types, {
+                    name: node.node_type.job_type_name,
+                    version: node.node_type.job_type_version
                 });
                 this.nodes.push({
                     id: _.camelCase(node.node_type.job_type_name), // id can't have dashes or anything
-                    label: `${jobType.manifest.job.title} v${jobType.manifest.job.jobVersion}`,
+                    label: `${jobType.title} v${jobType.version}`,
                     icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
                     dependencies: node.dependencies,
                     visible: true,
@@ -140,6 +137,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         });
     }
 
+    private calculateMetricTotal(currValue) {
+        let total = 0;
+        const metricsValues = _.values(currValue);
+        _.forEach(_.keys(metricsValues[0]), key => {
+            total = total + _.sumBy(metricsValues, key);
+        });
+        return total;
+    }
+
     select(e) {
         const shouldDeselect = _.isEqual(this.selectedNode, e);
         if (this.selectedNode) {
@@ -150,24 +156,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.selectedNode = e;
             this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
             this.selectedJobType = _.find(this.recipeData.job_types, {
-                manifest: {
-                    job: {
-                        name: this.selectedNode.node_type.job_type_name,
-                        jobVersion: this.selectedNode.node_type.job_type_version
-                    }
-                }
+                name: this.selectedNode.node_type.job_type_name,
+                version: this.selectedNode.node_type.job_type_version
             });
             this.selectedNodeConnections = [];
             _.forEach(this.selectedNode.input, i => {
                 if (i.node) {
                     const dependency = this.recipeData.definition.nodes[i.node];
-                    const dependencyJobType: JobType = _.find(this.recipeData.job_types, {
-                        manifest: {
-                            job: {
-                                name: dependency.node_type.job_type_name,
-                                jobVersion: dependency.node_type.job_type_version
-                            }
-                        }
+                    const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                        name: dependency.node_type.job_type_name,
+                        version: dependency.node_type.job_type_version
                     });
                     const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
                     this.selectedNodeConnections.push({
@@ -217,18 +215,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.dependencyOptions = [];
         // only show job types present in recipe
         _.forEach(this.recipeData.definition.nodes, node => {
-            if (node.node_type.job_type_name !== this.selectedJobType.manifest.job.name) {
+            if (node.node_type.job_type_name !== this.selectedJobType.name) {
                 const jobType: any = _.find(this.recipeData.job_types, {
-                    manifest: {
-                        job: {
-                            name: node.node_type.job_type_name,
-                            jobVersion: node.node_type.job_type_version
-                        }
-                    }
+                    name: node.node_type.job_type_name,
+                    version: node.node_type.job_type_version
                 });
                 if (jobType) {
                     // only show job types that are not yet dependencies
-                    jobType.disabled = _.find(this.selectedNode.dependencies, { name: jobType.manifest.job.name });
+                    jobType.disabled = _.find(this.selectedNode.dependencies, { name: jobType.name });
                     this.dependencyOptions.push(jobType);
                 }
             }
@@ -244,7 +238,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (currJob) {
             currJob.dependencies.push({
                 connections: [],
-                name: dependency.manifest.job.name
+                name: dependency.name
             });
             dependency.disabled = true;
             // manually call updateRecipe
@@ -268,24 +262,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // inspect dependencies and display possible connections
         this.inputJobs = [];
         _.forEach(this.selectedNode.dependencies, dep => {
-            const jobType: JobType = _.find(this.recipeData.job_types, {
-                manifest: {
-                    job: {
-                        name: dep.name
-                    }
-                }
+            const jobType: any = _.find(this.recipeData.job_types, {
+                name: dep.name
             });
             const job = {
-                title: jobType.manifest.job.title,
-                name: jobType.manifest.job.name,
-                version: jobType.manifest.job.jobVersion,
+                title: jobType.title,
+                name: jobType.name,
+                version: jobType.version,
                 options: []
             };
             _.forEach(jobType.manifest.job.interface.outputs.files, output => {
                 // only show the option if the output media type is contained in the input media types
                 if (_.includes(input.mediaTypes, output.mediaType)) {
                     // disable the output if it currently exists as a connection
-                    const hasOutput = _.find(_.values(this.selectedNode.input), { node: jobType.manifest.job.name, output: output.name });
+                    const hasOutput = _.find(_.values(this.selectedNode.input), { node: jobType.name, output: output.name });
                     output.disabled = !!hasOutput;
                     job.options.push(output);
                 }
@@ -304,13 +294,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         const currJob: any = this.getCurrJob();
         if (currJob) {
             // look for the current job input that matches the dependency's output
-            const currJobType: JobType = _.find(this.recipeData.job_types, {
-                manifest: {
-                    job: {
-                        name: currJob.node_type.job_type_name,
-                        jobVersion: currJob.node_type.job_type_version
-                    }
-                }
+            const currJobType: any = _.find(this.recipeData.job_types, {
+                name: currJob.node_type.job_type_name,
+                version: currJob.node_type.job_type_version
             });
             if (currJobType) {
                 const currInput: any = _.find(currJobType.manifest.job.interface.inputs.files, file => {
@@ -375,6 +361,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(changes) {
+        if (changes.jobMetrics) {
+            this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);
+        }
         if (changes.jobMetricsTitle) {
             this.chartOptions.title = {
                 display: !!changes.jobMetricsTitle.currentValue,

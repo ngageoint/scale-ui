@@ -30,6 +30,10 @@
     },
     "job_types": [{
         "id": 12,
+        "name": "caffe-aircraft-detection",
+        "version": "1.0",
+        "title": "Caffe Aircraft Detection",
+        "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
         "is_operational": true,
         "icon_code": "f072",
         "docker_image": "10.4.4.10:5000/caffe-aircraft-detection:1.0",

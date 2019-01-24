@@ -71,6 +71,10 @@
     "job_types": [
         {
             "id": 2,
+            "name": "sam",
+            "version": "1.0",
+            "title": "Spectral Angle Mapper",
+            "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra. This technique, developed by J.W. Boardman, determines the spectral similarity between given reference spectra, r, (i.e., the image endmember in this case) and the spectra found at each pixel, t (Kruse, et al., 1992). The result of the comparison is reported as the angular difference (in radians) between the two spectra. Each pair of spectra is treated as a vector in nb-space, allowing the similarity of the spectra to be determined without regard to their relative brightness values. The result of the SAM calculation is an image for each reference spectrum, with high values (displayed in brighter values) corresponding to a better match between reference and test spectra.",
             "is_operational": true,
             "icon_code": "f0e7",
             "docker_image": "10.4.4.10:5000/sam:1.0",
@@ -131,6 +135,10 @@
         },
         {
             "id": 3,
+            "name": "scm",
+            "version": "1.0",
+            "title": "Spectral Correlation Mapper",
+            "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity. The Spectral Correlation Mapper (SCM) method is a derivative of Pearsonian Correlation Coefficient that eliminates negative correlation and maintains the SAM characteristic of minimizing the shading effect resulting in better results. The SCM varies from –1 to 1 and cos (SAM) varies from 0 to 1. Figure 1 – Graphic area in relation to the deviations beginning at x mean and y mean. Figure 2 – Exemplification of correlation: a) positive – with the major part of points presenting signals similar in relation at x mean and y mean; b) negative – with the major part of points with apposite signals in relation at x mean and y mean. The SCM algorithm method, similar to SAM, uses the reference spectrum defined by the investigator, in accordance with the image s/he wants to classify.",
             "is_operational": true,
             "icon_code": "f140",
             "docker_image": "10.4.4.10:5000/scm:1.0",
@@ -177,6 +185,10 @@
         },
         {
             "id": 4,
+            "name": "cem",
+            "version": "1.0",
+            "title": "Constrained Energy Minimization",
+            "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
             "is_operational": true,
             "icon_code": "f185",
             "docker_image": "10.4.4.10:5000/cem:1.0",
@@ -223,6 +235,10 @@
         },
         {
             "id": 10,
+            "name": "export-shp",
+            "version": "2.0",
+            "title": "Export Shapefile",
+            "description": "Creates shapefile (.shp) from raster data",
             "is_operational": true,
             "icon_code": "f06e",
             "docker_privileged": false,

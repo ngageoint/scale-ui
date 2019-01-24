@@ -71,6 +71,10 @@
     "job_types": [
         {
             "id": 5,
+            "name": "wv2-parse",
+            "version": "1.0.1",
+            "title": "WorldView-2 Parse",
+            "description": "Parses WorldView-2 imagery. WorldView-2 is a commercial Earth observation satellite owned by DigitalGlobe. WorldView-2 provides commercially available panchromatic imagery of .46 m resolution, and eight-band multispectral imagery with 1.84 m (6 ft 0 in) resolution. It was launched October 8, 2009 to become DigitalGlobe's third satellite in orbit, joining WorldView-1 which was launched in 2007 and QuickBird which was launched in 2001. It takes a new photograph of any place on Earth every 1.1 days.",
             "is_operational": true,
             "icon_code": "f0c2",
             "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
@@ -124,6 +128,10 @@
         },
         {
             "id": 6,
+            "name": "wv2-atmosphere-corr",
+            "version": "1.0.1",
+            "title": "WorldView-2 Atmospheric Correction",
+            "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
             "is_operational": true,
             "icon_code": "f14e",
             "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
@@ -176,6 +184,10 @@
         },
         {
             "id": 9,
+            "name": "wv2-ortho",
+            "version": "2.0",
+            "title": "WorldView-2 Rigorous Orthorectification",
+            "description": "Applies Orthorectification to WorldView-2 data",
             "is_operational": true,
             "icon_code": "f219",
             "docker_privileged": false,
@@ -230,6 +242,10 @@
         },
         {
             "id": 10,
+            "name": "export-shp",
+            "version": "2.0",
+            "title": "Export Shapefile",
+            "description": "Creates shapefile (.shp) from raster data",
             "is_operational": true,
             "icon_code": "f06e",
             "docker_privileged": false,
