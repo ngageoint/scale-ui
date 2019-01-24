@@ -102,10 +102,11 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
         this.jobsDatatableService.setJobsDatatableOptions(Object.assign(jobsDatatableOptions, {
             first: 0,
             status: 'RUNNING',
-            job_type_id: e.data.job_type.id
+            job_type_name: e.data.job_type.name,
+            job_type_version: e.data.job_type.version
         }));
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/processing/jobs/?first=0&status=RUNNING&job_type_id=${e.data.job_type.id}`);
+            window.open(`/processing/jobs/?first=0&status=RUNNING&job_type_name=${e.data.job_type.name}&job_type_version=${e.data.job_type.version}`);
         } else {
             this.router.navigate(['/processing/jobs/']);
         }

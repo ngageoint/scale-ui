@@ -74,20 +74,17 @@ export class QueuedJobsComponent implements OnInit, OnDestroy {
         }
     }
     onRowSelect(e) {
+        const jobsDatatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
+        this.jobsDatatableService.setJobsDatatableOptions(Object.assign(jobsDatatableOptions, {
+            first: 0,
+            status: 'QUEUED',
+            job_type_name: this.selectedJob.job_type.name,
+            job_type_version: this.selectedJob.job_type.version
+        }));
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(
-                `/processing/jobs/?first=0&status=QUEUED&job_type_name=${e.data.job_type.name}&job_type_version=${e.data.job_type.version}`
-            );
+            window.open(`/processing/jobs/?first=0&status=QUEUED&job_type_name=${this.selectedJob.job_type.name}&job_type_version=${this.selectedJob.job_type.version}`);
         } else {
-            console.log(this.selectedJob);
-            this.router.navigate(['/processing/jobs/'], {
-                queryParams: {
-                    first: 0,
-                    status: 'QUEUED',
-                    job_type_name: this.selectedJob.job_type.name,
-                    job_type_version: this.selectedJob.job_type.version
-                }
-            });
+            this.router.navigate(['/processing/jobs/']);
         }
     }
     ngOnInit() {
