@@ -145,6 +145,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+            this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });

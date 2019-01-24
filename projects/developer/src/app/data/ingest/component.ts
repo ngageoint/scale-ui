@@ -128,6 +128,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                 }
             });
             this.strikeValues = _.orderBy(selectItems, ['title'], ['asc']);
+            this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
         });

@@ -102,6 +102,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
+            this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });

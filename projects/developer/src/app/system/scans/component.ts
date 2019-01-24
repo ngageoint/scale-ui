@@ -166,6 +166,7 @@ export class ScansComponent implements OnInit, OnDestroy {
             }
             this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
+            this.updateOptions();
         });
     }
     ngOnDestroy() {
