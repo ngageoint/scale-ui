@@ -36,6 +36,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     strikes: SelectItem[] = [];
     selectedStrike: Strike;
     selectedStrikeDetail: any;
+    strikeJobIcon = '';
     workspaces: any = [];
     workspacesOptions: SelectItem[] = [];
     newWorkspacesOptions: SelectItem[] = [];
@@ -248,6 +249,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     this.initEdit();
                 } else {
                     // just looking, so all done
+                    if (this.selectedStrikeDetail) {
+                        this.strikeJobIcon = this.getUnicode(this.selectedStrikeDetail.job.job_type.icon_code);
+                    }
                     this.loading = false;
                 }
             }, err => {
