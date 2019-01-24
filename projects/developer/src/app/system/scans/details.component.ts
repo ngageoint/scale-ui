@@ -181,7 +181,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
 
     private initEdit() {
         if (this.workspaces.length === 0) {
-            this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
+            this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
                 this.loading = false;
 
                 // set up workspaces
@@ -311,11 +311,11 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
-            // get workspace detail to obtain json_config data
+            // get workspace detail to obtain configuration data
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
-                if (data.json_config.broker.type === 'host') {
+                if (data.configuration.broker.type === 'host') {
                     this.scan.configuration.scanner.type = 'dir';
-                } else if (data.json_config.broker.type === 's3') {
+                } else if (data.configuration.broker.type === 's3') {
                     this.scan.configuration.scanner.type = 's3';
                     this.scan.configuration.scanner.transfer_suffix = null;
                 } else {

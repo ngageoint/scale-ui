@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
 
@@ -20,19 +21,27 @@ export class WorkspacesApiService {
     }
 
     getWorkspaces(params?: any): Observable<ApiResults> {
-        let queryParams = {};
+        let queryParams: any = {
+            page: 1,
+            page_size: 1000
+        };
         if (params) {
-            const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+            const sortStr = params.sortOrder < 0 ? `-${params.sortField}` : params.sortField;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
             queryParams = {
-                order: sortStr,
-                page: page,
-                page_size: params.rows,
-                started: params.started,
-                ended: params.ended,
-                name: params.name
+                order: sortStr || null,
+                page: page || 1,
+                page_size: params.rows || 1000,
+                started: params.started || null,
+                ended: params.ended || null,
+                name: params.name || null
             };
         }
+        queryParams = new HttpParams({
+            fromObject: _.pickBy(queryParams, d => {
+                return d !== null && typeof d !== 'undefined' && d !== '';
+            })
+        });
         return this.http.get<ApiResults>(`${this.apiPrefix}/workspaces/`, { params: queryParams })
             .pipe(
                 map(response => {

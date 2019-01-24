@@ -22,21 +22,26 @@ export class ScansApiService {
     }
 
     getScans(params: any, poll?: boolean): Observable<ApiResults> {
-        const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        let apiParams: any = {
-            page: page.toString(),
-            page_size: params.rows ? params.rows.toString() : null,
-            started: params.started,
-            ended: params.ended,
-            name: params.name,
-            order: sortStr
+        let queryParams: any = {
+            page: 1,
+            page_size: 1000
         };
-        apiParams = _.pickBy(apiParams, (d) => {
-            return d !== null && typeof d !== 'undefined' && d !== '';
-        });
-        const queryParams = new HttpParams({
-            fromObject: apiParams
+        if (params) {
+            const sortStr = params.sortOrder < 0 ? `-${params.sortField}` : params.sortField;
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            queryParams = {
+                order: sortStr || null,
+                page: page || 1,
+                page_size: params.rows || 1000,
+                started: params.started || null,
+                ended: params.ended || null,
+                name: params.name || null
+            };
+        }
+        queryParams = new HttpParams({
+            fromObject: _.pickBy(queryParams, d => {
+                return d !== null && typeof d !== 'undefined' && d !== '';
+            })
         });
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/scans/`, { params: queryParams })

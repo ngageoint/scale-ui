@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { LazyLoadEvent } from 'primeng/primeng';
 import * as _ from 'lodash';
 
+import { JobsDatatableService } from '../jobs/datatable.service';
 import { QueueApiService } from '../../common/services/queue/api.service';
 import { QueuedJob } from './api.model';
 
@@ -26,6 +27,7 @@ export class QueuedJobsComponent implements OnInit, OnDestroy {
 
     constructor(
         private messageService: MessageService,
+        private jobsDatatableService: JobsDatatableService,
         private queueApiService: QueueApiService,
         private router: Router
     ) {
@@ -82,7 +84,7 @@ export class QueuedJobsComponent implements OnInit, OnDestroy {
             job_type_version: this.selectedJob.job_type.version
         }));
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/processing/jobs/?first=0&status=QUEUED&job_type_name=${this.selectedJob.job_type.name}&job_type_version=${this.selectedJob.job_type.version}`);
+            window.open(`/processing/jobs/?first=0&status=QUEUED&job_type_name=${this.selectedJob.job_type.name}&job_type_version=${this.selectedJob.job_type.version}`); // tslint:disable-line:max-line-length
         } else {
             this.router.navigate(['/processing/jobs/']);
         }

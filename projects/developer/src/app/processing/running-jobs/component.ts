@@ -106,7 +106,7 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
             job_type_version: e.data.job_type.version
         }));
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/processing/jobs/?first=0&status=RUNNING&job_type_name=${e.data.job_type.name}&job_type_version=${e.data.job_type.version}`);
+            window.open(`/processing/jobs/?first=0&status=RUNNING&job_type_name=${e.data.job_type.name}&job_type_version=${e.data.job_type.version}`); // tslint:disable-line:max-line-length
         } else {
             this.router.navigate(['/processing/jobs/']);
         }

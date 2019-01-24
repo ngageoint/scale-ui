@@ -200,7 +200,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     private initEdit() {
         if (this.workspaces.length === 0) {
-            this.workspacesApiService.getWorkspaces().subscribe(workspaces => {
+            this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
                 this.loading = false;
 
                 // set up workspaces
@@ -221,7 +221,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private getStrikes(id: number) {
         this.strikes = [];
         this.loading = true;
-        this.strikesApiService.getStrikes().subscribe(data => {
+        this.strikesApiService.getStrikes({ sortField: 'title' }).subscribe(data => {
             this.loading = false;
             _.forEach(data.results, result => {
                 this.strikes.push({
@@ -350,14 +350,14 @@ export class StrikesComponent implements OnInit, OnDestroy {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
-            // get workspace detail to obtain json_config data
+            // get workspace detail to obtain configuration data
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
-                if (data.json_config.broker.type === 'host') {
+                if (data.configuration.broker.type === 'host') {
                     this.selectedStrikeDetail.configuration.monitor.type = 'dir-watcher';
                     this.selectedStrikeDetail.configuration.monitor.sqs_name = null;
                     this.selectedStrikeDetail.configuration.monitor.credentials = {};
                     this.selectedStrikeDetail.configuration.monitor.region_name = null;
-                } else if (data.json_config.broker.type === 's3') {
+                } else if (data.configuration.broker.type === 's3') {
                     this.selectedStrikeDetail.configuration.monitor.type = 's3';
                     this.selectedStrikeDetail.configuration.monitor.transfer_suffix = null;
                 } else {

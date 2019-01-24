@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
 
 import { DataService } from '../../common/services/data.service';
+import { JobsDatatableService } from '../jobs/datatable.service';
 import { QueueApiService } from '../../common/services/queue/api.service';
 import { QueuedJobsComponent } from './component';
 
@@ -18,7 +19,7 @@ describe('QueuedJobsComponent', () => {
             declarations: [QueuedJobsComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, DataService, QueueApiService,
+                MessageService, DataService, JobsDatatableService, QueueApiService,
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

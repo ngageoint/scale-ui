@@ -30,7 +30,7 @@
                     <dd *ngIf="selectedStrikeDetail.job.id">
                         <a routerLink="/jobs/job/{{ selectedStrikeDetail.job.id }}">
                             <i class="fa"
-                               [innerHtml]="getUnicode(selectedStrikeDetail.job.job_type.icon_code)"></i>
+                               [innerHtml]="getUnicode(selectedStrikeDetail ? selectedStrikeDetail.job.job_type.icon_code : '')"></i>
                             View Job Details ({{ selectedStrike.job.status }})
                         </a>
                     </dd>

@@ -176,7 +176,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     private getWorkspaces(id: number) {
         this.workspaces = [];
         this.loading = true;
-        this.workspacesApiService.getWorkspaces().subscribe(data => {
+        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
             this.loading = false;
             _.forEach(data.results, result => {
                 this.workspaces.push({
