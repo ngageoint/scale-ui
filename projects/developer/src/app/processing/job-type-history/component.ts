@@ -135,18 +135,18 @@ export class JobTypeHistoryComponent implements OnInit {
     private getJobTypes() {
         this.selectedJobType = [];
         this.datatableLoading = true;
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
+        this.metricsApiService.getDataTypeOptions('job-types').subscribe(data => {
             this.datatableLoading = false;
-            this.jobTypes = JobTypeName.transformer(data.results);
+            this.jobTypes = data.choices;
             const selectItems = [];
-            _.forEach(this.jobTypes, (jobType) => {
+            _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
-                    label: `${jobType.title} ${jobType.latest_version}`,
+                    label: `${jobType.title} ${jobType.version}`,
                     value: jobType
                 });
                 if (
                     _.indexOf(this.datatableOptions.name, jobType.name) >= 0 &&
-                    _.indexOf(this.datatableOptions.version, jobType.latest_version) >= 0
+                    _.indexOf(this.datatableOptions.version, jobType.version) >= 0
                 ) {
                     this.selectedJobType.push(jobType);
                 }

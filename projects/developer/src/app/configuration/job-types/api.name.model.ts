@@ -2,7 +2,6 @@ export class JobTypeName {
     private static build(data) {
         if (data) {
             return new JobTypeName(
-                data.id,
                 data.name,
                 data.title,
                 data.description,
@@ -22,7 +21,6 @@ export class JobTypeName {
         return null;
     }
     constructor(
-        public id: number,
         public name: string,
         public title: string,
         public description: string,
