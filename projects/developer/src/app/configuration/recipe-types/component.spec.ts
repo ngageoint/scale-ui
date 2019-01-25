@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
@@ -18,7 +19,7 @@ describe('RecipeTypesComponent', () => {
             declarations: [RecipeTypesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                RecipeTypesApiService, JobTypesApiService, DataService,
+                MessageService, RecipeTypesApiService, JobTypesApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

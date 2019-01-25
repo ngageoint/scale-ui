@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MenuItem, SelectItem } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
-
-import { map, filter } from 'rxjs/operators';
 
 import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
@@ -18,7 +17,6 @@ import { RecipeTypeDefinition } from './definition.model';
 })
 
 export class RecipeTypesComponent implements OnInit, OnDestroy {
-    private routerEvents: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.toggleEdit(); } }
@@ -42,6 +40,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     items: MenuItem[] = _.clone(this.viewMenu);
 
     constructor(
+        private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
         private jobTypesApiService: JobTypesApiService,
         private dataService: DataService,
@@ -51,58 +50,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
-        if (this.router.events) {
-            this.routerEvents = this.router.events.pipe(
-                filter((event) => event instanceof NavigationEnd),
-                map(() => this.route)
-            ).subscribe(() => {
-                this.recipeTypes = [];
-                if (this.route && this.route.paramMap) {
-                    this.routeParams = this.route.paramMap.subscribe(params => {
-                        this.recipeTypeName = params.get('name');
-                    });
-                }
-                this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-                    _.forEach(data.results, result => {
-                        this.recipeTypes.push({
-                            label: result.title,
-                            value: result
-                        });
-                        if (this.recipeTypeName === result.name) {
-                            this.selectedRecipeType = _.clone(result);
-                        }
-                    });
-                    if (this.recipeTypeName && this.recipeTypeName !== 'create') {
-                        this.isEditing = false;
-                        this.getRecipeTypeDetail(this.recipeTypeName);
-                    } else {
-                        if (this.recipeTypeName === 'create') {
-                            this.selectedRecipeType = {
-                                label: 'New Recipe',
-                                value: new RecipeType(
-                                    null,
-                                    'new-recipe',
-                                    'New Recipe',
-                                    'Description of a new recipe',
-                                    true,
-                                    false,
-                                    null,
-                                    new RecipeTypeDefinition({}, {}),
-                                    null,
-                                    null,
-                                    null,
-                                    null,
-                                    null
-                                )
-                            };
-                            this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
-                            this.items = _.clone(this.editMenu);
-                            this.isEditing = true;
-                        }
-                    }
-                });
-            });
-        }
     }
 
     private getRecipeTypeDetail(name: string) {
@@ -124,7 +71,50 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
+    private getRecipeTypes() {
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            _.forEach(data.results, result => {
+                this.recipeTypes.push({
+                    label: result.title,
+                    value: result
+                });
+                if (this.recipeTypeName === result.name) {
+                    this.selectedRecipeType = _.clone(result);
+                }
+            });
+            if (this.recipeTypeName && this.recipeTypeName !== 'create') {
+                this.isEditing = false;
+                this.getRecipeTypeDetail(this.recipeTypeName);
+            } else {
+                if (this.recipeTypeName === 'create') {
+                    this.selectedRecipeType = {
+                        label: 'New Recipe',
+                        value: new RecipeType(
+                            null,
+                            'new-recipe',
+                            'New Recipe',
+                            'Description of a new recipe',
+                            true,
+                            false,
+                            null,
+                            new RecipeTypeDefinition({}, {}),
+                            null,
+                            null,
+                            null,
+                            null,
+                            null
+                        )
+                    };
+                    this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
+                    this.items = _.clone(this.editMenu);
+                    this.isEditing = true;
+                }
+            }
+        });
+    }
+
     createNewRecipe() {
+        this.selectedJobTypes = [];
         this.router.navigate(['/configuration/recipe-types/create']);
     }
 
@@ -157,8 +147,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             recipeData.job_types.push(data);
             this.selectedRecipeTypeDetail = recipeData;
         }, err => {
-            // todo show growl message with error info
             console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
+            // remove job type from selection
+            this.selectedJobTypes = _.filter(this.selectedJobTypes, jt => {
+                return jt.name !== event.data.name && jt.latest_version !== event.data.latest_version;
+            });
         });
     }
 
@@ -207,12 +201,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = data.results;
         });
+
+        this.recipeTypes = [];
+        if (this.route && this.route.paramMap) {
+            this.routeParams = this.route.paramMap.subscribe(params => {
+                this.recipeTypeName = params.get('name');
+                this.getRecipeTypes();
+            });
+        }
     }
 
     ngOnDestroy() {
-        if (this.routerEvents) {
-            this.routerEvents.unsubscribe();
-        }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
         }
