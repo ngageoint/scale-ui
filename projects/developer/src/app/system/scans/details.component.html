@@ -1,7 +1,4 @@
-<div class="flexed space-between">
-    <h2><i class="fa fa-barcode"></i> Scan Details</h2>
-    <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>
-</div>
+<h2><i class="fa fa-barcode"></i> Scan Details</h2>
 <a routerLink="/system/scans"><i class="fa fa-caret-left"></i> Scans List</a>
 <div class="scans__details">
     <div *ngIf="scan">
@@ -16,15 +13,14 @@
                             (click)="menu.toggle($event)"></button>
                 </div>
             </p-header>
-            <div *ngIf="mode !== 'edit' && scan.id">
+            <div *ngIf="!isEditing && scan.id">
                 <dl>
                     <dt>Description:</dt>
                     <dd>{{ scan.description }}</dd>
                     <dt *ngIf="scan.job.id">Job:</dt>
                     <dd *ngIf="scan.job.id">
                         <a routerLink="/jobs/job/{{ scan.job.id }}">
-                            <i class="fa"
-                               [innerHtml]="getUnicode(scan.job.job_type.icon_code)"></i>
+                            <i class="fa" [innerHtml]="scanJobIcon"></i>
                             View Job Details ({{ scan.job.status }})
                         </a>
                     </dd>
@@ -44,7 +40,7 @@
                     <dd><pre>{{ scan.configurationDisplay }}</pre></dd>
                 </dl>
             </div>
-            <div *ngIf="mode === 'edit' && scan">
+            <div *ngIf="isEditing && scan">
                 <div [formGroup]="createForm">
                     <div class="ui-g">
                         <div class="ui-g-6">

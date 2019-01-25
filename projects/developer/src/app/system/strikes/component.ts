@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
-
-import { filter, map } from 'rxjs/operators';
 
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { StrikesApiService } from './api.service';
@@ -21,7 +19,6 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
 export class StrikesComponent implements OnInit, OnDestroy {
     private routerEvents: any;
     private routeParams: any;
-    private queryParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
     ];
@@ -42,7 +39,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
     newWorkspacesOptions: SelectItem[] = [];
     ingestFile: any;
     createForm: any;
+    createFormSubscription: any;
     ingestFileForm: any;
+    ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
     items: MenuItem[] = _.clone(this.viewMenu);
 
@@ -53,33 +52,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService,
         private strikesApiService: StrikesApiService
-    ) {
-        if (this.router.events) {
-            this.routerEvents = this.router.events.pipe(
-                filter(event => event instanceof NavigationEnd),
-                map(() => this.route)
-            ).subscribe(() => {
-                this.initFormGroups();
-                let id = null;
-                if (this.route && this.route.queryParams && this.route.paramMap) {
-                    this.queryParams = this.route.queryParams.subscribe(queryParams => {
-                        this.routeParams = this.route.paramMap.subscribe(routeParams => {
-                            // get id from url, and convert to an int if not null
-                            id = routeParams.get('id');
-                            id = id !== null && id !== 'create' ? +id : id;
-
-                            if (id === 'create') {
-                                this.isEditing = true;
-                                this.items = _.clone(this.editMenu);
-                            }
-
-                            this.getStrikes(id);
-                        });
-                    });
-                }
-            });
-        }
-    }
+    ) {}
 
     private initFormGroups() {
         this.createForm = this.fb.group({
@@ -187,14 +160,14 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
 
         // listen for changes to createForm fields
-        this.createForm.valueChanges.subscribe(changes => {
+        this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedStrikeDetail, changes);
             this.initValidation();
         });
 
         // listen to changes to ingestFileForm fields
-        this.ingestFileForm.valueChanges.subscribe(changes => {
+        this.ingestFileFormSubscription = this.ingestFileForm.valueChanges.subscribe(changes => {
             this.ingestFile = IngestFile.transformer(changes);
         });
     }
@@ -263,12 +236,26 @@ export class StrikesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private redirect(id?: any) {
-        this.isEditing = false;
-        this.items = _.clone(this.viewMenu);
-        id = id || this.selectedStrikeDetail.id;
-        const url = id ? id === 'create' ? '/system/strikes' : `/system/strikes/${id}` : '/system/strikes';
-        this.router.navigate([url]);
+    private unsubscribeFromForms() {
+        if (this.createFormSubscription) {
+            this.createFormSubscription.unsubscribe();
+        }
+        if (this.ingestFileFormSubscription) {
+            this.ingestFileFormSubscription.unsubscribe();
+        }
+    }
+
+    private redirect(id: any) {
+        if (id === this.selectedStrikeDetail.id) {
+            this.isEditing = false;
+            this.items = _.clone(this.viewMenu);
+            this.unsubscribeFromForms();
+            this.createForm.reset();
+            this.ingestFileForm.reset();
+        } else {
+            const url = id ? id === 'create' ? '/system/strikes' : `/system/strikes/${id}` : '/system/strikes';
+            this.router.navigate([url]);
+        }
     }
 
     getUnicode(code) {
@@ -379,10 +366,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(e) {
-        this.isEditing = false;
-        this.items = _.clone(this.viewMenu);
-        this.createForm.reset();
-        this.ingestFileForm.reset();
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/system/strikes/${e.value.id}`);
         } else {
@@ -391,17 +374,29 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initFormGroups();
+        let id = null;
+        if (this.route && this.route.paramMap) {
+            this.routeParams = this.route.paramMap.subscribe(routeParams => {
+                this.unsubscribeFromForms();
+                this.createForm.reset();
+                this.ingestFileForm.reset();
+
+                // get id from url, and convert to an int if not null
+                id = routeParams.get('id');
+                id = id !== null && id !== 'create' ? +id : id;
+
+                this.isEditing = id === 'create';
+                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+
+                this.getStrikes(id);
+            });
+        }
     }
 
     ngOnDestroy() {
-        if (this.routerEvents) {
-            this.routerEvents.unsubscribe();
-        }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
-        }
-        if (this.queryParams) {
-            this.queryParams.unsubscribe();
         }
     }
 }

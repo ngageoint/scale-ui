@@ -137,14 +137,9 @@ export class ScansComponent implements OnInit, OnDestroy {
     }
     onCreateClick(e) {
         if (e.ctrlKey || e.metaKey) {
-            window.open('/system/scans/0?mode=edit');
+            window.open('/system/scans/create');
         } else {
-            this.router.navigate([`/system/scans/0`], {
-                queryParams: {
-                    mode: 'edit'
-                },
-                replaceUrl: true
-            });
+            this.router.navigate([`/system/scans/create`]);
         }
     }
     ngOnInit() {

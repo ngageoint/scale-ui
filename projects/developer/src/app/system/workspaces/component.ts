@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
-
-import { filter, map } from 'rxjs/operators';
 
 import { WorkspacesApiService } from './api.service';
 import { Workspace } from './api.model';
@@ -17,9 +15,7 @@ import { Workspace } from './api.model';
     styleUrls: ['./component.scss']
 })
 export class WorkspacesComponent implements OnInit, OnDestroy {
-    private routerEvents: any;
     private routeParams: any;
-    private queryParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
     ];
@@ -30,11 +26,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
     ];
     loading: boolean;
-    mode: string;
+    isEditing: boolean;
     workspaces: SelectItem[] = [];
     selectedWorkspace: Workspace;
     selectedWorkspaceDetail: any;
     createForm: any;
+    createFormSubscription: any;
     items: MenuItem[] = _.clone(this.viewMenu);
     typeOptions: SelectItem[] = [
         {
@@ -57,34 +54,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService
-    ) {
-        if (this.router.events) {
-            this.routerEvents = this.router.events.pipe(
-                filter(event => event instanceof NavigationEnd),
-                map(() => this.route)
-            ).subscribe(d => {
-                this.initFormGroups();
-                if (this.route && this.route.queryParams && this.route.paramMap) {
-                    this.queryParams = this.route.queryParams.subscribe(queryParams => {
-                        this.mode = queryParams.mode || null;
-                        this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
-                        let id = null;
-
-                        this.routeParams = this.route.paramMap.subscribe(routeParams => {
-                            // get id from url, and convert to an int if not null
-                            id = routeParams.get('id');
-                            id = id !== null ? +id : id;
-
-                            if (this.workspaces.length === 0) {
-                                this.getWorkspaces(id);
-                            }
-                            this.getWorkspaceDetail(id);
-                        });
-                    });
-                }
-            });
-        }
-    }
+    ) {}
 
     private initFormGroups() {
         this.createForm = this.fb.group({
@@ -149,7 +119,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     private initWorkspaceForm() {
-        if (this.selectedWorkspaceDetail && this.mode === 'edit') {
+        if (this.selectedWorkspaceDetail) {
             // disable the name field if editing an existing workspace
             if (this.selectedWorkspaceDetail.id) {
                 this.createForm.get('name').disable();
@@ -166,14 +136,33 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
 
         // listen for changes to createForm fields
-        this.createForm.valueChanges.subscribe(changes => {
+        this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedWorkspaceDetail, changes);
             this.initValidation();
         });
     }
 
-    private getWorkspaces(id: number) {
+    private getWorkspaceDetail(id: any) {
+        if (id > 0) {
+            this.loading = true;
+            this.workspacesApiService.getWorkspace(id).subscribe(data => {
+                this.selectedWorkspaceDetail = data;
+                this.loading = false;
+            }, err => {
+                this.loading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving workspace details', detail: err.statusText});
+            });
+        } else if (id === 'create') {
+            // creating a new workspace
+            this.isEditing = true;
+            this.selectedWorkspace = null;
+            this.selectedWorkspaceDetail = Workspace.transformer(null);
+            this.initWorkspaceForm();
+        }
+    }
+
+    private getWorkspaces(id: any) {
         this.workspaces = [];
         this.loading = true;
         this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
@@ -187,6 +176,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                     this.selectedWorkspace = result;
                 }
             });
+            this.getWorkspaceDetail(id);
         }, err => {
             this.loading = false;
             console.log(err);
@@ -194,38 +184,22 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private getWorkspaceDetail(id: number) {
-        if (id > 0) {
-            this.loading = true;
-            this.workspacesApiService.getWorkspace(id).subscribe(data => {
-                this.selectedWorkspaceDetail = data;
-                if (this.mode === 'edit') {
-                    this.initWorkspaceForm();
-                } else {
-                    // just looking, so all done
-                    this.loading = false;
-                }
-            }, err => {
-                this.loading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving workspace details', detail: err.statusText});
-            });
-        } else if (id === 0) {
-            // creating a new workspace
-            this.selectedWorkspace = null;
-            this.selectedWorkspaceDetail = Workspace.transformer(null);
-            this.initWorkspaceForm();
+    private unsubscribeFromForm() {
+        if (this.createFormSubscription) {
+            this.createFormSubscription.unsubscribe();
         }
     }
 
-    private redirect(id?: number) {
-        id = id || this.selectedWorkspaceDetail.id;
-        const url = id ? `/system/workspaces/${id}` : '/system/workspaces';
-        this.router.navigate([url], {
-            queryParams: {
-                mode: null
-            },
-            replaceUrl: true
-        });
+    private redirect(id: any) {
+        if (id === this.selectedWorkspaceDetail.id) {
+            this.isEditing = false;
+            this.items = _.clone(this.viewMenu);
+            this.unsubscribeFromForm();
+            this.createForm.reset();
+        } else {
+            const url = id ? id === 'create' ? '/system/workspaces' : `/system/workspaces/${id}` : '/system/workspaces';
+            this.router.navigate([url]);
+        }
     }
 
     getUnicode(code) {
@@ -233,12 +207,9 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onEditClick() {
-        this.router.navigate([`/system/workspaces/${this.selectedWorkspaceDetail.id}`], {
-            queryParams: {
-                mode: 'edit'
-            },
-            replaceUrl: true
-        });
+        this.isEditing = true;
+        this.items = _.clone(this.editMenu);
+        this.initWorkspaceForm();
     }
 
     onValidateClick() {
@@ -266,7 +237,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         if (this.selectedWorkspaceDetail.id) {
             // edit workspace
             const cleanWorkspace = this.selectedWorkspaceDetail.clean();
-            this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, cleanWorkspace).subscribe(data => {
+            this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, cleanWorkspace).subscribe(() => {
                 this.redirect(this.selectedWorkspaceDetail.id);
             }, err => {
                 console.log(err);
@@ -289,14 +260,9 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     onCreateClick(e) {
         if (e.ctrlKey || e.metaKey) {
-            window.open('/system/workspaces/0?mode=edit');
+            window.open('/system/workspaces/create');
         } else {
-            this.router.navigate([`/system/workspaces/0`], {
-                queryParams: {
-                    mode: 'edit'
-                },
-                replaceUrl: true
-            });
+            this.router.navigate([`/system/workspaces/create`]);
         }
     }
 
@@ -322,7 +288,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onRowSelect(e) {
-        this.createForm.reset();
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/system/workspaces/${e.value.id}`);
         } else {
@@ -335,17 +300,28 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.initFormGroups();
+        let id = null;
+        if (this.route && this.route.paramMap) {
+            this.routeParams = this.route.paramMap.subscribe(routeParams => {
+                this.unsubscribeFromForm();
+                this.createForm.reset();
+
+                // get id from url, and convert to an int if not null
+                id = routeParams.get('id');
+                id = id !== null && id !== 'create' ? +id : id;
+
+                this.isEditing = id === 'create';
+                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+
+                this.getWorkspaces(id);
+            });
+        }
     }
 
     ngOnDestroy() {
-        if (this.routerEvents) {
-            this.routerEvents.unsubscribe();
-        }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
-        }
-        if (this.queryParams) {
-            this.queryParams.unsubscribe();
         }
     }
 }

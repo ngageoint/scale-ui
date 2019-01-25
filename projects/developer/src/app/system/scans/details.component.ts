@@ -1,12 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
-
-import { filter, map } from 'rxjs/operators';
 
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { ScansApiService } from './api.service';
@@ -19,7 +17,6 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
     styleUrls: ['./details.component.scss']
 })
 export class ScanDetailsComponent implements OnInit, OnDestroy {
-    private routerEvents: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
@@ -31,14 +28,17 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
     ];
     loading: boolean;
-    mode: string;
+    isEditing: boolean;
     scan: any;
+    scanJobIcon = '';
     workspaces: any = [];
     workspacesOptions: SelectItem[] = [];
     newWorkspacesOptions: SelectItem[] = [];
     ingestFile: any;
     createForm: any;
+    createFormSubscription: any;
     ingestFileForm: any;
+    ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
     items: MenuItem[] = _.clone(this.viewMenu);
 
@@ -49,28 +49,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService,
         private scansApiService: ScansApiService
-    ) {
-        if (this.router.events) {
-            this.routerEvents = this.router.events.pipe(
-                filter(event => event instanceof NavigationEnd),
-                map(() => this.route)
-            ).subscribe(() => {
-                this.initFormGroups();
-                let id = null;
-                if (this.route && this.route.paramMap) {
-                    this.routeParams = this.route.paramMap.subscribe(params => {
-                        // get id from url, and convert to an int if not null
-                        id = params.get('id');
-                        id = id !== null ? +id : id;
-                    });
-                    if (id === 0 && !this.mode) {
-                        this.mode = 'edit';
-                    }
-                    this.getScanDetail(id);
-                }
-            });
-        }
-    }
+    ) {}
 
     private initFormGroups() {
         this.createForm = this.fb.group({
@@ -134,7 +113,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     private initScanForm() {
-        if (this.scan && this.mode === 'edit') {
+        if (this.scan) {
             this.workspacesOptions = [];
             _.forEach(this.workspaces, workspace => {
                 this.workspacesOptions.push({
@@ -199,37 +178,47 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getScanDetail(id: number) {
+    private getScanDetail(id: any) {
         if (id > 0) {
             this.loading = true;
             this.scansApiService.getScan(id).subscribe(data => {
                 this.scan = data;
-                if (this.mode === 'edit') {
-                    this.initEdit();
-                } else {
-                    // just looking, so all done
-                    this.loading = false;
+                if (this.scan) {
+                    this.scanJobIcon = this.getUnicode(this.scan.job.job_type.icon_code);
                 }
+                this.loading = false;
             }, err => {
                 this.loading = false;
                 this.messageService.add({severity: 'error', summary: 'Error retrieving scan details', detail: err.statusText});
             });
-        } else if (id === 0) {
+        } else if (id === 'create') {
             // creating a new scan
+            this.isEditing = true;
             this.scan = Scan.transformer(null);
             this.initEdit();
         }
     }
 
-    private redirect(id?: number) {
-        id = id || this.scan.id;
-        const url = id ? `/system/scans/${id}` : '/system/scans';
-        this.router.navigate([url], {
-            queryParams: {
-                mode: null
-            },
-            replaceUrl: true
-        });
+    private unsubscribeFromForms() {
+        if (this.createFormSubscription) {
+            this.createFormSubscription.unsubscribe();
+        }
+        if (this.ingestFileFormSubscription) {
+            this.ingestFileFormSubscription.unsubscribe();
+        }
+    }
+
+    private redirect(id: any) {
+        if (id === this.scan.id) {
+            this.isEditing = false;
+            this.items = _.clone(this.viewMenu);
+            this.unsubscribeFromForms();
+            // this.createForm.reset();
+            // this.ingestFileForm.reset();
+        } else {
+            const url = id ? id === 'create' ? '/system/scans' : `/system/scans/${id}` : '/system/scans';
+            this.router.navigate([url]);
+        }
     }
 
     getUnicode(code) {
@@ -237,12 +226,9 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     onEditClick() {
-        this.router.navigate([`/system/scans/${this.scan.id}`], {
-            queryParams: {
-                mode: 'edit'
-            },
-            replaceUrl: true
-        });
+        this.isEditing = true;
+        this.items = _.clone(this.editMenu);
+        this.initEdit();
     }
 
     onValidateClick() {
@@ -289,19 +275,14 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     onCancelClick() {
-        this.redirect(this.scan.id);
+        this.redirect(this.scan.id || 'create');
     }
 
     onCreateClick(e) {
         if (e.ctrlKey || e.metaKey) {
-            window.open('/system/scans/0?mode=edit');
+            window.open('/system/scans/create');
         } else {
-            this.router.navigate([`/system/scans/0`], {
-                queryParams: {
-                    mode: 'edit'
-                },
-                replaceUrl: true
-            });
+            this.router.navigate([`/system/scans/create`]);
         }
     }
 
@@ -351,16 +332,27 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.route.queryParams.subscribe(params => {
-            this.mode = params.mode || null;
-            this.items = this.mode === 'edit' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
-        });
+        this.initFormGroups();
+        let id = null;
+        if (this.route && this.route.paramMap) {
+            this.routeParams = this.route.paramMap.subscribe(params => {
+                this.unsubscribeFromForms();
+                this.createForm.reset();
+                this.ingestFileForm.reset();
+
+                // get id from url, and convert to an int if not null
+                id = params.get('id');
+                id = id !== null && id !== 'create' ? +id : id;
+
+                this.isEditing = id === 'create';
+                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+
+                this.getScanDetail(id);
+            });
+        }
     }
 
     ngOnDestroy() {
-        if (this.routerEvents) {
-            this.routerEvents.unsubscribe();
-        }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
         }
