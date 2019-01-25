@@ -191,7 +191,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     private redirect(id: any) {
-        if (id === this.selectedWorkspaceDetail.id) {
+        if (id && id === this.selectedWorkspaceDetail.id) {
             this.isEditing = false;
             this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForm();

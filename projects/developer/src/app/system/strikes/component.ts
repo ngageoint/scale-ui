@@ -246,7 +246,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private redirect(id: any) {
-        if (id === this.selectedStrikeDetail.id) {
+        if (id && id === this.selectedStrikeDetail.id) {
             this.isEditing = false;
             this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForms();
