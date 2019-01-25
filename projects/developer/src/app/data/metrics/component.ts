@@ -213,20 +213,25 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             );
 
             // compute total count for requested time period
-            let total = 0;
+            let primaryTotal = 0;
+            let secondaryTotal = 0;
             _.forEach(chartData.data, dataset => {
-                total = total + _.sum(dataset.data);
+                if (dataset.isPrimary) {
+                    primaryTotal = primaryTotal + _.sum(dataset.data);
+                } else {
+                    secondaryTotal = secondaryTotal + _.sum(dataset.data);
+                }
             });
 
             // set chart title
-            const formattedTotal = this.formatYValues(this.yUnits1, total, true),
+            const formattedTotal = this.formatYValues(this.yUnits1, primaryTotal, true),
                 formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 chartTitle: String[] = [];
             chartTitle.push(`${formattedStart} - ${formattedEnd}`);
             chartTitle.push(`${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()}`);
             if (this.yUnits2) {
-                const formattedTotal2 = this.formatYValues(this.yUnits2, total, true);
+                const formattedTotal2 = this.formatYValues(this.yUnits2, secondaryTotal, true);
                 chartTitle.push(`${this.selectedMetric2.title}: ${formattedTotal2.toLocaleString()}`);
             }
 
