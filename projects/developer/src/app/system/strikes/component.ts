@@ -17,7 +17,6 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
     styleUrls: ['./component.scss']
 })
 export class StrikesComponent implements OnInit, OnDestroy {
-    private routerEvents: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }

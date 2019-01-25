@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -27,6 +28,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
+    createForm: any;
+    createFormSubscription: any;
     columns: any[];
     loadingRecipeType: boolean;
     recipeTypeName: string;
@@ -38,8 +41,26 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     toggleJobTypeDisplay: boolean;
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
+    menuBarItems: MenuItem[] = [
+        {
+            label: 'Job Type',
+            icon: 'fa fa-cube',
+            command: () => {
+                this.showToggleJobType();
+            }
+        },
+        {
+            label: 'Recipe',
+            icon: 'fa fa-cubes'
+        },
+        {
+            label: 'Condition',
+            icon: 'fa fa-adjust'
+        }
+    ];
 
     constructor(
+        private fb: FormBuilder,
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
         private jobTypesApiService: JobTypesApiService,
@@ -50,6 +71,42 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
+    }
+
+    private initFormGroup() {
+        this.createForm = this.fb.group({
+            title: ['', Validators.required],
+            description: ['', Validators.required]
+        });
+    }
+
+    private initValidation() {
+        // enable/disable validate and save actions based on form status
+        const validateItem = _.find(this.items, { label: 'Validate' });
+        if (validateItem) {
+            validateItem.disabled = this.createForm.status === 'INVALID';
+        }
+        const saveItem = _.find(this.items, { label: 'Save' });
+        if (saveItem) {
+            saveItem.disabled = this.createForm.status === 'INVALID';
+        }
+    }
+
+    private initRecipeTypeForm() {
+        if (this.selectedRecipeTypeDetail) {
+            // add the values from the object
+            this.createForm.patchValue(this.selectedRecipeTypeDetail);
+
+            // modify form actions based on status
+            this.initValidation();
+        }
+
+        // listen for changes to createForm fields
+        this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
+            // need to merge these changes because there are fields in the model that aren't in the form
+            _.merge(this.selectedRecipeTypeDetail, changes);
+            this.initValidation();
+        });
     }
 
     private getRecipeTypeDetail(name: string) {
@@ -87,30 +144,32 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.getRecipeTypeDetail(this.recipeTypeName);
             } else {
                 if (this.recipeTypeName === 'create') {
-                    this.selectedRecipeType = {
-                        label: 'New Recipe',
-                        value: new RecipeType(
-                            null,
-                            'new-recipe',
-                            'New Recipe',
-                            'Description of a new recipe',
-                            true,
-                            false,
-                            null,
-                            new RecipeTypeDefinition({}, {}),
-                            null,
-                            null,
-                            null,
-                            null,
-                            null
-                        )
-                    };
-                    this.selectedRecipeTypeDetail = this.selectedRecipeType.value;
-                    this.items = _.clone(this.editMenu);
-                    this.isEditing = true;
+                    this.selectedRecipeType = null;
+                    this.selectedRecipeTypeDetail = new RecipeType(
+                        null,
+                        null,
+                        'Untitled Recipe',
+                        null,
+                        true,
+                        false,
+                        null,
+                        new RecipeTypeDefinition({}, {}),
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    );
+                    this.initRecipeTypeForm();
                 }
             }
         });
+    }
+
+    private unsubscribeFromForm() {
+        if (this.createFormSubscription) {
+            this.createFormSubscription.unsubscribe();
+        }
     }
 
     createNewRecipe() {
@@ -170,7 +229,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
-            if (!this.isEditing) {
+            if (this.isEditing) {
+                this.initRecipeTypeForm();
+            } else {
                 // reset recipe type
                 this.getRecipeTypeDetail(this.recipeTypeName);
             }
@@ -202,10 +263,19 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             this.jobTypes = data.results;
         });
 
+        this.initFormGroup();
         this.recipeTypes = [];
         if (this.route && this.route.paramMap) {
-            this.routeParams = this.route.paramMap.subscribe(params => {
-                this.recipeTypeName = params.get('name');
+            this.routeParams = this.route.paramMap.subscribe(routeParams => {
+                this.unsubscribeFromForm();
+                this.createForm.reset();
+
+                // get name from url
+                this.recipeTypeName = routeParams.get('name');
+
+                this.isEditing = this.recipeTypeName === 'create';
+                this.items = this.recipeTypeName === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+
                 this.getRecipeTypes();
             });
         }

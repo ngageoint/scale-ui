@@ -28,13 +28,28 @@
     }
 }
 
-.recipe-type-details {
+.recipe-type__details {
     h3 {
         margin: 0;
     }
 
     p {
         margin: 0;
+    }
+
+    label {
+        font-weight: bold;
+        display: block;
+        margin: 0 0 10px 0;
+
+        input, textarea, select {
+            display: block;
+            width: 100%;
+        }
+    }
+
+    button, input, optgroup, select, textarea {
+        line-height: 1.5em;
     }
 
     .btn__edit {
@@ -49,9 +64,5 @@
             margin: 0 0 0 3px;
             max-height: 32px;
         }
-    }
-
-    .recipe-type__metadata {
-        width: 100%;
     }
 }

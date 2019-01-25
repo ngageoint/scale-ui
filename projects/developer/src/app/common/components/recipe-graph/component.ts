@@ -155,54 +155,56 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (!shouldDeselect) {
             this.selectedNode = e;
             this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
-            this.selectedJobType = _.find(this.recipeData.job_types, {
-                name: this.selectedNode.node_type.job_type_name,
-                version: this.selectedNode.node_type.job_type_version
-            });
-            this.selectedNodeConnections = [];
-            _.forEach(this.selectedNode.input, i => {
-                if (i.node) {
-                    const dependency = this.recipeData.definition.nodes[i.node];
-                    const dependencyJobType: any = _.find(this.recipeData.job_types, {
-                        name: dependency.node_type.job_type_name,
-                        version: dependency.node_type.job_type_version
-                    });
-                    const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
-                    this.selectedNodeConnections.push({
-                        name: dependency.node_type.job_type_name,
-                        output: connection.name
-                    });
-                }
-            });
+            if (this.selectedNode.node_type) {
+                this.selectedJobType = _.find(this.recipeData.job_types, {
+                    name: this.selectedNode.node_type.job_type_name,
+                    version: this.selectedNode.node_type.job_type_version
+                });
+                this.selectedNodeConnections = [];
+                _.forEach(this.selectedNode.input, i => {
+                    if (i.node) {
+                        const dependency = this.recipeData.definition.nodes[i.node];
+                        const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                            name: dependency.node_type.job_type_name,
+                            version: dependency.node_type.job_type_version
+                        });
+                        const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                        this.selectedNodeConnections.push({
+                            name: dependency.node_type.job_type_name,
+                            output: connection.name
+                        });
+                    }
+                });
 
-            if (this.jobMetrics) {
-                const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
-                this.metricData = {
-                    labels: ['Pending', 'Blocked', 'Queued', 'Running', 'Failed', 'Completed', 'Canceled'],
-                    datasets: [
-                        {
-                            data: [
-                                rawData.jobs_pending,
-                                rawData.jobs_blocked,
-                                rawData.jobs_queued,
-                                rawData.jobs_running,
-                                rawData.jobs_failed,
-                                rawData.jobs_completed,
-                                rawData.jobs_canceled
-                            ],
-                            backgroundColor: [
-                                this.colorService.PENDING,
-                                this.colorService.BLOCKED,
-                                this.colorService.QUEUED,
-                                this.colorService.RUNNING,
-                                this.colorService.FAILED,
-                                this.colorService.COMPLETED,
-                                this.colorService.CANCELED
-                            ],
-                            label: 'Jobs'
-                        }
-                    ]
-                };
+                if (this.jobMetrics) {
+                    const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
+                    this.metricData = {
+                        labels: ['Pending', 'Blocked', 'Queued', 'Running', 'Failed', 'Completed', 'Canceled'],
+                        datasets: [
+                            {
+                                data: [
+                                    rawData.jobs_pending,
+                                    rawData.jobs_blocked,
+                                    rawData.jobs_queued,
+                                    rawData.jobs_running,
+                                    rawData.jobs_failed,
+                                    rawData.jobs_completed,
+                                    rawData.jobs_canceled
+                                ],
+                                backgroundColor: [
+                                    this.colorService.PENDING,
+                                    this.colorService.BLOCKED,
+                                    this.colorService.QUEUED,
+                                    this.colorService.RUNNING,
+                                    this.colorService.FAILED,
+                                    this.colorService.COMPLETED,
+                                    this.colorService.CANCELED
+                                ],
+                                label: 'Jobs'
+                            }
+                        ]
+                    };
+                }
             }
         }
     }

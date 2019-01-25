@@ -7,55 +7,44 @@
             [disabled]="recipeTypeName === 'new'"></button>
 </div>
 <hr />
-<div class="text-center" *ngIf="!selectedRecipeTypeDetail && recipeTypeName !== 'new'">
+<div class="text-center" *ngIf="!selectedRecipeTypeDetail && recipeTypeName !== 'create'">
     <h3>Select a recipe type to view its details</h3>
 </div>
 <div class="scale-chart-container">
     <dev-loading-indicator [loading]="loadingRecipeType"></dev-loading-indicator>
-    <div class="recipe-type-details" *ngIf="selectedRecipeTypeDetail">
-        <div class="ui-g margin-bottom-md">
-            <div class="ui-g-12 ui-g-nopad">
-                <div class="ui-g">
-                    <div class="ui-g-8 ui-g-nopad">
-                        <div *ngIf="!isEditing">
-                            <h3>{{ selectedRecipeTypeDetail.title }}</h3>
-                            <p>{{ selectedRecipeTypeDetail.description }}</p>
-                        </div>
-                        <div *ngIf="isEditing">
-                            <div class="ui-g ui-g-nopad">
-                                <div class="ui-g-4 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text"
-                                           [(ngModel)]="selectedRecipeTypeDetail.name" pInputText>
-                                </div>
-                                <div class="ui-g-4 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text"
-                                           [(ngModel)]="selectedRecipeTypeDetail.title" pInputText>
-                                </div>
-                                <div class="ui-g-4 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text"
-                                           [(ngModel)]="selectedRecipeTypeDetail.version" pInputText>
-                                </div>
-                            </div>
-                            <div class="ui-g ui-g-nopad">
-                                <div class="ui-g-12 ui-g-nopad">
-                                    <input class="recipe-type__metadata" type="text"
-                                           [(ngModel)]="selectedRecipeTypeDetail.description" pInputText>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui-g-4 ui-g-nopad recipe-type__menu">
-                        <button class="ui-button-info" pButton icon="fa fa-cube fa-fw" (click)="showToggleJobType()"
-                                *ngIf="selectedRecipeType && isEditing" pTooltip="Add/Remove Job Types"
-                                tooltipPosition="bottom"></button>
-                        <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                        <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                            (click)="menu.toggle($event)"></button>
-                    </div>
+    <div class="recipe-type__details" *ngIf="selectedRecipeTypeDetail">
+        <p-panel>
+            <p-header class="flexed space-between">
+                <div>
+                    {{ selectedRecipeTypeDetail.title }}
                 </div>
+                <div class="recipe-type__menu">
+                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                            (click)="menu.toggle($event)"></button>
+                </div>
+            </p-header>
+            <div class="margin-bottom-md" *ngIf="!isEditing">
+                {{ selectedRecipeTypeDetail.description }}
             </div>
-        </div>
-        <dev-recipe-graph [recipeData]="selectedRecipeTypeDetail" [isEditing]="isEditing"></dev-recipe-graph>
+            <div *ngIf="isEditing" [formGroup]="createForm">
+                <label>
+                    <span>Title</span>
+                    <input pInputText type="text" formControlName="title"/>
+                </label>
+                <label>
+                    <span>Description</span>
+                    <textarea pInputTextarea formControlName="description" rows="5"></textarea>
+                </label>
+            </div>
+            <div class="margin-bottom-sm">
+                <div *ngIf="isEditing">
+                    <label class="no-margin">Definition</label>
+                    <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}"></p-menubar>
+                </div>
+                <dev-recipe-graph [recipeData]="selectedRecipeTypeDetail" [isEditing]="isEditing"></dev-recipe-graph>
+            </div>
+        </p-panel>
     </div>
 </div>
 <p-sidebar [(visible)]="toggleJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">

@@ -12,9 +12,9 @@ import { SeedImagesModule } from 'seed-images';
 // Prime NG
 import {
     AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
-    DialogModule, DropdownModule, GrowlModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MessagesModule,
-    MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule, StepsModule,
-    TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
+    DialogModule, DropdownModule, GrowlModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
+    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
+    StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
 import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -184,7 +184,8 @@ import { ScansDatatableService } from './system/scans/datatable.service';
         MenuModule,
         ProgressBarModule,
         ToastModule,
-        DataViewModule
+        DataViewModule,
+        MenubarModule
     ],
     exports: [
         DropdownModule,
