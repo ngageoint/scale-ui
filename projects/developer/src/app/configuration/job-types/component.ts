@@ -1,11 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
-
-import { map, filter } from 'rxjs/operators';
 
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
@@ -19,7 +17,6 @@ import { ScansApiService } from '../../system/scans/api.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
-    private routerEvents: any;
     private routeParams: any;
     jobTypes: SelectItem[];
     selectedJobType: any;
@@ -58,41 +55,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private scansApiService: ScansApiService,
         private router: Router,
         private route: ActivatedRoute
-    ) {
-        if (this.router.events) {
-            this.routerEvents = this.router.events.pipe(
-                filter((event) => event instanceof NavigationEnd),
-                map(() => this.route)
-            ).subscribe(() => {
-                this.jobTypes = [];
-                let name = null;
-                let version = null;
-                if (this.route && this.route.paramMap) {
-                    this.routeParams = this.route.paramMap.subscribe(params => {
-                        name = params.get('name');
-                        version = params.get('version');
-                    });
-                }
-                this.jobTypesApiService.getJobTypes().subscribe(data => {
-                    _.forEach(data.results, result => {
-                        this.jobTypes.push({
-                            label: `${result.title} ${result.latest_version}`,
-                            value: result
-                        });
-                        if (name === result.name && version === result.latest_version) {
-                            this.selectedJobType = result;
-                        }
-                    });
-                    if (name && version) {
-                        this.getJobTypeDetail(name, version);
-                    }
-                }, err => {
-                    console.log(err);
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
-                });
-            });
-        }
-    }
+    ) {}
 
     // private setInterfaceData(data) {
     //     const dataArr = [];
@@ -157,7 +120,27 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.failed24h = this.getChartTotals(data.job_counts_24h, 'failed');
             this.selectedJobTypeDetail = data;
         }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText});
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
+        });
+    }
+    private getJobTypes(name?: string, version?: string) {
+        this.jobTypesApiService.getJobTypes().subscribe(data => {
+            _.forEach(data.results, result => {
+                this.jobTypes.push({
+                    label: `${result.title} ${result.latest_version}`,
+                    value: result
+                });
+                if (name === result.name && version === result.latest_version) {
+                    this.selectedJobType = result;
+                }
+            });
+            if (name && version) {
+                this.getJobTypeDetail(name, version);
+            }
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
         });
     }
     private getWorkspaces() {
@@ -200,7 +183,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         });
     }
     onEditClick() {
-        this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.id}`]);
+        this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.name}/${this.selectedJobTypeDetail.version}`]);
     }
     onScanHide() {
         this.selectedWorkspace = null;
@@ -274,11 +257,19 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             }
         };
         this.getWorkspaces();
+
+        this.jobTypes = [];
+        let name = null;
+        let version = null;
+        if (this.route && this.route.paramMap) {
+            this.routeParams = this.route.paramMap.subscribe(params => {
+                name = params.get('name');
+                version = params.get('version');
+                this.getJobTypes(name, version);
+            });
+        }
     }
     ngOnDestroy() {
-        if (this.routerEvents) {
-            this.routerEvents.unsubscribe();
-        }
         if (this.routeParams) {
             this.routeParams.unsubscribe();
         }

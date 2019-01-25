@@ -116,20 +116,29 @@ export class DataService {
     }
 
     handleError(error: HttpErrorResponse) {
+        let body = null;
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.
             console.error('An error occurred:', error.error.message);
         } else {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
-            const body = error.error ? error.error.message : error;
+            if (error.error) {
+                body = error.error.detail ?
+                    error.error.detail :
+                    error.error.message ?
+                        error.error.message :
+                        JSON.stringify(error);
+            } else {
+                body = JSON.stringify(error);
+            }
             console.error(
                 `Backend returned code ${error.status}, ` +
                 `body was: ${body}`);
         }
         // return an observable with a user-facing error message
         return throwError({
-            statusText: error.error.message
+            statusText: body
         });
     }
 
