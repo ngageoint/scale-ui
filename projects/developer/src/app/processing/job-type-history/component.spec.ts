@@ -5,22 +5,22 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 
 import { DataService } from '../../common/services/data.service';
-import { FailureRatesComponent } from './component';
-import { FailureRatesDatatableService } from './datatable.service';
+import { JobTypeHistoryComponent } from './component';
+import { JobTypeHistoryDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 
 
-describe('FailureRatesComponent', () => {
-    let component: FailureRatesComponent;
-    let fixture: ComponentFixture<FailureRatesComponent>;
+describe('JobTypeHistoryComponent', () => {
+    let component: JobTypeHistoryComponent;
+    let fixture: ComponentFixture<JobTypeHistoryComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [FailureRatesComponent],
+            declarations: [JobTypeHistoryComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                DataService, FailureRatesDatatableService, JobTypesApiService, MetricsApiService,
+                DataService, JobTypeHistoryDatatableService, JobTypesApiService, MetricsApiService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
@@ -38,7 +38,7 @@ describe('FailureRatesComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(FailureRatesComponent);
+        fixture = TestBed.createComponent(JobTypeHistoryComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

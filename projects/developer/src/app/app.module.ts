@@ -55,8 +55,8 @@ import { WorkspacesApiService } from './system/workspaces/api.service';
 import { JobHistoryComponent } from './dashboard/job-history/component';
 import { DataService } from './common/services/data.service';
 import { ProcessingFormComponent } from './navbar/subnav/processing-form/component';
-import { FailureRatesComponent } from './processing/failure-rates/component';
-import { FailureRatesDatatableService } from './processing/failure-rates/datatable.service';
+import { JobTypeHistoryComponent } from './processing/job-type-history/component';
+import { JobTypeHistoryDatatableService } from './processing/job-type-history/datatable.service';
 import { MetricsComponent } from './data/metrics/component';
 import { MetricsApiService } from './data/metrics/api.service';
 import { ChartService } from './data/metrics/chart.service';
@@ -116,7 +116,7 @@ import { ScansDatatableService } from './system/scans/datatable.service';
         WorkspacesComponent,
         JobHistoryComponent,
         ProcessingFormComponent,
-        FailureRatesComponent,
+        JobTypeHistoryComponent,
         MetricsComponent,
         RunningJobsComponent,
         LogViewerComponent,
@@ -202,7 +202,7 @@ import { ScansDatatableService } from './system/scans/datatable.service';
         RecipeTypesApiService,
         WorkspacesApiService,
         DataService,
-        FailureRatesDatatableService,
+        JobTypeHistoryDatatableService,
         MetricsApiService,
         ChartService,
         RunningJobsDatatableService,

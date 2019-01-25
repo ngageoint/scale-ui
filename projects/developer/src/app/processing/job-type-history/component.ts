@@ -1,23 +1,23 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobTypeName } from '../../configuration/job-types/api.name.model';
-import { FailureRatesDatatableService } from './datatable.service';
-import { FailureRatesDatatable } from './datatable.model';
+import { JobTypeHistoryDatatableService } from './datatable.service';
+import { JobTypeHistoryDatatable } from './datatable.model';
 import { MetricsApiService } from '../../data/metrics/api.service';
 
 @Component({
-    selector: 'dev-failure-rates',
+    selector: 'dev-job-type-history',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
 
-export class FailureRatesComponent implements OnInit {
-    datatableOptions: FailureRatesDatatable;
+export class JobTypeHistoryComponent implements OnInit {
+    datatableOptions: JobTypeHistoryDatatable;
     columns: any[];
     jobTypes: any;
     jobTypeOptions: SelectItem[];
@@ -27,14 +27,14 @@ export class FailureRatesComponent implements OnInit {
     datatableLoading: boolean;
 
     constructor(
-        private failureRatesDatatableService: FailureRatesDatatableService,
+        private jobTypeHistoryDatatableService: JobTypeHistoryDatatableService,
         private jobTypesApiService: JobTypesApiService,
         private metricsApiService: MetricsApiService,
         private router: Router,
         private route: ActivatedRoute
     ) {
         this.selectedJobType = null;
-        this.datatableOptions = this.failureRatesDatatableService.getFailureRatesDatatableOptions();
+        this.datatableOptions = this.jobTypeHistoryDatatableService.getJobTypeHistoryDatatableOptions();
         this.columns = [
             { field: 'job_type.id', header: 'Job Type' },
             { field: 'twentyfour_hours', header: '24 Hours' },
@@ -120,10 +120,10 @@ export class FailureRatesComponent implements OnInit {
         });
     }
     private updateOptions(skipUpdate?) {
-        this.failureRatesDatatableService.setFailureRatesDatatableOptions(this.datatableOptions);
+        this.jobTypeHistoryDatatableService.setJobTypeHistoryDatatableOptions(this.datatableOptions);
 
         // update querystring
-        this.router.navigate(['/processing/failure-rates'], {
+        this.router.navigate(['/processing/job-type-history'], {
             queryParams: this.datatableOptions,
             replaceUrl: true
         });
@@ -203,7 +203,7 @@ export class FailureRatesComponent implements OnInit {
                     category: params.category || null
                 };
             } else {
-                this.datatableOptions = this.failureRatesDatatableService.getFailureRatesDatatableOptions();
+                this.datatableOptions = this.jobTypeHistoryDatatableService.getJobTypeHistoryDatatableOptions();
             }
         });
         this.sortConfig = {

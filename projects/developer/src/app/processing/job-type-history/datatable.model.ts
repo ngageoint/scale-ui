@@ -1,4 +1,4 @@
-export class FailureRatesDatatable {
+export class JobTypeHistoryDatatable {
     constructor(
         public sortField: string,
         public sortOrder: number,
@@ -8,7 +8,7 @@ export class FailureRatesDatatable {
     ) {}
 }
 
-export const initialFailureRatesDatatable: FailureRatesDatatable = {
+export const initialJobTypeHistoryDatatable: JobTypeHistoryDatatable = {
     sortField: 'twentyfour_hours.failRate',
     sortOrder: -1,
     name: null,

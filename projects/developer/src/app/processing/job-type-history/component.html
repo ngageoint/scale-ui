@@ -1,6 +1,5 @@
-<h2><i class="fa fa-exclamation-triangle"></i> Job Type Failure Rates</h2>
-<p-table [value]="performanceData" [columns]="columns" [rows]="10" [loading]="datatableLoading" [autoLayout]="true"
-         styleClass="fail-rate__table">
+<h2><i class="fa fa-history"></i> Job Type History</h2>
+<p-table [value]="performanceData" [columns]="columns" [rows]="10" [loading]="datatableLoading" [autoLayout]="true">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field">
@@ -110,13 +109,13 @@
                 <div *ngSwitchCase="'twentyfour_hours'">
                     <div class="ui-g">
                         <div class="ui-g-6 label-container text-left ui-g-nopad">
-                            <span *ngIf="rowData.twentyfour_hours.total > 0" class="fail-rate-container">
+                            <span *ngIf="rowData.twentyfour_hours.total > 0" class="fail-rate__container">
                                 <span class="fail-rate" [style.width]="rowData.twentyfour_hours.failRatePercent"></span>
                             </span>
                             <span *ngIf="rowData.twentyfour_hours.total > 0" class="percentage">
                                 {{ rowData.twentyfour_hours.failRatePercent }}
                             </span>
-                            <span *ngIf="rowData.twentyfour_hours.total === 0" class="fail-rate-container">
+                            <span *ngIf="rowData.twentyfour_hours.total === 0" class="fail-rate__container">
                                 <span class="fail-rate" style="display: none"></span>
                             </span>
                             <span *ngIf="rowData.twentyfour_hours.total === 0" class="percentage">0%</span>
@@ -144,13 +143,13 @@
                 <div *ngSwitchCase="'fortyeight_hours'">
                     <div class="ui-g">
                         <div class="ui-g-6 label-container text-left ui-g-nopad">
-                            <span *ngIf="rowData.fortyeight_hours.total > 0" class="fail-rate-container">
+                            <span *ngIf="rowData.fortyeight_hours.total > 0" class="fail-rate__container">
                                 <span class="fail-rate" [style.width]="rowData.fortyeight_hours.failRatePercent"></span>
                             </span>
                             <span *ngIf="rowData.fortyeight_hours.total > 0" class="percentage">
                                 {{rowData.fortyeight_hours.failRatePercent}}
                             </span>
-                            <span *ngIf="rowData.fortyeight_hours.total === 0" class="fail-rate-container">
+                            <span *ngIf="rowData.fortyeight_hours.total === 0" class="fail-rate__container">
                                 <span class="fail-rate" style="display: none"></span>
                             </span>
                             <span *ngIf="rowData.fortyeight_hours.total === 0" class="percentage">0%</span>
@@ -178,13 +177,13 @@
                 <div *ngSwitchCase="'thirty_days'">
                     <div class="ui-g">
                         <div class="ui-g-6 label-container text-left ui-g-nopad">
-                            <span *ngIf="rowData.thirty_days.total > 0" class="fail-rate-container">
+                            <span *ngIf="rowData.thirty_days.total > 0" class="fail-rate__container">
                                 <span class="fail-rate" [style.width]="rowData.thirty_days.failRatePercent"></span>
                             </span>
                             <span *ngIf="rowData.thirty_days.total > 0" class="percentage">
                                 {{ rowData.thirty_days.failRatePercent }}
                             </span>
-                            <span *ngIf="rowData.thirty_days.total === 0" class="fail-rate-container">
+                            <span *ngIf="rowData.thirty_days.total === 0" class="fail-rate__container">
                                 <span class="fail-rate" style="display: none"></span>
                             </span>
                             <span *ngIf="rowData.thirty_days.total === 0" class="percentage">0%</span>

@@ -1,15 +1,15 @@
 import { TestBed, inject } from '@angular/core/testing';
 
-import { FailureRatesDatatableService } from './datatable.service';
+import { JobTypeHistoryDatatableService } from './datatable.service';
 
 describe('FailureRatesDatatableService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
-            providers: [FailureRatesDatatableService]
+            providers: [JobTypeHistoryDatatableService]
         });
     });
 
-    it('should be created', inject([FailureRatesDatatableService], (service: FailureRatesDatatableService) => {
+    it('should be created', inject([JobTypeHistoryDatatableService], (service: JobTypeHistoryDatatableService) => {
         expect(service).toBeTruthy();
     }));
 });
