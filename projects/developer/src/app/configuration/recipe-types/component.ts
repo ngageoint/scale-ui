@@ -30,15 +30,19 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     ];
     createForm: any;
     createFormSubscription: any;
-    columns: any[];
+    jobTypeColumns: any[];
+    recipeTypeColumns: any[];
     loadingRecipeType: boolean;
     recipeTypeName: string;
     jobTypes: any;
     selectedJobTypes = [];
-    recipeTypes: SelectItem[];
-    selectedRecipeType: SelectItem;
+    recipeTypes: any; // used for adding/removing recipe nodes from recipe
+    selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
+    recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
+    selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
     toggleJobTypeDisplay: boolean;
+    toggleRecipeTypeDisplay: boolean;
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
@@ -51,7 +55,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         },
         {
             label: 'Recipe',
-            icon: 'fa fa-cubes'
+            icon: 'fa fa-cubes',
+            command: () => {
+                this.showToggleRecipeType();
+            }
         },
         {
             label: 'Condition',
@@ -68,7 +75,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute
     ) {
-        this.columns = [
+        this.jobTypeColumns = [
+            { field: 'title', header: 'Title', filterMatchMode: 'contains' }
+        ];
+        this.recipeTypeColumns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
     }
@@ -130,13 +140,14 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     private getRecipeTypes() {
         this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
             _.forEach(data.results, result => {
-                this.recipeTypes.push({
+                this.recipeTypeOptions.push({
                     label: result.title,
                     value: result
                 });
                 if (this.recipeTypeName === result.name) {
-                    this.selectedRecipeType = _.clone(result);
+                    this.selectedRecipeTypeOption = _.clone(result);
                 }
             });
             if (this.recipeTypeName && this.recipeTypeName !== 'create') {
@@ -144,7 +155,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.getRecipeTypeDetail(this.recipeTypeName);
             } else {
                 if (this.recipeTypeName === 'create') {
-                    this.selectedRecipeType = null;
+                    this.selectedRecipeTypeOption = null;
                     this.selectedRecipeTypeDetail = new RecipeType(
                         null,
                         null,
@@ -181,7 +192,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.toggleJobTypeDisplay = true;
     }
 
-    addJobType(event) {
+    showToggleRecipeType() {
+        this.toggleRecipeTypeDisplay = true;
+    }
+
+    addJobTypeNode(event) {
         const jobType = event.data;
         // get job type detail in order to obtain the interface
         this.jobTypesApiService.getJobType(jobType.name, jobType.latest_version).subscribe(data => {
@@ -190,8 +205,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 recipeData.job_types = [];
             }
             const input = {};
-            _.forEach(data.manifest.job.interface.inputs.files, file => {
-                input[file.name] = {};
+            _.forEach(data.manifest.job.interface.inputs, inputType => {
+                _.forEach(inputType, it => {
+                    input[it.name] = {};
+                });
             });
             recipeData.definition.nodes[data.manifest.job.name] = {
                 dependencies: [],
@@ -215,10 +232,43 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
-    removeJobType(event) {
-        const jobType = event.data;
+    addRecipeTypeNode(event) {
+        // get recipe type detail in order to obtain the input
+        this.recipeTypesApiService.getRecipeType(event.data.name).subscribe(data => {
+            const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+            if (!recipeData.sub_recipe_types) {
+                recipeData.sub_recipe_types = [];
+            }
+            const input = {};
+            _.forEach(data.definition.input, inputType => {
+                _.forEach(inputType, it => {
+                    input[it.name] = {};
+                });
+            });
+            recipeData.definition.nodes[event.data.name] = {
+                dependencies: [],
+                input: input,
+                node_type: {
+                    node_type: 'recipe',
+                    recipe_type_name: event.data.name,
+                    recipe_type_revision: event.data.revision_num
+                }
+            };
+            recipeData.sub_recipe_types.push(data);
+            this.selectedRecipeTypeDetail = recipeData;
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type details', detail: err.statusText, life: 10000});
+            // remove job type from selection
+            this.selectedRecipeTypes = _.filter(this.selectedRecipeTypes, rt => {
+                return rt.name !== event.data.name && rt.revision_num !== event.data.revision_num;
+            });
+        });
+    }
+
+    removeNode(event) {
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-        delete recipeData.definition.nodes[jobType.name];
+        delete recipeData.definition.nodes[event.data.name];
         this.selectedRecipeTypeDetail = recipeData;
     }
 
@@ -265,6 +315,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
         this.initFormGroup();
         this.recipeTypes = [];
+        this.recipeTypeOptions = [];
         if (this.route && this.route.paramMap) {
             this.routeParams = this.route.paramMap.subscribe(routeParams => {
                 this.unsubscribeFromForm();

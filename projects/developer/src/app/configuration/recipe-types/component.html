@@ -1,6 +1,6 @@
 <div class="recipe-type__header">
     <h2><i class="fa fa-cubes"></i> Recipe Types</h2>
-    <p-dropdown [options]="recipeTypes" [autoWidth]="false" [(ngModel)]="selectedRecipeType" filter="filter"
+    <p-dropdown [options]="recipeTypeOptions" [autoWidth]="false" [(ngModel)]="selectedRecipeTypeOption" filter="filter"
                 class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."
                 [showClear]="false"></p-dropdown>
     <button pButton class="btn__new-recipe" icon="fa fa-plus" (click)="createNewRecipe()"
@@ -49,8 +49,8 @@
 </div>
 <p-sidebar [(visible)]="toggleJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
     <h2>Add/Remove Job Types</h2>
-    <p-table [columns]="columns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
-             [rowHover]="true" (onRowSelect)="addJobType($event)" (onRowUnselect)="removeJobType($event)"
+    <p-table [columns]="jobTypeColumns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
+             [rowHover]="true" (onRowSelect)="addJobTypeNode($event)" (onRowUnselect)="removeNode($event)"
              selectionMode="multiple" [(selection)]="selectedJobTypes" #datatable>
         <ng-template pTemplate="header" let-columns>
             <tr>
@@ -64,9 +64,34 @@
         <ng-template pTemplate="body" let-rowData let-columns="columns">
             <tr [pSelectableRow]="rowData">
                 <td>
-                    <div class="recipe-type__job-type-row">
+                    <div class="recipe-type__node-type-row">
                         <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
                         {{ rowData.title }} v{{ rowData.latest_version }}
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-sidebar>
+<p-sidebar [(visible)]="toggleRecipeTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+    <h2>Add/Remove Recipe Types</h2>
+    <p-table [columns]="recipeTypeColumns" [value]="recipeTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
+             [rowHover]="true" (onRowSelect)="addRecipeTypeNode($event)" (onRowUnselect)="removeNode($event)"
+             selectionMode="multiple" [(selection)]="selectedRecipeTypes" #datatable>
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th *ngFor="let col of columns">
+                    <input pInputText type="text"
+                           (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                           class="column-filter">
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td>
+                    <div class="recipe-type__node-type-row">
+                        {{ rowData.title }}
                     </div>
                 </td>
             </tr>

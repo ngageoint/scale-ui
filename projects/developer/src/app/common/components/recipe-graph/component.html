@@ -51,20 +51,23 @@
         </div>
     </div>
 </div>
-<p-dialog #recipeDialog [(visible)]="selectedNode && selectedJobType" [style]="{'width': '500px'}"
-          styleClass="recipe-dialog" (onHide)="hideDialog()" (onShow)="showDialog()">
+<p-dialog #recipeDialog [(visible)]="selectedNode" (onHide)="hideDialog()" (onShow)="showDialog()">
     <p-header>
-        <span *ngIf="selectedNode && selectedJobType">
+        <span *ngIf="selectedJobType">
             <strong>{{ selectedJobType.title }} v{{ selectedJobType.version }}</strong>
+        </span>
+        <span *ngIf="selectedRecipeType">
+            <strong>{{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}</strong>
         </span>
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
-        <div class="job-type-content">
+        <div class="dialog-content">
             <p-chart type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
         </div>
     </div>
-    <div *ngIf="!hideDetails">
-        <div class="job-type-content" *ngIf="selectedNode && selectedJobType">
+    <!-- Job node information -->
+    <div *ngIf="!hideDetails && selectedJobType">
+        <div class="dialog-content" *ngIf="selectedNode && selectedJobType">
             <div *ngIf="!selectedJobType.manifest.seedVersion">
                 This job type is not seed compliant.
             </div>
@@ -133,6 +136,69 @@
                     </ng-template>
                 </p-dataList>
             </div>
+        </div>
+    </div>
+    <!-- Recipe node information -->
+    <div *ngIf="!hideDetails && selectedRecipeType">
+        <div class="dialog-content" *ngIf="selectedNode && selectedRecipeType">
+            <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
+                        class="recipe-dependencies-container" emptyMessage="None">
+                <p-header>
+                    <div class="ui-g">
+                        <div class="ui-g-10 ui-g-nopad">
+                            <strong>Dependencies</strong>
+                        </div>
+                        <div class="ui-g-2 ui-g-nopad text-right">
+                            <button pButton class="ui-button-info" icon="fa fa-plus"
+                                    (click)="showDependencyOptions($event)" *ngIf="isEditing"
+                                    pTooltip="Add Dependency"></button>
+                        </div>
+                    </div>
+                </p-header>
+                <ng-template let-dep pTemplate="item">
+                    <div class="ui-g recipe-io recipe-dependencies">
+                        <div class="ui-g-12 ui-g-nopad">
+                            <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
+                                    *ngIf="isEditing"></button>
+                            {{ dep.name }}
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
+            <p-dataList [value]="selectedRecipeType.definition.input.files" [scrollable]="true"
+                        scrollHeight="300px" class="recipe-io-container">
+                <p-header>
+                    <strong>Inputs</strong>
+                </p-header>
+                <ng-template let-input pTemplate="item">
+                    <div class="recipe-io">
+                        <div class="ui-g">
+                            <div class="ui-g-10 ui-g-nopad">
+                                {{ input.name }} <span *ngIf="input.required">*</span>
+                                <ul class="list-unstyled media-type-list">
+                                    <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
+                                </ul>
+                                <div class="connections"
+                                     *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
+                                    <h5>Connections</h5>
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let connection of selectedNodeConnections" class="connection">
+                                            <div>
+                                                <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
+                                                        (click)="removeInputConnection(connection)" *ngIf="isEditing">
+                                                </button>
+                                            </div>
+                                            <div>
+                                                <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </p-dataList>
         </div>
     </div>
 </p-dialog>

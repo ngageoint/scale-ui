@@ -31,6 +31,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     orientation: string; // LR, RL, TB, BT
     curve: any;
     selectedJobType: any;
+    selectedRecipeType: any;
     selectedNode: any;
     selectedNodeConnections = [];
     recipeDialogX: number;
@@ -86,14 +87,26 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.links = [];
 
             _.forEach(this.recipeData.definition.nodes, node => {
-                const jobType: any = _.find(this.recipeData.job_types, {
-                    name: node.node_type.job_type_name,
-                    version: node.node_type.job_type_version
-                });
+                let id = '';
+                let label = '';
+                let icon = '';
+                if (node.node_type.node_type === 'job') {
+                    const jobType: any = _.find(this.recipeData.job_types, {
+                        name: node.node_type.job_type_name,
+                        version: node.node_type.job_type_version
+                    });
+                    id = _.camelCase(node.node_type.job_type_name); // id can't have dashes or anything
+                    label = `${jobType.title} v${jobType.version}`;
+                    icon = String.fromCharCode(parseInt(jobType.icon_code, 16));
+                } else if (node.node_type.node_type === 'recipe') {
+                    id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
+                    label = node.node_type.recipe_type_name;
+                    icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
+                }
                 this.nodes.push({
-                    id: _.camelCase(node.node_type.job_type_name), // id can't have dashes or anything
-                    label: `${jobType.title} v${jobType.version}`,
-                    icon: String.fromCharCode(parseInt(jobType.icon_code, 16)),
+                    id: id,
+                    label: label,
+                    icon: icon,
                     dependencies: node.dependencies,
                     visible: true,
                     fillColor: node.node_type.status ? this.colorService[node.node_type.status] : this.colorService.RECIPE_NODE,
@@ -156,54 +169,78 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.selectedNode = e;
             this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
             if (this.selectedNode.node_type) {
-                this.selectedJobType = _.find(this.recipeData.job_types, {
-                    name: this.selectedNode.node_type.job_type_name,
-                    version: this.selectedNode.node_type.job_type_version
-                });
-                this.selectedNodeConnections = [];
-                _.forEach(this.selectedNode.input, i => {
-                    if (i.node) {
-                        const dependency = this.recipeData.definition.nodes[i.node];
-                        const dependencyJobType: any = _.find(this.recipeData.job_types, {
-                            name: dependency.node_type.job_type_name,
-                            version: dependency.node_type.job_type_version
-                        });
-                        const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
-                        this.selectedNodeConnections.push({
-                            name: dependency.node_type.job_type_name,
-                            output: connection.name
-                        });
-                    }
-                });
+                if (this.selectedNode.node_type.node_type === 'job') {
+                    this.selectedRecipeType = null;
+                    this.selectedJobType = _.find(this.recipeData.job_types, {
+                        name: this.selectedNode.node_type.job_type_name,
+                        version: this.selectedNode.node_type.job_type_version
+                    });
+                    this.selectedNodeConnections = [];
+                    _.forEach(this.selectedNode.input, i => {
+                        if (i.node) {
+                            const dependency = this.recipeData.definition.nodes[i.node];
+                            const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                                name: dependency.node_type.job_type_name,
+                                version: dependency.node_type.job_type_version
+                            });
+                            const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                            this.selectedNodeConnections.push({
+                                name: dependency.node_type.job_type_name,
+                                output: connection.name
+                            });
+                        }
+                    });
 
-                if (this.jobMetrics) {
-                    const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
-                    this.metricData = {
-                        labels: ['Pending', 'Blocked', 'Queued', 'Running', 'Failed', 'Completed', 'Canceled'],
-                        datasets: [
-                            {
-                                data: [
-                                    rawData.jobs_pending,
-                                    rawData.jobs_blocked,
-                                    rawData.jobs_queued,
-                                    rawData.jobs_running,
-                                    rawData.jobs_failed,
-                                    rawData.jobs_completed,
-                                    rawData.jobs_canceled
-                                ],
-                                backgroundColor: [
-                                    this.colorService.PENDING,
-                                    this.colorService.BLOCKED,
-                                    this.colorService.QUEUED,
-                                    this.colorService.RUNNING,
-                                    this.colorService.FAILED,
-                                    this.colorService.COMPLETED,
-                                    this.colorService.CANCELED
-                                ],
-                                label: 'Jobs'
-                            }
-                        ]
-                    };
+                    if (this.jobMetrics) {
+                        const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
+                        this.metricData = {
+                            labels: ['Pending', 'Blocked', 'Queued', 'Running', 'Failed', 'Completed', 'Canceled'],
+                            datasets: [
+                                {
+                                    data: [
+                                        rawData.jobs_pending,
+                                        rawData.jobs_blocked,
+                                        rawData.jobs_queued,
+                                        rawData.jobs_running,
+                                        rawData.jobs_failed,
+                                        rawData.jobs_completed,
+                                        rawData.jobs_canceled
+                                    ],
+                                    backgroundColor: [
+                                        this.colorService.PENDING,
+                                        this.colorService.BLOCKED,
+                                        this.colorService.QUEUED,
+                                        this.colorService.RUNNING,
+                                        this.colorService.FAILED,
+                                        this.colorService.COMPLETED,
+                                        this.colorService.CANCELED
+                                    ],
+                                    label: 'Jobs'
+                                }
+                            ]
+                        };
+                    }
+                } else if (this.selectedNode.node_type.node_type === 'recipe') {
+                    this.selectedJobType = null;
+                    this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
+                        name: this.selectedNode.node_type.recipe_type_name,
+                        revision_num: this.selectedNode.node_type.recipe_type_revision
+                    });
+                    this.selectedNodeConnections = [];
+                    _.forEach(this.selectedNode.input, i => {
+                        if (i.node) {
+                            const dependency = this.recipeData.definition.nodes[i.node];
+                            const dependencyRecipeType: any = _.find(this.recipeData.sub_recipe_types, {
+                                name: dependency.node_type.recipe_type_name,
+                                revision_num: dependency.node_type.recipe_type_revision
+                            });
+                            const connection: any = _.find(dependencyRecipeType.definition.input.files, {name: i.input});
+                            console.log(connection);
+                            this.selectedNodeConnections.push({
+                                name: dependency.node_type.recipe_type_name
+                            });
+                        }
+                    });
                 }
             }
         }

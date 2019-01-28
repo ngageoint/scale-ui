@@ -11,7 +11,7 @@
     "last_modified": "2016-05-02T02:45:28.075Z",
     "definition": {
         "input": {
-            "files": [{"name": "input_file"}]
+            "files": [{"name": "input_file", "media_types": ["image/tiff"], "required": true, "multiple": true}]
         },
         "nodes": {
             "landsat8-parse": {
