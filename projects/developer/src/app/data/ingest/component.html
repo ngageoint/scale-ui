@@ -3,11 +3,13 @@
     <div class="ingest__date-filter">
         <div>
             <label>From:</label>
-            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+            <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
+                            (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
         <div>
             <label>To:</label>
-            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+            <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
+                            (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
         <button pButton class="ui-button-primary ingest__date-filter-btn" label="Apply"
                 (click)="onDateFilterApply()"></button>
