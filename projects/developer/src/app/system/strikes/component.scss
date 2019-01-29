@@ -18,6 +18,12 @@
             }
         }
     }
+
+    ::ng-deep .ui-button {
+        .ui-button-text {
+            padding: 0.529em 1em 0.529em 2em !important;
+        }
+    }
 }
 
 .strikes__title {
@@ -102,5 +108,15 @@
         border-color: rgba(0, 0, 0, 0.125);
         width: 100%;
         height: 70vh;
+    }
+
+    ::ng-deep .ui-panel-primary, .ui-panel-danger {
+        .ui-panel-content {
+            background-color: #f5f5f5 !important;
+
+            pre {
+                background: #fff;
+            }
+        }
     }
 }

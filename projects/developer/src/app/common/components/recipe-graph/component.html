@@ -51,7 +51,8 @@
         </div>
     </div>
 </div>
-<p-dialog #recipeDialog [(visible)]="selectedNode" (onHide)="hideDialog()" (onShow)="showDialog()">
+<p-dialog #recipeDialog [(visible)]="showRecipeDialog" (onHide)="hideDialog()" (onShow)="showDialog()"
+          styleClass="recipe-dialog">
     <p-header>
         <span *ngIf="selectedJobType">
             <strong>{{ selectedJobType.title }} v{{ selectedJobType.version }}</strong>
@@ -208,6 +209,9 @@
     </div>
 </p-dialog>
 <p-overlayPanel appendTo="body" #dependencyPanel>
+    <div *ngIf="dependencyOptions.length === 0">
+        <div class="margin-top-sm margin-bottom-sm">No other nodes found</div>
+    </div>
     <ul class="recipe__option-list">
         <li *ngFor="let option of dependencyOptions" (click)="addDependency(option)"
             [class]="option.disabled ? 'disabled' : ''">

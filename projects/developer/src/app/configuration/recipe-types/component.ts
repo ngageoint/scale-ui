@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
+import { Dialog } from 'primeng/dialog';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -18,6 +19,7 @@ import { RecipeTypeDefinition } from './definition.model';
 })
 
 export class RecipeTypesComponent implements OnInit, OnDestroy {
+    @ViewChild('addRemoveDialog') addRemoveDialog: Dialog;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.toggleEdit(); } }
@@ -28,6 +30,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
+    addRemoveDialogX: number;
+    addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
     jobTypeColumns: any[];
@@ -41,8 +45,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
     selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
-    toggleJobTypeDisplay: boolean;
-    toggleRecipeTypeDisplay: boolean;
+    showAddRemoveDisplay: boolean;
+    addRemoveDisplayType = 'job';
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
@@ -50,14 +54,16 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             label: 'Job Type',
             icon: 'fa fa-cube',
             command: () => {
-                this.showToggleJobType();
+                this.addRemoveDisplayType = 'job';
+                this.showAddRemoveDisplay = true;
             }
         },
         {
             label: 'Recipe',
             icon: 'fa fa-cubes',
             command: () => {
-                this.showToggleRecipeType();
+                this.addRemoveDisplayType = 'recipe';
+                this.showAddRemoveDisplay = true;
             }
         },
         {
@@ -188,12 +194,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.router.navigate(['/configuration/recipe-types/create']);
     }
 
-    showToggleJobType() {
-        this.toggleJobTypeDisplay = true;
+    showDialog() {
+        if (this.addRemoveDialogX && this.addRemoveDialogY) {
+            this.addRemoveDialog.positionLeft = this.addRemoveDialogX;
+            this.addRemoveDialog.positionTop = this.addRemoveDialogY;
+        }
     }
 
-    showToggleRecipeType() {
-        this.toggleRecipeTypeDisplay = true;
+    hideDialog() {
+        const addRemoveDialogDiv: HTMLElement = document.querySelector('.add-remove-dialog');
+        this.addRemoveDialogX = addRemoveDialogDiv ? parseInt(addRemoveDialogDiv.style.left, 10) : null;
+        this.addRemoveDialogY = addRemoveDialogDiv ? parseInt(addRemoveDialogDiv.style.top, 10) : null;
     }
 
     addJobTypeNode(event) {

@@ -51,17 +51,6 @@
 }
 
 .dialog-content {
-    padding: 0 0 10px 10px;
-
-    h4 {
-        margin: 0 0 5px 0;
-        font-size: 1.2em;
-
-        &.label {
-            display: block;
-        }
-    }
-
     ::ng-deep .ui-datalist {
         margin-bottom: 15px;
 

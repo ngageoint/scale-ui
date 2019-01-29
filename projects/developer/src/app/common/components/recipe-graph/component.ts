@@ -34,6 +34,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedRecipeType: any;
     selectedNode: any;
     selectedNodeConnections = [];
+    showRecipeDialog: boolean;
     recipeDialogX: number;
     recipeDialogY: number;
     metricData: any;
@@ -170,6 +171,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     select(e) {
         const shouldDeselect = _.isEqual(this.selectedNode, e);
+        this.showRecipeDialog = !shouldDeselect;
         if (this.selectedNode) {
             this.selectedNode.options.stroke = '';
             this.selectedNode = null;

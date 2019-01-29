@@ -47,54 +47,67 @@
         </p-panel>
     </div>
 </div>
-<p-sidebar [(visible)]="toggleJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'40em'}">
-    <h2>Add/Remove Job Types</h2>
-    <p-table [columns]="jobTypeColumns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
-             [rowHover]="true" (onRowSelect)="addJobTypeNode($event)" (onRowUnselect)="removeNode($event)"
-             selectionMode="multiple" [(selection)]="selectedJobTypes" #datatable>
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns">
-                    <input pInputText type="text"
-                           (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                           class="column-filter">
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData">
-                <td>
-                    <div class="recipe-type__node-type-row">
-                        <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
-                        {{ rowData.title }} v{{ rowData.latest_version }}
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-sidebar>
-<p-sidebar [(visible)]="toggleRecipeTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'40em'}">
-    <h2>Add/Remove Recipe Types</h2>
-    <p-table [columns]="recipeTypeColumns" [value]="recipeTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
-             [rowHover]="true" (onRowSelect)="addRecipeTypeNode($event)" (onRowUnselect)="removeNode($event)"
-             selectionMode="multiple" [(selection)]="selectedRecipeTypes" #datatable>
-        <ng-template pTemplate="header" let-columns>
-            <tr>
-                <th *ngFor="let col of columns">
-                    <input pInputText type="text"
-                           (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                           class="column-filter">
-                </th>
-            </tr>
-        </ng-template>
-        <ng-template pTemplate="body" let-rowData let-columns="columns">
-            <tr [pSelectableRow]="rowData">
-                <td>
-                    <div class="recipe-type__node-type-row">
-                        {{ rowData.title }}
-                    </div>
-                </td>
-            </tr>
-        </ng-template>
-    </p-table>
-</p-sidebar>
+<p-dialog #addRemoveDialog [(visible)]="showAddRemoveDisplay" (onHide)="hideDialog()" (onShow)="showDialog()"
+          styleClass="add-remove-dialog">
+    <p-header>
+        <span *ngIf="addRemoveDisplayType === 'job'">
+            <strong>Add/Remove Job Types</strong>
+        </span>
+        <span *ngIf="addRemoveDisplayType === 'recipe'">
+            <strong>Add/Remove Recipe Types</strong>
+        </span>
+    </p-header>
+    <div class="dialog-content" *ngIf="addRemoveDisplayType === 'job'">
+        <p-scrollPanel [style]="{width: '100%', height: '33vh'}">
+            <p-table [columns]="jobTypeColumns" [value]="jobTypes" styleClass="nopadding" [rowHover]="true"
+                     (onRowSelect)="addJobTypeNode($event)" (onRowUnselect)="removeNode($event)"
+                     selectionMode="multiple" [(selection)]="selectedJobTypes" #jobTypeDatatable>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            <input pInputText type="text"
+                                   (input)="jobTypeDatatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                   class="column-filter">
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td>
+                            <div class="recipe-type__node-type-row">
+                                <span class="fa fa-fw" [innerHtml]="getUnicode(rowData.icon_code)"></span>
+                                {{ rowData.title }} v{{ rowData.latest_version }}
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-scrollPanel>
+    </div>
+    <div class="dialog-content" *ngIf="addRemoveDisplayType === 'recipe'">
+        <p-scrollPanel [style]="{width: '100%', height: '33vh'}">
+            <p-table [columns]="recipeTypeColumns" [value]="recipeTypes" styleClass="nopadding" [rowHover]="true"
+                     (onRowSelect)="addRecipeTypeNode($event)" (onRowUnselect)="removeNode($event)"
+                     selectionMode="multiple" [(selection)]="selectedRecipeTypes" #recipeTypeDatatable>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            <input pInputText type="text"
+                                   (input)="recipeTypeDatatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                   class="column-filter">
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td>
+                            <div class="recipe-type__node-type-row">
+                                {{ rowData.title }}
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-scrollPanel>
+    </div>
+</p-dialog>
