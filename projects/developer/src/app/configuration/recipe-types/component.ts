@@ -55,9 +55,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
     definitionFile: any;
-    definitionFilePanelClass = 'ui-panel-primary';
     definitionJson: any;
-    definitionJsonPanelClass = 'ui-panel-primary';
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
@@ -141,9 +139,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             // add the values from the object
             this.createForm.patchValue(this.selectedRecipeTypeDetail);
 
-            this.definitionFilePanelClass = this.definitionFileForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
-            this.definitionJsonPanelClass = this.definitionJsonForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
-
             // modify form actions based on status
             this.initValidation();
         }
@@ -158,13 +153,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         // listen to changes to definitionFile fields
         this.definitionFileFormSubscription = this.definitionFileForm.valueChanges.subscribe(changes => {
             this.definitionFile = RecipeTypeDefinitionFile.transformer(changes);
-            this.definitionFilePanelClass = this.definitionFileForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
         });
 
         // listen to changes to definitionJson fields
         this.definitionJsonFormSubscription = this.definitionJsonForm.valueChanges.subscribe(changes => {
             this.definitionJson = RecipeTypeDefinitionJson.transformer(changes);
-            this.definitionJsonPanelClass = this.definitionJsonForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
         });
     }
 

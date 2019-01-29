@@ -41,22 +41,14 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-g">
-                <div class="ui-g-12">
-                    <div class="margin-bottom-sm">
-                        <div *ngIf="isEditing">
-                            <label class="no-margin">Nodes</label>
-                            <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}"></p-menubar>
-                        </div>
-                        <dev-recipe-graph [recipeData]="selectedRecipeTypeDetail" [isEditing]="isEditing"
-                                          [minHeight]="recipeGraphMinHeight"></dev-recipe-graph>
-                    </div>
-                </div>
-            </div>
             <div class="ui-g" *ngIf="isEditing">
                 <div class="ui-g-6">
                     <div [formGroup]="definitionFileForm">
-                        <p-panel header="Input Files" [styleClass]="definitionFilePanelClass">
+                        <p-panel [collapsed]="true" [toggleable]="true" collapseIcon="fa fa-caret-up"
+                                 expandIcon="fa fa-caret-down" toggler="header">
+                            <p-header>
+                                <strong>Input Files</strong>
+                            </p-header>
                             <div class="ui-g">
                                 <div class="ui-g-6">
                                     <label>
@@ -125,7 +117,11 @@
                 </div>
                 <div class="ui-g-6">
                     <div [formGroup]="definitionJsonForm">
-                        <p-panel header="Input JSON" [styleClass]="definitionJsonPanelClass">
+                        <p-panel [collapsed]="true" [toggleable]="true" collapseIcon="fa fa-caret-up"
+                                 expandIcon="fa fa-caret-down" toggler="header">
+                            <p-header>
+                                Input JSON
+                            </p-header>
                             <div class="ui-g">
                                 <div class="ui-g-12">
                                     <label>
@@ -174,6 +170,18 @@
                                 </div>
                             </div>
                         </p-panel>
+                    </div>
+                </div>
+            </div>
+            <div class="ui-g">
+                <div class="ui-g-12">
+                    <div class="margin-bottom-sm">
+                        <div *ngIf="isEditing">
+                            <label class="no-margin">Nodes</label>
+                            <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}"></p-menubar>
+                        </div>
+                        <dev-recipe-graph [recipeData]="selectedRecipeTypeDetail" [isEditing]="isEditing"
+                                          [minHeight]="recipeGraphMinHeight"></dev-recipe-graph>
                     </div>
                 </div>
             </div>
