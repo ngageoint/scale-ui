@@ -47,7 +47,7 @@
         </p-panel>
     </div>
 </div>
-<p-sidebar [(visible)]="toggleJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+<p-sidebar [(visible)]="toggleJobTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'40em'}">
     <h2>Add/Remove Job Types</h2>
     <p-table [columns]="jobTypeColumns" [value]="jobTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
              [rowHover]="true" (onRowSelect)="addJobTypeNode($event)" (onRowUnselect)="removeNode($event)"
@@ -73,7 +73,7 @@
         </ng-template>
     </p-table>
 </p-sidebar>
-<p-sidebar [(visible)]="toggleRecipeTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'30em'}">
+<p-sidebar [(visible)]="toggleRecipeTypeDisplay" [blockScroll]="true" position="right" [style]="{width:'40em'}">
     <h2>Add/Remove Recipe Types</h2>
     <p-table [columns]="recipeTypeColumns" [value]="recipeTypes" styleClass="nopadding" [scrollable]="true" scrollHeight="85%"
              [rowHover]="true" (onRowSelect)="addRecipeTypeNode($event)" (onRowUnselect)="removeNode($event)"

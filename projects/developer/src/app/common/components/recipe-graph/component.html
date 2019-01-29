@@ -195,6 +195,11 @@
                                     </ul>
                                 </div>
                             </div>
+                            <div class="ui-g-2 ui-g-nopad text-right">
+                                <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
+                                        (click)="showInputConnections($event, input)" *ngIf="isEditing"
+                                        pTooltip="Add Input Connection"></button>
+                            </div>
                         </div>
                     </div>
                 </ng-template>
@@ -212,13 +217,13 @@
     </ul>
 </p-overlayPanel>
 <p-overlayPanel appendTo="body" #inputPanel>
-    <div *ngIf="inputJobs.length === 0">
+    <div *ngIf="nodeInputs.length === 0">
         <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
     </div>
-    <div *ngFor="let job of inputJobs">
-        <strong>{{ job.title }}</strong>
+    <div *ngFor="let input of nodeInputs">
+        <strong>{{ input.title }}</strong>
         <ul class="recipe__option-list">
-            <li *ngFor="let option of job.options" (click)="addInputConnection(job.name, job.version, option)"
+            <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, input.version, option)"
                 [class]="option.disabled ? 'disabled' : ''">
                 {{ option.name }}
             </li>

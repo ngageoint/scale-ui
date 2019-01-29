@@ -25,23 +25,28 @@
             "timeout": 0,
             "interface": {
                 "command": "./cem.sh",
-                "inputs": [{
-                    "media_types": ["image/nitf"],
-                    "required": true,
-                    "type": "file",
-                    "name": "image"
-                },{
-                    "media_types": ["text/csv"],
-                    "required": true,
-                    "type": "file",
-                    "name": "signature"
-                }],
-                "outputs": [{
-                    "media_type": "image/tiff",
-                    "required": true,
-                    "type": "file",
-                    "name": "cem-detections"
-                }],
+                "inputs": {
+                    "files": [{
+                        "media_types": ["image/nitf"],
+                        "required": true,
+                        "type": "file",
+                        "name": "image"
+                    },{
+                        "media_types": ["text/csv"],
+                        "required": true,
+                        "type": "file",
+                        "name": "signature"
+                    }]
+                },
+                "outputs": {
+                    "files": [{
+                        "media_type": "image/tiff",
+                        "required": true,
+                        "type": "file",
+                        "name": "cem-detections"
+                    }]
+                },
+                "mounts": [],
                 "settings": []
             }
         },

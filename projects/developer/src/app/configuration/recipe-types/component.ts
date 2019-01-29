@@ -258,7 +258,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             this.selectedRecipeTypeDetail = recipeData;
         }, err => {
             console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type details', detail: err.statusText, life: 10000});
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error retrieving recipe type details',
+                detail: err.statusText,
+                life: 10000
+            });
             // remove job type from selection
             this.selectedRecipeTypes = _.filter(this.selectedRecipeTypes, rt => {
                 return rt.name !== event.data.name && rt.revision_num !== event.data.revision_num;
