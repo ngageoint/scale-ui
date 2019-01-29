@@ -17,6 +17,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() jobMetrics: any;
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
+    @Input() minHeight = '70vh';
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;

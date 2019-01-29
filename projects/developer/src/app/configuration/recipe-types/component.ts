@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, Validators } from '@angular/forms';
+import {FormBuilder, FormControl, Validators} from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -10,7 +10,9 @@ import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
 import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
-import { RecipeTypeDefinition } from './definition.model';
+import { RecipeTypeDefinition } from './api.definition.model';
+import { RecipeTypeDefinitionFile } from './api.definition.file.model';
+import { RecipeTypeDefinitionJson } from './api.definition.json.model';
 
 @Component({
     selector: 'dev-job-types',
@@ -30,10 +32,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
+    recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;
     addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
+    definitionFileForm: any;
+    definitionFileFormSubscription: any;
+    definitionJsonForm: any;
+    definitionJsonFormSubscription: any;
     jobTypeColumns: any[];
     recipeTypeColumns: any[];
     loadingRecipeType: boolean;
@@ -47,6 +54,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedRecipeTypeDetail: any;
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
+    definitionFile: any;
+    definitionFilePanelClass = 'ui-panel-primary';
+    definitionJson: any;
+    definitionJsonPanelClass = 'ui-panel-primary';
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
@@ -89,10 +100,27 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         ];
     }
 
-    private initFormGroup() {
+    private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
-            description: ['', Validators.required]
+            description: ['', Validators.required],
+            definition: this.fb.group({
+                input: this.fb.group({
+                    files: this.fb.array([]),
+                    json: this.fb.array([])
+                })
+            })
+        });
+        this.definitionFileForm = this.fb.group({
+            name: ['', Validators.required],
+            required: [true],
+            media_types: [''],
+            multiple: [false]
+        });
+        this.definitionJsonForm = this.fb.group({
+            name: ['', Validators.required],
+            required: [true],
+            type: ['', Validators.required]
         });
     }
 
@@ -113,6 +141,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             // add the values from the object
             this.createForm.patchValue(this.selectedRecipeTypeDetail);
 
+            this.definitionFilePanelClass = this.definitionFileForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
+            this.definitionJsonPanelClass = this.definitionJsonForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
+
             // modify form actions based on status
             this.initValidation();
         }
@@ -122,6 +153,18 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
             this.initValidation();
+        });
+
+        // listen to changes to definitionFile fields
+        this.definitionFileFormSubscription = this.definitionFileForm.valueChanges.subscribe(changes => {
+            this.definitionFile = RecipeTypeDefinitionFile.transformer(changes);
+            this.definitionFilePanelClass = this.definitionFileForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
+        });
+
+        // listen to changes to definitionJson fields
+        this.definitionJsonFormSubscription = this.definitionJsonForm.valueChanges.subscribe(changes => {
+            this.definitionJson = RecipeTypeDefinitionJson.transformer(changes);
+            this.definitionJsonPanelClass = this.definitionJsonForm.status === 'INVALID' ? 'ui-panel-danger' : 'ui-panel-primary';
         });
     }
 
@@ -183,9 +226,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private unsubscribeFromForm() {
+    private unsubscribeFromForms() {
         if (this.createFormSubscription) {
             this.createFormSubscription.unsubscribe();
+        }
+        if (this.definitionFileFormSubscription) {
+            this.definitionFileFormSubscription.unsubscribe();
+        }
+        if (this.definitionJsonFormSubscription) {
+            this.definitionJsonFormSubscription.unsubscribe();
         }
     }
 
@@ -291,6 +340,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     toggleEdit() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
+        this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
         this.items = this.isEditing ? _.clone(this.editMenu) : _.clone(this.viewMenu);
         if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
@@ -324,23 +374,58 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
+    onToggleClick(e) {
+        e.originalEvent.preventDefault();
+    }
+
+    onAddFileClick() {
+        const addedFile = this.selectedRecipeTypeDetail.definition.addFile(this.definitionFile);
+        const control: any = this.createForm.get('definition.input.files');
+        control.push(new FormControl(addedFile));
+    }
+
+    onRemoveFileClick(file) {
+        const removedFile = this.selectedRecipeTypeDetail.definition.removeFile(file);
+        const control: any = this.createForm.get('definition.input.files');
+        const idx = _.findIndex(control.value, removedFile);
+        if (idx >= 0) {
+            control.removeAt(idx);
+        }
+    }
+
+    onAddJsonClick() {
+        const addedJson = this.selectedRecipeTypeDetail.definition.addJson(this.definitionJson);
+        const control: any = this.createForm.get('definition.input.json');
+        control.push(new FormControl(addedJson));
+    }
+
+    onRemoveJsonClick(json) {
+        const removedJson = this.selectedRecipeTypeDetail.definition.removeJson(json);
+        const control: any = this.createForm.get('definition.input.json');
+        const idx = _.findIndex(control.value, removedJson);
+        if (idx >= 0) {
+            control.removeAt(idx);
+        }
+    }
+
     ngOnInit() {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = data.results;
         });
 
-        this.initFormGroup();
+        this.initFormGroups();
         this.recipeTypes = [];
         this.recipeTypeOptions = [];
         if (this.route && this.route.paramMap) {
             this.routeParams = this.route.paramMap.subscribe(routeParams => {
-                this.unsubscribeFromForm();
+                this.unsubscribeFromForms();
                 this.createForm.reset();
 
                 // get name from url
                 this.recipeTypeName = routeParams.get('name');
 
                 this.isEditing = this.recipeTypeName === 'create';
+                this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
                 this.items = this.recipeTypeName === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getRecipeTypes();

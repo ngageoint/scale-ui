@@ -1,4 +1,4 @@
-import { RecipeTypeDefinition } from './definition.model';
+import { RecipeTypeDefinition } from './api.definition.model';
 import { JobType } from '../job-types/api.model';
 
 export class RecipeType {
@@ -12,7 +12,7 @@ export class RecipeType {
                 data.is_active,
                 data.is_system,
                 data.revision_num,
-                data.definition,
+                RecipeTypeDefinition.transformer(data.definition),
                 data.job_types,
                 data.sub_recipe_types,
                 data.created,
