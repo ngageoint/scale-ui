@@ -1,7 +1,7 @@
-export class RecipeTypeDefinitionJson {
+export class RecipeTypeInputInterfaceJson {
     private static build(data) {
         if (data) {
-            return new RecipeTypeDefinitionJson(
+            return new RecipeTypeInputInterfaceJson(
                 data.name,
                 data.required,
                 data.type
@@ -11,9 +11,9 @@ export class RecipeTypeDefinitionJson {
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
-                return data.map(item => RecipeTypeDefinitionJson.build(item));
+                return data.map(item => RecipeTypeInputInterfaceJson.build(item));
             }
-            return RecipeTypeDefinitionJson.build(data);
+            return RecipeTypeInputInterfaceJson.build(data);
         }
         return [];
     }

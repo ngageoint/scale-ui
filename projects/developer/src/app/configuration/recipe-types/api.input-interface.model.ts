@@ -1,41 +1,38 @@
 import { SelectItem } from 'primeng/api';
 import * as _ from 'lodash';
 
-import { RecipeTypeDefinitionFile } from './api.definition.file.model';
-import { RecipeTypeDefinitionJson } from './api.definition.json.model';
+import { RecipeTypeInputInterfaceFile } from './api.input-interface.file.model';
+import { RecipeTypeInputInterfaceJson } from './api.input-interface.json.model';
 
-export class RecipeTypeDefinition {
+export class RecipeTypeInputInterface {
     files_display: SelectItem[] = [];
     json_display: SelectItem[] = [];
 
     private static build(data) {
         if (data) {
-            return new RecipeTypeDefinition(
-                {
-                    files: RecipeTypeDefinitionFile.transformer(data.input.files),
-                    json: RecipeTypeDefinitionJson.transformer(data.input.json)
-                },
-                data.nodes
+            return new RecipeTypeInputInterface(
+                RecipeTypeInputInterfaceFile.transformer(data.files),
+                RecipeTypeInputInterfaceJson.transformer(data.json)
             );
         }
     }
 
     public static transformer(data) {
         if (data) {
-            return RecipeTypeDefinition.build(data);
+            return RecipeTypeInputInterface.build(data);
         }
-        return new RecipeTypeDefinition([], []);
+        return new RecipeTypeInputInterface([], []);
     }
 
     public addFile(file): object {
-        if (!this.input.files || !Array.isArray(this.input.files)) {
-            this.input.files = [];
+        if (!this.files || !Array.isArray(this.files)) {
+            this.files = [];
         }
         file = _.pickBy(file, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        const fileToAdd = RecipeTypeDefinitionFile.transformer(file);
-        this.input.files.push(fileToAdd);
+        const fileToAdd = RecipeTypeInputInterfaceFile.transformer(file);
+        this.files.push(fileToAdd);
         this.files_display.push({
             label: JSON.stringify(file, null, 4),
             value: fileToAdd
@@ -44,8 +41,8 @@ export class RecipeTypeDefinition {
     }
 
     public removeFile(file): object {
-        const fileToRemove = RecipeTypeDefinitionFile.transformer(file);
-        _.remove(this.input.files, f => {
+        const fileToRemove = RecipeTypeInputInterfaceFile.transformer(file);
+        _.remove(this.files, f => {
             return _.isEqual(f, fileToRemove);
         });
         _.remove(this.files_display, (f: any) => {
@@ -55,14 +52,14 @@ export class RecipeTypeDefinition {
     }
 
     public addJson(json): object {
-        if (!this.input.json || !Array.isArray(this.input.json)) {
-            this.input.json = [];
+        if (!this.json || !Array.isArray(this.json)) {
+            this.json = [];
         }
         json = _.pickBy(json, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        const jsonToAdd = RecipeTypeDefinitionJson.transformer(json);
-        this.input.json.push(jsonToAdd);
+        const jsonToAdd = RecipeTypeInputInterfaceJson.transformer(json);
+        this.json.push(jsonToAdd);
         this.json_display.push({
             label: JSON.stringify(json, null, 4),
             value: jsonToAdd
@@ -71,8 +68,8 @@ export class RecipeTypeDefinition {
     }
 
     public removeJson(json): object {
-        const jsonToRemove = RecipeTypeDefinitionJson.transformer(json);
-        _.remove(this.input.json, j => {
+        const jsonToRemove = RecipeTypeInputInterfaceJson.transformer(json);
+        _.remove(this.json, j => {
             return _.isEqual(j, jsonToRemove);
         });
         _.remove(this.json_display, (j: any) => {
@@ -82,23 +79,23 @@ export class RecipeTypeDefinition {
     }
 
     constructor(
-        public input: any,
-        public nodes: any,
+        public files: any,
+        public json: any,
     ) {
-        if (this.input.files) {
-            _.forEach(this.input.files, file => {
+        if (this.files) {
+            _.forEach(this.files, f => {
                 this.files_display.push({
-                    label: JSON.stringify(file, null, 4),
-                    value: RecipeTypeDefinitionFile.transformer(file)
+                    label: JSON.stringify(f, null, 4),
+                    value: RecipeTypeInputInterfaceFile.transformer(f)
                 });
             });
         }
 
-        if (this.input.json) {
-            _.forEach(this.input.json, json => {
+        if (this.json) {
+            _.forEach(this.json, j => {
                 this.json_display.push({
-                    label: JSON.stringify(json, null, 4),
-                    value: RecipeTypeDefinitionJson.transformer(json)
+                    label: JSON.stringify(j, null, 4),
+                    value: RecipeTypeInputInterfaceJson.transformer(j)
                 });
             });
         }

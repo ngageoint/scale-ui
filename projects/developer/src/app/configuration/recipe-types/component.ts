@@ -10,9 +10,7 @@ import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
 import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
-import { RecipeTypeDefinition } from './api.definition.model';
-import { RecipeTypeDefinitionFile } from './api.definition.file.model';
-import { RecipeTypeDefinitionJson } from './api.definition.json.model';
+import { RecipeTypeInputInterface } from './api.input-interface.model';
 
 @Component({
     selector: 'dev-job-types',
@@ -39,10 +37,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     createFormSubscription: any;
     showFileInputs: boolean;
     showJsonInputs: boolean;
-    definitionFileForm: any;
-    definitionFileFormSubscription: any;
-    definitionJsonForm: any;
-    definitionJsonFormSubscription: any;
+    showConditions: boolean;
     jobTypeColumns: any[];
     recipeTypeColumns: any[];
     loadingRecipeType: boolean;
@@ -54,26 +49,31 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
     selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
+    conditions: any = [];
+    conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
-    definitionFile: any;
-    definitionJson: any;
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
-        { label: 'Job Types', icon: 'fa fa-cube',
+        { label: 'Job Nodes', icon: 'fa fa-cube',
             command: () => {
                 this.addRemoveDisplayType = 'job';
                 this.showAddRemoveDisplay = true;
             }
         },
-        { label: 'Recipe Types', icon: 'fa fa-cubes',
+        { label: 'Recipe Nodes', icon: 'fa fa-cubes',
             command: () => {
                 this.addRemoveDisplayType = 'recipe';
                 this.showAddRemoveDisplay = true;
             }
         },
-        { label: 'Conditions', icon: 'fa fa-adjust' },
+        { label: 'Condition Nodes', icon: 'fa fa-adjust',
+            command: () => {
+                this.addRemoveDisplayType = 'condition';
+                this.showAddRemoveDisplay = true;
+            }
+        }
     ];
 
     constructor(
@@ -91,6 +91,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.recipeTypeColumns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
+        this.conditionColumns = [
+            { field: 'title', header: 'Title', filterMatchMode: 'contains' }
+        ];
     }
 
     private initFormGroups() {
@@ -103,17 +106,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     json: this.fb.array([])
                 })
             })
-        });
-        this.definitionFileForm = this.fb.group({
-            name: ['', Validators.required],
-            required: [true],
-            media_types: [''],
-            multiple: [false]
-        });
-        this.definitionJsonForm = this.fb.group({
-            name: ['', Validators.required],
-            required: [true],
-            type: ['', Validators.required]
         });
     }
 
@@ -143,16 +135,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
             this.initValidation();
-        });
-
-        // listen to changes to definitionFile fields
-        this.definitionFileFormSubscription = this.definitionFileForm.valueChanges.subscribe(changes => {
-            this.definitionFile = RecipeTypeDefinitionFile.transformer(changes);
-        });
-
-        // listen to changes to definitionJson fields
-        this.definitionJsonFormSubscription = this.definitionJsonForm.valueChanges.subscribe(changes => {
-            this.definitionJson = RecipeTypeDefinitionJson.transformer(changes);
         });
     }
 
@@ -201,7 +183,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                         true,
                         false,
                         null,
-                        new RecipeTypeDefinition({}, {}),
+                        {
+                            input: new RecipeTypeInputInterface([], []),
+                            nodes: []
+                        },
                         null,
                         null,
                         null,
@@ -217,12 +202,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private unsubscribeFromForms() {
         if (this.createFormSubscription) {
             this.createFormSubscription.unsubscribe();
-        }
-        if (this.definitionFileFormSubscription) {
-            this.definitionFileFormSubscription.unsubscribe();
-        }
-        if (this.definitionJsonFormSubscription) {
-            this.definitionJsonFormSubscription.unsubscribe();
         }
     }
 
@@ -319,6 +298,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
+    addConditionNode(event) {
+        console.log(event);
+    }
+
     removeNode(event) {
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
         delete recipeData.definition.nodes[event.data.name];
@@ -362,46 +345,16 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    onToggleClick(e) {
-        e.originalEvent.preventDefault();
-    }
-
-    onAddFileClick() {
-        const addedFile = this.selectedRecipeTypeDetail.definition.addFile(this.definitionFile);
-        const control: any = this.createForm.get('definition.input.files');
-        control.push(new FormControl(addedFile));
-    }
-
-    onRemoveFileClick(file) {
-        const removedFile = this.selectedRecipeTypeDetail.definition.removeFile(file);
-        const control: any = this.createForm.get('definition.input.files');
-        const idx = _.findIndex(control.value, removedFile);
-        if (idx >= 0) {
-            control.removeAt(idx);
-        }
-    }
-
-    onAddJsonClick() {
-        const addedJson = this.selectedRecipeTypeDetail.definition.addJson(this.definitionJson);
-        const control: any = this.createForm.get('definition.input.json');
-        control.push(new FormControl(addedJson));
-    }
-
-    onRemoveJsonClick(json) {
-        const removedJson = this.selectedRecipeTypeDetail.definition.removeJson(json);
-        const control: any = this.createForm.get('definition.input.json');
-        const idx = _.findIndex(control.value, removedJson);
-        if (idx >= 0) {
-            control.removeAt(idx);
-        }
-    }
-
     toggleFileInputs() {
         this.showFileInputs = !this.showFileInputs;
     }
 
     toggleJsonInputs() {
         this.showJsonInputs = !this.showJsonInputs;
+    }
+
+    toggleConditions() {
+        this.showConditions = !this.showConditions;
     }
 
     ngOnInit() {

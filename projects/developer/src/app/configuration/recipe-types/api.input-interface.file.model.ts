@@ -1,7 +1,7 @@
-export class RecipeTypeDefinitionFile {
+export class RecipeTypeInputInterfaceFile {
     private static build(data) {
         if (data) {
-            return new RecipeTypeDefinitionFile(
+            return new RecipeTypeInputInterfaceFile(
                 data.name,
                 data.required,
                 data.media_types,
@@ -12,9 +12,9 @@ export class RecipeTypeDefinitionFile {
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
-                return data.map(item => RecipeTypeDefinitionFile.build(item));
+                return data.map(item => RecipeTypeInputInterfaceFile.build(item));
             }
-            return RecipeTypeDefinitionFile.build(data);
+            return RecipeTypeInputInterfaceFile.build(data);
         }
         return [];
     }

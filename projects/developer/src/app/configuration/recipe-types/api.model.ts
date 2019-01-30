@@ -1,4 +1,4 @@
-import { RecipeTypeDefinition } from './api.definition.model';
+import { RecipeTypeInputInterface } from './api.input-interface.model';
 import { JobType } from '../job-types/api.model';
 
 export class RecipeType {
@@ -12,7 +12,10 @@ export class RecipeType {
                 data.is_active,
                 data.is_system,
                 data.revision_num,
-                RecipeTypeDefinition.transformer(data.definition),
+                {
+                    input: RecipeTypeInputInterface.transformer(data.definition.input),
+                    nodes: data.definition.nodes
+                },
                 data.job_types,
                 data.sub_recipe_types,
                 data.created,
@@ -38,7 +41,7 @@ export class RecipeType {
         public is_active: boolean,
         public is_system: boolean,
         public revision_num: number,
-        public definition: RecipeTypeDefinition,
+        public definition: any,
         public job_types: JobType[],
         public sub_recipe_types: any,
         public created: string,

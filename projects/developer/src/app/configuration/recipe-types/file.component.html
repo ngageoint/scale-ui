@@ -1,0 +1,55 @@
+<div class="recipe-type__details" [formGroup]="fileForm">
+    <h2>File Inputs</h2>
+    <label>
+        <span>Name</span>
+        <input type="text" pInputText formControlName="name" required/>
+        <div class="help-block">
+            The unique name of the parameter (required)
+        </div>
+    </label>
+    <label>
+        <span>Required</span>
+        <p-toggleButton formControlName="required" onLabel="True" offLabel="False" onIcon="fa fa-check"
+                        offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
+                        (onChange)="onToggleClick($event)"></p-toggleButton>
+        <div class="help-block">
+            Indicates whether the parameter is required
+        </div>
+    </label>
+    <label>
+        <span>Media Types</span>
+        <p-chips formControlName="media_types" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                 [addOnBlur]="true"></p-chips>
+        <div class="help-block">
+            List of strings describing the accepted media types for the parameter’s file(s) (optional)
+        </div>
+    </label>
+    <label>
+        <span>Files Accepted</span>
+        <p-toggleButton formControlName="multiple" onLabel="Multiple Files"
+                        offLabel="Single File" onIcon="fa fa-clone" offIcon="fa fa-file"
+                        [style]="{'width':'100%', 'display':'block'}"
+                        (onChange)="onToggleClick($event)"></p-toggleButton>
+        <div class="help-block">
+            Indicates whether the parameter takes multiple files
+        </div>
+    </label>
+    <div class="text-center margin-top-lg margin-bottom-md" *ngIf="fileForm">
+        <button pButton type="button" icon="fa fa-plus" (click)="onAddFileClick()" label="Add File to Input"
+                [disabled]="fileForm.status === 'INVALID'"></button>
+    </div>
+    <h3>Current Files</h3>
+    <div *ngIf="input">
+        <span *ngIf="input.files_display.length === 0">No files in definition.</span>
+        <div *ngFor="let file of input.files_display">
+            <pre class="flexed space-between">
+                <span>{{ file.label }}</span>
+                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove File"
+                        (click)="onRemoveFileClick(file.value)"></button>
+            </pre>
+        </div>
+    </div>
+    <div *ngIf="!input">
+        No files in definition.
+    </div>
+</div>

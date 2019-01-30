@@ -93,6 +93,8 @@ import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
 import { ScansApiService } from './system/scans/api.service';
 import { ScansDatatableService } from './system/scans/datatable.service';
+import { RecipeTypeFileComponent } from './configuration/recipe-types/file.component';
+import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.component';
 
 
 @NgModule({
@@ -136,7 +138,9 @@ import { ScansDatatableService } from './system/scans/datatable.service';
         QueuedJobsComponent,
         StrikesComponent,
         ScansComponent,
-        ScanDetailsComponent
+        ScanDetailsComponent,
+        RecipeTypeFileComponent,
+        RecipeTypeJsonComponent
     ],
     imports: [
         AppRoutingModule,

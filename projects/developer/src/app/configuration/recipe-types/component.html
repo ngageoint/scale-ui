@@ -48,16 +48,22 @@
                             <label class="no-margin">Definition</label>
                             <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}">
                                 <ul class="ui-menubar-root-list">
-                                    <li class="ng-star-inserted ui-menuitem ui-corner-all">
+                                    <li class="ui-menuitem ui-corner-all">
                                         <a class="ui-menuitem-link ui-corner-all" (click)="toggleFileInputs()">
                                             <span class="ui-menuitem-icon fa fa-file"></span>
                                             <span class="ui-menuitem-text">File Inputs</span>
                                         </a>
                                     </li>
-                                    <li class="ng-star-inserted ui-menuitem ui-corner-all">
+                                    <li class="ui-menuitem ui-corner-all">
                                         <a class="ui-menuitem-link ui-corner-all" (click)="toggleJsonInputs()">
                                             <span class="ui-menuitem-icon fa fa-code"></span>
                                             <span class="ui-menuitem-text">JSON Inputs</span>
+                                        </a>
+                                    </li>
+                                    <li class="ui-menuitem ui-corner-all">
+                                        <a class="ui-menuitem-link ui-corner-all" (click)="toggleConditions()">
+                                            <span class="ui-menuitem-icon fa fa-adjust"></span>
+                                            <span class="ui-menuitem-text">Conditions</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -75,10 +81,13 @@
           styleClass="add-remove-dialog">
     <p-header>
         <span *ngIf="addRemoveDisplayType === 'job'">
-            <strong>Add/Remove Job Types</strong>
+            <strong>Add/Remove Job Nodes</strong>
         </span>
         <span *ngIf="addRemoveDisplayType === 'recipe'">
-            <strong>Add/Remove Recipe Types</strong>
+            <strong>Add/Remove Recipe Nodes</strong>
+        </span>
+        <span *ngIf="addRemoveDisplayType === 'condition'">
+            <strong>Add/Remove Condition Nodes</strong>
         </span>
     </p-header>
     <div class="dialog-content" *ngIf="addRemoveDisplayType === 'job'">
@@ -134,111 +143,46 @@
             </p-table>
         </p-scrollPanel>
     </div>
-</p-dialog>
-<p-sidebar [(visible)]="showFileInputs" [blockScroll]="true" position="right" [style]="{width:'25%'}"
-           *ngIf="isEditing && selectedRecipeTypeDetail">
-    <div class="recipe-type__details" [formGroup]="definitionFileForm">
-        <h2>File Inputs</h2>
-        <label>
-            <span>Name</span>
-            <input type="text" pInputText formControlName="name" required/>
-            <div class="help-block">
-                The unique name of the parameter (required)
-            </div>
-        </label>
-        <label>
-            <span>Required</span>
-            <p-toggleButton formControlName="required" onLabel="True" offLabel="False" onIcon="fa fa-check"
-                            offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
-                            (onChange)="onToggleClick($event)"></p-toggleButton>
-            <div class="help-block">
-                Indicates whether the parameter is required
-            </div>
-        </label>
-        <label>
-            <span>Media Types</span>
-            <p-chips formControlName="media_types" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
-                     [addOnBlur]="true"></p-chips>
-            <div class="help-block">
-                List of strings describing the accepted media types for the parameter’s file(s) (optional)
-            </div>
-        </label>
-        <label>
-            <span>Files Accepted</span>
-            <p-toggleButton formControlName="multiple" onLabel="Multiple Files"
-                            offLabel="Single File" onIcon="fa fa-clone" offIcon="fa fa-file"
-                            [style]="{'width':'100%', 'display':'block'}"
-                            (onChange)="onToggleClick($event)"></p-toggleButton>
-            <div class="help-block">
-                Indicates whether the parameter takes multiple files
-            </div>
-        </label>
-        <div class="text-center margin-top-lg margin-bottom-md">
-            <button pButton type="button" icon="fa fa-plus" (click)="onAddFileClick()" label="Add File to Input"
-                    [disabled]="definitionFileForm.status === 'INVALID'"></button>
-        </div>
-        <h3>Current Files</h3>
-        <div *ngIf="selectedRecipeTypeDetail.definition">
-            <span *ngIf="selectedRecipeTypeDetail.definition.files_display.length === 0">No files in definition.</span>
-            <div *ngFor="let file of selectedRecipeTypeDetail.definition.files_display">
-            <pre class="flexed space-between">
-                <span>{{ file.label }}</span>
-                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove File"
-                        (click)="onRemoveFileClick(file.value)"></button>
-            </pre>
-            </div>
-        </div>
-        <div *ngIf="!selectedRecipeTypeDetail.definition">
-            No files in definition.
-        </div>
+    <div class="dialog-content" *ngIf="addRemoveDisplayType === 'condition'">
+        <p-scrollPanel [style]="{width: '100%', height: '33vh'}">
+            <p-table [columns]="conditionColumns" [value]="conditions" styleClass="nopadding" [rowHover]="true"
+                     (onRowSelect)="addConditionNode($event)" (onRowUnselect)="removeNode($event)"
+                     selectionMode="multiple" [(selection)]="conditions" #conditionDatatable>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th *ngFor="let col of columns">
+                            <input pInputText type="text"
+                                   (input)="conditionDatatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                   class="column-filter">
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td>
+                            <div class="recipe-type__node-type-row">
+                                {{ rowData.title }}
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-scrollPanel>
     </div>
-</p-sidebar>
-<p-sidebar [(visible)]="showJsonInputs" [blockScroll]="true" position="right" [style]="{width:'25%'}"
+</p-dialog>
+<p-sidebar [(visible)]="showFileInputs" [blockScroll]="true" position="right" [style]="{width:'30%'}"
            *ngIf="isEditing && selectedRecipeTypeDetail">
-    <div class="recipe-type__details" [formGroup]="definitionJsonForm">
-        <h2>JSON Inputs</h2>
-        <label>
-            <span>Name</span>
-            <input type="text" pInputText formControlName="name" required/>
-            <div class="help-block">
-                The unique name of the parameter (required)
-            </div>
-        </label>
-        <label>
-            <span>Required</span>
-            <p-toggleButton formControlName="required" onLabel="True"
-                            offLabel="False" onIcon="fa fa-check" offIcon="fa fa-circle"
-                            [style]="{'width':'100%', 'display':'block'}" (onChange)="onToggleClick($event)">
-            </p-toggleButton>
-            <div class="help-block">
-                Indicates whether the parameter is required
-            </div>
-        </label>
-        <label>
-            <span>Type</span>
-            <input type="text" pInputText formControlName="type"/>
-            <div class="help-block">
-                The accepted JSON data type. Must be one of 'array', 'boolean', 'integer', 'number', 'object', or 'string'.
-                (required)
-            </div>
-        </label>
-        <div class="text-center margin-top-lg margin-bottom-lg">
-            <button pButton type="button" icon="fa fa-plus" (click)="onAddJsonClick()" label="Add JSON to Input"
-                    [disabled]="definitionJsonForm.status === 'INVALID'"></button>
-        </div>
-        <h3>Current JSON</h3>
-        <div *ngIf="selectedRecipeTypeDetail.definition">
-            <span *ngIf="selectedRecipeTypeDetail.definition.json_display.length === 0">No JSON in definition.</span>
-            <div *ngFor="let json of selectedRecipeTypeDetail.definition.json_display">
-            <pre class="flexed space-between">
-                <span>{{ json.label }}</span>
-                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove JSON"
-                        (click)="onRemoveJsonClick(json.value)"></button>
-            </pre>
-            </div>
-        </div>
-        <div *ngIf="!selectedRecipeTypeDetail.definition">
-            No JSON in definition.
-        </div>
+    <dev-recipe-type-file [input]="selectedRecipeTypeDetail.definition.input" [createForm]="createForm">
+    </dev-recipe-type-file>
+</p-sidebar>
+<p-sidebar [(visible)]="showJsonInputs" [blockScroll]="true" position="right" [style]="{width:'30%'}"
+           *ngIf="isEditing && selectedRecipeTypeDetail">
+    <dev-recipe-type-json [input]="selectedRecipeTypeDetail.definition.input" [createForm]="createForm">
+    </dev-recipe-type-json>
+</p-sidebar>
+<p-sidebar [(visible)]="showConditions" [blockScroll]="true" position="right" [style]="{width:'30%'}"
+           *ngIf="isEditing && selectedRecipeTypeDetail">
+    <div class="recipe-type__details">
+        Conditions
     </div>
 </p-sidebar>

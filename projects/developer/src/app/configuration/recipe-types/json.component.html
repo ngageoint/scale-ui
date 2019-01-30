@@ -1,0 +1,46 @@
+<div class="recipe-type__details" [formGroup]="jsonForm">
+    <h2>JSON Inputs</h2>
+    <label>
+        <span>Name</span>
+        <input type="text" pInputText formControlName="name" required/>
+        <div class="help-block">
+            The unique name of the parameter (required)
+        </div>
+    </label>
+    <label>
+        <span>Required</span>
+        <p-toggleButton formControlName="required" onLabel="True"
+                        offLabel="False" onIcon="fa fa-check" offIcon="fa fa-circle"
+                        [style]="{'width':'100%', 'display':'block'}" (onChange)="onToggleClick($event)">
+        </p-toggleButton>
+        <div class="help-block">
+            Indicates whether the parameter is required
+        </div>
+    </label>
+    <label>
+        <span>Type</span>
+        <input type="text" pInputText formControlName="type"/>
+        <div class="help-block">
+            The accepted JSON data type. Must be one of 'array', 'boolean', 'integer', 'number', 'object', or 'string'.
+            (required)
+        </div>
+    </label>
+    <div class="text-center margin-top-lg margin-bottom-lg" *ngIf="jsonForm">
+        <button pButton type="button" icon="fa fa-plus" (click)="onAddJsonClick()" label="Add JSON to Input"
+                [disabled]="jsonForm.status === 'INVALID'"></button>
+    </div>
+    <h3>Current JSON</h3>
+    <div *ngIf="input">
+        <span *ngIf="input.json_display.length === 0">No JSON in definition.</span>
+        <div *ngFor="let json of input.json_display">
+            <pre class="flexed space-between">
+                <span>{{ json.label }}</span>
+                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove JSON"
+                        (click)="onRemoveJsonClick(json.value)"></button>
+            </pre>
+        </div>
+    </div>
+    <div *ngIf="!input">
+        No JSON in definition.
+    </div>
+</div>
