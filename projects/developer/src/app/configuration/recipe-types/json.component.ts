@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { RecipeTypeInputInterface } from './api.input-interface.model';
-import { RecipeTypeInputInterfaceJson } from './api.input-interface.json.model';
+import { RecipeTypeInput } from './api.input.model';
+import { RecipeTypeInputJson } from './api.input.json.model';
 
 @Component({
     selector: 'dev-recipe-type-json',
@@ -11,7 +11,7 @@ import { RecipeTypeInputInterfaceJson } from './api.input-interface.json.model';
     styleUrls: ['./json.component.scss']
 })
 export class RecipeTypeJsonComponent implements OnInit, OnDestroy {
-    @Input() input: RecipeTypeInputInterface;
+    @Input() input: RecipeTypeInput;
     @Output() inputChange: EventEmitter<any> = new EventEmitter<any>();
     @Input() createForm: any;
     @Output() createFormChange: EventEmitter<any> = new EventEmitter<any>();
@@ -62,7 +62,7 @@ export class RecipeTypeJsonComponent implements OnInit, OnDestroy {
         if (this.jsonForm) {
             // listen to changes to jsonForm fields
             this.jsonFormSubscription = this.jsonForm.valueChanges.subscribe(changes => {
-                this.json = RecipeTypeInputInterfaceJson.transformer(changes);
+                this.json = RecipeTypeInputJson.transformer(changes);
             });
         }
     }

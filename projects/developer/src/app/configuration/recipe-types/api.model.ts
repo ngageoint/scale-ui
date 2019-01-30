@@ -1,4 +1,4 @@
-import { RecipeTypeInputInterface } from './api.input-interface.model';
+import { RecipeTypeInput } from './api.input.model';
 import { JobType } from '../job-types/api.model';
 
 export class RecipeType {
@@ -13,7 +13,7 @@ export class RecipeType {
                 data.is_system,
                 data.revision_num,
                 {
-                    input: RecipeTypeInputInterface.transformer(data.definition.input),
+                    input: RecipeTypeInput.transformer(data.definition.input),
                     nodes: data.definition.nodes
                 },
                 data.job_types,

@@ -10,7 +10,8 @@ import { RecipeTypesApiService } from './api.service';
 import { JobTypesApiService } from '../job-types/api.service';
 import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
-import { RecipeTypeInputInterface } from './api.input-interface.model';
+import { RecipeTypeInput } from './api.input.model';
+import { RecipeTypeCondition } from './api.condition.model';
 
 @Component({
     selector: 'dev-job-types',
@@ -35,6 +36,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
+    conditionForm: any;
+    conditionFormSubscription: any;
     showFileInputs: boolean;
     showJsonInputs: boolean;
     showConditions: boolean;
@@ -49,6 +52,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
     selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
+    condition: any;
     conditions: any = [];
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
@@ -107,6 +111,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 })
             })
         });
+
+        this.conditionForm = this.fb.group({
+            filters: this.fb.array([]),
+            all: [true]
+        });
     }
 
     private initValidation() {
@@ -135,6 +144,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
             this.initValidation();
+        });
+
+        this.conditionFormSubscription = this.conditionForm.valueChanges.subscribe(changes => {
+            _.merge(this.condition, changes);
         });
     }
 
@@ -184,7 +197,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                         false,
                         null,
                         {
-                            input: new RecipeTypeInputInterface([], []),
+                            input: new RecipeTypeInput([], []),
                             nodes: []
                         },
                         null,
@@ -202,6 +215,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private unsubscribeFromForms() {
         if (this.createFormSubscription) {
             this.createFormSubscription.unsubscribe();
+        }
+
+        if (this.conditionFormSubscription) {
+            this.conditionFormSubscription.unsubscribe();
         }
     }
 
@@ -355,6 +372,21 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     toggleConditions() {
         this.showConditions = !this.showConditions;
+    }
+
+    onToggleClick(e) {
+        e.originalEvent.preventDefault();
+    }
+
+    onAddConditionClick() {
+        this.conditions.push(RecipeTypeCondition.transformer(this.condition));
+        this.conditionForm.reset();
+    }
+
+    onRemoveConditionClick(condition) {
+        _.remove(this.conditions, c => {
+            return _.isEqual(c, condition);
+        });
     }
 
     ngOnInit() {

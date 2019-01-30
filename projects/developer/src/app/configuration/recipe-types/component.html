@@ -183,6 +183,46 @@
 <p-sidebar [(visible)]="showConditions" [blockScroll]="true" position="right" [style]="{width:'30%'}"
            *ngIf="isEditing && selectedRecipeTypeDetail">
     <div class="recipe-type__details">
-        Conditions
+        <h2>Conditions</h2>
+        <p-accordion [multiple]="true">
+            <p-accordionTab header="Files">
+                Content 1
+            </p-accordionTab>
+            <p-accordionTab header="JSON">
+                Content 2
+            </p-accordionTab>
+            <p-accordionTab header="Filters">
+                <div [formGroup]="conditionForm">
+                    <dev-recipe-type-filter [condition]="condition" [conditionForm]="conditionForm">
+                    </dev-recipe-type-filter>
+                </div>
+            </p-accordionTab>
+        </p-accordion>
+        <div class="margin-top-lg margin-bottom-lg" [formGroup]="conditionForm">
+            <label>
+                <p-toggleButton formControlName="all" onLabel="Filters are Required"
+                                offLabel="Filters are Optional" onIcon="fa fa-check" offIcon="fa fa-circle"
+                                [style]="{'width':'100%', 'display':'block'}"
+                                (onChange)="onToggleClick($event)"></p-toggleButton>
+            </label>
+        </div>
+        <div class="text-center margin-top-lg margin-bottom-md">
+            <button pButton type="button" icon="fa fa-plus" (click)="onAddConditionClick()" label="Add Condition"
+                    [disabled]="conditionForm.status === 'INVALID'"></button>
+        </div>
+        <h3>Current Conditions</h3>
+        <div *ngIf="conditions">
+            <span *ngIf="conditions.length === 0">No conditions.</span>
+            <div *ngFor="let condition of conditions">
+                <pre class="flexed space-between">
+                    <span>{{ condition.display.label }}</span>
+                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove Condition"
+                            (click)="onRemoveConditionClick(condition.display.value)"></button>
+                </pre>
+            </div>
+        </div>
+        <div *ngIf="!conditions">
+            No conditions.
+        </div>
     </div>
 </p-sidebar>

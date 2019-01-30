@@ -2,8 +2,8 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 
-import { RecipeTypeInputInterface } from './api.input-interface.model';
-import { RecipeTypeInputInterfaceFile } from './api.input-interface.file.model';
+import { RecipeTypeInput } from './api.input.model';
+import { RecipeTypeInputFile } from './api.input.file.model';
 
 @Component({
     selector: 'dev-recipe-type-file',
@@ -11,7 +11,7 @@ import { RecipeTypeInputInterfaceFile } from './api.input-interface.file.model';
     styleUrls: ['./file.component.scss']
 })
 export class RecipeTypeFileComponent implements OnInit, OnDestroy {
-    @Input() input: RecipeTypeInputInterface;
+    @Input() input: RecipeTypeInput;
     @Output() inputChange: EventEmitter<any> = new EventEmitter<any>();
     @Input() createForm: any;
     @Output() createFormChange: EventEmitter<any> = new EventEmitter<any>();
@@ -63,7 +63,7 @@ export class RecipeTypeFileComponent implements OnInit, OnDestroy {
         if (this.fileForm) {
             // listen to changes to fileForm fields
             this.fileFormSubscription = this.fileForm.valueChanges.subscribe(changes => {
-                this.file = RecipeTypeInputInterfaceFile.transformer(changes);
+                this.file = RecipeTypeInputFile.transformer(changes);
             });
         }
     }

@@ -1,15 +1,15 @@
-import { RecipeTypeInputInterfaceFile } from './api.input-interface.file.model';
-import { RecipeTypeInputInterfaceJson} from './api.input-interface.json.model';
+import { RecipeTypeInputFile } from './api.input.file.model';
+import { RecipeTypeInputJson} from './api.input.json.model';
 
 export class RecipeTypeCondition {
-    title: string;
+    display: any;
 
     private static build(data) {
         if (data) {
             return new RecipeTypeCondition(
                 {
-                    files: RecipeTypeInputInterfaceFile.transformer(data.condition_interface.files),
-                    json: RecipeTypeInputInterfaceJson.transformer(data.condition_interface.json)
+                    files: RecipeTypeInputFile.transformer(data.condition_interface.files),
+                    json: RecipeTypeInputJson.transformer(data.condition_interface.json)
                 },
                 data.data_filter
             );
@@ -27,5 +27,14 @@ export class RecipeTypeCondition {
     constructor(
         public condition_interface: any,
         public data_filter: any
-    ) {}
+    ) {
+        const c = {
+            interface: this.condition_interface,
+            data_filter: this.data_filter
+        };
+        this.display = {
+            label: JSON.stringify(c, null, 4),
+            value: c
+        };
+    }
 }

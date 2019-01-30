@@ -1,27 +1,27 @@
 import { SelectItem } from 'primeng/api';
 import * as _ from 'lodash';
 
-import { RecipeTypeInputInterfaceFile } from './api.input-interface.file.model';
-import { RecipeTypeInputInterfaceJson } from './api.input-interface.json.model';
+import { RecipeTypeInputFile } from './api.input.file.model';
+import { RecipeTypeInputJson } from './api.input.json.model';
 
-export class RecipeTypeInputInterface {
+export class RecipeTypeInput {
     files_display: SelectItem[] = [];
     json_display: SelectItem[] = [];
 
     private static build(data) {
         if (data) {
-            return new RecipeTypeInputInterface(
-                RecipeTypeInputInterfaceFile.transformer(data.files),
-                RecipeTypeInputInterfaceJson.transformer(data.json)
+            return new RecipeTypeInput(
+                RecipeTypeInputFile.transformer(data.files),
+                RecipeTypeInputJson.transformer(data.json)
             );
         }
     }
 
     public static transformer(data) {
         if (data) {
-            return RecipeTypeInputInterface.build(data);
+            return RecipeTypeInput.build(data);
         }
-        return new RecipeTypeInputInterface([], []);
+        return new RecipeTypeInput([], []);
     }
 
     public addFile(file): object {
@@ -31,7 +31,7 @@ export class RecipeTypeInputInterface {
         file = _.pickBy(file, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        const fileToAdd = RecipeTypeInputInterfaceFile.transformer(file);
+        const fileToAdd = RecipeTypeInputFile.transformer(file);
         this.files.push(fileToAdd);
         this.files_display.push({
             label: JSON.stringify(file, null, 4),
@@ -41,7 +41,7 @@ export class RecipeTypeInputInterface {
     }
 
     public removeFile(file): object {
-        const fileToRemove = RecipeTypeInputInterfaceFile.transformer(file);
+        const fileToRemove = RecipeTypeInputFile.transformer(file);
         _.remove(this.files, f => {
             return _.isEqual(f, fileToRemove);
         });
@@ -58,7 +58,7 @@ export class RecipeTypeInputInterface {
         json = _.pickBy(json, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-        const jsonToAdd = RecipeTypeInputInterfaceJson.transformer(json);
+        const jsonToAdd = RecipeTypeInputJson.transformer(json);
         this.json.push(jsonToAdd);
         this.json_display.push({
             label: JSON.stringify(json, null, 4),
@@ -68,7 +68,7 @@ export class RecipeTypeInputInterface {
     }
 
     public removeJson(json): object {
-        const jsonToRemove = RecipeTypeInputInterfaceJson.transformer(json);
+        const jsonToRemove = RecipeTypeInputJson.transformer(json);
         _.remove(this.json, j => {
             return _.isEqual(j, jsonToRemove);
         });
@@ -86,7 +86,7 @@ export class RecipeTypeInputInterface {
             _.forEach(this.files, f => {
                 this.files_display.push({
                     label: JSON.stringify(f, null, 4),
-                    value: RecipeTypeInputInterfaceFile.transformer(f)
+                    value: RecipeTypeInputFile.transformer(f)
                 });
             });
         }
@@ -95,7 +95,7 @@ export class RecipeTypeInputInterface {
             _.forEach(this.json, j => {
                 this.json_display.push({
                     label: JSON.stringify(j, null, 4),
-                    value: RecipeTypeInputInterfaceJson.transformer(j)
+                    value: RecipeTypeInputJson.transformer(j)
                 });
             });
         }
