@@ -11,11 +11,12 @@ import { SeedImagesModule } from 'seed-images';
 
 // Prime NG
 import {
-    AccordionModule, AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
+    AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
     DialogModule, DropdownModule, GrowlModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
     MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
     StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
 } from 'primeng/primeng';
+import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
@@ -95,6 +96,7 @@ import { ScansApiService } from './system/scans/api.service';
 import { ScansDatatableService } from './system/scans/datatable.service';
 import { RecipeTypeFileComponent } from './configuration/recipe-types/file.component';
 import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.component';
+import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.component';
 
 
 @NgModule({
@@ -140,7 +142,8 @@ import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.compo
         ScansComponent,
         ScanDetailsComponent,
         RecipeTypeFileComponent,
-        RecipeTypeJsonComponent
+        RecipeTypeJsonComponent,
+        RecipeTypeFilterComponent
     ],
     imports: [
         AppRoutingModule,
