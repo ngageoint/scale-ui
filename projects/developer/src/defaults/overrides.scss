@@ -56,6 +56,10 @@ body {
         line-height: normal;
     }
 
+    .ui-sidebar {
+        overflow-y: auto;
+    }
+
     .ui-multiselect .ui-multiselect-label {
         padding: .6em 2em .6em .6em;
     }

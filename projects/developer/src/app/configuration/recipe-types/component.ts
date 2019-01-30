@@ -37,6 +37,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
+    showFileInputs: boolean;
+    showJsonInputs: boolean;
     definitionFileForm: any;
     definitionFileFormSubscription: any;
     definitionJsonForm: any;
@@ -59,26 +61,19 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     isEditing: boolean;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
-        {
-            label: 'Job Type',
-            icon: 'fa fa-cube',
+        { label: 'Job Types', icon: 'fa fa-cube',
             command: () => {
                 this.addRemoveDisplayType = 'job';
                 this.showAddRemoveDisplay = true;
             }
         },
-        {
-            label: 'Recipe',
-            icon: 'fa fa-cubes',
+        { label: 'Recipe Types', icon: 'fa fa-cubes',
             command: () => {
                 this.addRemoveDisplayType = 'recipe';
                 this.showAddRemoveDisplay = true;
             }
         },
-        {
-            label: 'Condition',
-            icon: 'fa fa-adjust'
-        }
+        { label: 'Conditions', icon: 'fa fa-adjust' },
     ];
 
     constructor(
@@ -399,6 +394,14 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (idx >= 0) {
             control.removeAt(idx);
         }
+    }
+
+    toggleFileInputs() {
+        this.showFileInputs = !this.showFileInputs;
+    }
+
+    toggleJsonInputs() {
+        this.showJsonInputs = !this.showJsonInputs;
     }
 
     ngOnInit() {

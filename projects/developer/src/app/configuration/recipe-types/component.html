@@ -34,142 +34,10 @@
                             <span>Title</span>
                             <input pInputText type="text" formControlName="title"/>
                         </label>
-                        <label>
+                        <label style="margin-bottom: 0">
                             <span>Description</span>
                             <textarea pInputTextarea formControlName="description" rows="5"></textarea>
                         </label>
-                    </div>
-                </div>
-            </div>
-            <div class="ui-g" *ngIf="isEditing">
-                <div class="ui-g-6">
-                    <div [formGroup]="definitionFileForm">
-                        <p-panel [collapsed]="true" [toggleable]="true" collapseIcon="fa fa-caret-up"
-                                 expandIcon="fa fa-caret-down" toggler="header">
-                            <p-header>
-                                <strong>Input Files</strong>
-                            </p-header>
-                            <div class="ui-g">
-                                <div class="ui-g-6">
-                                    <label>
-                                        <span>Name</span>
-                                        <input type="text" pInputText formControlName="name" required/>
-                                        <div class="help-block">
-                                            The unique name of the parameter (required)
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="ui-g-6">
-                                    <label>
-                                        <span>Required</span>
-                                        <p-toggleButton formControlName="required" onLabel="Required" offLabel="Optional"
-                                                        onIcon="fa fa-check" offIcon="fa fa-circle"
-                                                        [style]="{'width':'100%', 'display':'block'}"
-                                                        (onChange)="onToggleClick($event)"></p-toggleButton>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="ui-g">
-                                <div class="ui-g-6">
-                                    <label>
-                                        <span>Media Types</span>
-                                        <p-chips formControlName="media_types" [style]="{'width':'100%'}"
-                                                 [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
-                                        <div class="help-block">
-                                            List of strings describing the accepted media types for the parameter’s file(s)
-                                            (optional)
-                                        </div>
-                                    </label>
-                                </div>
-                                <div class="ui-g-6">
-                                    <label>
-                                        <span>Files Accepted</span>
-                                        <p-toggleButton formControlName="multiple" onLabel="Multiple Files"
-                                                        offLabel="Single File" onIcon="fa fa-clone" offIcon="fa fa-file"
-                                                        [style]="{'width':'100%', 'display':'block'}"
-                                                        (onChange)="onToggleClick($event)"></p-toggleButton>
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <button pButton icon="fa fa-plus" (click)="onAddFileClick()"
-                                        label="Add File to Input"
-                                        [disabled]="definitionFileForm.status === 'INVALID'"></button>
-                            </div>
-                            <h3>Current Files</h3>
-                            <div *ngIf="selectedRecipeTypeDetail.definition">
-                                <span *ngIf="selectedRecipeTypeDetail.definition.files_display.length === 0">
-                                    No files in definition.
-                                </span>
-                                <div *ngFor="let file of selectedRecipeTypeDetail.definition.files_display">
-                                    <pre class="flexed space-between">
-                                        <span>{{ file.label }}</span>
-                                        <button pButton class="ui-button-danger" icon="fa fa-remove"
-                                                pTooltip="Remove File" (click)="onRemoveFileClick(file.value)"></button>
-                                    </pre>
-                                </div>
-                            </div>
-                            <div *ngIf="!selectedRecipeTypeDetail.definition">
-                                No files in definition.
-                            </div>
-                        </p-panel>
-                    </div>
-                </div>
-                <div class="ui-g-6">
-                    <div [formGroup]="definitionJsonForm">
-                        <p-panel [collapsed]="true" [toggleable]="true" collapseIcon="fa fa-caret-up"
-                                 expandIcon="fa fa-caret-down" toggler="header">
-                            <p-header>
-                                Input JSON
-                            </p-header>
-                            <div class="ui-g">
-                                <div class="ui-g-12">
-                                    <label>
-                                        <span>Name</span>
-                                        <input type="text" pInputText formControlName="name" required/>
-                                        <div class="help-block">
-                                            The unique name of the parameter (required)
-                                        </div>
-                                    </label>
-                                    <label>
-                                        <span>Required</span>
-                                        <p-toggleButton formControlName="required" onLabel="Required"
-                                                        offLabel="Optional" onIcon="fa fa-check" offIcon="fa fa-circle"
-                                                        [style]="{'width':'100%', 'display':'block'}"
-                                                        (onChange)="onToggleClick($event)"></p-toggleButton>
-                                    </label>
-                                    <label>
-                                        <span>Type</span>
-                                        <input type="text" pInputText formControlName="type"/>
-                                        <div class="help-block">
-                                            The accepted JSON data type. Must be one of 'array', 'boolean', 'integer',
-                                            'number', 'object', or 'string'. (required)
-                                        </div>
-                                    </label>
-                                    <div class="text-center">
-                                        <button pButton icon="fa fa-plus" (click)="onAddJsonClick()"
-                                                label="Add JSON to Input"
-                                                [disabled]="definitionJsonForm.status === 'INVALID'"></button>
-                                    </div>
-                                    <h3>Current JSON</h3>
-                                    <div *ngIf="selectedRecipeTypeDetail.definition">
-                                        <span *ngIf="selectedRecipeTypeDetail.definition.json_display.length === 0">
-                                            No JSON in definition.
-                                        </span>
-                                        <div *ngFor="let json of selectedRecipeTypeDetail.definition.json_display">
-                                            <pre class="flexed space-between">
-                                                <span>{{ json.label }}</span>
-                                                <button pButton class="ui-button-danger" icon="fa fa-remove"
-                                                        pTooltip="Remove JSON" (click)="onRemoveJsonClick(json.value)"></button>
-                                            </pre>
-                                        </div>
-                                    </div>
-                                    <div *ngIf="!selectedRecipeTypeDetail.definition">
-                                        No JSON in definition.
-                                    </div>
-                                </div>
-                            </div>
-                        </p-panel>
                     </div>
                 </div>
             </div>
@@ -177,8 +45,23 @@
                 <div class="ui-g-12">
                     <div class="margin-bottom-sm">
                         <div *ngIf="isEditing">
-                            <label class="no-margin">Nodes</label>
-                            <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}"></p-menubar>
+                            <label class="no-margin">Definition</label>
+                            <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}">
+                                <ul class="ui-menubar-root-list">
+                                    <li class="ng-star-inserted ui-menuitem ui-corner-all">
+                                        <a class="ui-menuitem-link ui-corner-all" (click)="toggleFileInputs()">
+                                            <span class="ui-menuitem-icon fa fa-file"></span>
+                                            <span class="ui-menuitem-text">File Inputs</span>
+                                        </a>
+                                    </li>
+                                    <li class="ng-star-inserted ui-menuitem ui-corner-all">
+                                        <a class="ui-menuitem-link ui-corner-all" (click)="toggleJsonInputs()">
+                                            <span class="ui-menuitem-icon fa fa-code"></span>
+                                            <span class="ui-menuitem-text">JSON Inputs</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </p-menubar>
                         </div>
                         <dev-recipe-graph [recipeData]="selectedRecipeTypeDetail" [isEditing]="isEditing"
                                           [minHeight]="recipeGraphMinHeight"></dev-recipe-graph>
@@ -252,3 +135,110 @@
         </p-scrollPanel>
     </div>
 </p-dialog>
+<p-sidebar [(visible)]="showFileInputs" [blockScroll]="true" position="right" [style]="{width:'25%'}"
+           *ngIf="isEditing && selectedRecipeTypeDetail">
+    <div class="recipe-type__details" [formGroup]="definitionFileForm">
+        <h2>File Inputs</h2>
+        <label>
+            <span>Name</span>
+            <input type="text" pInputText formControlName="name" required/>
+            <div class="help-block">
+                The unique name of the parameter (required)
+            </div>
+        </label>
+        <label>
+            <span>Required</span>
+            <p-toggleButton formControlName="required" onLabel="True" offLabel="False" onIcon="fa fa-check"
+                            offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
+                            (onChange)="onToggleClick($event)"></p-toggleButton>
+            <div class="help-block">
+                Indicates whether the parameter is required
+            </div>
+        </label>
+        <label>
+            <span>Media Types</span>
+            <p-chips formControlName="media_types" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                     [addOnBlur]="true"></p-chips>
+            <div class="help-block">
+                List of strings describing the accepted media types for the parameter’s file(s) (optional)
+            </div>
+        </label>
+        <label>
+            <span>Files Accepted</span>
+            <p-toggleButton formControlName="multiple" onLabel="Multiple Files"
+                            offLabel="Single File" onIcon="fa fa-clone" offIcon="fa fa-file"
+                            [style]="{'width':'100%', 'display':'block'}"
+                            (onChange)="onToggleClick($event)"></p-toggleButton>
+            <div class="help-block">
+                Indicates whether the parameter takes multiple files
+            </div>
+        </label>
+        <div class="text-center margin-top-lg margin-bottom-md">
+            <button pButton type="button" icon="fa fa-plus" (click)="onAddFileClick()" label="Add File to Input"
+                    [disabled]="definitionFileForm.status === 'INVALID'"></button>
+        </div>
+        <h3>Current Files</h3>
+        <div *ngIf="selectedRecipeTypeDetail.definition">
+            <span *ngIf="selectedRecipeTypeDetail.definition.files_display.length === 0">No files in definition.</span>
+            <div *ngFor="let file of selectedRecipeTypeDetail.definition.files_display">
+            <pre class="flexed space-between">
+                <span>{{ file.label }}</span>
+                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove File"
+                        (click)="onRemoveFileClick(file.value)"></button>
+            </pre>
+            </div>
+        </div>
+        <div *ngIf="!selectedRecipeTypeDetail.definition">
+            No files in definition.
+        </div>
+    </div>
+</p-sidebar>
+<p-sidebar [(visible)]="showJsonInputs" [blockScroll]="true" position="right" [style]="{width:'25%'}"
+           *ngIf="isEditing && selectedRecipeTypeDetail">
+    <div class="recipe-type__details" [formGroup]="definitionJsonForm">
+        <h2>JSON Inputs</h2>
+        <label>
+            <span>Name</span>
+            <input type="text" pInputText formControlName="name" required/>
+            <div class="help-block">
+                The unique name of the parameter (required)
+            </div>
+        </label>
+        <label>
+            <span>Required</span>
+            <p-toggleButton formControlName="required" onLabel="True"
+                            offLabel="False" onIcon="fa fa-check" offIcon="fa fa-circle"
+                            [style]="{'width':'100%', 'display':'block'}" (onChange)="onToggleClick($event)">
+            </p-toggleButton>
+            <div class="help-block">
+                Indicates whether the parameter is required
+            </div>
+        </label>
+        <label>
+            <span>Type</span>
+            <input type="text" pInputText formControlName="type"/>
+            <div class="help-block">
+                The accepted JSON data type. Must be one of 'array', 'boolean', 'integer', 'number', 'object', or 'string'.
+                (required)
+            </div>
+        </label>
+        <div class="text-center margin-top-lg margin-bottom-lg">
+            <button pButton type="button" icon="fa fa-plus" (click)="onAddJsonClick()" label="Add JSON to Input"
+                    [disabled]="definitionJsonForm.status === 'INVALID'"></button>
+        </div>
+        <h3>Current JSON</h3>
+        <div *ngIf="selectedRecipeTypeDetail.definition">
+            <span *ngIf="selectedRecipeTypeDetail.definition.json_display.length === 0">No JSON in definition.</span>
+            <div *ngFor="let json of selectedRecipeTypeDetail.definition.json_display">
+            <pre class="flexed space-between">
+                <span>{{ json.label }}</span>
+                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove JSON"
+                        (click)="onRemoveJsonClick(json.value)"></button>
+            </pre>
+            </div>
+        </div>
+        <div *ngIf="!selectedRecipeTypeDetail.definition">
+            No JSON in definition.
+        </div>
+    </div>
+</p-sidebar>

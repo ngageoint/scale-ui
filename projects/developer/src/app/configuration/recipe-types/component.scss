@@ -65,4 +65,8 @@
             max-height: 32px;
         }
     }
+
+    ::ng-deep .ui-menubar .ui-menubar-custom {
+        padding: 0;
+    }
 }
