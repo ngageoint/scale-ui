@@ -177,6 +177,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     private getRecipeTypes() {
+        this.showAddRemoveDisplay = false;
+        this.selectedRecipeTypes = [];
         this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
             this.recipeTypes = data.results;
             _.forEach(data.results, result => {
@@ -204,7 +206,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                         null,
                         {
                             input: new RecipeTypeInput([], []),
-                            nodes: []
+                            nodes: {}
                         },
                         null,
                         null,
@@ -292,7 +294,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             const input = {};
             _.forEach(data.definition.input, inputType => {
                 _.forEach(inputType, it => {
-                    input[it.name] = {};
+                    if (it.name) {
+                        input[it.name] = {};
+                    }
                 });
             });
             recipeData.definition.nodes[event.data.name] = {

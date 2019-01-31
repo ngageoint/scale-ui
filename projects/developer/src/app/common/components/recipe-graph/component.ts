@@ -3,7 +3,6 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
-import { JobTypesApiService } from '../../../configuration/job-types/api.service';
 import { JobType } from '../../../configuration/job-types/api.model';
 
 @Component({
@@ -21,7 +20,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
-    jobTypes: any;
     columns: any[];
     dependencyOptions = [];
     nodeInputs = [];
@@ -63,8 +61,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
     };
     constructor(
-        private colorService: ColorService,
-        private jobTypesApiService: JobTypesApiService
+        private colorService: ColorService
     ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -428,14 +425,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             };
         }
         if (changes.recipeData) {
-            this.jobTypesApiService.getJobTypes().subscribe(data => {
-                this.jobTypes = data.results;
-                this.selectedJobType = null;
-                this.selectedNode = null;
-                this.updateRecipe();
-            }, err => {
-                console.log(err);
-            });
+            this.selectedJobType = null;
+            this.selectedNode = null;
+            this.updateRecipe();
         }
     }
 
