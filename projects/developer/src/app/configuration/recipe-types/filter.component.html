@@ -57,7 +57,7 @@
     </div>
     <h3>Current Filters</h3>
     <div *ngIf="condition">
-        <span *ngIf="condition.filters.length === 0">No filters in condition.</span>
+        <span *ngIf="condition.data_filter.filters.length === 0">No filters in condition.</span>
         <div *ngFor="let filter of condition.filters_display">
             <pre class="flexed space-between">
                 <span>{{ filter.label }}</span>

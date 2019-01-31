@@ -13,8 +13,8 @@ import { RecipeTypeFilter } from './api.filter.model';
 export class RecipeTypeFilterComponent implements OnInit, OnDestroy {
     @Input() condition: any;
     @Output() conditionChange: EventEmitter<any> = new EventEmitter<any>();
-    @Input() conditionForm: any;
-    @Output() conditionFormChange: EventEmitter<any> = new EventEmitter<any>();
+    @Input() form: any;
+    @Output() formChange: EventEmitter<any> = new EventEmitter<any>();
     filter: RecipeTypeFilter;
     filterFormSubscription: any;
     filterForm = this.fb.group({
@@ -65,22 +65,22 @@ export class RecipeTypeFilterComponent implements OnInit, OnDestroy {
 
     onAddFilterClick() {
         const addedFilter = this.condition.filterInterface.addFilter(this.filter);
-        const control: any = this.conditionForm.get('data_filter.filters');
+        const control: any = this.form.get('data_filter.filters');
         control.push(new FormControl(addedFilter));
         this.conditionChange.emit();
-        this.conditionFormChange.emit();
+        this.formChange.emit();
         this.filterForm.reset();
     }
 
     onRemoveFilterClick(filter) {
         const removedFilter = this.condition.filterInterface.removeFilter(filter);
-        const control: any = this.conditionForm.get('data_filter.filters');
+        const control: any = this.form.get('data_filter.filters');
         const idx = _.findIndex(control.value, removedFilter);
         if (idx >= 0) {
             control.removeAt(idx);
         }
         this.conditionChange.emit();
-        this.conditionFormChange.emit();
+        this.formChange.emit();
     }
 
     onToggleClick(e) {

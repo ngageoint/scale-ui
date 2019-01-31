@@ -13,8 +13,9 @@ import { RecipeTypeInputFile } from './api.input.file.model';
 export class RecipeTypeFileComponent implements OnInit, OnDestroy {
     @Input() input: RecipeTypeInput;
     @Output() inputChange: EventEmitter<any> = new EventEmitter<any>();
-    @Input() createForm: any;
-    @Output() createFormChange: EventEmitter<any> = new EventEmitter<any>();
+    @Input() form: any;
+    @Output() formChange: EventEmitter<any> = new EventEmitter<any>();
+    @Input() filesControl: string;
     file: any;
     fileFormSubscription: any;
     fileForm = this.fb.group({
@@ -41,22 +42,22 @@ export class RecipeTypeFileComponent implements OnInit, OnDestroy {
 
     onAddFileClick() {
         const addedFile = this.input.addFile(this.file);
-        const control: any = this.createForm.get('definition.input.files');
+        const control: any = this.form.get(this.filesControl);
         control.push(new FormControl(addedFile));
         this.inputChange.emit();
-        this.createFormChange.emit();
-        this.createForm.reset();
+        this.formChange.emit();
+        this.form.reset();
     }
 
     onRemoveFileClick(file) {
         const removedFile = this.input.removeFile(file);
-        const control: any = this.createForm.get('definition.input.files');
+        const control: any = this.form.get(this.filesControl);
         const idx = _.findIndex(control.value, removedFile);
         if (idx >= 0) {
             control.removeAt(idx);
         }
         this.inputChange.emit();
-        this.createFormChange.emit();
+        this.formChange.emit();
     }
 
     ngOnInit() {

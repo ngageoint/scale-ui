@@ -13,8 +13,9 @@ import { RecipeTypeInputJson } from './api.input.json.model';
 export class RecipeTypeJsonComponent implements OnInit, OnDestroy {
     @Input() input: RecipeTypeInput;
     @Output() inputChange: EventEmitter<any> = new EventEmitter<any>();
-    @Input() createForm: any;
-    @Output() createFormChange: EventEmitter<any> = new EventEmitter<any>();
+    @Input() form: any;
+    @Output() formChange: EventEmitter<any> = new EventEmitter<any>();
+    @Input() jsonControl: string;
     json: any;
     jsonFormSubscription: any;
     jsonForm = this.fb.group({
@@ -40,22 +41,22 @@ export class RecipeTypeJsonComponent implements OnInit, OnDestroy {
 
     onAddJsonClick() {
         const addedJson = this.input.addJson(this.json);
-        const control: any = this.createForm.get('definition.input.json');
+        const control: any = this.form.get(this.jsonControl);
         control.push(new FormControl(addedJson));
         this.inputChange.emit();
-        this.createFormChange.emit();
+        this.formChange.emit();
         this.jsonForm.reset();
     }
 
     onRemoveJsonClick(json) {
         const removedJson = this.input.removeJson(json);
-        const control: any = this.createForm.get('definition.input.json');
+        const control: any = this.form.get(this.jsonControl);
         const idx = _.findIndex(control.value, removedJson);
         if (idx >= 0) {
             control.removeAt(idx);
         }
         this.inputChange.emit();
-        this.createFormChange.emit();
+        this.formChange.emit();
     }
 
     ngOnInit() {

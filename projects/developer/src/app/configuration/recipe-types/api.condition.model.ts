@@ -1,8 +1,13 @@
+import { SelectItem } from 'primeng/api';
+import * as _ from 'lodash';
+
 import { RecipeTypeInputFile } from './api.input.file.model';
 import { RecipeTypeInputJson} from './api.input.json.model';
+import { RecipeTypeFilter } from './api.filter.model';
 
 export class RecipeTypeCondition {
     display: any;
+    filters_display: SelectItem[] = [];
 
     private static build(data) {
         if (data) {
@@ -22,7 +27,7 @@ export class RecipeTypeCondition {
             }
             return RecipeTypeCondition.build(data);
         }
-        return null;
+        return new RecipeTypeCondition({ files: [], json: [] }, { filters: [], all: true });
     }
     constructor(
         public condition_interface: any,
@@ -36,5 +41,13 @@ export class RecipeTypeCondition {
             label: JSON.stringify(c, null, 4),
             value: c
         };
+        if (this.data_filter.files) {
+            _.forEach(this.data_filter.filters, f => {
+                this.filters_display.push({
+                    label: JSON.stringify(f, null, 4),
+                    value: RecipeTypeFilter.transformer(f)
+                });
+            });
+        }
     }
 }

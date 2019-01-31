@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import {FormBuilder, FormControl, Validators} from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -52,7 +52,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
     selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
-    condition: any;
+    condition = new RecipeTypeCondition({ files: [], json: [] }, { filters: [], all: true });
     conditions: any = [];
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
@@ -113,8 +113,14 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
 
         this.conditionForm = this.fb.group({
-            filters: this.fb.array([]),
-            all: [true]
+            interface: this.fb.group({
+                files: this.fb.array([]),
+                json: this.fb.array([])
+            }),
+            data_filter: this.fb.group({
+                filters: this.fb.array([]),
+                all: [true]
+            })
         });
     }
 
