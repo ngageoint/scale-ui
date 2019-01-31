@@ -35,7 +35,7 @@ export class RecipeTypeFilterInterface {
         const filterToAdd = RecipeTypeFilter.transformer(filter);
         this.filters.push(filterToAdd);
         this.filters_display.push({
-            label: JSON.stringify(filter, null, 4),
+            label: JSON.stringify(filterToAdd, null, 4),
             value: filterToAdd
         });
         return filterToAdd;

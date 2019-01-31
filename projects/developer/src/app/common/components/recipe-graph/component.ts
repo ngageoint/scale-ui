@@ -137,6 +137,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     }
                 }
             });
+            console.log(this.recipeData);
         }
     }
 

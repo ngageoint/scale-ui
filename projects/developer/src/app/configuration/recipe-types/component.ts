@@ -52,7 +52,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
     selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
-    condition = new RecipeTypeCondition({ files: [], json: [] }, { filters: [], all: true });
+    condition = RecipeTypeCondition.transformer(null);
     conditions: any = [];
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
@@ -113,12 +113,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
 
         this.conditionForm = this.fb.group({
-            interface: this.fb.group({
-                files: this.fb.array([]),
-                json: this.fb.array([])
-            }),
             data_filter: this.fb.group({
-                filters: this.fb.array([]),
+                filters: this.fb.array([], Validators.required),
                 all: [true]
             })
         });
@@ -331,8 +327,26 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     removeNode(event) {
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-        delete recipeData.definition.nodes[event.data.name];
-        this.selectedRecipeTypeDetail = recipeData;
+        const nodeToRemove = recipeData.definition.nodes[event.data.name];
+        if (nodeToRemove) {
+            if (nodeToRemove.node_type.node_type === 'job') {
+                recipeData.job_types = _.filter(recipeData.job_types, jt => {
+                    return jt.name !== event.data.name && jt.version !== event.data.latest_version;
+                });
+            } else if (nodeToRemove.node_type.node_type === 'recipe') {
+                recipeData.sub_recipe_types = _.filter(recipeData.sub_recipe_types, rt => {
+                    return rt.name !== event.data.name && rt.revision_num !== event.data.revision_num;
+                });
+            }
+            delete recipeData.definition.nodes[event.data.name];
+            this.selectedRecipeTypeDetail = recipeData;
+        } else {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error removing node',
+                detail: 'Unable to find node in recipe definition'
+            });
+        }
     }
 
     toggleEdit() {

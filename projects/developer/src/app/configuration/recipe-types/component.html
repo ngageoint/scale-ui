@@ -184,23 +184,9 @@
            *ngIf="isEditing && selectedRecipeTypeDetail">
     <div class="recipe-type__details">
         <h2>Conditions</h2>
-        <p-accordion [multiple]="true">
-            <p-accordionTab header="Files">
-                <dev-recipe-type-file [input]="condition.interface" [form]="conditionForm"
-                                      filesControl="interface.files"></dev-recipe-type-file>
-            </p-accordionTab>
-            <p-accordionTab header="JSON">
-                <dev-recipe-type-json [input]="condition.interface" [form]="conditionForm"
-                                      jsonControl="interface.json"></dev-recipe-type-json>
-            </p-accordionTab>
-            <p-accordionTab header="Filters">
-                <div [formGroup]="conditionForm">
-                    <dev-recipe-type-filter [condition]="condition" [form]="conditionForm">
-                    </dev-recipe-type-filter>
-                </div>
-            </p-accordionTab>
-        </p-accordion>
-        <div class="margin-top-lg margin-bottom-lg" [formGroup]="conditionForm">
+        <div [formGroup]="conditionForm">
+            <dev-recipe-type-filter [condition]="condition" [form]="conditionForm">
+            </dev-recipe-type-filter>
             <label formGroupName="data_filter">
                 <p-toggleButton formControlName="all" onLabel="Filters are Required"
                                 offLabel="Filters are Optional" onIcon="fa fa-check" offIcon="fa fa-circle"
@@ -218,8 +204,9 @@
             <div *ngFor="let condition of conditions">
                 <pre class="flexed space-between">
                     <span>{{ condition.display.label }}</span>
-                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove Condition"
-                            (click)="onRemoveConditionClick(condition.display.value)"></button>
+                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove"
+                            pTooltip="Remove Condition" (click)="onRemoveConditionClick(condition.display.value)">
+                    </button>
                 </pre>
             </div>
         </div>
