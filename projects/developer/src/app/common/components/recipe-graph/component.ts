@@ -31,6 +31,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     curve: any;
     selectedJobType: any;
     selectedRecipeType: any;
+    selectedCondition: any;
     selectedNode: any;
     selectedNodeConnections = [];
     showRecipeDialog: boolean;
@@ -101,6 +102,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
                     label = node.node_type.recipe_type_name;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
+                } else if (node.node_type.node_type === 'condition') {
+                    id = _.camelCase(node.node_type.name); // id can't have dashes or anything
+                    label = node.node_type.name;
+                    icon = String.fromCharCode(parseInt('f042', 16)); // condition icon
                 }
                 this.nodes.push({
                     id: id,
@@ -181,6 +186,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             if (this.selectedNode.node_type) {
                 if (this.selectedNode.node_type.node_type === 'job') {
                     this.selectedRecipeType = null;
+                    this.selectedCondition = null;
                     this.selectedJobType = _.find(this.recipeData.job_types, {
                         name: this.selectedNode.node_type.job_type_name,
                         version: this.selectedNode.node_type.job_type_version
@@ -218,10 +224,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     }
                 } else if (this.selectedNode.node_type.node_type === 'recipe') {
                     this.selectedJobType = null;
+                    this.selectedCondition = null;
                     this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
                         name: this.selectedNode.node_type.recipe_type_name,
                         revision_num: this.selectedNode.node_type.recipe_type_revision
                     });
+                    this.getNodeConnections();
+                } else if (this.selectedNode.node_type.node_type === 'condition') {
+                    this.selectedJobType = null;
+                    this.selectedRecipeType = null;
+                    this.selectedCondition = _.cloneDeep(this.selectedNode);
                     this.getNodeConnections();
                 }
             }
@@ -257,6 +269,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             return;
         }
         // const currJob: any = this.getCurrJob();
+        // TODO if selectedNode is a condition, inspect the dependency's input interface and apply it to the condition interface
         if (this.selectedNode) {
             this.selectedNode.dependencies.push({
                 connections: [],

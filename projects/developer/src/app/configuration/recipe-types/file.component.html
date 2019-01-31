@@ -42,11 +42,13 @@
     <div *ngIf="input">
         <span *ngIf="input.files_display.length === 0">No files in definition.</span>
         <div *ngFor="let file of input.files_display">
-            <pre class="flexed space-between">
-                <span>{{ file.label }}</span>
-                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove File"
-                        (click)="onRemoveFileClick(file.value)"></button>
-            </pre>
+            <div class="relative">
+                <pre>{{ file.label }}</pre>
+                <div class="inset">
+                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove File"
+                            (click)="onRemoveFileClick(file.value)"></button>
+                </div>
+            </div>
         </div>
     </div>
     <div *ngIf="!input">

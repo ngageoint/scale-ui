@@ -33,11 +33,13 @@
     <div *ngIf="input">
         <span *ngIf="input.json_display.length === 0">No JSON in definition.</span>
         <div *ngFor="let json of input.json_display">
-            <pre class="flexed space-between">
-                <span>{{ json.label }}</span>
-                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove JSON"
-                        (click)="onRemoveJsonClick(json.value)"></button>
-            </pre>
+            <div class="relative">
+                <pre>{{ json.label }}</pre>
+                <div class="inset">
+                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove JSON"
+                            (click)="onRemoveJsonClick(json.value)"></button>
+                </div>
+            </div>
         </div>
     </div>
     <div *ngIf="!input">

@@ -1,75 +1,76 @@
 <div class="recipe-type__details margin-bottom-md" [formGroup]="filterForm">
-    <p-panel styleClass="margin-bottom-md" [toggleable]="true" collapsed="true" toggler="header">
-        <p-header>
-            <strong>Filters</strong>
-        </p-header>
-        <label>
-            <span>Name</span>
-            <input type="text" pInputText formControlName="name" required/>
-            <div class="help-block">
-                The name of the parameter this filter runs against (required)
+    <p-accordion [multiple]="true" styleClass="margin-bottom-md">
+        <p-accordionTab header="Filters">
+            <label>
+                <span>Name</span>
+                <input type="text" pInputText formControlName="name" required/>
+                <div class="help-block">
+                    The name of the parameter this filter runs against (required)
+                </div>
+            </label>
+            <label>
+                <span>Type</span>
+                <p-dropdown [options]="typeOptions" [autoWidth]="false" formControlName="type" [style]="{'width':'100%'}"
+                            placeholder="Select..." [showClear]="false">
+                </p-dropdown>
+                <div class="help-block">
+                    Type of parameter this filter runs against (required)
+                </div>
+            </label>
+            <label>
+                <span>Condition</span>
+                <p-dropdown [options]="conditionOptions" [autoWidth]="false" formControlName="condition"
+                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                </p-dropdown>
+                <div class="help-block">
+                    Condition to test data value against (required)
+                </div>
+            </label>
+            <label>
+                <span>Values</span>
+                <p-chips formControlName="values" [style]="{'width':'100%'}"
+                         [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
+                <div class="help-block">
+                    List of values to compare data against. May be any type. Press return/enter after each entry. (required)
+                </div>
+            </label>
+            <label>
+                <span>Fields</span>
+                <p-chips formControlName="fields" [style]="{'width':'100%'}"
+                         [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
+                <div class="help-block">
+                    List of lists with each item being a list of keys for a path to a field in an object or file meta-data
+                    to be tested. If provided, this property must be of equal length to values. E.g. type [foo,bar], then
+                    press return/enter.
+                </div>
+            </label>
+            <label>
+                <p-toggleButton formControlName="all_fields" onLabel="All fields are required" offLabel="Fields are optional"
+                                onIcon="fa fa-check" offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
+                                (onChange)="onToggleClick($event)"></p-toggleButton>
+            </label>
+            <label>
+                <p-toggleButton formControlName="all_files" onLabel="All files are required" offLabel="Files are optional"
+                                onIcon="fa fa-check" offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
+                                (onChange)="onToggleClick($event)"></p-toggleButton>
+            </label>
+            <div class="text-center margin-top-lg margin-bottom-md" *ngIf="filterForm">
+                <button pButton type="button" icon="fa fa-plus" (click)="onAddFilterClick()" label="Add Filter"
+                        [disabled]="filterForm.status === 'INVALID'"></button>
             </div>
-        </label>
-        <label>
-            <span>Type</span>
-            <p-dropdown [options]="typeOptions" [autoWidth]="false" formControlName="type" [style]="{'width':'100%'}"
-                        placeholder="Select..." [showClear]="false">
-            </p-dropdown>
-            <div class="help-block">
-                Type of parameter this filter runs against (required)
-            </div>
-        </label>
-        <label>
-            <span>Condition</span>
-            <p-dropdown [options]="conditionOptions" [autoWidth]="false" formControlName="condition"
-                        [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
-            </p-dropdown>
-            <div class="help-block">
-                Condition to test data value against (required)
-            </div>
-        </label>
-        <label>
-            <span>Values</span>
-            <p-chips formControlName="values" [style]="{'width':'100%'}"
-                     [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
-            <div class="help-block">
-                List of values to compare data against. May be any type. Press return/enter after each entry. (required)
-            </div>
-        </label>
-        <label>
-            <span>Fields</span>
-            <p-chips formControlName="fields" [style]="{'width':'100%'}"
-                     [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
-            <div class="help-block">
-                List of lists with each item being a list of keys for a path to a field in an object or file meta-data
-                to be tested. If provided, this property must be of equal length to values. E.g. type [foo,bar], then
-                press return/enter.
-            </div>
-        </label>
-        <label>
-            <p-toggleButton formControlName="all_fields" onLabel="All fields are required" offLabel="Fields are optional"
-                            onIcon="fa fa-check" offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
-                            (onChange)="onToggleClick($event)"></p-toggleButton>
-        </label>
-        <label>
-            <p-toggleButton formControlName="all_files" onLabel="All files are required" offLabel="Files are optional"
-                            onIcon="fa fa-check" offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
-                            (onChange)="onToggleClick($event)"></p-toggleButton>
-        </label>
-        <div class="text-center margin-top-lg margin-bottom-md" *ngIf="filterForm">
-            <button pButton type="button" icon="fa fa-plus" (click)="onAddFilterClick()" label="Add Filter"
-                    [disabled]="filterForm.status === 'INVALID'"></button>
-        </div>
-    </p-panel>
+        </p-accordionTab>
+    </p-accordion>
     <h3>Current Filters</h3>
     <div *ngIf="condition">
         <span *ngIf="condition.data_filter.filters.length === 0">No filters in condition.</span>
         <div *ngFor="let filter of condition.data_filter.filters_display">
-            <pre class="flexed space-between">
-                <span>{{ filter.label }}</span>
-                <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove Filter"
-                        (click)="onRemoveFilterClick(filter.value)"></button>
-            </pre>
+            <div class="relative">
+                <pre>{{ filter.label }}</pre>
+                <div class="inset">
+                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove" pTooltip="Remove Filter"
+                            (click)="onRemoveFilterClick(filter.value)"></button>
+                </div>
+            </div>
         </div>
     </div>
     <div *ngIf="!condition">

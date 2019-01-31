@@ -54,6 +54,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedRecipeTypeDetail: any;
     condition = RecipeTypeCondition.transformer(null);
     conditions: any = [];
+    selectedConditions = [];
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
@@ -96,7 +97,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
         this.conditionColumns = [
-            { field: 'title', header: 'Title', filterMatchMode: 'contains' }
+            { field: 'name', header: 'Name', filterMatchMode: 'contains' }
         ];
     }
 
@@ -113,6 +114,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
 
         this.conditionForm = this.fb.group({
+            name: ['', Validators.required],
             data_filter: this.fb.group({
                 filters: this.fb.array([], Validators.required),
                 all: [true]
@@ -322,7 +324,18 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addConditionNode(event) {
-        console.log(event);
+        const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+        recipeData.definition.nodes[event.data.name] = {
+            dependencies: [],
+            input: {},
+            node_type: {
+                node_type: 'condition',
+                name: event.data.name,
+                interface: event.data.interface,
+                data_filter: event.data.data_filter
+            }
+        };
+        this.selectedRecipeTypeDetail = recipeData;
     }
 
     removeNode(event) {
@@ -405,6 +418,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     onAddConditionClick() {
         this.conditions.push(RecipeTypeCondition.transformer(this.condition));
         this.conditionForm.reset();
+        this.condition = RecipeTypeCondition.transformer(null);
     }
 
     onRemoveConditionClick(condition) {

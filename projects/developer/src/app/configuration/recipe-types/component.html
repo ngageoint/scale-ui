@@ -147,22 +147,20 @@
         <p-scrollPanel [style]="{width: '100%', height: '33vh'}">
             <p-table [columns]="conditionColumns" [value]="conditions" styleClass="nopadding" [rowHover]="true"
                      (onRowSelect)="addConditionNode($event)" (onRowUnselect)="removeNode($event)"
-                     selectionMode="multiple" [(selection)]="conditions" #conditionDatatable>
-                <ng-template pTemplate="header" let-columns>
-                    <tr>
-                        <th *ngFor="let col of columns">
-                            <input pInputText type="text"
-                                   (input)="conditionDatatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                                   class="column-filter">
-                        </th>
-                    </tr>
-                </ng-template>
+                     selectionMode="multiple" [(selection)]="selectedConditions">
                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                     <tr [pSelectableRow]="rowData">
                         <td>
                             <div class="recipe-type__node-type-row">
-                                {{ rowData.title }}
+                                {{ rowData.name }}
                             </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="columns.length" class="text-center">
+                            No records found. Use the "Conditions" button to add conditions to this recipe.
                         </td>
                     </tr>
                 </ng-template>
@@ -185,6 +183,10 @@
     <div class="recipe-type__details">
         <h2>Conditions</h2>
         <div [formGroup]="conditionForm">
+            <label>
+                <span>Name</span>
+                <input pInput type="text" formControlName="name"/>
+            </label>
             <dev-recipe-type-filter [condition]="condition" [form]="conditionForm">
             </dev-recipe-type-filter>
             <label formGroupName="data_filter">
@@ -202,12 +204,14 @@
         <div *ngIf="conditions">
             <span *ngIf="conditions.length === 0">No conditions.</span>
             <div *ngFor="let condition of conditions">
-                <pre class="flexed space-between">
-                    <span>{{ condition.display.label }}</span>
-                    <button pButton type="button" class="ui-button-danger" icon="fa fa-remove"
-                            pTooltip="Remove Condition" (click)="onRemoveConditionClick(condition.display.value)">
-                    </button>
-                </pre>
+                <div class="relative">
+                    <pre>{{ condition.display.label }}</pre>
+                    <div class="inset">
+                        <button pButton type="button" class="ui-button-danger" icon="fa fa-remove"
+                                pTooltip="Remove Condition" (click)="onRemoveConditionClick(condition.display.value)">
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         <div *ngIf="!conditions">
