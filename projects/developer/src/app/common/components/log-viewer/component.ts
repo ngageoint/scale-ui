@@ -30,7 +30,8 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
         mode: {name: 'text/plain', json: false},
         indentUnit: 4,
         lineNumbers: true,
-        readOnly: true
+        readOnly: true,
+        viewportMargin: Infinity
     };
 
     constructor(

@@ -6,7 +6,7 @@
 // Defaults
 @import './defaults/animations';
 @import 'environments/environment';
-@import './defaults/primeng-theme';
+@import './themes/primeng-nova-light';
 @import './defaults/tags';
 @import './defaults/typography';
 
@@ -236,6 +236,10 @@ a:not(.ui-button, .ui-paginator) {
 
     &.flex-end {
         justify-content: flex-end;
+    }
+
+    &.inline {
+        display: inline-flex;
     }
 }
 

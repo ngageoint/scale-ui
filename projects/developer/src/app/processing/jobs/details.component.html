@@ -202,11 +202,9 @@
             </p-panel>
         </div>
     </div>
-    <p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true" (onAfterHide)="hideExeLog()">
-        <span *ngIf="selectedJobExe">
-            <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
-        </span>
-    </p-sidebar>
+    <div *ngIf="selectedJobExe">
+        <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
+    </div>
     <p-overlayPanel #status appendTo="body">
         <strong>{{ jobStatus }}</strong>
         <div *ngIf="job.status === 'FAILED' && job.error">

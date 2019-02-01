@@ -1,17 +1,17 @@
 @import '../../../../environments/environment';
 
 .scale-log__container {
+    ::ng-deep .ui-button {
+        font-size: .7em !important;
+        padding: 0 !important;
+        margin-left: 10px !important;
+    }
+
+    .scale-log__title {
+        margin: 0;
+    }
+
     .scale-log__viewer {
-        .scale-log__title {
-            margin: 0;
-        }
-
-        ::ng-deep .ui-button {
-            font-size: .7em !important;
-            padding: 0 !important;
-            margin-left: 10px !important;
-        }
-
         ::ng-deep .CodeMirror {
             height: 25em;
         }

@@ -123,9 +123,6 @@
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
              [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
 <p-confirmDialog></p-confirmDialog>
-<p-sidebar [(visible)]="logDisplay" position="bottom" styleClass="ui-sidebar-lg" [blockScroll]="true"
-           (onAfterHide)="hideExeLog()">
-        <span *ngIf="selectedJobExe">
-            <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
-        </span>
-</p-sidebar>
+<div *ngIf="selectedJobExe">
+    <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
+</div>

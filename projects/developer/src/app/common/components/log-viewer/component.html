@@ -1,22 +1,29 @@
 <div class="scale-log__container">
-    <dev-loading-indicator [loading]="loading"></dev-loading-indicator>
-    <div class="scale-log__viewer" *ngIf="execution">
-        <div class="flexed margin-bottom-sm">
-            <h3 class="scale-log__title" (mouseenter)="showExeError(error, $event)" (mouseleave)="hideExeError(error)">
-                <i class="fa fa-fw fa-square" [ngClass]="execution.statusClass"></i>
-                {{ execution.status }}
-            </h3>
-            <button class="scale-log__copy-btn ui-button-secondary" pButton type="button" icon="fa fa-copy"
-                    label="Copy Log">
-            </button>
-        </div>
-        <ngx-codemirror [(ngModel)]="execLogStr" [options]="jsonConfig" (scroll)="onScroll()" #codemirror>
-        </ngx-codemirror>
-        <p-overlayPanel #error appendTo="body">
-            <div *ngIf="execution.error && execution.status === 'FAILED'">
-                <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />
-                {{ execution.error.description }}
+    <p-dialog [(visible)]="visible" [modal]="false" [responsive]="true"
+              [style]="{width: '95%', minWidth: '25%'}" [blockScroll]="true"
+              [maximizable]="true" [baseZIndex]="10000" (onHide)="unsubscribe()">
+        <p-header>
+            <div class="flexed inline" *ngIf="execution">
+                <div class="scale-log__title" (mouseenter)="showExeError(error, $event)"
+                     (mouseleave)="hideExeError(error)">
+                    <i class="fa fa-fw fa-square" [ngClass]="execution.statusClass"></i>
+                    {{ execution.status }}
+                </div>
+                <button class="scale-log__copy-btn" pButton type="button" icon="fa fa-copy"
+                        label="Copy Log">
+                </button>
             </div>
-        </p-overlayPanel>
-    </div>
+        </p-header>
+        <dev-loading-indicator [loading]="loading"></dev-loading-indicator>
+        <div class="scale-log__viewer" *ngIf="execution">
+            <ngx-codemirror [(ngModel)]="execLogStr" [options]="jsonConfig" (scroll)="onScroll()" #codemirror>
+            </ngx-codemirror>
+            <p-overlayPanel #error appendTo="body">
+                <div *ngIf="execution.error && execution.status === 'FAILED'">
+                    <strong>{{ execution.error.category }} Error: {{ execution.error.title }}</strong><br />
+                    {{ execution.error.description }}
+                </div>
+            </p-overlayPanel>
+        </div>
+    </p-dialog>
 </div>

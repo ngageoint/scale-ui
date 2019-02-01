@@ -283,9 +283,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
             });
     }
-    hideExeLog() {
-        this.selectedJobExe = null;
-    }
     onFilterClick(e) {
         e.stopPropagation();
     }
