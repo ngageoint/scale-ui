@@ -16,6 +16,9 @@
         <div [class]="getNavItemStyles('configuration')">
             <a (click)="selectNavItem($event, 'configuration')"><i class="fa fa-wrench"></i> Configuration</a>
         </div>
+        <div [class]="getNavItemStyles('system')">
+            <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
+        </div>
 
         <span class="navbar__status">
             <dev-status></dev-status>

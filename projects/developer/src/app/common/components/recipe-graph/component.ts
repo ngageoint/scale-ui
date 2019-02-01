@@ -34,6 +34,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedCondition: any;
     selectedNode: any;
     selectedNodeConnections = [];
+    showMetrics: boolean;
     showRecipeDialog: boolean;
     recipeDialogX: number;
     recipeDialogY: number;
@@ -167,7 +168,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
                 this.selectedNodeConnections.push({
                     name: dependency.node_type.job_type_name,
-                    output: connection.name
+                    output: connection ? connection.name : null
                 });
             }
         });
@@ -492,6 +493,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     ngOnChanges(changes) {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);
+            this.showMetrics = this.jobMetrics && typeof this.metricTotal === 'number';
         }
         if (changes.jobMetricsTitle) {
             this.chartOptions.title = {

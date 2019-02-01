@@ -4,8 +4,8 @@
         <ul>
             <li><a routerLink="/processing/jobs" (click)="navigate()"><i class="fa fa-cube"></i> Jobs</a></li>
             <li><a routerLink="/processing/recipes" (click)="navigate()"><i class="fa fa-cubes"></i> Recipes</a></li>
-            <li><a routerLink="/processing/running-jobs" (click)="navigate()"><i class="fa fa-arrow-circle-right"></i> Running Jobs</a></li>
-            <li><a routerLink="/processing/queued-jobs" (click)="navigate()"><i class="fa fa-clock-o"></i> Queued Jobs</a></li>
+            <!--<li><a routerLink="/processing/running-jobs" (click)="navigate()"><i class="fa fa-arrow-circle-right"></i> Running Jobs</a></li>-->
+            <!--<li><a routerLink="/processing/queued-jobs" (click)="navigate()"><i class="fa fa-clock-o"></i> Queued Jobs</a></li>-->
             <li><a routerLink="/processing/job-type-history" (click)="navigate()"><i class="fa fa-history"></i> Job Type History</a></li>
             <li><a routerLink="/processing/batches" (click)="navigate()"><i class="fa fa-files-o"></i> Batches</a></li>
         </ul>
@@ -24,8 +24,16 @@
     <div [class]="getSectionStyles('configuration')">
         <ul>
             <li><a routerLink="/configuration/job-types" (click)="navigate()"><i class="fa fa-cube"></i> Job Types</a></li>
-            <li><a routerLink="/configuration/job-types/create" (click)="navigate()"><i class="fa fa-plus-circle"></i> Create Job Type</a></li>
             <li><a routerLink="/configuration/recipe-types" (click)="navigate()"><i class="fa fa-cubes"></i> Recipe Types</a></li>
+        </ul>
+    </div>
+
+    <!-- System -->
+    <div [class]="getSectionStyles('system')">
+        <ul>
+            <li><a routerLink="/system/strikes" (click)="navigate()"><i class="fa fa-bolt"></i> Strikes</a></li>
+            <li><a routerLink="/system/scans" (click)="navigate()"><i class="fa fa-barcode"></i> Scans</a></li>
+            <li><a routerLink="/system/workspaces" (click)="navigate()"><i class="fa fa-database"></i> Workspaces</a></li>
         </ul>
     </div>
 </div>

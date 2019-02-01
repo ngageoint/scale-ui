@@ -4,6 +4,12 @@ import { JobType } from '../job-types/api.model';
 export class RecipeType {
     private static build(data) {
         if (data) {
+            const definition = data.definition ?
+                {
+                    input: RecipeTypeInput.transformer(data.definition.input),
+                    nodes: data.definition.nodes
+                } :
+                data.definition;
             return new RecipeType(
                 data.id,
                 data.name,
@@ -12,10 +18,7 @@ export class RecipeType {
                 data.is_active,
                 data.is_system,
                 data.revision_num,
-                {
-                    input: RecipeTypeInput.transformer(data.definition.input),
-                    nodes: data.definition.nodes
-                },
+                definition,
                 data.job_types,
                 data.sub_recipe_types,
                 data.created,

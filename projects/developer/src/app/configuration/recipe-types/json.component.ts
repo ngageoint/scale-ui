@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 
 import { RecipeTypeInput } from './api.input.model';
 import { RecipeTypeInputJson } from './api.input.json.model';
+import {SelectItem} from 'primeng/api';
 
 @Component({
     selector: 'dev-recipe-type-json',
@@ -23,6 +24,14 @@ export class RecipeTypeJsonComponent implements OnInit, OnDestroy {
         required: [true],
         type: ['', Validators.required]
     });
+    typeOptions: SelectItem[] = [
+        { label: 'Array', value: 'array' },
+        { label: 'Boolean', value: 'boolean' },
+        { label: 'Integer', value: 'integer' },
+        { label: 'Number', value: 'number' },
+        { label: 'Object', value: 'object' },
+        { label: 'String', value: 'string' }
+    ];
 
     constructor(
         private fb: FormBuilder

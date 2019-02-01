@@ -3,6 +3,8 @@
     <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
                 class="job-type__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
                 (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
+    <button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"
+            [disabled]="jobTypeName === 'create'"></button>
 </div>
 <hr />
 <div class="job-type__details">

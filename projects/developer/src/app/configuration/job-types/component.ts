@@ -248,6 +248,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.handleScanError(err);
         });
     }
+    createNewJobType() {
+        this.router.navigate(['/configuration/job-types/create']);
+    }
     ngOnInit() {
         this.options = {
             legend: false,

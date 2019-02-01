@@ -11,7 +11,7 @@
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"
                             [format]="dateFormat"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-primary recipes__date-filter-btn" label="Apply"
+        <button pButton class="recipes__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
         <div class="recipes__date-filter-ranges">
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 6 Hours"

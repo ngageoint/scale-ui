@@ -67,8 +67,8 @@
                 "export-shp": {
                     "dependencies": [{"name": "wv2-atmosphere-corr"}, {"name": "wv2-ortho"}],
                     "input": {
-                        "wv2-corrected": {"type": "dependency", "node": "wv2-atmosphere-corr", "output": "wv2-shp"},
-                        "wv2-ortho-out": {"type": "dependency", "node": "wv2-ortho", "output": "wv2-ortho-shp"}
+                        "wv2-corrected": {"type": "dependency", "node": "wv2-atmosphere-corr", "output": "wv2-corrected"},
+                        "wv2-ortho-out": {"type": "dependency", "node": "wv2-ortho", "output": "wv2-ortho-out"}
                     },
                     "node_type": {
                         "node_type": "job",

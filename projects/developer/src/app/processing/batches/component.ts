@@ -36,6 +36,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized: boolean;
     subscription: any;
+    applyBtnClass = 'ui-button-secondary';
 
     constructor(
         private dataService: DataService,
@@ -153,9 +154,11 @@ export class BatchesComponent implements OnInit, OnDestroy {
     }
     onStartSelect(e) {
         this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
+        this.applyBtnClass = 'ui-button-primary';
     }
     onEndSelect(e) {
         this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
+        this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -163,6 +166,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
             started: moment.utc(this.started, this.dateFormat).toISOString(),
             ended: moment.utc(this.ended, this.dateFormat).toISOString()
         });
+        this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
     setDateFilterRange(unit: any, range: any) {

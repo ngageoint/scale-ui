@@ -19,10 +19,11 @@
     </label>
     <label>
         <span>Type</span>
-        <input type="text" pInputText formControlName="type"/>
+        <p-dropdown [options]="typeOptions" [autoWidth]="false" formControlName="type"
+                    [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+        </p-dropdown>
         <div class="help-block">
-            The accepted JSON data type. Must be one of 'array', 'boolean', 'integer', 'number', 'object', or 'string'.
-            (required)
+            The accepted JSON data type (required)
         </div>
     </label>
     <div class="text-center margin-top-lg margin-bottom-lg" *ngIf="jsonForm">
