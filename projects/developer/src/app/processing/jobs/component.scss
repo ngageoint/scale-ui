@@ -10,6 +10,7 @@ label {
 .jobs__header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
     margin-bottom: 10px;
 
     .jobs__date-filter {
@@ -33,9 +34,11 @@ label {
             }
         }
     }
+
     .jobs__controls {
-        display: flex;
-        flex-direction: column-reverse;
+        button {
+            margin-left: 5px;
+        }
     }
 }
 .jobs__table {

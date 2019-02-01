@@ -226,18 +226,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.ended = moment.utc().toISOString();
         this.onDateFilterApply();
     }
-    cancelJob(job: Job) {
-        const originalStatus = job.status;
-        job.status = 'CANCEL';
-        this.jobsApiService.updateJob(job.id, { status: 'CANCELED' })
-            .subscribe(() => {
-                job.status = 'CANCELED';
-            }, err => {
-                job.status = originalStatus;
-                this.messageService.add({severity: 'error', summary: 'Error canceling job', detail: err.statusText});
-            });
-    }
     requeueJobs(jobsParams?) {
+        this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
         if (!jobsParams) {
             jobsParams = {
                 started: this.datatableOptions.started,
@@ -256,6 +246,28 @@ export class JobsComponent implements OnInit, OnDestroy {
                 this.updateData();
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
+            });
+    }
+    cancelJobs(jobsParams?) {
+        this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
+        if (!jobsParams) {
+            jobsParams = {
+                started: this.datatableOptions.started,
+                ended: this.datatableOptions.ended,
+                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
+                status: this.datatableOptions.status === 'RUNNING' || this.datatableOptions.status === 'QUEUED' ?
+                    this.datatableOptions.status :
+                    null,
+                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
+            };
+            // remove null properties
+            jobsParams = _.pickBy(jobsParams);
+        }
+        this.jobsApiService.cancelJobs(jobsParams)
+            .subscribe(() => {
+                this.updateData();
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
             });
     }
     showExeLog(id) {
@@ -280,15 +292,35 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.jobsApiService.getJobs(requeueParams)
             .subscribe(data => {
                 this.confirmationService.confirm({
-                    message: `This will requeue <span class="failed"><strong>${data.count}</strong></span> canceled and failed jobs.
-                              Are you sure that you want to proceed?`,
+                    message: `This will requeue <span class="label label-danger"><strong>${data.count}</strong></span> canceled and failed
+                              jobs. Are you sure that you want to proceed?`,
                     header: 'Requeue All Jobs',
-                    icon: 'fa fa-question-circle',
                     accept: () => {
                         this.requeueJobs();
                     },
                     reject: () => {
                         console.log('requeue rejected');
+                    }
+                });
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
+            });
+    }
+    cancelAllConfirm() {
+        // query for running and queued jobs with current params to report an accurate cancel count
+        const cancelParams = _.clone(this.datatableOptions);
+        cancelParams.status = ['RUNNING', 'QUEUED'];
+        this.jobsApiService.getJobs(cancelParams)
+            .subscribe(data => {
+                this.confirmationService.confirm({
+                    message: `This will cancel <span class="label label-danger"><strong>${data.count}</strong></span> running and queued
+                              jobs. Are you sure that you want to proceed?`,
+                    header: 'Cancel All Jobs',
+                    accept: () => {
+                        this.cancelJobs();
+                    },
+                    reject: () => {
+                        console.log('cancel rejected');
                     }
                 });
             }, err => {

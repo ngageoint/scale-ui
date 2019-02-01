@@ -137,4 +137,11 @@ export class JobsApiService {
                 catchError(this.dataService.handleError)
             );
     }
+    cancelJobs(params): Observable<any> {
+        params.url = params.url ? params.url : `${this.apiPrefix}/jobs/cancel/`;
+        return this.http.post<any>(params.url, params)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
 }

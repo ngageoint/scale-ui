@@ -29,6 +29,8 @@
     <div class="jobs__controls">
         <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
                 (click)="requeueAllConfirm()"></button>
+        <button pButton type="button" class="ui-button-primary" icon="fa fa-ban" pTooltip="Cancel All Jobs"
+                (click)="cancelAllConfirm()"></button>
     </div>
 </div>
 <p-table [value]="jobs" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
@@ -86,7 +88,7 @@
                     <div class="pull-right">
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
                         <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
-                                (click)="cancelJob(rowData)" pTooltip="Cancel Job"
+                                (click)="cancelJobs({job_ids: [rowData.id]})" pTooltip="Cancel Job"
                                 *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
                         <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
                                 (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
