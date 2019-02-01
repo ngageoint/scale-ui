@@ -268,9 +268,41 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (dependency.disabled) {
             return;
         }
-        // const currJob: any = this.getCurrJob();
-        // TODO if selectedNode is a condition, inspect the dependency's input interface and apply it to the condition interface
         if (this.selectedNode) {
+            if (this.selectedNode.node_type.node_type === 'condition' && dependency.manifest) {
+                // inspect the dependency's input interface and apply it to the condition interface
+                const files = [];
+                const json = [];
+                const outputs = dependency.manifest.job.interface.outputs;
+                // job type manifest files and json are slightly different, so just grab what we need
+                if (outputs.files) {
+                    _.forEach(outputs.files, f => {
+                        files.push({
+                            name: f.name,
+                            required: f.required || null,
+                            media_types: f.mediaType ? [f.mediaType] : [],
+                            multiple: f.multiple || null
+                        });
+                    });
+                }
+                if (outputs.json) {
+                    _.forEach(outputs.json, j => {
+                        json.push({
+                            name: j.name,
+                            type: j.type,
+                            required: j.required || null
+                        });
+                    });
+                }
+                this.selectedNode.node_type.interface = {
+                    files: files,
+                    json: json
+                };
+                this.selectedCondition.node_type.interface = {
+                    files: files,
+                    json: json
+                };
+            }
             this.selectedNode.dependencies.push({
                 connections: [],
                 name: dependency.name
@@ -284,8 +316,37 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     removeDependency(dependency) {
-        // const currJob: any = this.getCurrJob();
         if (this.selectedNode) {
+            if (this.selectedNode.node_type.node_type === 'condition') {
+                // remove the dependency's interface from the condition's interface
+                const jobType: any = _.find(this.recipeData.job_types, {
+                    name: dependency.name
+                });
+                if (jobType) {
+                    jobType.disabled = false;
+                    let files = this.selectedNode.node_type.interface.files;
+                    let json = this.selectedNode.node_type.interface.json;
+                    const outputs = jobType.manifest.job.interface.outputs;
+                    if (outputs.files && files) {
+                        _.forEach(outputs.files, outputFile => {
+                            files = _.filter(files, f => {
+                                return outputFile.name !== f.name;
+                            });
+                        });
+                    }
+                    if (outputs.json && json) {
+                        _.forEach(outputs.json, outputJson => {
+                            json = _.filter(json, j => {
+                                return outputJson.name !== j.name;
+                            });
+                        });
+                    }
+                    this.selectedNode.node_type.interface = {
+                        files: files,
+                        json: json
+                    };
+                }
+            }
             _.remove(this.selectedNode.dependencies, dependency);
             this.updateRecipe();
         } else {
@@ -439,8 +500,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             };
         }
         if (changes.recipeData) {
-            this.selectedJobType = null;
-            this.selectedNode = null;
+            if (this.selectedNode && this.showRecipeDialog) {
+                if (!changes.recipeData.currentValue.definition.nodes[this.selectedNode.node_type.job_type_name]) {
+                    // selected node is no longer in recipe
+                    this.showRecipeDialog = false;
+                    this.selectedJobType = null;
+                    this.selectedNode = null;
+                }
+            }
             this.updateRecipe();
         }
     }
