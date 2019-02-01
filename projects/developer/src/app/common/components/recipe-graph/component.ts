@@ -3,7 +3,6 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
-import { JobType } from '../../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -174,6 +173,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         });
     }
 
+    private getInputConnectionOptions(input, output, dependency): any {
+        // only show the option if the interface media type is contained in the input media types
+        const inputMediaTypes = input.mediaTypes ? input.mediaTypes : input.media_types;
+        const outputMediaType = output.mediaType ? output.mediaType : output.media_types;
+        if (_.includes(inputMediaTypes, outputMediaType)) {
+            // disable the output if it currently exists as a connection
+            const hasOutput = _.find(_.values(this.selectedNode.input), {node: dependency.name, output: output.name});
+            output.disabled = !!hasOutput;
+            return output;
+        }
+        return false;
+    }
+
     select(e) {
         const shouldDeselect = _.isEqual(this.selectedNode, e);
         this.showRecipeDialog = !shouldDeselect;
@@ -247,18 +259,34 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
 
     showDependencyOptions(event) {
         this.dependencyOptions = [];
-        // only show job types present in recipe
+        // only show options present in recipe
         _.forEach(this.recipeData.definition.nodes, node => {
-            const isJobNode = this.selectedNode.node_type.node_type === 'job';
-            if (!isJobNode || node.node_type.job_type_name !== this.selectedJobType.name) {
-                const jobType: any = _.find(this.recipeData.job_types, {
-                    name: node.node_type.job_type_name,
-                    version: node.node_type.job_type_version
-                });
-                if (jobType) {
-                    // only show job types that are not yet dependencies
-                    jobType.disabled = _.find(this.selectedNode.dependencies, { name: jobType.name });
-                    this.dependencyOptions.push(jobType);
+            if (node.node_type.node_type === 'job') {
+                // exclude the selected job type
+                if ((this.selectedJobType && node.node_type.job_type_name !== this.selectedJobType.name) || !this.selectedJobType) {
+                    const jobType: any = _.find(this.recipeData.job_types, {
+                        name: node.node_type.job_type_name,
+                        version: node.node_type.job_type_version
+                    });
+                    if (jobType) {
+                        // only show job types that are not yet dependencies
+                        jobType.disabled = _.find(this.selectedNode.dependencies, { name: jobType.name });
+                        this.dependencyOptions.push(jobType);
+                    }
+                }
+            } else if (node.node_type.node_type === 'recipe') {
+                // do nothing; recipe nodes can not be dependencies
+            } else if (node.node_type.node_type === 'condition') {
+                // exclude the selected condition
+                if ((this.selectedCondition && node.node_type.name !== this.selectedCondition.node_type.name) || !this.selectedCondition) {
+                    const condition: any = _.find(this.recipeData.conditions, {
+                        name: node.node_type.name
+                    });
+                    if (condition) {
+                        // only show conditions that are not yet dependencies
+                        condition.disabled = _.find(this.selectedNode.dependencies, { name: condition.name });
+                        this.dependencyOptions.push(condition);
+                    }
                 }
             }
         });
@@ -274,6 +302,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 // inspect the dependency's input interface and apply it to the condition interface
                 const files = [];
                 const json = [];
+                const input = {};
                 const outputs = dependency.manifest.job.interface.outputs;
                 // job type manifest files and json are slightly different, so just grab what we need
                 if (outputs.files) {
@@ -295,14 +324,26 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                         });
                     });
                 }
-                this.selectedNode.node_type.interface = {
+                // _.forEach(dependency.manifest.job.interface.outputs.files, f => {
+                //     input[f.name] = {
+                //         node: dependency.name,
+                //         output: f.name,
+                //         type: 'dependency'
+                //     };
+                // });
+                // _.forEach(dependency.manifest.job.interface.outputs.json, j => {
+                //     input[j.name] = {
+                //         node: dependency.name,
+                //         output: j.name,
+                //         type: 'dependency'
+                //     };
+                // });
+                // console.log(input);
+                this.recipeData.definition.nodes[this.selectedNode.node_type.name].node_type.interface = {
                     files: files,
                     json: json
                 };
-                this.selectedCondition.node_type.interface = {
-                    files: files,
-                    json: json
-                };
+                // this.recipeData.definition.nodes[this.selectedNode.node_type.name].input = input;
             }
             this.selectedNode.dependencies.push({
                 connections: [],
@@ -362,31 +403,37 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             const jobType: any = _.find(this.recipeData.job_types, {
                 name: dep.name
             });
-            const inputConnection = {
-                title: jobType.title,
-                name: jobType.name,
-                version: jobType.version,
-                options: []
-            };
-            _.forEach(jobType.manifest.job.interface.outputs.files, output => {
-                // only show the option if the output media type is contained in the input media types
-                const inputMediaTypes = this.selectedNode.node_type.node_type === 'job' ?
-                    input.mediaTypes :
-                    this.selectedNode.node_type.node_type === 'recipe' ?
-                        input.media_types :
-                        [];
-                const outputMediaType = this.selectedNode.node_type.node_type === 'job' ?
-                    output.mediaType :
-                    this.selectedNode.node_type.node_type === 'recipe' ?
-                        output.media_type :
-                        null;
-                if (_.includes(inputMediaTypes, outputMediaType)) {
-                    // disable the output if it currently exists as a connection
-                    const hasOutput = _.find(_.values(this.selectedNode.input), { node: jobType.name, output: output.name });
-                    output.disabled = !!hasOutput;
-                    inputConnection.options.push(output);
-                }
+            const condition: any = _.find(this.recipeData.conditions, {
+                name: dep.name
             });
+            let inputConnection = null;
+            if (jobType) {
+                inputConnection = {
+                    title: jobType.title,
+                    name: jobType.name,
+                    version: jobType.version,
+                    options: []
+                };
+                _.forEach(jobType.manifest.job.interface.outputs.files, output => {
+                    const option = this.getInputConnectionOptions(input, output, jobType);
+                    if (option) {
+                        inputConnection.options.push(option);
+                    }
+                });
+            } else {
+                inputConnection = {
+                    title: null,
+                    name: condition.name,
+                    version: null,
+                    options: []
+                };
+                _.forEach(condition.interface.files, output => {
+                    const option = this.getInputConnectionOptions(input, output, condition);
+                    if (option) {
+                        inputConnection.options.push(option);
+                    }
+                });
+            }
             if (inputConnection.options.length > 0) {
                 this.nodeInputs.push(inputConnection);
             }
@@ -411,25 +458,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     name: this.selectedNode.node_type.recipe_type_name,
                     revision_num: this.selectedNode.node_type.recipe_type_revision
                 });
+            } else if (this.selectedNode.node_type.node_type === 'condition') {
+                currType = _.clone(this.selectedNode.node_type);
             }
             if (currType) {
                 const files = this.selectedNode.node_type.node_type === 'job' ?
                     currType.manifest.job.interface.inputs.files :
                     this.selectedNode.node_type.node_type === 'recipe' ?
                         currType.definition.input.files :
-                        {};
+                        currType.interface.files;
                 const currInput: any = _.find(files, file => {
                     // job manifest input has "mediaTypes", recipe definition has "media_types"
-                    const inputMediaTypes = this.selectedNode.node_type.node_type === 'job' ?
-                        file.mediaTypes :
-                        this.selectedNode.node_type.node_type === 'recipe' ?
-                            file.media_types :
-                            [];
-                    const outputMediaType = this.selectedNode.node_type.node_type === 'job' ?
-                        providerOutput.mediaType :
-                        this.selectedNode.node_type.node_type === 'recipe' ?
-                            providerOutput.media_type :
-                            null;
+                    const inputMediaTypes = this.selectedNode.node_type.node_type === 'job' ? file.mediaTypes : file.media_types;
+                    const outputMediaType = providerOutput.mediaType ? providerOutput.mediaType : providerOutput.media_types;
                     return _.includes(inputMediaTypes, outputMediaType);
                 });
                 if (currInput) {

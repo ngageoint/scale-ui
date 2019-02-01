@@ -286,8 +286,14 @@
     <ul class="recipe__option-list">
         <li *ngFor="let option of dependencyOptions" (click)="addDependency(option)"
             [class]="option.disabled ? 'disabled' : ''">
-            <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
-            {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
+            <span *ngIf="option.manifest">
+                <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
+                {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
+            </span>
+            <span *ngIf="option.data_filter">
+                <span class="fa fa-fw fa-adjust"></span>
+                {{ option.name }}
+            </span>
         </li>
     </ul>
 </p-overlayPanel>

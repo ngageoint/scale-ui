@@ -335,6 +335,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 data_filter: event.data.data_filter
             }
         };
+        recipeData.addCondition(event.data);
         this.selectedRecipeTypeDetail = recipeData;
     }
 

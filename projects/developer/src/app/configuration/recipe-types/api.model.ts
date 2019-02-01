@@ -1,7 +1,11 @@
 import { RecipeTypeInput } from './api.input.model';
 import { JobType } from '../job-types/api.model';
+import * as _ from 'lodash';
+import {RecipeTypeFilter} from './api.filter.model';
 
 export class RecipeType {
+    conditions = [];
+
     private static build(data) {
         if (data) {
             const definition = data.definition ?
@@ -27,6 +31,7 @@ export class RecipeType {
             );
         }
     }
+
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
@@ -36,6 +41,20 @@ export class RecipeType {
         }
         return null;
     }
+
+    public addCondition(condition) {
+        if (!this.conditions || !Array.isArray(this.conditions)) {
+            this.conditions = [];
+        }
+        this.conditions.push(condition);
+    }
+
+    public removeCondition(condition) {
+        _.remove(this.conditions, c => {
+            return _.isEqual(c, condition);
+        });
+    }
+
     constructor(
         public id: number,
         public name: string,
