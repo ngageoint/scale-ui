@@ -1,9 +1,7 @@
 <div class="scale-log__container">
-    <p-dialog [(visible)]="visible" [modal]="false" [responsive]="true"
-              [style]="{width: '95%', minWidth: '25%'}" [blockScroll]="true"
-              [maximizable]="true" [baseZIndex]="10000" (onHide)="unsubscribe()">
+    <p-sidebar [(visible)]="visible" position="bottom" (onHide)="onClose()" styleClass="ui-sidebar-lg">
         <p-header>
-            <div class="flexed inline" *ngIf="execution">
+            <div class="flexed inline margin-bottom-md" *ngIf="execution">
                 <div class="scale-log__title" (mouseenter)="showExeError(error, $event)"
                      (mouseleave)="hideExeError(error)">
                     <i class="fa fa-fw fa-square" [ngClass]="execution.statusClass"></i>
@@ -25,5 +23,5 @@
                 </div>
             </p-overlayPanel>
         </div>
-    </p-dialog>
+    </p-sidebar>
 </div>

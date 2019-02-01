@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import {Component, Input, OnInit, OnChanges, OnDestroy, ViewChild, AfterViewInit, EventEmitter, Output} from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as Clipboard from 'clipboard';
 import * as _ from 'lodash';
@@ -14,10 +14,11 @@ import { LogViewerApiService } from './api.service';
 export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
     @Input() execution: JobExecution;
     @Input() visible: boolean;
+    @Output() close: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('codemirror') codemirror: any;
     loading: boolean;
     subscription: any;
-    scrollToLine = 1e8;
+    scrollToLine = null;
     execLog: any[];
     execLogStr: string;
     latestScaleOrderNum = 0;
@@ -30,8 +31,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
         mode: {name: 'text/plain', json: false},
         indentUnit: 4,
         lineNumbers: true,
-        readOnly: true,
-        viewportMargin: Infinity
+        readOnly: true
     };
 
     constructor(
@@ -67,8 +67,6 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
                 _.forEach(this.execLog, line => {
                     this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
                 });
-                // this.codemirror.codeMirror.focus();
-                // this.codemirror.codeMirror.setCursor(1e8, 0);
             } else {
                 this.execLogStr = 'Waiting for log output...';
             }
@@ -105,6 +103,11 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
             console.log('unsubscribe');
             this.subscription.unsubscribe();
         }
+        this.close.emit();
+    }
+
+    onClose() {
+        this.close.emit();
     }
 
     ngOnInit() {
@@ -130,10 +133,6 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
                 }
             }
         }
-
-        if (changes.execution && !_.isEqual(changes.execution.previousValue, changes.execution.currentValue)) {
-
-        }
     }
 
     ngOnDestroy() {
@@ -143,8 +142,11 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     ngAfterViewInit() {
         if (this.codemirror) {
             this.codemirror.codeMirror.on('change', e => {
-                this.codemirror.codeMirror.focus();
-                this.codemirror.codeMirror.setCursor(this.scrollToLine, 0);
+                if (this.scrollToLine === null) {
+                    this.scrollToLine = 1e8;
+                }
+                e.focus();
+                e.setCursor(this.scrollToLine, 0);
             });
         }
     }

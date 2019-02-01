@@ -203,7 +203,7 @@
         </div>
     </div>
     <div *ngIf="selectedJobExe">
-        <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
+        <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay" (close)="hideExeLog()"></dev-log-viewer>
     </div>
     <p-overlayPanel #status appendTo="body">
         <strong>{{ jobStatus }}</strong>

@@ -124,5 +124,5 @@
              [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
 <p-confirmDialog></p-confirmDialog>
 <div *ngIf="selectedJobExe">
-    <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay"></dev-log-viewer>
+    <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay" (close)="hideExeLog()"></dev-log-viewer>
 </div>
