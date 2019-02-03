@@ -72,6 +72,38 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.showLegend = false;
     }
 
+    private verifyNode(node) {
+        // add link for dependency, if it exists
+        _.forEach(node.dependencies, dependency => {
+            if (this.recipeData.definition.nodes[dependency.name]) {
+                this.links.push({
+                    source: _.camelCase(dependency.name),
+                    target: node.id,
+                    node: node,
+                    visible: true
+                });
+            } else {
+                // dependency node was removed, so remove it from dependencies
+                _.remove(node.dependencies, dependency);
+            }
+        });
+        // check to make sure all connections are associated with nodes currently in the recipe
+        _.forEach(node.input, input => {
+            if (!this.recipeData.definition.nodes[input.node]) {
+                // input node no longer exists, so remove the input connection
+                _.remove(node.input, input);
+            }
+        });
+        if (this.selectedNodeConnections) {
+            _.forEach(this.selectedNodeConnections, connection => {
+                if (!this.recipeData.definition.nodes[connection.name]) {
+                    // connection node no longer exists, so remove it
+                    _.remove(this.selectedNodeConnections, connection);
+                }
+            });
+        }
+    }
+
     private updateRecipe() {
         if (this.recipeData) {
             // build nodes and links for DAG
@@ -82,10 +114,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 icon: null,
                 dependencies: [],
                 visible: true,
-                fillColor: this.colorService.RECIPE_NODE,
-                node_type: {
-                    node_type: 'job'
-                }
+                fillColor: this.colorService.RECIPE_NODE
             }];
             this.links = [];
 
@@ -134,17 +163,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                             visible: true
                         });
                     } else {
-                        _.forEach(node.dependencies, dependency => {
-                            this.links.push({
-                                source: _.camelCase(dependency.name),
-                                target: node.id,
-                                node: node,
-                                visible: true
-                            });
-                        });
+                        this.verifyNode(node);
                     }
                 }
             });
+
+            if (this.selectedNode) {
+                this.verifyNode(this.selectedNode);
+            }
             console.log(this.recipeData);
         }
     }

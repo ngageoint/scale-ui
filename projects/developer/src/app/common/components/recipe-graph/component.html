@@ -134,7 +134,7 @@
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showInputConnections($event, input)"
                                             pTooltip="Add Input Connection"
-                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.files.length > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && input.mediaTypes.length > selectedNodeConnections.length"></button>
                                 </div>
                             </div>
                         </div>
@@ -204,7 +204,7 @@
                                 <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                         (click)="showInputConnections($event, input)"
                                         pTooltip="Add Input Connection"
-                                        *ngIf="isEditing && selectedRecipeType.definition.input.files.length > selectedNodeConnections.length"></button>
+                                        *ngIf="isEditing && input.media_types.length > selectedNodeConnections.length"></button>
                             </div>
                         </div>
                     </div>

@@ -344,16 +344,16 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         const nodeToRemove = recipeData.definition.nodes[event.data.name];
         if (nodeToRemove) {
             if (nodeToRemove.node_type.node_type === 'job') {
-                recipeData.job_types = _.filter(recipeData.job_types, jt => {
-                    return jt.name !== event.data.name && jt.version !== event.data.latest_version;
+                _.remove(recipeData.job_types, (jt: any) => {
+                    return jt.name === event.data.name && jt.version === event.data.latest_version;
                 });
             } else if (nodeToRemove.node_type.node_type === 'recipe') {
-                recipeData.sub_recipe_types = _.filter(recipeData.sub_recipe_types, rt => {
-                    return rt.name !== event.data.name && rt.revision_num !== event.data.revision_num;
+                _.remove(recipeData.sub_recipe_types, (rt: any) => {
+                    return rt.name === event.data.name && rt.revision_num === event.data.revision_num;
                 });
             } else if (nodeToRemove.node_type.node_type === 'condition') {
-                recipeData.conditions = _.filter(recipeData.conditions, c => {
-                    return c.name !== event.data.name && c.revision_num !== event.data.revision_num;
+                _.remove(recipeData.conditions, (c: any) => {
+                    return c.name === event.data.name;
                 });
             }
             delete recipeData.definition.nodes[event.data.name];
