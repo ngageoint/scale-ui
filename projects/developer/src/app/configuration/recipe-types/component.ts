@@ -351,6 +351,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 recipeData.sub_recipe_types = _.filter(recipeData.sub_recipe_types, rt => {
                     return rt.name !== event.data.name && rt.revision_num !== event.data.revision_num;
                 });
+            } else if (nodeToRemove.node_type.node_type === 'condition') {
+                recipeData.conditions = _.filter(recipeData.conditions, c => {
+                    return c.name !== event.data.name && c.revision_num !== event.data.revision_num;
+                });
             }
             delete recipeData.definition.nodes[event.data.name];
             this.selectedRecipeTypeDetail = recipeData;

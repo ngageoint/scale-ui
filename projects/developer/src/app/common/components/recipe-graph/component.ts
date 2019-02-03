@@ -82,7 +82,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 icon: null,
                 dependencies: [],
                 visible: true,
-                fillColor: this.colorService.RECIPE_NODE
+                fillColor: this.colorService.RECIPE_NODE,
+                node_type: {
+                    node_type: 'job'
+                }
             }];
             this.links = [];
 
