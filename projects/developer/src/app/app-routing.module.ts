@@ -10,6 +10,7 @@ import { JobTypesComponent } from './configuration/job-types/component';
 import { JobTypesCreateComponent } from './configuration/job-types/create.component';
 import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { JobTypeHistoryComponent } from './processing/job-type-history/component';
+import { JobTypeHistoryDetailsComponent } from './processing/job-type-history/details.component';
 import { MetricsComponent } from './data/metrics/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
@@ -33,6 +34,7 @@ const routes: Routes = [
     { path: 'processing/running-jobs', component: RunningJobsComponent },
     { path: 'processing/queued-jobs', component: QueuedJobsComponent },
     { path: 'processing/job-type-history', component: JobTypeHistoryComponent },
+    { path: 'processing/job-type-history/:name/:version', component: JobTypeHistoryDetailsComponent },
     { path: 'processing/batches', component: BatchesComponent },
     { path: 'processing/batches/:id', component: BatchDetailsComponent },
     { path: 'processing/batches/edit/:id', component: BatchesEditComponent },

@@ -1,7 +1,9 @@
 <h2><i class="fa fa-history"></i> Job Type History</h2>
+<!--<p-table [value]="performanceData" [columns]="columns" [rows]="10" [loading]="datatableLoading" [autoLayout]="true"-->
+         <!--[responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJobType"-->
+         <!--(onRowSelect)="onRowSelect($event)">-->
 <p-table [value]="performanceData" [columns]="columns" [rows]="10" [loading]="datatableLoading" [autoLayout]="true"
-         [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJobType"
-         [loading]="datatableLoading" (onRowSelect)="onRowSelect($event)">
+         [responsive]="true" resizableColumns="true">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field">

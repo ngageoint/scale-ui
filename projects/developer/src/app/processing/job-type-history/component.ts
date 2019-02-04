@@ -186,18 +186,18 @@ export class JobTypeHistoryComponent implements OnInit {
     }
     onChange(e) {
         const name = _.map(e.value, 'name');
-        const version = _.map(e.value, 'latest_version');
+        const version = _.map(e.value, 'version');
         this.datatableOptions.name = name.length > 0 ? name : null;
         this.datatableOptions.version = version.length > 0 ? version : null;
         this.updateOptions();
     }
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/processing/job-type-history/${e.data.name}/${e.data.version}`);
-        } else {
-            this.router.navigate([`/processing/job-type-history/${e.data.name}/${e.data.version}`]);
-        }
-    }
+    // onRowSelect(e) {
+    //     if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+    //         window.open(`/processing/job-type-history/${e.data.job_type.name}/${e.data.job_type.version}`);
+    //     } else {
+    //         this.router.navigate([`/processing/job-type-history/${e.data.job_type.name}/${e.data.job_type.version}`]);
+    //     }
+    // }
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
