@@ -109,15 +109,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             //         children: this.setInterfaceData(data.job_type_interface.output_data)
             //     }
             // ];
-            this.chartData6h = this.getChartData(data.job_counts_6h);
-            this.total6h = this.getChartTotals(data.job_counts_6h, 'total');
-            this.failed6h = this.getChartTotals(data.job_counts_6h, 'failed');
-            this.chartData12h = this.getChartData(data.job_counts_12h);
-            this.total12h = this.getChartTotals(data.job_counts_12h, 'total');
-            this.failed12h = this.getChartTotals(data.job_counts_12h, 'failed');
-            this.chartData24h = this.getChartData(data.job_counts_24h);
-            this.total24h = this.getChartTotals(data.job_counts_24h, 'total');
-            this.failed24h = this.getChartTotals(data.job_counts_24h, 'failed');
             this.selectedJobTypeDetail = data;
         }, err => {
             console.log(err);

@@ -57,6 +57,7 @@ import { JobHistoryComponent } from './dashboard/job-history/component';
 import { DataService } from './common/services/data.service';
 import { ProcessingFormComponent } from './navbar/subnav/processing-form/component';
 import { JobTypeHistoryComponent } from './processing/job-type-history/component';
+import { JobTypeHistoryDetailsComponent } from './processing/job-type-history/details.component';
 import { JobTypeHistoryDatatableService } from './processing/job-type-history/datatable.service';
 import { MetricsComponent } from './data/metrics/component';
 import { MetricsApiService } from './data/metrics/api.service';
@@ -121,6 +122,7 @@ import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.c
         JobHistoryComponent,
         ProcessingFormComponent,
         JobTypeHistoryComponent,
+        JobTypeHistoryDetailsComponent,
         MetricsComponent,
         RunningJobsComponent,
         LogViewerComponent,

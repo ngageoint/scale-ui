@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { JobTypeName } from '../../configuration/job-types/api.name.model';
 import { JobTypeHistoryDatatableService } from './datatable.service';
 import { JobTypeHistoryDatatable } from './datatable.model';
 import { MetricsApiService } from '../../data/metrics/api.service';
@@ -191,6 +190,13 @@ export class JobTypeHistoryComponent implements OnInit {
         this.datatableOptions.name = name.length > 0 ? name : null;
         this.datatableOptions.version = version.length > 0 ? version : null;
         this.updateOptions();
+    }
+    onRowSelect(e) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/processing/job-type-history/${e.data.name}/${e.data.version}`);
+        } else {
+            this.router.navigate([`/processing/job-type-history/${e.data.name}/${e.data.version}`]);
+        }
     }
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
