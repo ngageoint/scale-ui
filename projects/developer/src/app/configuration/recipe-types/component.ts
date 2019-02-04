@@ -427,9 +427,19 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     onRemoveConditionClick(condition) {
-        _.remove(this.conditions, c => {
-            return _.isEqual(c, condition);
-        });
+        _.remove(this.conditions, { name: condition.name });
+        const nodeToRemove = this.selectedRecipeTypeDetail.definition.nodes[condition.name];
+        if (nodeToRemove) {
+            this.removeNode({
+                data: condition
+            });
+        }
+    }
+
+    onEditConditionClick(condition) {
+        this.onRemoveConditionClick(condition);
+        this.condition = condition;
+        this.conditionForm.patchValue(condition);
     }
 
     ngOnInit() {
