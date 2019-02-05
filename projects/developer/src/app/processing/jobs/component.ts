@@ -217,6 +217,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
+        this.jobs = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, this.dateFormat).toISOString(),

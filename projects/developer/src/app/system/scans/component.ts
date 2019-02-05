@@ -123,6 +123,7 @@ export class ScansComponent implements OnInit, OnDestroy {
         this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
     }
     onDateFilterApply() {
+        this.scans = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, this.dateFormat).toISOString(),

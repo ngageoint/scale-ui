@@ -20,7 +20,7 @@ export class JobTypeHistoryComponent implements OnInit {
     columns: any[];
     jobTypes: any;
     jobTypeOptions: SelectItem[];
-    selectedJobType: any = [];
+    selectedJobType: any;
     performanceData: any[];
     sortConfig: any;
     datatableLoading: boolean;
@@ -78,12 +78,20 @@ export class JobTypeHistoryComponent implements OnInit {
     }
     private updateData() {
         this.datatableLoading = true;
+        let choiceIds = null;
+        if (this.selectedJobType) {
+            choiceIds = Array.isArray(this.selectedJobType) ?
+                _.map(this.selectedJobtype, 'id') :
+                [this.selectedJobType.id];
+        } else {
+            choiceIds = _.map(this.jobTypes, 'id');
+        }
         const metricsParams = {
             page: 1,
             page_size: null,
             started: moment.utc().subtract(30, 'd').startOf('d').toISOString(),
             ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
-            choice_id: this.selectedJobType ? [this.selectedJobType.id] : _.map(this.jobTypes, 'id'),
+            choice_id: choiceIds,
             column: ['error_system_count', 'error_algorithm_count', 'error_data_count', 'total_count'],
             group: null,
             dataType: 'job-types'
@@ -106,6 +114,12 @@ export class JobTypeHistoryComponent implements OnInit {
                 });
                 if (this.datatableOptions.name && this.datatableOptions.version) {
                     tempData = _.filter(tempData, (d) => {
+                        if (Array.isArray(this.datatableOptions.name)) {
+                            // more than one job type selected, so both name and version are arrays
+                            return _.indexOf(this.datatableOptions.name, d.job_type.name) >= 0 &&
+                                   _.indexOf(this.datatableOptions.version, d.job_type.version) >= 0;
+                        }
+                        // name and version are just strings
                         return d.job_type.name === this.datatableOptions.name && d.job_type.version === this.datatableOptions.version;
                     });
                 }
@@ -132,7 +146,7 @@ export class JobTypeHistoryComponent implements OnInit {
         }
     }
     private getJobTypes() {
-        this.selectedJobType = [];
+        const selectedJobTypes = [];
         this.datatableLoading = true;
         this.metricsApiService.getDataTypeOptions('job-types').subscribe(data => {
             this.datatableLoading = false;
@@ -143,13 +157,27 @@ export class JobTypeHistoryComponent implements OnInit {
                     label: `${jobType.title} ${jobType.version}`,
                     value: jobType
                 });
-                if (
-                    _.indexOf(this.datatableOptions.name, jobType.name) >= 0 &&
-                    _.indexOf(this.datatableOptions.version, jobType.version) >= 0
-                ) {
-                    this.selectedJobType.push(jobType);
+                if (Array.isArray(this.datatableOptions.name)) {
+                    // more than one job type selected, so both name and version are arrays
+                    if (
+                        _.indexOf(this.datatableOptions.name, jobType.name) >= 0 &&
+                        _.indexOf(this.datatableOptions.version, jobType.version) >= 0
+                    ) {
+                        selectedJobTypes.push(jobType);
+                    }
+                } else {
+                    // name and version are just strings
+                    if (
+                        this.datatableOptions.name === jobType.name &&
+                        this.datatableOptions.version === jobType.version
+                    ) {
+                        selectedJobTypes.push(jobType);
+                    }
                 }
             });
+            if (selectedJobTypes.length > 0) {
+                this.selectedJobType = selectedJobTypes;
+            }
             this.jobTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
             this.updateOptions();
         });

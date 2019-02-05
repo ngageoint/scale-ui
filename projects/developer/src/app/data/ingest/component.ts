@@ -194,6 +194,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
+        this.ingests = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, this.dateFormat).toISOString(),
