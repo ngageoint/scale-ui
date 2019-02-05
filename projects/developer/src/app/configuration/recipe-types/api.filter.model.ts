@@ -6,7 +6,11 @@ export class RecipeTypeFilter {
             // parse string value to array of array
             const fieldArrs = [];
             _.forEach(data.fields, field => {
-                fieldArrs.push([field.substring(1, (field.length - 1)).split(',')]);
+                if (typeof field === 'string') {
+                    fieldArrs.push([_.map(field.substring(1, (field.length - 1)).split(','), _.trim)]);
+                } else {
+                    fieldArrs.push(field);
+                }
             });
             return new RecipeTypeFilter(
                 data.name,
