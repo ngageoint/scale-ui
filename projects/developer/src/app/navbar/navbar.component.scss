@@ -24,6 +24,12 @@ $navbar-item-width: 150px;
     right: 0;
     top: 0;
     z-index: 1001;
+
+    .theme {
+        margin: 0 0 0 20px;
+        color: #ccc;
+        cursor: pointer;
+    }
 }
 
 .navbar__item {
@@ -36,7 +42,7 @@ $navbar-item-width: 150px;
 
     a {
         color: $clr-gray-85;
-        padding: 1.6em 1.1em 1.5em 1.1em;
+        padding: 1.8em 1.1em 1.5em 1.1em;
         text-align: center;
         text-decoration: none;
         text-shadow: 0 1px 0 $clr-navbar-dark;
@@ -77,7 +83,7 @@ $navbar-item-width: 150px;
 .navbar__logo {
     color: $clr-white;
     margin-right: 1.0em;
-    padding: 1em 1.25em 0.5em 1.25em;
+    padding: 1.2em 1.25em 0.5em 1.25em;
     text-align: center;
 
     a {

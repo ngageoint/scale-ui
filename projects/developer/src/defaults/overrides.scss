@@ -16,20 +16,6 @@ body {
         padding: .35em .5em;
     }
 
-    .ui-panel {
-        padding: 0;
-
-        .ui-panel-titlebar {
-            padding: .75em 1.25em .5em 1.25em;
-            font-weight: bold;
-            border-bottom: 1px solid #e6e6e6;
-            border-top-left-radius: 0.25em;
-            border-top-right-radius: 0.25em;
-            border-bottom-left-radius: 0px;
-            border-bottom-right-radius: 0px;
-        }
-    }
-
     .ui-steps {
         .ui-steps-item {
             float: none;

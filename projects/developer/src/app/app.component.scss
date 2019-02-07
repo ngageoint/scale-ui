@@ -1,15 +1,8 @@
-@import '../environments/environment';
-
 .app {
-    background: $clr-gray-90;
-    background-image: linear-gradient(to bottom, $clr-gray-95, $clr-gray-85);
-    color: $clr-dark;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-
-    .content {
-        flex: 1;
-        padding: 1.0em 2.0em;
+    .app__theme-dropdown {
+        position: absolute;
+        top: 18px;
+        left: 775px;
+        z-index: 10000;
     }
 }

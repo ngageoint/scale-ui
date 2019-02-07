@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 @Component({
     selector: 'dev-navbar',
@@ -7,8 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 
 export class NavbarComponent {
+    @ViewChild('themePanel') themePanel: any;
     selectedId = null;
     subscription: any;
+    isLight = true;
+    themeIcon = 'fa fa-sun-o';
 
     constructor() {}
 
@@ -32,5 +35,13 @@ export class NavbarComponent {
     onNavigate() {
         // close the subnav
         this.selectedId = null;
+    }
+
+    changeTheme() {
+        const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
+        this.isLight = !this.isLight;
+        this.themeIcon = this.isLight ? 'fa fa-sun-o' : 'fa fa-moon-o';
+        const theme = this.isLight ? 'light' : 'dark';
+        themeLink.href = `assets/themes/${theme}.css`;
     }
 }
