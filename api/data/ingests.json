@@ -8,8 +8,8 @@
             "file_name": "Vestibulum.gif",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
                 "job": {
                     "id": 6
@@ -67,8 +67,8 @@
             "file_name": "QuisOrciNullam.png",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
                 "job": {
                     "id": 9
@@ -126,8 +126,8 @@
             "file_name": "CrasPellentesque.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.",
                 "job": {
                     "id": 4
@@ -185,8 +185,8 @@
             "file_name": "IpsumPraesent.tiff",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui.",
                 "job": {
                     "id": 5
@@ -244,8 +244,8 @@
             "file_name": "NullaNequeLibero.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.",
                 "job": {
                     "id": 6
@@ -303,8 +303,8 @@
             "file_name": "DonecPharetraMagna.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
                 "job": {
                     "id": 8
@@ -362,8 +362,8 @@
             "file_name": "CuraeNulla.tiff",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin risus. Praesent lectus.\n\nVestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.",
                 "job": {
                     "id": 1
@@ -421,8 +421,8 @@
             "file_name": "Amet.png",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
                 "job": {
                     "id": 3
@@ -480,8 +480,8 @@
             "file_name": "SuscipitLigula.png",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat.",
                 "job": {
                     "id": 2
@@ -539,8 +539,8 @@
             "file_name": "SitAmet.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.",
                 "job": {
                     "id": 6
@@ -598,8 +598,8 @@
             "file_name": "VivamusInFelis.tiff",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.\n\nCurabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
                 "job": {
                     "id": 3
@@ -657,8 +657,8 @@
             "file_name": "SodalesScelerisqueMauris.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus.\n\nIn sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
                 "job": {
                     "id": 5
@@ -716,8 +716,8 @@
             "file_name": "RidiculusMus.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\n\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.",
                 "job": {
                     "id": 5
@@ -775,8 +775,8 @@
             "file_name": "Justo.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\n\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
                 "job": {
                     "id": 3
@@ -834,8 +834,8 @@
             "file_name": "NamNullaInteger.jpeg",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\n\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
                 "job": {
                     "id": 1
@@ -893,8 +893,8 @@
             "file_name": "CurabiturIn.gif",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Fusce consequat. Nulla nisl. Nunc nisl.\n\nDuis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
                 "job": {
                     "id": 10
@@ -952,8 +952,8 @@
             "file_name": "Lectus.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede.",
                 "job": {
                     "id": 2
@@ -1011,8 +1011,8 @@
             "file_name": "Curabitur.png",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.",
                 "job": {
                     "id": 10
@@ -1070,8 +1070,8 @@
             "file_name": "PellentesqueAt.tiff",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.\n\nDuis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.",
                 "job": {
                     "id": 3
@@ -1129,8 +1129,8 @@
             "file_name": "Hac.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.",
                 "job": {
                     "id": 10
@@ -1188,8 +1188,8 @@
             "file_name": "AccumsanFelis.png",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.",
                 "job": {
                     "id": 2
@@ -1247,8 +1247,8 @@
             "file_name": "Magna.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Phasellus in felis. Donec semper sapien a libero. Nam dui.\n\nProin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius.",
                 "job": {
                     "id": 4
@@ -1306,8 +1306,8 @@
             "file_name": "NatoquePenatibus.png",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Aenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
                 "job": {
                     "id": 8
@@ -1365,8 +1365,8 @@
             "file_name": "Turpis.jpeg",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
                 "job": {
                     "id": 10
@@ -1424,8 +1424,8 @@
             "file_name": "ImperdietSapienUrna.jpeg",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit.\n\nDonec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
                 "job": {
                     "id": 4
@@ -1483,8 +1483,8 @@
             "file_name": "Erat.gif",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
                 "job": {
                     "id": 2
@@ -1542,8 +1542,8 @@
             "file_name": "Pede.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.",
                 "job": {
                     "id": 7
@@ -1601,8 +1601,8 @@
             "file_name": "DiamErat.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Duis consequat dui nec nisi volutpat eleifend. Donec ut dolor. Morbi vel lectus in quam fringilla rhoncus.\n\nMauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.",
                 "job": {
                     "id": 4
@@ -1660,8 +1660,8 @@
             "file_name": "MorbiVelLectus.jpeg",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Duis bibendum, felis sed interdum venenatis, turpis enim blandit mi, in porttitor pede justo eu massa. Donec dapibus. Duis at velit eu est congue elementum.",
                 "job": {
                     "id": 8
@@ -1719,8 +1719,8 @@
             "file_name": "PretiumIaculis.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Mauris enim leo, rhoncus sed, vestibulum sit amet, cursus id, turpis. Integer aliquet, massa id lobortis convallis, tortor risus dapibus augue, vel accumsan tellus nisi eu orci. Mauris lacinia sapien quis libero.\n\nNullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
                 "job": {
                     "id": 5
@@ -1778,8 +1778,8 @@
             "file_name": "HabitassePlateaDictumst.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.",
                 "job": {
                     "id": 10
@@ -1837,8 +1837,8 @@
             "file_name": "PosuereMetus.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.",
                 "job": {
                     "id": 1
@@ -1896,8 +1896,8 @@
             "file_name": "IdPretium.tiff",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "In congue. Etiam justo. Etiam pretium iaculis justo.\n\nIn hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.",
                 "job": {
                     "id": 3
@@ -1955,8 +1955,8 @@
             "file_name": "Ultrices.jpeg",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio.\n\nCras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.",
                 "job": {
                     "id": 5
@@ -2014,8 +2014,8 @@
             "file_name": "UllamcorperAugueA.gif",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.",
                 "job": {
                     "id": 6
@@ -2073,8 +2073,8 @@
             "file_name": "DiamVitae.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.",
                 "job": {
                     "id": 5
@@ -2132,8 +2132,8 @@
             "file_name": "EtiamJusto.gif",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Nullam sit amet turpis elementum ligula vehicula consequat. Morbi a ipsum. Integer a nibh.",
                 "job": {
                     "id": 9
@@ -2191,8 +2191,8 @@
             "file_name": "AugueLuctus.gif",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Curabitur at ipsum ac tellus semper interdum. Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
                 "job": {
                     "id": 10
@@ -2250,8 +2250,8 @@
             "file_name": "TinciduntEgetTempus.png",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum.",
                 "job": {
                     "id": 3
@@ -2309,8 +2309,8 @@
             "file_name": "Faucibus.gif",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Quisque id justo sit amet sapien dignissim vestibulum. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Nulla dapibus dolor vel est. Donec odio justo, sollicitudin ut, suscipit a, feugiat et, eros.\n\nVestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
                 "job": {
                     "id": 5
@@ -2368,8 +2368,8 @@
             "file_name": "ConsectetuerAdipiscing.png",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
                 "job": {
                     "id": 1
@@ -2427,8 +2427,8 @@
             "file_name": "AcDiam.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Morbi porttitor lorem id ligula. Suspendisse ornare consequat lectus. In est risus, auctor sed, tristique in, tempus sit amet, sem.\n\nFusce consequat. Nulla nisl. Nunc nisl.",
                 "job": {
                     "id": 10
@@ -2486,8 +2486,8 @@
             "file_name": "Dictumst.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.\n\nSed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus.",
                 "job": {
                     "id": 3
@@ -2545,8 +2545,8 @@
             "file_name": "Sit.gif",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.",
                 "job": {
                     "id": 1
@@ -2604,8 +2604,8 @@
             "file_name": "Suspendisse.tiff",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.\n\nIn congue. Etiam justo. Etiam pretium iaculis justo.",
                 "job": {
                     "id": 1
@@ -2663,8 +2663,8 @@
             "file_name": "Pede.gif",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.\n\nFusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem.",
                 "job": {
                     "id": 9
@@ -2722,8 +2722,8 @@
             "file_name": "LacusCurabiturAt.tiff",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Sed ante. Vivamus tortor. Duis mattis egestas metus.\n\nAenean fermentum. Donec ut mauris eget massa tempor convallis. Nulla neque libero, convallis eget, eleifend luctus, ultricies eu, nibh.",
                 "job": {
                     "id": 1
@@ -2781,8 +2781,8 @@
             "file_name": "JustoEtiam.png",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis.\n\nSed ante. Vivamus tortor. Duis mattis egestas metus.",
                 "job": {
                     "id": 4
@@ -2840,8 +2840,8 @@
             "file_name": "LectusAliquam.jpeg",
             "strike": {
                 "id": 1,
-                "name": "landsat",
-                "title": "Landsat",
+                "name": "worldview",
+                "title": "Worldview",
                 "description": "In hac habitasse platea dictumst. Etiam faucibus cursus urna. Ut tellus.\n\nNulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi.",
                 "job": {
                     "id": 4
@@ -2899,8 +2899,8 @@
             "file_name": "ArcuAdipiscingMolestie.jpeg",
             "strike": {
                 "id": 2,
-                "name": "worldview",
-                "title": "Worldview",
+                "name": "landsat",
+                "title": "Landsat",
                 "description": "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.\n\nProin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.",
                 "job": {
                     "id": 10
