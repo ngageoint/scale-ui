@@ -22,15 +22,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     selectedJobType: any;
     selectedJobTypeDetail: any;
     // interfaceData: TreeNode[];
-    chartData6h: any;
-    total6h: number;
-    failed6h: number;
-    chartData12h: any;
-    total12h: number;
-    failed12h: number;
-    chartData24h: any;
-    total24h: number;
-    failed24h: number;
     options: any;
     pauseBtnIcon = 'fa fa-pause';
     items: MenuItem[] = [

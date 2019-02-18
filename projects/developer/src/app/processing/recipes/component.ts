@@ -100,7 +100,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
                     label: `${recipeType.title}`,
                     value: recipeType
                 });
-                if (_.indexOf(this.datatableOptions.type_name, recipeType.name) >= 0) {
+                if (_.indexOf(this.datatableOptions.recipe_type_name, recipeType.name) >= 0) {
                     this.selectedRecipeType.push(recipeType);
                 }
             });
@@ -139,7 +139,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
     onChange(e) {
         const name = _.map(e.value, 'name');
-        this.datatableOptions.type_name = name.length > 0 ? name : null;
+        this.datatableOptions.recipe_type_name = name.length > 0 ? name : null;
         this.updateOptions();
     }
     onRowSelect(e) {
@@ -188,14 +188,14 @@ export class RecipesComponent implements OnInit, OnDestroy {
                     sortOrder: +params.sortOrder || -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
-                    type_id: +params.type_id || null,
-                    type_name: params.type_name ?
-                        Array.isArray(params.type_name) ?
-                            params.type_name :
-                            [params.type_name]
+                    recipe_type_id: +params.recipe_type_id || null,
+                    recipe_type_name: params.recipe_type_name ?
+                        Array.isArray(params.recipe_type_name) ?
+                            params.recipe_type_name :
+                            [params.recipe_type_name]
                         : null,
                     batch_id: +params.batch_id || null,
-                    include_superseded: params.include_superseded || null
+                    is_superseded: params.is_superseded || null
                 };
             } else {
                 this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();

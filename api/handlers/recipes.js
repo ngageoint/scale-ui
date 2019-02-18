@@ -6,9 +6,9 @@ module.exports = function (request) {
     var data = _.clone(recipes);
     var params = request.url.query;
     if (_.keys(params).length > 0) {
-        if (params.type_name) {
+        if (params.recipe_type_name) {
             data.results = _.filter(data.results, function (r) {
-                return r.recipe_type.name.toLowerCase().includes(params.type_name);
+                return r.recipe_type.name.toLowerCase().includes(params.recipe_type_name);
             });
         }
         if (params.order) {

@@ -8,10 +8,10 @@ export class RecipesDatatable {
         public sortOrder: number,
         public started: string,
         public ended: string,
-        public type_id: number,
-        public type_name: any,
+        public recipe_type_id: number,
+        public recipe_type_name: any,
         public batch_id: number,
-        public include_superseded: boolean
+        public is_superseded: boolean
     ) {}
 }
 
@@ -22,8 +22,8 @@ export const initialRecipesDatatable: RecipesDatatable = {
     sortOrder: -1,
     started: moment.utc().subtract(24, 'h').toISOString(),
     ended: moment.utc().toISOString(),
-    type_id: null,
-    type_name: null,
+    recipe_type_id: null,
+    recipe_type_name: null,
     batch_id: null,
-    include_superseded: null
+    is_superseded: null
 };

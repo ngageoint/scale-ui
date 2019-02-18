@@ -31,10 +31,10 @@ export class RecipesApiService {
             page_size: params.rows ? params.rows.toString() : null,
             started: params.started,
             ended: params.ended,
-            type_id: params.type_id ? params.type_id.toString() : null,
-            type_name: params.type_name,
+            recipe_type_id: params.recipe_type_id ? params.recipe_type_id.toString() : null,
+            recipe_type_name: params.recipe_type_name,
             batch_id: params.batch_id ? params.batch_id.toString() : null,
-            include_superseded: params.include_superseded ? params.include_superseded.toString() : null
+            is_superseded: params.is_superseded ? params.is_superseded.toString() : null
         };
         apiParams = _.pickBy(apiParams, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
