@@ -1,27 +1,40 @@
+import * as _ from 'lodash';
+
+import { DataService } from '../../common/services/data.service';
+
 export class JobType {
+    cpus: number;
+    mem: any;
+    disk: any;
+    interfaceData: any = {
+        data: [
+            {
+                data: {
+                    name: 'Inputs'
+                },
+                children: []
+            }
+        ]
+    };
     private static build(data) {
         if (data) {
             return new JobType(
-                data.manifest,
                 data.id,
                 data.name,
                 data.version,
                 data.title,
                 data.description,
-                data.timeout,
-                data.category,
-                data.is_system,
-                data.is_active,
-                data.is_operational,
-                data.is_paused,
                 data.icon_code,
-                data.docker_image,
-                data.revision_num,
-                data.priority,
+                data.is_active,
+                data.is_paused,
+                data.is_system,
                 data.max_scheduled,
-                data.max_tries,
+                data.revision_num,
+                data.docker_image,
+                data.manifest,
+                data.configuration,
                 data.created,
-                data.archived,
+                data.deprecated,
                 data.paused,
                 data.last_modified
             );
@@ -37,49 +50,40 @@ export class JobType {
         return null;
     }
     constructor(
+        public id: number,
+        public name: string,
+        public version: string,
+        public title: string,
+        public description: string,
+        public icon_code: string,
+        public is_active: boolean,
+        public is_paused: boolean,
+        public is_system: boolean,
+        public max_scheduled: number,
+        public revision_num: number,
+        public docker_image: string,
         public manifest: any,
-        public id?: number,
-        public name?: string,
-        public version?: string,
-        public title?: string,
-        public description?: string,
-        public timeout?: any,
-        public category?: string,
-        public is_system?: boolean,
-        public is_active?: boolean,
-        public is_operational?: boolean,
-        public is_paused?: boolean,
-        public icon_code?: string,
-        public docker_image?: string,
-        public revision_num?: number,
-        public priority?: number,
-        public max_scheduled?: number,
-        public max_tries?: number,
-        public created?: string,
-        public archived?: string,
-        public paused?: string,
-        public last_modified?: string
+        public configuration: any,
+        public created: string,
+        public archived: string,
+        public paused: string,
+        public last_modified: string
     ) {
-        this.manifest = this.manifest || null;
-        this.id = this.id || null;
-        this.name = this.name || null;
-        this.version = this.version || null;
-        this.title = this.title || null;
-        this.description = this.description || null;
-        this.category = this.category || null;
-        this.is_system = this.is_system || null;
-        this.is_active = this.is_active || null;
-        this.is_operational = this.is_operational || null;
-        this.is_paused = this.is_paused || null;
-        this.icon_code = this.icon_code || null;
-        this.docker_image = this.docker_image || null;
-        this.revision_num = this.revision_num || null;
-        this.priority = this.priority || null;
-        this.max_scheduled = this.max_scheduled || null;
-        this.max_tries = this.max_tries || null;
-        this.created = this.created || null;
-        this.archived = this.archived || null;
-        this.paused = this.paused || null;
-        this.last_modified = this.last_modified || null;
+        const dataService = new DataService();
+        const cpus: any = _.find(this.manifest.job.resources.scalar, { name: 'cpus' });
+        const mem: any = _.find(this.manifest.job.resources.scalar, { name: 'mem' });
+        const disk: any = _.find(this.manifest.job.resources.scalar, { name: 'disk' });
+        this.cpus = cpus.value || null;
+        this.mem = dataService.calculateFileSizeFromMib(mem.value) || null;
+        this.disk = dataService.calculateFileSizeFromMib(disk.value) || null;
+        _.forEach(this.manifest.job.interface.inputs.files, file => {
+            this.interfaceData.data[0].children.push({
+                data: {
+                    name: file.name,
+                    required: file.required,
+                    mediaTypes: file.mediaTypes
+                }
+            });
+        });
     }
 }

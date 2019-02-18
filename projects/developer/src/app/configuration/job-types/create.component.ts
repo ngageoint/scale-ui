@@ -33,7 +33,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     msgs: Message[] = [];
     msgSubscription: any;
     workspaces: SelectItem[];
-    jobType: JobType;
+    jobType: any;
     cleanJobType: JobType;
     createForm: FormGroup;
     validated: boolean;
@@ -70,7 +70,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     });
                 } else {
                     this.mode = 'Create';
-                    this.jobType = new JobType(null);
+                    this.jobType = JobType.transformer(null);
                 }
 
                 this.createForm = this.fb.group({
