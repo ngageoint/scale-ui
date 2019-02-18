@@ -18,7 +18,6 @@ import { BatchesComponent } from './processing/batches/component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesEditComponent } from './processing/batches/edit.component';
 import { IngestComponent } from './data/ingest/component';
-import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { StrikesComponent } from './system/strikes/component';
@@ -48,7 +47,6 @@ const routes: Routes = [
     { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent },
     { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
-    { path: 'data/ingest/:id', component: IngestDetailsComponent },
     { path: 'data/metrics', component: MetricsComponent },
     { path: 'system/nodes', component: NodesComponent },
     { path: 'system/strikes', component: StrikesComponent },

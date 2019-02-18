@@ -82,7 +82,6 @@ import { BatchesEditComponent } from './processing/batches/edit.component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { StrikesApiService } from './system/strikes/api.service';
 import { ToastModule } from 'primeng/toast';
-import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { NodesApiService } from './system/nodes/api.service';
@@ -134,7 +133,6 @@ import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.c
         BatchesComponent,
         BatchesEditComponent,
         BatchDetailsComponent,
-        IngestDetailsComponent,
         FeedComponent,
         NodesComponent,
         CandyBarComponent,
