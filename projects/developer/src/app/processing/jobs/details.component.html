@@ -119,85 +119,104 @@
     <div class="ui-g">
         <div class="ui-g-6">
             <p-panel header="Inputs">
-                <p-scrollPanel>
-                    <dev-loading-indicator [loading]="loadingInputs"></dev-loading-indicator>
-                    <div *ngIf="jobInputs.length === 0">
-                        No records found.
-                    </div>
-                    <table class="table table-striped job__io" *ngIf="jobInputs.length > 0">
-                        <thead>
-                        <tr class="job__io-header">
-                            <th>File Name</th>
-                            <th>File Size</th>
-                            <th>Created</th>
-                            <th>Last Modified</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let input of jobInputs">
-                            <td>
-                                <a *ngIf="input.url" href="{{ input.url }}" target="_jobfile">
-                                    <i class="fa fa-fw fa-download"></i>
-                                </a>
-                                <!-- <a routerLink="/data/ingest/{{ input.id }}"> -->
-                                    {{ input.file_name }}
-                                <!-- </a> -->
-                            </td>
-                            <td>{{ calculateFileSize(input.file_size) }}</td>
-                            <td>
+                <div class="ui-g">
+                    <div [ngClass]="inputClass" *ngIf="jobInputs.length > 0">
+                        <strong>Files</strong>
+                        <p-scrollPanel>
+                            <dev-loading-indicator [loading]="loadingInputs"></dev-loading-indicator>
+                            <div *ngIf="jobInputs.length === 0 && !job.inputJson">
+                                No records found.
+                            </div>
+                            <table class="table table-striped job__io" *ngIf="jobInputs.length > 0">
+                                <thead>
+                                <tr class="job__io-header">
+                                    <th>File Name</th>
+                                    <th>File Size</th>
+                                    <th>Created</th>
+                                    <th>Last Modified</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr *ngFor="let input of jobInputs">
+                                    <td>
+                                        <a *ngIf="input.url" href="{{ input.url }}" target="_jobfile">
+                                            <i class="fa fa-fw fa-download"></i>
+                                        </a>
+                                        <!-- <a routerLink="/data/ingest/{{ input.id }}"> -->
+                                        {{ input.file_name }}
+                                        <!-- </a> -->
+                                    </td>
+                                    <td>{{ calculateFileSize(input.file_size) }}</td>
+                                    <td>
                             <span [pTooltip]="input.createdTooltip">
                                 {{ input.createdDisplay }}
                             </span>
-                            </td>
-                            <td>
+                                    </td>
+                                    <td>
                             <span [pTooltip]="input.lastModifiedTooltip" tooltipPosition="left">
                                 {{ input.lastModifiedDisplay }}
                             </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </p-scrollPanel>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </p-scrollPanel>
+                    </div>
+                    <div [ngClass]="inputClass" *ngIf="job.inputJson">
+                        <strong>JSON</strong>
+                        <p-scrollPanel styleClass="margin-top-md">
+                            <pre>{{ job.inputJson }}</pre>
+                        </p-scrollPanel>
+                    </div>
+                </div>
             </p-panel>
         </div>
         <div class="ui-g-6">
             <p-panel header="Outputs">
                 <p-scrollPanel styleClass="scale-panel">
                     <dev-loading-indicator [loading]="loadingOutputs"></dev-loading-indicator>
-                    <div *ngIf="jobOutputs.length === 0">
+                    <div *ngIf="jobOutputs.length === 0 && !job.outputJson">
                         No records found.
                     </div>
-                    <table class="table table-striped job__io" *ngIf="jobOutputs.length > 0">
-                        <thead>
-                        <tr class="job__io-header">
-                            <th>File Name</th>
-                            <th>File Size</th>
-                            <th>Created</th>
-                            <th>Last Modified</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr *ngFor="let output of jobOutputs">
-                            <td>
-                                <a *ngIf="output.url" href="{{ output.url }}" target="_jobfile">
-                                    <i class="fa fa-fw fa-download"></i>
-                                </a>
-                                {{ output.file_name }}
-                            </td>
-                            <td>{{ calculateFileSize(output.file_size) }}</td>
-                            <td>
+                    <div [ngClass]="outputClass" *ngIf="jobOutputs.length > 0">
+                        <table class="table table-striped job__io" *ngIf="jobOutputs.length > 0">
+                            <thead>
+                            <tr class="job__io-header">
+                                <th>File Name</th>
+                                <th>File Size</th>
+                                <th>Created</th>
+                                <th>Last Modified</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let output of jobOutputs">
+                                <td>
+                                    <a *ngIf="output.url" href="{{ output.url }}" target="_jobfile">
+                                        <i class="fa fa-fw fa-download"></i>
+                                    </a>
+                                    {{ output.file_name }}
+                                </td>
+                                <td>{{ calculateFileSize(output.file_size) }}</td>
+                                <td>
                             <span [pTooltip]="output.createdTooltip">
                                 {{ output.createdDisplay }}
                             </span>
-                            </td>
-                            <td>
+                                </td>
+                                <td>
                             <span [pTooltip]="output.lastModifiedTooltip" tooltipPosition="left">
                                 {{ output.lastModifiedDisplay }}
                             </span>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div [ngClass]="inputClass" *ngIf="job.inputJson">
+                        <strong>JSON</strong>
+                        <p-scrollPanel styleClass="margin-top-md">
+                            <pre>{{ job.outputJson }}</pre>
+                        </p-scrollPanel>
+                    </div>
                 </p-scrollPanel>
             </p-panel>
         </div>

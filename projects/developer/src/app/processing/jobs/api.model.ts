@@ -1,5 +1,7 @@
 import { DataService } from '../../common/services/data.service';
 import * as moment from 'moment';
+import * as _ from 'lodash';
+
 import { JobType } from '../../configuration/job-types/api.model';
 import { JobExecution } from './execution.model';
 import { environment } from '../../../environments/environment';
@@ -19,6 +21,8 @@ export class Job {
     occurredTooltip: any;
     occurredDisplay: any;
     exeEndedTooltip: any;
+    inputJson: any;
+    outputJson: any;
 
     private static build(data) {
         if (data) {
@@ -47,13 +51,11 @@ export class Job {
                 data.last_status_change,
                 data.superseded,
                 data.last_modified,
-                data.input,
-                data.output,
                 data.resources,
                 JobExecution.transformer(data.execution),
                 data.recipe,
-                data.inputs,
-                data.outputs,
+                data.input,
+                data.output,
                 data.selected
             );
         }
@@ -93,13 +95,11 @@ export class Job {
         public last_status_change: string,
         public superseded: string,
         public last_modified: string,
-        public input: object,
-        public output: object,
         public resources: any,
         public execution: any,
         public recipe: any,
-        public inputs: any,
-        public outputs: any,
+        public input: any,
+        public output: any,
         public selected: boolean
     ) {
         this.dataService = new DataService();
@@ -126,5 +126,7 @@ export class Job {
         this.occurredTooltip = this.dataService.formatDate(this.event.occurred);
         this.occurredDisplay = this.dataService.formatDate(this.event.occurred, true);
         this.exeEndedTooltip = this.execution ? this.dataService.formatDate(this.execution.ended) : null;
+        this.inputJson = this.input ? _.keys(this.input.json).length > 0 ? JSON.stringify(this.input.json, null, 2) : null : null;
+        this.outputJson = this.output ? _.keys(this.output.json).length > 0 ? JSON.stringify(this.output.json, null, 2) : null : null;
     }
 }

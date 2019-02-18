@@ -32,6 +32,11 @@
                             "required": true,
                             "mediaTypes": ["application/octet-stream"]
                         }
+                    ],
+                    "json": [
+                        {
+                            "example": "this is an example string input"
+                        }
                     ]
                 },
                 "outputs": {
@@ -57,7 +62,10 @@
                             "pattern": "thermal*.tiff",
                             "required": true
                         }
-                    ]
+                    ],
+                    "json": {
+                        "example": "this is an example string output"
+                    }
                 },
                 "mounts": [],
                 "settings": []

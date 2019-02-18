@@ -178,13 +178,13 @@
         }
     },
     "input": {
-        "files": {"input_file": [1]},
-        "json": {}
+        "files": {"infile": [1]},
+        "json": {"example": "this is an example string input"}
     },
     "input_file_size": 64,
     "output": {
-        "files": {"my_file": [1]},
-        "json": {}
+        "files": {"multispectral": [1], "panchromatic":  [2], "thermal":  [3]},
+        "json": {"example": "this is an example string output"}
     },
     "source_started": "2015-08-28T17:55:41.005Z",
     "source_ended": "2015-08-28T17:56:41.005Z",
