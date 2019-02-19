@@ -267,6 +267,10 @@ a:not(.ui-button, .ui-paginator) {
     }
 }
 
+.table-bordered {
+    border: 1px solid #ececec;
+}
+
 .label {
     display: inline;
     padding: .2em .6em .2em;

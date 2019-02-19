@@ -19,6 +19,7 @@
                             <strong>
                                 <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
                                 {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
+                                <span class="label label-paused" *ngIf="selectedJobTypeDetail.is_paused">Paused</span>
                             </strong>
                         </div>
                         <div>
@@ -27,15 +28,46 @@
                                     (click)="menu.toggle($event)"></button>
                         </div>
                     </p-header>
-                    <p-scrollPanel>
-                        <div class="ui-g">
-                            <div class="ui-g-8">
-                                <div class="margin-bottom-md">
-                                    <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
-                                    {{ selectedJobTypeDetail.manifest.job.description }}
-                                </div>
-                                <strong>Interface</strong>
-                                <table class="table table-striped">
+                    <div class="ui-g">
+                        <div class="ui-g-8">
+                            <div class="margin-bottom-md">
+                                <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
+                                {{ selectedJobTypeDetail.manifest.job.description }}
+                            </div>
+                        </div>
+                        <div class="ui-g-4">
+                            <dl class="dl-horizontal">
+                                <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.created" [pTooltip]="selectedJobTypeDetail.createdTooltip">{{ selectedJobTypeDetail.createdDisplay }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.last_modified">Last Modified:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.last_modified" [pTooltip]="selectedJobTypeDetail.lastModifiedTooltip">{{ selectedJobTypeDetail.lastModifiedDisplay }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.deprecated">Deprecated:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.deprecated">{{ selectedJobTypeDetail.deprecated }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.cpus">CPUs:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.cpus">{{ selectedJobTypeDetail.cpus }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.mem">Memory:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.mem">{{ selectedJobTypeDetail.mem }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.disk">Disk:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.disk">{{ selectedJobTypeDetail.disk }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.docker_image">Docker Image:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.docker_image">{{ selectedJobTypeDetail.docker_image }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.configuration.priority">Priority:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.configuration.priority">{{ selectedJobTypeDetail.configuration.priority }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.manifest.job.timeout">Timeout:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
+                                <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.is_system">{{ selectedJobTypeDetail.is_system }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.is_active">Active:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.is_active">{{ selectedJobTypeDetail.is_active }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.is_paused">Paused:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.is_paused">{{ selectedJobTypeDetail.is_paused }}</dd>
+                                <dt *ngIf="selectedJobTypeDetail.paused">Paused Date:</dt>
+                                <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
+                            </dl>
+                        </div>
+                        <div [ngClass]="interfaceClass" *ngIf="selectedJobTypeDetail.manifest.job.interface">
+                            <p-card header="Interface">
+                                <table class="table">
                                     <tbody>
                                     <tr>
                                         <td>Command</td>
@@ -44,7 +76,7 @@
                                     <tr>
                                         <td>Input Data</td>
                                         <td>
-                                            <table class="table">
+                                            <table class="table table-striped">
                                                 <thead>
                                                 <th style="width: 50%">Name</th>
                                                 <th style="width: 50%">Media Types</th>
@@ -61,7 +93,7 @@
                                     <tr>
                                         <td>Output Data</td>
                                         <td>
-                                            <table class="table">
+                                            <table class="table table-striped">
                                                 <thead>
                                                 <th style="width: 50%">Name</th>
                                                 <th style="width: 50%">Media Type</th>
@@ -77,39 +109,29 @@
                                     </tr>
                                     </tbody>
                                 </table>
-                            </div>
-                            <div class="ui-g-4">
-                                <dl class="dl-horizontal">
-                                    <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.created">{{ selectedJobTypeDetail.created }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.last_modified">Last Modified:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.last_modified">{{ selectedJobTypeDetail.last_modified }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.deprecated">Deprecated:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.deprecated">{{ selectedJobTypeDetail.deprecated }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.cpus">CPUs:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.cpus">{{ selectedJobTypeDetail.cpus }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.mem">Memory:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.mem">{{ selectedJobTypeDetail.mem }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.disk">Disk:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.disk">{{ selectedJobTypeDetail.disk }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.docker_image">Docker Image:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.docker_image">{{ selectedJobTypeDetail.docker_image }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.configuration.priority">Priority:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.configuration.priority">{{ selectedJobTypeDetail.configuration.priority }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.manifest.job.timeout">Timeout:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.is_system">{{ selectedJobTypeDetail.is_system }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.is_active">Active:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.is_active">{{ selectedJobTypeDetail.is_active }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.is_paused">Paused:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.is_paused">{{ selectedJobTypeDetail.is_paused }}</dd>
-                                    <dt *ngIf="selectedJobTypeDetail.paused">Paused Date:</dt>
-                                    <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
-                                </dl>
-                            </div>
+                            </p-card>
                         </div>
-                    </p-scrollPanel>
+                        <div [ngClass]="errorClass" *ngIf="selectedJobTypeDetail.manifest.job.errors">
+                            <p-card header="Errors">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <th>Code</th>
+                                    <th>Title</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    </thead>
+                                    <tbody>
+                                    <tr *ngFor="let error of selectedJobTypeDetail.manifest.job.errors">
+                                        <td>{{ error.code }}</td>
+                                        <td>{{ error.title }}</td>
+                                        <td>{{ error.description }}</td>
+                                        <td>{{ error.category }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </p-card>
+                        </div>
+                    </div>
                 </p-panel>
             </div>
         </div>

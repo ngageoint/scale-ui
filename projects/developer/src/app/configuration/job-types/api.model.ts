@@ -3,6 +3,10 @@ import * as _ from 'lodash';
 import { DataService } from '../../common/services/data.service';
 
 export class JobType {
+    createdTooltip: any;
+    createdDisplay: any;
+    lastModifiedTooltip: any;
+    lastModifiedDisplay: any;
     cpus: number;
     mem: any;
     disk: any;
@@ -70,12 +74,16 @@ export class JobType {
         public last_modified: string
     ) {
         const dataService = new DataService();
-        const cpus: any = _.find(this.manifest.job.resources.scalar, { name: 'cpus' });
-        const mem: any = _.find(this.manifest.job.resources.scalar, { name: 'mem' });
-        const disk: any = _.find(this.manifest.job.resources.scalar, { name: 'disk' });
-        this.cpus = cpus.value || null;
-        this.mem = dataService.calculateFileSizeFromMib(mem.value) || null;
-        this.disk = dataService.calculateFileSizeFromMib(disk.value) || null;
+        this.createdTooltip = dataService.formatDate(this.created);
+        this.createdDisplay = dataService.formatDate(this.created, true);
+        this.lastModifiedTooltip = dataService.formatDate(this.last_modified);
+        this.lastModifiedDisplay = dataService.formatDate(this.last_modified, true);
+        const cpus: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'cpus' }) : null;
+        const mem: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'mem' }) : null;
+        const disk: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'disk' }) : null;
+        this.cpus = cpus ? cpus.value : null;
+        this.mem = mem ? dataService.calculateFileSizeFromMib(mem.value) : null;
+        this.disk = disk ? dataService.calculateFileSizeFromMib(disk.value) : null;
         _.forEach(this.manifest.job.interface.inputs.files, file => {
             this.interfaceData.data[0].children.push({
                 data: {

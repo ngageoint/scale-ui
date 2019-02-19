@@ -21,11 +21,15 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     jobTypes: SelectItem[];
     selectedJobType: any;
     selectedJobTypeDetail: any;
-    // interfaceData: TreeNode[];
     options: any;
-    pauseBtnIcon = 'fa fa-pause';
-    items: MenuItem[] = [
+    items: MenuItem[];
+    itemsWithPause: MenuItem[] = [
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
+    ];
+    itemsWithResume: MenuItem[] = [
+        { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
     ];
@@ -35,8 +39,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     isScanning: boolean;
     scanProgress = 0;
     scanBtnIcon = 'fa fa-barcode';
-    private readonly STATUS_VALUES = ['COMPLETED', 'BLOCKED', 'QUEUED', 'RUNNING', 'FAILED', 'CANCELED', 'PENDING'];
-    private readonly CATEGORY_VALUES = ['SYSTEM', 'ALGORITHM', 'DATA'];
+    interfaceClass = 'ui-g-6';
+    errorClass = 'ui-g-6';
 
     constructor(
         private messageService: MessageService,
@@ -48,59 +52,18 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {}
 
-    // private setInterfaceData(data) {
-    //     const dataArr = [];
-    //     _.forEach(data, (d) => {
-    //         dataArr.push({
-    //             data: d
-    //         });
-    //     });
-    //     return dataArr;
-    // }
-    private getChartData(data) {
-        const returnData = {
-            labels: _.map(data, 'status'),
-            datasets: [{
-                data: _.map(data, 'count'),
-                backgroundColor: []
-            }]
-        };
-        _.forEach(data, d => {
-            returnData.datasets[0].backgroundColor.push(this.colorService[_.toUpper(d.status)]);
-        });
-        return returnData;
-    }
-    private getChartTotals(data: any, type: string): number {
-        if (type === 'total') {
-            return _.sum(_.map(_.filter(data, jobCount => {
-                return jobCount.status !== 'RUNNING';
-            }), 'count'));
-        }
-        return _.sum(_.map(_.filter(data, jobCount => {
-            return jobCount.status === 'FAILED';
-        }), 'count'));
-    }
     private getJobTypeDetail(name: string, version: string) {
         this.jobTypesApiService.getJobType(name, version).subscribe(data => {
-            // this.interfaceData = [
-            //     {
-            //         data: {
-            //             name: 'Input Data',
-            //             type: '',
-            //             media_types: ''
-            //         },
-            //         children: this.setInterfaceData(data.job_type_interface.input_data)
-            //     },
-            //     {
-            //         data: {
-            //             name: 'Output Data',
-            //             type: '',
-            //             media_type: ''
-            //         },
-            //         children: this.setInterfaceData(data.job_type_interface.output_data)
-            //     }
-            // ];
             this.selectedJobTypeDetail = data;
+            if (data.manifest.job.interface && data.manifest.job.errors) {
+                this.interfaceClass = 'ui-g-6';
+                this.errorClass = 'ui-g-6';
+            } else if (data.manifest.job.interface && !data.manifest.job.errors) {
+                this.interfaceClass = 'ui-g-12';
+            } else if (!data.manifest.job.interface && data.manifest.job.errors) {
+                this.errorClass = 'ui-g-12';
+            }
+            this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
@@ -159,7 +122,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
         this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
             this.selectedJobTypeDetail = data;
-            this.pauseBtnIcon = this.selectedJobTypeDetail.is_paused ? 'fa fa-play' : 'fa fa-pause';
+            this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
         });

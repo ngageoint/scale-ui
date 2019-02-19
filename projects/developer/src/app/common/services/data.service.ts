@@ -130,7 +130,7 @@ export class DataService {
                         error.error.message :
                         JSON.stringify(error);
             } else {
-                body = JSON.stringify(error);
+                body = error.toString();
             }
             console.error(
                 `Backend returned code ${error.status}, ` +
