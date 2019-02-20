@@ -58,6 +58,10 @@ body {
         width: 100%;
     }
 
+    .ui-button:enabled:focus {
+        box-shadow: none;
+    }
+
     .seed-jobs .results .ui-panel:hover {
         background: $clr-highlight !important;
 

@@ -60,12 +60,6 @@
                                             <span class="ui-menuitem-text">JSON Inputs</span>
                                         </a>
                                     </li>
-                                    <li class="ui-menuitem ui-corner-all">
-                                        <a class="ui-menuitem-link ui-corner-all" (click)="toggleConditions()">
-                                            <span class="ui-menuitem-icon fa fa-adjust"></span>
-                                            <span class="ui-menuitem-text">Conditions</span>
-                                        </a>
-                                    </li>
                                 </ul>
                             </p-menubar>
                         </div>
@@ -88,6 +82,8 @@
         </span>
         <span *ngIf="addRemoveDisplayType === 'condition'">
             <strong>Add/Remove Condition Nodes</strong>
+            <button pButton type="button" icon="fa fa-plus" pTooltip="Create new condition"
+                    class="recipe-type__condition-btn" (click)="toggleConditions()"></button>
         </span>
     </p-header>
     <div class="dialog-content" *ngIf="addRemoveDisplayType === 'job'">
@@ -160,7 +156,7 @@
                 <ng-template pTemplate="emptymessage" let-columns>
                     <tr>
                         <td [attr.colspan]="columns.length" class="text-center">
-                            No records found. Use the "Conditions" button to add conditions to this recipe.
+                            No conditions found
                         </td>
                     </tr>
                 </ng-template>
