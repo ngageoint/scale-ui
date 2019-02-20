@@ -1,8 +1,15 @@
 <div class="feed__header">
     <h2><i class="fa fa-line-chart"></i> Data Feed</h2>
-    <p-dropdown [options]="strikes" [autoWidth]="false" [(ngModel)]="selectedStrike" (onChange)="getLatestData()"
-                [style]="{'width':'300px', 'margin-left':'10px', 'margin-right':'10px'}" placeholder="Select..."
-                [showClear]="false"></p-dropdown>
+    <p-multiSelect [options]="strikes" [(ngModel)]="selectedStrikes"
+                   (onChange)="onStrikesChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
+                   (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
+        <ng-template let-strike p-template="item">
+            {{ strike.label }}
+        </ng-template>
+    </p-multiSelect>
+    <!--<p-dropdown [options]="strikes" [autoWidth]="false" [(ngModel)]="selectedStrike" (onChange)="getLatestData()"-->
+                <!--[style]="{'width':'300px', 'margin-left':'10px', 'margin-right':'10px'}" placeholder="Select..."-->
+                <!--[showClear]="false"></p-dropdown>-->
     <p-dropdown [options]="timeValues" [autoWidth]="false" [(ngModel)]="selectedTimeValue" (onChange)="getLatestData()"
                 [style]="{'width':'150px', 'margin-left':'10px', 'margin-right':'10px'}" placeholder="Select..."
                 [showClear]="false"></p-dropdown>

@@ -22,18 +22,10 @@ export class FeedComponent implements OnInit, OnDestroy {
     dateFormat: string = environment.dateFormat;
     options: any;
     data = {
-        datasets: [{
-            backgroundColor: '#cae3fd',
-            borderColor: this.colorService.SCALE_BLUE3,
-            borderWidth: 1,
-            pointBackgroundColor: this.colorService.SCALE_BLUE3,
-            pointRadius: 2,
-            lineTension: 0,
-            data: []
-        }]
+        datasets: []
     };
     strikes: SelectItem[] = [];
-    selectedStrike: number;
+    selectedStrikes: any;
     started: any;
     ended: any;
     viewingLatest = true;
@@ -63,8 +55,8 @@ export class FeedComponent implements OnInit, OnDestroy {
                 });
             });
             this.strikes = _.orderBy(this.strikes, ['label'], ['asc']);
-            if (!this.selectedStrike) {
-                this.selectedStrike = this.strikes[0].value;
+            if (!this.selectedStrikes) {
+                this.selectedStrikes = [this.strikes[0].value];
             }
 
             this.getLatestData();
@@ -95,31 +87,42 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.chartLoading = true;
         this.subscription = this.ingestApiService.getIngestStatus(params, true, 5000).subscribe(data => {
             this.chartLoading = false;
-            // format data for streaming chart
-            const returnArr = [];
             const allFeeds = _.orderBy(data.results, ['strike_name'], ['asc']);
-            let selectedFeed: any = {};
-            if (this.selectedStrike) {
-                // set selectedFeed = new feed
-                const feed = _.find(allFeeds, f => {
-                    return f.strike.id === this.selectedStrike;
-                });
-                selectedFeed = feed ? feed : null;
-            } else {
-                selectedFeed = allFeeds[0];
-            }
-            _.forEach(selectedFeed.values, v => {
-                returnArr.push({
-                    x: moment.utc(v.time).format(this.dateFormat),
-                    y: v.size
-                });
+            const selectedFeeds = _.filter(allFeeds, feed => {
+                return _.includes(this.selectedStrikes, feed.strike.id);
             });
-            this.data.datasets[0].data = returnArr;
+            _.forEach(selectedFeeds, (feed, idx) => {
+                const returnArr = [];
+                _.forEach(feed.values, v => {
+                    returnArr.push({
+                        x: moment.utc(v.time).format(this.dateFormat),
+                        y: v.size
+                    });
+                });
+                const dataset = _.find(this.data.datasets, { id: feed.strike.id });
+                if (dataset) {
+                    dataset.data = returnArr;
+                } else {
+                    const opacity = parseFloat((1 - (idx / 10) * 2).toFixed(2));
+                    const bgColor = this.colorService.getRgba(this.colorService.SCALE_BLUE2, opacity);
+                    this.data.datasets.push({
+                        borderColor: '#d0eaff',
+                        backgroundColor: bgColor,
+                        borderWidth: 1,
+                        pointBackgroundColor: this.colorService.SCALE_BLUE2,
+                        pointBorderColor: '#fff',
+                        pointRadius: 2,
+                        // lineTension: 0,
+                        id: feed.strike.id,
+                        data: returnArr
+                    });
+                }
+            });
             this.feedChart.chart.update();
 
             const urlParams = {
                 use_ingest_time: params.use_ingest_time,
-                strike_id: this.selectedStrike
+                strike_id: this.selectedStrikes
             };
 
             this.router.navigate(['/data/feed'], {
@@ -155,6 +158,21 @@ export class FeedComponent implements OnInit, OnDestroy {
             this.viewingLatest = false;
             this.started = moment.utc(this.started, this.dateFormat).add(7, 'd').format(this.dateFormat);
             this.ended = moment.utc(this.ended, this.dateFormat).add(7, 'd').format(this.dateFormat);
+            this.getLatestData();
+        }
+    }
+
+    onFilterClick(e) {
+        e.stopPropagation();
+    }
+
+    onStrikesChange(e) {
+        if (!_.includes(this.selectedStrikes, e.itemValue)) {
+            _.remove(this.data.datasets, d => {
+                return d.id === e.itemValue;
+            });
+            this.feedChart.chart.update();
+        } else {
             this.getLatestData();
         }
     }
@@ -202,10 +220,18 @@ export class FeedComponent implements OnInit, OnDestroy {
 
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
-                this.selectedStrike = params.strike_id || null;
+                if (params.strike_id) {
+                    if (Array.isArray(params.strike_id)) {
+                        this.selectedStrikes = [];
+                        _.forEach(params.strike_id, id => {
+                            this.selectedStrikes.push(+id);
+                        });
+                    } else {
+                        this.selectedStrikes = [+params.strike_id];
+                    }
+                }
             }
             this.selectedTimeValue = params.use_ingest_time === 'true' ? 'ingest' : 'data';
-            this.selectedStrike = +params.strike_id || null;
         });
 
         this.getStrikes();
