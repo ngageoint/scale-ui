@@ -25,13 +25,21 @@ export class RecipeTypeFilter {
     }
 
     public static transformer(data) {
-        if (data) {
-            if (Array.isArray(data)) {
-                return data.map(item => RecipeTypeFilter.build(item));
-            }
-            return RecipeTypeFilter.build(data);
+        if (!data) {
+            data = {
+                name: 'Untitled filter',
+                type: 'boolean',
+                condition: '==',
+                values: [false],
+                fields: [],
+                all_fields: true,
+                all_files: false
+            };
         }
-        return new RecipeTypeFilter('', '', '', [], [], true, false);
+        if (Array.isArray(data)) {
+            return data.map(item => RecipeTypeFilter.build(item));
+        }
+        return RecipeTypeFilter.build(data);
     }
 
     constructor(

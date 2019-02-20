@@ -1,6 +1,7 @@
 import { RecipeTypeInputFile } from './api.input.file.model';
 import { RecipeTypeInputJson} from './api.input.json.model';
 import { RecipeTypeFilterInterface } from './api.filter-interface.model';
+import { RecipeTypeFilter } from './api.filter.model';
 
 export class RecipeTypeCondition {
     display: any;
@@ -21,13 +22,13 @@ export class RecipeTypeCondition {
     public static transformer(data) {
         if (!data) {
             data = {
-                name: '',
+                name: 'Untitled condition',
                 condition_interface: {
                     files: [],
                     json: []
                 },
                 data_filter: {
-                    filters: [],
+                    filters: [RecipeTypeFilter.transformer(null)],
                     all: true
                 }
             };

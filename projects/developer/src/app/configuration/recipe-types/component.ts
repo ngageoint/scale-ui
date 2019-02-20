@@ -52,7 +52,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
     selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
     selectedRecipeTypeDetail: any;
-    condition = RecipeTypeCondition.transformer(null);
+    condition: any = RecipeTypeCondition.transformer(null);
     conditions: any = [];
     selectedConditions = [];
     conditionColumns: any[];
@@ -114,9 +114,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
 
         this.conditionForm = this.fb.group({
-            name: ['', Validators.required],
+            name: [this.condition.name, Validators.required],
             data_filter: this.fb.group({
-                filters: this.fb.array([], Validators.required),
+                filters: this.fb.array(this.condition.data_filter.filters, Validators.required),
                 all: [true]
             })
         });
