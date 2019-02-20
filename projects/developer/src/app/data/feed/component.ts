@@ -100,11 +100,12 @@ export class FeedComponent implements OnInit, OnDestroy {
                     });
                 });
                 const dataset = _.find(this.data.datasets, { id: feed.strike.id });
+                const opacity = parseFloat((1 - (idx / 10) * 2).toFixed(2));
+                const bgColor = this.colorService.getRgba(this.colorService.SCALE_BLUE2, opacity);
                 if (dataset) {
+                    dataset.backgroundColor = bgColor;
                     dataset.data = returnArr;
                 } else {
-                    const opacity = parseFloat((1 - (idx / 10) * 2).toFixed(2));
-                    const bgColor = this.colorService.getRgba(this.colorService.SCALE_BLUE2, opacity);
                     this.data.datasets.push({
                         borderColor: '#d0eaff',
                         backgroundColor: bgColor,
@@ -168,10 +169,13 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     onStrikesChange(e) {
         if (!_.includes(this.selectedStrikes, e.itemValue)) {
-            _.remove(this.data.datasets, d => {
+            const idx = _.findIndex(this.data.datasets, d => {
                 return d.id === e.itemValue;
             });
-            this.feedChart.chart.update();
+            if (idx >= 0) {
+                this.data.datasets.splice(idx, 1);
+                this.feedChart.chart.update();
+            }
         } else {
             this.getLatestData();
         }
