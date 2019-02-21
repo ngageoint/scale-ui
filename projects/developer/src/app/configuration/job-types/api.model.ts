@@ -78,20 +78,22 @@ export class JobType {
         this.createdDisplay = dataService.formatDate(this.created, true);
         this.lastModifiedTooltip = dataService.formatDate(this.last_modified);
         this.lastModifiedDisplay = dataService.formatDate(this.last_modified, true);
-        const cpus: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'cpus' }) : null;
-        const mem: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'mem' }) : null;
-        const disk: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'disk' }) : null;
-        this.cpus = cpus ? cpus.value : null;
-        this.mem = mem ? dataService.calculateFileSizeFromMib(mem.value) : null;
-        this.disk = disk ? dataService.calculateFileSizeFromMib(disk.value) : null;
-        _.forEach(this.manifest.job.interface.inputs.files, file => {
-            this.interfaceData.data[0].children.push({
-                data: {
-                    name: file.name,
-                    required: file.required,
-                    mediaTypes: file.mediaTypes
-                }
+        if (this.manifest) {
+            const cpus: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'cpus' }) : null;
+            const mem: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'mem' }) : null;
+            const disk: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'disk' }) : null;
+            this.cpus = cpus ? cpus.value : null;
+            this.mem = mem ? dataService.calculateFileSizeFromMib(mem.value) : null;
+            this.disk = disk ? dataService.calculateFileSizeFromMib(disk.value) : null;
+            _.forEach(this.manifest.job.interface.inputs.files, file => {
+                this.interfaceData.data[0].children.push({
+                    data: {
+                        name: file.name,
+                        required: file.required,
+                        mediaTypes: file.mediaTypes
+                    }
+                });
             });
-        });
+        }
     }
 }

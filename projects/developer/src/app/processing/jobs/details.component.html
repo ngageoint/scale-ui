@@ -211,7 +211,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div [ngClass]="inputClass" *ngIf="job.inputJson">
+                    <div [ngClass]="inputClass" *ngIf="job.outputJson">
                         <strong>JSON</strong>
                         <p-scrollPanel styleClass="margin-top-md">
                             <pre>{{ job.outputJson }}</pre>

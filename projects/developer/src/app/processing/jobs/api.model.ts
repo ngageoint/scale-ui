@@ -123,8 +123,8 @@ export class Job {
         this.createdDisplay = this.dataService.formatDate(this.created, true);
         this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
         this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
-        this.occurredTooltip = this.dataService.formatDate(this.event.occurred);
-        this.occurredDisplay = this.dataService.formatDate(this.event.occurred, true);
+        this.occurredTooltip = this.event ? this.dataService.formatDate(this.event.occurred) : null;
+        this.occurredDisplay = this.event ? this.dataService.formatDate(this.event.occurred, true) : null;
         this.exeEndedTooltip = this.execution ? this.dataService.formatDate(this.execution.ended) : null;
         this.inputJson = this.input ? _.keys(this.input.json).length > 0 ? JSON.stringify(this.input.json, null, 2) : null : null;
         this.outputJson = this.output ? _.keys(this.output.json).length > 0 ? JSON.stringify(this.output.json, null, 2) : null : null;
