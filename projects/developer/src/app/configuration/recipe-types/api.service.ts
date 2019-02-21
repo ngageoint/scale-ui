@@ -22,15 +22,18 @@ export class RecipeTypesApiService {
     getRecipeTypes(params?: any): Observable<ApiResults> {
         let queryParams = {};
         if (params) {
-            const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+            const sortStr = params.sortField ? params.sortOrder < 0 ? '-' + params.sortField : params.sortField : null;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
             queryParams = {
                 order: sortStr,
                 page: page,
-                page_size: params.rows,
-                started: params.started,
-                ended: params.ended
+                page_size: params.rows ? params.rows : 1000,
+                started: params.started || null,
+                ended: params.ended || null
             };
+            queryParams = _.pickBy(queryParams, d => {
+                return d !== null && typeof d !== 'undefined' && d !== '';
+            });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
             .pipe(

@@ -75,23 +75,34 @@
                         </div>
                         <div class="ui-g-6" formGroupName="configuration">
                             <label>
-                                <span>Workspace</span>
-                                <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
-                                            formControlName="workspace" (onChange)="onWorkspaceChange()"
-                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                <span>Recipe</span>
+                                <p-dropdown [options]="recipeOptions" [autoWidth]="false"
+                                            formControlName="recipe" [style]="{'width':'100%'}"
+                                            placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
                         </div>
                     </div>
                     <div formGroupName="configuration">
-                        <div class="ui-g" formGroupName="monitor">
+                        <div class="ui-g">
                             <div class="ui-g-6">
-                                <label>
-                                    <span>Monitor Type</span>
-                                    <input type="text" pInputText formControlName="type" required/>
-                                </label>
+                                <div>
+                                    <label>
+                                        <span>Workspace</span>
+                                        <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
+                                                    formControlName="workspace" (onChange)="onWorkspaceChange()"
+                                                    [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                        </p-dropdown>
+                                    </label>
+                                </div>
+                                <div formGroupName="monitor">
+                                    <label>
+                                        <span>Monitor Type</span>
+                                        <input type="text" pInputText formControlName="type" required/>
+                                    </label>
+                                </div>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="ui-g-6" formGroupName="monitor">
                                 <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
                                     <span>Transfer Suffix</span>
                                     <input type="text" pInputText formControlName="transfer_suffix" required/>

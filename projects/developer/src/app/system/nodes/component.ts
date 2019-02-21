@@ -14,7 +14,7 @@ import { StatusApiService } from '../../common/services/status/api.service';
 export class NodesComponent implements OnInit {
     @ViewChild('menu') menu: any;
     loading: boolean;
-    collapsed = false;
+    collapsed = true;
     collapseIcon = 'fa fa-minus';
     collapseTooltip = 'Collapse All Nodes';
     readyBtnClass = 'ui-button-ready';

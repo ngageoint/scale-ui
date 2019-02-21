@@ -6,6 +6,7 @@ import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service',
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { StrikesApiService } from './api.service';
 import { Strike } from './api.model';
@@ -33,6 +34,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
     selectedStrike: Strike;
     selectedStrikeDetail: any;
     strikeJobIcon = '';
+    recipes: any = [];
+    recipeOptions: SelectItem[] = [];
+    selectedRecipe: any;
     workspaces: any = [];
     workspacesOptions: SelectItem[] = [];
     newWorkspacesOptions: SelectItem[] = [];
@@ -49,6 +53,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private workspacesApiService: WorkspacesApiService,
         private strikesApiService: StrikesApiService
     ) {}
@@ -70,7 +75,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     }),
                     region_name: ['']
                 }),
-                files_to_ingest: this.fb.array([], Validators.required)
+                files_to_ingest: this.fb.array([], Validators.required),
+                recipe: ['']
             })
         });
         this.ingestFileForm = this.fb.group({
@@ -128,6 +134,18 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private initStrikeForm() {
         if (this.selectedStrikeDetail) {
             this.workspacesOptions = [];
+            this.recipeOptions = [];
+
+            _.forEach(this.recipes, recipe => {
+                this.recipeOptions.push({
+                    label: recipe.title,
+                    value: {
+                        name: recipe.name,
+                        revision_num: recipe.revision_num
+                    }
+                });
+            });
+
             _.forEach(this.workspaces, workspace => {
                 this.workspacesOptions.push({
                     label: workspace.title,
@@ -174,13 +192,18 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private initEdit() {
         if (this.workspaces.length === 0) {
             this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
-                this.loading = false;
-
                 // set up workspaces
                 this.workspaces = workspaces.results;
 
-                // set up the form
-                this.initStrikeForm();
+                // get recipe type options
+                this.recipeTypesApiService.getRecipeTypes({ sortField: 'title', page: 1, page_size: 1000 }).subscribe(recipes => {
+                    this.loading = false;
+
+                    this.recipes = recipes.results;
+
+                    // set up the form
+                    this.initStrikeForm();
+                })
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
@@ -289,6 +312,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
+        debugger;
         if (this.selectedStrikeDetail.id) {
             // edit strike
             this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail.clean()).subscribe(data => {

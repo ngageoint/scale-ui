@@ -11,7 +11,8 @@ export class StrikeConfiguration {
             return new StrikeConfiguration(
                 data.workspace,
                 data.monitor,
-                IngestFile.transformer(data.files_to_ingest)
+                IngestFile.transformer(data.files_to_ingest),
+                data.recipe
             );
         }
     }
@@ -20,7 +21,7 @@ export class StrikeConfiguration {
         if (data) {
             return StrikeConfiguration.build(data);
         }
-        return new StrikeConfiguration('', {}, []);
+        return new StrikeConfiguration('', {}, [], {});
     }
 
     public addIngestFile(file): object {
@@ -53,7 +54,8 @@ export class StrikeConfiguration {
     constructor(
         public workspace: string,
         public monitor: any,
-        public files_to_ingest: any
+        public files_to_ingest: any,
+        public recipe: any
     ) {
         if (this.files_to_ingest) {
             _.forEach(this.files_to_ingest, file => {

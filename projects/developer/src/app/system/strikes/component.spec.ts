@@ -9,6 +9,7 @@ import { Subject } from 'rxjs';
 import { StrikesComponent } from './component';
 import { StrikesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
 
 describe('StrikesComponent', () => {
@@ -20,7 +21,7 @@ describe('StrikesComponent', () => {
             declarations: [StrikesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, StrikesApiService, DataService, WorkspacesApiService,
+                MessageService, StrikesApiService, DataService, RecipeTypesApiService, WorkspacesApiService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
