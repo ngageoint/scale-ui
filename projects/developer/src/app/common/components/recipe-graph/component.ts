@@ -3,6 +3,7 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import {JobType} from '../../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -80,7 +81,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     source: _.camelCase(dependency.name),
                     target: node.id,
                     node: node,
-                    visible: true
+                    visible: true,
+                    label: dependency.type === 'condition' ? dependency.acceptance.toString() : null
                 });
             } else {
                 // dependency node was removed, so remove it from dependencies
@@ -324,12 +326,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             } else if (node.node_type.node_type === 'condition') {
                 // exclude the selected condition
                 if ((this.selectedCondition && node.node_type.name !== this.selectedCondition.name) || !this.selectedCondition) {
-                    const condition: any = _.find(this.recipeData.conditions, {
-                        name: node.node_type.name
-                    });
+                    const condition: any = _.find(this.recipeData.conditions, { name: node.node_type.name });
                     if (condition) {
                         // only show conditions that are not yet dependencies
-                        condition.disabled = _.find(this.selectedNode.dependencies, { name: condition.name });
+                        const currDependency: any = _.find(this.selectedNode.dependencies, { name: condition.name });
+                        condition.disabled = !!currDependency;
+                        condition.acceptance = currDependency ? currDependency.acceptance : false;
                         this.dependencyOptions.push(condition);
                     }
                 }
@@ -338,7 +340,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.dependencyPanel.toggle(event);
     }
 
-    addDependency(dependency) {
+    addDependency(event, dependency) {
+        event.stopPropagation();
         if (dependency.disabled) {
             return;
         }
@@ -399,7 +402,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
             this.selectedNode.dependencies.push({
                 connections: [],
-                name: dependency.name
+                name: dependency.name,
+                acceptance: dependency.acceptance || false,
+                type: dependency instanceof JobType ? 'jobType' : 'condition'
             });
             dependency.disabled = true;
             // manually call updateRecipe

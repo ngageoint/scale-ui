@@ -21,11 +21,6 @@
         padding: 7px;
         border-bottom: 1px solid #ccc;
 
-        &:hover {
-            cursor: pointer;
-            color: #48ACFF;
-        }
-
         &.disabled {
             cursor: default;
             color: #ccc;
@@ -33,6 +28,13 @@
 
         &:last-of-type {
             border-bottom: none;
+        }
+
+        span {
+            &:hover {
+                cursor: pointer;
+                color: #48ACFF;
+            }
         }
     }
 }

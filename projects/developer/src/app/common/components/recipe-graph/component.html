@@ -93,9 +93,10 @@
                     <ng-template let-dep pTemplate="item">
                         <div class="ui-g recipe-io recipe-dependencies">
                             <div class="ui-g-12 ui-g-nopad">
-                                <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
-                                        *ngIf="isEditing"></button>
+                                <button pButton class="ui-button-danger" icon="fa fa-remove"
+                                        (click)="removeDependency(dep)" *ngIf="isEditing"></button>
                                 {{ dep.name }}
+                                <span *ngIf="dep.type === 'condition'">({{ dep.acceptance.toString() }})</span>
                             </div>
                         </div>
                     </ng-template>
@@ -166,6 +167,7 @@
                             <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
                             {{ dep.name }}
+                            <span *ngIf="dep.type === 'condition'">({{ dep.acceptance.toString() }})</span>
                         </div>
                     </div>
                 </ng-template>
@@ -279,16 +281,23 @@
         <div class="margin-top-sm margin-bottom-sm">No other nodes found</div>
     </div>
     <ul class="recipe__option-list">
-        <li *ngFor="let option of dependencyOptions" (click)="addDependency(option)"
-            [class]="option.disabled ? 'disabled' : ''">
-            <span *ngIf="option.manifest">
+        <li *ngFor="let option of dependencyOptions" [ngClass]="option.disabled ? 'disabled' : ''"
+            (click)="$event.stopPropagation()">
+            <span *ngIf="option.manifest" (click)="addDependency($event, option)">
                 <span class="fa fa-fw" [innerHtml]="getUnicode(option.icon_code)"></span>
                 {{ option.manifest.job.title }} v{{ option.manifest.job.jobVersion }}
             </span>
-            <span *ngIf="option.data_filter">
-                <span class="fa fa-fw fa-adjust"></span>
-                {{ option.name }}
-            </span>
+            <div class="flexed space-between" *ngIf="option.data_filter">
+                <span (click)="addDependency($event, option)">
+                    <i class="fa fa-fw fa-adjust"></i>
+                    {{ option.name }}
+                </span>
+                <p-toggleButton [(ngModel)]="option.acceptance" onIcon="fa fa-check" offIcon="fa fa-remove"
+                                onLabel="" offLabel="" class="margin-left-md" [style]="{fontSize: '12px'}"
+                                [disabled]="option.disabled"
+                                [pTooltip]="option.acceptance ? 'Depend on true condition' : 'Depend on false condition'">
+                </p-toggleButton>
+            </div>
         </li>
     </ul>
 </p-overlayPanel>

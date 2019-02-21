@@ -436,12 +436,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    onEditConditionClick(condition) {
-        this.onRemoveConditionClick(condition);
-        this.condition = condition;
-        this.conditionForm.patchValue(condition);
-    }
-
     ngOnInit() {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = data.results;
