@@ -6,7 +6,7 @@ import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
-import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service',
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { StrikesApiService } from './api.service';
 import { Strike } from './api.model';
