@@ -17,7 +17,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     columnsAll: any[];
     subscription: any;
     allJobTypes: any[];
+    allJobTypesTooltip: string;
     favoriteJobTypes: any[];
+    favorteJobTypesTooltip: string;
     pieChartOptions: any;
     totalAll: number;
     failedAll: number;
@@ -46,6 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.pieChartOptions = {
             rotation: 0.5 * Math.PI, // start from bottom
             cutoutPercentage: 40,
+            maintainAspectRatio: false,
             legend: {
                 display: false
             },
@@ -135,6 +138,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.totalFavs = favoriteJobStats.total;
             this.failedFavs = favoriteJobStats.failed;
             this.dataFavs = favoriteJobStats.chartData;
+            this.allJobTypesTooltip = this.allJobTypes.length > 0 && this.failedAll > 0 ?
+                `${this.failedAll} Failure(s) / ${this.totalAll} Total` : null;
+            this.favorteJobTypesTooltip = this.favoriteJobTypes.length > 0 && this.failedFavs > 0 ?
+                `${this.failedFavs} Failure(s) / ${this.totalFavs} Total` : null;
 
             this.dataFeedChartTitle = 'Data Feed';
             this.dataFeedChartTitle = favs.length > 0 ?
