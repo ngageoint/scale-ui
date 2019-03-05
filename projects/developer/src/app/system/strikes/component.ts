@@ -203,7 +203,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
                     // set up the form
                     this.initStrikeForm();
-                })
+                });
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
@@ -312,7 +312,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
-        debugger;
         if (this.selectedStrikeDetail.id) {
             // edit strike
             this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail.clean()).subscribe(data => {
