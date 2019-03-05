@@ -50,7 +50,7 @@ export class IngestApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 600000 });
+            return polling(request, { interval: 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/`, { params: queryParams })
             .pipe(
@@ -80,7 +80,7 @@ export class IngestApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: interval || 600000 });
+            return polling(request, { interval: interval || 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/ingests/status/`, { params: params })
             .pipe(

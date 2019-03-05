@@ -37,7 +37,7 @@ export class QueueApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 600000 });
+            return polling(request, { interval: 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.loadApiPrefix}/load/`, {params: queryParams})
             .pipe(
@@ -57,7 +57,7 @@ export class QueueApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 600000 });
+            return polling(request, { interval: 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/queue/status/`)
             .pipe(

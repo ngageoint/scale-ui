@@ -30,6 +30,12 @@ $navbar-item-width: 150px;
         color: #ccc;
         cursor: pointer;
     }
+
+    .navbar__profile {
+        margin: 23px 0 0 35px;
+        font-size: 24px;
+        cursor: pointer;
+    }
 }
 
 .navbar__item {
@@ -99,4 +105,8 @@ $navbar-item-width: 150px;
     top: 0;
     width: $navbar-status-width;
     z-index: 1001;
+}
+
+.navbar__profile {
+    color: #fff;
 }

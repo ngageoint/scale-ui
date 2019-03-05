@@ -60,7 +60,7 @@ export class FilesApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 600000 });
+            return polling(request, { interval: 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/files/`, { params: queryParams })
             .pipe(

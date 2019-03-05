@@ -20,8 +20,13 @@
             <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
         </div>
 
-        <span class="flexed theme">
-            <span [ngClass]="themeIcon" (click)="changeTheme()"></span>
+        <!--<span class="flexed theme">-->
+            <!--<span [ngClass]="themeIcon" (click)="changeTheme()"></span>-->
+        <!--</span>-->
+
+        <span class="navbar__profile">
+            <p-menu #menu [popup]="true" [model]="menuItems" appendTo="body"></p-menu>
+            <span (click)="onMenuClick($event)"><i class="fa fa-user"></i></span>
         </span>
 
         <span class="navbar__status">

@@ -50,7 +50,7 @@ export class RecipesApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 500000 });
+            return polling(request, { interval: 500000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
             .pipe(
@@ -70,7 +70,7 @@ export class RecipesApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 500000 });
+            return polling(request, { interval: 500000, attempts: 0 });
         }
         return this.http.get<Recipe>(`${this.apiPrefix}/recipes/${id}/`)
             .pipe(

@@ -29,7 +29,7 @@ export class LogViewerApiService {
                 .pipe(
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 5000 });
+            return polling(request, { interval: 5000, attempts: 0 });
         }
         return this.http.get<any>(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
             .pipe(

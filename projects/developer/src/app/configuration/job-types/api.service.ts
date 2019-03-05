@@ -97,7 +97,7 @@ export class JobTypesApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 600000 });
+            return polling(request, { interval: 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/status/`)
             .pipe(
@@ -125,7 +125,7 @@ export class JobTypesApiService {
                     }),
                     catchError(this.dataService.handleError)
                 );
-            return polling(request, { interval: 5000 });
+            return polling(request, { interval: 5000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/running/`, { params: queryParams })
             .pipe(
