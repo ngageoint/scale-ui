@@ -1,4 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { OverlayPanel } from 'primeng/primeng';
+
+import { DataService } from '../common/services/data.service';
 
 @Component({
     selector: 'dev-navbar',
@@ -6,16 +9,21 @@ import { Component, ViewChild } from '@angular/core';
     styleUrls: ['./navbar.component.scss']
 })
 
-export class NavbarComponent {
-    @ViewChild('themePanel') themePanel: any;
-    @ViewChild('menu') menu: any;
+export class NavbarComponent implements OnInit {
+    @ViewChild('op') op: OverlayPanel;
+    @ViewChild('profile') profile: any;
     selectedId = null;
     subscription: any;
     isLight = true;
     themeTooltip = 'Switch to Dark Theme';
     themeIcon = 'fa fa-moon-o';
+    isAuthenticated = null;
 
-    constructor() {}
+    constructor(
+        private dataService: DataService
+    ) {
+        this.isAuthenticated = this.dataService.getIsAuthenticated();
+    }
 
     selectNavItem(event, itemId) {
         event.stopPropagation();
@@ -46,5 +54,16 @@ export class NavbarComponent {
         this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
         const theme = this.isLight ? 'light' : 'dark';
         themeLink.href = `assets/themes/${theme}.css`;
+    }
+
+    ngOnInit() {
+        if (this.isAuthenticated === false) {
+            const event = new MouseEvent('click', {
+                view: window,
+                bubbles: true,
+                cancelable: true
+            });
+            this.op.show(event, this.profile.nativeElement);
+        }
     }
 }

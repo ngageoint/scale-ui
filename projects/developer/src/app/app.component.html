@@ -1,8 +1,25 @@
-<div class="app">
+<div class="app" *ngIf="isAuthenticated">
     <dev-navbar></dev-navbar>
     <div class="content">
         <router-outlet></router-outlet>
     </div>
     <dev-footer></dev-footer>
     <p-toast></p-toast>
+</div>
+
+<div class="app" *ngIf="!isAuthenticated">
+    <dev-navbar></dev-navbar>
+    <div class="content">
+        <div class="authenticating" *ngIf="loading">
+            <div>
+                <h2>Authenticating</h2>
+                <p-progressSpinner mode="indeterminate"></p-progressSpinner>
+            </div>
+        </div>
+        <div *ngIf="!loading && !isAuthenticated">
+            <h2>{{ header }}</h2>
+            {{ message }}<br/>
+            <em>{{ detail }}</em>
+        </div>
+    </div>
 </div>

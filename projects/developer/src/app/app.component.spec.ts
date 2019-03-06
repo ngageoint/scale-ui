@@ -1,6 +1,8 @@
 import { TestBed, async } from '@angular/core/testing';
 import { APP_BASE_HREF } from '@angular/common';
 
+import { DataService } from './common/services/data.service';
+import { ProfileService } from './common/services/profile.service';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
 
@@ -12,7 +14,7 @@ describe('AppComponent', () => {
             imports: [
                 AppModule
             ],
-            providers: [{
+            providers: [DataService, ProfileService, {
                 provide: APP_BASE_HREF,
                 useValue: '/'
             }]

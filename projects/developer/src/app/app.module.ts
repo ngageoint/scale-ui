@@ -25,6 +25,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { TableModule } from 'primeng/table';
 import { DataViewModule } from 'primeng/dataview';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -97,6 +98,7 @@ import { ScansDatatableService } from './system/scans/datatable.service';
 import { RecipeTypeFileComponent } from './configuration/recipe-types/file.component';
 import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.component';
 import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.component';
+import { ProfileService } from './common/services/profile.service';
 
 
 @NgModule({
@@ -192,7 +194,8 @@ import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.c
         ProgressBarModule,
         ToastModule,
         DataViewModule,
-        MenubarModule
+        MenubarModule,
+        ProgressSpinnerModule
     ],
     exports: [
         DropdownModule,
@@ -226,7 +229,8 @@ import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.c
         StrikesApiService,
         NodesApiService,
         QueueApiService,
-        ScansDatatableService
+        ScansDatatableService,
+        ProfileService
     ],
     bootstrap: [AppComponent]
 })

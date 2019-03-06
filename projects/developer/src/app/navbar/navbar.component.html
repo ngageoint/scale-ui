@@ -6,37 +6,34 @@
                     <dev-logo></dev-logo>
                 </a>
             </div>
-            <div [ngClass]="getNavItemStyles('processing')">
+            <div [ngClass]="getNavItemStyles('processing')" *ngIf="isAuthenticated">
                 <a (click)="selectNavItem($event, 'processing')"><i class="fa fa-gears"></i> Processing</a>
             </div>
-            <div [ngClass]="getNavItemStyles('data')">
+            <div [ngClass]="getNavItemStyles('data')" *ngIf="isAuthenticated">
                 <a (click)="selectNavItem($event, 'data')"><i class="fa fa-hdd-o"></i> Data</a>
             </div>
-            <div [ngClass]="getNavItemStyles('configuration')">
+            <div [ngClass]="getNavItemStyles('configuration')" *ngIf="isAuthenticated">
                 <a (click)="selectNavItem($event, 'configuration')"><i class="fa fa-wrench"></i> Configuration</a>
             </div>
-            <div [ngClass]="getNavItemStyles('system')">
+            <div [ngClass]="getNavItemStyles('system')" *ngIf="isAuthenticated">
                 <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
             </div>
         </div>
         <div class="flexed" style="height: 100%">
-            <div class="navbar__status">
+            <div class="navbar__status" *ngIf="isAuthenticated">
                 <dev-status></dev-status>
             </div>
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__profile" (click)="op.toggle($event)" pTooltip="User Profile" tooltipPosition="bottom">
+            <div class="navbar__profile" (click)="op.toggle($event)" pTooltip="User Profile" tooltipPosition="bottom" #profile>
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>
-        <!--<span class="flexed theme">-->
-            <!--<span [ngClass]="themeIcon" (click)="changeTheme()"></span>-->
-        <!--</span>-->
     </div>
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
-<p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" #op>
+<p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" [dismissable]="false" #op>
     <div class="navbar__profile-login">
         <input pInputText type="text" placeholder="Username"/>
         <input pInputText type="password" placeholder="Password"/>

@@ -14,6 +14,7 @@ export class DataService {
     selectedBatchRows = [];
     selectedIngestRows = [];
     selectedScanRows = [];
+    isAuthenticated: boolean;
 
     constructor() {
     }
@@ -123,7 +124,9 @@ export class DataService {
         } else {
             // The backend returned an unsuccessful response code.
             // The response body may contain clues as to what went wrong,
-            if (error.error) {
+            if (error.message) {
+                body = error.message;
+            } else if (error.error) {
                 body = error.error.detail ?
                     error.error.detail :
                     error.error.message ?
@@ -180,5 +183,13 @@ export class DataService {
 
     setSelectedScanRows(data) {
         this.selectedScanRows = data;
+    }
+
+    getIsAuthenticated(): boolean {
+        return this.isAuthenticated;
+    }
+
+    setIsAuthenticated(data: boolean) {
+        this.isAuthenticated = data;
     }
 }

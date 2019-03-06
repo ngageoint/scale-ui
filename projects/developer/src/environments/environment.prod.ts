@@ -5,5 +5,7 @@ export const environment = {
     dateFormat: 'YYYY-MM-DD HH:mm:ss[Z]',
     apiPrefix: '/mocks',
     apiDefaultVersion: 'v6',
-    apiVersions: []
+    apiVersions: [],
+    enableGeoaxis: true,
+    geoaxisUrl: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?='
 };
