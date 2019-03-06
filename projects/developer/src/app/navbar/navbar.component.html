@@ -26,7 +26,7 @@
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__profile" (click)="op.toggle($event)">
+            <div class="navbar__profile" (click)="op.toggle($event)" pTooltip="User Profile" tooltipPosition="bottom">
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>
