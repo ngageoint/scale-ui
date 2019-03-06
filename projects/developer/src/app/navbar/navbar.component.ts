@@ -12,7 +12,8 @@ export class NavbarComponent {
     selectedId = null;
     subscription: any;
     isLight = true;
-    themeIcon = 'fa fa-sun-o';
+    themeTooltip = 'Switch to Dark Theme';
+    themeIcon = 'fa fa-moon-o';
 
     constructor() {}
 
@@ -41,7 +42,8 @@ export class NavbarComponent {
     changeTheme() {
         const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
         this.isLight = !this.isLight;
-        this.themeIcon = this.isLight ? 'fa fa-sun-o' : 'fa fa-moon-o';
+        this.themeTooltip = this.isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+        this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
         const theme = this.isLight ? 'light' : 'dark';
         themeLink.href = `assets/themes/${theme}.css`;
     }

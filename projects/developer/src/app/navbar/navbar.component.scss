@@ -91,11 +91,12 @@ $navbar-item-width: 150px;
     width: $navbar-status-width;
 }
 
-.navbar__profile {
+.navbar__theme, .navbar__profile {
+    margin: 0 0 0 1px;
     color: #fff;
     font-size: 25px;
     background-color: #444;
-    width: 60px;
+    width: 80px;
     height: 100%;
     display: flex;
     justify-content: center;
@@ -105,5 +106,26 @@ $navbar-item-width: 150px;
     &:hover {
         cursor: pointer;
         background-color: #2E3F50;
+    }
+}
+
+::ng-deep .ui-overlaypanel {
+    &.navbar__profile-overlaypanel {
+        width: 300px;
+        padding: 10px 0;
+
+        &:before, &:after {
+            left: 259px;
+        }
+
+        .navbar__profile-login {
+            text-align: right;
+
+            input {
+                width: 100%;
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
     }
 }

@@ -23,16 +23,23 @@
             <div class="navbar__status">
                 <dev-status></dev-status>
             </div>
+            <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
+                <span [ngClass]="themeIcon"></span>
+            </div>
             <div class="navbar__profile" (click)="op.toggle($event)">
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>
+        <!--<span class="flexed theme">-->
+            <!--<span [ngClass]="themeIcon" (click)="changeTheme()"></span>-->
+        <!--</span>-->
     </div>
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
-<p-overlayPanel appendTo="body" #op>
-    <input pInputText type="text" placeholder="Username"/>
-    <input pInputText type="password" placeholder="Password"/>
-    <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login"></button>
-    <p-inputSwitch [(ngModel)]="isLight" (onChange)="changeTheme()"></p-inputSwitch>
+<p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" #op>
+    <div class="navbar__profile-login">
+        <input pInputText type="text" placeholder="Username"/>
+        <input pInputText type="password" placeholder="Password"/>
+        <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login"></button>
+    </div>
 </p-overlayPanel>
