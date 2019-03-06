@@ -13,29 +13,17 @@ $navbar-item-width: 150px;
 }
 
 .navbar {
-    align-items: stretch;
+    align-items: center;
     background: $clr-navbar-dark;
     //box-shadow: $navshadow;
     display: flex;
     height: $navbar-height;
-    justify-content: flex-start;
+    justify-content: space-between;
     left: 0;
     position: absolute;
     right: 0;
     top: 0;
     z-index: 1001;
-
-    .theme {
-        margin: 0 0 0 20px;
-        color: #ccc;
-        cursor: pointer;
-    }
-
-    .navbar__profile {
-        margin: 23px 0 0 35px;
-        font-size: 24px;
-        cursor: pointer;
-    }
 }
 
 .navbar__item {
@@ -100,13 +88,22 @@ $navbar-item-width: 150px;
 }
 
 .navbar__status {
-    position: absolute;
-    right: 0;
-    top: 0;
     width: $navbar-status-width;
-    z-index: 1001;
 }
 
 .navbar__profile {
     color: #fff;
+    font-size: 25px;
+    background-color: #444;
+    width: 60px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: $default-transition;
+
+    &:hover {
+        cursor: pointer;
+        background-color: #2E3F50;
+    }
 }

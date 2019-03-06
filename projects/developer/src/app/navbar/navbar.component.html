@@ -1,37 +1,38 @@
 <div class="navbar-ctr">
     <div class="navbar" (click)="selectNavItem($event, null)">
-
-        <div class="navbar__logo">
-            <a routerLink="/">
-                <dev-logo></dev-logo>
-            </a>
+        <div class="flexed">
+            <div class="navbar__logo">
+                <a routerLink="/">
+                    <dev-logo></dev-logo>
+                </a>
+            </div>
+            <div [ngClass]="getNavItemStyles('processing')">
+                <a (click)="selectNavItem($event, 'processing')"><i class="fa fa-gears"></i> Processing</a>
+            </div>
+            <div [ngClass]="getNavItemStyles('data')">
+                <a (click)="selectNavItem($event, 'data')"><i class="fa fa-hdd-o"></i> Data</a>
+            </div>
+            <div [ngClass]="getNavItemStyles('configuration')">
+                <a (click)="selectNavItem($event, 'configuration')"><i class="fa fa-wrench"></i> Configuration</a>
+            </div>
+            <div [ngClass]="getNavItemStyles('system')">
+                <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
+            </div>
         </div>
-
-        <div [class]="getNavItemStyles('processing')">
-            <a (click)="selectNavItem($event, 'processing')"><i class="fa fa-gears"></i> Processing</a>
+        <div class="flexed" style="height: 100%">
+            <div class="navbar__status">
+                <dev-status></dev-status>
+            </div>
+            <div class="navbar__profile" (click)="op.toggle($event)">
+                <span class="fa fa-user-circle-o"></span>
+            </div>
         </div>
-        <div [class]="getNavItemStyles('data')">
-            <a (click)="selectNavItem($event, 'data')"><i class="fa fa-hdd-o"></i> Data</a>
-        </div>
-        <div [class]="getNavItemStyles('configuration')">
-            <a (click)="selectNavItem($event, 'configuration')"><i class="fa fa-wrench"></i> Configuration</a>
-        </div>
-        <div [class]="getNavItemStyles('system')">
-            <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
-        </div>
-
-        <!--<span class="flexed theme">-->
-            <!--<span [ngClass]="themeIcon" (click)="changeTheme()"></span>-->
-        <!--</span>-->
-
-        <span class="navbar__profile">
-            <p-menu #menu [popup]="true" [model]="menuItems" appendTo="body"></p-menu>
-            <span (click)="onMenuClick($event)"><i class="fa fa-user"></i></span>
-        </span>
-
-        <span class="navbar__status">
-            <dev-status></dev-status>
-        </span>
     </div>
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
+<p-overlayPanel appendTo="body" #op>
+    <input pInputText type="text" placeholder="Username"/>
+    <input pInputText type="password" placeholder="Password"/>
+    <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login"></button>
+    <p-inputSwitch [(ngModel)]="isLight" (onChange)="changeTheme()"></p-inputSwitch>
+</p-overlayPanel>

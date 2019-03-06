@@ -13,14 +13,8 @@ export class NavbarComponent {
     subscription: any;
     isLight = true;
     themeIcon = 'fa fa-sun-o';
-    menuItems: any;
 
-    constructor() {
-        this.menuItems = [
-            { label: 'Profile', icon: 'fa fa-arrow-right', command: () => {  } },
-            { label: 'Theme', icon: this.themeIcon, command: () => {  } }
-        ];
-    }
+    constructor() {}
 
     selectNavItem(event, itemId) {
         event.stopPropagation();
@@ -50,10 +44,5 @@ export class NavbarComponent {
         this.themeIcon = this.isLight ? 'fa fa-sun-o' : 'fa fa-moon-o';
         const theme = this.isLight ? 'light' : 'dark';
         themeLink.href = `assets/themes/${theme}.css`;
-    }
-
-    onMenuClick(event) {
-        this.menu.toggle(event);
-        event.stopPropagation();
     }
 }
