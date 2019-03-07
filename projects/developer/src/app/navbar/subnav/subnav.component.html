@@ -1,6 +1,6 @@
-<div [class]="getSubnavStyles()">
+<div [ngClass]="getSubnavStyles()">
     <!-- Processing -->
-    <div [class]="getSectionStyles('processing')">
+    <div [ngClass]="getSectionStyles('processing')">
         <ul>
             <li><a routerLink="/processing/jobs" (click)="navigate()"><i class="fa fa-cube"></i> Jobs</a></li>
             <li><a routerLink="/processing/recipes" (click)="navigate()"><i class="fa fa-cubes"></i> Recipes</a></li>
@@ -12,7 +12,7 @@
     </div>
 
     <!-- Data -->
-    <div [class]="getSectionStyles('data')">
+    <div [ngClass]="getSectionStyles('data')">
         <ul>
             <li><a routerLink="/data/feed" (click)="navigate()"><i class="fa fa-line-chart"></i> Feed</a> </li>
             <li><a routerLink="/data/ingest" (click)="navigate()"><i class="fa fa-clone"></i> Ingest Records</a></li>
@@ -21,7 +21,7 @@
     </div>
 
     <!-- Configuration -->
-    <div [class]="getSectionStyles('configuration')">
+    <div [ngClass]="getSectionStyles('configuration')">
         <ul>
             <li><a routerLink="/configuration/job-types" (click)="navigate()"><i class="fa fa-cube"></i> Job Types</a></li>
             <li><a routerLink="/configuration/recipe-types" (click)="navigate()"><i class="fa fa-cubes"></i> Recipe Types</a></li>
@@ -29,7 +29,7 @@
     </div>
 
     <!-- System -->
-    <div [class]="getSectionStyles('system')">
+    <div [ngClass]="getSectionStyles('system')">
         <ul>
             <li><a routerLink="/system/nodes" (click)="navigate()"><i class="fa fa-circle-o"></i> Nodes</a></li>
             <li><a routerLink="/system/scans" (click)="navigate()"><i class="fa fa-barcode"></i> Scans</a></li>

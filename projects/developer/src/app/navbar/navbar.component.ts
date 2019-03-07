@@ -1,7 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
 
-import { DataService } from '../common/services/data.service';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'dev-navbar',
@@ -9,21 +9,18 @@ import { DataService } from '../common/services/data.service';
     styleUrls: ['./navbar.component.scss']
 })
 
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnChanges {
+    @Input() isAuthenticated: boolean;
     @ViewChild('op') op: OverlayPanel;
     @ViewChild('profile') profile: any;
+    auth = environment.auth;
     selectedId = null;
     subscription: any;
     isLight = true;
     themeTooltip = 'Switch to Dark Theme';
     themeIcon = 'fa fa-moon-o';
-    isAuthenticated = null;
 
-    constructor(
-        private dataService: DataService
-    ) {
-        this.isAuthenticated = this.dataService.getIsAuthenticated();
-    }
+    constructor() {}
 
     selectNavItem(event, itemId) {
         event.stopPropagation();
@@ -57,7 +54,10 @@ export class NavbarComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (this.isAuthenticated === false) {
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.isAuthenticated.currentValue === false) {
             const event = new MouseEvent('click', {
                 view: window,
                 bubbles: true,

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 
-import { DataService } from './common/services/data.service';
 import { ProfileService } from './common/services/profile.service';
 import { environment } from '../environments/environment';
 
@@ -18,31 +17,46 @@ export class AppComponent implements OnInit {
     detail: string;
 
     constructor(
-        private dataService: DataService,
         private profileService: ProfileService
     ) {}
 
     ngOnInit() {
-        this.profileService.getProfile().subscribe(data => {
-            this.loading = false;
-            console.log(data);
-            // TODO either set isAuthenticated to true, redirect to geoaxis, or show login form based on returned data
-            // this.isAuthenticated = true;
-            // this.dataService.setIsAuthenticated(this.isAuthenticated);
-        }, err => {
-            this.loading = false;
-            console.log(err);
-            if (environment.enableGeoaxis) {
-                this.header = 'Unable to Retrieve Authentication Status';
-                this.message = 'Redirecting to GEOAxIS...';
-                window.location.href = `${environment.geoaxisUrl}http://127.0.0.1:8080`;
-            } else {
-                this.header = 'Unable to Retrieve Authentication Status';
-                this.message = 'The authentication system is unavailable.';
-                this.detail = err.statusText;
-                this.isAuthenticated = false;
-                this.dataService.setIsAuthenticated(this.isAuthenticated);
-            }
-        });
+        if (environment.auth.enabled) {
+            this.profileService.getProfile().subscribe(data => {
+                this.loading = false;
+                console.log(data);
+                if (data) {
+                    // continue to app
+                    this.isAuthenticated = true;
+                } else {
+                    // attempt to authenticate
+                    if (environment.auth.scheme.type === 'geoaxis') {
+                        // redirect to geoaxis login
+                        this.header = 'Authentication is Required';
+                        this.message = 'Redirecting to GEOAxIS...';
+                        window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
+                    } else {
+                        // show login form
+                        this.header = 'Authentication is Required';
+                        this.message = 'Enter your username and password to continue.';
+                        this.isAuthenticated = false;
+                    }
+                }
+            }, err => {
+                this.loading = false;
+                console.log(err);
+                if (environment.auth.scheme.type === 'geoaxis') {
+                    this.header = 'Unable to Retrieve Authentication Status';
+                    this.message = 'Redirecting to GEOAxIS...';
+                    window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
+                } else {
+                    this.header = 'Unable to Retrieve Authentication Status';
+                    this.message = 'The authentication system is unavailable.';
+                    this.detail = err.statusText;
+                }
+            });
+        } else {
+            this.isAuthenticated = true;
+        }
     }
 }

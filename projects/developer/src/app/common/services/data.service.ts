@@ -14,7 +14,6 @@ export class DataService {
     selectedBatchRows = [];
     selectedIngestRows = [];
     selectedScanRows = [];
-    isAuthenticated: boolean;
 
     constructor() {
     }
@@ -183,13 +182,5 @@ export class DataService {
 
     setSelectedScanRows(data) {
         this.selectedScanRows = data;
-    }
-
-    getIsAuthenticated(): boolean {
-        return this.isAuthenticated;
-    }
-
-    setIsAuthenticated(data: boolean) {
-        this.isAuthenticated = data;
     }
 }
