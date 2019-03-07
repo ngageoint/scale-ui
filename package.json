@@ -1,6 +1,7 @@
 {
   "name": "scale-ui",
   "version": "0.0.0",
+  "homepage": "http://appliedis.github.io/demos/scale-ui",
   "scripts": {
     "ng": "ng",
     "api": "nodemon --watch api api/ApiServer.js",

@@ -26,8 +26,8 @@ import { ScanDetailsComponent } from './system/scans/details.component';
 import { WorkspacesComponent } from './system/workspaces/component';
 
 const routes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-    { path: 'dashboard', component: DashboardComponent },
+    { path: '', pathMatch: 'full', component: DashboardComponent },
+    { path: 'dashboard', redirectTo: '' },
     { path: 'processing/jobs', component: JobsComponent },
     { path: 'processing/jobs/:id', component: JobDetailsComponent },
     { path: 'processing/running-jobs', component: RunningJobsComponent },
@@ -54,7 +54,7 @@ const routes: Routes = [
     { path: 'system/scans', component: ScansComponent },
     { path: 'system/scans/:id', component: ScanDetailsComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
-    { path: 'system/workspaces/:id', component: WorkspacesComponent },
+    { path: 'system/workspaces/:id', component: WorkspacesComponent }
 ];
 
 @NgModule({
