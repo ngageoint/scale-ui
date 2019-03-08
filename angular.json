@@ -147,7 +147,8 @@
                         "tsConfig": "projects/developer/tsconfig.app.json",
                         "assets": [
                             "projects/developer/src/favicon.ico",
-                            "projects/developer/src/assets"
+                            "projects/developer/src/assets",
+                            "projects/developer/src/404.html"
                         ],
                         "styles": [
                             "node_modules/font-awesome/scss/font-awesome.scss",
