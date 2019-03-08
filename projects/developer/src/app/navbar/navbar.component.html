@@ -26,17 +26,21 @@
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__profile" *ngIf="auth.enabled" (click)="op.toggle($event)" pTooltip="User Profile" tooltipPosition="bottom" #profile>
+            <div class="navbar__profile" *ngIf="auth.enabled" (click)="op.toggle($event)" #profile>
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>
     </div>
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
-<p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" [dismissable]="false" #op>
-    <div class="navbar__profile-login">
-        <input pInputText type="text" placeholder="Username"/>
-        <input pInputText type="password" placeholder="Password"/>
-        <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login"></button>
+<p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" [dismissable]="false"
+                (onShow)="handleOnShow()" #op>
+    <div class="navbar__profile-login" *ngIf="!isAuthenticated">
+        <input pInputText type="text" placeholder="Username" [(ngModel)]="username" (keypress)="handleKeyPress($event)"
+               #user/>
+        <input pInputText type="password" placeholder="Password" [(ngModel)]="password"
+               (keypress)="handleKeyPress($event)"/>
+        <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login" (click)="login()"
+                [disabled]="!username && !password"></button>
     </div>
 </p-overlayPanel>

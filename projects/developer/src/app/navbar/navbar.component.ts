@@ -1,7 +1,9 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
+import { MessageService } from 'primeng/primeng';
 
 import { environment } from '../../environments/environment';
+import { ProfileService } from '../common/services/profile.service';
 
 @Component({
     selector: 'dev-navbar',
@@ -13,14 +15,20 @@ export class NavbarComponent implements OnInit, OnChanges {
     @Input() isAuthenticated: boolean;
     @ViewChild('op') op: OverlayPanel;
     @ViewChild('profile') profile: any;
+    @ViewChild('user') usernameEl: any;
     auth = environment.auth;
     selectedId = null;
     subscription: any;
     isLight = true;
     themeTooltip = 'Switch to Dark Theme';
     themeIcon = 'fa fa-moon-o';
+    username: string;
+    password: string;
 
-    constructor() {}
+    constructor(
+        private messageService: MessageService,
+        private profileService: ProfileService
+    ) {}
 
     selectNavItem(event, itemId) {
         event.stopPropagation();
@@ -51,6 +59,27 @@ export class NavbarComponent implements OnInit, OnChanges {
         this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
         const theme = this.isLight ? 'light' : 'dark';
         themeLink.href = `assets/themes/${theme}.css`;
+    }
+
+    login() {
+        this.profileService.login({ username: this.username, password: this.password }).subscribe(data => {
+            console.log(data);
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Authentication Error', detail: err.statusText, life: 10000});
+        });
+    }
+
+    handleKeyPress(event) {
+        if (event.code === 'Enter' && this.username && this.password) {
+            this.login();
+        }
+    }
+
+    handleOnShow() {
+        setTimeout(() => {
+            this.usernameEl.nativeElement.focus();
+        }, 50);
     }
 
     ngOnInit() {

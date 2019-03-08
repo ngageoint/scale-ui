@@ -1,8 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../common/services/data.service';
+import { ProfileService } from '../common/services/profile.service';
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
@@ -11,7 +13,8 @@ describe('NavbarComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            providers: [MessageService, DataService],
+            imports: [HttpClientTestingModule],
+            providers: [MessageService, DataService, ProfileService],
             declarations: [ NavbarComponent ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]

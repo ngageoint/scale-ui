@@ -51,8 +51,9 @@ export class AppComponent implements OnInit {
                     window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
                 } else {
                     this.header = 'Unable to Retrieve Authentication Status';
-                    this.message = 'The authentication system is unavailable.';
+                    this.message = 'Please use the form to login.';
                     this.detail = err.statusText;
+                    this.isAuthenticated = false;
                 }
             });
         } else {

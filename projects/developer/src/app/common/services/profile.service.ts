@@ -23,4 +23,11 @@ export class ProfileService {
                 catchError(this.dataService.handleError)
             );
     }
+
+    login(data): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/login/`, data)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
 }
