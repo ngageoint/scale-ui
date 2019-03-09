@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { catchError } from 'rxjs/internal/operators';
 
+import { environment } from '../../../environments/environment';
 import { DataService } from './data.service';
 
 @Injectable()
@@ -25,7 +26,7 @@ export class ProfileService {
     }
 
     login(data): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/login/`, data)
+        return this.http.post<any>(`${environment.auth.scheme.url}`, data)
             .pipe(
                 catchError(this.dataService.handleError)
             );
