@@ -6,7 +6,7 @@ export class JobTypeName {
                 data.title,
                 data.description,
                 data.icon_code,
-                data.num_versions,
+                data.versions,
                 data.latest_version
             );
         }
@@ -25,7 +25,7 @@ export class JobTypeName {
         public title: string,
         public description: string,
         public icon_code: string,
-        public num_versions: number,
+        public versions: number,
         public latest_version: string
     ) {}
 }

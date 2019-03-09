@@ -249,7 +249,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addJobTypeNode(event) {
         const jobType = event.data;
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.name, jobType.latest_version).subscribe(data => {
+        this.jobTypesApiService.getJobType(jobType.name, jobType.version).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
             if (!recipeData.job_types) {
                 recipeData.job_types = [];
@@ -277,7 +277,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
             // remove job type from selection
             this.selectedJobTypes = _.filter(this.selectedJobTypes, jt => {
-                return jt.name !== event.data.name && jt.latest_version !== event.data.latest_version;
+                return jt.name !== event.data.name && jt.version !== event.data.version;
             });
         });
     }
@@ -345,7 +345,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (nodeToRemove) {
             if (nodeToRemove.node_type.node_type === 'job') {
                 _.remove(recipeData.job_types, (jt: any) => {
-                    return jt.name === event.data.name && jt.version === event.data.latest_version;
+                    return jt.name === event.data.name && jt.version === event.data.version;
                 });
             } else if (nodeToRemove.node_type.node_type === 'recipe') {
                 _.remove(recipeData.sub_recipe_types, (rt: any) => {

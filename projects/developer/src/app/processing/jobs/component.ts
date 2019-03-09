@@ -135,12 +135,12 @@ export class JobsComponent implements OnInit, OnDestroy {
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
                 selectItems.push({
-                    label: jobType.title + ' ' + jobType.latest_version,
+                    label: jobType.title + ' ' + jobType.version,
                     value: jobType
                 });
                 if (
                     _.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
-                    _.indexOf(this.datatableOptions.job_type_version, jobType.latest_version) >= 0
+                    _.indexOf(this.datatableOptions.job_type_version, jobType.version) >= 0
                 ) {
                     this.selectedJobType.push(jobType);
                 }
@@ -185,7 +185,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     onJobTypeChange(e) {
         const name = _.map(e.value, 'name');
-        const version = _.map(e.value, 'latest_version');
+        const version = _.map(e.value, 'version');
         this.datatableOptions.job_type_name = name.length > 0 ? name : null;
         this.datatableOptions.job_type_version = version.length > 0 ? version : null;
         this.updateOptions();

@@ -28,15 +28,13 @@ export class JobTypesApiService {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
             queryParams = {
-                order: sortStr,
                 page: page,
                 page_size: params.rows || 1000,
-                started: params.started,
-                ended: params.ended,
-                name: params.name,
-                category: params.category,
+                keyword: params.keyword,
+                id: params.id,
                 is_active: params.is_active,
-                is_operational: params.is_operational
+                is_system: params.is_system,
+                order: sortStr
             };
         } else {
             queryParams = {
@@ -47,7 +45,62 @@ export class JobTypesApiService {
             .pipe(
                 map(response => {
                     const returnObj = ApiResults.transformer(response);
+                    returnObj.results = JobType.transformer(returnObj.results);
+                    return returnObj;
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    getJobTypeNames(params?: any): Observable<ApiResults> {
+        let queryParams = {};
+        if (params) {
+            const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            queryParams = {
+                page: page,
+                page_size: params.rows || 1000,
+                keyword: params.keyword,
+                id: params.id,
+                is_active: params.is_active,
+                is_system: params.is_system,
+                order: sortStr
+            };
+        } else {
+            queryParams = {
+                page_size: 1000
+            };
+        }
+        return this.http.get<ApiResults>(`${this.apiPrefix}/job-type-names/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    const returnObj = ApiResults.transformer(response);
                     returnObj.results = JobTypeName.transformer(returnObj.results);
+                    return returnObj;
+                }),
+                catchError(this.dataService.handleError)
+            );
+    }
+
+    getJobTypeVersions(name: string, params?: any): Observable<ApiResults> {
+        let queryParams = {};
+        if (params) {
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            queryParams = {
+                page: page,
+                page_size: params.rows || 1000,
+                is_active: params.is_active
+            };
+        } else {
+            queryParams = {
+                page_size: 1000
+            };
+        }
+        return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/${name}/`, { params: queryParams })
+            .pipe(
+                map(response => {
+                    const returnObj = ApiResults.transformer(response);
+                    returnObj.results = JobType.transformer(returnObj.results);
                     return returnObj;
                 }),
                 catchError(this.dataService.handleError)

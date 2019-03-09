@@ -73,10 +73,10 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             _.forEach(data.results, result => {
                 this.jobTypes.push({
-                    label: `${result.title} ${result.latest_version}`,
+                    label: `${result.title} ${result.version}`,
                     value: result
                 });
-                if (name === result.name && version === result.latest_version) {
+                if (name === result.name && version === result.version) {
                     this.selectedJobType = result;
                 }
             });
@@ -113,9 +113,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onRowSelect(e) {
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/job-types/${e.value.name}/${e.value.latest_version}`);
+            window.open(`/configuration/job-types/${e.value.name}/${e.value.version}`);
         } else {
-            this.router.navigate([`/configuration/job-types/${e.value.name}/${e.value.latest_version}`]);
+            this.router.navigate([`/configuration/job-types/${e.value.name}/${e.value.version}`]);
         }
     }
     onPauseClick() {
