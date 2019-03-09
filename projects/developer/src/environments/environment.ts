@@ -15,8 +15,9 @@ export const environment = {
     auth: {
         enabled: false,
         scheme: {
-            type: 'geoaxis', // geoaxis or form
-            url: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?=' // required if geoaxis
+            type: 'form', // geoaxis or form
+            // url: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?=' // geoaxis endpoint or form post endpoint
+            url: 'http://scale.alpha.aisohio.net/api/login/' // geoaxis endpoint or form post endpoint
         }
     }
 };
