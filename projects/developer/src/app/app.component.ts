@@ -46,11 +46,11 @@ export class AppComponent implements OnInit {
                 this.loading = false;
                 console.log(err);
                 if (environment.auth.scheme.type === 'geoaxis') {
-                    this.header = 'Unable to Retrieve Authentication Status';
+                    this.header = 'Authentication is Required';
                     this.message = 'Redirecting to GEOAxIS...';
                     window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
                 } else {
-                    this.header = 'Unable to Retrieve Authentication Status';
+                    this.header = 'Authentication is Required';
                     this.message = 'Please use the form to login.';
                     this.detail = err.statusText;
                     this.isAuthenticated = false;
