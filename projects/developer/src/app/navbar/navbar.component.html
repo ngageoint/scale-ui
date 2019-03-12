@@ -41,6 +41,6 @@
         <input pInputText type="password" placeholder="Password" [(ngModel)]="password"
                (keypress)="handleKeyPress($event)"/>
         <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login" (click)="login()"
-                [disabled]="!username && !password"></button>
+                [disabled]="!username || !password"></button>
     </div>
 </p-overlayPanel>
