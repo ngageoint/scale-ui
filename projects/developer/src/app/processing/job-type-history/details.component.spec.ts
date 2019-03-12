@@ -4,8 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { JobsApiService } from '../jobs/api.service';
-import { JobTypesApiService } from '../../configuration/job-types/api.service';
+import { ErrorsApiService } from '../../common/services/errors/api.service';
 import { DataService } from '../../common/services/data.service';
 import { JobTypeHistoryDetailsComponent } from './details.component';
 
@@ -19,7 +18,7 @@ describe('JobTypeHistoryDetailsComponent', () => {
             declarations: [JobTypeHistoryDetailsComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, JobsApiService, JobTypesApiService, DataService,
+                MessageService, ErrorsApiService, DataService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes

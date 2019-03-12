@@ -46,6 +46,7 @@ var scanDetails = require('./handlers/scanDetails');
 var scanCreate = require('./handlers/scanCreate');
 var scanEdit = require('./handlers/scanEdit');
 var scanValidate = require('./handlers/scanValidate');
+var errors = require('./handlers/errors');
 
 var apiVersion = 'v6';
 
@@ -349,6 +350,12 @@ module.exports = {
             method: 'POST',
             path: '/mocks/' + apiVersion + '/scans/',
             handler: scanCreate
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/errors/',
+            handler: errors
         });
     }
 };

@@ -219,13 +219,13 @@ export class JobTypeHistoryComponent implements OnInit {
         this.datatableOptions.version = version.length > 0 ? version : null;
         this.updateOptions();
     }
-    // onRowSelect(e) {
-    //     if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-    //         window.open(`/processing/job-type-history/${e.data.job_type.name}/${e.data.job_type.version}`);
-    //     } else {
-    //         this.router.navigate([`/processing/job-type-history/${e.data.job_type.name}/${e.data.job_type.version}`]);
-    //     }
-    // }
+    onRowSelect(e) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/processing/job-type-history/${e.data.job_type.name}`);
+        } else {
+            this.router.navigate([`/processing/job-type-history/${e.data.job_type.name}`]);
+        }
+    }
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {

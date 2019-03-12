@@ -100,6 +100,7 @@ import { RecipeTypeFileComponent } from './configuration/recipe-types/file.compo
 import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.component';
 import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.component';
 import { ProfileService } from './common/services/profile.service';
+import { ErrorsApiService } from './common/services/errors/api.service';
 
 
 @NgModule({
@@ -235,7 +236,8 @@ import { ProfileService } from './common/services/profile.service';
         NodesApiService,
         QueueApiService,
         ScansDatatableService,
-        ProfileService
+        ProfileService,
+        ErrorsApiService
     ],
     bootstrap: [AppComponent]
 })

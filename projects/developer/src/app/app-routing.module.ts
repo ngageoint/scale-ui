@@ -33,7 +33,7 @@ const routes: Routes = [
     { path: 'processing/running-jobs', component: RunningJobsComponent },
     { path: 'processing/queued-jobs', component: QueuedJobsComponent },
     { path: 'processing/job-type-history', component: JobTypeHistoryComponent },
-    { path: 'processing/job-type-history/:name/:version', component: JobTypeHistoryDetailsComponent },
+    { path: 'processing/job-type-history/:name', component: JobTypeHistoryDetailsComponent },
     { path: 'processing/batches', component: BatchesComponent },
     { path: 'processing/batches/:id', component: BatchDetailsComponent },
     { path: 'processing/batches/edit/:id', component: BatchesEditComponent },
