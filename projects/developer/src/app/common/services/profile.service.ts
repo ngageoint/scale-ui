@@ -25,6 +25,13 @@ export class ProfileService {
             );
     }
 
+    getLogin(): Observable<any> {
+        return this.http.get<any>(`${environment.auth.scheme.url}`)
+            .pipe(
+                catchError(this.dataService.handleError)
+            );
+    }
+
     login(data): Observable<any> {
         return this.http.post<any>(`${environment.auth.scheme.url}`, data)
             .pipe(

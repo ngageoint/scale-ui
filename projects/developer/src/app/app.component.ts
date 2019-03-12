@@ -50,10 +50,20 @@ export class AppComponent implements OnInit {
                     this.message = 'Redirecting to GEOAxIS...';
                     window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
                 } else {
-                    this.header = 'Authentication is Required';
-                    this.message = 'Please use the form to login.';
-                    this.detail = err.statusText;
-                    this.isAuthenticated = false;
+                    // GET call to retrieve CSRF cookie
+                    this.profileService.getLogin().subscribe(data => {
+                        console.log(data);
+                        this.header = 'Authentication is Required';
+                        this.message = 'Please use the form to login.';
+                        this.detail = err.statusText;
+                        this.isAuthenticated = false;
+                    }, loginErr => {
+                        console.log('error', loginErr);
+                        this.header = 'Authentication is Required';
+                        this.message = 'Please use the form to login.';
+                        this.detail = err.statusText;
+                        this.isAuthenticated = false;
+                    });
                 }
             });
         } else {
