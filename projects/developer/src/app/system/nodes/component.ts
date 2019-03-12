@@ -285,7 +285,7 @@ export class NodesComponent implements OnInit {
             this.filters.paused = params.paused ? params.paused === 'true' : true;
             this.filters.busy = params.busy ? params.busy === 'true' : true;
             this.filters.waiting = params.waiting ? params.waiting === 'true' : true;
-            this.collapsed = params.collapsed ? params.collapsed === 'true' : false;
+            this.collapsed = params.collapsed ? params.collapsed === 'true' : this.collapsed;
             this.activeLabel = this.showActive ? 'Active Nodes' : 'Deprecated Nodes';
             this.readyBtnClass = this.filters.ready ? 'ui-button-ready' : 'ui-button-secondary';
             this.readyBtnIcon = this.filters.ready ? 'fa fa-check' : 'fa fa-remove';
