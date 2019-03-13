@@ -12,12 +12,25 @@ import { ErrorsApiService } from '../../common/services/errors/api.service';
 export class JobTypeHistoryDetailsComponent implements OnInit {
     datatableLoading: boolean;
     errors: any;
+    columns: any[];
+    first: number;
+    count: number;
+    isInitialized: boolean;
 
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
         private errorsApiService: ErrorsApiService
-    ) {}
+    ) {
+        this.columns = [
+            { field: '', header: 'Job Type' },
+            { field: 'job_type.version', header: 'Version' },
+            { field: 'highest_priority', header: 'Highest Priority' },
+            { field: 'count', header: 'Count' },
+            { field: 'longest_queued_duration', header: 'Duration of Longest Queued Job' }
+        ];
+        this.isInitialized = false;
+    }
 
     private updateData() {
         this.datatableLoading = true;

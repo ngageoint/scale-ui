@@ -1,3 +1,37 @@
 <p *ngIf="errors">
   {{ errors.length }} Error(s) Found
 </p>
+<p-table [value]="errors" [columns]="columns" [rows]="count" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
+         [responsive]="true" resizableColumns="true" [autoLayout]="true" [loading]="datatableLoading"
+         [style]="{'min-height':'300px'}">
+    <ng-template pTemplate="header" let-columns>
+        <tr>
+            <th *ngFor="let col of columns">
+                {{ col.header }}
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr [pSelectableRow]="rowData">
+            <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <div *ngSwitchCase="'job_type.name'">
+                    <i class="fa fa-fw" [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
+                    {{ rowData.job_type.title }}
+                </div>
+                <div *ngSwitchCase="'job_type.version'">
+                    {{ rowData.job_type.version }}
+                </div>
+                <div *ngSwitchDefault>
+                    {{ rowData[col.field] }}
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="columns.length" class="text-center">
+                No records found
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
