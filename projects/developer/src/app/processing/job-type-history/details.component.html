@@ -1,6 +1,5 @@
-<p *ngIf="errors">
-  {{ errors.length }} Error(s) Found
-</p>
+<h2><i class="fa fa-history"></i> Error History for {{ jobTypeName }}</h2>
+{{ errors.length }} Error(s) Found
 <p-table [value]="errors" [columns]="columns" [rows]="count" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
          [responsive]="true" resizableColumns="true" [autoLayout]="true" [loading]="datatableLoading"
          [style]="{'min-height':'300px'}">
