@@ -1,3 +1,3 @@
 FROM gisjedi/scale:auth
 
-COPY dist /opt/scale/ui
+COPY dist/developer /opt/scale/ui
