@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import {LazyLoadEvent, MessageService} from 'primeng/api';
+import { LazyLoadEvent, MessageService } from 'primeng/api';
+import * as _ from 'lodash';
 
+import { DataService } from '../../common/services/data.service';
 import { ErrorsApiService } from '../../common/services/errors/api.service';
 
 @Component({
@@ -21,6 +23,7 @@ export class JobTypeHistoryDetailsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
+        private dataService: DataService,
         private errorsApiService: ErrorsApiService
     ) {
         this.columns = [
@@ -34,7 +37,17 @@ export class JobTypeHistoryDetailsComponent implements OnInit {
 
     private updateData() {
         this.datatableLoading = true;
-        this.errorsApiService.getErrors({ job_type_name: this.jobTypeName }).subscribe(data => {
+        this.errorsApiService.getErrors({
+            job_type_name: this.jobTypeName,
+            sortOrder: -1,
+            sortField: 'last_modified'
+        }).subscribe(data => {
+            _.forEach(data.results, result => {
+                result.createdTooltip = this.dataService.formatDate(result.created);
+                result.createdDisplay = this.dataService.formatDate(result.created, true);
+                result.lastModifiedTooltip = this.dataService.formatDate(result.last_modified);
+                result.lastModifiedDisplay = this.dataService.formatDate(result.last_modified, true);
+            });
             this.errors = data.results;
             this.datatableLoading = false;
         }, err => {
