@@ -19,14 +19,14 @@ $clr-black: #000000;
 $clr-royal01: #141e30;
 $clr-royal02: #243b55;
 
-$clr-aqua: #22dfdf;
+$clr-aqua: #169e9e;
 $clr-purple: rgb(77, 40, 146);
 
 $clr-blue-lgt: #009ac8;
 $clr-blue-med: #1950fb;
 $clr-blue-drk: #273662;
-$clr-green: #00cd8c;
-$clr-orange: #d36115;
+$clr-green: #417e2e;
+$clr-orange: #e46f21;
 $clr-red: #fb4719;
 $clr-yellow: #fdc613;
 
@@ -46,25 +46,25 @@ $clr-navbar-text: #fff;
 
 $clr-app-background: #e4e4e4;
 
-$clr-status-good: #417e2e;
+$clr-status-good: $clr-green;
 $clr-status-error: #be292e;
 $clr-status-error-data: $clr-status-error;
 $clr-status-error-algorithm: adjust-hue($clr-status-error-data, 20%);
 $clr-status-error-system: adjust-hue($clr-status-error-data, 40%);
 $clr-status-warn: $clr-status-error-algorithm;
 $clr-status-unknown: $clr-gray-50;
-$clr-status-completed: $clr-green;
-$clr-status-failed: $clr-red;
-$clr-status-pending: $clr-scale-blue1;
-$clr-status-queued: $clr-aqua;
-$clr-status-running: $clr-scale-blue2;
+$clr-status-completed: $clr-scale-blue2;
+$clr-status-failed: #be292e;
+$clr-status-pending:  $clr-orange;
+$clr-status-queued: $clr-purple;
+$clr-status-running: $clr-green;
 $clr-status-blocked: $clr-orange;
 $clr-status-canceled: $clr-black;
 $clr-failure-system: #912125;
 $clr-failure-algorithm: #be292e;
 $clr-failure-data: #e02026;
 $clr-offered: $clr-gray-50;
-$clr-free: $clr-status-good;
+$clr-free: $clr-scale-blue1;
 $clr-unavailable: #991628;
 
 $clr-label-text: #fff;
@@ -72,8 +72,8 @@ $clr-label-default: #777;
 $clr-label-default-hover: #5e5e5e;
 $clr-label-primary: #337ab7;
 $clr-label-primary-hover: #286090;
-$clr-label-success: #5cb85c;
-$clr-label-success-hover: #449d44;
+$clr-label-success: #337ab7;
+$clr-label-success-hover: #286090;
 $clr-label-info: #5bc0de;
 $clr-label-info-hover: #31b0d5;
 $clr-label-warning: #f0ad4e;
@@ -81,10 +81,10 @@ $clr-label-warning-hover: #ec971f;
 $clr-label-danger: #d9534f;
 $clr-label-danger-hover: #c9302c;
 
-$clr-ready: $clr-status-good;
-$clr-paused: $clr-status-pending;
-$clr-busy: $clr-status-running;
-$clr-waiting: $clr-scale-blue3;
+$clr-ready: $clr-scale-blue2;
+$clr-paused:$clr-orange ;
+$clr-busy:$clr-unavailable;
+$clr-waiting: $clr-status-queued;
 
 
 //--------------------- PrimeNG vars ---------------------//

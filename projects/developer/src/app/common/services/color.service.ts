@@ -9,13 +9,13 @@ export class ColorService {
     public ERROR_SYSTEM = '#912125';
     public COMPLETED = '#0071BC';
     public FAILED = '#88382a';
-    public PENDING = '#d36115';
+    public PENDING = '#e46f21';
     public QUEUED = '#fdc613';
     public RUNNING = '#417e2e';
     public CANCELED = '#000000';
     public BLOCKED = '#cf6a34';
     public INGEST = '#bbbbbb';
-    public SCALE_BLUE1 = '#400000';
+    public SCALE_BLUE1 = '#48ACFF';
     public SCALE_BLUE2 = '#0071BC';
     public SCALE_BLUE3 = '#24567F';
     public RECIPE_NODE = '#777';

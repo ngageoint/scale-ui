@@ -79,20 +79,20 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
                 datasets: [{
                     label: 'Running',
                     backgroundColor: this.colorService.RUNNING,
-                    borderColor: '#9dd3ff',
-                    borderWidth: 2,
+                    borderColor: '#FFF',
+                    borderWidth: .75,
                     data: []
                 }, {
                     label: 'Queued',
                     backgroundColor: this.colorService.QUEUED,
-                    borderColor: '#9dd3ff',
-                    borderWidth: 2,
+                    borderColor: '#FFF',
+                    borderWidth: .75,
                     data: []
                 }, {
                     label: 'Pending',
                     backgroundColor: this.colorService.PENDING,
-                    borderColor: '#9dd3ff',
-                    borderWidth: 2,
+                    borderColor: '#FFF',
+                    borderWidth: .75,
                     data: []
                 }]
             };
