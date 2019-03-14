@@ -20,15 +20,15 @@ $clr-royal01: #141e30;
 $clr-royal02: #243b55;
 
 $clr-aqua: #22dfdf;
-$clr-purple: #e395f6;
+$clr-purple: rgb(77, 40, 146);
 
 $clr-blue-lgt: #009ac8;
 $clr-blue-med: #1950fb;
 $clr-blue-drk: #273662;
 $clr-green: #00cd8c;
-$clr-orange: #cf6a34;
+$clr-orange: #d36115;
 $clr-red: #fb4719;
-$clr-yellow: #fdb813;
+$clr-yellow: #fdc613;
 
 $clr-scale-blue1: #48ACFF;
 $clr-scale-blue2: #0071BC;
@@ -46,26 +46,26 @@ $clr-navbar-text: #fff;
 
 $clr-app-background: #e4e4e4;
 
-$clr-status-good: desaturate(darken(#76a269, 15%), 7%);
-$clr-status-error: desaturate(darken(#d66e5b, 25%), 7%);
+$clr-status-good: #417e2e;
+$clr-status-error: #be292e;
 $clr-status-error-data: $clr-status-error;
 $clr-status-error-algorithm: adjust-hue($clr-status-error-data, 20%);
 $clr-status-error-system: adjust-hue($clr-status-error-data, 40%);
 $clr-status-warn: $clr-status-error-algorithm;
-$clr-status-unknown: $clr-gray-20;
+$clr-status-unknown: $clr-gray-50;
 $clr-status-completed: $clr-green;
 $clr-status-failed: $clr-red;
-$clr-status-pending: $clr-purple;
+$clr-status-pending: $clr-scale-blue1;
 $clr-status-queued: $clr-aqua;
-$clr-status-running: $clr-blue-lgt;
+$clr-status-running: $clr-scale-blue2;
 $clr-status-blocked: $clr-orange;
 $clr-status-canceled: $clr-black;
-$clr-failure-system: #67000d;
-$clr-failure-algorithm: #cb181d;
-$clr-failure-data: #f16913;
-$clr-offered: $clr-gray-60;
+$clr-failure-system: #912125;
+$clr-failure-algorithm: #be292e;
+$clr-failure-data: #e02026;
+$clr-offered: $clr-gray-50;
 $clr-free: $clr-status-good;
-$clr-unavailable: $clr-failure-system;
+$clr-unavailable: #991628;
 
 $clr-label-text: #fff;
 $clr-label-default: #777;
@@ -84,7 +84,7 @@ $clr-label-danger-hover: #c9302c;
 $clr-ready: $clr-status-good;
 $clr-paused: $clr-status-pending;
 $clr-busy: $clr-status-running;
-$clr-waiting: $clr-status-blocked;
+$clr-waiting: $clr-scale-blue3;
 
 
 //--------------------- PrimeNG vars ---------------------//
