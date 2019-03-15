@@ -12,6 +12,7 @@ import { ProfileService } from '../common/services/profile.service';
 })
 
 export class NavbarComponent implements OnInit, OnChanges {
+    private THEME_KEY = 'scale.theme';
     @Input() isAuthenticated: boolean;
     @ViewChild('op') op: OverlayPanel;
     @ViewChild('profile') profile: any;
@@ -19,9 +20,9 @@ export class NavbarComponent implements OnInit, OnChanges {
     auth = environment.auth;
     selectedId = null;
     subscription: any;
-    isLight = true;
-    themeTooltip = 'Switch to Dark Theme';
-    themeIcon = 'fa fa-moon-o';
+    isLight: boolean;
+    themeTooltip: string;
+    themeIcon: string;
     username: string;
     password: string;
 
@@ -59,6 +60,7 @@ export class NavbarComponent implements OnInit, OnChanges {
         this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
         const theme = this.isLight ? 'light' : 'dark';
         themeLink.href = `assets/themes/${theme}.css`;
+        localStorage.setItem(this.THEME_KEY, theme);
     }
 
     login() {
@@ -83,6 +85,14 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
+        if (themeLink) {
+            const theme = localStorage.getItem(this.THEME_KEY) || environment.defaultTheme;
+            this.isLight = theme === 'light';
+            this.themeTooltip = this.isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+            this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
+            themeLink.href = `assets/themes/${theme}.css`;
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
