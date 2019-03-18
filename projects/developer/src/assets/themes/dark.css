@@ -45,3 +45,198 @@ pre {
     background-color: #555 !important;
     border: 1px solid #777 !important;
 }
+body .ui-inputtext {
+    background: #5f6470 !important;
+    border: 1px solid #5f6470 !important;
+}
+body .ui-chkbox .ui-chkbox-box {
+    border: 1px solid #5f6470 !important;
+    background-color: #5f6470 !important
+}
+body .ui-chkbox .ui-chkbox-box.ui-state-focus {
+    background-color: #5f6470 !important;
+}
+body .ui-radiobutton .ui-radiobutton-box {
+    border: 1px solid #5f6470 !important;
+    background-color: #5f6470 !important;
+}
+body .ui-radiobutton .ui-radiobutton-box.ui-state-focus {
+    background-color: #5f6470 !important;
+}
+body .ui-inputswitch .ui-inputswitch-slider {
+    background: #5f6470 !important;
+}
+body .ui-inputswitch .ui-inputswitch-slider:before {
+    background-color: #22292E !important;
+}
+body .ui-inputswitch:not(.ui-state-disabled):hover .ui-inputswitch-slider {
+    background-color: #5f6470 !important;
+}
+body .ui-autocomplete-panel {
+    background-color: #22292E !important;
+}
+body .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-group {
+    background-color: #5f6470 !important;
+}
+body .ui-dropdown {
+    background: #5f6470 !important;
+    border: 1px solid #5f6470 !important;
+}
+body .ui-dropdown .ui-dropdown-trigger {
+    background-color: #5f6470 !important;
+}
+body .ui-dropdown-panel {
+    background-color: #22292E !important;
+}
+body .ui-multiselect {
+    background: #5f6470 !important;
+    border: 1px solid #5f6470 !important;
+}
+body .ui-multiselect .ui-multiselect-trigger {
+    background-color: #5f6470 !important;
+}
+body .ui-multiselect-panel {
+    background-color: #22292E !important;
+}
+body .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-disabled .ui-chkbox-box:hover {
+    border: 1px solid #5f6470 !important;
+}
+body .ui-listbox {
+    background: #22292E !important;
+}
+body .ui-listbox .ui-listbox-list {
+    background-color: #22292E !important;
+}
+body .ui-listbox.ui-state-disabled .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
+    border: 1px solid #5f6470 !important;
+}
+body .ui-editor-container .ui-editor-content .ql-editor {
+    background-color: #5f6470 !important;
+}
+body .ui-slider {
+    background-color: #5f6470 !important;
+}
+body .ui-datepicker {
+    background-color: #22292E !important;
+}
+body .ui-fileupload .ui-fileupload-content {
+    background-color: #22292E !important;
+}
+body .ui-password-panel {
+    background-color: #22292E !important;
+}
+body .ui-button.ui-state-default.ui-button-secondary, body .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default {
+    color: #FFFFFF !important;
+    background-color:  rgb(39, 46, 51) !important;
+    border: 1px solid  rgb(39, 46, 51) !important;
+}
+body .ui-button.ui-state-default.ui-button-secondary:enabled:hover, body .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default:enabled:hover {
+    background-color: #2E3F50 !important;
+    color: #FFFFFF !important;
+    border-color: #2E3F50 !important;
+}
+body .ui-panel .ui-panel-content {
+    background-color: #22292E !important;
+}
+body .ui-panel .ui-panel-footer {
+    background-color: #22292E !important;
+}
+body .ui-fieldset {
+    background-color: #22292E !important;
+}
+body .ui-accordion .ui-accordion-content {
+    background-color: #22292E !important;
+}
+body .ui-tabview .ui-tabview-panels {
+    background-color: #22292E !important;
+}
+body .ui-card {
+    background-color: #22292E !important;
+}
+body .ui-table .ui-table-tbody > tr {
+    background-color: #22292E !important;
+}
+body .ui-table .ui-table-tbody > tr:nth-child(even) {
+    background-color: #22292E !important;
+}
+body .ui-datagrid .ui-datagrid-content {
+    background-color: #22292E !important;
+}
+body .ui-datagrid .ui-datagrid-footer {
+    background-color: #22292E !important;
+}
+body .ui-datalist .ui-datalist-content {
+    background-color: #22292E !important;
+}
+body .ui-datalist .ui-datalist-footer {
+    background-color: #22292E !important;
+}
+body .ui-datascroller .ui-datascroller-content {
+    background-color: #22292E !important;
+}
+body .ui-datascroller .ui-datascroller-footer {
+    background-color: #22292E !important;
+}
+body .ui-virtualscroller .ui-virtualscroller-content {
+    background-color: #22292E !important;
+}
+body .ui-virtualscroller .ui-virtualscroller-footer {
+    background-color: #22292E !important;
+}
+body .ui-dataview .ui-dataview-content {
+    background-color: #22292E !important;
+}
+body .ui-dataview .ui-dataview-footer {
+    background-color: #22292E !important;
+}
+body .fc td.ui-widget-content {
+    background-color: #22292E !important;
+}
+body .ui-picklist .ui-picklist-list {
+    background-color: #22292E !important;
+}
+body .ui-orderlist .ui-orderlist-list {
+    background-color: #22292E !important;
+}
+body .ui-tree {
+    background-color: #22292E !important;
+}
+body .ui-tree.ui-tree-horizontal .ui-treenode .ui-treenode-content {
+    background-color: #22292E !important;
+}
+body .ui-organizationchart .ui-organizationchart-node-content {
+    background-color: #22292E !important;
+}
+body .ui-organizationchart .ui-organizationchart-node-content {
+    background-color: #22292E !important;
+}
+body .ui-treetable .ui-treetable-tbody > tr {
+    background-color: #22292E !important;
+}
+body .ui-overlaypanel {
+    background-color: #22292E !important;
+}
+body .ui-overlaypanel:after {
+    border-bottom-color: #22292E !important;
+}
+body .ui-overlaypanel.ui-overlaypanel-flipped:after {
+    border-top-color: #22292E !important;
+}
+body .ui-dialog .ui-dialog-content {
+    background-color: #22292E !important;
+}
+body .ui-dialog .ui-dialog-footer {
+    background-color: #22292E !important;
+}
+body .ui-sidebar {
+    background-color: #22292E !important;
+}
+body .ui-lightbox .ui-lightbox-content-wrapper {
+    background-color: #22292E !important;
+}
+body .ui-breadcrumb {
+    background-color: #22292E !important;
+}
+body .ui-terminal {
+    background-color: #22292E !important;
+}
