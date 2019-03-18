@@ -12,6 +12,7 @@ export class ColorService {
     public PENDING = '#e46f21';
     public QUEUED = '#fdc613';
     public RUNNING = '#417e2e';
+    public CANCELED = '#000000';
     public BLOCKED = '#cf6a34';
     public INGEST = '#bbbbbb';
     public SCALE_BLUE1 = '#48ACFF';
