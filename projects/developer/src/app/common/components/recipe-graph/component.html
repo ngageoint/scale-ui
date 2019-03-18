@@ -17,13 +17,20 @@
                 </ng-template>
 
                 <ng-template #nodeTemplate let-node>
-                    <svg:g class="node">
+                    <svg:g class="node" *ngIf="node.node_type.node_type === 'job'">
                         <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.fillColor"
                                   [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" [ngClass]="node.class"/>
                         <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.5" class="node__label">
                             <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
                             <svg:tspan class="node__title" dx="5" *ngIf="node.icon">{{ node.label }}</svg:tspan>
                             <svg:tspan class="node__title" dx="0" *ngIf="!node.icon">{{ node.label }}</svg:tspan>
+                        </svg:text>
+                    </svg:g>
+                    <svg:g class="node" transform="translate(-24, -18)" *ngIf="node.node_type.node_type === 'condition'">
+                        <svg:path viewBox="0 0 80 80" [attr.width]="80" [attr.height]="80" [attr.fill]="node.fillColor"
+                                  d="M40 60 L60 40 L40 20 L20 40">{{ node.label }}</svg:path>
+                        <svg:text alignment-baseline="central" [attr.x]="34" [attr.y]="node.height / 0.9" class="node__label">
+                            <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
                         </svg:text>
                     </svg:g>
                 </ng-template>
