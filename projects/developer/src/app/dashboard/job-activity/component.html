@@ -1,2 +1,4 @@
-<dev-queue-load [started]="params.started" [ended]="params.ended" [jobTypeIds]="params.job_type_id"
-                [maintainAspectRatio]="false" (chartLoaded)="onChartLoaded($event)"></dev-queue-load>
+<div *ngIf="params">
+    <dev-queue-load [started]="params.started" [ended]="params.ended" [jobTypeIds]="params.job_type_id"
+                    [maintainAspectRatio]="false" (chartLoaded)="onChartLoaded($event)"></dev-queue-load>
+</div>
