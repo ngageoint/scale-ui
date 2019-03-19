@@ -29,7 +29,7 @@
                 "command": "./export_shapefile.sh",
                 "inputs": {
                     "files": [{
-                        "media_types": ["application/octet-stream"],
+                        "mediaTypes": ["application/octet-stream"],
                         "required": true,
                         "type": "file",
                         "name": "infile"
@@ -37,7 +37,7 @@
                 },
                 "outputs": {
                     "files": [{
-                        "media_type": "application/xml",
+                        "mediaType": "application/xml",
                         "required": true,
                         "type": "file",
                         "name": "shapefile"
