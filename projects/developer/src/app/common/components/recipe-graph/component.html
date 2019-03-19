@@ -17,32 +17,47 @@
                 </ng-template>
 
                 <ng-template #nodeTemplate let-node>
-                    <svg:g class="node" *ngIf="node.node_type.node_type === 'job'">
-                        <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.fillColor"
-                                  [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" [ngClass]="node.class"/>
-                        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.5" class="node__label">
+                    <svg:g class="node" *ngIf="!node.node_type || node.node_type.node_type === 'job'">
+                        <svg:rect [attr.width]="node.width" [attr.height]="node.height * 1.15"
+                                  [attr.fill]="node.fillColor" [attr.stroke]="node.options.stroke"
+                                  [attr.stroke-width]="3" [ngClass]="node.class"/>
+                        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.35"
+                                  class="node__label">
                             <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
                             <svg:tspan class="node__title" dx="5" *ngIf="node.icon">{{ node.label }}</svg:tspan>
                             <svg:tspan class="node__title" dx="0" *ngIf="!node.icon">{{ node.label }}</svg:tspan>
                         </svg:text>
                     </svg:g>
-                    <svg:g class="node" transform="translate(-24, -18)" *ngIf="node.node_type.node_type === 'condition'">
-                        <svg:path viewBox="0 0 80 80" [attr.width]="80" [attr.height]="80" [attr.fill]="node.fillColor"
-                                  d="M40 60 L60 40 L40 20 L20 40">{{ node.label }}</svg:path>
-                        <svg:text alignment-baseline="central" [attr.x]="34" [attr.y]="node.height / 0.9" class="node__label">
+                    <svg:g class="node"
+                           *ngIf="node.node_type && node.node_type.node_type === 'condition'">
+                        <!--<svg:path viewBox="0 0 132 132" [attr.width]="132" [attr.height]="132"-->
+                                  <!--[attr.fill]="node.fillColor" d="M66 99 L99 66 L66 33 L33 66">-->
+                            <!--{{ node.label }}-->
+                        <!--</svg:path>-->
+                        <!--<svg:text alignment-baseline="central" [attr.x]="60" [attr.y]="node.height / 1.25"-->
+                                  <!--class="node__label">-->
+                            <!--<svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>-->
+                        <!--</svg:text>-->
+                        <svg:rect [attr.x]="12" [attr.y]="-10" [attr.width]="42" [attr.height]="42" transform="rotate(45)"
+                                  [attr.fill]="node.fillColor" [attr.stroke]="node.options.stroke"
+                                  [attr.stroke-width]="3" [ngClass]="node.class"/>
+                        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.65"
+                                  class="node__label">
                             <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
                         </svg:text>
                     </svg:g>
-                    <svg:g class="node" *ngIf="node.node_type.node_type === 'recipe'">
-                        <svg:rect [attr.x]="-12" [attr.y]="0" [attr.width]="10" [attr.height]="node.height"
+                    <svg:g class="node" *ngIf="node.node_type && node.node_type.node_type === 'recipe'">
+                        <svg:rect [attr.x]="-12" [attr.y]="0" [attr.width]="10" [attr.height]="node.height * 1.15"
                                   [attr.fill]="node.fillColor" [attr.stroke]="node.options.stroke"
                                   [attr.stroke-width]="3" [ngClass]="node.class" />
-                        <svg:rect [attr.width]="node.width" [attr.height]="node.height" [attr.fill]="node.fillColor"
-                                  [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" [ngClass]="node.class"/>
-                        <svg:rect [attr.x]="node.width + 2" [attr.y]="0" [attr.width]="10" [attr.height]="node.height"
+                        <svg:rect [attr.width]="node.width" [attr.height]="node.height * 1.15"
                                   [attr.fill]="node.fillColor" [attr.stroke]="node.options.stroke"
-                                  [attr.stroke-width]="3" [ngClass]="node.class" />
-                        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.5" class="node__label">
+                                  [attr.stroke-width]="3" [ngClass]="node.class"/>
+                        <svg:rect [attr.x]="node.width + 2" [attr.y]="0" [attr.width]="10"
+                                  [attr.height]="node.height * 1.15" [attr.fill]="node.fillColor"
+                                  [attr.stroke]="node.options.stroke" [attr.stroke-width]="3" [ngClass]="node.class" />
+                        <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.35"
+                                  class="node__label">
                             <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
                             <svg:tspan class="node__title" dx="5" *ngIf="node.icon">{{ node.label }}</svg:tspan>
                             <svg:tspan class="node__title" dx="0" *ngIf="!node.icon">{{ node.label }}</svg:tspan>

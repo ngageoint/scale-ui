@@ -29,12 +29,12 @@
                 "command": "./scm.sh",
                 "inputs": {
                     "files": [{
-                        "media_types": ["image/nitf"],
+                        "mediaTypes": ["image/nitf"],
                         "required": true,
                         "type": "file",
                         "name": "image"
                     },{
-                        "media_types": ["text/csv"],
+                        "mediaTypes": ["text/csv"],
                         "required": true,
                         "type": "file",
                         "name": "signature"
@@ -42,7 +42,7 @@
                 },
                 "outputs": {
                     "files": [{
-                        "media_type": "image/tiff",
+                        "mediaType": "image/tiff",
                         "required": true,
                         "type": "file",
                         "name": "scm-detections"
