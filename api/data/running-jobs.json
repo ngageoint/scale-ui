@@ -7,7 +7,7 @@
             "count": 41,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Curabitur gravida nisi at nibh.",
@@ -187,7 +187,7 @@
             "count": 97,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Aenean sit amet justo.",
@@ -367,7 +367,7 @@
             "count": 67,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Aenean auctor gravida sem.",
@@ -547,7 +547,7 @@
             "count": 68,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum.",
@@ -727,7 +727,7 @@
             "count": 14,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Curabitur convallis. Duis consequat dui nec nisi volutpat eleifend.",
@@ -907,7 +907,7 @@
             "count": 12,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Morbi non quam nec dui luctus rutrum. Nulla tellus.",
@@ -1087,7 +1087,7 @@
             "count": 55,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est.",
@@ -1267,7 +1267,7 @@
             "count": 28,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem.",
@@ -1447,7 +1447,7 @@
             "count": 20,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam.",
@@ -1627,7 +1627,7 @@
             "count": 100,
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Donec posuere metus vitae ipsum.",

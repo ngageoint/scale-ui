@@ -250,31 +250,39 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         const jobType = event.data;
         // get job type detail in order to obtain the interface
         this.jobTypesApiService.getJobType(jobType.name, jobType.version).subscribe(data => {
-            const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
-            if (!recipeData.job_types) {
-                recipeData.job_types = [];
-            }
-            const input = {};
-            _.forEach(data.manifest.job.interface.inputs, inputType => {
-                _.forEach(inputType, it => {
-                    input[it.name] = {};
-                });
-            });
-            recipeData.definition.nodes[data.manifest.job.name] = {
-                dependencies: [],
-                input: input,
-                node_type: {
-                    node_type: 'job',
-                    job_type_name: data.manifest.job.name,
-                    job_type_version: data.manifest.job.jobVersion,
-                    job_type_revision: data.revision_num
+            if (data && data.manifest.seedVersion) {
+                const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
+                if (!recipeData.job_types) {
+                    recipeData.job_types = [];
                 }
-            };
-            recipeData.job_types.push(data);
-            this.selectedRecipeTypeDetail = recipeData;
+                const input = {};
+                _.forEach(data.manifest.job.interface.inputs, inputType => {
+                    _.forEach(inputType, it => {
+                        input[it.name] = {};
+                    });
+                });
+                recipeData.definition.nodes[data.manifest.job.name] = {
+                    dependencies: [],
+                    input: input,
+                    node_type: {
+                        node_type: 'job',
+                        job_type_name: data.manifest.job.name,
+                        job_type_version: data.manifest.job.jobVersion,
+                        job_type_revision: data.revision_num
+                    }
+                };
+                recipeData.job_types.push(data);
+                this.selectedRecipeTypeDetail = recipeData;
+            } else {
+                this.messageService.add({severity: 'error', summary: `${data.title} is not seed compliant`, life: 10000});
+                // remove job type from selection
+                this.selectedJobTypes = _.filter(this.selectedJobTypes, jt => {
+                    return jt.name !== event.data.name && jt.version !== event.data.version;
+                });
+            }
         }, err => {
             console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText});
             // remove job type from selection
             this.selectedJobTypes = _.filter(this.selectedJobTypes, jt => {
                 return jt.name !== event.data.name && jt.version !== event.data.version;

@@ -4,8 +4,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
-import { ColorService } from '../../common/services/color.service';
-import { JobsApiService } from '../../processing/jobs/api.service';
+import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { DashboardJobsService } from '../jobs.service';
 import { JobActivityComponent } from './component';
 
@@ -17,7 +16,7 @@ describe('JobActivityComponent', () => {
         TestBed.configureTestingModule({
             declarations: [JobActivityComponent],
             imports: [HttpClientTestingModule],
-            providers: [DataService, MessageService, ColorService, JobsApiService, DashboardJobsService],
+            providers: [DataService, MessageService, JobTypesApiService, DashboardJobsService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
