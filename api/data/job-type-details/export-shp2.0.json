@@ -5,12 +5,14 @@
     "title": "Export Shapefile",
     "description": "Creates shapefile (.shp) from raster data",
     "icon_code": "f06e",
+    "is_published": true,
     "is_active": true,
     "is_paused": false,
     "is_system": false,
     "max_scheduled": 1,
     "revision_num": 1,
     "docker_image": "10.4.4.10:5000/export-shp:2.0",
+    "unmet_resources": null,
     "manifest": {
         "job": {
             "name": "export-shp",
