@@ -1,3 +1,9 @@
+
+// Chart JS text fails and needs to be fixed for dark theme
+// grey text on nodes page is too small for font color
+// Dark theme colors testing
+
+
 $clr-white: #ffffff;
 $clr-gray-98: #f3f3f3;
 $clr-gray-95: #ededed;
@@ -7,33 +13,29 @@ $clr-gray-80: #cccccc;
 $clr-gray-75: #c0c0c0;
 $clr-gray-70: #b0b0b0;
 $clr-gray-60: #999999;
-$clr-gray-50: #808080;
-$clr-gray-45: #727272;
-$clr-gray-40: #696969;
+$clr-gray-50: #808080; 
+$clr-gray-45: #727272; 
+$clr-gray-40: #696969; 
 $clr-gray-30: #4d4d4d;
-$clr-gray-20: #363636;
-$clr-gray-15: #222222;
-$clr-gray-10: #171717;
-$clr-black: #000000;
+$clr-gray-20: #363636; 
+$clr-gray-15: #222222; 
+$clr-gray-10: #171717; 
+$clr-black: #000000; 
 
-$clr-royal01: #141e30;
-$clr-royal02: #243b55;
+//general colors
+$clr-teal: #2AC992;  
+$clr-aqua: #0FA3BD;
+$clr-purple-light: #1bbcd8; 
+$clr-purple: #7f53d1; // FAILS
+$clr-pink: #E73C70; // pass 
+$clr-green: #529D39; // pass
+$clr-orange: #e46f21; //pass 
+$clr-red: #DC2A2A; // pass 
+$clr-yellow: #FFC505; // pass
 
-$clr-aqua: #169e9e;
-$clr-purple: rgb(77, 40, 146);
-
-$clr-blue-lgt: #009ac8;
-$clr-blue-med: #1950fb;
-$clr-blue-drk: #273662;
-$clr-green: #417e2e;
-$clr-orange: #e46f21;
-$clr-red: #fb4719;
-$clr-yellow: #fdc613;
-
-$clr-scale-blue1: #48ACFF;
-$clr-scale-blue2: #0071BC;
-$clr-scale-blue3: #24567F;
-$clr-scale-outline: #00141E;
+$clr-scale-blue1: #5C97BF; // pass  has been changed
+$clr-scale-blue2: #017cce; // pass has been changed
+$clr-scale-blue3: #24567F; // fails
 
 $clr-dark: #202223;
 $clr-light: $clr-gray-98;
@@ -46,102 +48,45 @@ $clr-navbar-text: #fff;
 
 $clr-app-background: #e4e4e4;
 
-$clr-status-good: $clr-green;
-$clr-status-error: #be292e;
-$clr-status-error-data: $clr-status-error;
-$clr-status-error-algorithm: adjust-hue($clr-status-error-data, 20%);
-$clr-status-error-system: adjust-hue($clr-status-error-data, 40%);
-$clr-status-warn: $clr-status-error-algorithm;
-$clr-status-unknown: $clr-gray-50;
-$clr-status-completed: $clr-scale-blue2;
-$clr-status-failed: #be292e;
-$clr-status-pending:  $clr-orange;
-$clr-status-queued: $clr-purple;
-$clr-status-running: $clr-green;
-$clr-status-blocked: $clr-orange;
-$clr-status-canceled: $clr-black;
-$clr-failure-system: #912125;
-$clr-failure-algorithm: #be292e;
-$clr-failure-data: #e02026;
+// job status colorings
+$clr-status-good: $clr-green; 
+$clr-status-error: #be292e; // fail
+$clr-status-warn: #FF4500; 
+$clr-status-unknown: $clr-gray-50; 
+$clr-status-completed: $clr-scale-blue2; 
+$clr-status-failed: $clr-red; 
+$clr-status-pending:  $clr-orange; 
+$clr-status-queued: $clr-yellow; 
+$clr-status-running: $clr-green; 
+$clr-status-blocked: $clr-purple-light; 
+$clr-status-canceled: $clr-white; // fails
+$clr-failure-system: #912125; // fails
+$clr-failure-algorithm: #be292e; // fails
+$clr-failure-data: #F22613;
+$clr-status-error-data: $clr-failure-data;
+$clr-status-error-algorithm: $clr-failure-algorithm; // fails
+$clr-status-error-system: $clr-failure-system; //fails
+// node memory colorings 
 $clr-offered: $clr-gray-50;
-$clr-free: $clr-scale-blue1;
-$clr-unavailable: #991628;
+$clr-free: #0e0bb6; 
+$clr-unavailable: $clr-gray-75; // pass kinda
 
 $clr-label-text: #fff;
 $clr-label-default: #777;
-$clr-label-default-hover: #5e5e5e;
-$clr-label-primary: #337ab7;
-$clr-label-primary-hover: #286090;
+$clr-label-default-hover: #5e5e5e; 
+$clr-label-primary: #337ab7; 
+$clr-label-primary-hover: #286090; 
 $clr-label-success: #337ab7;
 $clr-label-success-hover: #286090;
-$clr-label-info: #5bc0de;
-$clr-label-info-hover: #31b0d5;
-$clr-label-warning: #f0ad4e;
-$clr-label-warning-hover: #ec971f;
-$clr-label-danger: #d9534f;
-$clr-label-danger-hover: #c9302c;
+$clr-label-info: #5bc0de; 
+$clr-label-info-hover: #31b0d5; 
+$clr-label-warning: $clr-status-warn; 
+$clr-label-warning-hover: #da3a00; 
+$clr-label-danger: $clr-status-error; //Fails
+$clr-label-danger-hover: darken($clr-status-error, 20%);
 
-$clr-ready: $clr-scale-blue2;
-$clr-paused:$clr-orange ;
-$clr-busy:$clr-unavailable;
-$clr-waiting: $clr-status-queued;
-
-
-//--------------------- PrimeNG vars ---------------------//
-
-
-$fontFamily: 'Roboto', 'Segoe UI', 'Open Sans', 'Helvetica Neue', sans-serif;
-$fontSize: 1em;
-$borderRadius: 2px;
-$disabledOpacity: 0.35;
-
-// Header
-$headerBorderWidth: 1px;
-$headerBorderColor: #d9d9d9;
-$headerBgColor: #f6f7f9;
-$headerTextColor: #1b1d1f;
-$headerFontWeight: normal;
-$headerIconTextColor: #1b1d1f;
-
-// Content
-$contentBorderWidth: 1px;
-$contentBorderColor: #D5D5D5;
-$contentBgColor: #ffffff;
-$contentTextColor: #222222;
-
-// Default State
-$stateDefaultBorderWidth: 1px;
-$stateDefaultBorderColor: #d6d6d6;
-$stateDefaultBgColor: #ffffff;
-$stateDefaultTextColor: #555555;
-
-// Active State
-$stateActiveBorderColor: #bebebe;
-$stateActiveBgColor: #d6d6d6;
-$stateActiveTextColor: #212121;
-
-// Highlight State
-$stateHighlightBorderColor: #156090;
-$stateHighlightBgColor: $clr-scale-blue2;
-$stateHighlightTextColor: #FFFFFF;
-
-// Focus State
-$stateFocusBorderColor: #c0c0c0;
-$stateFocusBgColor: #eeeeee;
-$stateFocusTextColor: #212121;
-
-// Error State
-$stateErrorBorderColor: #f44336;
-$stateErrorBgColor: #f5554a;
-$stateErrorTextColor: #cd0a0a;
-
-// Hover State
-$stateHoverBorderColor: #c0c0c0;
-$stateHoverBgColor: #eeeeee;
-$stateHoverTextColor: #212121;
-
-// Forms
-$inputBgColor: #ffffff;
-$inputTextColor: #222222;
-$invalidInputBorderColor: #f44336;
-$inputGroupTextColor: #222222;
+// node status colorings
+$clr-ready: $clr-teal;
+$clr-paused: $clr-aqua;
+$clr-busy: $clr-pink;
+$clr-waiting: $clr-purple;

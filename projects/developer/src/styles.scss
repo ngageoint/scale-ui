@@ -171,10 +171,10 @@ h2:first-of-type {
 }
 
 a:not(.ui-button, .ui-paginator) {
-    color: $clr-blue-lgt;
+    color: $clr-scale-blue1;
 
     &:hover {
-        color: $clr-blue-drk;
+        color: $clr-scale-blue3;
     }
 }
 
@@ -213,7 +213,7 @@ a:not(.ui-button, .ui-paginator) {
 }
 
 .link-button {
-    background: $clr-blue-lgt;
+    background: $clr-scale-blue1;
     color: $clr-white;
     padding: 7px;
     border-radius: 3px;

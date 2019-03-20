@@ -2,7 +2,7 @@
 
 .app {
     background: #1c212b;
-    background-image: linear-gradient(to bottom, rgb(48, 59, 65), rgb(39, 46, 51));
+    background-image: linear-gradient(to bottom, #303b41, #272e33);
     color: #e3e3e3;
     display: flex;
     flex-direction: column;
@@ -15,11 +15,11 @@
 }
 
 .scale-loading {
-    background: rgba(75, 75, 75, 0.5) !important;
+    background: #4b4b4b80 !important;
 }
 
 .table-striped ttr:nth-child(odd) {
-    background-color: #323232 !important;
+    background-color: #303b41 !important;
 }
 .table-striped ttr:nth-child(even) {
     background-color: #1f1f1f !important;
@@ -27,7 +27,7 @@
 
 .recipe-container {
     border-color: #626262 !important;
-    background: #323232 !important;
+    background: #303b41 !important;
 }
 
 .ui-button-secondary {
@@ -42,7 +42,7 @@
 
 pre {
     color: #f5f5f5 !important;
-    background-color: rgb(48, 59, 65) !important;
+    background-color: #303b41 !important;
     border: 1px solid #777 !important;
 }
 .ui-inputtext {
@@ -127,8 +127,8 @@ pre {
 }
 .ui-button.ui-state-default.ui-button-secondary, .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default {
     color: #FFFFFF !important;
-    background-color:  rgb(39, 46, 51) !important;
-    border: 1px solid  rgb(39, 46, 51) !important;
+    background-color:  #272e33 !important;
+    border: 1px solid  #272e33 !important;
 }
 .ui-button.ui-state-default.ui-button-secondary:enabled:hover, .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default:enabled:hover {
     background-color: #2E3F50 !important;
@@ -246,4 +246,7 @@ pre {
 }
 .ui-menubar {
     background-color: #191919 !important;
+}
+.ui-table .ui-table-tbody > tr > td{
+    background-color: #303b41 !important;
 }

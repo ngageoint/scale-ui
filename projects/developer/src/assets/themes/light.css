@@ -13,3 +13,7 @@
     flex: 1;
     padding: 1.0em 2.0em;
 }
+.ui-button.ui-state-default.ui-button-danger, body .ui-buttonset.ui-button-danger > .ui-button.ui-state-default{
+    background-color: #be292e !important;
+    border: 1px solid #be292e !important;
+}
