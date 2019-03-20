@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import polling from 'rx-polling';
+import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
@@ -23,11 +24,11 @@ export class JobTypesApiService {
     }
 
     getJobTypes(params?: any): Observable<ApiResults> {
-        let queryParams = {};
+        let apiParams = {};
         if (params) {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-            queryParams = {
+            apiParams = {
                 page: page,
                 page_size: params.rows || 1000,
                 keyword: params.keyword,
@@ -37,10 +38,16 @@ export class JobTypesApiService {
                 order: sortStr
             };
         } else {
-            queryParams = {
+            apiParams = {
                 page_size: 1000
             };
         }
+        apiParams = _.pickBy(apiParams, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        const queryParams = new HttpParams({
+            fromObject: apiParams
+        });
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/`, { params: queryParams })
             .pipe(
                 map(response => {
