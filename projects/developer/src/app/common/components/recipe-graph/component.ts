@@ -116,10 +116,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 icon: null,
                 dependencies: [],
                 visible: true,
-                fillColor: this.colorService.RECIPE_NODE,
-                node_type: {
-                    node_type: 'job'
-                }
+                fillColor: this.colorService.RECIPE_NODE
             }];
             this.links = [];
 
@@ -235,6 +232,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     select(e) {
+        if (e.id === 'start') {
+            return;
+        }
         const shouldDeselect = _.isEqual(this.selectedNode, e);
         this.showRecipeDialog = !shouldDeselect;
         if (this.selectedNode) {

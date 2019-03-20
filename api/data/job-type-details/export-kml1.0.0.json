@@ -5,12 +5,14 @@
     "title": "Export KML",
     "description": "Creates KML from data",
     "icon_code": "f0ac",
+    "is_published": true,
     "is_active": true,
     "is_paused": false,
     "is_system": false,
     "max_scheduled": 1,
     "revision_num": 1,
     "docker_image": "10.4.4.10:5000/export-kml:2.0",
+    "unmet_resources": null,
     "manifest": {
         "job": {
             "name": "export-kml",
