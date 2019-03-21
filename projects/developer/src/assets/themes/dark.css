@@ -27,7 +27,7 @@
 
 .recipe-container {
     border-color: #626262 !important;
-    background: #303b41 !important;
+    background: #22292E !important;
 }
 
 .ui-button-secondary {
@@ -249,4 +249,20 @@ pre {
 }
 .ui-table .ui-table-tbody > tr > td{
     background-color: #303b41 !important;
+}
+.ui-panel .ui-panel-content table{
+    color: white;
+}
+.table-striped tbody tr:nth-child(odd) {
+    background-color: #364047 !important;
+} 
+.table-striped tbody tr:nth-child(even) {
+    background-color: #22292E !important;
+} 
+.CodeMirror-gutter {
+    background-color: #22292E !important;
+}
+.CodeMirror {
+    border: none !important;
+    background-color: #22292E !important;
 }

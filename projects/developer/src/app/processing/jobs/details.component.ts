@@ -87,7 +87,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                 timeline: true
             },
             colorFunction: () => {
-                return Color('#009ac8');
+                return Color('#017cce');
             },
             maintainAspectRatio: false
         };
