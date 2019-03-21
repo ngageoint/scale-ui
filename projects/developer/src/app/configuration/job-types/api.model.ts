@@ -53,29 +53,29 @@ export class JobType {
             }
             return JobType.build(data);
         }
-        return null;
+        return new JobType();
     }
     constructor(
-        public id: number,
-        public name: string,
-        public version: string,
-        public title: string,
-        public description: string,
-        public icon_code: string,
-        public is_published: boolean,
-        public is_active: boolean,
-        public is_paused: boolean,
-        public is_system: boolean,
-        public max_scheduled: number,
-        public revision_num: number,
-        public docker_image: string,
-        public unmet_resources: any,
-        public manifest: any,
-        public configuration: any,
-        public created: string,
-        public deprecated: string,
-        public paused: string,
-        public last_modified: string
+        public id?: number,
+        public name?: string,
+        public version?: string,
+        public title?: string,
+        public description?: string,
+        public icon_code?: string,
+        public is_published?: boolean,
+        public is_active?: boolean,
+        public is_paused?: boolean,
+        public is_system?: boolean,
+        public max_scheduled?: number,
+        public revision_num?: number,
+        public docker_image?: string,
+        public unmet_resources?: any,
+        public manifest?: any,
+        public configuration?: any,
+        public created?: string,
+        public deprecated?: string,
+        public paused?: string,
+        public last_modified?: string
     ) {
         const dataService = new DataService();
         this.createdTooltip = dataService.formatDate(this.created);

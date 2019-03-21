@@ -1,10 +1,10 @@
-<h2><i class="fa fa-plus-circle"></i> {{ mode }} Job Type</h2>
+<h2><i class="fa fa-cube"></i> {{ mode }} Job Type</h2>
 <form [formGroup]="createForm" (ngSubmit)="createForm.value" *ngIf="jobType">
     <p-panel>
         <p-header>
             <div class="seed-panel-title">
                 <span class="ui-panel-title job-type-title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
-                <span *ngIf="!jobType.manifest"></span>
+                <span *ngIf="!jobType.manifest">New Job Type</span>
                 <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa fa-code"
                         iconPos="left" (click)="onModeClick()"></button>
             </div>

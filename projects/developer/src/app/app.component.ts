@@ -48,22 +48,27 @@ export class AppComponent implements OnInit {
                 if (environment.auth.scheme.type === 'geoaxis') {
                     this.header = 'Authentication is Required';
                     this.message = 'Redirecting to GEOAxIS...';
-                    window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
+                    window.location.href = `${environment.auth.scheme.url}${window.location.href}`;
                 } else {
-                    // GET call to retrieve CSRF cookie
-                    this.profileService.getLogin().subscribe(data => {
-                        console.log(data);
-                        this.header = 'Authentication is Required';
-                        this.message = 'Please use the form to login.';
-                        this.detail = err.statusText;
-                        this.isAuthenticated = false;
-                    }, loginErr => {
-                        console.log('error', loginErr);
-                        this.header = 'Authentication is Required';
-                        this.message = 'Please use the form to login.';
-                        this.detail = err.statusText;
-                        this.isAuthenticated = false;
-                    });
+                    this.header = 'Authentication is Required';
+                    this.message = 'Redirecting to login form...';
+                    setTimeout(() => {
+                        window.location.href = `${environment.auth.scheme.url}?next=${window.location.href}`;
+                    }, 3000);
+                    // // GET call to retrieve CSRF cookie
+                    // this.profileService.getLogin().subscribe(data => {
+                    //     console.log(data);
+                    //     this.header = 'Authentication is Required';
+                    //     this.message = 'Please use the form to login.';
+                    //     this.detail = err.statusText;
+                    //     this.isAuthenticated = false;
+                    // }, loginErr => {
+                    //     console.log('error', loginErr);
+                    //     this.header = 'Authentication is Required';
+                    //     this.message = 'Please use the form to login.';
+                    //     this.detail = err.statusText;
+                    //     this.isAuthenticated = false;
+                    // });
                 }
             });
         } else {
