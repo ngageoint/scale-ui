@@ -43,9 +43,8 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     };
     workspaces: SelectItem[] = [];
     jobType: any;
-    cleanJobType: JobType;
+    cleanJobType: any;
     createForm: FormGroup = this.fb.group({
-        'json-editor': new FormControl(''),
         'icon': new FormControl('')
     });
     validated: boolean;
@@ -64,29 +63,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute
     ) {}
-
-    private stripObject(obj: object) {
-        const strippedObj: any = _.cloneDeep(obj);
-        _.pickBy(obj, (value: any, key: any): any => {
-            if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
-                const childObj = this.stripObject(value);
-                if (_.keys(childObj).length > 0) {
-                    strippedObj[key] = childObj;
-                } else {
-                    delete strippedObj[key];
-                }
-            } else {
-                if (value !== null && typeof value !== 'undefined' && value !== '' && !Array.isArray(value)) {
-                    strippedObj[key] = value;
-                } else if (Array.isArray(value) && value.length > 0) {
-                    strippedObj[key] = value;
-                } else {
-                    delete strippedObj[key];
-                }
-            }
-        });
-        return strippedObj;
-    }
 
     private validateForm() {
         // only enable 'Validate and Create' when the form is valid
@@ -130,28 +106,70 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         const image = seedImage.job.JobVersions[0].Images[0];
         this.jobType.manifest = seedImage.manifest;
         this.jobType.docker_image = `${image.Registry}/${image.Org}/${image.Name}`;
+
+        // use manifest data to stub out a configuration
+        let mounts = null;
+        if (this.jobType.manifest.job.interface.mounts) {
+            mounts = {};
+            _.forEach(this.jobType.manifest.job.interface.mounts, mount => {
+                mounts[mount.name] = {};
+            });
+        }
+
+        let outputWorkspaces = null;
+        if (this.jobType.manifest.job.interface.outputs.files) {
+            outputWorkspaces = {
+                default: '',
+                outputs: {}
+            };
+            _.forEach(this.jobType.manifest.job.interface.outputs.files, file => {
+                outputWorkspaces.outputs[file.name] = '';
+            });
+        }
+
+        let settings = null;
+        if (this.jobType.manifest.job.interface.settings) {
+            settings = {};
+            _.forEach(this.jobType.manifest.job.interface.settings, setting => {
+                settings[setting.name] = '';
+            });
+        }
+
+        this.jobType.configuration = {
+            mounts: mounts,
+            output_workspaces: outputWorkspaces,
+            priority: 100,
+            settings: settings
+        };
+
+        this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+
         this.validateForm();
         console.log(this.jobType);
     }
 
     onImageRemove() {
+        this.jobType.configuration = null;
         this.jobType.manifest = null;
+        delete this.jobType.docker_image;
         this.validateForm();
     }
 
     onValidate() {
         // remove falsey values
-        this.cleanJobType = this.stripObject(this.jobType);
-
-        // this.cleanJobType['interface'] = this.cleanJobType.job_type_interface;
-        // delete this.cleanJobType.job_type_interface;
+        this.cleanJobType = JobType.cleanJobType(this.jobType);
 
         // perform validation
         this.jobTypesApiService.validateJobType(this.cleanJobType).subscribe(result => {
-            if (result.warnings.length > 0) {
+            if (!result.is_valid) {
                 this.validated = false;
-                _.forEach(result.warnings, (warning) => {
-                    this.messageService.add({ severity: 'error', summary: warning.id, detail: warning.details });
+                _.forEach(result.warnings, warning => {
+                    this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+                });
+                _.forEach(result.errors, error => {
+                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
                 });
             } else {
                 this.validated = true;
@@ -161,6 +179,9 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     detail: 'Job Type is valid and can be created.'
                 });
             }
+        }, err => {
+            console.log(err);
+            this.messageService.add({ severity: 'error', summary: 'Error validating job type', detail: err.statusText });
         });
     }
 
@@ -198,19 +219,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.items = [
-            {
-                label: 'Seed Image'
-            },
-            {
-                label: 'General Information'
-            },
-            {
-                label: 'Validate and Create',
-                disabled: this.createForm.valid && this.mode === 'Create'
-            }
-        ];
-
         _.forEach(this.iconData, d => {
             this.icons.push({
                 label: d.label,
@@ -240,6 +248,19 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     this.mode = 'Create';
                     this.jobType = JobType.transformer(null);
                 }
+
+                this.items = [
+                    {
+                        label: 'Seed Image'
+                    },
+                    {
+                        label: 'General Information'
+                    },
+                    {
+                        label: 'Validate and Create',
+                        disabled: this.createForm.valid && this.mode === 'Create'
+                    }
+                ];
             });
         }
     }

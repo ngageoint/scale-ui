@@ -10,16 +10,7 @@ export class JobType {
     cpus: number;
     mem: any;
     disk: any;
-    interfaceData: any = {
-        data: [
-            {
-                data: {
-                    name: 'Inputs'
-                },
-                children: []
-            }
-        ]
-    };
+
     private static build(data) {
         if (data) {
             return new JobType(
@@ -46,6 +37,14 @@ export class JobType {
             );
         }
     }
+
+    public static cleanJobType(data) {
+        return {
+            configuration: data.configuration || null,
+            manifest: data.manifest || null
+        };
+    }
+
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
@@ -53,8 +52,9 @@ export class JobType {
             }
             return JobType.build(data);
         }
-        return new JobType();
+        return JobType.cleanJobType(new JobType());
     }
+
     constructor(
         public id?: number,
         public name?: string,
@@ -89,15 +89,6 @@ export class JobType {
             this.cpus = cpus ? cpus.value : null;
             this.mem = mem ? dataService.calculateFileSizeFromMib(mem.value) : null;
             this.disk = disk ? dataService.calculateFileSizeFromMib(disk.value) : null;
-            _.forEach(this.manifest.job.interface.inputs.files, file => {
-                this.interfaceData.data[0].children.push({
-                    data: {
-                        name: file.name,
-                        required: file.required,
-                        mediaTypes: file.mediaTypes
-                    }
-                });
-            });
         }
     }
 }
