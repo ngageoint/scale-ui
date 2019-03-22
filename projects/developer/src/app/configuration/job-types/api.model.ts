@@ -10,16 +10,7 @@ export class JobType {
     cpus: number;
     mem: any;
     disk: any;
-    interfaceData: any = {
-        data: [
-            {
-                data: {
-                    name: 'Inputs'
-                },
-                children: []
-            }
-        ]
-    };
+
     private static build(data) {
         if (data) {
             return new JobType(
@@ -46,6 +37,14 @@ export class JobType {
             );
         }
     }
+
+    public static cleanJobType(data) {
+        return {
+            configuration: data.configuration || null,
+            manifest: data.manifest || null
+        };
+    }
+
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
@@ -53,29 +52,30 @@ export class JobType {
             }
             return JobType.build(data);
         }
-        return null;
+        return JobType.cleanJobType(new JobType());
     }
+
     constructor(
-        public id: number,
-        public name: string,
-        public version: string,
-        public title: string,
-        public description: string,
-        public icon_code: string,
-        public is_published: boolean,
-        public is_active: boolean,
-        public is_paused: boolean,
-        public is_system: boolean,
-        public max_scheduled: number,
-        public revision_num: number,
-        public docker_image: string,
-        public unmet_resources: any,
-        public manifest: any,
-        public configuration: any,
-        public created: string,
-        public deprecated: string,
-        public paused: string,
-        public last_modified: string
+        public id?: number,
+        public name?: string,
+        public version?: string,
+        public title?: string,
+        public description?: string,
+        public icon_code?: string,
+        public is_published?: boolean,
+        public is_active?: boolean,
+        public is_paused?: boolean,
+        public is_system?: boolean,
+        public max_scheduled?: number,
+        public revision_num?: number,
+        public docker_image?: string,
+        public unmet_resources?: any,
+        public manifest?: any,
+        public configuration?: any,
+        public created?: string,
+        public deprecated?: string,
+        public paused?: string,
+        public last_modified?: string
     ) {
         const dataService = new DataService();
         this.createdTooltip = dataService.formatDate(this.created);
@@ -89,15 +89,6 @@ export class JobType {
             this.cpus = cpus ? cpus.value : null;
             this.mem = mem ? dataService.calculateFileSizeFromMib(mem.value) : null;
             this.disk = disk ? dataService.calculateFileSizeFromMib(disk.value) : null;
-            _.forEach(this.manifest.job.interface.inputs.files, file => {
-                this.interfaceData.data[0].children.push({
-                    data: {
-                        name: file.name,
-                        required: file.required,
-                        mediaTypes: file.mediaTypes
-                    }
-                });
-            });
         }
     }
 }
