@@ -1,27 +1,42 @@
-<div class="app" devTheme *ngIf="isAuthenticated">
-    <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
-    <div class="content">
-        <router-outlet></router-outlet>
+<div *ngIf="environmentLoaded">
+    <div class="app" devTheme *ngIf="isAuthenticated">
+        <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
+        <div class="content">
+            <router-outlet></router-outlet>
+        </div>
+        <dev-footer></dev-footer>
+        <p-toast></p-toast>
     </div>
-    <dev-footer></dev-footer>
-    <p-toast></p-toast>
-</div>
 
-<div class="app" *ngIf="!isAuthenticated">
+    <div class="app" *ngIf="!isAuthenticated">
+        <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
+        <div class="content">
+            <p-dialog [(visible)]="loading" [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true"
+                      [closeOnEscape]="false" [closable]="false" [showHeader]="false"
+                      [style]="{width: '400px', textAlign: 'center'}">
+                <h2>Authenticating</h2>
+                <p-progressSpinner [style]="{width: '35px', height: '35px'}" strokeWidth="4" animationDuration=".5s">
+                </p-progressSpinner>
+            </p-dialog>
+            <div *ngIf="!loading && !isAuthenticated">
+                <h2>{{ header }}</h2>
+                {{ message }}<br/>
+                <em>{{ detail }}</em>
+            </div>
+        </div>
+        <p-toast></p-toast>
+    </div>
+</div>
+<div *ngIf="!environmentLoaded">
     <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
     <div class="content">
         <p-dialog [(visible)]="loading" [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true"
                   [closeOnEscape]="false" [closable]="false" [showHeader]="false"
                   [style]="{width: '400px', textAlign: 'center'}">
-            <h2>Authenticating</h2>
+            <h2>Loading Configuration</h2>
             <p-progressSpinner [style]="{width: '35px', height: '35px'}" strokeWidth="4" animationDuration=".5s">
             </p-progressSpinner>
         </p-dialog>
-        <div *ngIf="!loading && !isAuthenticated">
-            <h2>{{ header }}</h2>
-            {{ message }}<br/>
-            <em>{{ detail }}</em>
-        </div>
     </div>
     <p-toast></p-toast>
 </div>

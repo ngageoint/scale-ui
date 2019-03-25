@@ -1,0 +1,6 @@
+{
+    "siloUrl": "http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com",
+    "apiPrefix": "http://scale.omega.aisohio.net/api",
+    "apiDefaultVersion": "v6",
+    "apiVersions": []
+}
