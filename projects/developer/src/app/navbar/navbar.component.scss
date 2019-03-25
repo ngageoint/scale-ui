@@ -91,7 +91,7 @@ $navbar-item-width: 150px;
     width: $navbar-status-width;
 }
 
-.navbar__theme, .navbar__profile {
+.navbar__scheduler, .navbar__theme, .navbar__profile {
     margin: 0 0 0 1px;
     color: #fff;
     font-size: 25px;
@@ -110,14 +110,21 @@ $navbar-item-width: 150px;
 }
 
 ::ng-deep .ui-overlaypanel {
-    &.navbar__profile-overlaypanel {
-        width: 300px;
+    &.navbar__scheduler-overlaypanel, &.navbar__profile-overlaypanel {
+        width: 350px;
         padding: 10px 0;
 
         &:before, &:after {
-            left: 259px;
+            left: 309px;
         }
-
+    }
+    &.navbar__scheduler-overlaypanel {
+        h3 {
+            margin: 0;
+            padding: 0;
+        }
+    }
+    &.navbar__profile-overlaypanel {
         .navbar__profile-login {
             text-align: right;
 

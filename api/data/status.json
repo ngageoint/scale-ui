@@ -20,7 +20,8 @@
             "name": "READY",
             "title": "Ready",
             "description": "Scheduler is ready to run new jobs."
-        }
+        },
+        "warnings": []
     },
     "system": {
         "database_update": {
@@ -36,6 +37,11 @@
                 "desired_count": 1
             }
         ]
+    },
+    "vault": {
+        "status": "Secrets Improperly Configured",
+        "sealed": false,
+        "message": "A secrets backend is not properly configured with Scale."
     },
     "num_offers": 4,
     "resources": {

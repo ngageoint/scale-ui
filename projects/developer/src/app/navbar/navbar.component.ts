@@ -14,7 +14,7 @@ import { ProfileService } from '../common/services/profile.service';
 export class NavbarComponent implements OnInit, OnChanges {
     private THEME_KEY = 'scale.theme';
     @Input() isAuthenticated: boolean;
-    @ViewChild('op') op: OverlayPanel;
+    @ViewChild('profileOp') profileOp: OverlayPanel;
     @ViewChild('profile') profile: any;
     @ViewChild('user') usernameEl: any;
     auth = environment.auth;
@@ -25,6 +25,9 @@ export class NavbarComponent implements OnInit, OnChanges {
     themeIcon: string;
     username: string;
     password: string;
+    scheduler: any;
+    schedulerClass: string;
+    schedulerIcon: string;
 
     constructor(
         private messageService: MessageService,
@@ -78,10 +81,24 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
-    handleOnShow() {
-        setTimeout(() => {
-            this.usernameEl.nativeElement.focus();
-        }, 50);
+    handleOnProfileShow() {
+        if (!this.isAuthenticated) {
+            setTimeout(() => {
+                this.usernameEl.nativeElement.focus();
+            }, 50);
+        }
+    }
+
+    onStatusChange(data) {
+        console.log(data);
+        this.scheduler = data.scheduler;
+        if (this.scheduler.state.name === 'READY') {
+            this.schedulerClass = 'label label-success';
+            this.schedulerIcon = 'fa fa-check-circle';
+        } else {
+            this.schedulerClass = 'label label-default';
+            this.schedulerIcon = 'fa fa-circle';
+        }
     }
 
     ngOnInit() {
@@ -102,7 +119,7 @@ export class NavbarComponent implements OnInit, OnChanges {
                 bubbles: true,
                 cancelable: true
             });
-            this.op.show(event, this.profile.nativeElement);
+            this.profileOp.show(event, this.profile.nativeElement);
         }
     }
 }
