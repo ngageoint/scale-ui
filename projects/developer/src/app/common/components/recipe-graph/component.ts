@@ -124,6 +124,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 let id = '';
                 let label = '';
                 let icon = '';
+                let publisher = false;
                 if (node.node_type.node_type === 'job') {
                     const jobType: any = _.find(this.recipeData.job_types, {
                         name: node.node_type.job_type_name,
@@ -132,6 +133,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     id = _.camelCase(node.node_type.job_type_name); // id can't have dashes or anything
                     label = `${jobType.title} v${jobType.version}`;
                     icon = String.fromCharCode(parseInt(jobType.icon_code, 16));
+                    publisher = jobType.is_published || false;
                 } else if (node.node_type.node_type === 'recipe') {
                     id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
                     label = node.node_type.recipe_type_name;
@@ -149,6 +151,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     visible: true,
                     fillColor: node.node_type.status ? this.colorService[node.node_type.status] : this.colorService.RECIPE_NODE,
                     class: node.node_type.status ? node.node_type.status === 'RUNNING' ? 'throb-svg' : null : null,
+                    transform: publisher ? 'skewX(-8)' : '',
                     node_type: node.node_type,
                     input: node.input
                 });

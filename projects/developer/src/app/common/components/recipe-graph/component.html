@@ -20,7 +20,7 @@
                     <svg:g class="node" *ngIf="!node.node_type || node.node_type.node_type === 'job'">
                         <svg:rect [attr.width]="node.width" [attr.height]="node.height * 1.15"
                                   [attr.fill]="node.fillColor" [attr.stroke]="node.options.stroke"
-                                  [attr.stroke-width]="3" [ngClass]="node.class"/>
+                                  [attr.stroke-width]="3" [attr.transform]="node.transform" [ngClass]="node.class"/>
                         <svg:text alignment-baseline="central" [attr.x]="10" [attr.y]="node.height / 1.35"
                                   class="node__label">
                             <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
