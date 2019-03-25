@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/primeng';
 
 import { environment } from '../../environments/environment';
 import { ProfileService } from '../common/services/profile.service';
+import { ThemeService } from '../theme';
 
 @Component({
     selector: 'dev-navbar',
@@ -31,7 +32,8 @@ export class NavbarComponent implements OnInit, OnChanges {
 
     constructor(
         private messageService: MessageService,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        private themeService: ThemeService
     ) {}
 
     selectNavItem(event, itemId) {
@@ -57,13 +59,21 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     changeTheme() {
+        const active = this.themeService.getActiveTheme();
         const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
-        this.isLight = !this.isLight;
-        this.themeTooltip = this.isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme';
-        this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
-        const theme = this.isLight ? 'light' : 'dark';
-        themeLink.href = `assets/themes/${theme}.css`;
-        localStorage.setItem(this.THEME_KEY, theme);
+        if (active.name === 'light') {
+            themeLink.href = 'assets/themes/dark.css';
+            this.themeTooltip = 'Switch to Light Theme';
+            this.themeIcon = 'fa fa-sun-o';
+            this.themeService.setTheme('dark');
+            localStorage.setItem(this.THEME_KEY, 'dark');
+        } else {
+            themeLink.href = 'assets/themes/light.css';
+            this.themeTooltip = 'Switch to Dark Theme';
+            this.themeIcon = 'fa fa-moon-o';
+            this.themeService.setTheme('light');
+            localStorage.setItem(this.THEME_KEY, 'light');
+        }
     }
 
     login() {
@@ -105,10 +115,10 @@ export class NavbarComponent implements OnInit, OnChanges {
         const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
         if (themeLink) {
             const theme = localStorage.getItem(this.THEME_KEY) || environment.defaultTheme;
-            this.isLight = theme === 'light';
-            this.themeTooltip = this.isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme';
-            this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
+            this.themeTooltip = theme === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+            this.themeIcon = theme === 'light' ? 'fa fa-moon-o' : 'fa fa-sun-o';
             themeLink.href = `assets/themes/${theme}.css`;
+            this.themeService.setTheme(theme);
         }
     }
 
