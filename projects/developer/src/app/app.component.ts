@@ -85,11 +85,14 @@ export class AppComponent implements OnInit {
     loadEnvironment() {
         this.environmentService.getEnvironment(this.environmentPath).subscribe(data => {
             // set up environment
-            environment.production = data.production;
-            environment.siloUrl = data.siloUrl;
-            environment.apiPrefix = data.apiPrefix;
             environment.apiDefaultVersion = data.apiDefaultVersion;
+            environment.apiPrefix = data.apiPrefix;
             environment.apiVersions = data.apiVersions;
+            environment.auth = data.auth;
+            environment.dateFormat = data.dateFormat;
+            environment.defaultTheme = data.defaultTheme;
+            environment.scale = data.scale;
+            environment.siloUrl = data.siloUrl;
             this.environmentLoaded = true;
 
             // continue loading app

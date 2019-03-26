@@ -3,29 +3,25 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-    runtime: false,
-
-    // when runtime is true, values below will be overwritten by /assets/environment.json
-    siloUrl: 'http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com',
+    production: false,
+    runtime: false, // if true, values below will be overwritten at app runtime by /assets/environment.json
+    apiDefaultVersion: 'v6',
     apiPrefix: '/mocks',
     // apiPrefix: 'https://scale-ui-api.azurewebsites.net/mocks',
     // apiPrefix: 'http://scale.alpha.aisohio.net/api',
-    apiDefaultVersion: 'v6',
     apiVersions: [],
-
-    // these values are unique to this environment file
-    production: false,
-    scale: true,
-    dateFormat: 'YYYY-MM-DD HH:mm:ss[Z]',
-    defaultTheme: 'light',
     auth: {
         enabled: false,
         scheme: {
             type: 'external', // geoaxis, form, or external
-            // url: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?=' // geoaxis endpoint or form post endpoint
             url: 'http://scale.alpha.aisohio.net/api/login/' // geoaxis endpoint, form post endpoint, or redirect url
+            // url: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?='
         }
-    }
+    },
+    dateFormat: 'YYYY-MM-DD HH:mm:ss[Z]',
+    defaultTheme: 'light',
+    scale: true,
+    siloUrl: 'http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com'
 };
 
 /*

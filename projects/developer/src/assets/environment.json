@@ -1,6 +1,16 @@
 {
-    "siloUrl": "http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com",
-    "apiPrefix": "http://scale.omega.aisohio.net/api",
     "apiDefaultVersion": "v6",
-    "apiVersions": []
+    "apiPrefix": "http://scale.omega.aisohio.net/api",
+    "apiVersions": [],
+    "auth": {
+        "enabled": false,
+        "scheme": {
+            "type": "external",
+            "url": "http://scale.alpha.aisohio.net/api/login/"
+        }
+    },
+    "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
+    "defaultTheme": "light",
+    "scale": true,
+    "siloUrl": "http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com"
 }
