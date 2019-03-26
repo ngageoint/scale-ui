@@ -5,7 +5,7 @@
     "title": "Constrained Energy Minimization",
     "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
     "icon_code": "f185",
-    "is_published": true,
+    "is_published": false,
     "is_active": true,
     "is_paused": false,
     "is_system": false,

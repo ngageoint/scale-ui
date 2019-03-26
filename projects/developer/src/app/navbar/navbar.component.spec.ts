@@ -5,6 +5,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../common/services/data.service';
 import { ProfileService } from '../common/services/profile.service';
+import { ThemeService } from '../theme';
+import { THEMES, ACTIVE_THEME } from '../theme/symbols';
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
@@ -14,7 +16,13 @@ describe('NavbarComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [MessageService, DataService, ProfileService],
+            providers: [MessageService, DataService, ProfileService, ThemeService, {
+                provide: THEMES,
+                useValue: THEMES
+            }, {
+                provide: ACTIVE_THEME,
+                useValue: ACTIVE_THEME
+            }],
             declarations: [ NavbarComponent ],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]

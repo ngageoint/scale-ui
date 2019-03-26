@@ -5,7 +5,7 @@
     "title": "WorldView-2 Rigorous Orthorectification",
     "description": "Applies Orthorectification to WorldView-2 data",
     "icon_code": "f219",
-    "is_published": true,
+    "is_published": false,
     "is_active": true,
     "is_paused": false,
     "is_system": false,

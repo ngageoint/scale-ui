@@ -5,7 +5,7 @@
     "title": "WorldView-2 Atmospheric Correction",
     "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
     "icon_code": "f14e",
-    "is_published": true,
+    "is_published": false,
     "is_active": true,
     "is_paused": false,
     "is_system": false,

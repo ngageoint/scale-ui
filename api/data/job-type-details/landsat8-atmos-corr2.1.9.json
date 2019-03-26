@@ -5,7 +5,7 @@
     "title": "Landsat 8 Atmospheric Correction",
     "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
     "icon_code": "f00c",
-    "is_published": true,
+    "is_published": false,
     "is_active": true,
     "is_paused": false,
     "is_system": false,

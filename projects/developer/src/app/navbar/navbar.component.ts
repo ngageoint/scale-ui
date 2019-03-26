@@ -4,6 +4,7 @@ import { MessageService } from 'primeng/primeng';
 
 import { environment } from '../../environments/environment';
 import { ProfileService } from '../common/services/profile.service';
+import { ThemeService } from '../theme';
 
 @Component({
     selector: 'dev-navbar',
@@ -14,7 +15,7 @@ import { ProfileService } from '../common/services/profile.service';
 export class NavbarComponent implements OnInit, OnChanges {
     private THEME_KEY = 'scale.theme';
     @Input() isAuthenticated: boolean;
-    @ViewChild('op') op: OverlayPanel;
+    @ViewChild('profileOp') profileOp: OverlayPanel;
     @ViewChild('profile') profile: any;
     @ViewChild('user') usernameEl: any;
     auth = environment.auth;
@@ -25,10 +26,14 @@ export class NavbarComponent implements OnInit, OnChanges {
     themeIcon: string;
     username: string;
     password: string;
+    scheduler: any;
+    schedulerClass: string;
+    schedulerIcon: string;
 
     constructor(
         private messageService: MessageService,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        private themeService: ThemeService
     ) {}
 
     selectNavItem(event, itemId) {
@@ -54,13 +59,21 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     changeTheme() {
+        const active = this.themeService.getActiveTheme();
         const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
-        this.isLight = !this.isLight;
-        this.themeTooltip = this.isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme';
-        this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
-        const theme = this.isLight ? 'light' : 'dark';
-        themeLink.href = `assets/themes/${theme}.css`;
-        localStorage.setItem(this.THEME_KEY, theme);
+        if (active.name === 'light') {
+            themeLink.href = 'assets/themes/dark.css';
+            this.themeTooltip = 'Switch to Light Theme';
+            this.themeIcon = 'fa fa-sun-o';
+            this.themeService.setTheme('dark');
+            localStorage.setItem(this.THEME_KEY, 'dark');
+        } else {
+            themeLink.href = 'assets/themes/light.css';
+            this.themeTooltip = 'Switch to Dark Theme';
+            this.themeIcon = 'fa fa-moon-o';
+            this.themeService.setTheme('light');
+            localStorage.setItem(this.THEME_KEY, 'light');
+        }
     }
 
     login() {
@@ -78,20 +91,34 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
-    handleOnShow() {
-        setTimeout(() => {
-            this.usernameEl.nativeElement.focus();
-        }, 50);
+    handleOnProfileShow() {
+        if (!this.isAuthenticated) {
+            setTimeout(() => {
+                this.usernameEl.nativeElement.focus();
+            }, 50);
+        }
+    }
+
+    onStatusChange(data) {
+        console.log(data);
+        this.scheduler = data.scheduler;
+        if (this.scheduler.state.name === 'READY') {
+            this.schedulerClass = 'label label-success';
+            this.schedulerIcon = 'fa fa-check-circle';
+        } else {
+            this.schedulerClass = 'label label-default';
+            this.schedulerIcon = 'fa fa-circle';
+        }
     }
 
     ngOnInit() {
         const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
         if (themeLink) {
             const theme = localStorage.getItem(this.THEME_KEY) || environment.defaultTheme;
-            this.isLight = theme === 'light';
-            this.themeTooltip = this.isLight ? 'Switch to Dark Theme' : 'Switch to Light Theme';
-            this.themeIcon = this.isLight ? 'fa fa-moon-o' : 'fa fa-sun-o';
+            this.themeTooltip = theme === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+            this.themeIcon = theme === 'light' ? 'fa fa-moon-o' : 'fa fa-sun-o';
             themeLink.href = `assets/themes/${theme}.css`;
+            this.themeService.setTheme(theme);
         }
     }
 
@@ -102,7 +129,7 @@ export class NavbarComponent implements OnInit, OnChanges {
                 bubbles: true,
                 cancelable: true
             });
-            this.op.show(event, this.profile.nativeElement);
+            this.profileOp.show(event, this.profile.nativeElement);
         }
     }
 }

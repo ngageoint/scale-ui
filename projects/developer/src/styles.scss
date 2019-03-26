@@ -45,6 +45,20 @@ pre {
     border-radius: 4px;
 }
 
+.app {
+    background: var(--background);
+    background-image: var(--background-image);
+    color: var(--on-background);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.content {
+    flex: 1;
+    padding: 1.0em 2.0em;
+}
+
 .relative {
     position: relative;
 }

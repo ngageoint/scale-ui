@@ -30,6 +30,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { ColorService } from './common/services/color.service';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
@@ -101,6 +102,7 @@ import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.compo
 import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.component';
 import { ProfileService } from './common/services/profile.service';
 import { ErrorsApiService } from './common/services/errors/api.service';
+import { EnvironmentService } from './common/services/environment.service';
 
 
 @NgModule({
@@ -164,6 +166,10 @@ import { ErrorsApiService } from './common/services/errors/api.service';
         NgxGraphModule,
         UtcDatepickerModule,
         SeedImagesModule,
+        ThemeModule.forRoot({
+            themes: [lightTheme, darkTheme],
+            active: localStorage.getItem('scale.theme') || 'light'
+        }),
         // Prime NG
         AutoCompleteModule,
         CalendarModule,
@@ -237,7 +243,8 @@ import { ErrorsApiService } from './common/services/errors/api.service';
         QueueApiService,
         ScansDatatableService,
         ProfileService,
-        ErrorsApiService
+        ErrorsApiService,
+        EnvironmentService
     ],
     bootstrap: [AppComponent]
 })
