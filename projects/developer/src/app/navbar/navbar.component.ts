@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
 import { MessageService } from 'primeng/primeng';
+import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
 import { ProfileService } from '../common/services/profile.service';
@@ -81,7 +82,7 @@ export class NavbarComponent implements OnInit, OnChanges {
             console.log(data);
         }, err => {
             console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Authentication Error', detail: err.statusText, life: 10000});
+            this.messageService.add({ severity: 'error', summary: 'Authentication Error', detail: err.statusText, life: 10000 });
         });
     }
 
@@ -100,11 +101,14 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     onStatusChange(data) {
-        console.log(data);
         this.scheduler = data.scheduler;
+        this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
         if (this.scheduler.state.name === 'READY') {
             this.schedulerClass = 'label label-success';
             this.schedulerIcon = 'fa fa-check-circle';
+        } else if (this.scheduler.state.name === 'PAUSED') {
+            this.schedulerClass = 'label label-paused';
+            this.schedulerIcon = 'fa fa-pause';
         } else {
             this.schedulerClass = 'label label-default';
             this.schedulerIcon = 'fa fa-circle';

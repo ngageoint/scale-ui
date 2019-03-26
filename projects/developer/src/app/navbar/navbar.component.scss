@@ -107,6 +107,17 @@ $navbar-item-width: 150px;
         cursor: pointer;
         background-color: #2E3F50;
     }
+
+    .navbar__icon {
+        position: relative;
+
+        .label {
+            font-size: 10px;
+            position: absolute;
+            top: 4px;
+            right: -10px;
+        }
+    }
 }
 
 ::ng-deep .ui-overlaypanel {
@@ -116,6 +127,10 @@ $navbar-item-width: 150px;
 
         &:before, &:after {
             left: 309px;
+        }
+
+        ul {
+            padding: 0 0 0 17px;
         }
     }
     &.navbar__scheduler-overlaypanel {
