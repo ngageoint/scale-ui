@@ -38,13 +38,10 @@ $clr-scale-blue1: #5C97BF; // pass  has been changed
 $clr-scale-blue2: #017cce; // pass has been changed
 $clr-scale-blue3: #24567F; // fails
 
-$clr-dark: #202223;
-$clr-light: $clr-gray-98;
 $clr-highlight: $clr-scale-blue2;
 
 $clr-navbar-light: #2E3F50;
 $clr-navbar-dark: #22292E;
-$clr-navbar-hover: #293134;
 $clr-navbar-text: #fff;
 
 $clr-app-background: #e4e4e4;
@@ -60,13 +57,11 @@ $clr-status-pending:  $clr-orange;
 $clr-status-queued: $clr-yellow; 
 $clr-status-running: $clr-green; 
 $clr-status-blocked: $clr-purple-light; 
-$clr-status-canceled: $clr-white; // fails
+$clr-status-canceled: $clr-white; 
 $clr-failure-system: #912125; // fails
 $clr-failure-algorithm: #be292e; // fails
 $clr-failure-data: #F22613;
-$clr-status-error-data: $clr-failure-data;
-$clr-status-error-algorithm: $clr-failure-algorithm; // fails
-$clr-status-error-system: $clr-failure-system; //fails
+
 // node memory colorings 
 $clr-offered: $clr-gray-50;
 $clr-free: #0e0bb6; 
@@ -84,7 +79,7 @@ $clr-label-info-hover: #31b0d5;
 $clr-label-warning: $clr-status-warn; 
 $clr-label-warning-hover: #da3a00; 
 $clr-label-danger: $clr-status-error; //Fails
-$clr-label-danger-hover: darken($clr-status-error, 20%);
+$clr-label-danger-hover: #a02226;
 
 // node status colorings
 $clr-ready: $clr-teal;

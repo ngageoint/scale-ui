@@ -23,7 +23,7 @@
 }
 
 .jti__subheading {
-    color: $clr-gray-60;
+    color: var(--grey-60);
     font-size: 0.75em;
     font-weight: normal;
 }
@@ -32,10 +32,10 @@
     padding: 0 0.5em;
 
     .jti__btn {
-        border: 1px solid $clr-gray-75;
+        border: 1px solid var(--grey-75);
         border-bottom: none;
         border-radius: 0.35em 0.35em 0 0;
-        color: $clr-gray-60;
+        color: var(--grey-60);
         cursor: pointer;
         display: inline-block;
         font-size: 0.80em;
@@ -43,15 +43,15 @@
         padding: 0 0.5em;
 
         &:hover {
-            background: $clr-gray-85;
-            color: $clr-black;
+            background: var(--grey-85);
+            color: var(--black);
         }
     }
 }
 
 .jti__status {
-    background: $clr-navbar-light;
-    color: $clr-white;
+    background: var(--navbar-light);
+    color: var(--white);
     position: relative;
     text-align: center;
     width: 64px;
@@ -59,22 +59,22 @@
 
 .jti__status-good {
     @extend .jti__status;
-    background: $clr-status-good;
+    background: var(--status-good);
 }
 
 .jti__status-warn {
     @extend .jti__status;
-    background: $clr-status-warn;
+    background: var(--status-warn);
 }
 
 .jti__status-error {
     @extend .jti__status;
-    background: $clr-status-error;
+    background: var(--status-error);
 }
 
 .jti__status-unknown {
     @extend .jti__status;
-    background: $clr-status-unknown;
+    background: var(--status-unknown);
 }
 
 .jti__status-icon {
