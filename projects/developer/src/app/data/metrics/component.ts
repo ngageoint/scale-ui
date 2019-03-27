@@ -24,7 +24,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     dataTypesLoading: boolean;
     selectedDataType: any;
     filtersApplied: any[] = [];
-    selectedDataTypeOptions: any[] = [];
+    selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
@@ -88,9 +88,15 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
-        this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe((result) => {
+        this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
+            if (result.name === 'job-types') {
+                // filter out inactive job types from result set
+                this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
+                    return choice.is_active === true;
+                });
+            }
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :

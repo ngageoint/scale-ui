@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
@@ -21,21 +21,32 @@ export class RecipeTypesApiService {
     }
 
     getRecipeTypes(params?: any): Observable<ApiResults> {
-        let queryParams = {};
+        let apiParams = {};
         if (params) {
             const sortStr = params.sortField ? params.sortOrder < 0 ? '-' + params.sortField : params.sortField : null;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-            queryParams = {
+            apiParams = {
                 order: sortStr,
                 page: page,
                 page_size: params.rows ? params.rows : 1000,
                 started: params.started || null,
-                ended: params.ended || null
+                ended: params.ended || null,
+                keyword: params.keyword || null,
+                is_active: params.is_active || true,
+                is_system: params.is_system || null
             };
-            queryParams = _.pickBy(queryParams, d => {
-                return d !== null && typeof d !== 'undefined' && d !== '';
-            });
+        } else {
+            apiParams = {
+                page_size: 1000,
+                is_active: true
+            }
         }
+        apiParams = _.pickBy(apiParams, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        const queryParams = new HttpParams({
+            fromObject: apiParams
+        });
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
             .pipe(
                 map(response => {
