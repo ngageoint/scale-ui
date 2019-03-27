@@ -4,22 +4,24 @@
 
 export const environment = {
     production: false,
-    scale: true,
-    siloUrl: 'http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com',
-    dateFormat: 'YYYY-MM-DD HH:mm:ss[Z]',
+    runtime: false, // if true, values below will be overwritten at app runtime by /assets/environment.json
+    apiDefaultVersion: 'v6',
     apiPrefix: '/mocks',
     // apiPrefix: 'https://scale-ui-api.azurewebsites.net/mocks',
     // apiPrefix: 'http://scale.alpha.aisohio.net/api',
-    apiDefaultVersion: 'v6',
     apiVersions: [],
     auth: {
         enabled: false,
         scheme: {
-            type: 'form', // geoaxis or form
-            // url: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?=' // geoaxis endpoint or form post endpoint
-            url: 'http://scale.alpha.aisohio.net/api/login/' // geoaxis endpoint or form post endpoint
+            type: 'external', // geoaxis, form, or external
+            url: 'http://scale.alpha.aisohio.net/api/login/' // geoaxis endpoint, form post endpoint, or redirect url
+            // url: 'http://scale.alpha.aisohio.net/api/social-auth/login/geoaxis/?='
         }
-    }
+    },
+    dateFormat: 'YYYY-MM-DD HH:mm:ss[Z]',
+    defaultTheme: 'light',
+    scale: true,
+    siloUrl: 'http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com'
 };
 
 /*

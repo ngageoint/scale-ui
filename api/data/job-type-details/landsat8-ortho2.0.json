@@ -5,12 +5,14 @@
     "title": "Landsat 8 Ortho (OSSIM)",
     "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
     "icon_code": "f1c0",
+    "is_published": false,
     "is_active": true,
     "is_paused": false,
     "is_system": false,
     "max_scheduled": 1,
     "revision_num": 1,
     "docker_image": "10.4.4.10:5000/ls8-ortho:2.1.9",
+    "unmet_resources": null,
     "manifest": {
         "job": {
             "name": "landsat8-ortho",

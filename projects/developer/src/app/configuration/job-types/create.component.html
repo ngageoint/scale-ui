@@ -1,94 +1,91 @@
-<h2><i class="fa fa-plus-circle"></i> {{ mode }} Job Type</h2>
-<form [formGroup]="createForm" (ngSubmit)="createForm.value" *ngIf="jobType">
-    <p-panel>
-        <p-header>
-            <div class="seed-panel-title">
-                <span class="ui-panel-title job-type-title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
-                <span *ngIf="!jobType.manifest"></span>
-                <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa fa-code"
-                        iconPos="left" (click)="onModeClick()"></button>
+<h2><i class="fa fa-cube"></i> {{ mode }} Job Type</h2>
+<div class="job-type__create">
+    <form [formGroup]="createForm" (ngSubmit)="createForm.value" *ngIf="jobType">
+        <p-panel>
+            <p-header>
+                <div class="flexed space-between">
+                    <span class="job-type__title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
+                    <span class="job-type__title" *ngIf="!jobType.manifest">New Job Type</span>
+                    <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa fa-code"
+                            iconPos="left" (click)="onModeClick()"></button>
+                </div>
+            </p-header>
+            <div *ngIf="jsonMode">
+                <ngx-codemirror [(ngModel)]="jobTypeJson" [options]="jsonConfig" [ngModelOptions]="{standalone: true}"></ngx-codemirror>
             </div>
-        </p-header>
-        <p-messages [(value)]="msgs"></p-messages>
-        <div *ngIf="jsonMode">
-            <ngx-codemirror [(ngModel)]="jobTypeJson" formControlName="json-editor" [options]="jsonConfig"></ngx-codemirror>
-        </div>
-        <div class="ui-g" [hidden]="jsonMode">
-            <div class="ui-g-2">
-                <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
-            </div>
-            <div class="ui-g-10" *ngIf="currentStepIdx === 0">
-                <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
-                <div class="ui-g" *ngIf="jobType.manifest">
-                    <div class="ui-g-12">
-                        <div class="seed-header">
-                            <h3>{{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}</h3>
-                            <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Delete Seed Image"
-                                    (click)="onImageRemove()"></button>
+            <div class="ui-g" [hidden]="jsonMode">
+                <div class="ui-g-2">
+                    <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
+                </div>
+                <div class="ui-g-10" *ngIf="currentStepIdx === 0">
+                    <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
+                    <div class="ui-g" *ngIf="jobType.manifest">
+                        <div class="ui-g-5 job-type__manifest">
+                            <div class="flexed space-between">
+                                <h3>{{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}</h3>
+                                <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Delete Seed Image"
+                                        (click)="onImageRemove()"></button>
+                            </div>
+                            {{ jobType.manifest.job.description }}
+                            <ul class="list-unstyled">
+                                <li><strong>Maintainer:</strong> {{ jobType.manifest.job.maintainer.name }}</li>
+                                <li *ngIf="jobType.manifest.job.maintainer.organization">
+                                    <strong>Organization:</strong> {{ jobType.manifest.job.maintainer.organization }}
+                                </li>
+                                <li *ngIf="jobType.manifest.job.maintainer.email">
+                                    <strong>Email:</strong> {{ jobType.manifest.job.maintainer.email }}
+                                </li>
+                                <li *ngIf="jobType.manifest.job.maintainer.phone">
+                                    <strong>Phone:</strong> {{ jobType.manifest.job.maintainer.phone }}
+                                </li>
+                            </ul>
                         </div>
-                        {{ jobType.manifest.job.description }}
-                        <ul class="list-unstyled">
-                            <li><strong>Maintainer:</strong> {{ jobType.manifest.job.maintainer.name }}</li>
-                            <li *ngIf="jobType.manifest.job.maintainer.organization">
-                                <strong>Organization:</strong> {{ jobType.manifest.job.maintainer.organization }}
-                            </li>
-                            <li *ngIf="jobType.manifest.job.maintainer.email">
-                                <strong>Email:</strong> {{ jobType.manifest.job.maintainer.email }}
-                            </li>
-                            <li *ngIf="jobType.manifest.job.maintainer.phone">
-                                <strong>Phone:</strong> {{ jobType.manifest.job.maintainer.phone }}
-                            </li>
-                        </ul>
                     </div>
                 </div>
-            </div>
-            <div class="ui-g-10" *ngIf="currentStepIdx === 1">
-                <div class="ui-g">
-                    <div class="ui-g-1">
-                        <label>Icon:</label>
-                    </div>
-                    <div class="ui-g-4">
-                        Select an icon which will be used to represent this job type in Scale.
-                        <p-listbox [options]="icons" formControlName="icon" filter="filter" (onChange)="selectIcon()"
-                                   [style]="{'max-height':'300px','overflow':'auto','margin-top':'10px'}">
-                            <ng-template let-icon pTemplate="item">
-                                <div class="ui-helper-clearfix" *ngIf="icon.label">
-                                    <span class="fa fa-fw {{ icon.label }}"></span> {{ icon.label.replace('fa-','') }}
-                                </div>
-                            </ng-template>
-                        </p-listbox>
+                <div class="ui-g-10" *ngIf="currentStepIdx === 1">
+                    <div class="ui-g">
+                        <div class="ui-g-6">
+                            Select an icon which will be used to represent this job type in Scale.
+                            <p-listbox [options]="icons" formControlName="icon" filter="filter" (onChange)="selectIcon()"
+                                       [style]="{'width':'100%','max-height':'300px','overflow':'auto','margin-top':'10px'}">
+                                <ng-template let-icon pTemplate="item">
+                                    <div class="ui-helper-clearfix" *ngIf="icon.label">
+                                        <span class="fa fa-fw {{ icon.label }}"></span> {{ icon.label.replace('fa-','') }}
+                                    </div>
+                                </ng-template>
+                            </p-listbox>
+                        </div>
                     </div>
                 </div>
+                <div class="ui-g-10 validate-and-create" *ngIf="currentStepIdx === 2">
+                    <div *ngIf="jobType.manifest">
+                        <h3>
+                            <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
+                               [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i>
+                            {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
+                        </h3>
+                        <button class="ui-button-secondary" pButton icon="fa fa-check" label="Validate"
+                                (click)="onValidate()" *ngIf="!validated"></button>
+                        <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
+                                (click)="onSubmit()" *ngIf="validated && !submitted"></button>
+                        <a class="ui-button-success" pButton icon="fa fa-arrow-circle-right" label="View Job Type"
+                           routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
+                    </div>
+                    <!--<div class="ui-g">-->
+                    <!--<div class="ui-g-2">-->
+                    <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
+                    <!--</div>-->
+                    <!--<div class="ui-g-2">-->
+                    <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                </div>
             </div>
-            <div class="ui-g-10 validate-and-create" *ngIf="currentStepIdx === 2">
-                <h3>
-                    <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
-                       [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i>
-                    {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
-                </h3>
-                <ul class="list-unstyled">
-                    <li><b>Description:</b> {{ jobType.manifest.job.description }}</li>
-                </ul>
-                <button class="ui-button-secondary" pButton icon="fa fa-check" label="Validate"
-                        (click)="onValidate()" *ngIf="!validated"></button>
-                <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
-                        (click)="onSubmit()" *ngIf="validated && !submitted"></button>
-                <a class="ui-button-success" pButton icon="fa fa-arrow-circle-right" label="View Job Type"
-                   routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
-                <!--<div class="ui-g">-->
-                <!--<div class="ui-g-2">-->
-                <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
-                <!--</div>-->
-                <!--<div class="ui-g-2">-->
-                <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
-                <!--</div>-->
-                <!--</div>-->
-            </div>
-        </div>
-    </p-panel>
-    <!-- <div style="text-align:center;margin-top:20px" *ngIf="submitted">
-        Form Submitted
-        <br>
-        {{diagnostic}}
-    </div> -->
-</form>
+        </p-panel>
+        <!-- <div style="text-align:center;margin-top:20px" *ngIf="submitted">
+            Form Submitted
+            <br>
+            {{diagnostic}}
+        </div> -->
+    </form>
+</div>

@@ -62,31 +62,29 @@ body {
         box-shadow: none;
     }
 
-    .seed-jobs .results .ui-panel:hover {
-        background: $clr-highlight !important;
+    .seed-jobs {
+        .results {
+            .ui-dialog-title {
+                font-weight: bold;
 
-        .ui-panel-content {
-            color: #fff;
+                .ui-button.ui-state-default.ui-button-secondary:enabled:focus {
+                    box-shadow: none;
+                }
+            }
+
+            .ui-dialog-content {
+                .docker-command {
+                    pre {
+                        padding: 2px 7px !important;
+                        margin: 5px 0 0 0 !important;
+                    }
+                }
+                pre {
+                    margin: 14px 0 0 0;
+                    border-radius: 0;
+                }
+            }
         }
-    }
-
-    .seed-jobs .results .ui-button,
-    .seed-jobs .results .ui-dropdown,
-    .seed-jobs .job-details .code pre,
-    .seed-jobs .results .ui-dialog-title {
-        font-size: 1em !important;
-    }
-
-    .seed-jobs .results .ui-dialog-title {
-        font-weight: bold;
-    }
-
-    .seed-jobs .job-details .header button {
-        font-size: 0.8em !important;
-    }
-
-    .seed-jobs .search .ui-inputtext {
-        font-size: 2em !important;
     }
 
     .CodeMirror {

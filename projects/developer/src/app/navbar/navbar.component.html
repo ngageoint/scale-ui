@@ -21,20 +21,45 @@
         </div>
         <div class="flexed" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
-                <dev-status></dev-status>
+                <dev-status (statusChange)="onStatusChange($event)"></dev-status>
+            </div>
+            <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler" pTooltip="Scheduler Status"
+                 tooltipPosition="bottom" (click)="schedulerOp.toggle($event)">
+                <div class="navbar__icon">
+                    <span class="fa fa-heartbeat"></span>
+                    <span class="label label-danger" *ngIf="scheduler.warnings.length > 0">
+                        {{ scheduler.warnings.length }}
+                    </span>
+                </div>
             </div>
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__profile" *ngIf="auth.enabled" (click)="op.toggle($event)" #profile>
+            <div class="navbar__profile" *ngIf="auth.enabled" (click)="profileOp.toggle($event)" #profile>
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>
     </div>
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
+<p-overlayPanel styleClass="navbar__scheduler-overlaypanel" appendTo="body" [dismissable]="false" #schedulerOp>
+    <div class="navbar__scheduler-status" *ngIf="scheduler">
+        <h3>{{ scheduler.hostname }}</h3>
+        <div>
+            <span [ngClass]="schedulerClass"><i [ngClass]="schedulerIcon"></i> {{ scheduler.state.title }}</span>
+            {{ scheduler.state.description }}
+        </div>
+        <ul *ngFor="let warning of scheduler.warnings">
+            <li>
+                <strong>{{ warning.title }}</strong><br/>
+                {{ warning.description }}<br/>
+                <span class="small-text">{{ warning.last_updated }}</span>
+            </li>
+        </ul>
+    </div>
+</p-overlayPanel>
 <p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" [dismissable]="false"
-                (onShow)="handleOnShow()" #op>
+                (onShow)="handleOnProfileShow()" #profileOp>
     <div class="navbar__profile-login" *ngIf="!isAuthenticated">
         <input pInputText type="text" placeholder="Username" [(ngModel)]="username" (keypress)="handleKeyPress($event)"
                #user/>

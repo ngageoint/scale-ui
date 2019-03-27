@@ -5,7 +5,7 @@
     "results": [{
             "job_type": {
                 "id": 1,
-                "name": "landsat-parse",
+                "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
                 "description": "Parse Landsat 8 multi-tif files in tar.gz archives",

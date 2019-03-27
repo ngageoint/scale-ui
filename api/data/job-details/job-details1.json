@@ -20,7 +20,7 @@
             "latest_version": "1.0.0"
         },
         "revision_num": 1,
-        "docker_image": "10.4.4.10:5000/landsat-parse_1.0:dev",
+        "docker_image": "10.4.4.10:5000/landsat8-parse_1.0:dev",
         "created": "2015-08-28T17:55:41.005Z",
         "manifest": {
             "job": {

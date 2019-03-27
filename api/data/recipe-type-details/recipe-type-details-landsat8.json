@@ -72,12 +72,15 @@
             "version": "1.0.0",
             "title": "Landsat 8 Parse",
             "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
-            "is_operational": true,
             "icon_code": "f248",
-            "docker_image": "10.4.4.10:5000/landsat-parse_1.0:dev",
-            "priority": 1,
-            "timeout": 30,
-            "max_tries": 3,
+            "is_published": false,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
+            "docker_image": "10.4.4.10:5000/landsat8-parse_1.0:dev",
+            "unmet_resources": null,
             "manifest": {
                 "job": {
                     "name": "landsat8-parse",
@@ -85,11 +88,28 @@
                     "packageVersion": "",
                     "title": "Landsat 8 Parse",
                     "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
+                    "tags": [],
+                    "timeout": 0,
                     "maintainer": {
                         "name": "USGS",
                         "email": ""
                     },
-                    "timeout": 0,
+                    "resources": {
+                        "scalar": [
+                            {
+                                "name": "cpus",
+                                "value": 4
+                            },
+                            {
+                                "name": "mem",
+                                "value": 18960
+                            },
+                            {
+                                "name": "disk",
+                                "value": 204200
+                            }
+                        ]
+                    },
                     "interface": {
                         "command": "./parse_landsat.sh",
                         "inputs": {
@@ -98,6 +118,11 @@
                                     "name": "infile",
                                     "required": true,
                                     "mediaTypes": ["application/octet-stream"]
+                                }
+                            ],
+                            "json": [
+                                {
+                                    "example": "this is an example string input"
                                 }
                             ]
                         },
@@ -114,7 +139,7 @@
                                     "name": "panchromatic",
                                     "mediaType": "image/nitf",
                                     "multiple": true,
-                                    "pattern": "panchromatic*.tiff",
+                                    "pattern": "panchromatic*.nitf",
                                     "required": true
                                 },
                                 {
@@ -124,14 +149,47 @@
                                     "pattern": "thermal*.tiff",
                                     "required": true
                                 }
+                            ],
+                            "json": [
+                                {
+                                    "name": "example",
+                                    "type": "string"
+                                }
                             ]
                         },
                         "mounts": [],
                         "settings": []
                     },
-                    "errors": {},
-                    "tags": [],
-                    "resources": {}
+                    "errors": [
+                        {
+                            "code": 1,
+                            "name": "error-1",
+                            "title": "Error 1",
+                            "description": "Error description",
+                            "category": "job"
+                        },
+                        {
+                            "code": 2,
+                            "name": "error-2",
+                            "title": "Error 2",
+                            "description": "Error description",
+                            "category": "data"
+                        },
+                        {
+                            "code": 3,
+                            "name": "error-3",
+                            "title": "Error 3",
+                            "description": "Error description",
+                            "category": "job"
+                        },
+                        {
+                            "code": 4,
+                            "name": "error-4",
+                            "title": "Error 4",
+                            "description": "Error description",
+                            "category": "job"
+                        }
+                    ]
                 },
                 "seedVersion": "1.0"
             }
@@ -144,11 +202,14 @@
             "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
             "is_operational": true,
             "icon_code": "f00c",
-            "docker_privileged": false,
+            "is_published": false,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
             "docker_image": "10.4.4.10:5000/ls8-atmos-corr:2.1.9",
-            "priority": 1,
-            "timeout": 30,
-            "max_tries": 3,
+            "unmet_resources": null,
             "manifest": {
                 "job": {
                     "name": "landsat8-atmos-corr",
@@ -197,11 +258,14 @@
             "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
             "is_operational": true,
             "icon_code": "f1c0",
-            "docker_privileged": false,
+            "is_published": false,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
             "docker_image": "10.4.4.10:5000/ls8-ortho:2.1.9",
-            "priority": 1,
-            "timeout": 30,
-            "max_tries": 3,
+            "unmet_resources": null,
             "manifest": {
                 "job": {
                     "name": "landsat8-ortho",
@@ -250,11 +314,14 @@
             "description": "Creates shapefile (.shp) from raster data",
             "is_operational": true,
             "icon_code": "f06e",
-            "docker_privileged": false,
-            "docker_image": "10.4.4.10:5000/wv2-ortho:2.0",
-            "priority": 1,
-            "timeout": 30,
-            "max_tries": 3,
+            "is_published": true,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
+            "docker_image": "10.4.4.10:5000/export-shp:2.0",
+            "unmet_resources": null,
             "manifest": {
                 "job": {
                     "name": "export-shp",
