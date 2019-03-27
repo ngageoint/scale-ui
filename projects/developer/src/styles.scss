@@ -15,6 +15,20 @@
 // Components & Pages loaded separately
 $transparent-running: transparentize(#529D39, 0.65);
 
+.app {
+    background: var(--background);
+    background-image: var(--background-image);
+    color: var(--on-background);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.content {
+    flex: 1;
+    padding: 1.0em 2.0em;
+}
+
 dl {
     margin-top: 0;
     margin-bottom: 20px;

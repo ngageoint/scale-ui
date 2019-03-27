@@ -6,7 +6,6 @@ export const darkTheme: Theme = {
         '--background': '#222222',
         '--background-image': 'linear-gradient(to bottom, #363636, #171717)',
         '--on-background': '#e3e3e3',
-        
         '--teal': '#2AC992',
         '--aqua': '#0FA3BD',
         '--light-blue': '#1bbcd8',
@@ -16,7 +15,6 @@ export const darkTheme: Theme = {
         '--orange': '#e46f21',
         '--red': '#DC2A2A',
         '--yellow': '#FFC505',
-
         '--white': '#FFFFFF',
         '--grey-98': '#f3f3f3',
         '--grey-95': '#ededed',
@@ -34,17 +32,14 @@ export const darkTheme: Theme = {
         '--grey-15': '#222222',
         '--grey-10': '#171717',
         '--black': '#000000',
-
         '--scale-primary': '#017cce',
         '--scale-secondary-light': '#5C97BF',
         '--scale-secondary-dark': '#24567F',
-
         '--navbar-dark': '#22292E',
         '--navbar-light': '#2E3F50',
         '--navbar-text': '#fff',
         '--subnav-dark': '#0173bf',
         '--subnav-light': '#0185dd',
-
         '--status-good': '#529D39',
         '--status-error': '#be292e',
         '--status-warn': '#FF4500',
@@ -56,15 +51,12 @@ export const darkTheme: Theme = {
         '--status-running': '#529D39',
         '--status-blocked': '#1bbcd8',
         '--status-canceled': '#fff',
-
         '--status-data': '#F22613',
         '--status-algorithm': '#be292e',
         '--status-system': '#912125',
-
         '--status-offered': '#808080',
         '--status-free': '#0e0bb6',
         '--status-unavailable': '#c0c0c0',
-
         '--label-text': '#fff',
         '--label-text-default': '#777',
         '--label-text-default-hover': '#5e5e5e',
@@ -73,12 +65,11 @@ export const darkTheme: Theme = {
         '--label-text-success': '#337ab7',
         '--label-text-success-hover': '#286090',
         '--label-text-info': '#5bc0de',
-        '--label-text-info-hover': '#31b0d5', 
+        '--label-text-info-hover': '#31b0d5',
         '--label-text-warning': '#FF4500',
-        '--label-text-warning-hover': '#da3a00', 
+        '--label-text-warning-hover': '#da3a00',
         '--label-text-danger': '#be292e',
-        '--label-text-danger-hover': '#a02226', 
-
+        '--label-text-danger-hover': '#a02226',
         '--label-ready': '#2AC992',
         '--label-paused': '#0FA3BD',
         '--label-busy': '#E73C70',
