@@ -26,7 +26,7 @@
         </div>
     </p-header>
     <ng-template let-node pTemplate="gridItem">
-        <div class="ui-g-12 ui-md-4">
+        <div class="p-col-12 p-md-4">
             <p-panel [styleClass]="node.headerClass" [collapsed]="collapsed" [toggleable]="true" toggler="header">
                 <p-header>
                     <div class="flexed space-between">
@@ -66,18 +66,18 @@
                     Created: <span [pTooltip]="node.createdTooltip">{{ node.createdDisplay }}</span>;
                     Last Modified: <span [pTooltip]="node.lastModifiedTooltip">{{ node.lastModifiedDisplay }}</span>
                 </div>
-                <div class="ui-g" *ngIf="node.status">
-                    <div class="ui-g-6" *ngIf="node.status.jobExeData">
+                <div class="p-grid" *ngIf="node.status">
+                    <div class="p-col-6" *ngIf="node.status.jobExeData">
                         <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6 node__empty-data" *ngIf="!node.status.jobExeData">
+                    <div class="p-col-6 node__empty-data" *ngIf="!node.status.jobExeData">
                         No job executions during the past 3 hours
                     </div>
-                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
+                    <div class="p-col-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
                         <p-chart type="doughnut" [data]="node.status.runningJobData"
                                  [options]="runningJobOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">
+                    <div class="p-col-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">
                         There are no jobs running on this node
                     </div>
                 </div>

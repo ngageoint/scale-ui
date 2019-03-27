@@ -1,6 +1,6 @@
 <div class="dashboard">
-    <div class="ui-g">
-        <div class="ui-g-3 dashboard__favs-container">
+    <div class="p-grid">
+        <div class="p-col-3 dashboard__favs-container">
             <p-panel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
                 <p-scrollPanel>
                     <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
@@ -33,14 +33,14 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="ui-g-7">
+        <div class="p-col-7">
             <div class="charts" *ngIf="allJobTypes.length > 0">
                 <p-panel [header]="dataFeedChartTitle">
                     <dev-data-feed></dev-data-feed>
                 </p-panel>
             </div>
         </div>
-        <div class="ui-g-2 dashboard__error-charts">
+        <div class="p-col-2 dashboard__error-charts">
             <p-panel header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes">
                 <div class="dashboard__error-chart" *ngIf="dataFavs">
                     <h3><span [pTooltip]="favorteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
@@ -66,8 +66,8 @@
             </p-panel>
         </div>
     </div>
-    <div class="ui-g">
-        <div class="ui-g-3 dashboard__all-container">
+    <div class="p-grid">
+        <div class="p-col-3 dashboard__all-container">
             <p-panel [header]="'Job Types (' + allJobTypes.length + ')'">
                 <p-scrollPanel>
                     <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
@@ -90,7 +90,7 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="ui-g-9">
+        <div class="p-col-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
                 <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
                     <dev-job-history></dev-job-history>

@@ -11,8 +11,8 @@
         <h3>Select a job type to view its details</h3>
     </div>
     <div *ngIf="selectedJobTypeDetail && selectedJobTypeDetail.manifest.seedVersion">
-        <div class="ui-g">
-            <div class="ui-g-12">
+        <div class="p-grid">
+            <div class="p-col-12">
                 <p-panel>
                     <p-header class="job-type__title">
                         <div>
@@ -28,14 +28,14 @@
                                     (click)="menu.toggle($event)"></button>
                         </div>
                     </p-header>
-                    <div class="ui-g">
-                        <div class="ui-g-8">
+                    <div class="p-grid">
+                        <div class="p-col-8">
                             <div class="margin-bottom-md">
                                 <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
                                 {{ selectedJobTypeDetail.manifest.job.description }}
                             </div>
                         </div>
-                        <div class="ui-g-4">
+                        <div class="p-col-4">
                             <dl class="dl-horizontal">
                                 <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.created" [pTooltip]="selectedJobTypeDetail.createdTooltip">{{ selectedJobTypeDetail.createdDisplay }}</dd>
@@ -137,13 +137,13 @@
         </div>
     </div>
     <div *ngIf="selectedJobTypeDetail && !selectedJobTypeDetail.manifest.seedVersion">
-        <div class="ui-g">
-            <div class="ui-g-10">
+        <div class="p-grid">
+            <div class="p-col-10">
                 <p-scrollPanel styleClass="scale-panel">
                     <div class="scale-panel__title job-type__title-container">
                         <div class="ui-panel-title">
-                            <div class="ui-g">
-                                <div class="ui-g-12">
+                            <div class="p-grid">
+                                <div class="p-col-12">
                                     <span class="job-type__title">
                                         <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
                                         {{ selectedJobTypeDetail.title }} v{{selectedJobTypeDetail.version }}
@@ -153,8 +153,8 @@
                         </div>
                     </div>
                     <div class="scale-panel__body">
-                        <div class="ui-g">
-                            <div class="ui-g-12">
+                        <div class="p-grid">
+                            <div class="p-col-12">
                                 This job type is incompatible with Seed. <a href="http://seed-spec.nga.wpafb.ic.gov/" target="_blank">Learn more</a>
                             </div>
                         </div>

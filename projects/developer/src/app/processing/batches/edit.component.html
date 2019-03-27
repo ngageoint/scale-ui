@@ -3,8 +3,8 @@
         <p-header>
             <h2><i class="fa fa-files-o"></i> {{ batch.title }}</h2>
         </p-header>
-        <div class="ui-g">
-            <div class="ui-g-6">
+        <div class="p-grid">
+            <div class="p-col-6">
                 <div class="margin-bottom-md">
                     <label for="title">Title *:</label>
                     <input pInputText type="text" id="title" [(ngModel)]="batch.title" class="full-width"/>
@@ -15,7 +15,7 @@
                               class="full-width"></textarea>
                 </div>
             </div>
-            <div class="ui-g-6">
+            <div class="p-col-6">
                 <div class="margin-bottom-md">
                     <label for="recipeType">Recipe Type *:</label>
                     <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..." autoWidth="false"

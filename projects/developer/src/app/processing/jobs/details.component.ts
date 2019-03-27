@@ -31,8 +31,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     data: any;
     selectedJobExe: any;
     logDisplay: boolean;
-    inputClass = 'ui-g-12';
-    outputClass = 'ui-g-12';
+    inputClass = 'p-col-12';
+    outputClass = 'p-col-12';
 
     constructor(
         private route: ActivatedRoute,
@@ -127,7 +127,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                         d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
                     });
                     this.jobInputs = inputData.results;
-                    this.inputClass = this.jobInputs.length > 0 && _.keys(data.input.json).length > 0 ? 'ui-g-6' : 'ui-g-12';
+                    this.inputClass = this.jobInputs.length > 0 && _.keys(data.input.json).length > 0 ? 'p-col-6' : 'p-col-12';
                 }, err => {
                     this.loadingInputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
@@ -145,7 +145,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                         d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
                     });
                     this.jobOutputs = outputData.results;
-                    this.outputClass = this.jobOutputs.length > 0 && _.keys(data.output.json).length > 0 ? 'ui-g-6' : 'ui-g-12';
+                    this.outputClass = this.jobOutputs.length > 0 && _.keys(data.output.json).length > 0 ? 'p-col-6' : 'p-col-12';
                 }, err => {
                     this.loadingOutputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});

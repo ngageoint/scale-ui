@@ -27,7 +27,8 @@
                             "src/assets"
                         ],
                         "styles": [
-                            "src/styles.scss"
+                            "src/styles.scss",
+                            "node_modules/primeflex/primeflex.css"
                         ],
                         "scripts": []
                     },
@@ -76,7 +77,8 @@
                         "tsConfig": "src/tsconfig.spec.json",
                         "karmaConfig": "src/karma.conf.js",
                         "styles": [
-                            "src/styles.scss"
+                            "src/styles.scss",
+                            "node_modules/primeflex/primeflex.css"
                         ],
                         "scripts": [],
                         "assets": [
@@ -155,7 +157,8 @@
                             "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/primeicons/primeicons.css",
                             "node_modules/codemirror/lib/codemirror.css",
-                            "projects/developer/src/styles.scss"
+                            "projects/developer/src/styles.scss",
+                            "node_modules/primeflex/primeflex.css"
                         ],
                         "scripts": [
                             "node_modules/moment/moment.js",
@@ -209,7 +212,8 @@
                         "tsConfig": "projects/developer/tsconfig.spec.json",
                         "karmaConfig": "projects/developer/karma.conf.js",
                         "styles": [
-                            "projects/developer/src/styles.scss"
+                            "projects/developer/src/styles.scss",
+                            "node_modules/primeflex/primeflex.css"
                         ],
                         "scripts": [],
                         "assets": [

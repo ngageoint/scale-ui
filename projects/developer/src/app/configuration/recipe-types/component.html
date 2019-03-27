@@ -27,8 +27,8 @@
             <div class="margin-bottom-md" *ngIf="!isEditing">
                 {{ selectedRecipeTypeDetail.description }}
             </div>
-            <div class="ui-g" *ngIf="isEditing">
-                <div class="ui-g-12">
+            <div class="p-grid" *ngIf="isEditing">
+                <div class="p-col-12">
                     <div [formGroup]="createForm">
                         <label>
                             <span>Title</span>
@@ -41,8 +41,8 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-g">
-                <div class="ui-g-12">
+            <div class="p-grid">
+                <div class="p-col-12">
                     <div class="margin-bottom-sm">
                         <div *ngIf="isEditing">
                             <label class="no-margin">Definition</label>
