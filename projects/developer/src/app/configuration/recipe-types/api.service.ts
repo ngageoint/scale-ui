@@ -39,7 +39,7 @@ export class RecipeTypesApiService {
             apiParams = {
                 page_size: 1000,
                 is_active: true
-            }
+            };
         }
         apiParams = _.pickBy(apiParams, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
