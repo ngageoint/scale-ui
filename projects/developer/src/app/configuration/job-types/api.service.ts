@@ -33,13 +33,14 @@ export class JobTypesApiService {
                 page_size: params.rows || 1000,
                 keyword: params.keyword,
                 id: params.id,
-                is_active: params.is_active,
+                is_active: params.is_active || true,
                 is_system: params.is_system,
                 order: sortStr
             };
         } else {
             apiParams = {
-                page_size: 1000
+                page_size: 1000,
+                is_active: true
             };
         }
         apiParams = _.pickBy(apiParams, d => {

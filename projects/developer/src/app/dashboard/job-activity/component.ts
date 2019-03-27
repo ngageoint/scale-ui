@@ -60,7 +60,7 @@ export class JobActivityComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.chartLoading = true;
-        this.jobTypesApiService.getJobTypes({ is_active: true }).subscribe((data: any) => {
+        this.jobTypesApiService.getJobTypes().subscribe((data: any) => {
             this.jobTypes = data.results;
             this.updateData();
             this.subscription = this.jobsService.favoritesUpdated.subscribe(() => {
