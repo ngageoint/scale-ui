@@ -14,7 +14,7 @@ import { ThemeService } from '../theme';
 })
 
 export class NavbarComponent implements OnInit, OnChanges {
-    private THEME_KEY = 'scale.theme';
+    @Input() theme: string;
     @Input() isAuthenticated: boolean;
     @ViewChild('profileOp') profileOp: OverlayPanel;
     @ViewChild('profile') profile: any;
@@ -22,7 +22,6 @@ export class NavbarComponent implements OnInit, OnChanges {
     auth = environment.auth;
     selectedId = null;
     subscription: any;
-    isLight: boolean;
     themeTooltip: string;
     themeIcon: string;
     username: string;
@@ -67,13 +66,13 @@ export class NavbarComponent implements OnInit, OnChanges {
             this.themeTooltip = 'Switch to Light Theme';
             this.themeIcon = 'fa fa-sun-o';
             this.themeService.setTheme('dark');
-            localStorage.setItem(this.THEME_KEY, 'dark');
+            localStorage.setItem(environment.themeKey, 'dark');
         } else {
             themeLink.href = 'assets/themes/light.css';
             this.themeTooltip = 'Switch to Dark Theme';
             this.themeIcon = 'fa fa-moon-o';
             this.themeService.setTheme('light');
-            localStorage.setItem(this.THEME_KEY, 'light');
+            localStorage.setItem(environment.themeKey, 'light');
         }
     }
 
@@ -116,18 +115,18 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
-        if (themeLink) {
-            const theme = localStorage.getItem(this.THEME_KEY) || environment.defaultTheme;
-            this.themeTooltip = theme === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme';
-            this.themeIcon = theme === 'light' ? 'fa fa-moon-o' : 'fa fa-sun-o';
-            themeLink.href = `assets/themes/${theme}.css`;
-            this.themeService.setTheme(theme);
-        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
-        if (changes.isAuthenticated.currentValue === false) {
+        if (changes.theme && changes.theme.currentValue) {
+            this.themeTooltip = changes.theme.currentValue === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme';
+            this.themeIcon = changes.theme.currentValue === 'light' ? 'fa fa-moon-o' : 'fa fa-sun-o';
+            const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
+            if (themeLink) {
+                themeLink.href = `assets/themes/${changes.theme.currentValue}.css`;
+            }
+        }
+        if (changes.isAuthenticated && changes.isAuthenticated.currentValue === false) {
             const event = new MouseEvent('click', {
                 view: window,
                 bubbles: true,

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
+import { ThemeService } from './theme';
 import { EnvironmentService } from './common/services/environment.service';
 import { ProfileService } from './common/services/profile.service';
 import { environment } from '../environments/environment';
@@ -13,13 +14,14 @@ export class AppComponent implements OnInit {
     title = 'Scale';
     loading = true;
     environmentLoaded = !environment.runtime;
-    environmentPath = '/assets/environment.json';
+    theme: any;
     isAuthenticated: boolean;
     header: string;
     message: string;
     detail: string;
 
     constructor(
+        private themeService: ThemeService,
         private environmentService: EnvironmentService,
         private profileService: ProfileService
     ) {}
@@ -83,7 +85,9 @@ export class AppComponent implements OnInit {
     }
 
     loadEnvironment() {
-        this.environmentService.getEnvironment(this.environmentPath).subscribe(data => {
+        const base = document.querySelector('base');
+        const baseUrl = base && base.href || '';
+        this.environmentService.getEnvironment(`${baseUrl}assets/environment.json`).subscribe(data => {
             // set up environment
             environment.apiDefaultVersion = data.apiDefaultVersion;
             environment.apiPrefix = data.apiPrefix;
@@ -93,6 +97,7 @@ export class AppComponent implements OnInit {
             environment.defaultTheme = data.defaultTheme;
             environment.scale = data.scale;
             environment.siloUrl = data.siloUrl;
+            environment.themeKey = data.themeKey;
             this.environmentLoaded = true;
 
             // continue loading app
@@ -101,6 +106,10 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
+        // init theme
+        this.theme = localStorage.getItem(environment.themeKey) || environment.defaultTheme;
+        this.themeService.setTheme(this.theme);
+
         if (environment.runtime) {
             this.loadEnvironment();
         } else {

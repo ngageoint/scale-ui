@@ -1,6 +1,6 @@
-<div *ngIf="environmentLoaded">
+<div style="height: 100%" *ngIf="environmentLoaded">
     <div class="app" devTheme *ngIf="isAuthenticated">
-        <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
+        <dev-navbar [theme]="theme" [isAuthenticated]="isAuthenticated"></dev-navbar>
         <div class="content">
             <router-outlet></router-outlet>
         </div>
@@ -8,8 +8,8 @@
         <p-toast></p-toast>
     </div>
 
-    <div class="app" *ngIf="!isAuthenticated">
-        <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
+    <div class="app" devTheme *ngIf="!isAuthenticated">
+        <dev-navbar [theme]="theme" [isAuthenticated]="isAuthenticated"></dev-navbar>
         <div class="content">
             <p-dialog [(visible)]="loading" [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true"
                       [closeOnEscape]="false" [closable]="false" [showHeader]="false"
@@ -24,19 +24,23 @@
                 <em>{{ detail }}</em>
             </div>
         </div>
+        <dev-footer></dev-footer>
         <p-toast></p-toast>
     </div>
 </div>
-<div *ngIf="!environmentLoaded">
-    <dev-navbar [isAuthenticated]="isAuthenticated"></dev-navbar>
-    <div class="content">
-        <p-dialog [(visible)]="loading" [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true"
-                  [closeOnEscape]="false" [closable]="false" [showHeader]="false"
-                  [style]="{width: '400px', textAlign: 'center'}">
-            <h2>Loading Configuration</h2>
-            <p-progressSpinner [style]="{width: '35px', height: '35px'}" strokeWidth="4" animationDuration=".5s">
-            </p-progressSpinner>
-        </p-dialog>
+<div style="height: 100%" *ngIf="!environmentLoaded">
+    <div class="app" devTheme>
+        <dev-navbar [theme]="theme" [isAuthenticated]="isAuthenticated"></dev-navbar>
+        <div class="content">
+            <p-dialog [(visible)]="loading" [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true"
+                      [closeOnEscape]="false" [closable]="false" [showHeader]="false"
+                      [style]="{width: '400px', textAlign: 'center'}">
+                <h2>Loading Configuration</h2>
+                <p-progressSpinner [style]="{width: '35px', height: '35px'}" strokeWidth="4" animationDuration=".5s">
+                </p-progressSpinner>
+            </p-dialog>
+        </div>
+        <dev-footer></dev-footer>
+        <p-toast></p-toast>
     </div>
-    <p-toast></p-toast>
 </div>
