@@ -93,9 +93,9 @@ $navbar-item-width: 150px;
 
 .navbar__scheduler, .navbar__theme, .navbar__profile {
     margin: 0 0 0 1px;
-    color: #fff;
+    color: var(--white);
     font-size: 25px;
-    background-color: #29333d;
+    background-color: var(--navbar-background);
     width: 80px;
     height: 100%;
     display: flex;
@@ -105,7 +105,7 @@ $navbar-item-width: 150px;
 
     &:hover {
         cursor: pointer;
-        background-color: #2E3F50;
+        background-color: var(--navbar-light);
     }
 
     .navbar__icon {

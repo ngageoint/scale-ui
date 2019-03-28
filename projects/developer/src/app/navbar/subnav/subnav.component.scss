@@ -50,10 +50,10 @@ $subnav-height: 47px;
             a {
                 padding: 8px 10px;
                 text-decoration: none;
-                color: #fff;
+                color: var(--white);
 
                 &:hover {
-                    color: #000;
+                    color: var(--black);
                 }
 
                 i {

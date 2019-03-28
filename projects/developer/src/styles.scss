@@ -56,7 +56,7 @@ pre {
     word-wrap: break-word;
     color: #333333;
     background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    border: 1px solid var(--off-white);
     border-radius: 4px;
 }
 
@@ -87,8 +87,8 @@ pre {
 .nodes__dataview {
     .ui-dataview-header {
         .ui-button-secondary {
-            background-color: #ccc !important;
-            border: 1px solid #ccc !important;
+            background-color: var(--off-white) !important;
+            border: 1px solid var(--off-white) !important;
         }
     }
 
@@ -108,7 +108,7 @@ pre {
     .node__paused {
         .ui-panel-titlebar {
             background: var(--label-paused);
-            color: #fff;
+            color: var(--white);
         }
     }
 }
@@ -118,10 +118,10 @@ pre {
         width: 33vw !important;
     }
     .ui-dialog-titlebar {
-        color: #fff !important;
+        color: var(--white) !important;
 
         .ui-dialog-titlebar-icon {
-            color: #fff !important;
+            color: var(--white) !important;
         }
     }
 }
@@ -142,7 +142,7 @@ pre {
     display: block;
     margin-top: 5px;
     margin-bottom: 10px;
-    color: #737373;
+    color: var(--grey-45);
     font-weight: normal;
 }
 
@@ -558,7 +558,7 @@ label-default {
         padding: .5em 1.25em .5em 1em !important;
 
         .ui-panel-title {
-            color: #fff !important;
+            color: var(--white) !important;
             font-weight: bold;
         }
     }
