@@ -266,6 +266,3 @@ pre {
     border: none !important;
     background-color: #22292E !important;
 }
-.node__empty-data {
-    color: var(--white) !important;
-}
