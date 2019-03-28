@@ -78,7 +78,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         _.forEach(node.dependencies, dependency => {
             if (this.recipeData.definition.nodes[dependency.name]) {
                 this.links.push({
-                    source: _.camelCase(dependency.name),
+                    source: _.camelCase(this.recipeData.definition.nodes[dependency.name].node_type.job_type_name),
                     target: node.id,
                     node: node,
                     visible: true,
@@ -199,8 +199,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     version: dependency.node_type.job_type_version
                 });
                 const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                // use the key instead of the job type name to specify the connection name
+                const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
+                    return n.node_type.job_type_name === dependency.node_type.job_type_name &&
+                        n.node_type.job_type_version === dependency.node_type.job_type_version;
+                });
                 this.selectedNodeConnections.push({
-                    name: dependency.node_type.job_type_name,
+                    name: nodeKey,
                     output: connection ? connection.name : null
                 });
             }

@@ -44,15 +44,23 @@
                     </dd>
                     <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Access Key ID:</dt>
                     <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.credentials.access_key_id }}
+                        {{
+                            selectedWorkspaceDetail.configuration.broker.credentials ?
+                                selectedWorkspaceDetail.configuration.broker.credentials.access_key_id :
+                                ''
+                        }}
                     </dd>
                     <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Secret Access Key:</dt>
                     <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key }}
+                        {{
+                            selectedWorkspaceDetail.configuration.broker.credentials ?
+                                selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key :
+                                ''
+                        }}
                     </dd>
                     <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Region Name Override:</dt>
                     <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.region_name }}
+                        {{ selectedWorkspaceDetail.configuration.broker.region_name || '' }}
                     </dd>
                     <dt>Created:</dt>
                     <dd>

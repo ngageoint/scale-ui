@@ -29,11 +29,15 @@ export class NodesComponent implements OnInit {
     waitingBtnClass = 'ui-button-waiting';
     waitingBtnIcon = 'fa fa-check';
     waitingBtnLabel = 'Waiting';
+    stoppedBtnClass = 'ui-button-stopped';
+    stoppedBtnIcon = 'fa fa-check';
+    stoppedBtnLabel = 'Stopped';
     filters: any = {
         ready: true,
         paused: true,
         busy: true,
-        waiting: true
+        waiting: true,
+        scheduler_stopped: true
     };
     allNodes: any = [];
     nodesStatus: any = [];
@@ -147,10 +151,12 @@ export class NodesComponent implements OnInit {
         const pausedCount = _.countBy(this.nodes, { status: { state: { name: 'PAUSED' } } });
         const busyCount = _.countBy(this.nodes, { status: { state: { name: 'BUSY' } } });
         const waitingCount = _.countBy(this.nodes, { status: { state: { name: 'WAITING' } } });
+        const stoppedCount = _.countBy(this.nodes, { status: { state: { name: 'SCHEDULER_STOPPED' } } });
         this.readyBtnLabel = `Ready (${readyCount.true ? readyCount.true : 0})`;
         this.pausedBtnLabel = `Paused (${pausedCount.true ? pausedCount.true : 0})`;
         this.busyBtnLabel = `Busy (${busyCount.true ? busyCount.true : 0})`;
         this.waitingBtnLabel = `Waiting (${waitingCount.true ? waitingCount.true : 0})`;
+        this.stoppedBtnLabel = `Waiting (${stoppedCount.true ? stoppedCount.true : 0})`;
         this.filterNodes();
     }
 
@@ -255,6 +261,8 @@ export class NodesComponent implements OnInit {
         this.busyBtnIcon = this.filters.busy ? 'fa fa-check' : 'fa fa-remove';
         this.waitingBtnClass = this.filters.waiting ? 'ui-button-waiting' : 'ui-button-secondary';
         this.waitingBtnIcon = this.filters.waiting ? 'fa fa-check' : 'fa fa-remove';
+        this.stoppedBtnClass = this.filters.scheduler_stopped ? 'ui-button-stopped' : 'ui-button-secondary';
+        this.stoppedBtnIcon = this.filters.scheduler_stopped ? 'fa fa-check' : 'fa fa-remove';
         this.filterNodes();
         this.updateQueryParams();
     }

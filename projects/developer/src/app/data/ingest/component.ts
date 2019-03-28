@@ -179,10 +179,17 @@ export class IngestComponent implements OnInit, OnDestroy {
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedIngestRows(e);
         }
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/processing/jobs/${e.data.job.id}`);
+        if (e.data.job) {
+            if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+                window.open(`/processing/jobs/${e.data.job.id}`);
+            } else {
+                this.router.navigate([`/processing/jobs/${e.data.job.id}`]);
+            }
         } else {
-            this.router.navigate([`/processing/jobs/${e.data.job.id}`]);
+            this.messageService.add({severity: 'error', summary: 'Job not found', detail: 'There is no job associated with this ingest'});
+            setTimeout(() => {
+                this.selectedIngest = null;
+            })
         }
     }
     onStartSelect(e) {
