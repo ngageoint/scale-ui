@@ -17,13 +17,6 @@ export class EnvironmentService {
         this.apiPrefix = this.dataService.getApiPrefix('profile');
     }
 
-    getProfile(): Observable<any> {
-        return this.http.get<any>(`${this.apiPrefix}/accounts/profile/`)
-            .pipe(
-                catchError(this.dataService.handleError)
-            );
-    }
-
     getEnvironment(path: string): Observable<any> {
         return this.http.get<any>(path)
             .pipe(
