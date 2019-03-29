@@ -4,7 +4,7 @@
 
 export const environment = {
     production: false,
-    runtime: true, // if true, values below will be overwritten at app runtime by /assets/environment.json
+    runtime: false, // if true, values below will be overwritten at app runtime by /assets/environment.json
     apiDefaultVersion: 'v6',
     apiPrefix: '/mocks',
     // apiPrefix: 'https://scale-ui-api.azurewebsites.net/mocks',

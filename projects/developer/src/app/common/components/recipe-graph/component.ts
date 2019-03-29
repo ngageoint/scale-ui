@@ -77,8 +77,17 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // add link for dependency, if it exists
         _.forEach(node.dependencies, dependency => {
             if (this.recipeData.definition.nodes[dependency.name]) {
+                let source = '';
+                const sourceNode = this.recipeData.definition.nodes[dependency.name];
+                if (sourceNode.node_type.node_type === 'job') {
+                    source = _.camelCase(this.recipeData.definition.nodes[dependency.name].node_type.job_type_name);
+                } else if (sourceNode.node_type.node_type === 'recipe') {
+                    source = _.camelCase(this.recipeData.definition.nodes[dependency.name].node_type.recipe_type_name);
+                } else if (sourceNode.node_type.node_type === 'condition') {
+                    source = _.camelCase(dependency.name);
+                }
                 this.links.push({
-                    source: _.camelCase(this.recipeData.definition.nodes[dependency.name].node_type.job_type_name),
+                    source: source,
                     target: node.id,
                     node: node,
                     visible: true,
@@ -411,11 +420,24 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.selectedNode.input = input;
                 this.getNodeConnections();
             }
+            let dependencyName: any = '';
+            if (dependency.manifest) {
+                // retrieve the key of the job node to ensure correct mapping
+                dependencyName = _.findKey(this.recipeData.definition.nodes, {
+                    node_type: {
+                        job_type_name: dependency.name,
+                        job_type_version: dependency.version
+                    }
+                });
+            } else {
+                // with a conditio node, the key is always the same as the name
+                dependencyName = dependency.name;
+            }
             this.selectedNode.dependencies.push({
                 connections: [],
-                name: dependency.name,
+                name: dependencyName,
                 acceptance: dependency.acceptance || false,
-                type: dependency instanceof JobType ? 'jobType' : 'condition'
+                type: dependency.manifest ? 'jobType' : 'condition'
             });
             dependency.disabled = true;
             // manually call updateRecipe
@@ -468,9 +490,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // inspect dependencies and display possible connections
         this.nodeInputs = [];
         _.forEach(this.selectedNode.dependencies, dep => {
-            const jobType: any = _.find(this.recipeData.job_types, {
-                name: dep.name
-            });
+            const jobType = this.getJobTypeFromNodeKey(dep.name);
             const condition: any = _.find(this.recipeData.conditions, {
                 name: dep.name
             });
@@ -601,6 +621,23 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.selectedNode.options.stroke = '';
             this.selectedNode = null;
         }
+    }
+
+    getJobTypeFromNodeKey(key) {
+        const node = this.recipeData.definition.nodes[key];
+        const jobType: any = _.find(this.recipeData.job_types, {
+            name: node.node_type.job_type_name,
+            version: node.node_type.job_type_version
+        });
+        return jobType;
+    }
+
+    getNodeTitle(key) {
+        const jobType = this.getJobTypeFromNodeKey(key);
+        if (jobType) {
+            return `${jobType.title} v${jobType.version}`;
+        }
+        return key;
     }
 
     ngOnChanges(changes) {
