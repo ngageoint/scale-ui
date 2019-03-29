@@ -401,7 +401,7 @@ label-default {
 }
 
 .label-scheduler_stopped {
-    background-color: $clr-stopped;
+    background-color: var(--label-stopped);
 }
 
 .no-margin {
@@ -557,8 +557,8 @@ label-default {
     border: 1px solid var(--label-waiting) !important;
 }
 .ui-button-stopped {
-    background-color: $clr-stopped !important;
-    border: 1px solid $clr-stopped !important;
+    background-color: var(--label-stopped) !important;
+    border: 1px solid var(--label-stopped) !important;
 }
 
 .ui-panel-primary, .ui-panel-danger {

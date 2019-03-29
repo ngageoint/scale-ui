@@ -76,5 +76,6 @@ export const darkTheme: Theme = {
         '--label-paused': '#0FA3BD',
         '--label-busy': '#E73C70',
         '--label-waiting': '#7f53d1',
+        '--label-stopped': '#be292e',
     }
 };

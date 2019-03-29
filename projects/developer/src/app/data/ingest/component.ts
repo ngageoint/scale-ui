@@ -189,7 +189,7 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Job not found', detail: 'There is no job associated with this ingest'});
             setTimeout(() => {
                 this.selectedIngest = null;
-            })
+            });
         }
     }
     onStartSelect(e) {
