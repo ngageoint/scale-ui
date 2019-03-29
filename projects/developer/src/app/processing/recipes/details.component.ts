@@ -39,7 +39,13 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                 this.recipeTypesApiService.getRecipeType(recipe.recipe_type.name).subscribe(recipeType => {
                     // add recipe detail data to nodes
                     _.forEach(recipe.recipe_type_rev.definition.nodes, node => {
-                        _.merge(node.node_type, this.recipe.details.nodes[node.node_type.job_type_name].node_type);
+                        const recipeDetail = _.find(this.recipe.details.nodes, rd => {
+                            return node.node_type.job_type_name === rd.node_type.job_type_name &&
+                                node.node_type.job_type_version === rd.node_type.job_type_version;
+                        });
+                        if (recipeDetail) {
+                            _.merge(node.node_type, recipeDetail.node_type);
+                        }
                     });
                     // create recipe type, using mostly data from recipe_type_rev
                     this.recipeType = RecipeType.transformer(

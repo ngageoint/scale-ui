@@ -15,6 +15,9 @@
                 <button pButton type="button" class="ui-button-rounded" [ngClass]="waitingBtnClass"
                         [icon]="waitingBtnIcon" [label]="waitingBtnLabel" [disabled]="!showActive"
                         (click)="onFilterBtnClick('waiting')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="stoppedBtnClass"
+                        [icon]="stoppedBtnIcon" [label]="stoppedBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('scheduler_stopped')"></button>
             </div>
             <div class="flexed">
                 <span class="node__type-label">{{ activeLabel }}</span>

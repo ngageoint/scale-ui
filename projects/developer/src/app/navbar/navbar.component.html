@@ -52,7 +52,7 @@
         <ul *ngFor="let warning of scheduler.warnings">
             <li>
                 <strong>{{ warning.title }}</strong><br/>
-                {{ warning.description }}<br/>
+                <span *ngIf="warning.description">{{ warning.description }}<br/></span>
                 <span class="small-text">{{ warning.last_updated }}</span>
             </li>
         </ul>
