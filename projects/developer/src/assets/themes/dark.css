@@ -15,7 +15,7 @@
 }
 
 .scale-loading {
-    background: #4b4b4b80 !important;
+    background: rgba(73, 73, 73, 0.502) !important;
 }
 
 .table-striped ttr:nth-child(odd) {
@@ -46,199 +46,199 @@ pre {
     border: 1px solid #777 !important;
 }
 .ui-inputtext {
-    background: #6e7179 !important;
-    border: 1px solid #6e7179 !important;
+    background: var(--checkbox) !important;
+    border: 1px solid var(--checkbox) !important;
 }
 .ui-chkbox .ui-chkbox-box {
-    border: 1px solid #6e7179 !important;
-    background-color: #6e7179 !important
+    border: 1px solid var(--checkbox) !important;
+    background-color: var(--checkbox) !important
 }
 .ui-chkbox .ui-chkbox-box.ui-state-focus {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-radiobutton .ui-radiobutton-box {
-    border: 1px solid #6e7179 !important;
-    background-color: #6e7179 !important;
+    border: 1px solid var(--checkbox) !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-radiobutton .ui-radiobutton-box.ui-state-focus {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-inputswitch .ui-inputswitch-slider {
-    background: #6e7179 !important;
+    background: var(--checkbox) !important;
 }
 .ui-inputswitch .ui-inputswitch-slider:before {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-inputswitch:not(.ui-state-disabled):hover .ui-inputswitch-slider {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-autocomplete-panel {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-group {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-dropdown {
-    background: #6e7179 !important;
-    border: 1px solid #6e7179 !important;
+    background: var(--checkbox) !important;
+    border: 1px solid var(--checkbox) !important;
 }
 .ui-dropdown .ui-dropdown-trigger {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-dropdown-panel {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-multiselect {
-    background: #6e7179 !important;
-    border: 1px solid #6e7179 !important;
+    background: var(--checkbox) !important;
+    border: 1px solid var(--checkbox) !important;
 }
 .ui-multiselect .ui-multiselect-trigger {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-multiselect-panel {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-disabled .ui-chkbox-box:hover {
-    border: 1px solid #6e7179 !important;
+    border: 1px solid var(--checkbox) !important;
 }
 .ui-listbox {
-    background: #22292E !important;
+    background: var(--panel-background) !important;
 }
 .ui-listbox .ui-listbox-list {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-listbox.ui-state-disabled .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
-    border: 1px solid #6e7179 !important;
+    border: 1px solid var(--checkbox) !important;
 }
 .ui-editor-container .ui-editor-content .ql-editor {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-slider {
-    background-color: #6e7179 !important;
+    background-color: var(--checkbox) !important;
 }
 .ui-datepicker {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-fileupload .ui-fileupload-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-password-panel {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-button.ui-state-default.ui-button-secondary, .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default {
-    color: #FFFFFF !important;
+    color: var(--white) !important;
     background-color:  #272e33 !important;
     border: 1px solid  #272e33 !important;
 }
 .ui-button.ui-state-default.ui-button-secondary:enabled:hover, .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default:enabled:hover {
     background-color: #2E3F50 !important;
-    color: #FFFFFF !important;
+    color: var(--white) !important;
     border-color: #2E3F50 !important;
 }
 .ui-panel .ui-panel-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-panel .ui-panel-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-fieldset {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-accordion .ui-accordion-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-tabview .ui-tabview-panels {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-card {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-table .ui-table-t> tr {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-table .ui-table-t> tr:nth-child(even) {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-datagrid .ui-datagrid-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-datagrid .ui-datagrid-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-datalist .ui-datalist-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-datalist .ui-datalist-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-datascroller .ui-datascroller-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-datascroller .ui-datascroller-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-virtualscroller .ui-virtualscroller-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-virtualscroller .ui-virtualscroller-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-dataview .ui-dataview-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-dataview .ui-dataview-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .fc td.ui-widget-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-picklist .ui-picklist-list {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-orderlist .ui-orderlist-list {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-tree {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-tree.ui-tree-horizontal .ui-treenode .ui-treenode-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-organizationchart .ui-organizationchart-node-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-organizationchart .ui-organizationchart-node-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-treetable .ui-treetable-t> tr {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-overlaypanel {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-overlaypanel:after {
-    border-bottom-color: #22292E !important;
+    border-bottom-color: var(--panel-background) !important;
 }
 .ui-overlaypanel.ui-overlaypanel-flipped:after {
-    border-top-color: #22292E !important;
+    border-top-color: var(--panel-background) !important;
 }
 .ui-dialog .ui-dialog-content {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-dialog .ui-dialog-footer {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-sidebar {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-lightbox .ui-lightbox-content-wrapper {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-breadcrumb {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .ui-terminal {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 
 .dialog-content .recipe-io .connections {
@@ -251,21 +251,18 @@ pre {
     background-color: #303b41 !important;
 }
 .ui-panel .ui-panel-content table{
-    color: white;
+    color: var(--white);
 }
 .table-striped tbody tr:nth-child(odd) {
     background-color: #364047 !important;
 } 
 .table-striped tbody tr:nth-child(even) {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 } 
 .CodeMirror-gutter {
-    background-color: #22292E !important;
+    background-color: var(--panel-background) !important;
 }
 .CodeMirror {
     border: none !important;
-    background-color: #22292E !important;
-}
-.node__empty-data {
-    color: var(--off-white) !important;
+    background-color: var(--panel-background) !important;
 }

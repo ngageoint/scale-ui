@@ -5,7 +5,9 @@ export const darkTheme: Theme = {
     properties: {
         '--background': '#222222',
         '--background-image': 'linear-gradient(to bottom, #363636, #171717)',
-        '--on-background': '#e3e3e3',
+        '--main-text': '#e3e3e3',
+        '--panel-background': '#22292E',
+        '--checkbox': '#6e7179',
         '--teal': '#2AC992',
         '--aqua': '#0FA3BD',
         '--light-blue': '#1bbcd8',

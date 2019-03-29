@@ -5,7 +5,7 @@ export const lightTheme: Theme = {
     properties: {
         '--background': '#e3e3e3',
         '--background-image': 'linear-gradient(to bottom, #ededed, #d9d9d9)',
-        '--on-background': '#202223',
+        '--main-text': '#202223',
         '--teal': '#2AC992',
         '--aqua': '#0FA3BD',
         '--light-blue': '#1bbcd8',
