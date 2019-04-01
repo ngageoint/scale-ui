@@ -5,10 +5,10 @@
 
 # The script takes one command - your Docker image name you want to create and push 
 
+dcos marathon app stop /scale-ui
 
-dcos marathon app stop /scale-webserver
-
-docker build -t $1 .
+npm run builddocker:prod
+docker tag scale-ui $1
 docker push $1
 
-dcos marathon app start /scale-webserver 1
+dcos marathon app start /scale-ui 1
