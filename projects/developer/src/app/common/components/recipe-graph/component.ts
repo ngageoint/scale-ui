@@ -1,4 +1,4 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 

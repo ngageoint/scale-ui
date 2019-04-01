@@ -105,7 +105,6 @@ import { ProfileService } from './common/services/profile.service';
 import { ErrorsApiService } from './common/services/errors/api.service';
 import { EnvironmentService } from './common/services/environment.service';
 
-
 @NgModule({
     declarations: [
         AppComponent,
