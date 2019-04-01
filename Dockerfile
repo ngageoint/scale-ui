@@ -1,3 +1,3 @@
-FROM gisjedi/scale:auth
+FROM nginx
 
-COPY dist/developer /opt/scale/ui
+COPY dist/developer /usr/share/nginx/html
