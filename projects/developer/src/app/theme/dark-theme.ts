@@ -3,9 +3,9 @@ import { Theme } from './symbols';
 export const darkTheme: Theme = {
     name: 'dark',
     properties: {
-        '--background': '#222222',
-        '--background-image': 'linear-gradient(to bottom, #363636, #171717)',
+        '--background': 'linear-gradient(to bottom, #363636, #171717)',
         '--main-text': '#e3e3e3',
+        '--main-hover': '#475359',
         '--panel-background': '#22292E',
         '--checkbox': '#6e7179',
         '--teal': '#2AC992',
@@ -79,5 +79,13 @@ export const darkTheme: Theme = {
         '--label-busy': '#E73C70',
         '--label-waiting': '#7f53d1',
         '--label-stopped': '#be292e',
+        '--table-striped-even': '#303b41',
+        '--table-striped-odd': '#1f1f1f',
+        '--recipe-container-background': '#303b41',
+        '--recipe-container-border': '#626262',
+        '--recipe-connection-background': '#444',
+        '--pre-background': '#303b41',
+        '--pre-border': '#777',
+        '--pre-on': '#f5f5f5'
     }
 };

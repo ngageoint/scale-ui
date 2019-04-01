@@ -10,7 +10,7 @@ import { Theme } from './symbols';
     selector: '[devTheme]'
 })
 export class ThemeDirective implements OnInit, OnDestroy {
-    @Input() scoped = true;
+    @Input() scoped = false;
     private destroy = new Subject();
 
     constructor(
