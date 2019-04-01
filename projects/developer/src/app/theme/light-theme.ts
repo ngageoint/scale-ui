@@ -3,9 +3,9 @@ import { Theme } from './symbols';
 export const lightTheme: Theme = {
     name: 'light',
     properties: {
-        '--background': '#e3e3e3',
-        '--background-image': 'linear-gradient(to bottom, #ededed, #d9d9d9)',
+        '--background': 'linear-gradient(to bottom, #ededed, #d9d9d9)',
         '--main-text': '#202223',
+        '--main-hover': '#eee',
         '--teal': '#2AC992',
         '--aqua': '#0FA3BD',
         '--light-blue': '#1bbcd8',
@@ -75,6 +75,14 @@ export const lightTheme: Theme = {
         '--label-ready': '#2AC992',
         '--label-paused': '#0FA3BD',
         '--label-busy': '#E73C70',
-        '--label-waiting': '#7f53d1'
+        '--label-waiting': '#7f53d1',
+        '--table-striped-even': '#ededed',
+        '--table-striped-odd': '#fff',
+        '--recipe-container-background': '#fff',
+        '--recipe-container-border': '#ccc',
+        '--recipe-connection-background': '#f3f3f3',
+        '--pre-background': '#f5f5f5',
+        '--pre-border': '#ccc',
+        '--pre-on': '#333'
     }
 };

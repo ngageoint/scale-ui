@@ -17,236 +17,84 @@ $transparent-running: transparentize(#529D39, 0.65);
 
 .app {
     background: var(--background);
-    background-image: var(--background-image);
     color: var(--main-text);
     display: flex;
     flex-direction: column;
     min-height: 100%;
 }
 
-.content {
-    flex: 1;
-    padding: 1.0em 2.0em;
+.blocked {
+    background: var(--status-blocked) !important;
 }
 
-dl {
-    margin-top: 0;
-    margin-bottom: 20px;
-
-    dt, dd {
-        line-height: 1.42857143;
-    }
-
-    dt {
-        font-weight: bold;
-    }
-
-    dd {
-        margin: 0 0 10px 0;
-    }
+.blocked-text {
+    color: var(--status-blocked);
 }
 
-pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.42857143;
-    word-break: break-all;
-    word-wrap: break-word;
-    color: #333333;
-    background-color: #f5f5f5;
-    border: 1px solid var(--off-white);
-    border-radius: 4px;
+.canceled {
+    background: var(--status-canceled) !important;
 }
 
-.app {
-    background: var(--background);
-    background-image: var(--background-image);
-    color: var(--main-text);
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-}
-
-.content {
-    flex: 1;
-    padding: 1.0em 2.0em;
-}
-
-.relative {
-    position: relative;
-}
-
-.inset {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
-
-.nodes__dataview {
-    .ui-dataview-header {
-        .ui-button-secondary {
-            background-color: var(--off-white) !important;
-            border: 1px solid var(--off-white) !important;
-        }
-    }
-
-    .ui-dataview-content {
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-    }
-
-    .ui-panel-titlebar {
-        padding: 0.2em 0.5em !important;
-    }
-
-    .ui-panel-titlebar-toggler {
-        display: none !important;
-    }
-
-    .node__paused {
-        .ui-panel-titlebar {
-            background: var(--label-paused);
-            color: var(--white);
-        }
-    }
-}
-
-.node__errors, .node__warnings {
-    &.ui-dialog {
-        width: 33vw !important;
-    }
-    .ui-dialog-titlebar {
-        color: var(--white) !important;
-
-        .ui-dialog-titlebar-icon {
-            color: var(--white) !important;
-        }
-    }
-}
-
-.node__errors {
-    .ui-dialog-titlebar {
-        background: var(--label-text-danger) !important;
-    }
-}
-
-.node__warnings {
-    .ui-dialog-titlebar {
-        background: var(--label-text-warning) !important;
-    }
-}
-
-.help-block {
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    color: var(--grey-45);
-    font-weight: normal;
-}
-
-.throb-text, .throb-background, .throb-svg {
-    animation-duration: 0.6s;
-    animation-timing-function: ease-out;
-    animation-delay: 0;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    animation-fill-mode: none;
-    animation-play-state: running;
-}
-
-.throb-text {
-    animation-name: throb-text;
-}
-
-.throb-background {
-    animation-name: throb-background;
-}
-
-.throb-svg {
-    animation-name: throb-svg;
-}
-
-@keyframes throb-text {
-    0% {
-        color: var(--status-running);
-    }
-    100% {
-        color: $transparent-running;
-    }
-}
-
-@keyframes throb-background {
-    0% {
-        background-color: var(--status-running);
-    }
-    100% {
-        background-color: $transparent-running;
-    }
-}
-
-@keyframes throb-svg {
-    0% {
-        fill: var(--status-running);
-    }
-    100% {
-        fill: $transparent-running;
-    }
-}
-
-h2:first-of-type {
-    margin: 3px 0;
-}
-
-a:not(.ui-button, .ui-paginator) {
-    color: var(--scale-secondary-light);
-
-    &:hover {
-        color: var(--scale-secondary-dark);
-    }
+.canceled-text {
+    color: var(--status-canceled);
 }
 
 .column-filter {
     width: 100%;
 }
 
-.scale-tab-header {
-    background: var(--navbar-dark);
+.completed {
+    background: var(--status-completed) !important;
+}
 
-    a {
-        color: var(--navbar-text);
+.completed-text {
+    color: var(--status-completed);
+}
+
+.content {
+    flex: 1;
+    padding: 1.0em 2.0em;
+}
+
+.dialog-content {
+    padding: 0 0 10px 10px;
+
+    h4 {
+        margin: 0 0 5px 0;
+        font-size: 1.2em;
+
+        &.label {
+            display: block;
+        }
     }
 }
 
-.scale-chart-container {
-    position: relative;
+.dl-horizontal {
+    dt {
+        float: left;
+        width: 160px;
+        clear: left;
+        text-align: right;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-weight: bold;
+    }
+    dd {
+        margin-left: 180px;
+    }
 }
 
-.text-left {
-    text-align: left !important;
+.error-text {
+    color: var(--label-text-danger);
 }
 
-.text-center {
-    text-align: center !important;
+.failed {
+    background: var(--status-failed) !important;
 }
 
-.text-right {
-    text-align: right !important;
-}
-
-.list-unstyled {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-}
-
-.link-button {
-    background: var(--scale-secondary-light);
-    color: var(--white);
-    padding: 7px;
-    border-radius: 3px;
-    text-decoration: none;
+.failed-text {
+    color: var(--status-failed);
 }
 
 .flexed {
@@ -271,33 +119,26 @@ a:not(.ui-button, .ui-paginator) {
     }
 }
 
-.table {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead {
-        th {
-            text-align: left;
-            padding: 5px !important;
-        }
-    }
-
-    tbody td {
-        padding: 5px !important;
-    }
+.free {
+    background: var(--status-free) !important;
 }
 
-.table-striped {
-    tbody tr:nth-child(odd) {
-        background-color: var(--white);
-    }
-    tbody tr:nth-child(even) {
-        background-color: var(--grey-95);
-    }
+.free-text {
+    color: var(--status-free);
 }
 
-.table-bordered {
-    border: 1px solid #ececec;
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: var(--grey-45);
+    font-weight: normal;
+}
+
+.inset {
+    position: absolute;
+    top: 10px;
+    right: 10px;
 }
 
 .label {
@@ -317,58 +158,19 @@ a:not(.ui-button, .ui-paginator) {
     }
 }
 
-a.label {
-    &:hover, &:focus {
-        color: var(--label-text);
-        text-decoration: none;
-        cursor: pointer;
-    }
+.label-algorithm {
+    background-color: var(--status-algorithm);
 }
 
-.label:empty {
-    display: none;
+.label-busy {
+    background-color: var(--label-busy);
 }
 
-label-default {
-    background-color: var(--label-text-default);
-}
-.label-default[href]:hover,
-.label-default[href]:focus {
-    background-color: var(--label-text-default-hover);
-}
-.label-primary {
-    background-color: var(--label-text-primary);
-}
-.label-primary[href]:hover,
-.label-primary[href]:focus {
-    background-color: var(--label-text-primary-hover);
-}
-.label-success {
-    background-color: var(--label-text-success);
-}
-.label-success[href]:hover,
-.label-success[href]:focus {
-    background-color: var(--label-text-success-hover);
-}
-.label-info {
-    background-color: var(--label-text-info);
-}
-.label-info[href]:hover,
-.label-info[href]:focus {
-    background-color: var(--label-text-info-hover);
-}
-.label-warning {
-    background-color: var(--label-text-warning);
-}
-.label-warning[href]:hover,
-.label-warning[href]:focus {
-    background-color: var(--label-text-warning-hover);
-}
 .label-danger {
     background-color: var(--label-text-danger);
 }
-.label-danger[href]:hover,
-.label-danger[href]:focus {
+
+.label-danger[href]:focus, .label-danger[href]:hover {
     background-color: var(--label-text-danger-hover);
 }
 
@@ -376,192 +178,284 @@ label-default {
     background-color: var(--status-data);
 }
 
-.label-system {
-    background-color: var(--status-system);
+.label-default {
+    background-color: var(--label-text-default);
 }
 
-.label-algorithm {
-    background-color: var(--status-algorithm);
+.label-default[href]:focus, .label-default[href]:hover {
+    background-color: var(--label-text-default-hover);
 }
 
-.label-ready {
-    background-color: var(--label-ready);
+.label-info {
+    background-color: var(--label-text-info);
+}
+
+.label-info[href]:focus, .label-info[href]:hover {
+    background-color: var(--label-text-info-hover);
 }
 
 .label-paused {
     background-color: var(--label-paused);
 }
 
-.label-busy {
-    background-color: var(--label-busy);
+.label-primary {
+    background-color: var(--label-text-primary);
 }
 
-.label-waiting {
-    background-color: var(--label-waiting);
+.label-primary[href]:focus, .label-primary[href]:hover {
+    background-color: var(--label-text-primary-hover);
+}
+
+.label-ready {
+    background-color: var(--label-ready);
 }
 
 .label-scheduler_stopped {
     background-color: var(--label-stopped);
 }
 
-.no-margin {
-    margin: 0 !important;
+.label-success {
+    background-color: var(--label-text-success);
 }
 
-.margin-top-sm {
-    margin-top: 5px;
+.label-success[href]:focus, .label-success[href]:hover {
+    background-color: var(--label-text-success-hover);
 }
 
-.margin-top-md {
-    margin-top: 10px;
+.label-system {
+    background-color: var(--status-system);
 }
 
-.margin-top-lg {
-    margin-top: 20px;
+.label-waiting {
+    background-color: var(--label-waiting);
 }
 
-.margin-right-sm {
-    margin-right: 5px;
+.label-warning {
+    background-color: var(--label-text-warning);
 }
 
-.margin-right-md {
-    margin-right: 10px;
+.label-warning[href]:focus, .label-warning[href]:hover {
+    background-color: var(--label-text-warning-hover);
 }
 
-.margin-right-lg {
-    margin-right: 20px;
+.link-button {
+    background: var(--scale-secondary-light);
+    color: var(--white);
+    padding: 7px;
+    border-radius: 3px;
+    text-decoration: none;
 }
 
-.margin-bottom-sm {
-    margin-bottom: 5px;
-}
-
-.margin-bottom-md {
-    margin-bottom: 10px;
+.list-unstyled {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
 }
 
 .margin-bottom-lg {
     margin-bottom: 20px;
 }
 
-.margin-left-sm {
-    margin-left: 5px;
+.margin-bottom-md {
+    margin-bottom: 10px;
+}
+
+.margin-bottom-sm {
+    margin-bottom: 5px;
+}
+
+
+.margin-left-lg {
+    margin-left: 20px;
 }
 
 .margin-left-md {
     margin-left: 10px;
 }
 
-.margin-left-lg {
-    margin-left: 20px;
+.margin-left-sm {
+    margin-left: 5px;
 }
 
-.dl-horizontal {
-    dt {
-        float: left;
-        width: 160px;
-        clear: left;
-        text-align: right;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        font-weight: bold;
-    }
-    dd {
-        margin-left: 180px;
-    }
+.margin-right-lg {
+    margin-right: 20px;
 }
 
-.completed-text {
-    color: var(--status-completed);
-}
-.failed-text {
-    color: var(--status-failed);
-}
-.pending-text {
-    color: var(--status-pending);
-}
-.queued-text {
-    color: var(--status-queued);
-}
-.running-text {
-    color: var(--status-running);
-}
-.blocked-text {
-    color: var(--status-blocked);
-}
-.canceled-text {
-    color: var(--status-canceled);
-}
-.warning-text {
-    color: var(--label-text-warning);
-}
-.error-text {
-    color: var(--label-text-danger);
-}
-.offered-text {
-    color: var(--status-offered);
-}
-.free-text {
-    color: var(--status-free);
-}
-.unavailable-text {
-    color: var(--status-unavailable);
+.margin-right-md {
+    margin-right: 10px;
 }
 
-.completed {
-    background: var(--status-completed) !important;
+.margin-right-sm {
+    margin-right: 5px;
 }
-.failed {
-    background: var(--status-failed) !important;
+
+.margin-top-lg {
+    margin-top: 20px;
 }
-.pending {
-    background: var(--status-pending) !important;
+
+.margin-top-md {
+    margin-top: 10px;
 }
-.queued {
-    background: var(--status-queued) !important;
+
+.margin-top-sm {
+    margin-top: 5px;
 }
-.running {
-    background: var(--status-running) !important;
+
+.no-margin {
+    margin: 0 !important;
 }
-.blocked {
-    background: var(--status-blocked) !important;
-}
-.canceled {
-    background: var(--status-canceled) !important;
-}
+
 .offered {
     background: var(--status-offered) !important;
 }
-.free {
-    background: var(--status-free) !important;
+
+.offered-text {
+    color: var(--status-offered);
 }
-.unavailable {
-    background: var(--status-unavailable) !important;
+
+.pending {
+    background: var(--status-pending) !important;
+}
+
+.pending-text {
+    color: var(--status-pending);
+}
+
+.queued {
+    background: var(--status-queued) !important;
+}
+
+.queued-text {
+    color: var(--status-queued);
+}
+
+.relative {
+    position: relative;
+}
+
+.running {
+    background: var(--status-running) !important;
+}
+
+.running-text {
+    color: var(--status-running);
+}
+
+.scale-chart-container {
+    position: relative;
+}
+
+.scale-loading {
+    background: rgba(73, 73, 73, 0.502);
+}
+
+.scale-tab-header {
+    background: var(--navbar-dark);
+
+    a {
+        color: var(--navbar-text);
+    }
+}
+
+.small-text {
+    font-size: 10px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+        th {
+            text-align: left;
+            padding: 5px !important;
+        }
+    }
+
+    tbody td {
+        padding: 5px !important;
+    }
+}
+
+.table-bordered {
+    border: 1px solid #ececec;
+}
+
+.table-striped {
+    tbody tr:nth-child(odd) {
+        background-color: var(--table-striped-odd);
+    }
+    tbody tr:nth-child(even) {
+        background-color: var(--table-striped-even);
+    }
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.throb-background {
+    animation-name: throb-background;
+}
+
+.throb-svg {
+    animation-name: throb-svg;
+}
+
+.throb-text {
+    animation-name: throb-text;
+}
+
+.throb-text, .throb-background, .throb-svg {
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-fill-mode: none;
+    animation-play-state: running;
+}
+
+.ui-button-busy {
+    background-color: var(--label-busy) !important;
+    border: 1px solid var(--label-busy) !important;
+}
+
+.ui-button-paused {
+    background-color: var(--label-paused) !important;
+    border: 1px solid var(--label-paused) !important;
 }
 
 .ui-button-ready {
     background-color: var(--label-ready) !important;
     border: 1px solid var(--label-ready) !important;
 }
-.ui-button-paused {
-    background-color: var(--label-paused) !important;
-    border: 1px solid var(--label-paused) !important;
-}
-.ui-button-busy {
-    background-color: var(--label-busy) !important;
-    border: 1px solid var(--label-busy) !important;
-}
-.ui-button-waiting {
-    background-color: var(--label-waiting) !important;
-    border: 1px solid var(--label-waiting) !important;
-}
+
 .ui-button-stopped {
     background-color: var(--label-stopped) !important;
     border: 1px solid var(--label-stopped) !important;
 }
 
-.ui-panel-primary, .ui-panel-danger {
+.ui-button-waiting {
+    background-color: var(--label-waiting) !important;
+    border: 1px solid var(--label-waiting) !important;
+}
+
+.ui-panel-danger {
+    .ui-panel-titlebar {
+        background-color: var(--label-text-danger) !important;
+    }
+}
+
+.ui-panel-danger, .ui-panel-primary {
     .ui-panel-titlebar {
         padding: .5em 1.25em .5em 1em !important;
 
@@ -578,24 +472,19 @@ label-default {
     }
 }
 
-.ui-panel-danger {
-    .ui-panel-titlebar {
-        background-color: var(--label-text-danger) !important;
-    }
+.unavailable {
+    background: var(--status-unavailable) !important;
 }
 
-.dialog-content {
-    padding: 0 0 10px 10px;
-
-    h4 {
-        margin: 0 0 5px 0;
-        font-size: 1.2em;
-
-        &.label {
-            display: block;
-        }
-    }
+.unavailable-text {
+    color: var(--status-unavailable);
 }
+
+.warning-text {
+    color: var(--label-text-warning);
+}
+
+
 
 ::ng-deep .ui-dialog {
     width: 500px;
@@ -605,6 +494,29 @@ label-default {
     }
 }
 
-.small-text {
-    font-size: 10px;
+@keyframes throb-background {
+    0% {
+        background-color: var(--status-running);
+    }
+    100% {
+        background-color: $transparent-running;
+    }
+}
+
+@keyframes throb-text {
+    0% {
+        color: var(--status-running);
+    }
+    100% {
+        color: $transparent-running;
+    }
+}
+
+@keyframes throb-svg {
+    0% {
+        fill: var(--status-running);
+    }
+    100% {
+        fill: $transparent-running;
+    }
 }
