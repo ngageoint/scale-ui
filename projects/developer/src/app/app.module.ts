@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
+import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
@@ -214,6 +215,10 @@ import { EnvironmentService } from './common/services/environment.service';
         PaginatorModule
     ],
     providers: [
+        {
+            provide: APP_BASE_HREF,
+            useValue: '/' + (window.location.pathname.split('/')[1] || '')
+        },
         MessageService,
         JobsApiService,
         JobsDatatableService,
