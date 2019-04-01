@@ -203,7 +203,7 @@
                         <div class="ui-g-12 ui-g-nopad">
                             <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
-                            {{ dep.name }}
+                            {{ getNodeTitle(dep.name) }}
                             <span *ngIf="dep.type === 'condition'">({{ dep.acceptance.toString() }})</span>
                         </div>
                     </div>
@@ -273,7 +273,7 @@
                         <div class="ui-g-12 ui-g-nopad">
                             <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
-                            {{ dep.name }}
+                            {{ getNodeTitle(dep.name) }}
                         </div>
                     </div>
                 </ng-template>
