@@ -11,6 +11,6 @@
     justify-content: center;
 
     svg path, svg rect {
-        fill: #000;
+        fill: var(--black);
     }
 }

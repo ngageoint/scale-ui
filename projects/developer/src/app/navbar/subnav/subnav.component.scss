@@ -6,27 +6,27 @@
 $subnav-height: 47px;
 
 .blue-subnav {
-    background: $clr-scale-blue2;
-    background-image: linear-gradient(to bottom, $clr-scale-blue2, darken($clr-scale-blue2, 3%));
-    border-bottom: 1px solid $clr-gray-90;
+    background: var(--scale-primary);
+    background-image: linear-gradient(to bottom, var(--scale-primary), var(--subnav-dark));
+    border-bottom: 1px solid var(--grey-90);
     box-shadow: $navshadow;
-    color: $clr-white;
+    color: var(--white);
 
     .subnav__link {
-        border-left: 3px solid $clr-navbar-dark;
-        color: $clr-white;
+        border-left: 3px solid var(--navbar-dark);
+        color: var(--white);
         text-decoration: none;
         transition: $default-transition;
 
         &:hover {
-            background: rgba($clr-white, 0.05);
-            border-left: 3px solid $clr-white;
+            background: rgba(var(--white), 0.05);
+            border-left: 3px solid var(--white);
         }
     }
 
     h2 {
-        color: $clr-white;
-        text-shadow: 1px 1px 7px darken($clr-highlight, 45%);
+        color: var(--white);
+        text-shadow: 1px 1px 7px (var(--scale-primary), 45%);
     }
 }
 
@@ -50,10 +50,10 @@ $subnav-height: 47px;
             a {
                 padding: 8px 10px;
                 text-decoration: none;
-                color: #fff;
+                color: var(--white);
 
                 &:hover {
-                    color: #000;
+                    color: var(--black);
                 }
 
                 i {
@@ -134,7 +134,7 @@ $subnav-height: 47px;
     }
 }
 
-$subnav-bg-color: lighten($clr-scale-blue2, 3%);
+$subnav-bg-color: var(--subnav-light);
 
 .subnav__header::before {
     color: $subnav-bg-color;

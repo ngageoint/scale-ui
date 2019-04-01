@@ -1,5 +1,5 @@
-<div class="ui-g" xmlns:svg="http://www.w3.org/1999/html">
-    <div class="ui-g-12 ui-g-nopad">
+<div class="p-grid" xmlns:svg="http://www.w3.org/1999/html">
+    <div class="p-col-12 p-col-nopad">
         <div class="recipe-container" [style.minHeight]="minHeight">
             <ngx-graph
                 class="chart-container"
@@ -116,11 +116,11 @@
                 <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
                             class="recipe-dependencies-container" emptyMessage="None">
                     <p-header>
-                        <div class="ui-g">
-                            <div class="ui-g-10 ui-g-nopad">
+                        <div class="p-grid">
+                            <div class="p-col-10 p-col-nopad">
                                 <strong>Dependencies</strong>
                             </div>
-                            <div class="ui-g-2 ui-g-nopad text-right">
+                            <div class="p-col-2 p-col-nopad text-right">
                                 <button pButton class="ui-button-info" icon="fa fa-plus"
                                         (click)="showDependencyOptions($event)" *ngIf="isEditing"
                                         pTooltip="Add Dependency"></button>
@@ -128,8 +128,8 @@
                         </div>
                     </p-header>
                     <ng-template let-dep pTemplate="item">
-                        <div class="ui-g recipe-io recipe-dependencies">
-                            <div class="ui-g-12 ui-g-nopad">
+                        <div class="p-col recipe-io recipe-dependencies">
+                            <div class="p-col-12 p-col-nopad">
                                 <button pButton class="ui-button-danger" icon="fa fa-remove"
                                         (click)="removeDependency(dep)" *ngIf="isEditing"></button>
                                 {{ getNodeTitle(dep.name) }}
@@ -145,8 +145,8 @@
                     </p-header>
                     <ng-template let-input pTemplate="item">
                         <div class="recipe-io">
-                            <div class="ui-g">
-                                <div class="ui-g-10 ui-g-nopad">
+                            <div class="p-col">
+                                <div class="p-col-10 p-col-nopad">
                                     {{ input.name }} <span *ngIf="input.required">*</span>
                                     <ul class="list-unstyled media-type-list">
                                         <li *ngFor="let mediaType of input.mediaTypes">{{ mediaType }}</li>
@@ -168,7 +168,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="ui-g-2 ui-g-nopad text-right">
+                                <div class="p-col-2 p-col-nopad text-right">
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showInputConnections($event, input)"
                                             pTooltip="Add Input Connection"
@@ -187,11 +187,11 @@
             <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
                         class="recipe-dependencies-container" emptyMessage="None">
                 <p-header>
-                    <div class="ui-g">
-                        <div class="ui-g-10 ui-g-nopad">
+                    <div class="p-grid">
+                        <div class="p-col-10 p-col-nopad">
                             <strong>Dependencies</strong>
                         </div>
-                        <div class="ui-g-2 ui-g-nopad text-right">
+                        <div class="p-col-2 p-col-nopad text-right">
                             <button pButton class="ui-button-info" icon="fa fa-plus"
                                     (click)="showDependencyOptions($event)" *ngIf="isEditing"
                                     pTooltip="Add Dependency"></button>
@@ -199,8 +199,8 @@
                     </div>
                 </p-header>
                 <ng-template let-dep pTemplate="item">
-                    <div class="ui-g recipe-io recipe-dependencies">
-                        <div class="ui-g-12 ui-g-nopad">
+                    <div class="p-grid recipe-io recipe-dependencies">
+                        <div class="p-col-12 p-col-nopad">
                             <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
                             {{ getNodeTitle(dep.name) }}
@@ -216,8 +216,8 @@
                 </p-header>
                 <ng-template let-input pTemplate="item">
                     <div class="recipe-io">
-                        <div class="ui-g">
-                            <div class="ui-g-10 ui-g-nopad">
+                        <div class="p-grid">
+                            <div class="p-col-10 p-col-nopad">
                                 {{ input.name }} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
                                     <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
@@ -239,7 +239,7 @@
                                     </ul>
                                 </div>
                             </div>
-                            <div class="ui-g-2 ui-g-nopad text-right">
+                            <div class="p-col-2 p-col-nopad text-right">
                                 <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                         (click)="showInputConnections($event, input)"
                                         pTooltip="Add Input Connection"
@@ -257,11 +257,11 @@
             <p-dataList [value]="selectedNode.dependencies" [scrollable]="true" scrollHeight="300px"
                         class="recipe-dependencies-container" emptyMessage="None">
                 <p-header>
-                    <div class="ui-g">
-                        <div class="ui-g-10 ui-g-nopad">
+                    <div class="p-grid">
+                        <div class="p-col-10 p-col-nopad">
                             <strong>Dependencies</strong>
                         </div>
-                        <div class="ui-g-2 ui-g-nopad text-right">
+                        <div class="p-col-2 p-col-nopad text-right">
                             <button pButton class="ui-button-info" icon="fa fa-plus"
                                     (click)="showDependencyOptions($event)" *ngIf="isEditing"
                                     pTooltip="Add Dependency"></button>
@@ -269,8 +269,8 @@
                     </div>
                 </p-header>
                 <ng-template let-dep pTemplate="item">
-                    <div class="ui-g recipe-io recipe-dependencies">
-                        <div class="ui-g-12 ui-g-nopad">
+                    <div class="p-grid recipe-io recipe-dependencies">
+                        <div class="p-col-12 p-col-nopad">
                             <button pButton class="ui-button-danger" icon="fa fa-remove" (click)="removeDependency(dep)"
                                     *ngIf="isEditing"></button>
                             {{ getNodeTitle(dep.name) }}
@@ -285,8 +285,8 @@
                 </p-header>
                 <ng-template let-input pTemplate="item">
                     <div class="recipe-io">
-                        <div class="ui-g">
-                            <div class="ui-g-12 ui-g-nopad">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-col-nopad">
                                 {{ input.name }} <span *ngIf="input.required">*</span>
                                 <ul class="list-unstyled media-type-list">
                                     <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>

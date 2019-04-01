@@ -42,29 +42,29 @@
             </div>
             <div *ngIf="isEditing && scan">
                 <div [formGroup]="createForm">
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Name</span>
                                 <input type="text" pInputText formControlName="name" required/>
                             </label>
                         </div>
-                        <div class="ui-g-6">
+                        <div class="p-col-6">
                             <label>
                                 <span>Title</span>
                                 <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Description</span>
                                 <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
                                           [autoResize]="true"></textarea>
                             </label>
                         </div>
-                        <div class="ui-g-6" formGroupName="configuration">
+                        <div class="p-col-6" formGroupName="configuration">
                             <label>
                                 <span>Workspace</span>
                                 <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
@@ -72,20 +72,20 @@
                                             [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
-                            <div class="ui-g">
-                                <div class="ui-g-4" formGroupName="scanner" style="padding-left: 0">
+                            <div class="p-grid">
+                                <div class="p-col-4" formGroupName="scanner" style="padding-left: 0">
                                     <label>
                                         <span>Scanner Type</span>
                                         <input type="text" pInputText formControlName="type" required/>
                                     </label>
                                 </div>
-                                <div class="ui-g-4" formGroupName="scanner">
+                                <div class="p-col-4" formGroupName="scanner">
                                     <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
                                         <span>Transfer Suffix</span>
                                         <input type="text" pInputText formControlName="transfer_suffix" required/>
                                     </label>
                                 </div>
-                                <div class="ui-g-4" style="padding-right: 0">
+                                <div class="p-col-4" style="padding-right: 0">
                                     <label>
                                         <span>Recursive</span>
                                         <p-toggleButton formControlName="recursive" onLabel="True" offLabel="False"
@@ -100,8 +100,8 @@
                 </div>
                 <div [formGroup]="ingestFileForm" class="margin-top-lg">
                     <p-panel header="Ingest File Rules (at least 1 is required)" [styleClass]="ingestFilePanelClass">
-                        <div class="ui-g">
-                            <div class="ui-g-6">
+                        <div class="p-grid">
+                            <div class="p-col-6">
                                 <label>
                                     <span>Filename Regex</span>
                                     <input type="text" pInputText formControlName="filename_regex" required/>
@@ -110,7 +110,7 @@
                                     </div>
                                 </label>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="p-col-6">
                                 <label>
                                     <span>Data Types</span>
                                     <p-chips formControlName="data_types" [style]="{'width':'100%'}"
@@ -122,8 +122,8 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="ui-g">
-                            <div class="ui-g-6">
+                        <div class="p-grid">
+                            <div class="p-col-6">
                                 <label>
                                     <span>New Workspace</span>
                                     <p-dropdown [options]="newWorkspacesOptions" [autoWidth]="false"
@@ -135,7 +135,7 @@
                                     </div>
                                 </label>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="p-col-6">
                                 <label>
                                     <span>New File Path</span>
                                     <input pInputText type="text" formControlName="new_file_path"/>
