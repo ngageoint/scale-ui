@@ -366,6 +366,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             return;
         }
         if (this.selectedNode) {
+            let dependencyName: any = '';
+            if (dependency.manifest) {
+                // retrieve the key of the job node to ensure correct mapping
+                dependencyName = _.findKey(this.recipeData.definition.nodes, {
+                    node_type: {
+                        job_type_name: dependency.name,
+                        job_type_version: dependency.version
+                    }
+                });
+            } else {
+                // with a condition node, the key is always the same as the name
+                dependencyName = dependency.name;
+            }
             if (this.selectedNode.node_type.node_type === 'condition' && dependency.manifest) {
                 // inspect the dependency's input interface and apply it to the condition interface
                 const files = [];
@@ -394,14 +407,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 }
                 _.forEach(dependency.manifest.job.interface.outputs.files, f => {
                     input[f.name] = {
-                        node: dependency.name,
+                        node: dependencyName,
                         output: f.name,
                         type: 'dependency'
                     };
                 });
                 _.forEach(dependency.manifest.job.interface.outputs.json, j => {
                     input[j.name] = {
-                        node: dependency.name,
+                        node: dependencyName,
                         output: j.name,
                         type: 'dependency'
                     };
@@ -419,19 +432,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.recipeData.definition.nodes[this.selectedNode.node_type.name].input = input;
                 this.selectedNode.input = input;
                 this.getNodeConnections();
-            }
-            let dependencyName: any = '';
-            if (dependency.manifest) {
-                // retrieve the key of the job node to ensure correct mapping
-                dependencyName = _.findKey(this.recipeData.definition.nodes, {
-                    node_type: {
-                        job_type_name: dependency.name,
-                        job_type_version: dependency.version
-                    }
-                });
-            } else {
-                // with a conditio node, the key is always the same as the name
-                dependencyName = dependency.name;
             }
             this.selectedNode.dependencies.push({
                 connections: [],
