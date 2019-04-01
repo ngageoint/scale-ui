@@ -6,8 +6,8 @@
            (mouseleave)="hideStatus(status)"></i>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
-    <div class="ui-g">
-        <div class="ui-g-4">
+    <div class="p-grid">
+        <div class="p-col-4">
             <p-panel header="Overview">
                 <p-scrollPanel>
                     <table class="table table-striped">
@@ -63,7 +63,7 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="ui-g-5">
+        <div class="p-col-5">
             <p-panel header="Timeline">
                 <p-scrollPanel>
                     <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
@@ -81,7 +81,7 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="ui-g-3">
+        <div class="p-col-3">
             <p-panel header="Executions">
                 <p-scrollPanel>
                     <dev-loading-indicator [loading]="loadingExecutions"></dev-loading-indicator>
@@ -116,10 +116,10 @@
             </p-panel>
         </div>
     </div>
-    <div class="ui-g">
-        <div class="ui-g-6">
+    <div class="p-grid">
+        <div class="p-col-6">
             <p-panel header="Inputs">
-                <div class="ui-g">
+                <div class="p-grid">
                     <div [ngClass]="inputClass" *ngIf="jobInputs.length > 0">
                         <strong>Files</strong>
                         <p-scrollPanel>
@@ -171,7 +171,7 @@
                 </div>
             </p-panel>
         </div>
-        <div class="ui-g-6">
+        <div class="p-col-6">
             <p-panel header="Outputs">
                 <p-scrollPanel styleClass="scale-panel">
                     <dev-loading-indicator [loading]="loadingOutputs"></dev-loading-indicator>

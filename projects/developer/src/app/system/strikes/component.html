@@ -51,29 +51,29 @@
             </div>
             <div *ngIf="isEditing && selectedStrikeDetail">
                 <div [formGroup]="createForm">
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Name</span>
                                 <input type="text" pInputText formControlName="name" required/>
                             </label>
                         </div>
-                        <div class="ui-g-6">
+                        <div class="p-col-6">
                             <label>
                                 <span>Title</span>
                                 <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Description</span>
                                 <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
                                           [autoResize]="true"></textarea>
                             </label>
                         </div>
-                        <div class="ui-g-6" formGroupName="configuration">
+                        <div class="p-col-6" formGroupName="configuration">
                             <label>
                                 <span>Recipe</span>
                                 <p-dropdown [options]="recipeOptions" [autoWidth]="false"
@@ -84,8 +84,8 @@
                         </div>
                     </div>
                     <div formGroupName="configuration">
-                        <div class="ui-g">
-                            <div class="ui-g-6">
+                        <div class="p-grid">
+                            <div class="p-col-6">
                                 <div>
                                     <label>
                                         <span>Workspace</span>
@@ -102,7 +102,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="ui-g-6" formGroupName="monitor">
+                            <div class="p-col-6" formGroupName="monitor">
                                 <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
                                     <span>Transfer Suffix</span>
                                     <input type="text" pInputText formControlName="transfer_suffix" required/>
@@ -132,8 +132,8 @@
                 </div>
                 <div [formGroup]="ingestFileForm" class="margin-top-lg">
                     <p-panel header="Ingest File Rules (at least 1 is required)" [styleClass]="ingestFilePanelClass">
-                        <div class="ui-g">
-                            <div class="ui-g-6">
+                        <div class="p-grid">
+                            <div class="p-col-6">
                                 <label>
                                     <span>Filename Regex</span>
                                     <input type="text" pInputText formControlName="filename_regex" required/>
@@ -142,7 +142,7 @@
                                     </div>
                                 </label>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="p-col-6">
                                 <label>
                                     <span>Data Types</span>
                                     <p-chips formControlName="data_types" [style]="{'width':'100%'}"
@@ -154,8 +154,8 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="ui-g">
-                            <div class="ui-g-6">
+                        <div class="p-grid">
+                            <div class="p-col-6">
                                 <label>
                                     <span>New Workspace</span>
                                     <p-dropdown [options]="newWorkspacesOptions" [autoWidth]="false"
@@ -167,7 +167,7 @@
                                     </div>
                                 </label>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="p-col-6">
                                 <label>
                                     <span>New File Path</span>
                                     <input pInputText type="text" formControlName="new_file_path"/>

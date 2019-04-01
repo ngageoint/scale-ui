@@ -25,7 +25,7 @@
         top: -13px;
         left: 5px;
         z-index: 1000;
-        color: #fff;
+        color: var(--white);
         font-size: 1.1em;
     }
 }
@@ -40,7 +40,7 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    color: #777;
+    color: var(--off-white);
     font-size: 0.9em;
     text-align: center;
     line-height: 1.2em;

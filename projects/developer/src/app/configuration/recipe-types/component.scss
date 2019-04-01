@@ -24,7 +24,7 @@
 
     &.disabled {
         cursor: default;
-        color: #ccc;
+        color: var(--off-white);
     }
 }
 

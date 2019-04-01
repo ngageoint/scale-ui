@@ -156,7 +156,7 @@ export class NodesComponent implements OnInit {
         this.pausedBtnLabel = `Paused (${pausedCount.true ? pausedCount.true : 0})`;
         this.busyBtnLabel = `Busy (${busyCount.true ? busyCount.true : 0})`;
         this.waitingBtnLabel = `Waiting (${waitingCount.true ? waitingCount.true : 0})`;
-        this.stoppedBtnLabel = `Waiting (${stoppedCount.true ? stoppedCount.true : 0})`;
+        this.stoppedBtnLabel = `Stopped (${stoppedCount.true ? stoppedCount.true : 0})`;
         this.filterNodes();
     }
 

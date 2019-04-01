@@ -48,10 +48,10 @@
 }
 
 .dashboard__item {
-    background: $clr-white;
-    background-image: linear-gradient(to bottom, $clr-white, $clr-gray-98);
+    background: var(--white);
+    background-image: linear-gradient(to bottom, var(--white), var(--grey-98));
     border-radius: 0.25em;
-    box-shadow: 0 0 0.5em $clr-gray-80;
+    box-shadow: 0 0 0.5em var(--grey-80);
     flex: 1;
     margin: 0.5em 0.25em;
     min-height: 400px;

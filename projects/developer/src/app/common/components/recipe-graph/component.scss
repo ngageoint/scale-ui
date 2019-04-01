@@ -7,9 +7,9 @@
         margin-bottom: 0;
     }
 
-    border: 1px solid #ccc;
+    border: 1px solid var(--off-white);
     padding: 0;
-    background: #fff;
+    background: var(--white);
 }
 
 .recipe__option-list {
@@ -19,11 +19,11 @@
 
     li {
         padding: 7px;
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid var(--off-white);
 
         &.disabled {
             cursor: default;
-            color: #ccc;
+            color: var(--off-white);
         }
 
         &:last-of-type {
@@ -33,7 +33,7 @@
         span {
             &:hover {
                 cursor: pointer;
-                color: #48ACFF;
+                color: var(--scale-secondary-light);
             }
         }
     }
@@ -42,7 +42,7 @@
 .chart-container {
     .node {
         .node__label {
-            fill: #fff;
+            fill: var(--white);
 
             .node__icon {
                 font-family: FontAwesome;
@@ -70,7 +70,7 @@
     }
 
     .recipe-io {
-        border-bottom: 1px solid #e1e1e1;
+        border-bottom: 1px solid var(--grey-95);
         margin: 5px 5px 0 5px;
 
         button {
@@ -94,7 +94,7 @@
 
             margin: 7px 0;
             padding: 8px 5px 5px 5px;
-            background: #f0f0f0;
+            background: var(--grey-98);
             border-radius: 3px;
 
             .connection {

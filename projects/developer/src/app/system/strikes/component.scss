@@ -94,11 +94,11 @@
         .ui-treetable-data {
             .ui-treetable-child-table-container {
                 tbody:nth-child(even) {
-                    background-color: #fff !important;
+                    background-color: var(--white) !important;
                 }
 
                 tbody:nth-child(odd) {
-                    background-color: #ededed !important;
+                    background-color: var(--grey-95) !important;
                 }
             }
         }
@@ -115,8 +115,14 @@
             background-color: #f5f5f5 !important;
 
             pre {
-                background: #fff;
+                background: var(--white);
             }
         }
     }
+}
+pre{
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+                white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                white-space: -pre-wrap;      /* Opera 4-6 */
+                white-space: -o-pre-wrap;
 }

@@ -78,22 +78,22 @@
             </div>
             <div *ngIf="isEditing && selectedWorkspaceDetail">
                 <div [formGroup]="createForm">
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Name</span>
                                 <input type="text" pInputText formControlName="name" required/>
                             </label>
                         </div>
-                        <div class="ui-g-6">
+                        <div class="p-col-6">
                             <label>
                                 <span>Title</span>
                                 <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
+                    <div class="p-grid">
+                        <div class="p-col-12">
                             <label>
                                 <span>Description</span>
                                 <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
@@ -101,14 +101,14 @@
                             </label>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Base URL</span>
                                 <input type="text" pInputText formControlName="base_url"/>
                             </label>
                         </div>
-                        <div class="ui-g-6">
+                        <div class="p-col-6">
                             <label>
                                 <span>Workspace Status</span>
                                 <p-toggleButton formControlName="is_active" onLabel="Active" offLabel="Inactive"
@@ -119,8 +119,8 @@
                         </div>
                     </div>
                     <div formGroupName="configuration">
-                        <div class="ui-g" formGroupName="broker">
-                            <div class="ui-g-6">
+                        <div class="p-grid" formGroupName="broker">
+                            <div class="p-col-6">
                                 <label>
                                     <span>Type</span>
                                     <p-dropdown [options]="typeOptions" [autoWidth]="false"
@@ -129,7 +129,7 @@
                                     </p-dropdown>
                                 </label>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="p-col-6">
                                 <label *ngIf="createForm.get('configuration.broker.nfs_path').enabled">
                                     <span>NFS Path</span>
                                     <input type="text" pInputText formControlName="nfs_path" required/>

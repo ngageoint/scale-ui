@@ -13,6 +13,21 @@
 @import './defaults/overrides';
 
 // Components & Pages loaded separately
+$transparent-running: transparentize(#529D39, 0.65);
+
+.app {
+    background: var(--background);
+    background-image: var(--background-image);
+    color: var(--main-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+}
+
+.content {
+    flex: 1;
+    padding: 1.0em 2.0em;
+}
 
 dl {
     margin-top: 0;
@@ -41,14 +56,14 @@ pre {
     word-wrap: break-word;
     color: #333333;
     background-color: #f5f5f5;
-    border: 1px solid #ccc;
+    border: 1px solid var(--off-white);
     border-radius: 4px;
 }
 
 .app {
     background: var(--background);
     background-image: var(--background-image);
-    color: var(--on-background);
+    color: var(--main-text);
     display: flex;
     flex-direction: column;
     min-height: 100%;
@@ -72,8 +87,8 @@ pre {
 .nodes__dataview {
     .ui-dataview-header {
         .ui-button-secondary {
-            background-color: #ccc !important;
-            border: 1px solid #ccc !important;
+            background-color: var(--off-white) !important;
+            border: 1px solid var(--off-white) !important;
         }
     }
 
@@ -92,8 +107,8 @@ pre {
 
     .node__paused {
         .ui-panel-titlebar {
-            background: $clr-paused;
-            color: #fff;
+            background: var(--label-paused);
+            color: var(--white);
         }
     }
 }
@@ -103,23 +118,23 @@ pre {
         width: 33vw !important;
     }
     .ui-dialog-titlebar {
-        color: #fff !important;
+        color: var(--white) !important;
 
         .ui-dialog-titlebar-icon {
-            color: #fff !important;
+            color: var(--white) !important;
         }
     }
 }
 
 .node__errors {
     .ui-dialog-titlebar {
-        background: $clr-label-danger !important;
+        background: var(--label-text-danger) !important;
     }
 }
 
 .node__warnings {
     .ui-dialog-titlebar {
-        background: $clr-label-warning !important;
+        background: var(--label-text-warning) !important;
     }
 }
 
@@ -127,7 +142,7 @@ pre {
     display: block;
     margin-top: 5px;
     margin-bottom: 10px;
-    color: #737373;
+    color: var(--grey-45);
     font-weight: normal;
 }
 
@@ -155,28 +170,28 @@ pre {
 
 @keyframes throb-text {
     0% {
-        color: $clr-status-running;
+        color: var(--status-running);
     }
     100% {
-        color: transparentize($clr-status-running, 0.65);
+        color: $transparent-running;
     }
 }
 
 @keyframes throb-background {
     0% {
-        background-color: $clr-status-running;
+        background-color: var(--status-running);
     }
     100% {
-        background-color: transparentize($clr-status-running, 0.65);
+        background-color: $transparent-running;
     }
 }
 
 @keyframes throb-svg {
     0% {
-        fill: $clr-status-running;
+        fill: var(--status-running);
     }
     100% {
-        fill: transparentize($clr-status-running, 0.65);
+        fill: $transparent-running;
     }
 }
 
@@ -185,10 +200,10 @@ h2:first-of-type {
 }
 
 a:not(.ui-button, .ui-paginator) {
-    color: $clr-blue-lgt;
+    color: var(--scale-secondary-light);
 
     &:hover {
-        color: $clr-blue-drk;
+        color: var(--scale-secondary-dark);
     }
 }
 
@@ -197,10 +212,10 @@ a:not(.ui-button, .ui-paginator) {
 }
 
 .scale-tab-header {
-    background: $clr-navbar-dark;
+    background: var(--navbar-dark);
 
     a {
-        color: $clr-navbar-text;
+        color: var(--navbar-text);
     }
 }
 
@@ -227,8 +242,8 @@ a:not(.ui-button, .ui-paginator) {
 }
 
 .link-button {
-    background: $clr-blue-lgt;
-    color: $clr-white;
+    background: var(--scale-secondary-light);
+    color: var(--white);
     padding: 7px;
     border-radius: 3px;
     text-decoration: none;
@@ -274,10 +289,10 @@ a:not(.ui-button, .ui-paginator) {
 
 .table-striped {
     tbody tr:nth-child(odd) {
-        background-color: $clr-white;
+        background-color: var(--white);
     }
     tbody tr:nth-child(even) {
-        background-color: $clr-gray-95;
+        background-color: var(--grey-95);
     }
 }
 
@@ -291,7 +306,7 @@ a:not(.ui-button, .ui-paginator) {
     font-size: 75%;
     font-weight: bold;
     line-height: 1;
-    color: $clr-label-text;
+    color: var(--label-text);
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
@@ -304,7 +319,7 @@ a:not(.ui-button, .ui-paginator) {
 
 a.label {
     &:hover, &:focus {
-        color: $clr-label-text;
+        color: var(--label-text);
         text-decoration: none;
         cursor: pointer;
     }
@@ -315,78 +330,78 @@ a.label {
 }
 
 label-default {
-    background-color: $clr-label-default;
+    background-color: var(--label-text-default);
 }
 .label-default[href]:hover,
 .label-default[href]:focus {
-    background-color: $clr-label-default-hover;
+    background-color: var(--label-text-default-hover);
 }
 .label-primary {
-    background-color: $clr-label-primary;
+    background-color: var(--label-text-primary);
 }
 .label-primary[href]:hover,
 .label-primary[href]:focus {
-    background-color: $clr-label-primary-hover;
+    background-color: var(--label-text-primary-hover);
 }
 .label-success {
-    background-color: $clr-label-success;
+    background-color: var(--label-text-success);
 }
 .label-success[href]:hover,
 .label-success[href]:focus {
-    background-color: $clr-label-success-hover;
+    background-color: var(--label-text-success-hover);
 }
 .label-info {
-    background-color: $clr-label-info;
+    background-color: var(--label-text-info);
 }
 .label-info[href]:hover,
 .label-info[href]:focus {
-    background-color: $clr-label-info-hover;
+    background-color: var(--label-text-info-hover);
 }
 .label-warning {
-    background-color: $clr-label-warning;
+    background-color: var(--label-text-warning);
 }
 .label-warning[href]:hover,
 .label-warning[href]:focus {
-    background-color: $clr-label-warning-hover;
+    background-color: var(--label-text-warning-hover);
 }
 .label-danger {
-    background-color: $clr-label-danger;
+    background-color: var(--label-text-danger);
 }
 .label-danger[href]:hover,
 .label-danger[href]:focus {
-    background-color: $clr-label-danger-hover;
+    background-color: var(--label-text-danger-hover);
 }
 
 .label-data {
-    background-color: $clr-failure-data;
+    background-color: var(--status-data);
 }
 
 .label-system {
-    background-color: $clr-failure-system;
+    background-color: var(--status-system);
 }
 
 .label-algorithm {
-    background-color: $clr-failure-algorithm;
+    background-color: var(--status-algorithm);
 }
 
 .label-ready {
-    background-color: $clr-ready;
+    background-color: var(--label-ready);
 }
 
 .label-paused {
-    background-color: $clr-paused;
+    background-color: var(--label-paused);
 }
 
 .label-busy {
-    background-color: $clr-busy;
+    background-color: var(--label-busy);
 }
 
 .label-waiting {
-    background-color: $clr-waiting;
+    background-color: var(--label-waiting);
 }
 
 .label-scheduler_stopped {
-    background-color: $clr-stopped;
+    background-color: var(--label-stopped);
 }
 
 .no-margin {
@@ -458,92 +473,92 @@ label-default {
 }
 
 .completed-text {
-    color: $clr-status-completed;
+    color: var(--status-completed);
 }
 .failed-text {
-    color: $clr-status-failed;
+    color: var(--status-failed);
 }
 .pending-text {
-    color: $clr-status-pending;
+    color: var(--status-pending);
 }
 .queued-text {
-    color: $clr-status-queued;
+    color: var(--status-queued);
 }
 .running-text {
-    color: $clr-status-running;
+    color: var(--status-running);
 }
 .blocked-text {
-    color: $clr-status-blocked;
+    color: var(--status-blocked);
 }
 .canceled-text {
-    color: $clr-status-canceled;
+    color: var(--status-canceled);
 }
 .warning-text {
-    color: $clr-label-warning;
+    color: var(--label-text-warning);
 }
 .error-text {
-    color: $clr-label-danger;
+    color: var(--label-text-danger);
 }
 .offered-text {
-    color: $clr-offered;
+    color: var(--status-offered);
 }
 .free-text {
-    color: $clr-free;
+    color: var(--status-free);
 }
 .unavailable-text {
-    color: $clr-unavailable;
+    color: var(--status-unavailable);
 }
 
 .completed {
-    background: $clr-status-completed !important;
+    background: var(--status-completed) !important;
 }
 .failed {
-    background: $clr-status-failed !important;
+    background: var(--status-failed) !important;
 }
 .pending {
-    background: $clr-status-pending !important;
+    background: var(--status-pending) !important;
 }
 .queued {
-    background: $clr-status-queued !important;
+    background: var(--status-queued) !important;
 }
 .running {
-    background: $clr-status-running !important;
+    background: var(--status-running) !important;
 }
 .blocked {
-    background: $clr-status-blocked !important;
+    background: var(--status-blocked) !important;
 }
 .canceled {
-    background: $clr-status-canceled !important;
+    background: var(--status-canceled) !important;
 }
 .offered {
-    background: $clr-offered !important;
+    background: var(--status-offered) !important;
 }
 .free {
-    background: $clr-free !important;
+    background: var(--status-free) !important;
 }
 .unavailable {
-    background: $clr-unavailable !important;
+    background: var(--status-unavailable) !important;
 }
 
 .ui-button-ready {
-    background-color: $clr-ready !important;
-    border: 1px solid $clr-ready !important;
+    background-color: var(--label-ready) !important;
+    border: 1px solid var(--label-ready) !important;
 }
 .ui-button-paused {
-    background-color: $clr-paused !important;
-    border: 1px solid $clr-paused !important;
+    background-color: var(--label-paused) !important;
+    border: 1px solid var(--label-paused) !important;
 }
 .ui-button-busy {
-    background-color: $clr-busy !important;
-    border: 1px solid $clr-busy !important;
+    background-color: var(--label-busy) !important;
+    border: 1px solid var(--label-busy) !important;
 }
 .ui-button-waiting {
-    background-color: $clr-waiting !important;
-    border: 1px solid $clr-waiting !important;
+    background-color: var(--label-waiting) !important;
+    border: 1px solid var(--label-waiting) !important;
 }
 .ui-button-stopped {
-    background-color: $clr-stopped !important;
-    border: 1px solid $clr-stopped !important;
+    background-color: var(--label-stopped) !important;
+    border: 1px solid var(--label-stopped) !important;
 }
 
 .ui-panel-primary, .ui-panel-danger {
@@ -551,7 +566,7 @@ label-default {
         padding: .5em 1.25em .5em 1em !important;
 
         .ui-panel-title {
-            color: #fff !important;
+            color: var(--white) !important;
             font-weight: bold;
         }
     }
@@ -559,13 +574,13 @@ label-default {
 
 .ui-panel-primary {
     .ui-panel-titlebar {
-        background-color: $clr-label-primary !important;
+        background-color: var(--label-text-primary) !important;
     }
 }
 
 .ui-panel-danger {
     .ui-panel-titlebar {
-        background-color: $clr-label-danger !important;
+        background-color: var(--label-text-danger) !important;
     }
 }
 

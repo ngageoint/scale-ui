@@ -1,8 +1,8 @@
 @import '../../environments/environment';
 
 .footer {
-    background: $clr-navbar-dark;
-    box-shadow: 0 0 0.5em $clr-black;
+    background: var(--navbar-dark);
+    box-shadow: 0 0 0.5em var(--black);
     margin-top: 2.0em;
     min-height: 35px;
 }

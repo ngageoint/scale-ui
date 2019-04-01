@@ -7,7 +7,7 @@ $healthbar-warn: #da932e;
 $healthbar-error: #d66e5b;
 
 .healthbar {
-    background: $clr-gray-40;
+    background: var(--grey-40);
     // green -> yellow -> red gradient
     background-image: linear-gradient(to right, $healthbar-good 0%, $healthbar-good 50%, $healthbar-warn 70%, $healthbar-error 90%);
     border-radius: $healthbar-radius;
@@ -18,7 +18,7 @@ $healthbar-error: #d66e5b;
 .healthbar__status {
     // gray overlay... trick is in the width of the bar. Reveals .healthbar
     // gradient below it.
-    background: $clr-gray-40;
+    background: var(--grey-40);
     border-radius: 0 $healthbar-radius $healthbar-radius 0;
     float: right;
     height: 100%;
