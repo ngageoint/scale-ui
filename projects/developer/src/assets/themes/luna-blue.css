@@ -106,6 +106,7 @@ body .ui-inputtext {
     color: #dedede;
     background: #585858;
     padding: 0.429em;
+    border: 1px solid #585858;
     -moz-transition: border-color 0.2s;
     -o-transition: border-color 0.2s;
     -webkit-transition: border-color 0.2s;

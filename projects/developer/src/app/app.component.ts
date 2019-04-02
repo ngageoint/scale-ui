@@ -85,9 +85,7 @@ export class AppComponent implements OnInit {
     }
 
     loadEnvironment() {
-        const base = document.querySelector('base');
-        const baseUrl = base && base.href || '';
-        this.environmentService.getEnvironment(`${baseUrl}assets/environment.json`).subscribe(data => {
+        this.environmentService.getEnvironment('/assets/environment.json').subscribe(data => {
             // set up environment
             environment.apiDefaultVersion = data.apiDefaultVersion;
             environment.apiPrefix = data.apiPrefix;

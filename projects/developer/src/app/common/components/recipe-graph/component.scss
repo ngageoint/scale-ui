@@ -7,9 +7,9 @@
         margin-bottom: 0;
     }
 
-    border: 1px solid var(--off-white);
+    border: 1px solid var(--recipe-container-border);
     padding: 0;
-    background: var(--white);
+    background: var(--recipe-container-background);
 }
 
 .recipe__option-list {
@@ -94,7 +94,7 @@
 
             margin: 7px 0;
             padding: 8px 5px 5px 5px;
-            background: var(--grey-98);
+            background: var(--recipe-connection-background);
             border-radius: 3px;
 
             .connection {

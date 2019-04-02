@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
+import { APP_BASE_HREF } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
@@ -103,7 +104,6 @@ import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.c
 import { ProfileService } from './common/services/profile.service';
 import { ErrorsApiService } from './common/services/errors/api.service';
 import { EnvironmentService } from './common/services/environment.service';
-
 
 @NgModule({
     declarations: [
@@ -214,6 +214,10 @@ import { EnvironmentService } from './common/services/environment.service';
         PaginatorModule
     ],
     providers: [
+        {
+            provide: APP_BASE_HREF,
+            useValue: '/' + (window.location.pathname.split('/')[1] || '')
+        },
         MessageService,
         JobsApiService,
         JobsDatatableService,

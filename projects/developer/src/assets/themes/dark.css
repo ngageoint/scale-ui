@@ -1,34 +1,16 @@
 @import 'luna-blue.css';
 
-.app {
-    background: #1c212b;
-    background-image: linear-gradient(to bottom, #303b41, #272e33);
-    color: #e3e3e3;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
+/* CodeMirror Overrides */
+.CodeMirror-gutter {
+    background-color: var(--panel-background) !important;
 }
 
-.content {
-    flex: 1;
-    padding: 1.0em 2.0em;
+.CodeMirror {
+    border: none !important;
+    background-color: var(--panel-background) !important;
 }
 
-.scale-loading {
-    background: rgba(73, 73, 73, 0.502) !important;
-}
-
-.table-striped ttr:nth-child(odd) {
-    background-color: #303b41 !important;
-}
-.table-striped ttr:nth-child(even) {
-    background-color: #1f1f1f !important;
-}
-
-.recipe-container {
-    border-color: #626262 !important;
-    background: #303b41 !important;
-}
+/* PrimeNG Overrides */
 
 .ui-button-secondary {
     color: #f4f4f4 !important;
@@ -40,229 +22,271 @@
     background-color: #666 !important;
 }
 
-pre {
-    color: #f5f5f5 !important;
-    background-color: #303b41 !important;
-    border: 1px solid #777 !important;
-}
 .ui-inputtext {
     background: var(--checkbox) !important;
     border: 1px solid var(--checkbox) !important;
 }
+
 .ui-chkbox .ui-chkbox-box {
     border: 1px solid var(--checkbox) !important;
-    background-color: var(--checkbox) !important
+    background-color: var(--checkbox) !important;
 }
+
 .ui-chkbox .ui-chkbox-box.ui-state-focus {
     background-color: var(--checkbox) !important;
 }
+
 .ui-radiobutton .ui-radiobutton-box {
     border: 1px solid var(--checkbox) !important;
     background-color: var(--checkbox) !important;
 }
+
 .ui-radiobutton .ui-radiobutton-box.ui-state-focus {
     background-color: var(--checkbox) !important;
 }
+
 .ui-inputswitch .ui-inputswitch-slider {
     background: var(--checkbox) !important;
 }
+
 .ui-inputswitch .ui-inputswitch-slider:before {
     background-color: var(--panel-background) !important;
 }
+
 .ui-inputswitch:not(.ui-state-disabled):hover .ui-inputswitch-slider {
     background-color: var(--checkbox) !important;
 }
+
 .ui-autocomplete-panel {
     background-color: var(--panel-background) !important;
 }
+
 .ui-autocomplete-panel .ui-autocomplete-items .ui-autocomplete-group {
     background-color: var(--checkbox) !important;
 }
+
 .ui-dropdown {
     background: var(--checkbox) !important;
     border: 1px solid var(--checkbox) !important;
 }
+
 .ui-dropdown .ui-dropdown-trigger {
     background-color: var(--checkbox) !important;
 }
+
 .ui-dropdown-panel {
     background-color: var(--panel-background) !important;
 }
+
 .ui-multiselect {
     background: var(--checkbox) !important;
     border: 1px solid var(--checkbox) !important;
 }
+
 .ui-multiselect .ui-multiselect-trigger {
     background-color: var(--checkbox) !important;
 }
+
 .ui-multiselect-panel {
     background-color: var(--panel-background) !important;
 }
+
 .ui-multiselect-panel .ui-multiselect-items .ui-multiselect-item.ui-state-disabled .ui-chkbox-box:hover {
     border: 1px solid var(--checkbox) !important;
 }
+
 .ui-listbox {
     background: var(--panel-background) !important;
 }
+
 .ui-listbox .ui-listbox-list {
     background-color: var(--panel-background) !important;
 }
+
 .ui-listbox.ui-state-disabled .ui-chkbox-box:not(.ui-state-disabled):not(.ui-state-active):hover {
     border: 1px solid var(--checkbox) !important;
 }
+
 .ui-editor-container .ui-editor-content .ql-editor {
     background-color: var(--checkbox) !important;
 }
+
 .ui-slider {
     background-color: var(--checkbox) !important;
 }
+
 .ui-datepicker {
     background-color: var(--panel-background) !important;
 }
+
 .ui-fileupload .ui-fileupload-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-password-panel {
     background-color: var(--panel-background) !important;
 }
+
 .ui-button.ui-state-default.ui-button-secondary, .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default {
     color: var(--white) !important;
     background-color:  #272e33 !important;
     border: 1px solid  #272e33 !important;
 }
+
 .ui-button.ui-state-default.ui-button-secondary:enabled:hover, .ui-buttonset.ui-button-secondary > .ui-button.ui-state-default:enabled:hover {
     background-color: #2E3F50 !important;
     color: var(--white) !important;
     border-color: #2E3F50 !important;
 }
+
 .ui-panel .ui-panel-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-panel .ui-panel-footer {
     background-color: var(--panel-background) !important;
 }
+
 .ui-fieldset {
     background-color: var(--panel-background) !important;
 }
+
 .ui-accordion .ui-accordion-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-tabview .ui-tabview-panels {
     background-color: var(--panel-background) !important;
 }
+
 .ui-card {
     background-color: var(--panel-background) !important;
 }
+
 .ui-table .ui-table-t> tr {
     background-color: var(--panel-background) !important;
 }
+
 .ui-table .ui-table-t> tr:nth-child(even) {
     background-color: var(--panel-background) !important;
 }
+
 .ui-datagrid .ui-datagrid-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-datagrid .ui-datagrid-footer {
     background-color: var(--panel-background) !important;
 }
+
 .ui-datalist .ui-datalist-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-datalist .ui-datalist-footer {
     background-color: var(--panel-background) !important;
 }
+
 .ui-datascroller .ui-datascroller-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-datascroller .ui-datascroller-footer {
     background-color: var(--panel-background) !important;
 }
+
 .ui-virtualscroller .ui-virtualscroller-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-virtualscroller .ui-virtualscroller-footer {
     background-color: var(--panel-background) !important;
 }
+
 .ui-dataview .ui-dataview-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-dataview .ui-dataview-footer {
     background-color: var(--panel-background) !important;
 }
+
 .fc td.ui-widget-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-picklist .ui-picklist-list {
     background-color: var(--panel-background) !important;
 }
+
 .ui-orderlist .ui-orderlist-list {
     background-color: var(--panel-background) !important;
 }
+
 .ui-tree {
     background-color: var(--panel-background) !important;
 }
+
 .ui-tree.ui-tree-horizontal .ui-treenode .ui-treenode-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-organizationchart .ui-organizationchart-node-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-organizationchart .ui-organizationchart-node-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-treetable .ui-treetable-t> tr {
     background-color: var(--panel-background) !important;
 }
+
 .ui-overlaypanel {
     background-color: var(--panel-background) !important;
 }
+
 .ui-overlaypanel:after {
     border-bottom-color: var(--panel-background) !important;
 }
+
 .ui-overlaypanel.ui-overlaypanel-flipped:after {
     border-top-color: var(--panel-background) !important;
 }
+
 .ui-dialog .ui-dialog-content {
     background-color: var(--panel-background) !important;
 }
+
 .ui-dialog .ui-dialog-footer {
     background-color: var(--panel-background) !important;
 }
+
 .ui-sidebar {
     background-color: var(--panel-background) !important;
 }
+
 .ui-lightbox .ui-lightbox-content-wrapper {
     background-color: var(--panel-background) !important;
 }
+
 .ui-breadcrumb {
     background-color: var(--panel-background) !important;
 }
+
 .ui-terminal {
     background-color: var(--panel-background) !important;
 }
 
-.dialog-content .recipe-io .connections {
-    background: #444 !important;
-}
 .ui-menubar {
     background-color: #191919 !important;
 }
+
 .ui-table .ui-table-tbody > tr > td{
     background-color: #303b41 !important;
 }
+
 .ui-panel .ui-panel-content table{
-    color: var(--white);
-}
-.table-striped tbody tr:nth-child(odd) {
-    background-color: #364047 !important;
-} 
-.table-striped tbody tr:nth-child(even) {
-    background-color: var(--panel-background) !important;
-} 
-.CodeMirror-gutter {
-    background-color: var(--panel-background) !important;
-}
-.CodeMirror {
-    border: none !important;
-    background-color: var(--panel-background) !important;
+    color: var(--white) !important;
 }

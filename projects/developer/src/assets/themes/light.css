@@ -1,19 +1,1 @@
 @import 'nova-light.css';
-
-.app {
-    background: #e3e3e3;
-    background-image: linear-gradient(to bottom, #ededed, #d9d9d9);
-    color: #202223;
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-}
-
-.content {
-    flex: 1;
-    padding: 1.0em 2.0em;
-}
-.ui-button.ui-state-default.ui-button-danger, body .ui-buttonset.ui-button-danger > .ui-button.ui-state-default{
-    background-color: #be292e !important;
-    border: 1px solid #be292e !important;
-}
