@@ -57,7 +57,7 @@ build_docker:
   tags:
     - docker
   script:
-    - ./build-scale.sh
+    - ./docker/build.sh
   only:
     - master
     - tags

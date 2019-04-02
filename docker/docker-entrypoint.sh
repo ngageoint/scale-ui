@@ -1,6 +1,4 @@
-#!/usr/bin/env bash
-
-CONFIG_JSON=/usr/share/nginx/html/assets/appConfig.json
+#!/usr/bin/env sh
 
 if [[ "${API_PREFIX}x" != "x" ]]
 then
