@@ -1,12 +1,11 @@
-import { DataService } from '../../common/services/data.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
-import { environment } from '../../../environments/environment';
 
+import { environment } from '../../../environments/environment';
+import { DataService } from '../../common/services/data.service';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 export class Batch {
-    dataService: DataService;
     creation_progress: any;
     creation_progress_tooltip: any;
     created_formatted: string;
@@ -99,16 +98,15 @@ export class Batch {
         public job_metrics?: any,
         public selected?: boolean
     ) {
-        this.dataService = new DataService();
         if (this.created) {
             this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
-            this.createdTooltip = this.dataService.formatDate(this.created);
-            this.createdDisplay = this.dataService.formatDate(this.created, true);
+            this.createdTooltip = DataService.formatDate(this.created);
+            this.createdDisplay = DataService.formatDate(this.created, true);
         }
         if (this.last_modified) {
             this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
-            this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
-            this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
+            this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
+            this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
         }
         this.creation_progress = this.is_creation_done ?
             this.recipes_total > 0 ?

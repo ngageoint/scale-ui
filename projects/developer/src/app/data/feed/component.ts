@@ -19,7 +19,6 @@ export class FeedComponent implements OnInit, OnDestroy {
     @ViewChild('feedChart') feedChart: any;
     subscription: any;
     chartLoading: boolean;
-    dateFormat: string = environment.dateFormat;
     options: any;
     data = {
         datasets: []
@@ -40,8 +39,6 @@ export class FeedComponent implements OnInit, OnDestroy {
     constructor(
         private ingestApiService: IngestApiService,
         private strikesApiService: StrikesApiService,
-        private dataService: DataService,
-        private colorService: ColorService,
         private router: Router,
         private route: ActivatedRoute
     ) {}
@@ -80,8 +77,8 @@ export class FeedComponent implements OnInit, OnDestroy {
         };
 
         if (!this.viewingLatest) {
-            params['started'] = moment.utc(this.started, this.dateFormat).toISOString();
-            params['ended'] = moment.utc(this.ended, this.dateFormat).toISOString();
+            params['started'] = moment.utc(this.started, environment.dateFormat).toISOString();
+            params['ended'] = moment.utc(this.ended, environment.dateFormat).toISOString();
         }
 
         this.chartLoading = true;
@@ -95,13 +92,13 @@ export class FeedComponent implements OnInit, OnDestroy {
                 const returnArr = [];
                 _.forEach(feed.values, v => {
                     returnArr.push({
-                        x: moment.utc(v.time).format(this.dateFormat),
+                        x: moment.utc(v.time).format(environment.dateFormat),
                         y: v.size
                     });
                 });
                 const dataset = _.find(this.data.datasets, { id: feed.strike.id });
                 const opacity = parseFloat((1 - (idx / 10) * 2).toFixed(2));
-                const bgColor = this.colorService.getRgba(this.colorService.SCALE_BLUE2, opacity);
+                const bgColor = ColorService.getRgba(ColorService.SCALE_BLUE2, opacity);
                 if (dataset) {
                     dataset.backgroundColor = bgColor;
                     dataset.data = returnArr;
@@ -110,7 +107,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                         borderColor: '#d0eaff',
                         backgroundColor: bgColor,
                         borderWidth: 1,
-                        pointBackgroundColor: this.colorService.SCALE_BLUE2,
+                        pointBackgroundColor: ColorService.SCALE_BLUE2,
                         pointBorderColor: '#fff',
                         pointRadius: 2,
                         // lineTension: 0,
@@ -138,27 +135,27 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     viewLatest() {
         this.viewingLatest = true;
-        this.started = moment.utc().subtract(7, 'd').startOf('d').format(this.dateFormat);
-        this.ended = moment.utc().format(this.dateFormat);
+        this.started = moment.utc().subtract(7, 'd').startOf('d').format(environment.dateFormat);
+        this.ended = moment.utc().format(environment.dateFormat);
         this.getLatestData();
     }
 
     viewOlder() {
         this.viewingLatest = false;
-        this.started = moment.utc(this.started, this.dateFormat).subtract(7, 'd').format(this.dateFormat);
-        this.ended = moment.utc(this.ended, this.dateFormat).subtract(7, 'd').format(this.dateFormat);
+        this.started = moment.utc(this.started, environment.dateFormat).subtract(7, 'd').format(environment.dateFormat);
+        this.ended = moment.utc(this.ended, environment.dateFormat).subtract(7, 'd').format(environment.dateFormat);
         this.getLatestData();
     }
 
     viewNewer() {
-        if (moment.utc().diff(moment.utc(this.ended, this.dateFormat), 'd') <= 7) {
+        if (moment.utc().diff(moment.utc(this.ended, environment.dateFormat), 'd') <= 7) {
             // time is within the last 7 days
             this.viewLatest();
         } else {
             // time is older than 7 days, so just add 7 to both started and ended
             this.viewingLatest = false;
-            this.started = moment.utc(this.started, this.dateFormat).add(7, 'd').format(this.dateFormat);
-            this.ended = moment.utc(this.ended, this.dateFormat).add(7, 'd').format(this.dateFormat);
+            this.started = moment.utc(this.started, environment.dateFormat).add(7, 'd').format(environment.dateFormat);
+            this.ended = moment.utc(this.ended, environment.dateFormat).add(7, 'd').format(environment.dateFormat);
             this.getLatestData();
         }
     }
@@ -204,7 +201,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                     ticks: {
                         beginAtZero: true,
                         callback: (label, index, labels) => {
-                            return this.dataService.calculateFileSizeFromBytes(label, 0);
+                            return DataService.calculateFileSizeFromBytes(label, 0);
                         }
                     }
                 }]
@@ -219,8 +216,8 @@ export class FeedComponent implements OnInit, OnDestroy {
             }
         };
 
-        this.started = moment.utc().add(-7, 'd').startOf('d').format(this.dateFormat);
-        this.ended = moment.utc().format(this.dateFormat);
+        this.started = moment.utc().add(-7, 'd').startOf('d').format(environment.dateFormat);
+        this.ended = moment.utc().format(environment.dateFormat);
 
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {

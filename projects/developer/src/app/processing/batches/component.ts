@@ -21,20 +21,27 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 })
 
 export class BatchesComponent implements OnInit, OnDestroy {
-    dateFormat: string = environment.dateFormat;
     batches: any;
+    dateFormat = environment.dateFormat;
     selectedBatch: any;
     selectedRows: any;
     datatableLoading: boolean;
     datatableOptions: BatchesDatatable;
-    columns: any[];
+    columns = [
+        { field: 'title', header: 'Title' },
+        { field: 'recipe_type', header: 'Recipe Type' },
+        { field: 'is_creation_done', header: 'Recipes' },
+        { field: 'jobs_total', header: 'Jobs' },
+        { field: 'created', header: 'Created (Z)' },
+        { field: 'last_modified', header: 'Last Modified (Z)' }
+    ];
     recipeTypes: any;
     recipeTypeOptions: SelectItem[];
     selectedRecipeType: any = [];
     count: number;
     started: string;
     ended: string;
-    isInitialized: boolean;
+    isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
 
@@ -46,18 +53,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService
-    ) {
-        this.isInitialized = false;
-        this.selectedRows = this.dataService.getSelectedBatchRows();
-        this.columns = [
-            { field: 'title', header: 'Title' },
-            { field: 'recipe_type', header: 'Recipe Type' },
-            { field: 'is_creation_done', header: 'Recipes' },
-            { field: 'jobs_total', header: 'Jobs' },
-            { field: 'created', header: 'Created (Z)' },
-            { field: 'last_modified', header: 'Last Modified (Z)' }
-        ];
-    }
+    ) {}
 
     private updateData() {
         this.datatableLoading = true;
@@ -153,19 +149,19 @@ export class BatchesComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
         this.batches = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, this.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, this.dateFormat).toISOString()
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
@@ -179,6 +175,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     ngOnInit() {
+        this.selectedRows = this.dataService.getSelectedBatchRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.batchesDatatableService.getBatchesDatatableOptions();
         }
@@ -202,8 +199,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     root_batch_id: params.root_batch_id ? +params.root_batch_id : null
                 };
             }
-            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
+            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
             this.getRecipeTypes();
         });
     }

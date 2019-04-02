@@ -14,10 +14,9 @@ export class ErrorsApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('errors');
+        this.apiPrefix = DataService.getApiPrefix('errors');
     }
 
     getErrors(params: any, poll?: Boolean): Observable<any> {
@@ -44,7 +43,7 @@ export class ErrorsApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -53,14 +52,14 @@ export class ErrorsApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     getFile(id: number): Observable<any> {
         return this.http.get<any>(`${this.apiPrefix}/errors/${id}/`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

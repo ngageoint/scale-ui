@@ -13,10 +13,9 @@ export class LogViewerApiService {
     logArgs: any;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('job-executions');
+        this.apiPrefix = DataService.getApiPrefix('job-executions');
         this.logArgs = {};
     }
 
@@ -27,13 +26,13 @@ export class LogViewerApiService {
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/job-executions/${id}/logs/combined/`, { params: this.logArgs })
                 .pipe(
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 5000, attempts: 0 });
         }
         return this.http.get<any>(`${this.apiPrefix}/job-executions/${id}/logs/combined/`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

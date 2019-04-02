@@ -20,7 +20,7 @@ export class JobTypesApiService {
         private http: HttpClient,
         private dataService: DataService
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('job-types');
+        this.apiPrefix = DataService.getApiPrefix('job-types');
     }
 
     getJobTypes(params?: any): Observable<ApiResults> {
@@ -56,7 +56,7 @@ export class JobTypesApiService {
                     returnObj.results = JobType.transformer(returnObj.results);
                     return returnObj;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -86,7 +86,7 @@ export class JobTypesApiService {
                     returnObj.results = JobTypeName.transformer(returnObj.results);
                     return returnObj;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -111,7 +111,7 @@ export class JobTypesApiService {
                     returnObj.results = JobType.transformer(returnObj.results);
                     return returnObj;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -121,21 +121,21 @@ export class JobTypesApiService {
                 map(response => {
                     return JobType.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     validateJobType(jobType: JobType): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/job-types/validation/`, jobType)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     createJobType(jobType: JobType): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/job-types/`, jobType)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -145,7 +145,7 @@ export class JobTypesApiService {
         };
         return this.http.patch<any>(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -156,7 +156,7 @@ export class JobTypesApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -165,7 +165,7 @@ export class JobTypesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -184,7 +184,7 @@ export class JobTypesApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 5000, attempts: 0 });
         }
@@ -193,14 +193,14 @@ export class JobTypesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     scanJobTypeWorkspace(params: any): Observable<any> {
         return this.http.patch<any>(`${this.apiPrefix}/job-types/${params.id}/`, { params: params.trigger_rule })
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

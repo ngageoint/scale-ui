@@ -17,10 +17,9 @@ export class StrikesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('strikes');
+        this.apiPrefix = DataService.getApiPrefix('strikes');
     }
 
     getStrikes(params?: any, poll?: boolean): Observable<any> {
@@ -53,7 +52,7 @@ export class StrikesApiService {
                         returnObj.results = Strike.transformer(returnObj.results);
                         return returnObj;
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -64,7 +63,7 @@ export class StrikesApiService {
                     returnObj.results = Strike.transformer(returnObj.results);
                     return returnObj;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -74,28 +73,28 @@ export class StrikesApiService {
                 map(response => {
                     return Strike.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     validateStrike(strike: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/strikes/validation/`, strike)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     editStrike(id: number, strike: any): Observable<any> {
         return this.http.patch<any>(`${this.apiPrefix}/strikes/${id}/`, strike)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     createStrike(strike: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/strikes/`, strike)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

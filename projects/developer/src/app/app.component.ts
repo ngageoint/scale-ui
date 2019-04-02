@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { ThemeService } from './theme';
-import { EnvironmentService } from './common/services/environment.service';
-import { ProfileService } from './common/services/profile.service';
 import { environment } from '../environments/environment';
+import { ThemeService } from './theme';
+import { ProfileService } from './common/services/profile.service';
 
 @Component({
     selector: 'dev-root',
@@ -12,8 +11,7 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
     title = 'Scale';
-    loading = true;
-    environmentLoaded = !environment.runtime;
+    loading = false;
     theme: any;
     isAuthenticated: boolean;
     header: string;
@@ -22,12 +20,16 @@ export class AppComponent implements OnInit {
 
     constructor(
         private themeService: ThemeService,
-        private environmentService: EnvironmentService,
         private profileService: ProfileService
     ) {}
 
-    bootstrapApplication() {
+    ngOnInit() {
+        // init theme
+        this.theme = localStorage.getItem(environment.themeKey) || environment.defaultTheme;
+        this.themeService.setTheme(this.theme);
+
         if (environment.auth.enabled) {
+            this.loading = true;
             this.profileService.getProfile().subscribe(data => {
                 this.loading = false;
                 console.log(data);
@@ -81,39 +83,6 @@ export class AppComponent implements OnInit {
             });
         } else {
             this.isAuthenticated = true;
-        }
-    }
-
-    loadEnvironment() {
-        const base = document.querySelector('base');
-        const baseUrl = base && base.href || '';
-        this.environmentService.getEnvironment(`${baseUrl}assets/environment.json`).subscribe(data => {
-            // set up environment
-            environment.apiDefaultVersion = data.apiDefaultVersion;
-            environment.apiPrefix = data.apiPrefix;
-            environment.apiVersions = data.apiVersions;
-            environment.auth = data.auth;
-            environment.dateFormat = data.dateFormat;
-            environment.defaultTheme = data.defaultTheme;
-            environment.scale = data.scale;
-            environment.siloUrl = data.siloUrl;
-            environment.themeKey = data.themeKey;
-            this.environmentLoaded = true;
-
-            // continue loading app
-            this.bootstrapApplication();
-        });
-    }
-
-    ngOnInit() {
-        // init theme
-        this.theme = localStorage.getItem(environment.themeKey) || environment.defaultTheme;
-        this.themeService.setTheme(this.theme);
-
-        if (environment.runtime) {
-            this.loadEnvironment();
-        } else {
-            this.bootstrapApplication();
         }
     }
 }

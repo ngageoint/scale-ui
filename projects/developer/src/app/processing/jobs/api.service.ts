@@ -17,10 +17,9 @@ export class JobsApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('jobs');
+        this.apiPrefix = DataService.getApiPrefix('jobs');
     }
 
     getJobs(params: JobsDatatable, poll?: Boolean): Observable<any> {
@@ -53,7 +52,7 @@ export class JobsApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -62,7 +61,7 @@ export class JobsApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     getJob(id: number, poll?: Boolean): Observable<any> {
@@ -72,7 +71,7 @@ export class JobsApiService {
                     map(response => {
                         return Job.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -81,7 +80,7 @@ export class JobsApiService {
                 map(response => {
                     return Job.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     getJobExecutions(id: number): Observable<ApiResults> {
@@ -90,7 +89,7 @@ export class JobsApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     getJobExecution(id: number, exe_num: number): Observable<any> {
@@ -99,7 +98,7 @@ export class JobsApiService {
                 map(response => {
                     return JobExecution.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     getJobInputs(id: number): Observable<ApiResults> {
@@ -108,40 +107,40 @@ export class JobsApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     getJobOutputs(id: number): Observable<ApiResults> {
         const queryParams = new HttpParams({
             fromObject: { job_id: id.toString(), sortField: 'last_modified', sortOrder: 'desc' }
         });
-        const apiPrefix = this.dataService.getApiPrefix('files');
+        const apiPrefix = DataService.getApiPrefix('files');
         return this.http.get<ApiResults>(`${apiPrefix}/files/`, { params: queryParams })
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     updateJob(id: number, data: any): Observable<any> {
         return this.http.patch<any>(`${this.apiPrefix}/jobs/${id}/`, data)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     requeueJobs(params): Observable<any> {
         params.url = params.url ? params.url : `${this.apiPrefix}/jobs/requeue/`;
         return this.http.post<any>(params.url, params)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
     cancelJobs(params): Observable<any> {
         params.url = params.url ? params.url : `${this.apiPrefix}/jobs/cancel/`;
         return this.http.post<any>(params.url, params)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

@@ -17,17 +17,22 @@ import { ScansDatatableService } from './datatable.service';
     styleUrls: ['./component.scss']
 })
 export class ScansComponent implements OnInit, OnDestroy {
-    dateFormat: string = environment.dateFormat;
     scans: any;
     selectedScan: any;
     selectedRows: any;
     datatableLoading: boolean;
     datatableOptions: ScansDatatable;
-    columns: any[];
+    columns = [
+        { field: 'name', header: 'Name' },
+        { field: 'file_count', header: 'File Count' },
+        { field: 'job', header: 'Job' },
+        { field: 'created', header: 'Created (Z)' },
+        { field: 'last_modified', header: 'Last Modified (Z)' }
+    ];
     count: number;
     started: string;
     ended: string;
-    isInitialized: boolean;
+    isInitialized = false;
     subscription: any;
 
     constructor(
@@ -37,17 +42,7 @@ export class ScansComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService
-    ) {
-        this.isInitialized = false;
-        this.selectedRows = this.dataService.getSelectedScanRows();
-        this.columns = [
-            { field: 'name', header: 'Name' },
-            { field: 'file_count', header: 'File Count' },
-            { field: 'job', header: 'Job' },
-            { field: 'created', header: 'Created (Z)' },
-            { field: 'last_modified', header: 'Last Modified (Z)' }
-        ];
-    }
+    ) {}
 
     private updateData() {
         this.datatableLoading = true;
@@ -117,17 +112,17 @@ export class ScansComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
     }
     onDateFilterApply() {
         this.scans = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, this.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, this.dateFormat).toISOString()
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.updateOptions();
     }
@@ -144,6 +139,7 @@ export class ScansComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
+        this.selectedRows = this.dataService.getSelectedScanRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.scansDatatableService.getScansDatatableOptions();
         }
@@ -160,8 +156,8 @@ export class ScansComponent implements OnInit, OnDestroy {
                     name: params.name || null
                 };
             }
-            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
+            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
             this.updateOptions();
         });
     }

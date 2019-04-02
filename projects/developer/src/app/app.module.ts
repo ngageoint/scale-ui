@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
 import { APP_BASE_HREF } from '@angular/common';
-import { NgModule } from '@angular/core';
+import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { UtcDatepickerModule } from 'angular-utc-datepicker';
@@ -103,8 +103,13 @@ import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.compo
 import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.component';
 import { ProfileService } from './common/services/profile.service';
 import { ErrorsApiService } from './common/services/errors/api.service';
-import { EnvironmentService } from './common/services/environment.service';
+import { AppConfigService } from './common/services/app-config.service';
 
+const appInitializer = (appConfig: AppConfigService) => {
+    return () => {
+        return appConfig.loadAppConfig('/assets/appConfig.json');
+    };
+};
 
 @NgModule({
     declarations: [
@@ -215,41 +220,47 @@ import { EnvironmentService } from './common/services/environment.service';
         PaginatorModule
     ],
     providers: [
+        AppConfigService,
+        BatchesApiService,
+        BatchesDatatableService,
+        ChartService,
+        ColorService,
+        ConfirmationService,
+        DashboardJobsService,
+        DataService,
+        ErrorsApiService,
+        FilesApiService,
+        IngestApiService,
+        IngestDatatableService,
+        JobsApiService,
+        JobTypeHistoryDatatableService,
+        JobTypesApiService,
+        JobsDatatableService,
+        LogViewerApiService,
+        MessageService,
+        MetricsApiService,
+        NodesApiService,
+        ProfileService,
+        QueueApiService,
+        RecipeTypesApiService,
+        RecipesApiService,
+        RecipesDatatableService,
+        RunningJobsDatatableService,
+        ScansApiService,
+        ScansDatatableService,
+        StatusApiService,
+        StrikesApiService,
+        WorkspacesApiService,
         {
             provide: APP_BASE_HREF,
             useValue: '/' + (window.location.pathname.split('/')[1] || '')
         },
-        MessageService,
-        JobsApiService,
-        JobsDatatableService,
-        JobTypesApiService,
-        RecipesApiService,
-        RecipesDatatableService,
-        ColorService,
-        DashboardJobsService,
-        RecipeTypesApiService,
-        WorkspacesApiService,
-        DataService,
-        JobTypeHistoryDatatableService,
-        MetricsApiService,
-        ChartService,
-        RunningJobsDatatableService,
-        LogViewerApiService,
-        IngestApiService,
-        IngestDatatableService,
-        StatusApiService,
-        ConfirmationService,
-        FilesApiService,
-        ScansApiService,
-        BatchesApiService,
-        BatchesDatatableService,
-        StrikesApiService,
-        NodesApiService,
-        QueueApiService,
-        ScansDatatableService,
-        ProfileService,
-        ErrorsApiService,
-        EnvironmentService
+        {
+            provide: APP_INITIALIZER,
+            useFactory: appInitializer,
+            multi: true,
+            deps: [AppConfigService]
+        }
     ],
     bootstrap: [AppComponent]
 })

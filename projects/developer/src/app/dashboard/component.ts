@@ -34,8 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     constructor(
         private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
-        private jobsService: DashboardJobsService,
-        private colorService: ColorService
+        private jobsService: DashboardJobsService
     ) {
         this.columnsFavs = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -99,9 +98,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 borderColor: '#fff',
                 borderWidth: 1,
                 backgroundColor: [
-                    this.colorService.ERROR_SYSTEM,   // system
-                    this.colorService.ERROR_ALGORITHM,  // algorithm
-                    this.colorService.ERROR_DATA  // data
+                    ColorService.ERROR_SYSTEM,   // system
+                    ColorService.ERROR_ALGORITHM,  // algorithm
+                    ColorService.ERROR_DATA  // data
                 ]
             }],
             labels: ['SYSTEM', 'ALGORITHM', 'DATA']

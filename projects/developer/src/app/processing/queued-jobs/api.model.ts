@@ -4,7 +4,6 @@ import { JobType } from '../../configuration/job-types/api.model';
 import { DataService } from '../../common/services/data.service';
 
 export class QueuedJob {
-    dataService: DataService;
     longest_queued_duration: string;
 
     private static build(data) {
@@ -32,7 +31,6 @@ export class QueuedJob {
         public longest_queued: string,
         public highest_priority: number
     ) {
-        this.dataService = new DataService();
-        this.longest_queued_duration = this.dataService.calculateDuration(this.longest_queued, moment.utc().toISOString());
+        this.longest_queued_duration = DataService.calculateDuration(this.longest_queued, moment.utc().toISOString());
     }
 }

@@ -1,8 +1,7 @@
 import { WorkspaceConfiguration } from './api.configuration.model';
-import {DataService} from '../../common/services/data.service';
+import { DataService } from '../../common/services/data.service';
 
 export class Workspace {
-    dataService: DataService;
     createdDisplay: string;
     createdTooltip: string;
     lastModifiedDisplay: string;
@@ -69,11 +68,10 @@ export class Workspace {
         public last_modified: string,
         public configuration: WorkspaceConfiguration
     ) {
-        this.dataService = new DataService();
-        this.createdDisplay = this.dataService.formatDate(this.created, true);
-        this.createdTooltip = this.dataService.formatDate(this.created);
-        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
-        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+        this.createdDisplay = DataService.formatDate(this.created, true);
+        this.createdTooltip = DataService.formatDate(this.created);
+        this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
+        this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
     }
 }
 

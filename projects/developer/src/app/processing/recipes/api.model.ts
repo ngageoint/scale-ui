@@ -111,16 +111,15 @@ export class Recipe {
         public job_types: any,
         public sub_recipe_types: any
     ) {
-        this.dataService = new DataService();
-        this.createdDisplay = this.dataService.formatDate(this.created, true);
-        this.createdTooltip = this.dataService.formatDate(this.created);
-        this.completedDisplay = this.dataService.formatDate(this.completed, true);
-        this.completedTooltip = this.dataService.formatDate(this.completed);
-        this.supersededDisplay = this.dataService.formatDate(this.superseded, true);
-        this.supersededTooltip = this.dataService.formatDate(this.superseded);
-        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
-        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
-        this.duration = this.dataService.calculateDuration(this.created, this.last_modified);
+        this.createdDisplay = DataService.formatDate(this.created, true);
+        this.createdTooltip = DataService.formatDate(this.created);
+        this.completedDisplay = DataService.formatDate(this.completed, true);
+        this.completedTooltip = DataService.formatDate(this.completed);
+        this.supersededDisplay = DataService.formatDate(this.superseded, true);
+        this.supersededTooltip = DataService.formatDate(this.superseded);
+        this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
+        this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
+        this.duration = DataService.calculateDuration(this.created, this.last_modified);
         this.jobMetrics = {};
         if (this.details) {
             _.forEach(this.details.nodes, node => {

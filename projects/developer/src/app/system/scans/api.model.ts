@@ -3,7 +3,6 @@ import { Job } from '../../processing/jobs/api.model';
 import { ScanConfiguration } from './api.configuration.model';
 
 export class Scan {
-    dataService: DataService;
     createdDisplay: string;
     createdTooltip: string;
     lastModifiedDisplay: string;
@@ -57,11 +56,10 @@ export class Scan {
         public last_modified: string,
         public configuration: any
     ) {
-        this.dataService = new DataService();
-        this.createdDisplay = this.dataService.formatDate(this.created, true);
-        this.createdTooltip = this.dataService.formatDate(this.created);
-        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
-        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+        this.createdDisplay = DataService.formatDate(this.created, true);
+        this.createdTooltip = DataService.formatDate(this.created);
+        this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
+        this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
         if (this.configuration) {
             this.configurationDisplay = JSON.stringify(this.configuration, null, 4);
         }
