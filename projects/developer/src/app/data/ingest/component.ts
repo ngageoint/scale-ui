@@ -19,6 +19,7 @@ import { StrikesApiService } from '../../system/strikes/api.service';
     styleUrls: ['./component.scss']
 })
 export class IngestComponent implements OnInit, OnDestroy {
+    dateFormat = environment.dateFormat;
     ingests: any;
     selectedIngest: any;
     selectedRows: any;

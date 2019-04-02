@@ -22,6 +22,7 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 export class BatchesComponent implements OnInit, OnDestroy {
     batches: any;
+    dateFormat = environment.dateFormat;
     selectedBatch: any;
     selectedRows: any;
     datatableLoading: boolean;

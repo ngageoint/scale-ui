@@ -37,6 +37,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         { field: 'error.title', header: 'Error' },
         { field: 'id', header: 'Log' }
     ];
+    dateFormat = environment.dateFormat;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;

@@ -30,6 +30,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         { field: 'duration', header: 'Duration' },
         { field: 'completed', header: 'Completed (Z)' }
     ];
+    dateFormat = environment.dateFormat;
     recipes: any;
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
