@@ -2,6 +2,8 @@
 set -e
 
 cd $(dirname $0)
+
+# Grab dist contents and make available to the Docker context
 cp -r ../dist/developer/ dist
 
 # When CI_BUILD_TAG is unset we are building a snapshot
