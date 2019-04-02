@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     @ViewChild('profileOp') profileOp: OverlayPanel;
     @ViewChild('profile') profile: any;
     @ViewChild('user') usernameEl: any;
-    auth = environment.auth;
+    env = environment;
     selectedId = null;
     subscription: any;
     themeTooltip: string;
@@ -114,8 +114,7 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnInit() {
-    }
+    ngOnInit() {}
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.theme && changes.theme.currentValue) {

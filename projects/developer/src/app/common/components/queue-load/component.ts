@@ -51,7 +51,6 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     };
     constructor(
         private messageService: MessageService,
-        private colorService: ColorService,
         private queueApiService: QueueApiService
     ) {
     }
@@ -78,19 +77,19 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
             this.data = {
                 datasets: [{
                     label: 'Running',
-                    backgroundColor: this.colorService.RUNNING,
+                    backgroundColor: ColorService.RUNNING,
                     borderColor: '#FFF',
                     borderWidth: .75,
                     data: []
                 }, {
                     label: 'Queued',
-                    backgroundColor: this.colorService.QUEUED,
+                    backgroundColor: ColorService.QUEUED,
                     borderColor: '#FFF',
                     borderWidth: .75,
                     data: []
                 }, {
                     label: 'Pending',
-                    backgroundColor: this.colorService.PENDING,
+                    backgroundColor: ColorService.PENDING,
                     borderColor: '#FFF',
                     borderWidth: .75,
                     data: []

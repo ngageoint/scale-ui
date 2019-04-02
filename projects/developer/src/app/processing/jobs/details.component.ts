@@ -37,8 +37,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private jobsApiService: JobsApiService,
-        private dataService: DataService
+        private jobsApiService: JobsApiService
     ) {}
 
     private initJobDetail(data) {
@@ -95,15 +94,15 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             labels: ['Created', 'Queued', 'Executed'],
             datasets: [{
                 data: [
-                    [data.created, data.queued, this.dataService.calculateDuration(data.created, data.queued, true)]
+                    [data.created, data.queued, DataService.calculateDuration(data.created, data.queued, true)]
                 ]
             }, {
                 data: [
-                    [data.queued, data.started, this.dataService.calculateDuration(data.queued, data.started, true)]
+                    [data.queued, data.started, DataService.calculateDuration(data.queued, data.started, true)]
                 ]
             }, {
                 data: [
-                    [data.started, data.ended, this.dataService.calculateDuration(data.started, data.ended, true)]
+                    [data.started, data.ended, DataService.calculateDuration(data.started, data.ended, true)]
                 ]
             }]
         };
@@ -121,10 +120,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                 .subscribe(inputData => {
                     this.loadingInputs = false;
                     _.forEach(inputData.results, d => {
-                        d.createdTooltip = this.dataService.formatDate(d.created);
-                        d.createdDisplay = this.dataService.formatDate(d.created, true);
-                        d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
-                        d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                        d.createdTooltip = DataService.formatDate(d.created);
+                        d.createdDisplay = DataService.formatDate(d.created, true);
+                        d.lastModifiedTooltip = DataService.formatDate(d.last_modified);
+                        d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
                     });
                     this.jobInputs = inputData.results;
                     this.inputClass = this.jobInputs.length > 0 && _.keys(data.input.json).length > 0 ? 'p-col-6' : 'p-col-12';
@@ -139,10 +138,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                 .subscribe(outputData => {
                     this.loadingOutputs = false;
                     _.forEach(outputData.results, d => {
-                        d.createdTooltip = this.dataService.formatDate(d.created);
-                        d.createdDisplay = this.dataService.formatDate(d.created, true);
-                        d.lastModifiedTooltip = this.dataService.formatDate(d.last_modified);
-                        d.lastModifiedDisplay = this.dataService.formatDate(d.last_modified, true);
+                        d.createdTooltip = DataService.formatDate(d.created);
+                        d.createdDisplay = DataService.formatDate(d.created, true);
+                        d.lastModifiedTooltip = DataService.formatDate(d.last_modified);
+                        d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
                     });
                     this.jobOutputs = outputData.results;
                     this.outputClass = this.jobOutputs.length > 0 && _.keys(data.output.json).length > 0 ? 'p-col-6' : 'p-col-12';
@@ -168,7 +167,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
 
     calculateFileSize(fileSize) {
-        return this.dataService.calculateFileSizeFromBytes(fileSize, 0);
+        return DataService.calculateFileSizeFromBytes(fileSize, 0);
     }
 
     getUnicode(code) {

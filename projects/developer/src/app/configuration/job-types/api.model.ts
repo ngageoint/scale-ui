@@ -77,18 +77,17 @@ export class JobType {
         public paused?: string,
         public last_modified?: string
     ) {
-        const dataService = new DataService();
-        this.createdTooltip = dataService.formatDate(this.created);
-        this.createdDisplay = dataService.formatDate(this.created, true);
-        this.lastModifiedTooltip = dataService.formatDate(this.last_modified);
-        this.lastModifiedDisplay = dataService.formatDate(this.last_modified, true);
+        this.createdTooltip = DataService.formatDate(this.created);
+        this.createdDisplay = DataService.formatDate(this.created, true);
+        this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
+        this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
         if (this.manifest) {
             const cpus: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'cpus' }) : null;
             const mem: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'mem' }) : null;
             const disk: any = this.manifest.job.resources ? _.find(this.manifest.job.resources.scalar, { name: 'disk' }) : null;
             this.cpus = cpus ? cpus.value : null;
-            this.mem = mem ? dataService.calculateFileSizeFromMib(mem.value) : null;
-            this.disk = disk ? dataService.calculateFileSizeFromMib(disk.value) : null;
+            this.mem = mem ? DataService.calculateFileSizeFromMib(mem.value) : null;
+            this.disk = disk ? DataService.calculateFileSizeFromMib(disk.value) : null;
         }
     }
 }

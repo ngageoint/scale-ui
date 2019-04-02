@@ -6,9 +6,7 @@ import { ColorService } from '../../common/services/color.service';
 
 @Injectable()
 export class ChartService {
-    constructor(
-        private colorService: ColorService
-    ) {}
+    constructor() {}
 
     private randomColorGenerator() {
         return '#' + (Math.random().toString(16) + '0000000').slice(2, 8);
@@ -108,7 +106,7 @@ export class ChartService {
                         const stackHeight = _.filter(datasets, stackId).length;
                         const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
                         const bgColor = colorObj ?
-                            this.colorService.getRgba(colorObj.color, opacity) :
+                            ColorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
                         datasets.push({
                             id: filter.id,

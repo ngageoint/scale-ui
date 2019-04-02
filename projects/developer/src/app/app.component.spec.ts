@@ -1,5 +1,4 @@
 import { TestBed, async } from '@angular/core/testing';
-import { APP_BASE_HREF } from '@angular/common';
 
 import { ThemeService } from './theme';
 import { ACTIVE_THEME, THEMES } from './theme/symbols';
@@ -16,9 +15,6 @@ describe('AppComponent', () => {
                 AppModule
             ],
             providers: [ThemeService, ProfileService, {
-                provide: APP_BASE_HREF,
-                useValue: '/'
-            }, {
                 provide: THEMES,
                 useValue: THEMES
             }, {

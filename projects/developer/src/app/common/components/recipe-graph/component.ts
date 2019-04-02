@@ -3,7 +3,6 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
-import {JobType} from '../../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -62,9 +61,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
-    constructor(
-        private colorService: ColorService
-    ) {
+    constructor() {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
@@ -125,7 +122,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 icon: null,
                 dependencies: [],
                 visible: true,
-                fillColor: this.colorService.RECIPE_NODE
+                fillColor: ColorService.RECIPE_NODE
             }];
             this.links = [];
 
@@ -158,7 +155,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     icon: icon,
                     dependencies: node.dependencies,
                     visible: true,
-                    fillColor: node.node_type.status ? this.colorService[node.node_type.status] : this.colorService.RECIPE_NODE,
+                    fillColor: node.node_type.status ? ColorService[node.node_type.status] : ColorService.RECIPE_NODE,
                     class: node.node_type.status ? node.node_type.status === 'RUNNING' ? 'throb-svg' : null : null,
                     transform: publisher ? 'skewX(-8)' : '',
                     node_type: node.node_type,
@@ -260,7 +257,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         if (!shouldDeselect) {
             this.selectedNode = e;
-            this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
+            this.selectedNode.options.stroke = ColorService.SCALE_BLUE1;
             if (this.selectedNode.node_type) {
                 if (this.selectedNode.node_type.node_type === 'job') {
                     this.selectedRecipeType = null;
@@ -287,13 +284,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                                         rawData.jobs_canceled
                                     ],
                                     backgroundColor: [
-                                        this.colorService.PENDING,
-                                        this.colorService.BLOCKED,
-                                        this.colorService.QUEUED,
-                                        this.colorService.RUNNING,
-                                        this.colorService.FAILED,
-                                        this.colorService.COMPLETED,
-                                        this.colorService.CANCELED
+                                        ColorService.PENDING,
+                                        ColorService.BLOCKED,
+                                        ColorService.QUEUED,
+                                        ColorService.RUNNING,
+                                        ColorService.FAILED,
+                                        ColorService.COMPLETED,
+                                        ColorService.CANCELED
                                     ],
                                     label: 'Jobs'
                                 }

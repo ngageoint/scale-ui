@@ -35,7 +35,7 @@
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__profile" *ngIf="auth.enabled" (click)="profileOp.toggle($event)" #profile>
+            <div class="navbar__profile" *ngIf="env.auth.enabled" (click)="profileOp.toggle($event)" #profile>
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>

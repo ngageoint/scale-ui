@@ -1,13 +1,12 @@
-import { DataService } from '../../common/services/data.service';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
+import { environment } from '../../../environments/environment';
+import { DataService } from '../../common/services/data.service';
 import { JobType } from '../../configuration/job-types/api.model';
 import { JobExecution } from './execution.model';
-import { environment } from '../../../environments/environment';
 
 export class Job {
-    dataService: DataService;
     created_formatted: string;
     last_modified_formatted: string;
     duration: string;
@@ -102,14 +101,13 @@ export class Job {
         public output: any,
         public selected: boolean
     ) {
-        this.dataService = new DataService();
         this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
         this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);
         this.duration = this.started && this.ended ?
-            this.dataService.calculateDuration(this.started, this.ended) :
+            DataService.calculateDuration(this.started, this.ended) :
             null;
         this.timeout_formatted = this.timeout ?
-            this.dataService.calculateDuration(moment.utc().toISOString(), moment.utc().add(this.timeout, 's').toISOString()) :
+            DataService.calculateDuration(moment.utc().toISOString(), moment.utc().add(this.timeout, 's').toISOString()) :
             'Unknown';
         this.statusClass = this.status === 'RUNNING' ?
             `${this.status.toLowerCase()}-text throb-text` :
@@ -119,13 +117,13 @@ export class Job {
                 `${this.execution.status.toLowerCase()}-text throb-text` :
                 `${this.execution.status.toLowerCase()}-text`;
         }
-        this.createdTooltip = this.dataService.formatDate(this.created);
-        this.createdDisplay = this.dataService.formatDate(this.created, true);
-        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
-        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
-        this.occurredTooltip = this.event ? this.dataService.formatDate(this.event.occurred) : null;
-        this.occurredDisplay = this.event ? this.dataService.formatDate(this.event.occurred, true) : null;
-        this.exeEndedTooltip = this.execution ? this.dataService.formatDate(this.execution.ended) : null;
+        this.createdTooltip = DataService.formatDate(this.created);
+        this.createdDisplay = DataService.formatDate(this.created, true);
+        this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
+        this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
+        this.occurredTooltip = this.event ? DataService.formatDate(this.event.occurred) : null;
+        this.occurredDisplay = this.event ? DataService.formatDate(this.event.occurred, true) : null;
+        this.exeEndedTooltip = this.execution ? DataService.formatDate(this.execution.ended) : null;
         this.inputJson = this.input ? _.keys(this.input.json).length > 0 ? JSON.stringify(this.input.json, null, 2) : null : null;
         this.outputJson = this.output ? _.keys(this.output.json).length > 0 ? JSON.stringify(this.output.json, null, 2) : null : null;
     }

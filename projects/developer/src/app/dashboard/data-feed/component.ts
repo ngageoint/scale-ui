@@ -45,7 +45,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
         private metricsApiService: MetricsApiService,
-        private colorService: ColorService,
         private jobsApiService: JobsApiService,
         private filesApiService: FilesApiService
     ) {
@@ -59,11 +58,11 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             this.feedDataset = {
                 label: this.selectedDataFeed.strike.title,
                 fill: false,
-                borderColor: this.colorService.INGEST,
-                backgroundColor: this.colorService.INGEST,
+                borderColor: ColorService.INGEST,
+                backgroundColor: ColorService.INGEST,
                 borderWidth: 2,
                 pointRadius: 2,
-                pointBackgroundColor: this.colorService.INGEST,
+                pointBackgroundColor: ColorService.INGEST,
                 data: []
             };
             _.forEach(this.selectedDataFeed.values, value => {
@@ -151,7 +150,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 choice_id: choiceIds,
                 column: ['completed_count'],
                 colors: [
-                    { column: 'completed_count', color: this.colorService.SCALE_BLUE2 }
+                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 }
                 ],
                 dataType: 'job-types',
                 started: moment.utc().subtract(3, 'd').toISOString(),
@@ -201,11 +200,11 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     //         this.filesDataset = {
                     //             label: 'Files',
                     //             fill: false,
-                    //             borderColor: this.colorService.WARNING,
-                    //             backgroundColor: this.colorService.WARNING,
+                    //             borderColor: ColorService.WARNING,
+                    //             backgroundColor: ColorService.WARNING,
                     //             borderWidth: 2,
                     //             pointRadius: 2,
-                    //             pointBackgroundColor: this.colorService.WARNING,
+                    //             pointBackgroundColor: ColorService.WARNING,
                     //             data: []
                     //         };
                     //         const files = _.toPairs(_.groupBy(filesData.results, r => {

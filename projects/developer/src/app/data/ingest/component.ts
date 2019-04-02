@@ -19,22 +19,54 @@ import { StrikesApiService } from '../../system/strikes/api.service';
     styleUrls: ['./component.scss']
 })
 export class IngestComponent implements OnInit, OnDestroy {
-    dateFormat: string = environment.dateFormat;
     ingests: any;
     selectedIngest: any;
     selectedRows: any;
     datatableOptions: IngestDatatable;
     datatableLoading: boolean;
-    columns: any[];
+    columns = [
+        { field: 'file_name', header: 'File Name' },
+        { field: 'file_size', header: 'File Size' },
+        { field: 'strike.id', header: 'Strike Process' },
+        { field: 'status', header: 'Status' },
+        { field: 'transfer_started', header: 'Transfer Started (Z)' },
+        { field: 'transfer_ended', header: 'Transfer Ended (Z)' },
+        { field: 'ingest_started', header: 'Ingest Started (Z)' },
+        { field: 'ingest_ended', header: 'Ingest Ended (Z)' }
+    ];
     strikeValues: SelectItem[];
     selectedStrike: any = [];
-    statusValues: SelectItem[];
+    statusValues: SelectItem[] = [{
+        label: 'Transfering',
+        value: 'TRANSFERING'
+    }, {
+        label: 'Transferred',
+        value: 'TRANSFERRED'
+    }, {
+        label: 'Queued',
+        value: 'QUEUED'
+    }, {
+        label: 'Deferred',
+        value: 'DEFERRED'
+    }, {
+        label: 'Ingesting',
+        value: 'INGESTING'
+    }, {
+        label: 'Ingested',
+        value: 'INGESTED'
+    }, {
+        label: 'Errored',
+        value: 'ERRORED'
+    }, {
+        label: 'Duplicate',
+        value: 'DUPLICATE'
+    }];
     selectedStatus: any = [];
     count: number;
     started: string;
     ended: string;
     filename: string;
-    isInitialized: boolean;
+    isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
 
@@ -46,45 +78,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService
-    ) {
-        this.isInitialized = false;
-        this.selectedRows = this.dataService.getSelectedIngestRows();
-        this.columns = [
-            { field: 'file_name', header: 'File Name' },
-            { field: 'file_size', header: 'File Size' },
-            { field: 'strike.id', header: 'Strike Process' },
-            { field: 'status', header: 'Status' },
-            { field: 'transfer_started', header: 'Transfer Started (Z)' },
-            { field: 'transfer_ended', header: 'Transfer Ended (Z)' },
-            { field: 'ingest_started', header: 'Ingest Started (Z)' },
-            { field: 'ingest_ended', header: 'Ingest Ended (Z)' }
-        ];
-        this.statusValues = [{
-            label: 'Transfering',
-            value: 'TRANSFERING'
-        }, {
-            label: 'Transferred',
-            value: 'TRANSFERRED'
-        }, {
-            label: 'Queued',
-            value: 'QUEUED'
-        }, {
-            label: 'Deferred',
-            value: 'DEFERRED'
-        }, {
-            label: 'Ingesting',
-            value: 'INGESTING'
-        }, {
-            label: 'Ingested',
-            value: 'INGESTED'
-        }, {
-            label: 'Errored',
-            value: 'ERRORED'
-        }, {
-            label: 'Duplicate',
-            value: 'DUPLICATE'
-        }];
-    }
+    ) {}
 
     private updateData() {
         this.datatableLoading = true;
@@ -193,19 +187,19 @@ export class IngestComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
         this.ingests = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, this.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, this.dateFormat).toISOString()
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
@@ -219,6 +213,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     ngOnInit() {
+        this.selectedRows = this.dataService.getSelectedIngestRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.ingestDatatableService.getIngestDatatableOptions();
         }
@@ -254,8 +249,8 @@ export class IngestComponent implements OnInit, OnDestroy {
                     this.selectedStatus.push(status.value);
                 }
             });
-            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
+            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
             this.getStrikes();
         });
     }

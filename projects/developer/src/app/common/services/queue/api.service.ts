@@ -16,11 +16,10 @@ export class QueueApiService {
     apiPrefix: string;
     loadApiPrefix: string;
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('queue');
-        this.loadApiPrefix = this.dataService.getApiPrefix('load');
+        this.apiPrefix = DataService.getApiPrefix('queue');
+        this.loadApiPrefix = DataService.getApiPrefix('load');
     }
 
     getLoad(params: any, poll?: boolean): Observable<ApiResults> {
@@ -35,7 +34,7 @@ export class QueueApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -44,7 +43,7 @@ export class QueueApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -55,7 +54,7 @@ export class QueueApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -64,7 +63,7 @@ export class QueueApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

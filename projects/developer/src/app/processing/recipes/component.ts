@@ -21,10 +21,15 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 })
 
 export class RecipesComponent implements OnInit, OnDestroy {
-    dateFormat: string = environment.dateFormat;
     datatableOptions: RecipesDatatable;
     datatableLoading: boolean;
-    columns: any[];
+    columns = [
+        { field: 'recipe_type.name', header: 'Recipe Type' },
+        { field: 'created', header: 'Created (Z)' },
+        { field: 'last_modified', header: 'Last Modified (Z)' },
+        { field: 'duration', header: 'Duration' },
+        { field: 'completed', header: 'Completed (Z)' }
+    ];
     recipes: any;
     recipeTypes: RecipeType[];
     recipeTypeOptions: SelectItem[];
@@ -35,30 +40,19 @@ export class RecipesComponent implements OnInit, OnDestroy {
     count: number;
     started: string;
     ended: string;
-    isInitialized: boolean;
+    isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
 
     constructor(
-        public dataService: DataService,
+        private dataService: DataService,
         private messageService: MessageService,
         private recipesDatatableService: RecipesDatatableService,
         private recipesApiService: RecipesApiService,
         private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private route: ActivatedRoute
-    ) {
-        this.columns = [
-            { field: 'recipe_type.name', header: 'Recipe Type' },
-            { field: 'created', header: 'Created (Z)' },
-            { field: 'last_modified', header: 'Last Modified (Z)' },
-            { field: 'duration', header: 'Duration' },
-            { field: 'completed', header: 'Completed (Z)' }
-        ];
-        this.isInitialized = false;
-        this.selectedRows = this.dataService.getSelectedRecipeRows();
-        this.datatableOptions = recipesDatatableService.getRecipesDatatableOptions();
-    }
+    ) {}
 
     private updateData() {
         this.datatableLoading = true;
@@ -153,19 +147,19 @@ export class RecipesComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
         this.recipes = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, this.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, this.dateFormat).toISOString()
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
@@ -179,6 +173,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     ngOnInit() {
+        this.selectedRows = this.dataService.getSelectedRecipeRows();
+        this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {
@@ -200,8 +196,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
             } else {
                 this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
             }
-            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
+            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
             this.getRecipeTypes();
         });
     }

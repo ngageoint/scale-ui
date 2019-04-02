@@ -1,7 +1,6 @@
 import { DataService } from '../../common/services/data.service';
 
 export class Node {
-    dataService: DataService;
     pauseLabel: string;
     pauseIcon: string;
     deprecateLabel: string;
@@ -42,15 +41,14 @@ export class Node {
         public created: string,
         public last_modified: string,
     ) {
-        this.dataService = new DataService();
         this.pauseLabel = this.is_paused ? 'Resume' : 'Pause';
         this.pauseIcon = this.is_paused ? 'fa fa-play' : 'fa fa-pause';
         this.deprecateLabel = this.is_active ? 'Deprecate' : 'Activate';
         this.deprecateIcon = this.is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
         this.headerClass = this.is_paused ? 'node__paused' : '';
-        this.createdDisplay = this.dataService.formatDate(this.created, true);
-        this.createdTooltip = this.dataService.formatDate(this.created);
-        this.lastModifiedDisplay = this.dataService.formatDate(this.last_modified, true);
-        this.lastModifiedTooltip = this.dataService.formatDate(this.last_modified);
+        this.createdDisplay = DataService.formatDate(this.created, true);
+        this.createdTooltip = DataService.formatDate(this.created);
+        this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
+        this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
     }
 }

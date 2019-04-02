@@ -1,18 +1,17 @@
 import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
-import { DataService } from './data.service';
-import { EnvironmentService } from './environment.service';
+import { AppConfigService } from './app-config.service';
 
-describe('EnvironmentService', () => {
+describe('AppConfigService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [DataService, EnvironmentService]
+            providers: [AppConfigService]
         });
     });
 
-    it('should be created', inject([EnvironmentService], (service: EnvironmentService) => {
+    it('should be created', inject([AppConfigService], (service: AppConfigService) => {
         expect(service).toBeTruthy();
     }));
 });

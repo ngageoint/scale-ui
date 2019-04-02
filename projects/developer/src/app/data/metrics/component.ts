@@ -44,8 +44,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
-        private chartService: ChartService,
-        private dataService: DataService
+        private chartService: ChartService
     ) {
         this.chartTypes = [
             {
@@ -63,10 +62,10 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
         if (units === 'seconds') {
-            const r = this.dataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
+            const r = DataService.calculateDuration(moment.utc().startOf('d'), moment.utc().startOf('d').add(data, 's'), noPadding);
             return r;
         } else if (units === 'bytes') {
-            return this.dataService.calculateFileSizeFromBytes(data, 1);
+            return DataService.calculateFileSizeFromBytes(data, 1);
         }
         return data;
     }
