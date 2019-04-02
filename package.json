@@ -13,8 +13,6 @@
     "build": "ng build",
     "builddev": "ng build developer",
     "builddev:prod": "ng build developer --prod",
-    "builddocker": "ng build developer; docker build -t scale-ui .",
-    "builddocker:prod": "ng build developer --prod; docker build -t scale-ui .",
     "test": "ng test",
     "test:ci": "ng test --browsers ChromeHeadlessCi --watch=false",
     "testdev:ci": "ng test developer --browsers ChromeHeadlessCi --watch=false",
