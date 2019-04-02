@@ -4,7 +4,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
-import { APP_BASE_HREF } from '@angular/common';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
@@ -251,10 +250,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         StatusApiService,
         StrikesApiService,
         WorkspacesApiService,
-        {
-            provide: APP_BASE_HREF,
-            useValue: '/' + (window.location.pathname.split('/')[1] || '')
-        },
         {
             provide: APP_INITIALIZER,
             useFactory: appInitializer,
