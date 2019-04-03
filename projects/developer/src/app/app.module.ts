@@ -5,6 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
 import { NgModule, APP_INITIALIZER } from '@angular/core';
+import { APP_BASE_HREF } from '@angular/common';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { UtcDatepickerModule } from 'angular-utc-datepicker';
@@ -108,6 +109,10 @@ const appInitializer = (appConfig: AppConfigService) => {
     return () => {
         return appConfig.loadAppConfig('/assets/appConfig.json');
     };
+};
+
+const baseInitializer = () => {
+    return window['app_base'] || '/';
 };
 
 @NgModule({
@@ -255,6 +260,10 @@ const appInitializer = (appConfig: AppConfigService) => {
             useFactory: appInitializer,
             multi: true,
             deps: [AppConfigService]
+        },
+        {
+            provide: APP_BASE_HREF,
+            useFactory: baseInitializer
         }
     ],
     bootstrap: [AppComponent]
