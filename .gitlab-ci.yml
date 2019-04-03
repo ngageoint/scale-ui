@@ -14,10 +14,9 @@ variables:
   DIND_IMAGE: docker:dind
   IMAGE_PREFIX: scale-ui
   REGISTRY: docker.io
+  ANGULAR_IMAGE: avatsaev/angular-chrome-headless 
   
-image: avatsaev/angular-chrome-headless
-
-
+image: ${ANGULAR_IMAGE}
 
 build_ui:
   stage: build
