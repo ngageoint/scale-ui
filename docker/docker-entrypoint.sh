@@ -18,8 +18,8 @@ fi
 # We support duplicating the assets from the root to any number of contexts
 # This is necessary as Scale is served from DCOS at various contexts with one container. 
 # The front-end Angular routes need to know what their base HREF is and the only way we've 
-# discovered to accomplish this is to make them available all individual with their own
-# unique HREF. Nginx doesn't care about where they live under the web root, so we just
+# discovered to accomplish this is to make them available individually with their own
+# unique HREF. Nginx doesn't care what we do as long as they live under the web root, so we just
 # duplicate and shim.
 if [[ "${CONTEXTS}x" != "x" ]]
 then
