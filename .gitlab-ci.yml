@@ -8,13 +8,13 @@
 # NGINX_IMAGE
 
 variables:
-  PROJECT_ID: 1746474
-  GITLAB_BASE: https://gitlab.com/api/v4/projects
-  DOCKER_IMAGE: docker:stable
-  DIND_IMAGE: docker:dind
-  IMAGE_PREFIX: scale-ui
-  REGISTRY: docker.io
-  NODE_IMAGE: node:10-alpine
+  PROJECT_ID: '1746474'
+  GITLAB_BASE: 'https://gitlab.com/api/v4/projects'
+  DOCKER_IMAGE: 'docker:stable'
+  DIND_IMAGE: 'docker:dind'
+  IMAGE_PREFIX: 'scale-ui'
+  REGISTRY: 'docker.io'
+  NODE_IMAGE: 'node:10-alpine'
   
 image: ${NODE_IMAGE}
 
