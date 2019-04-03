@@ -8,17 +8,17 @@
 # NGINX_IMAGE
 
 variables:
-  PROJECT_ID: '1746474'
-  GITLAB_BASE: 'https://gitlab.com/api/v4/projects'
-  DOCKER_IMAGE: 'docker:stable'
+  CHROME_IMAGE: 'appliedis/nodejs-chrome'
   DIND_IMAGE: 'docker:dind'
+  DOCKER_IMAGE: 'docker:stable'
+  GITLAB_BASE: 'https://gitlab.com/api/v4/projects'
   IMAGE_PREFIX: 'scale-ui'
+  NODE_IMAGE: 'node:10'
+  PROJECT_ID: '1746474'
   REGISTRY: 'docker.io'
-  NODE_IMAGE: 'node:10-alpine'
-  
-image: ${NODE_IMAGE}
 
 build_ui:
+  image: ${NODE_IMAGE}
   stage: build
   tags:
     - linux
@@ -35,18 +35,19 @@ build_ui:
       - dist/developer
     expire_in: 1 day
 
-#test_ui:
-#  stage: build
-#  tags:
-#    - linux
-#  cache:
-#    paths:
-#      - node_modules/
-#  before_script:
-#    - npm install
-#    - npm install -g @angular/cli
-#  script:
-#    - npm run testdev:ci
+test_ui:
+  image: ${CHROME_IMAGE}
+  stage: build
+  tags:
+    - linux
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - npm install
+    - npm install -g @angular/cli
+  script:
+    - npm run testdev:ci
 
 build_docker:
   image: ${DOCKER_IMAGE}
