@@ -107,7 +107,7 @@ import { AppConfigService } from './common/services/app-config.service';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
-        return appConfig.loadAppConfig('/assets/appConfig.json');
+        return appConfig.loadAppConfig('./assets/appConfig.json');
     };
 };
 
