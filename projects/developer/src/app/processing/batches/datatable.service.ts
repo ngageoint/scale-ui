@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { initialBatchesDatatable, BatchesDatatable } from './datatable.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BatchesDatatableService {
     batchesDatatable: BatchesDatatable;
 

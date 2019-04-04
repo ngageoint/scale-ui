@@ -9,7 +9,9 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { catchError, map } from 'rxjs/internal/operators';
 import { Workspace } from './api.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class WorkspacesApiService {
     apiPrefix: string;
 

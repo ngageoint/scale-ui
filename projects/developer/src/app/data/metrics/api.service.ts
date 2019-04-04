@@ -7,7 +7,9 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MetricsApiService {
     apiPrefix: string;
 

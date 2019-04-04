@@ -9,7 +9,9 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { DataService } from '../data.service';
 import { ApiResults } from '../../models/api-results.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class FilesApiService {
     apiPrefix: string;
 
