@@ -161,10 +161,6 @@ $transparent-running: transparentize(#529D39, 0.65);
     background-color: var(--status-algorithm);
 }
 
-.label-busy {
-    background-color: var(--label-busy);
-}
-
 .label-danger {
     background-color: var(--label-text-danger);
 }
@@ -185,12 +181,32 @@ $transparent-running: transparentize(#529D39, 0.65);
     background-color: var(--label-text-default-hover);
 }
 
+.label-degraded {
+    background-color: var(--label-degraded);
+}
+
+.label-deprecated {
+    background-color: var(--label-deprecated);
+}
+
+.label-image_pull {
+    background-color: var(--label-image-pull);
+}
+
 .label-info {
     background-color: var(--label-text-info);
 }
 
+.label-initial_cleanup {
+    background-color: var(--label-initial-cleanup);
+}
+
 .label-info[href]:focus, .label-info[href]:hover {
     background-color: var(--label-text-info-hover);
+}
+
+.label-offline {
+    background-color: var(--label-offline);
 }
 
 .label-paused {
@@ -210,7 +226,7 @@ $transparent-running: transparentize(#529D39, 0.65);
 }
 
 .label-scheduler_stopped {
-    background-color: var(--label-stopped);
+    background-color: var(--label-scheduler-stopped);
 }
 
 .label-success {
@@ -223,10 +239,6 @@ $transparent-running: transparentize(#529D39, 0.65);
 
 .label-system {
     background-color: var(--status-system);
-}
-
-.label-waiting {
-    background-color: var(--label-waiting);
 }
 
 .label-warning {
@@ -423,9 +435,29 @@ $transparent-running: transparentize(#529D39, 0.65);
     animation-play-state: running;
 }
 
-.ui-button-busy {
-    background-color: var(--label-busy) !important;
-    border: 1px solid var(--label-busy) !important;
+.ui-button-degraded {
+    background-color: var(--label-degraded) !important;
+    border: 1px solid var(--label-degraded) !important;
+}
+
+.ui-button-deprecated {
+    background-color: var(--label-deprecated) !important;
+    border: 1px solid var(--label-deprecated) !important;
+}
+
+.ui-button-image-pull {
+    background-color: var(--label-image-pull) !important;
+    border: 1px solid var(--label-image-pull) !important;
+}
+
+.ui-button-initial-cleanup {
+    background-color: var(--label-initial-cleanup) !important;
+    border: 1px solid var(--label-initial-cleanup) !important;
+}
+
+.ui-button-offline {
+    background-color: var(--label-offline) !important;
+    border: 1px solid var(--label-offline) !important;
 }
 
 .ui-button-paused {
@@ -438,14 +470,9 @@ $transparent-running: transparentize(#529D39, 0.65);
     border: 1px solid var(--label-ready) !important;
 }
 
-.ui-button-stopped {
-    background-color: var(--label-stopped) !important;
-    border: 1px solid var(--label-stopped) !important;
-}
-
-.ui-button-waiting {
-    background-color: var(--label-waiting) !important;
-    border: 1px solid var(--label-waiting) !important;
+.ui-button-scheduler-stopped {
+    background-color: var(--label-scheduler-stopped) !important;
+    border: 1px solid var(--label-scheduler-stopped) !important;
 }
 
 .ui-panel-danger {
