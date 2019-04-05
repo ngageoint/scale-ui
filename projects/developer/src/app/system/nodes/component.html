@@ -5,16 +5,30 @@
     <p-header>
         <div class="flexed space-between">
             <div class="node__filters">
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="readyBtnClass" [icon]="readyBtnIcon"
-                        [label]="readyBtnLabel" [disabled]="!showActive" (click)="onFilterBtnClick('ready')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="deprecatedBtnClass"
+                        [icon]="deprecatedBtnIcon" [label]="deprecatedBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('deprecated')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="degradedBtnClass"
+                        [icon]="degradedBtnIcon" [label]="degradedBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('degraded')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="imagePullBtnClass"
+                        [icon]="imagePullBtnIcon" [label]="imagePullBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('image_pull')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="initialCleanupBtnClass"
+                        [icon]="initialCleanupBtnIcon" [label]="initialCleanupBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('initial_cleanup')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="offlineBtnClass"
+                        [icon]="offlineBtnIcon" [label]="offlineBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('offline')"></button>
                 <button pButton type="button" class="ui-button-rounded" [ngClass]="pausedBtnClass"
                         [icon]="pausedBtnIcon" [label]="pausedBtnLabel" [disabled]="!showActive"
                         (click)="onFilterBtnClick('paused')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="busyBtnClass" [icon]="busyBtnIcon"
-                        [label]="busyBtnLabel" [disabled]="!showActive" (click)="onFilterBtnClick('busy')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="waitingBtnClass"
-                        [icon]="waitingBtnIcon" [label]="waitingBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('waiting')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="readyBtnClass"
+                        [icon]="readyBtnIcon" [label]="readyBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('ready')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="schedulerStoppedBtnClass"
+                        [icon]="schedulerStoppedBtnIcon" [label]="schedulerStoppedBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('scheduler_stopped')"></button>
             </div>
             <div class="flexed">
                 <span class="node__type-label">{{ activeLabel }}</span>
@@ -26,7 +40,7 @@
         </div>
     </p-header>
     <ng-template let-node pTemplate="gridItem">
-        <div class="ui-g-12 ui-md-4">
+        <div class="p-col-12 p-md-4">
             <p-panel [styleClass]="node.headerClass" [collapsed]="collapsed" [toggleable]="true" toggler="header">
                 <p-header>
                     <div class="flexed space-between">
@@ -66,18 +80,18 @@
                     Created: <span [pTooltip]="node.createdTooltip">{{ node.createdDisplay }}</span>;
                     Last Modified: <span [pTooltip]="node.lastModifiedTooltip">{{ node.lastModifiedDisplay }}</span>
                 </div>
-                <div class="ui-g" *ngIf="node.status">
-                    <div class="ui-g-6" *ngIf="node.status.jobExeData">
+                <div class="p-grid" *ngIf="node.status">
+                    <div class="p-col-6" *ngIf="node.status.jobExeData">
                         <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6 node__empty-data" *ngIf="!node.status.jobExeData">
+                    <div class="p-col-6 node__empty-data" *ngIf="!node.status.jobExeData">
                         No job executions during the past 3 hours
                     </div>
-                    <div class="ui-g-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
+                    <div class="p-col-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
                         <p-chart type="doughnut" [data]="node.status.runningJobData"
                                  [options]="runningJobOptions"></p-chart>
                     </div>
-                    <div class="ui-g-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">
+                    <div class="p-col-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">
                         There are no jobs running on this node
                     </div>
                 </div>

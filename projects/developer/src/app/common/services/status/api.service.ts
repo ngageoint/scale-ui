@@ -8,15 +8,16 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { NodeStatus } from '../../../system/nodes/api.status.model';
 import { DataService } from '../data.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class StatusApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('status');
+        this.apiPrefix = DataService.getApiPrefix('status');
     }
 
     getStatus(poll?: boolean): Observable<any> {
@@ -27,7 +28,7 @@ export class StatusApiService {
                         response.nodes = NodeStatus.transformer(response.nodes, response.job_types);
                         return response;
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 300000, attempts: 0 });
         }
@@ -37,7 +38,7 @@ export class StatusApiService {
                     response.nodes = NodeStatus.transformer(response.nodes, response.job_types);
                     return response;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

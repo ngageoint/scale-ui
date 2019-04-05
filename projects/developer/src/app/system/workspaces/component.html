@@ -1,6 +1,6 @@
 <div class="workspaces__header">
     <h2><i class="fa fa-database"></i> Workspaces</h2>
-    <p-dropdown [options]="workspaces" [autoWidth]="false" [(ngModel)]="selectedWorkspace" filter="filter"
+    <p-dropdown [options]="workspaces" [(ngModel)]="selectedWorkspace" filter="filter"
                 class="workspaces__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
                 (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
     <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"></button>
@@ -44,15 +44,23 @@
                     </dd>
                     <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Access Key ID:</dt>
                     <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.credentials.access_key_id }}
+                        {{
+                            selectedWorkspaceDetail.configuration.broker.credentials ?
+                                selectedWorkspaceDetail.configuration.broker.credentials.access_key_id :
+                                ''
+                        }}
                     </dd>
                     <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Secret Access Key:</dt>
                     <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key }}
+                        {{
+                            selectedWorkspaceDetail.configuration.broker.credentials ?
+                                selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key :
+                                ''
+                        }}
                     </dd>
                     <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Region Name Override:</dt>
                     <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.region_name }}
+                        {{ selectedWorkspaceDetail.configuration.broker.region_name || '' }}
                     </dd>
                     <dt>Created:</dt>
                     <dd>
@@ -70,22 +78,22 @@
             </div>
             <div *ngIf="isEditing && selectedWorkspaceDetail">
                 <div [formGroup]="createForm">
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Name</span>
                                 <input type="text" pInputText formControlName="name" required/>
                             </label>
                         </div>
-                        <div class="ui-g-6">
+                        <div class="p-col-6">
                             <label>
                                 <span>Title</span>
                                 <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-12">
+                    <div class="p-grid">
+                        <div class="p-col-12">
                             <label>
                                 <span>Description</span>
                                 <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
@@ -93,14 +101,14 @@
                             </label>
                         </div>
                     </div>
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             <label>
                                 <span>Base URL</span>
                                 <input type="text" pInputText formControlName="base_url"/>
                             </label>
                         </div>
-                        <div class="ui-g-6">
+                        <div class="p-col-6">
                             <label>
                                 <span>Workspace Status</span>
                                 <p-toggleButton formControlName="is_active" onLabel="Active" offLabel="Inactive"
@@ -111,17 +119,17 @@
                         </div>
                     </div>
                     <div formGroupName="configuration">
-                        <div class="ui-g" formGroupName="broker">
-                            <div class="ui-g-6">
+                        <div class="p-grid" formGroupName="broker">
+                            <div class="p-col-6">
                                 <label>
                                     <span>Type</span>
-                                    <p-dropdown [options]="typeOptions" [autoWidth]="false"
-                                                formControlName="type" (onChange)="onTypeChange()"
-                                                [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                    <p-dropdown [options]="typeOptions" formControlName="type"
+                                                (onChange)="onTypeChange()" [style]="{'width':'100%'}"
+                                                placeholder="Select..." [showClear]="false">
                                     </p-dropdown>
                                 </label>
                             </div>
-                            <div class="ui-g-6">
+                            <div class="p-col-6">
                                 <label *ngIf="createForm.get('configuration.broker.nfs_path').enabled">
                                     <span>NFS Path</span>
                                     <input type="text" pInputText formControlName="nfs_path" required/>

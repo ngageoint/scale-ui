@@ -1,13 +1,11 @@
-@import '../../environments/environment';
-
 .logo {
-    fill: $clr-gray-85;
+    fill: var(--grey-85);
     height: 32px;
-    stroke: $clr-gray-85;
+    stroke: var(--grey-85);
     stroke-width: 0;
     width: 82px;
 
     &:hover {
-        fill: $clr-highlight;
+        fill: var(--scale-primary);
     }
 }

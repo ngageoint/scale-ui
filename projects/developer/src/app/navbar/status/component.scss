@@ -1,9 +1,7 @@
 @import '../navbar.component.scss';
-@import '../../../environments/environment';
-
 
 .status {
-    color: $clr-gray-80;
+    color: var(--grey-80);
     height: $navbar-height;
     padding-top: 6px;
 }

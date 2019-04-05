@@ -1,16 +1,16 @@
 import { Injectable, Inject, EventEmitter } from '@angular/core';
 import { THEMES, ACTIVE_THEME, Theme } from './symbols';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ThemeService {
-
     themeChange = new EventEmitter<Theme>();
 
     constructor(
         @Inject(THEMES) public themes: Theme[],
         @Inject(ACTIVE_THEME) public theme: string
-    ) {
-    }
+    ) {}
 
     getTheme(name: string) {
         const theme = this.themes.find(t => t.name === name);

@@ -3,8 +3,8 @@
         <p-header>
             <h2><i class="fa fa-files-o"></i> {{ batch.title }}</h2>
         </p-header>
-        <div class="ui-g">
-            <div class="ui-g-6">
+        <div class="p-grid">
+            <div class="p-col-6">
                 <div class="margin-bottom-md">
                     <label for="title">Title *:</label>
                     <input pInputText type="text" id="title" [(ngModel)]="batch.title" class="full-width"/>
@@ -15,10 +15,10 @@
                               class="full-width"></textarea>
                 </div>
             </div>
-            <div class="ui-g-6">
+            <div class="p-col-6">
                 <div class="margin-bottom-md">
                     <label for="recipeType">Recipe Type *:</label>
-                    <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..." autoWidth="false"
+                    <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..."
                                 [(ngModel)]="batch.recipe_type" [style]="{'width': '100%'}"
                                 (onChange)="handleRecipeTypeChange($event)">
                         <ng-template let-recipeType p-template="item">
@@ -35,8 +35,7 @@
                 <div *ngIf="previousBatchOptions.length > 0" class="margin-bottom-md">
                     <label for="previousBatch">Previous Batch:</label>
                     <p-dropdown id="previousBatch" [options]="previousBatchOptions" placeholder="Select..."
-                                autoWidth="false" [(ngModel)]="batch.definition.previous_batch.root_batch_id"
-                                [style]="{'width': '100%'}">
+                                [(ngModel)]="batch.definition.previous_batch.root_batch_id" [style]="{'width': '100%'}">
                         <ng-template let-previousBatch p-template="item">
                             {{ previousBatch.title }}
                         </ng-template>

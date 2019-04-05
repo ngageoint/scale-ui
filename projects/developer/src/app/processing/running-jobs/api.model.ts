@@ -4,7 +4,6 @@ import { JobType } from '../../configuration/job-types/api.model';
 import { DataService } from '../../common/services/data.service';
 
 export class RunningJob {
-    dataService: DataService;
     longest_running_duration: string;
 
     private static build(data) {
@@ -30,7 +29,6 @@ export class RunningJob {
         public job_type: JobType,
         public longest_running: string
     ) {
-        this.dataService = new DataService();
-        this.longest_running_duration = this.dataService.calculateDuration(this.longest_running, moment.utc().toISOString());
+        this.longest_running_duration = DataService.calculateDuration(this.longest_running, moment.utc().toISOString());
     }
 }

@@ -13,14 +13,14 @@
             <div *ngIf="jsonMode">
                 <ngx-codemirror [(ngModel)]="jobTypeJson" [options]="jsonConfig" [ngModelOptions]="{standalone: true}"></ngx-codemirror>
             </div>
-            <div class="ui-g" [hidden]="jsonMode">
-                <div class="ui-g-2">
+            <div class="p-grid" [hidden]="jsonMode">
+                <div class="p-col-2">
                     <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
                 </div>
-                <div class="ui-g-10" *ngIf="currentStepIdx === 0">
+                <div class="p-col-10" *ngIf="currentStepIdx === 0">
                     <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
-                    <div class="ui-g" *ngIf="jobType.manifest">
-                        <div class="ui-g-5 job-type__manifest">
+                    <div class="p-grid" *ngIf="jobType.manifest">
+                        <div class="p-col-5 job-type__manifest">
                             <div class="flexed space-between">
                                 <h3>{{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}</h3>
                                 <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Delete Seed Image"
@@ -42,9 +42,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui-g-10" *ngIf="currentStepIdx === 1">
-                    <div class="ui-g">
-                        <div class="ui-g-6">
+                <div class="p-col-10" *ngIf="currentStepIdx === 1">
+                    <div class="p-grid">
+                        <div class="p-col-6">
                             Select an icon which will be used to represent this job type in Scale.
                             <p-listbox [options]="icons" formControlName="icon" filter="filter" (onChange)="selectIcon()"
                                        [style]="{'width':'100%','max-height':'300px','overflow':'auto','margin-top':'10px'}">
@@ -57,7 +57,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui-g-10 validate-and-create" *ngIf="currentStepIdx === 2">
+                <div class="p-col-10 validate-and-create" *ngIf="currentStepIdx === 2">
                     <div *ngIf="jobType.manifest">
                         <h3>
                             <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
@@ -71,11 +71,11 @@
                         <a class="ui-button-success" pButton icon="fa fa-arrow-circle-right" label="View Job Type"
                            routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
                     </div>
-                    <!--<div class="ui-g">-->
-                    <!--<div class="ui-g-2">-->
+                    <!--<div class="p-grid">-->
+                    <!--<div class="p-col-2">-->
                     <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
                     <!--</div>-->
-                    <!--<div class="ui-g-2">-->
+                    <!--<div class="p-col-2">-->
                     <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
                     <!--</div>-->
                     <!--</div>-->

@@ -1,6 +1,6 @@
 <div class="recipe-type__header">
     <h2><i class="fa fa-cubes"></i> Recipe Types</h2>
-    <p-dropdown [options]="recipeTypeOptions" [autoWidth]="false" [(ngModel)]="selectedRecipeTypeOption" filter="filter"
+    <p-dropdown [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeTypeOption" filter="filter"
                 class="recipe-type__options" (onChange)="onRowSelect($event)" placeholder="Select..."
                 [showClear]="false"></p-dropdown>
     <button pButton class="btn__new-recipe" icon="fa fa-plus" (click)="createNewRecipe()"
@@ -27,8 +27,8 @@
             <div class="margin-bottom-md" *ngIf="!isEditing">
                 {{ selectedRecipeTypeDetail.description }}
             </div>
-            <div class="ui-g" *ngIf="isEditing">
-                <div class="ui-g-12">
+            <div class="p-grid" *ngIf="isEditing">
+                <div class="p-col-12">
                     <div [formGroup]="createForm">
                         <label>
                             <span>Title</span>
@@ -41,8 +41,8 @@
                     </div>
                 </div>
             </div>
-            <div class="ui-g">
-                <div class="ui-g-12">
+            <div class="p-grid">
+                <div class="p-col-12">
                     <div class="margin-bottom-sm">
                         <div *ngIf="isEditing">
                             <label class="no-margin">Definition</label>

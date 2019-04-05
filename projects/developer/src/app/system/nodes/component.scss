@@ -25,7 +25,7 @@
         top: -13px;
         left: 5px;
         z-index: 1000;
-        color: #fff;
+        color: var(--white);
         font-size: 1.1em;
     }
 }
@@ -40,8 +40,62 @@
     justify-content: center;
     align-items: center;
     font-weight: bold;
-    color: #777;
+    color: var(--off-white);
     font-size: 0.9em;
     text-align: center;
     line-height: 1.2em;
+}
+
+::ng-deep .nodes__dataview {
+    .ui-dataview-header {
+        .ui-button-secondary {
+            background-color: var(--off-white) !important;
+            border: 1px solid var(--off-white) !important;
+        }
+    }
+
+    .ui-dataview-content {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+
+    .ui-panel-titlebar {
+        padding: 0.2em 0.5em !important;
+    }
+
+    .ui-panel-titlebar-toggler {
+        display: none !important;
+    }
+
+    .node__paused {
+        .ui-panel-titlebar {
+            background: var(--label-paused);
+            color: var(--white);
+        }
+    }
+}
+
+::ng-deep .node__errors, .node__warnings {
+    &.ui-dialog {
+        width: 33vw !important;
+    }
+    .ui-dialog-titlebar {
+        color: var(--white) !important;
+
+        .ui-dialog-titlebar-icon {
+            color: var(--white) !important;
+        }
+    }
+}
+
+::ng-deep .node__errors {
+    .ui-dialog-titlebar {
+        background: var(--label-text-danger) !important;
+    }
+}
+
+::ng-deep .node__warnings {
+    .ui-dialog-titlebar {
+        background: var(--label-text-warning) !important;
+    }
 }

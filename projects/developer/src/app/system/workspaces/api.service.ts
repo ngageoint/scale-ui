@@ -9,15 +9,16 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { catchError, map } from 'rxjs/internal/operators';
 import { Workspace } from './api.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class WorkspacesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('workspaces');
+        this.apiPrefix = DataService.getApiPrefix('workspaces');
     }
 
     getWorkspaces(params?: any): Observable<ApiResults> {
@@ -47,7 +48,7 @@ export class WorkspacesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -57,28 +58,28 @@ export class WorkspacesApiService {
                 map(response => {
                     return Workspace.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     validateWorkspace(workspace: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/workspaces/validation/`, workspace)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     editWorkspace(id: number, workspace: any): Observable<any> {
         return this.http.patch<any>(`${this.apiPrefix}/workspaces/${id}/`, workspace)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     createWorkspace(workspace: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/workspaces/`, workspace)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

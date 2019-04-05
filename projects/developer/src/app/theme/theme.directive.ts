@@ -1,4 +1,5 @@
-import { Directive, OnInit, OnDestroy, ElementRef } from '@angular/core';
+import { Directive, OnInit, OnDestroy, ElementRef, Inject, Input } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -9,11 +10,13 @@ import { Theme } from './symbols';
     selector: '[devTheme]'
 })
 export class ThemeDirective implements OnInit, OnDestroy {
+    @Input() scoped = false;
     private destroy = new Subject();
 
     constructor(
         private elementRef: ElementRef,
-        private themeService: ThemeService
+        private themeService: ThemeService,
+        @Inject(DOCUMENT) private _document: any
     ) {}
 
     ngOnInit() {
@@ -33,18 +36,25 @@ export class ThemeDirective implements OnInit, OnDestroy {
     }
 
     updateTheme(theme: Theme) {
+        const element = this.getElement();
+
         // project properties onto the element
         for (const key of Object.keys(theme.properties)) {
-            this.elementRef.nativeElement.style.setProperty(key, theme.properties[key]);
+            element.style.setProperty(key, theme.properties[key]);
         }
 
         // remove old theme
         for (const name of this.themeService.theme) {
-            this.elementRef.nativeElement.classList.remove(`${name}-theme`);
+            element.classList.remove(`${name}-theme`);
         }
 
         // alias element with theme name
-        this.elementRef.nativeElement.classList.add(`${theme.name}-theme`);
+        element.classList.add(`${theme.name}-theme`);
+    }
+
+    // Element to attach the styles to.
+    getElement() {
+        return this.scoped ? this.elementRef.nativeElement : this._document.body;
     }
 
 }

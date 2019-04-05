@@ -1,9 +1,8 @@
-import {Component, Input, OnChanges, OnInit, ViewChild} from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
-import {JobType} from '../../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -62,9 +61,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
-    constructor(
-        private colorService: ColorService
-    ) {
+    constructor() {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
@@ -77,8 +74,17 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // add link for dependency, if it exists
         _.forEach(node.dependencies, dependency => {
             if (this.recipeData.definition.nodes[dependency.name]) {
+                let source = '';
+                const sourceNode = this.recipeData.definition.nodes[dependency.name];
+                if (sourceNode.node_type.node_type === 'job') {
+                    source = _.camelCase(this.recipeData.definition.nodes[dependency.name].node_type.job_type_name);
+                } else if (sourceNode.node_type.node_type === 'recipe') {
+                    source = _.camelCase(this.recipeData.definition.nodes[dependency.name].node_type.recipe_type_name);
+                } else if (sourceNode.node_type.node_type === 'condition') {
+                    source = _.camelCase(dependency.name);
+                }
                 this.links.push({
-                    source: _.camelCase(dependency.name),
+                    source: source,
                     target: node.id,
                     node: node,
                     visible: true,
@@ -116,7 +122,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 icon: null,
                 dependencies: [],
                 visible: true,
-                fillColor: this.colorService.RECIPE_NODE
+                fillColor: ColorService.RECIPE_NODE
             }];
             this.links = [];
 
@@ -149,7 +155,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     icon: icon,
                     dependencies: node.dependencies,
                     visible: true,
-                    fillColor: node.node_type.status ? this.colorService[node.node_type.status] : this.colorService.RECIPE_NODE,
+                    fillColor: node.node_type.status ? ColorService[node.node_type.status] : ColorService.RECIPE_NODE,
                     class: node.node_type.status ? node.node_type.status === 'RUNNING' ? 'throb-svg' : null : null,
                     transform: publisher ? 'skewX(-8)' : '',
                     node_type: node.node_type,
@@ -199,8 +205,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     version: dependency.node_type.job_type_version
                 });
                 const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                // use the key instead of the job type name to specify the connection name
+                const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
+                    return n.node_type.job_type_name === dependency.node_type.job_type_name &&
+                        n.node_type.job_type_version === dependency.node_type.job_type_version;
+                });
                 this.selectedNodeConnections.push({
-                    name: dependency.node_type.job_type_name,
+                    name: nodeKey,
                     output: connection ? connection.name : null
                 });
             }
@@ -246,7 +257,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         if (!shouldDeselect) {
             this.selectedNode = e;
-            this.selectedNode.options.stroke = this.colorService.SCALE_BLUE1;
+            this.selectedNode.options.stroke = ColorService.SCALE_BLUE1;
             if (this.selectedNode.node_type) {
                 if (this.selectedNode.node_type.node_type === 'job') {
                     this.selectedRecipeType = null;
@@ -273,13 +284,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                                         rawData.jobs_canceled
                                     ],
                                     backgroundColor: [
-                                        this.colorService.PENDING,
-                                        this.colorService.BLOCKED,
-                                        this.colorService.QUEUED,
-                                        this.colorService.RUNNING,
-                                        this.colorService.FAILED,
-                                        this.colorService.COMPLETED,
-                                        this.colorService.CANCELED
+                                        ColorService.PENDING,
+                                        ColorService.BLOCKED,
+                                        ColorService.QUEUED,
+                                        ColorService.RUNNING,
+                                        ColorService.FAILED,
+                                        ColorService.COMPLETED,
+                                        ColorService.CANCELED
                                     ],
                                     label: 'Jobs'
                                 }
@@ -352,6 +363,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             return;
         }
         if (this.selectedNode) {
+            let dependencyName: any = '';
+            if (dependency.manifest) {
+                // retrieve the key of the job node to ensure correct mapping
+                dependencyName = _.findKey(this.recipeData.definition.nodes, {
+                    node_type: {
+                        job_type_name: dependency.name,
+                        job_type_version: dependency.version
+                    }
+                });
+            } else {
+                // with a condition node, the key is always the same as the name
+                dependencyName = dependency.name;
+            }
             if (this.selectedNode.node_type.node_type === 'condition' && dependency.manifest) {
                 // inspect the dependency's input interface and apply it to the condition interface
                 const files = [];
@@ -380,14 +404,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 }
                 _.forEach(dependency.manifest.job.interface.outputs.files, f => {
                     input[f.name] = {
-                        node: dependency.name,
+                        node: dependencyName,
                         output: f.name,
                         type: 'dependency'
                     };
                 });
                 _.forEach(dependency.manifest.job.interface.outputs.json, j => {
                     input[j.name] = {
-                        node: dependency.name,
+                        node: dependencyName,
                         output: j.name,
                         type: 'dependency'
                     };
@@ -408,9 +432,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
             this.selectedNode.dependencies.push({
                 connections: [],
-                name: dependency.name,
+                name: dependencyName,
                 acceptance: dependency.acceptance || false,
-                type: dependency instanceof JobType ? 'jobType' : 'condition'
+                type: dependency.manifest ? 'jobType' : 'condition'
             });
             dependency.disabled = true;
             // manually call updateRecipe
@@ -463,9 +487,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         // inspect dependencies and display possible connections
         this.nodeInputs = [];
         _.forEach(this.selectedNode.dependencies, dep => {
-            const jobType: any = _.find(this.recipeData.job_types, {
-                name: dep.name
-            });
+            const jobType = this.getJobTypeFromNodeKey(dep.name);
             const condition: any = _.find(this.recipeData.conditions, {
                 name: dep.name
             });
@@ -596,6 +618,23 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             this.selectedNode.options.stroke = '';
             this.selectedNode = null;
         }
+    }
+
+    getJobTypeFromNodeKey(key) {
+        const node = this.recipeData.definition.nodes[key];
+        const jobType: any = _.find(this.recipeData.job_types, {
+            name: node.node_type.job_type_name,
+            version: node.node_type.job_type_version
+        });
+        return jobType;
+    }
+
+    getNodeTitle(key) {
+        const jobType = this.getJobTypeFromNodeKey(key);
+        if (jobType) {
+            return `${jobType.title} v${jobType.version}`;
+        }
+        return key;
     }
 
     ngOnChanges(changes) {

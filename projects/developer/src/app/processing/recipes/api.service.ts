@@ -11,15 +11,16 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { RecipesDatatable } from './datatable.model';
 import { Recipe } from './api.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class RecipesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('recipes');
+        this.apiPrefix = DataService.getApiPrefix('recipes');
     }
 
     getRecipes(params: RecipesDatatable, poll?: Boolean): Observable<any> {
@@ -48,7 +49,7 @@ export class RecipesApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 500000, attempts: 0 });
         }
@@ -57,7 +58,7 @@ export class RecipesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -68,7 +69,7 @@ export class RecipesApiService {
                     map(response => {
                         return Recipe.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 500000, attempts: 0 });
         }
@@ -77,7 +78,7 @@ export class RecipesApiService {
                 map(response => {
                     return Recipe.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

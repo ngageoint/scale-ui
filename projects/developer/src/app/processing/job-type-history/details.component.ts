@@ -23,7 +23,6 @@ export class JobTypeHistoryDetailsComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private dataService: DataService,
         private errorsApiService: ErrorsApiService
     ) {
         this.columns = [
@@ -43,10 +42,10 @@ export class JobTypeHistoryDetailsComponent implements OnInit {
             sortField: 'last_modified'
         }).subscribe(data => {
             _.forEach(data.results, result => {
-                result.createdTooltip = this.dataService.formatDate(result.created);
-                result.createdDisplay = this.dataService.formatDate(result.created, true);
-                result.lastModifiedTooltip = this.dataService.formatDate(result.last_modified);
-                result.lastModifiedDisplay = this.dataService.formatDate(result.last_modified, true);
+                result.createdTooltip = DataService.formatDate(result.created);
+                result.createdDisplay = DataService.formatDate(result.created, true);
+                result.lastModifiedTooltip = DataService.formatDate(result.last_modified);
+                result.lastModifiedDisplay = DataService.formatDate(result.last_modified, true);
             });
             this.errors = data.results;
             this.datatableLoading = false;

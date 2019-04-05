@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { initialJobTypeHistoryDatatable, JobTypeHistoryDatatable } from './datatable.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JobTypeHistoryDatatableService {
     jobTypeHistoryDatatable: JobTypeHistoryDatatable;
 

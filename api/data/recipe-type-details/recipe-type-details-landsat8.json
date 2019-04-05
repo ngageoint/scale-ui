@@ -14,7 +14,7 @@
             "files": [{"name": "input_file", "media_types": ["image/tiff"], "required": true, "multiple": true}]
         },
         "nodes": {
-            "landsat8-parse": {
+            "landsat8-parse-seed": {
                 "dependencies": [],
                 "input": {
                     "input_file": {"type": "recipe", "input": "input_file"}
@@ -26,10 +26,10 @@
                     "job_type_revision": 1
                 }
             },
-            "landsat8-atmos-corr": {
-                "dependencies": [{"name": "landsat8-parse"}],
+            "landsat8-atmos-corr-node": {
+                "dependencies": [{"name": "landsat8-parse-seed"}],
                 "input": {
-                    "infile": {"type": "dependency", "node": "landsat8-parse", "output": "thermal"}
+                    "infile": {"type": "dependency", "node": "landsat8-parse-seed", "output": "thermal"}
                 },
                 "node_type": {
                     "node_type": "job",
@@ -38,10 +38,10 @@
                     "job_type_revision": 1
                 }
             },
-            "landsat8-ortho": {
-                "dependencies": [{"name": "landsat8-parse"}],
+            "landsat8-ortho-something": {
+                "dependencies": [{"name": "landsat8-parse-seed"}],
                 "input": {
-                    "infile": {"type": "dependency", "node": "landsat8-parse", "output": "panchromatic"}
+                    "infile": {"type": "dependency", "node": "landsat8-parse-seed", "output": "panchromatic"}
                 },
                 "node_type": {
                     "node_type": "job",
@@ -50,11 +50,11 @@
                     "job_type_revision": 1
                 }
             },
-            "export-shp": {
-                "dependencies": [{"name": "landsat8-atmos-corr"}, {"name": "landsat8-ortho"}],
+            "export-shp-whatever": {
+                "dependencies": [{"name": "landsat8-atmos-corr-node"}, {"name": "landsat8-ortho-something"}],
                 "input": {
-                    "thermal": {"type": "dependency", "node": "landsat8-atmos-corr", "output": "ls8-corrected"},
-                    "panchromatic": {"type": "dependency", "node": "landsat8-ortho", "output": "ls8-corrected"}
+                    "thermal": {"type": "dependency", "node": "landsat8-atmos-corr-node", "output": "ls8-corrected"},
+                    "panchromatic": {"type": "dependency", "node": "landsat8-ortho-something", "output": "ls8-corrected"}
                 },
                 "node_type": {
                     "node_type": "job",

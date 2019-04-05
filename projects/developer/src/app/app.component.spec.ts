@@ -1,6 +1,7 @@
 import { TestBed, async } from '@angular/core/testing';
-import { APP_BASE_HREF } from '@angular/common';
 
+import { ThemeService } from './theme';
+import { ACTIVE_THEME, THEMES } from './theme/symbols';
 import { ProfileService } from './common/services/profile.service';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
@@ -13,9 +14,12 @@ describe('AppComponent', () => {
             imports: [
                 AppModule
             ],
-            providers: [ProfileService, {
-                provide: APP_BASE_HREF,
-                useValue: '/'
+            providers: [ThemeService, ProfileService, {
+                provide: THEMES,
+                useValue: THEMES
+            }, {
+                provide: ACTIVE_THEME,
+                useValue: ACTIVE_THEME
             }]
         }).compileComponents();
     }));

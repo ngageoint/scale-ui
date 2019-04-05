@@ -1,10 +1,61 @@
 html,
 body {
-    background: $clr-highlight;
+    background: var(--scale-primary);
     height: 100%;
     min-height: 100%;
 }
 
 a {
     cursor: pointer;
+
+    &:not(.ui-button, .ui-paginator) {
+        color: var(--scale-secondary-light);
+
+        &:hover {
+            color: var(--scale-secondary-dark);
+        }
+    }
+
+    &.label {
+        &:hover, &:focus {
+            color: var(--label-text);
+            text-decoration: none;
+            cursor: pointer;
+        }
+    }
+}
+
+dl {
+    margin-top: 0;
+    margin-bottom: 20px;
+
+    dt, dd {
+        line-height: 1.42857143;
+    }
+
+    dt {
+        font-weight: bold;
+    }
+
+    dd {
+        margin: 0 0 10px 0;
+    }
+}
+
+h2:first-of-type {
+    margin: 3px 0;
+}
+
+pre {
+    display: block;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    font-size: 13px;
+    line-height: 1.42857143;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: var(--pre-on);
+    background-color: var(--pre-background);
+    border: 1px solid var(--pre-border);
+    border-radius: 4px;
 }

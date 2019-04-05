@@ -1,28 +1,66 @@
+# Environment variables that must be set in Gitlab CI/CD Pipeline variables
+# DOCKER_DEV_ORG
+# DOCKER_DEV_PASS
+# DOCKER_DEV_USER
+# DOCKER_ORG
+# DOCKER_PASS
+# DOCKER_USER
+# NGINX_IMAGE
+
 variables:
-  PROJECT_ID: 1746474
-  GITLAB_BASE: https://gitlab.com/api/v4/projects
-  
-image: avatsaev/angular-chrome-headless
+  CHROME_IMAGE: 'appliedis/nodejs-chrome'
+  DIND_IMAGE: 'docker:dind'
+  DOCKER_IMAGE: 'docker:stable'
+  GITLAB_BASE: 'https://gitlab.com/api/v4/projects'
+  IMAGE_PREFIX: 'scale-ui'
+  NODE_IMAGE: 'node:10'
+  PROJECT_ID: '1746474'
+  REGISTRY: 'docker.io'
 
-before_script:
-  - npm install
-  - npm install -g @angular/cli
-
-cache:
-  paths:
-  - node_modules/
-
-test_ui:
-  stage: test
+build_ui:
+  image: ${NODE_IMAGE}
+  stage: build
   tags:
     - linux
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+      - npm install
+      - npm install -g @angular/cli
   script:
-    - npm run testdev:ci
     - npm run builddev:prod
   artifacts:
     paths:
       - dist/developer
     expire_in: 1 day
+
+test_ui:
+  image: ${CHROME_IMAGE}
+  stage: build
+  tags:
+    - linux
+  cache:
+    paths:
+      - node_modules/
+  before_script:
+    - npm install
+    - npm install -g @angular/cli
+  script:
+    - npm run testdev:ci
+
+build_docker:
+  image: ${DOCKER_IMAGE}
+  services:
+    - ${DIND_IMAGE}
+  stage: deploy
+  tags:
+    - docker
+  script:
+    - ./docker/build.sh
+  only:
+    - master
+    - tags
     
 trigger_build:
   stage: deploy

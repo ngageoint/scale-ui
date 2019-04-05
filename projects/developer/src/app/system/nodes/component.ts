@@ -23,17 +23,33 @@ export class NodesComponent implements OnInit {
     pausedBtnClass = 'ui-button-paused';
     pausedBtnIcon = 'fa fa-check';
     pausedBtnLabel = 'Paused';
-    busyBtnClass = 'ui-button-busy';
-    busyBtnIcon = 'fa fa-check';
-    busyBtnLabel = 'Busy';
-    waitingBtnClass = 'ui-button-waiting';
-    waitingBtnIcon = 'fa fa-check';
-    waitingBtnLabel = 'Waiting';
+    deprecatedBtnClass = 'ui-button-deprecated';
+    deprecatedBtnIcon = 'fa fa-check';
+    deprecatedBtnLabel = 'Deprecated';
+    offlineBtnClass = 'ui-button-offline';
+    offlineBtnIcon = 'fa fa-check';
+    offlineBtnLabel = 'Offline';
+    degradedBtnClass = 'ui-button-degraded';
+    degradedBtnIcon = 'fa fa-check';
+    degradedBtnLabel = 'Degraded';
+    initialCleanupBtnClass = 'ui-button-initial-cleanup';
+    initialCleanupBtnIcon = 'fa fa-check';
+    initialCleanupBtnLabel = 'Initial Cleanup';
+    imagePullBtnClass = 'ui-button-image-pull';
+    imagePullBtnIcon = 'fa fa-check';
+    imagePullBtnLabel = 'Image Pull';
+    schedulerStoppedBtnClass = 'ui-button-scheduler-stopped';
+    schedulerStoppedBtnIcon = 'fa fa-check';
+    schedulerStoppedBtnLabel = 'Scheduler Stopped';
     filters: any = {
         ready: true,
         paused: true,
-        busy: true,
-        waiting: true
+        deprecated: true,
+        offline: true,
+        degraded: true,
+        initial_cleanup: true,
+        image_pull: true,
+        scheduler_stopped: true
     };
     allNodes: any = [];
     nodesStatus: any = [];
@@ -145,12 +161,20 @@ export class NodesComponent implements OnInit {
             `${this.totalDeprecated} Deprecated / ${this.totalActive} Active`;
         const readyCount = _.countBy(this.nodes, { status: { state: { name: 'READY' } } });
         const pausedCount = _.countBy(this.nodes, { status: { state: { name: 'PAUSED' } } });
-        const busyCount = _.countBy(this.nodes, { status: { state: { name: 'BUSY' } } });
-        const waitingCount = _.countBy(this.nodes, { status: { state: { name: 'WAITING' } } });
+        const deprecatedCount = _.countBy(this.nodes, { status: { state: { name: 'DEPRECATED' } } });
+        const offlineCount = _.countBy(this.nodes, { status: { state: { name: 'OFFLINE' } } });
+        const degradedCount = _.countBy(this.nodes, { status: { state: { name: 'DEGRADED' } } });
+        const initialCleanupCount = _.countBy(this.nodes, { status: { state: { name: 'INITIAL_CLEANUP' } } });
+        const imagePullCount = _.countBy(this.nodes, { status: { state: { name: 'IMAGE_PULL' } } });
+        const schedulerStoppedCount = _.countBy(this.nodes, { status: { state: { name: 'SCHEDULER_STOPPED' } } });
         this.readyBtnLabel = `Ready (${readyCount.true ? readyCount.true : 0})`;
         this.pausedBtnLabel = `Paused (${pausedCount.true ? pausedCount.true : 0})`;
-        this.busyBtnLabel = `Busy (${busyCount.true ? busyCount.true : 0})`;
-        this.waitingBtnLabel = `Waiting (${waitingCount.true ? waitingCount.true : 0})`;
+        this.deprecatedBtnLabel = `Deprecated (${deprecatedCount.true ? deprecatedCount.true : 0})`;
+        this.offlineBtnLabel = `Offline (${offlineCount.true ? offlineCount.true : 0})`;
+        this.degradedBtnLabel = `Degraded (${degradedCount.true ? degradedCount.true : 0})`;
+        this.initialCleanupBtnLabel = `Initial Cleanup (${initialCleanupCount.true ? initialCleanupCount.true : 0})`;
+        this.imagePullBtnLabel = `Image Pull (${imagePullCount.true ? imagePullCount.true : 0})`;
+        this.schedulerStoppedBtnLabel = `Scheduler Stopped (${schedulerStoppedCount.true ? schedulerStoppedCount.true : 0})`;
         this.filterNodes();
     }
 
@@ -179,8 +203,12 @@ export class NodesComponent implements OnInit {
                 active: this.showActive,
                 ready: this.filters.ready,
                 paused: this.filters.paused,
-                busy: this.filters.busy,
-                waiting: this.filters.waiting,
+                deprecated: this.filters.deprecated,
+                offline: this.filters.offline,
+                degraded: this.filters.degraded,
+                initial_cleanup: this.filters.initial_cleanup,
+                image_pull: this.filters.image_pull,
+                scheduler_stopped: this.filters.scheduler_stopped,
                 collapsed: this.collapsed
             },
             replaceUrl: true
@@ -251,10 +279,18 @@ export class NodesComponent implements OnInit {
         this.readyBtnIcon = this.filters.ready ? 'fa fa-check' : 'fa fa-remove';
         this.pausedBtnClass = this.filters.paused ? 'ui-button-paused' : 'ui-button-secondary';
         this.pausedBtnIcon = this.filters.paused ? 'fa fa-check' : 'fa fa-remove';
-        this.busyBtnClass = this.filters.busy ? 'ui-button-busy' : 'ui-button-secondary';
-        this.busyBtnIcon = this.filters.busy ? 'fa fa-check' : 'fa fa-remove';
-        this.waitingBtnClass = this.filters.waiting ? 'ui-button-waiting' : 'ui-button-secondary';
-        this.waitingBtnIcon = this.filters.waiting ? 'fa fa-check' : 'fa fa-remove';
+        this.deprecatedBtnClass = this.filters.deprecated ? 'ui-button-deprecated' : 'ui-button-secondary';
+        this.deprecatedBtnIcon = this.filters.deprecated ? 'fa fa-check' : 'fa fa-remove';
+        this.offlineBtnClass = this.filters.offline ? 'ui-button-offline' : 'ui-button-secondary';
+        this.offlineBtnIcon = this.filters.offline ? 'fa fa-check' : 'fa fa-remove';
+        this.degradedBtnClass = this.filters.degraded ? 'ui-button-degraded' : 'ui-button-secondary';
+        this.degradedBtnIcon = this.filters.degraded ? 'fa fa-check' : 'fa fa-remove';
+        this.initialCleanupBtnClass = this.filters.initial_cleanup ? 'ui-button-initial-cleanup' : 'ui-button-secondary';
+        this.initialCleanupBtnIcon = this.filters.initial_cleanup ? 'fa fa-check' : 'fa fa-remove';
+        this.imagePullBtnClass = this.filters.image_pull ? 'ui-button-image-pull' : 'ui-button-secondary';
+        this.imagePullBtnIcon = this.filters.image_pull ? 'fa fa-check' : 'fa fa-remove';
+        this.schedulerStoppedBtnClass = this.filters.scheduler_stopped ? 'ui-button-scheduler-stopped' : 'ui-button-secondary';
+        this.schedulerStoppedBtnIcon = this.filters.scheduler_stopped ? 'fa fa-check' : 'fa fa-remove';
         this.filterNodes();
         this.updateQueryParams();
     }
@@ -283,18 +319,30 @@ export class NodesComponent implements OnInit {
             this.showActive = params.active ? params.active === 'true' : true;
             this.filters.ready = params.ready ? params.ready === 'true' : true;
             this.filters.paused = params.paused ? params.paused === 'true' : true;
-            this.filters.busy = params.busy ? params.busy === 'true' : true;
-            this.filters.waiting = params.waiting ? params.waiting === 'true' : true;
+            this.filters.deprecated = params.deprecated ? params.deprecated === 'true' : true;
+            this.filters.offline = params.offline ? params.offline === 'true' : true;
+            this.filters.degraded = params.degraded ? params.degraded === 'true' : true;
+            this.filters.initial_cleanup = params.initial_cleanup ? params.initial_cleanup === 'true' : true;
+            this.filters.image_pull = params.image_pull ? params.image_pull === 'true' : true;
+            this.filters.scheduler_stopped = params.scheduler_stopped ? params.scheduler_stopped === 'true' : true;
             this.collapsed = params.collapsed ? params.collapsed === 'true' : this.collapsed;
             this.activeLabel = this.showActive ? 'Active Nodes' : 'Deprecated Nodes';
             this.readyBtnClass = this.filters.ready ? 'ui-button-ready' : 'ui-button-secondary';
             this.readyBtnIcon = this.filters.ready ? 'fa fa-check' : 'fa fa-remove';
             this.pausedBtnClass = this.filters.paused ? 'ui-button-paused' : 'ui-button-secondary';
             this.pausedBtnIcon = this.filters.paused ? 'fa fa-check' : 'fa fa-remove';
-            this.busyBtnClass = this.filters.busy ? 'ui-button-busy' : 'ui-button-secondary';
-            this.busyBtnIcon = this.filters.busy ? 'fa fa-check' : 'fa fa-remove';
-            this.waitingBtnClass = this.filters.waiting ? 'ui-button-waiting' : 'ui-button-secondary';
-            this.waitingBtnIcon = this.filters.waiting ? 'fa fa-check' : 'fa fa-remove';
+            this.deprecatedBtnClass = this.filters.deprecated ? 'ui-button-deprecated' : 'ui-button-secondary';
+            this.deprecatedBtnIcon = this.filters.deprecated ? 'fa fa-check' : 'fa fa-remove';
+            this.offlineBtnClass = this.filters.offline ? 'ui-button-offline' : 'ui-button-secondary';
+            this.offlineBtnIcon = this.filters.offline ? 'fa fa-check' : 'fa fa-remove';
+            this.degradedBtnClass = this.filters.degraded ? 'ui-button-degraded' : 'ui-button-secondary';
+            this.degradedBtnIcon = this.filters.degraded ? 'fa fa-check' : 'fa fa-remove';
+            this.initialCleanupBtnClass = this.filters.initial_cleanup ? 'ui-button-initial-cleanup' : 'ui-button-secondary';
+            this.initialCleanupBtnIcon = this.filters.initial_cleanup ? 'fa fa-check' : 'fa fa-remove';
+            this.imagePullBtnClass = this.filters.image_pull ? 'ui-button-image-pull' : 'ui-button-secondary';
+            this.imagePullBtnIcon = this.filters.image_pull ? 'fa fa-check' : 'fa fa-remove';
+            this.schedulerStoppedBtnClass = this.filters.scheduler_stopped ? 'ui-button-scheduler-stopped' : 'ui-button-secondary';
+            this.schedulerStoppedBtnIcon = this.filters.scheduler_stopped ? 'fa fa-check' : 'fa fa-remove';
             this.collapseIcon = this.collapsed ? 'fa fa-plus' : 'fa fa-minus';
             this.collapseTooltip = this.collapsed ? 'Expand All Nodes' : 'Collapse All Nodes';
             this.getNodes();

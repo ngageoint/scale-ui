@@ -7,15 +7,16 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MetricsApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('metrics');
+        this.apiPrefix = DataService.getApiPrefix('metrics');
     }
 
     getDataTypes(): Observable<ApiResults> {
@@ -24,14 +25,14 @@ export class MetricsApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     getDataTypeOptions(name: string): Observable<any> {
         return this.http.get<any>(`${this.apiPrefix}/metrics/${name}/`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -41,7 +42,7 @@ export class MetricsApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

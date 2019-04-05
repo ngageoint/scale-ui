@@ -5,7 +5,6 @@
 
 // Defaults
 @import './defaults/animations';
-@import 'environments/environment';
 @import './defaults/tags';
 @import './defaults/typography';
 
@@ -13,45 +12,42 @@
 @import './defaults/overrides';
 
 // Components & Pages loaded separately
-
-dl {
-    margin-top: 0;
-    margin-bottom: 20px;
-
-    dt, dd {
-        line-height: 1.42857143;
-    }
-
-    dt {
-        font-weight: bold;
-    }
-
-    dd {
-        margin: 0 0 10px 0;
-    }
-}
-
-pre {
-    display: block;
-    padding: 9.5px;
-    margin: 0 0 10px;
-    font-size: 13px;
-    line-height: 1.42857143;
-    word-break: break-all;
-    word-wrap: break-word;
-    color: #333333;
-    background-color: #f5f5f5;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
+$transparent-running: transparentize(#529D39, 0.65);
 
 .app {
     background: var(--background);
-    background-image: var(--background-image);
-    color: var(--on-background);
+    color: var(--main-text);
     display: flex;
     flex-direction: column;
     min-height: 100%;
+}
+
+.blocked {
+    background: var(--status-blocked) !important;
+}
+
+.blocked-text {
+    color: var(--status-blocked);
+}
+
+.canceled {
+    background: var(--status-canceled) !important;
+}
+
+.canceled-text {
+    color: var(--status-canceled);
+}
+
+.column-filter {
+    width: 100%;
+}
+
+.completed {
+    background: var(--status-completed) !important;
+}
+
+.completed-text {
+    color: var(--status-completed);
 }
 
 .content {
@@ -59,382 +55,17 @@ pre {
     padding: 1.0em 2.0em;
 }
 
-.relative {
-    position: relative;
-}
+.dialog-content {
+    padding: 0 0 10px 10px;
 
-.inset {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-}
+    h4 {
+        margin: 0 0 5px 0;
+        font-size: 1.2em;
 
-.nodes__dataview {
-    .ui-dataview-header {
-        .ui-button-secondary {
-            background-color: #ccc !important;
-            border: 1px solid #ccc !important;
+        &.label {
+            display: block;
         }
     }
-
-    .ui-dataview-content {
-        padding-top: 15px !important;
-        padding-bottom: 15px !important;
-    }
-
-    .ui-panel-titlebar {
-        padding: 0.2em 0.5em !important;
-    }
-
-    .ui-panel-titlebar-toggler {
-        display: none !important;
-    }
-
-    .node__paused {
-        .ui-panel-titlebar {
-            background: $clr-paused;
-            color: #fff;
-        }
-    }
-}
-
-.node__errors, .node__warnings {
-    &.ui-dialog {
-        width: 33vw !important;
-    }
-    .ui-dialog-titlebar {
-        color: #fff !important;
-
-        .ui-dialog-titlebar-icon {
-            color: #fff !important;
-        }
-    }
-}
-
-.node__errors {
-    .ui-dialog-titlebar {
-        background: $clr-label-danger !important;
-    }
-}
-
-.node__warnings {
-    .ui-dialog-titlebar {
-        background: $clr-label-warning !important;
-    }
-}
-
-.help-block {
-    display: block;
-    margin-top: 5px;
-    margin-bottom: 10px;
-    color: #737373;
-    font-weight: normal;
-}
-
-.throb-text, .throb-background, .throb-svg {
-    animation-duration: 0.6s;
-    animation-timing-function: ease-out;
-    animation-delay: 0;
-    animation-direction: alternate;
-    animation-iteration-count: infinite;
-    animation-fill-mode: none;
-    animation-play-state: running;
-}
-
-.throb-text {
-    animation-name: throb-text;
-}
-
-.throb-background {
-    animation-name: throb-background;
-}
-
-.throb-svg {
-    animation-name: throb-svg;
-}
-
-@keyframes throb-text {
-    0% {
-        color: $clr-status-running;
-    }
-    100% {
-        color: transparentize($clr-status-running, 0.65);
-    }
-}
-
-@keyframes throb-background {
-    0% {
-        background-color: $clr-status-running;
-    }
-    100% {
-        background-color: transparentize($clr-status-running, 0.65);
-    }
-}
-
-@keyframes throb-svg {
-    0% {
-        fill: $clr-status-running;
-    }
-    100% {
-        fill: transparentize($clr-status-running, 0.65);
-    }
-}
-
-h2:first-of-type {
-    margin: 3px 0;
-}
-
-a:not(.ui-button, .ui-paginator) {
-    color: $clr-blue-lgt;
-
-    &:hover {
-        color: $clr-blue-drk;
-    }
-}
-
-.column-filter {
-    width: 100%;
-}
-
-.scale-tab-header {
-    background: $clr-navbar-dark;
-
-    a {
-        color: $clr-navbar-text;
-    }
-}
-
-.scale-chart-container {
-    position: relative;
-}
-
-.text-left {
-    text-align: left !important;
-}
-
-.text-center {
-    text-align: center !important;
-}
-
-.text-right {
-    text-align: right !important;
-}
-
-.list-unstyled {
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-}
-
-.link-button {
-    background: $clr-blue-lgt;
-    color: $clr-white;
-    padding: 7px;
-    border-radius: 3px;
-    text-decoration: none;
-}
-
-.flexed {
-    display: flex;
-    align-items: center;
-    justify-content: start;
-
-    &.space-between {
-        justify-content: space-between;
-    }
-
-    &.center {
-        justify-content: center;
-    }
-
-    &.flex-end {
-        justify-content: flex-end;
-    }
-
-    &.inline {
-        display: inline-flex;
-    }
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-
-    thead {
-        th {
-            text-align: left;
-            padding: 5px !important;
-        }
-    }
-
-    tbody td {
-        padding: 5px !important;
-    }
-}
-
-.table-striped {
-    tbody tr:nth-child(odd) {
-        background-color: $clr-white;
-    }
-    tbody tr:nth-child(even) {
-        background-color: $clr-gray-95;
-    }
-}
-
-.table-bordered {
-    border: 1px solid #ececec;
-}
-
-.label {
-    display: inline;
-    padding: .2em .6em .2em;
-    font-size: 75%;
-    font-weight: bold;
-    line-height: 1;
-    color: $clr-label-text;
-    text-align: center;
-    white-space: nowrap;
-    vertical-align: baseline;
-    border-radius: .25em;
-
-    &:empty {
-        display: none;
-    }
-}
-
-a.label {
-    &:hover, &:focus {
-        color: $clr-label-text;
-        text-decoration: none;
-        cursor: pointer;
-    }
-}
-
-.label:empty {
-    display: none;
-}
-
-label-default {
-    background-color: $clr-label-default;
-}
-.label-default[href]:hover,
-.label-default[href]:focus {
-    background-color: $clr-label-default-hover;
-}
-.label-primary {
-    background-color: $clr-label-primary;
-}
-.label-primary[href]:hover,
-.label-primary[href]:focus {
-    background-color: $clr-label-primary-hover;
-}
-.label-success {
-    background-color: $clr-label-success;
-}
-.label-success[href]:hover,
-.label-success[href]:focus {
-    background-color: $clr-label-success-hover;
-}
-.label-info {
-    background-color: $clr-label-info;
-}
-.label-info[href]:hover,
-.label-info[href]:focus {
-    background-color: $clr-label-info-hover;
-}
-.label-warning {
-    background-color: $clr-label-warning;
-}
-.label-warning[href]:hover,
-.label-warning[href]:focus {
-    background-color: $clr-label-warning-hover;
-}
-.label-danger {
-    background-color: $clr-label-danger;
-}
-.label-danger[href]:hover,
-.label-danger[href]:focus {
-    background-color: $clr-label-danger-hover;
-}
-
-.label-data {
-    background-color: $clr-failure-data;
-}
-
-.label-system {
-    background-color: $clr-failure-system;
-}
-
-.label-algorithm {
-    background-color: $clr-failure-algorithm;
-}
-
-.label-ready {
-    background-color: $clr-ready;
-}
-
-.label-paused {
-    background-color: $clr-paused;
-}
-
-.label-busy {
-    background-color: $clr-busy;
-}
-
-.label-waiting {
-    background-color: $clr-waiting;
-}
-
-.no-margin {
-    margin: 0 !important;
-}
-
-.margin-top-sm {
-    margin-top: 5px;
-}
-
-.margin-top-md {
-    margin-top: 10px;
-}
-
-.margin-top-lg {
-    margin-top: 20px;
-}
-
-.margin-right-sm {
-    margin-right: 5px;
-}
-
-.margin-right-md {
-    margin-right: 10px;
-}
-
-.margin-right-lg {
-    margin-right: 20px;
-}
-
-.margin-bottom-sm {
-    margin-bottom: 5px;
-}
-
-.margin-bottom-md {
-    margin-bottom: 10px;
-}
-
-.margin-bottom-lg {
-    margin-bottom: 20px;
-}
-
-.margin-left-sm {
-    margin-left: 5px;
-}
-
-.margin-left-md {
-    margin-left: 10px;
-}
-
-.margin-left-lg {
-    margin-left: 20px;
 }
 
 .dl-horizontal {
@@ -453,97 +84,409 @@ label-default {
     }
 }
 
-.completed-text {
-    color: $clr-status-completed;
-}
-.failed-text {
-    color: $clr-status-failed;
-}
-.pending-text {
-    color: $clr-status-pending;
-}
-.queued-text {
-    color: $clr-status-queued;
-}
-.running-text {
-    color: $clr-status-running;
-}
-.blocked-text {
-    color: $clr-status-blocked;
-}
-.canceled-text {
-    color: $clr-status-canceled;
-}
-.warning-text {
-    color: $clr-label-warning;
-}
 .error-text {
-    color: $clr-label-danger;
-}
-.offered-text {
-    color: $clr-offered;
-}
-.free-text {
-    color: $clr-free;
-}
-.unavailable-text {
-    color: $clr-unavailable;
+    color: var(--label-text-danger);
 }
 
-.completed {
-    background: $clr-status-completed !important;
-}
 .failed {
-    background: $clr-status-failed !important;
+    background: var(--status-failed) !important;
 }
-.pending {
-    background: $clr-status-pending !important;
+
+.failed-text {
+    color: var(--status-failed);
 }
-.queued {
-    background: $clr-status-queued !important;
+
+.flexed {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    &.space-between {
+        justify-content: space-between;
+    }
+
+    &.center {
+        justify-content: center;
+    }
+
+    &.flex-end {
+        justify-content: flex-end;
+    }
+
+    &.inline {
+        display: inline-flex;
+    }
 }
-.running {
-    background: $clr-status-running !important;
-}
-.blocked {
-    background: $clr-status-blocked !important;
-}
-.canceled {
-    background: $clr-status-canceled !important;
-}
-.offered {
-    background: $clr-offered !important;
-}
+
 .free {
-    background: $clr-free !important;
+    background: var(--status-free) !important;
 }
-.unavailable {
-    background: $clr-unavailable !important;
+
+.free-text {
+    color: var(--status-free);
+}
+
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: var(--grey-45);
+    font-weight: normal;
+}
+
+.inset {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.label {
+    display: inline;
+    padding: .2em .6em .2em;
+    font-size: 75%;
+    font-weight: bold;
+    line-height: 1;
+    color: var(--label-text);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.label-algorithm {
+    background-color: var(--status-algorithm);
+}
+
+.label-danger {
+    background-color: var(--label-text-danger);
+}
+
+.label-danger[href]:focus, .label-danger[href]:hover {
+    background-color: var(--label-text-danger-hover);
+}
+
+.label-data {
+    background-color: var(--status-data);
+}
+
+.label-default {
+    background-color: var(--label-text-default);
+}
+
+.label-default[href]:focus, .label-default[href]:hover {
+    background-color: var(--label-text-default-hover);
+}
+
+.label-degraded {
+    background-color: var(--label-degraded);
+}
+
+.label-deprecated {
+    background-color: var(--label-deprecated);
+}
+
+.label-image_pull {
+    background-color: var(--label-image-pull);
+}
+
+.label-info {
+    background-color: var(--label-text-info);
+}
+
+.label-initial_cleanup {
+    background-color: var(--label-initial-cleanup);
+}
+
+.label-info[href]:focus, .label-info[href]:hover {
+    background-color: var(--label-text-info-hover);
+}
+
+.label-offline {
+    background-color: var(--label-offline);
+}
+
+.label-paused {
+    background-color: var(--label-paused);
+}
+
+.label-primary {
+    background-color: var(--label-text-primary);
+}
+
+.label-primary[href]:focus, .label-primary[href]:hover {
+    background-color: var(--label-text-primary-hover);
+}
+
+.label-ready {
+    background-color: var(--label-ready);
+}
+
+.label-scheduler_stopped {
+    background-color: var(--label-scheduler-stopped);
+}
+
+.label-success {
+    background-color: var(--label-text-success);
+}
+
+.label-success[href]:focus, .label-success[href]:hover {
+    background-color: var(--label-text-success-hover);
+}
+
+.label-system {
+    background-color: var(--status-system);
+}
+
+.label-warning {
+    background-color: var(--label-text-warning);
+}
+
+.label-warning[href]:focus, .label-warning[href]:hover {
+    background-color: var(--label-text-warning-hover);
+}
+
+.link-button {
+    background: var(--scale-secondary-light);
+    color: var(--white);
+    padding: 7px;
+    border-radius: 3px;
+    text-decoration: none;
+}
+
+.list-unstyled {
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+.margin-bottom-lg {
+    margin-bottom: 20px;
+}
+
+.margin-bottom-md {
+    margin-bottom: 10px;
+}
+
+.margin-bottom-sm {
+    margin-bottom: 5px;
+}
+
+
+.margin-left-lg {
+    margin-left: 20px;
+}
+
+.margin-left-md {
+    margin-left: 10px;
+}
+
+.margin-left-sm {
+    margin-left: 5px;
+}
+
+.margin-right-lg {
+    margin-right: 20px;
+}
+
+.margin-right-md {
+    margin-right: 10px;
+}
+
+.margin-right-sm {
+    margin-right: 5px;
+}
+
+.margin-top-lg {
+    margin-top: 20px;
+}
+
+.margin-top-md {
+    margin-top: 10px;
+}
+
+.margin-top-sm {
+    margin-top: 5px;
+}
+
+.no-margin {
+    margin: 0 !important;
+}
+
+.offered {
+    background: var(--status-offered) !important;
+}
+
+.offered-text {
+    color: var(--status-offered);
+}
+
+.pending {
+    background: var(--status-pending) !important;
+}
+
+.pending-text {
+    color: var(--status-pending);
+}
+
+.queued {
+    background: var(--status-queued) !important;
+}
+
+.queued-text {
+    color: var(--status-queued);
+}
+
+.relative {
+    position: relative;
+}
+
+.running {
+    background: var(--status-running) !important;
+}
+
+.running-text {
+    color: var(--status-running);
+}
+
+.scale-chart-container {
+    position: relative;
+}
+
+.scale-loading {
+    background: rgba(73, 73, 73, 0.502);
+}
+
+.scale-tab-header {
+    background: var(--navbar-dark);
+
+    a {
+        color: var(--navbar-text);
+    }
+}
+
+.small-text {
+    font-size: 10px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+
+    thead {
+        th {
+            text-align: left;
+            padding: 5px !important;
+        }
+    }
+
+    tbody td {
+        padding: 5px !important;
+    }
+}
+
+.table-bordered {
+    border: 1px solid #ececec;
+}
+
+.table-striped {
+    tbody tr:nth-child(odd) {
+        background-color: var(--table-striped-odd);
+    }
+    tbody tr:nth-child(even) {
+        background-color: var(--table-striped-even);
+    }
+}
+
+.text-center {
+    text-align: center !important;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
+}
+
+.throb-background {
+    animation-name: throb-background;
+}
+
+.throb-svg {
+    animation-name: throb-svg;
+}
+
+.throb-text {
+    animation-name: throb-text;
+}
+
+.throb-text, .throb-background, .throb-svg {
+    animation-duration: 0.6s;
+    animation-timing-function: ease-out;
+    animation-delay: 0;
+    animation-direction: alternate;
+    animation-iteration-count: infinite;
+    animation-fill-mode: none;
+    animation-play-state: running;
+}
+
+.ui-button-degraded {
+    background-color: var(--label-degraded) !important;
+    border: 1px solid var(--label-degraded) !important;
+}
+
+.ui-button-deprecated {
+    background-color: var(--label-deprecated) !important;
+    border: 1px solid var(--label-deprecated) !important;
+}
+
+.ui-button-image-pull {
+    background-color: var(--label-image-pull) !important;
+    border: 1px solid var(--label-image-pull) !important;
+}
+
+.ui-button-initial-cleanup {
+    background-color: var(--label-initial-cleanup) !important;
+    border: 1px solid var(--label-initial-cleanup) !important;
+}
+
+.ui-button-offline {
+    background-color: var(--label-offline) !important;
+    border: 1px solid var(--label-offline) !important;
+}
+
+.ui-button-paused {
+    background-color: var(--label-paused) !important;
+    border: 1px solid var(--label-paused) !important;
 }
 
 .ui-button-ready {
-    background-color: $clr-ready !important;
-    border: 1px solid $clr-ready !important;
-}
-.ui-button-paused {
-    background-color: $clr-paused !important;
-    border: 1px solid $clr-paused !important;
-}
-.ui-button-busy {
-    background-color: $clr-busy !important;
-    border: 1px solid $clr-busy !important;
-}
-.ui-button-waiting {
-    background-color: $clr-waiting !important;
-    border: 1px solid $clr-waiting !important;
+    background-color: var(--label-ready) !important;
+    border: 1px solid var(--label-ready) !important;
 }
 
-.ui-panel-primary, .ui-panel-danger {
+.ui-button-scheduler-stopped {
+    background-color: var(--label-scheduler-stopped) !important;
+    border: 1px solid var(--label-scheduler-stopped) !important;
+}
+
+.ui-panel-danger {
+    .ui-panel-titlebar {
+        background-color: var(--label-text-danger) !important;
+    }
+}
+
+.ui-panel-danger, .ui-panel-primary {
     .ui-panel-titlebar {
         padding: .5em 1.25em .5em 1em !important;
 
         .ui-panel-title {
-            color: #fff !important;
+            color: var(--white) !important;
             font-weight: bold;
         }
     }
@@ -551,28 +494,23 @@ label-default {
 
 .ui-panel-primary {
     .ui-panel-titlebar {
-        background-color: $clr-label-primary !important;
+        background-color: var(--label-text-primary) !important;
     }
 }
 
-.ui-panel-danger {
-    .ui-panel-titlebar {
-        background-color: $clr-label-danger !important;
-    }
+.unavailable {
+    background: var(--status-unavailable) !important;
 }
 
-.dialog-content {
-    padding: 0 0 10px 10px;
-
-    h4 {
-        margin: 0 0 5px 0;
-        font-size: 1.2em;
-
-        &.label {
-            display: block;
-        }
-    }
+.unavailable-text {
+    color: var(--status-unavailable);
 }
+
+.warning-text {
+    color: var(--label-text-warning);
+}
+
+
 
 ::ng-deep .ui-dialog {
     width: 500px;
@@ -582,6 +520,29 @@ label-default {
     }
 }
 
-.small-text {
-    font-size: 10px;
+@keyframes throb-background {
+    0% {
+        background-color: var(--status-running);
+    }
+    100% {
+        background-color: $transparent-running;
+    }
+}
+
+@keyframes throb-text {
+    0% {
+        color: var(--status-running);
+    }
+    100% {
+        color: $transparent-running;
+    }
+}
+
+@keyframes throb-svg {
+    0% {
+        fill: var(--status-running);
+    }
+    100% {
+        fill: $transparent-running;
+    }
 }

@@ -28,8 +28,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         private messageService: MessageService,
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
-        private metricsApiService: MetricsApiService,
-        private colorService: ColorService
+        private metricsApiService: MetricsApiService
     ) {}
 
     private updateChart() {
@@ -44,8 +43,8 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
             choice_id: choiceIds,
             column: ['completed_count', 'failed_count'],
             colors: [
-                { column: 'completed_count', color: this.colorService.SCALE_BLUE2 },
-                { column: 'failed_count', color: this.colorService.ERROR }
+                { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
+                { column: 'failed_count', color: ColorService.ERROR }
             ],
             dataType: 'job-types',
             started: moment.utc().subtract(10, 'd').toISOString(),

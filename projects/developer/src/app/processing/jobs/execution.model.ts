@@ -1,7 +1,8 @@
+import * as moment from 'moment';
+
 import { environment } from '../../../environments/environment';
 import { Job } from './api.model';
 import { JobType } from '../../configuration/job-types/api.model';
-import * as moment from 'moment';
 
 export class JobExecution {
     created_formatted: string;

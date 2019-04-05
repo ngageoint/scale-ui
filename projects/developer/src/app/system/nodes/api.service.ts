@@ -16,10 +16,9 @@ export class NodesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('nodes');
+        this.apiPrefix = DataService.getApiPrefix('nodes');
     }
 
     getNodes(params?: any, poll?: boolean): Observable<any> {
@@ -35,7 +34,7 @@ export class NodesApiService {
                         returnObj.results = Node.transformer(returnObj.results);
                         return returnObj;
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -46,14 +45,14 @@ export class NodesApiService {
                     returnObj.results = Node.transformer(returnObj.results);
                     return returnObj;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     getNode(id: number): Observable<any> {
         return this.http.get<ApiResults>(`${this.apiPrefix}/nodes/${id}`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -65,7 +64,7 @@ export class NodesApiService {
         };
         return this.http.patch<any>(`${this.apiPrefix}/nodes/${node.id}/`, updatedNode)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

@@ -18,16 +18,27 @@ import { JobExecution } from './execution.model';
 @Component({
     selector: 'dev-jobs',
     templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    styleUrls: ['./component.scss'],
+    providers: [ConfirmationService]
 })
 
 export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
-    dateFormat: string = environment.dateFormat;
     datatableLoading: boolean;
-    columns: any[];
+    columns = [
+        { field: 'job_type', header: 'Job Type' },
+        { field: 'created', header: 'Created (Z)' },
+        { field: 'last_modified', header: 'Last Modified (Z)' },
+        { field: 'node.hostname', header: 'Node' },
+        { field: 'duration', header: 'Duration' },
+        { field: 'status', header: 'Status' },
+        { field: 'error.category', header: 'Error Category' },
+        { field: 'error.title', header: 'Error' },
+        { field: 'id', header: 'Log' }
+    ];
+    dateFormat = environment.dateFormat;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     selectedJob: Job;
@@ -35,14 +46,41 @@ export class JobsComponent implements OnInit, OnDestroy {
     selectedJobExe: JobExecution;
     selectedRows: any;
     logDisplay: boolean;
-    statusValues: SelectItem[];
+    statusValues: SelectItem[] = [{
+        label: 'Canceled',
+        value: 'CANCELED'
+    }, {
+        label: 'Completed',
+        value: 'COMPLETED'
+    }, {
+        label: 'Failed',
+        value: 'FAILED'
+    }, {
+        label: 'Pending',
+        value: 'PENDING'
+    }, {
+        label: 'Queued',
+        value: 'QUEUED'
+    }, {
+        label: 'Running',
+        value: 'RUNNING'
+    }];
     selectedStatus: any = [];
-    errorCategoryValues: SelectItem[];
+    errorCategoryValues: SelectItem[] = [{
+        label: 'System',
+        value: 'SYSTEM'
+    }, {
+        label: 'Algorithm',
+        value: 'ALGORITHM'
+    }, {
+        label: 'Data',
+        value: 'DATA'
+    }];
     selectedErrorCategory: any = [];
     count: number;
     started: string;
     ended: string;
-    isInitialized: boolean;
+    isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     constructor(
@@ -54,50 +92,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
         private messageService: MessageService
-    ) {
-        this.isInitialized = false;
-        this.selectedRows = this.dataService.getSelectedJobRows();
-        this.columns = [
-            { field: 'job_type', header: 'Job Type' },
-            { field: 'created', header: 'Created (Z)' },
-            { field: 'last_modified', header: 'Last Modified (Z)' },
-            { field: 'node.hostname', header: 'Node' },
-            { field: 'duration', header: 'Duration' },
-            { field: 'status', header: 'Status' },
-            { field: 'error.category', header: 'Error Category' },
-            { field: 'error.title', header: 'Error' },
-            { field: 'id', header: 'Log' }
-        ];
-        this.statusValues = [{
-            label: 'Canceled',
-            value: 'CANCELED'
-        }, {
-            label: 'Completed',
-            value: 'COMPLETED'
-        }, {
-            label: 'Failed',
-            value: 'FAILED'
-        }, {
-            label: 'Pending',
-            value: 'PENDING'
-        }, {
-            label: 'Queued',
-            value: 'QUEUED'
-        }, {
-            label: 'Running',
-            value: 'RUNNING'
-        }];
-        this.errorCategoryValues = [{
-            label: 'System',
-            value: 'SYSTEM'
-        }, {
-            label: 'Algorithm',
-            value: 'ALGORITHM'
-        }, {
-            label: 'Data',
-            value: 'DATA'
-        }];
-    }
+    ) {}
 
     private updateData() {
         this.datatableLoading = true;
@@ -209,19 +204,19 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onStartSelect(e) {
-        this.started = moment.utc(e, this.dateFormat).startOf('d').format(this.dateFormat);
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onEndSelect(e) {
-        this.ended = moment.utc(e, this.dateFormat).endOf('d').format(this.dateFormat);
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
     onDateFilterApply() {
         this.jobs = null;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
-            started: moment.utc(this.started, this.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, this.dateFormat).toISOString()
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
@@ -333,6 +328,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             });
     }
     ngOnInit() {
+        this.selectedRows = this.dataService.getSelectedJobRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         }
@@ -382,8 +378,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     this.datatableOptions.error_category :
                     [this.datatableOptions.error_category]
                 : null;
-            this.started = moment.utc(this.datatableOptions.started).format(this.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(this.dateFormat);
+            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
+            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
             this.getJobTypes();
         });
     }

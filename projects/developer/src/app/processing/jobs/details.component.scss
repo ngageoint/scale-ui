@@ -28,7 +28,7 @@
         }
 
         &:hover {
-            background: #eee;
+            background: var(--main-hover);
             cursor: pointer;
 
             td {

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { EnvironmentService } from './common/services/environment.service';
-import { ProfileService } from './common/services/profile.service';
 import { environment } from '../environments/environment';
+import { ThemeService } from './theme';
+import { ProfileService } from './common/services/profile.service';
 
 @Component({
     selector: 'dev-root',
@@ -11,21 +11,25 @@ import { environment } from '../environments/environment';
 })
 export class AppComponent implements OnInit {
     title = 'Scale';
-    loading = true;
-    environmentLoaded = !environment.runtime;
-    environmentPath = '/assets/environment.json';
+    loading = false;
+    theme: any;
     isAuthenticated: boolean;
     header: string;
     message: string;
     detail: string;
 
     constructor(
-        private environmentService: EnvironmentService,
+        private themeService: ThemeService,
         private profileService: ProfileService
     ) {}
 
-    bootstrapApplication() {
+    ngOnInit() {
+        // init theme
+        this.theme = localStorage.getItem(environment.themeKey) || environment.defaultTheme;
+        this.themeService.setTheme(this.theme);
+
         if (environment.auth.enabled) {
+            this.loading = true;
             this.profileService.getProfile().subscribe(data => {
                 this.loading = false;
                 console.log(data);
@@ -79,32 +83,6 @@ export class AppComponent implements OnInit {
             });
         } else {
             this.isAuthenticated = true;
-        }
-    }
-
-    loadEnvironment() {
-        this.environmentService.getEnvironment(this.environmentPath).subscribe(data => {
-            // set up environment
-            environment.apiDefaultVersion = data.apiDefaultVersion;
-            environment.apiPrefix = data.apiPrefix;
-            environment.apiVersions = data.apiVersions;
-            environment.auth = data.auth;
-            environment.dateFormat = data.dateFormat;
-            environment.defaultTheme = data.defaultTheme;
-            environment.scale = data.scale;
-            environment.siloUrl = data.siloUrl;
-            this.environmentLoaded = true;
-
-            // continue loading app
-            this.bootstrapApplication();
-        });
-    }
-
-    ngOnInit() {
-        if (environment.runtime) {
-            this.loadEnvironment();
-        } else {
-            this.bootstrapApplication();
         }
     }
 }

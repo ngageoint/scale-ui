@@ -9,15 +9,16 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { DataService } from '../data.service';
 import { ApiResults } from '../../models/api-results.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class FilesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('files');
+        this.apiPrefix = DataService.getApiPrefix('files');
     }
 
     getFiles(params: any, poll?: Boolean): Observable<any> {
@@ -58,7 +59,7 @@ export class FilesApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -67,14 +68,14 @@ export class FilesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     getFile(id: number): Observable<any> {
         return this.http.get<any>(`${this.apiPrefix}/files/${id}/`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

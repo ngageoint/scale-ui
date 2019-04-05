@@ -11,15 +11,16 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { Batch } from './api.model';
 import { BatchesDatatable } from './datatable.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BatchesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('batches');
+        this.apiPrefix = DataService.getApiPrefix('batches');
     }
 
     getBatches(params: BatchesDatatable, poll?: Boolean): Observable<any> {
@@ -48,7 +49,7 @@ export class BatchesApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -57,7 +58,7 @@ export class BatchesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -67,7 +68,7 @@ export class BatchesApiService {
                 map(response => {
                     return Batch.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -77,7 +78,7 @@ export class BatchesApiService {
                 map(response => {
                     return response;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

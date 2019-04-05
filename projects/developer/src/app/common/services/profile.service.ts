@@ -7,35 +7,36 @@ import { catchError } from 'rxjs/internal/operators';
 import { environment } from '../../../environments/environment';
 import { DataService } from './data.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProfileService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('profile');
+        this.apiPrefix = DataService.getApiPrefix('profile');
     }
 
     getProfile(): Observable<any> {
         return this.http.get<any>(`${this.apiPrefix}/accounts/profile/`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     getLogin(): Observable<any> {
         return this.http.get<any>(`${environment.auth.scheme.url}`)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     login(data): Observable<any> {
         return this.http.post<any>(`${environment.auth.scheme.url}`, data)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

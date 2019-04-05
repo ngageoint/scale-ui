@@ -11,15 +11,16 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { Ingest } from './api.model';
 import { IngestDatatable } from './datatable.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class IngestApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('ingests');
+        this.apiPrefix = DataService.getApiPrefix('ingests');
     }
 
     getIngests(params: IngestDatatable, poll?: boolean): Observable<any> {
@@ -48,7 +49,7 @@ export class IngestApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -57,7 +58,7 @@ export class IngestApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -67,7 +68,7 @@ export class IngestApiService {
                 map(response => {
                     return Ingest.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -78,7 +79,7 @@ export class IngestApiService {
                     map(response => {
                         return ApiResults.transformer(response);
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: interval || 600000, attempts: 0 });
         }
@@ -87,7 +88,7 @@ export class IngestApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

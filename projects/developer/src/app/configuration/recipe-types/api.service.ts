@@ -9,15 +9,16 @@ import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { RecipeType } from './api.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class RecipeTypesApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('recipe-types');
+        this.apiPrefix = DataService.getApiPrefix('recipe-types');
     }
 
     getRecipeTypes(params?: any): Observable<ApiResults> {
@@ -52,7 +53,7 @@ export class RecipeTypesApiService {
                 map(response => {
                     return ApiResults.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -62,7 +63,7 @@ export class RecipeTypesApiService {
                 map(response => {
                     return RecipeType.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

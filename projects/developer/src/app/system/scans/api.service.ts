@@ -10,15 +10,16 @@ import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { Scan } from './api.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ScansApiService {
     apiPrefix: string;
 
     constructor(
-        private http: HttpClient,
-        private dataService: DataService
+        private http: HttpClient
     ) {
-        this.apiPrefix = this.dataService.getApiPrefix('products');
+        this.apiPrefix = DataService.getApiPrefix('products');
     }
 
     getScans(params: any, poll?: boolean): Observable<ApiResults> {
@@ -51,7 +52,7 @@ export class ScansApiService {
                         returnObj.results = Scan.transformer(returnObj.results);
                         return returnObj;
                     }),
-                    catchError(this.dataService.handleError)
+                    catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
@@ -62,7 +63,7 @@ export class ScansApiService {
                     returnObj.results = Scan.transformer(returnObj.results);
                     return returnObj;
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
@@ -72,35 +73,35 @@ export class ScansApiService {
                 map(response => {
                     return Scan.transformer(response);
                 }),
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     validateScan(scan: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/scans/validation/`, scan)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     editScan(id: number, scan: any): Observable<any> {
         return this.http.patch<any>(`${this.apiPrefix}/scans/${id}/`, scan)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     createScan(scan: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/scans/`, scan)
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 
     processScan(id: number): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/scans/${id}/process/`, { ingest: true })
             .pipe(
-                catchError(this.dataService.handleError)
+                catchError(DataService.handleError)
             );
     }
 }

@@ -66,11 +66,11 @@
         .ui-treetable-data {
             .ui-treetable-child-table-container {
                 tbody:nth-child(even) {
-                    background-color: #fff !important;
+                    background-color: var(--white) !important;
                 }
 
                 tbody:nth-child(odd) {
-                    background-color: #ededed !important;
+                    background-color: var(--grey-95) !important;
                 }
             }
         }

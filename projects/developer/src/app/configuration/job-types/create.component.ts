@@ -192,7 +192,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     onSubmit() {
         this.submitted = true;
         if (this.mode === 'Create') {
-            this.jobTypesApiService.createJobType(this.cleanJobType).subscribe(result => {
+            this.jobTypesApiService.createJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
                 this.modifiedJobTypeId = result.id;
                 _.forEach(this.items, item => {
@@ -200,6 +200,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 });
             }, err => {
                 console.log(err);
+                this.submitted = false;
                 this.modifiedJobTypeId = null;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.statusText });
             });
@@ -212,6 +213,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 });
             }, err => {
                 console.log(err);
+                this.submitted = false;
                 this.modifiedJobTypeId = null;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.statusText });
             });

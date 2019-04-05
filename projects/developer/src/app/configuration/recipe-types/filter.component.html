@@ -10,7 +10,7 @@
             </label>
             <label>
                 <span>Type</span>
-                <p-dropdown [options]="typeOptions" [autoWidth]="false" formControlName="type" [style]="{'width':'100%'}"
+                <p-dropdown [options]="typeOptions" formControlName="type" [style]="{'width':'100%'}"
                             placeholder="Select..." [showClear]="false">
                 </p-dropdown>
                 <div class="help-block">
@@ -19,8 +19,8 @@
             </label>
             <label>
                 <span>Condition</span>
-                <p-dropdown [options]="conditionOptions" [autoWidth]="false" formControlName="condition"
-                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                <p-dropdown [options]="conditionOptions" formControlName="condition" [style]="{'width':'100%'}"
+                            placeholder="Select..." [showClear]="false">
                 </p-dropdown>
                 <div class="help-block">
                     Condition to test data value against (required)
@@ -44,15 +44,15 @@
                     press return/enter.
                 </div>
             </label>
-            <div class="ui-g ui-g-nopad">
-                <div class="ui-g-6">
+            <div class="p-grid p-col-nopad">
+                <div class="p-col-6">
                     <label>
                         <p-toggleButton formControlName="all_fields" onLabel="All fields are required" offLabel="Fields are optional"
                                         onIcon="fa fa-check" offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"
                                         (onChange)="onToggleClick($event)"></p-toggleButton>
                     </label>
                 </div>
-                <div class="ui-g-6">
+                <div class="p-col-6">
                     <label>
                         <p-toggleButton formControlName="all_files" onLabel="All files are required" offLabel="Files are optional"
                                         onIcon="fa fa-check" offIcon="fa fa-circle" [style]="{'width':'100%', 'display':'block'}"

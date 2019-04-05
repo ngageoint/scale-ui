@@ -55,18 +55,18 @@
                     {{ rowData.recipe_type.title }} {{ rowData.recipe_type.version }}
                 </div>
                 <div *ngSwitchCase="'created'">
-                    <span [pTooltip]="dataService.formatDate(rowData.created)">
-                        {{ dataService.formatDate(rowData.created, true) }}
+                    <span [pTooltip]="rowData.createdTooltip">
+                        {{ rowData.createdDisplay }}
                     </span>
                 </div>
                 <div *ngSwitchCase="'last_modified'">
-                    <span [pTooltip]="dataService.formatDate(rowData.last_modified)">
-                        {{ dataService.formatDate(rowData.last_modified, true) }}
+                    <span [pTooltip]="rowData.lastModifiedTooltip">
+                        {{ rowData.lastModifiedDisplay }}
                     </span>
                 </div>
                 <div *ngSwitchCase="'completed'">
-                    <span [pTooltip]="dataService.formatDate(rowData.completed)">
-                        {{ dataService.formatDate(rowData.completed, true) }}
+                    <span [pTooltip]="rowData.completedTooltip">
+                        {{ rowData.completedDisplay }}
                     </span>
                 </div>
                 <div *ngSwitchDefault>

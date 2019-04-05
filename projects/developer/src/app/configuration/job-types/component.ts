@@ -39,8 +39,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     isScanning: boolean;
     scanProgress = 0;
     scanBtnIcon = 'fa fa-barcode';
-    interfaceClass = 'ui-g-6';
-    errorClass = 'ui-g-6';
+    interfaceClass = 'p-col-6';
+    errorClass = 'p-col-6';
 
     constructor(
         private messageService: MessageService,
@@ -56,12 +56,12 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.jobTypesApiService.getJobType(name, version).subscribe(data => {
             this.selectedJobTypeDetail = data;
             if (data.manifest.job.interface && data.manifest.job.errors) {
-                this.interfaceClass = 'ui-g-6';
-                this.errorClass = 'ui-g-6';
+                this.interfaceClass = 'p-col-6';
+                this.errorClass = 'p-col-6';
             } else if (data.manifest.job.interface && !data.manifest.job.errors) {
-                this.interfaceClass = 'ui-g-12';
+                this.interfaceClass = 'p-col-12';
             } else if (!data.manifest.job.interface && data.manifest.job.errors) {
-                this.errorClass = 'ui-g-12';
+                this.errorClass = 'p-col-12';
             }
             this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
         }, err => {

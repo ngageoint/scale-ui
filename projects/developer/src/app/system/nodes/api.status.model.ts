@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
-import { DataService } from '../../common/services/data.service';
+
 import { ColorService } from '../../common/services/color.service';
+import { DataService } from '../../common/services/data.service';
 
 export class NodeStatus {
     stateClass: string;
@@ -20,8 +21,6 @@ export class NodeStatus {
     cpusArr: any;
     cpusFields: any;
     cpusTotal: any;
-    colorService: ColorService;
-    dataService: DataService;
     errorData: any = [];
     warningData: any = [];
     private static build(data, job_types) {
@@ -67,8 +66,6 @@ export class NodeStatus {
         public job_executions: any,
         public job_types: any
     ) {
-        this.colorService = new ColorService();
-        this.dataService = new DataService();
         this.stateClass = `label-${this.state.name.toLowerCase()}`;
         this.errorTooltip = this.errors ?
             this.errors.length === 1 ? this.errors.length + ' Error' : this.errors.length + ' Errors' :
@@ -93,10 +90,10 @@ export class NodeStatus {
                             this.job_executions.completed.total
                         ],
                         backgroundColor: [
-                            this.colorService.ERROR_SYSTEM,
-                            this.colorService.ERROR_ALGORITHM,
-                            this.colorService.ERROR_DATA,
-                            this.colorService.COMPLETED
+                            ColorService.ERROR_SYSTEM,
+                            ColorService.ERROR_ALGORITHM,
+                            ColorService.ERROR_DATA,
+                            ColorService.COMPLETED
                         ],
                         label: 'Total'
                     }
@@ -147,16 +144,16 @@ export class NodeStatus {
                 ], d => d.percentage > 0);
                 const resourcesFields = {
                     offered: isMib ?
-                        this.dataService.calculateFileSizeFromMib(this.resources[resource].offered) :
+                        DataService.calculateFileSizeFromMib(this.resources[resource].offered) :
                         this.resources[resource].offered,
                     running: isMib ?
-                        this.dataService.calculateFileSizeFromMib(this.resources[resource].running) :
+                        DataService.calculateFileSizeFromMib(this.resources[resource].running) :
                         this.resources[resource].running,
                     free: isMib ?
-                        this.dataService.calculateFileSizeFromMib(this.resources[resource].free) :
+                        DataService.calculateFileSizeFromMib(this.resources[resource].free) :
                         this.resources[resource].free,
                     unavailable: isMib ?
-                        this.dataService.calculateFileSizeFromMib(this.resources[resource].unavailable) :
+                        DataService.calculateFileSizeFromMib(this.resources[resource].unavailable) :
                         this.resources[resource].unavailable
                 };
                 return {
@@ -172,13 +169,13 @@ export class NodeStatus {
         const cpuData = calculateResource('cpus', false);
         this.memArr = memData ? memData.arr : null;
         this.memFields = memData ? memData.fields : null;
-        this.memTotal = this.resources ? this.dataService.calculateFileSizeFromMib(this.resources.mem.total) : 0;
+        this.memTotal = this.resources ? DataService.calculateFileSizeFromMib(this.resources.mem.total) : 0;
         this.gpusArr = gpuData ? gpuData.arr : null;
         this.gpusFields = gpuData ? gpuData.fields : null;
         this.gpusTotal = this.resources ? this.resources.gpus.total : 0;
         this.diskArr = diskData ? diskData.arr : null;
         this.diskFields = diskData ? diskData.fields : null;
-        this.diskTotal = this.resources ? this.dataService.calculateFileSizeFromMib(this.resources.disk.total) : 0;
+        this.diskTotal = this.resources ? DataService.calculateFileSizeFromMib(this.resources.disk.total) : 0;
         this.cpusArr = cpuData ? cpuData.arr : null;
         this.cpusFields = cpuData ? cpuData.fields : null;
         this.cpusTotal = this.resources ? this.resources.cpus.total : 0;
@@ -186,16 +183,16 @@ export class NodeStatus {
             this.errorData.push({
                 title: error.title,
                 description: error.description,
-                lastUpdatedDisplay: this.dataService.formatDate(error.last_updated, true),
-                lastUpdatedTooltip: this.dataService.formatDate(error.last_updated)
+                lastUpdatedDisplay: DataService.formatDate(error.last_updated, true),
+                lastUpdatedTooltip: DataService.formatDate(error.last_updated)
             });
         });
         _.forEach(this.warnings, warning => {
             this.warningData.push({
                 title: warning.title,
                 description: warning.description,
-                lastUpdatedDisplay: this.dataService.formatDate(warning.last_updated, true),
-                lastUpdatedTooltip: this.dataService.formatDate(warning.last_updated)
+                lastUpdatedDisplay: DataService.formatDate(warning.last_updated, true),
+                lastUpdatedTooltip: DataService.formatDate(warning.last_updated)
             });
         });
     }

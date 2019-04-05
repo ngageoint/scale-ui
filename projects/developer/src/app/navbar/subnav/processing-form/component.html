@@ -1,15 +1,15 @@
 <div class="spf__form">
-    <div class="ui-g">
-        <div class="ui-g-12">
+    <div class="p-grid">
+        <div class="p-col-12">
             <utc-datepicker [date]="started" [button]="true"></utc-datepicker>
         </div>
-        <div class="ui-g-12">
+        <div class="p-col-12">
             <utc-datepicker [date]="ended" [button]="true"></utc-datepicker>
         </div>
     </div>
-    <div class="ui-g">
-        <div class="ui-g-12">
-            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" [autoWidth]="false" filter="filter" placeholder="Job Type"
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" filter="filter" placeholder="Job Type"
                         [style]="{'width':'100%'}" [showClear]="false">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}
@@ -17,8 +17,8 @@
             </p-dropdown>
         </div>
     </div>
-    <div class="ui-g margin-bottom-md">
-        <div class="ui-g-12">
+    <div class="p-grid margin-bottom-md">
+        <div class="p-col-12">
             <button pButton type="button" label="Search" icon="fa-search" (click)="search"></button>
         </div>
     </div>

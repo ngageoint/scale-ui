@@ -3,11 +3,13 @@ import { HttpErrorResponse } from '@angular/common/http';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
-import { throwError } from 'rxjs/index';
+import { throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DataService {
     selectedJobRows = [];
     selectedRecipeRows = [];
@@ -15,10 +17,9 @@ export class DataService {
     selectedIngestRows = [];
     selectedScanRows = [];
 
-    constructor() {
-    }
+    constructor() {}
 
-    private padWithZero(input, length) {
+    private static padWithZero(input, length) {
         // Cast input to string
         input = '' + input;
 
@@ -26,7 +27,7 @@ export class DataService {
         return new Array(paddingSize > 0 ? paddingSize + 1 : 0).join('0') + input;
     }
 
-    calculateFileSizeFromMib(num) {
+    static calculateFileSizeFromMib(num) {
         if (num > 0) {
             if (num < 1024) {
                 return num.toFixed(2) + ' MB';
@@ -39,7 +40,7 @@ export class DataService {
         return num;
     }
 
-    calculateFileSizeFromBytes(num, decimals) {
+    static calculateFileSizeFromBytes(num, decimals) {
         if (num > 0) {
             if (num < 1024) {
                 return num.toFixed(decimals) + ' Bytes';
@@ -58,7 +59,7 @@ export class DataService {
         return num;
     }
 
-    calculateDuration(start, stop, noPadding?) {
+    static calculateDuration(start, stop, noPadding?) {
         const to = moment.utc(stop),
             from = moment.utc(start),
             diff = moment.utc(to).diff(moment.utc(from)),
@@ -67,12 +68,12 @@ export class DataService {
         let durationStr = '';
 
         if (!noPadding) {
-            durationStr = duration.years() > 0 ? durationStr + this.padWithZero(duration.years(), 2) + 'Y, ' : durationStr;
-            durationStr = duration.months() > 0 ? durationStr + this.padWithZero(duration.months(), 2) + 'M, ' : durationStr;
-            durationStr = duration.days() > 0 ? durationStr + this.padWithZero(duration.days(), 2) + 'D, ' : durationStr;
-            durationStr = duration.hours() > 0 ? durationStr + this.padWithZero(duration.hours(), 2) + 'h, ' : durationStr;
-            durationStr = duration.minutes() > 0 ? durationStr + this.padWithZero(duration.minutes(), 2) + 'm, ' : durationStr;
-            durationStr = durationStr + this.padWithZero(duration.seconds(), 2) + 's';
+            durationStr = duration.years() > 0 ? durationStr + DataService.padWithZero(duration.years(), 2) + 'Y, ' : durationStr;
+            durationStr = duration.months() > 0 ? durationStr + DataService.padWithZero(duration.months(), 2) + 'M, ' : durationStr;
+            durationStr = duration.days() > 0 ? durationStr + DataService.padWithZero(duration.days(), 2) + 'D, ' : durationStr;
+            durationStr = duration.hours() > 0 ? durationStr + DataService.padWithZero(duration.hours(), 2) + 'h, ' : durationStr;
+            durationStr = duration.minutes() > 0 ? durationStr + DataService.padWithZero(duration.minutes(), 2) + 'm, ' : durationStr;
+            durationStr = durationStr + DataService.padWithZero(duration.seconds(), 2) + 's';
         } else {
             durationStr = duration.years() > 0 ? durationStr + duration.years() + 'Y, ' : durationStr;
             durationStr = duration.months() > 0 ? durationStr + duration.months() + 'M, ' : durationStr;
@@ -85,7 +86,7 @@ export class DataService {
         return durationStr;
     }
 
-    formatDate(date, humanize?: boolean) {
+    static formatDate(date, humanize?: boolean) {
         humanize = humanize || false;
         if (date) {
             return humanize ?
@@ -95,7 +96,7 @@ export class DataService {
         return '';
     }
 
-    getViewportSize() {
+    static getViewportSize() {
         const w = window,
             d = document,
             e = d.documentElement,
@@ -109,13 +110,13 @@ export class DataService {
         };
     }
 
-    getApiPrefix(endpoint) {
+    static getApiPrefix(endpoint) {
         const versionObj: any = _.find(environment.apiVersions, { endpoint: endpoint });
         const version = versionObj ? versionObj.version : environment.apiDefaultVersion;
         return `${environment.apiPrefix}/${version}`;
     }
 
-    handleError(error: HttpErrorResponse) {
+    static handleError(error: HttpErrorResponse) {
         let body = null;
         if (error.error instanceof ErrorEvent) {
             // A client-side or network error occurred. Handle it accordingly.

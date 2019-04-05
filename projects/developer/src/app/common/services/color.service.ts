@@ -1,29 +1,30 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ColorService {
-
-    public ERROR = '#be292e';
-    public ERROR_DATA = '#e02026';
-    public ERROR_ALGORITHM = '#be292e';
-    public ERROR_SYSTEM = '#912125';
-    public COMPLETED = '#0071BC';
-    public FAILED = '#88382a';
-    public PENDING = '#e46f21';
-    public QUEUED = '#fdc613';
-    public RUNNING = '#417e2e';
-    public CANCELED = '#000000';
-    public BLOCKED = '#cf6a34';
-    public INGEST = '#bbbbbb';
-    public SCALE_BLUE1 = '#48ACFF';
-    public SCALE_BLUE2 = '#0071BC';
-    public SCALE_BLUE3 = '#24567F';
-    public RECIPE_NODE = '#777';
-    public WARNING = '#fdb813';
+    public static ERROR = '#D5393E';
+    public static ERROR_DATA = '#e02026';
+    public static ERROR_ALGORITHM = '#be292e';
+    public static ERROR_SYSTEM = '#912125';
+    public static COMPLETED = '#017cce';
+    public static FAILED = '#88382a';
+    public static PENDING = '#e46f21'; // FAILS ADA
+    public static QUEUED = '#FFC505';
+    public static RUNNING = '#529D39';
+    public static CANCELED = '#000000';
+    public static BLOCKED = '#cf6a34';
+    public static INGEST = '#bbbbbb';
+    public static SCALE_BLUE1 = '#48ACFF';
+    public static SCALE_BLUE2 = '#017cce';
+    public static SCALE_BLUE3 = '#24567F';
+    public static RECIPE_NODE = '#777';
+    public static WARNING = '#fdb813';
 
     constructor() { }
 
-    getRgba(hex, opacity?: number) {
+    static getRgba(hex, opacity?: number) {
         opacity = opacity || 0;
         // Expand shorthand form (e.g. '03F') to full form (e.g. '0033FF')
         const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;

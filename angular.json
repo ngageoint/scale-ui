@@ -155,6 +155,7 @@
                             "node_modules/primeng/resources/primeng.min.css",
                             "node_modules/primeicons/primeicons.css",
                             "node_modules/codemirror/lib/codemirror.css",
+                            "node_modules/primeflex/primeflex.css",
                             "projects/developer/src/styles.scss"
                         ],
                         "scripts": [
@@ -209,6 +210,7 @@
                         "tsConfig": "projects/developer/tsconfig.spec.json",
                         "karmaConfig": "projects/developer/karma.conf.js",
                         "styles": [
+                            "node_modules/primeflex/primeflex.css",
                             "projects/developer/src/styles.scss"
                         ],
                         "scripts": [],
