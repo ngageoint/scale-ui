@@ -9,9 +9,7 @@ import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { RecipeType } from './api.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class RecipeTypesApiService {
     apiPrefix: string;
 

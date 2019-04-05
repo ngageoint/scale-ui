@@ -1,8 +1,8 @@
 <div class="job-type__header">
     <h2><i class="fa fa-cube"></i> Job Types</h2>
-    <p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType" filter="filter" class="job-type__options"
-                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)"
-                placeholder="Select..." [showClear]="false"></p-dropdown>
+    <p-dropdown [options]="jobTypes" [autoWidth]="false" [(ngModel)]="selectedJobType" filter="filter"
+                class="job-type__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
+                (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
     <button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"></button>
 </div>
 <hr />
@@ -169,8 +169,8 @@
         </p-header>
         Select a workspace to scan<br />
         <div class="job-type__scan">
-            <p-dropdown [options]="workspaces" [(ngModel)]="selectedWorkspace" appendTo="body" [style]="{'width':'300px'}"
-                        placeholder="Select..." [showClear]="false"></p-dropdown>
+            <p-dropdown [options]="workspaces" [autoWidth]="false" [(ngModel)]="selectedWorkspace" appendTo="body"
+                        [style]="{'width':'300px'}" placeholder="Select..." [showClear]="false"></p-dropdown>
             <button pButton type="button" label="Scan" [icon]="scanBtnIcon" [disabled]="!selectedWorkspace"
                     (click)="scanWorkspace()"></button>
         </div>

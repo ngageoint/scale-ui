@@ -10,9 +10,7 @@ import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
 import { Scan } from './api.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ScansApiService {
     apiPrefix: string;
 

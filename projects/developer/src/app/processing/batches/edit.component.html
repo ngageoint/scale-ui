@@ -18,7 +18,7 @@
             <div class="p-col-6">
                 <div class="margin-bottom-md">
                     <label for="recipeType">Recipe Type *:</label>
-                    <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..."
+                    <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..." autoWidth="false"
                                 [(ngModel)]="batch.recipe_type" [style]="{'width': '100%'}"
                                 (onChange)="handleRecipeTypeChange($event)">
                         <ng-template let-recipeType p-template="item">
@@ -35,7 +35,8 @@
                 <div *ngIf="previousBatchOptions.length > 0" class="margin-bottom-md">
                     <label for="previousBatch">Previous Batch:</label>
                     <p-dropdown id="previousBatch" [options]="previousBatchOptions" placeholder="Select..."
-                                [(ngModel)]="batch.definition.previous_batch.root_batch_id" [style]="{'width': '100%'}">
+                                autoWidth="false" [(ngModel)]="batch.definition.previous_batch.root_batch_id"
+                                [style]="{'width': '100%'}">
                         <ng-template let-previousBatch p-template="item">
                             {{ previousBatch.title }}
                         </ng-template>

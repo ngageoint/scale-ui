@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { initialIngestDatatable, IngestDatatable } from './datatable.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class IngestDatatableService {
     ingestDatatable: IngestDatatable;
 
@@ -15,7 +13,6 @@ export class IngestDatatableService {
     getIngestDatatableOptions(): IngestDatatable {
         return this.ingestDatatable;
     }
-
     setIngestDatatableOptions(params: IngestDatatable): void {
         this.ingestDatatable = params;
     }

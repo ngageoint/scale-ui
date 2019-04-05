@@ -1,9 +1,7 @@
 import { EventEmitter, Injectable, Output } from '@angular/core';
 import * as _ from 'lodash';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class DashboardJobsService {
     @Output() favoritesUpdated: EventEmitter<any> = new EventEmitter();
     private FAVORITES_KEY = 'scale.dashboard.favorites';

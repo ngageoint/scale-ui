@@ -9,7 +9,7 @@
     </div>
     <div class="p-grid">
         <div class="p-col-12">
-            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" filter="filter" placeholder="Job Type"
+            <p-dropdown [options]="jobTypeOptions" [(ngModel)]="selectedJobType" [autoWidth]="false" filter="filter" placeholder="Job Type"
                         [style]="{'width':'100%'}" [showClear]="false">
                 <ng-template let-jobType p-template="item">
                     {{ jobType.label }}

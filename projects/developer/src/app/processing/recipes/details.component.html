@@ -1,17 +1,11 @@
 <div *ngIf="recipe && recipeType">
-    <div class="flexed space-between">
-        <div>
-            <h2>
-                {{ recipe.recipe_type_rev.recipe_type.title }}
-                <span class="label label-success" *ngIf="recipe.completed" [pTooltip]="recipe.completedTooltip">
-                Completed {{ recipe.completedDisplay }}
-            </span>
-            </h2>
-            <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
-        </div>
-        <p-button type="button" icon="fa fa-refresh" pTooltip="Reprocess Recipe" (click)="reprocess()"
-                  *ngIf="!recipe.is_superseded"></p-button>
-    </div>
+    <h2>
+        {{ recipe.recipe_type_rev.recipe_type.title }}
+        <span class="label label-success" *ngIf="recipe.completed" [pTooltip]="recipe.completedTooltip">
+            Completed {{ recipe.completedDisplay }}
+        </span>
+    </h2>
+    <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
     <p-table [value]="[recipe]">
         <ng-template pTemplate="header">
             <tr>

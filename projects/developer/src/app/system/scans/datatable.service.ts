@@ -2,9 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { initialScansDatatable, ScansDatatable } from './datatable.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ScansDatatableService {
     scansDatatable: ScansDatatable;
 

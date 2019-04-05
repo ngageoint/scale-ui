@@ -24,7 +24,8 @@
             <i class="fa fa-circle-o-notch fa-spin"></i>
         </div>
         <p-dropdown [options]="availableDataTypes" [(ngModel)]="selectedDataType" (onChange)="changeDataTypeSelection()"
-                    [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false"></p-dropdown>
+                    [autoWidth]="false" [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading"
+                    [showClear]="false"></p-dropdown>
         <div class="metrics__filter-loading" *ngIf="filteredChoicesLoading">
             <i class="fa fa-circle-o-notch fa-spin"></i>
         </div>

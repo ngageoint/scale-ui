@@ -7,9 +7,7 @@ import { throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class DataService {
     selectedJobRows = [];
     selectedRecipeRows = [];

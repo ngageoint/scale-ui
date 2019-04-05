@@ -11,9 +11,7 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { Ingest } from './api.model';
 import { IngestDatatable } from './datatable.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class IngestApiService {
     apiPrefix: string;
 

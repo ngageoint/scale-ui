@@ -1,6 +1,6 @@
 <div class="workspaces__header">
     <h2><i class="fa fa-database"></i> Workspaces</h2>
-    <p-dropdown [options]="workspaces" [(ngModel)]="selectedWorkspace" filter="filter"
+    <p-dropdown [options]="workspaces" [autoWidth]="false" [(ngModel)]="selectedWorkspace" filter="filter"
                 class="workspaces__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
                 (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
     <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"></button>
@@ -123,9 +123,9 @@
                             <div class="p-col-6">
                                 <label>
                                     <span>Type</span>
-                                    <p-dropdown [options]="typeOptions" formControlName="type"
-                                                (onChange)="onTypeChange()" [style]="{'width':'100%'}"
-                                                placeholder="Select..." [showClear]="false">
+                                    <p-dropdown [options]="typeOptions" [autoWidth]="false"
+                                                formControlName="type" (onChange)="onTypeChange()"
+                                                [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                     </p-dropdown>
                                 </label>
                             </div>

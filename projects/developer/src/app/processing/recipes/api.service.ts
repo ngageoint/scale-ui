@@ -11,9 +11,7 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { RecipesDatatable } from './datatable.model';
 import { Recipe } from './api.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class RecipesApiService {
     apiPrefix: string;
 
