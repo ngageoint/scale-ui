@@ -175,6 +175,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     private getRecipeTypes() {
+        this.recipeTypeOptions = [];
         this.showAddRemoveDisplay = false;
         this.selectedRecipeTypes = [];
         this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
