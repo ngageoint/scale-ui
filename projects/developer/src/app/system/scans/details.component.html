@@ -67,9 +67,9 @@
                         <div class="p-col-6" formGroupName="configuration">
                             <label>
                                 <span>Workspace</span>
-                                <p-dropdown [options]="workspacesOptions" formControlName="workspace"
-                                            (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
-                                            placeholder="Select..." [showClear]="false">
+                                <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
+                                            formControlName="workspace" (onChange)="onWorkspaceChange()"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
                             <div class="p-grid">
@@ -126,8 +126,9 @@
                             <div class="p-col-6">
                                 <label>
                                     <span>New Workspace</span>
-                                    <p-dropdown [options]="newWorkspacesOptions" formControlName="new_workspace"
-                                                [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                    <p-dropdown [options]="newWorkspacesOptions" [autoWidth]="false"
+                                                formControlName="new_workspace" [style]="{'width':'100%'}"
+                                                placeholder="Select..." [showClear]="false">
                                     </p-dropdown>
                                     <div class="help-block">
                                         New workspace to which the file should be copied (optional)

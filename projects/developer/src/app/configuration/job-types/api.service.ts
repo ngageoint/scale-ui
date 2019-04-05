@@ -12,9 +12,7 @@ import { JobType } from './api.model';
 import { JobTypeName } from './api.name.model';
 import { RunningJobsDatatable } from '../../processing/running-jobs/datatable.model';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class JobTypesApiService {
     apiPrefix: string;
 

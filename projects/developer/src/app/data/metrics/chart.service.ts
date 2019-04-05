@@ -4,9 +4,7 @@ import * as _ from 'lodash';
 
 import { ColorService } from '../../common/services/color.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ChartService {
     constructor() {}
 

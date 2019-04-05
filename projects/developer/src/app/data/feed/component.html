@@ -10,7 +10,7 @@
         </p-multiSelect>
     </div>
     <div>
-        <p-dropdown [options]="timeValues" [(ngModel)]="selectedTimeValue" (onChange)="getLatestData()"
+        <p-dropdown [options]="timeValues" [autoWidth]="false" [(ngModel)]="selectedTimeValue" (onChange)="getLatestData()"
                     [style]="{'width':'150px'}" placeholder="Select..."
                     [showClear]="false"></p-dropdown>
     </div>

@@ -1,6 +1,6 @@
 <div class="strikes__header">
     <h2><i class="fa fa-bolt"></i> Strikes</h2>
-    <p-dropdown [options]="strikes" [(ngModel)]="selectedStrike" filter="filter"
+    <p-dropdown [options]="strikes" [autoWidth]="false" [(ngModel)]="selectedStrike" filter="filter"
                 class="strikes__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
                 (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
     <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"></button>
@@ -76,8 +76,9 @@
                         <div class="p-col-6" formGroupName="configuration">
                             <label>
                                 <span>Recipe</span>
-                                <p-dropdown [options]="recipeOptions" formControlName="recipe"
-                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                <p-dropdown [options]="recipeOptions" [autoWidth]="false"
+                                            formControlName="recipe" [style]="{'width':'100%'}"
+                                            placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
                         </div>
@@ -88,9 +89,9 @@
                                 <div>
                                     <label>
                                         <span>Workspace</span>
-                                        <p-dropdown [options]="workspacesOptions" formControlName="workspace"
-                                                    (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
-                                                    placeholder="Select..." [showClear]="false">
+                                        <p-dropdown [options]="workspacesOptions" [autoWidth]="false"
+                                                    formControlName="workspace" (onChange)="onWorkspaceChange()"
+                                                    [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                         </p-dropdown>
                                     </label>
                                 </div>
@@ -157,8 +158,9 @@
                             <div class="p-col-6">
                                 <label>
                                     <span>New Workspace</span>
-                                    <p-dropdown [options]="newWorkspacesOptions" formControlName="new_workspace"
-                                                [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                    <p-dropdown [options]="newWorkspacesOptions" [autoWidth]="false"
+                                                formControlName="new_workspace" [style]="{'width':'100%'}"
+                                                placeholder="Select..." [showClear]="false">
                                     </p-dropdown>
                                     <div class="help-block">
                                         New workspace to which the file should be copied (optional)

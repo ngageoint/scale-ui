@@ -1,9 +1,7 @@
 import { Injectable, Inject, EventEmitter } from '@angular/core';
 import { THEMES, ACTIVE_THEME, Theme } from './symbols';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ThemeService {
     themeChange = new EventEmitter<Theme>();
 

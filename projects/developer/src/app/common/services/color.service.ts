@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ColorService {
     public static ERROR = '#D5393E';
     public static ERROR_DATA = '#e02026';

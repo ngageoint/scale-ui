@@ -5,29 +5,18 @@
     <p-header>
         <div class="flexed space-between">
             <div class="node__filters">
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="deprecatedBtnClass"
-                        [icon]="deprecatedBtnIcon" [label]="deprecatedBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('deprecated')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="degradedBtnClass"
-                        [icon]="degradedBtnIcon" [label]="degradedBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('degraded')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="imagePullBtnClass"
-                        [icon]="imagePullBtnIcon" [label]="imagePullBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('image_pull')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="initialCleanupBtnClass"
-                        [icon]="initialCleanupBtnIcon" [label]="initialCleanupBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('initial_cleanup')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="offlineBtnClass"
-                        [icon]="offlineBtnIcon" [label]="offlineBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('offline')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="readyBtnClass" [icon]="readyBtnIcon"
+                        [label]="readyBtnLabel" [disabled]="!showActive" (click)="onFilterBtnClick('ready')"></button>
                 <button pButton type="button" class="ui-button-rounded" [ngClass]="pausedBtnClass"
                         [icon]="pausedBtnIcon" [label]="pausedBtnLabel" [disabled]="!showActive"
                         (click)="onFilterBtnClick('paused')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="readyBtnClass"
-                        [icon]="readyBtnIcon" [label]="readyBtnLabel" [disabled]="!showActive"
-                        (click)="onFilterBtnClick('ready')"></button>
-                <button pButton type="button" class="ui-button-rounded" [ngClass]="schedulerStoppedBtnClass"
-                        [icon]="schedulerStoppedBtnIcon" [label]="schedulerStoppedBtnLabel" [disabled]="!showActive"
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="busyBtnClass" [icon]="busyBtnIcon"
+                        [label]="busyBtnLabel" [disabled]="!showActive" (click)="onFilterBtnClick('busy')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="waitingBtnClass"
+                        [icon]="waitingBtnIcon" [label]="waitingBtnLabel" [disabled]="!showActive"
+                        (click)="onFilterBtnClick('waiting')"></button>
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="stoppedBtnClass"
+                        [icon]="stoppedBtnIcon" [label]="stoppedBtnLabel" [disabled]="!showActive"
                         (click)="onFilterBtnClick('scheduler_stopped')"></button>
             </div>
             <div class="flexed">
