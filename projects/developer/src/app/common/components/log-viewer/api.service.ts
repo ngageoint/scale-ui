@@ -7,7 +7,9 @@ import { catchError } from 'rxjs/internal/operators';
 
 import { DataService } from '../../services/data.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LogViewerApiService {
     apiPrefix: string;
     logArgs: any;

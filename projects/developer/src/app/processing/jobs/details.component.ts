@@ -53,7 +53,10 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             `${_.toLower(this.job.execution.status)}`;
         this.options = {
             elements: {
-                font: 'Roboto'
+                font: 'Roboto',
+                colorFunction: () => {
+                    return Color('#017cce');
+                }
             },
             scales: {
                 xAxes: [{
@@ -84,9 +87,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             plugins: {
                 datalabels: false,
                 timeline: true
-            },
-            colorFunction: () => {
-                return Color('#017cce');
             },
             maintainAspectRatio: false
         };
