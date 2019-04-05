@@ -18,7 +18,8 @@ import { JobExecution } from './execution.model';
 @Component({
     selector: 'dev-jobs',
     templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    styleUrls: ['./component.scss'],
+    providers: [ConfirmationService]
 })
 
 export class JobsComponent implements OnInit, OnDestroy {
