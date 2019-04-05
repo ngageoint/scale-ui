@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 
 import { initialJobsDatatable, JobsDatatable } from './datatable.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class JobsDatatableService {
     jobsDatatable: JobsDatatable;
 

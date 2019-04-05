@@ -11,7 +11,9 @@ import { ApiResults } from '../../common/models/api-results.model';
 import { Batch } from './api.model';
 import { BatchesDatatable } from './datatable.model';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BatchesApiService {
     apiPrefix: string;
 

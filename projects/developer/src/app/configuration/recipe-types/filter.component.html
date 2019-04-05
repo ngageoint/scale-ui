@@ -10,7 +10,7 @@
             </label>
             <label>
                 <span>Type</span>
-                <p-dropdown [options]="typeOptions" [autoWidth]="false" formControlName="type" [style]="{'width':'100%'}"
+                <p-dropdown [options]="typeOptions" formControlName="type" [style]="{'width':'100%'}"
                             placeholder="Select..." [showClear]="false">
                 </p-dropdown>
                 <div class="help-block">
@@ -19,8 +19,8 @@
             </label>
             <label>
                 <span>Condition</span>
-                <p-dropdown [options]="conditionOptions" [autoWidth]="false" formControlName="condition"
-                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                <p-dropdown [options]="conditionOptions" formControlName="condition" [style]="{'width':'100%'}"
+                            placeholder="Select..." [showClear]="false">
                 </p-dropdown>
                 <div class="help-block">
                     Condition to test data value against (required)

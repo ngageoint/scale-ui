@@ -8,7 +8,9 @@ import { catchError, map } from 'rxjs/internal/operators';
 import { NodeStatus } from '../../../system/nodes/api.status.model';
 import { DataService } from '../data.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class StatusApiService {
     apiPrefix: string;
 

@@ -7,7 +7,9 @@ import { catchError } from 'rxjs/internal/operators';
 import { environment } from '../../../environments/environment';
 import { DataService } from './data.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProfileService {
     apiPrefix: string;
 
