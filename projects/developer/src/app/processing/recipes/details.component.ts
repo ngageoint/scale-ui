@@ -13,7 +13,11 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
     styleUrls: ['./details.component.scss']
 })
 export class RecipeDetailsComponent implements OnInit, OnDestroy {
+    originalRecipeType: any;
     recipeType: any;
+    forcedNodes: any;
+    nodeOptions: any;
+    selectedNodes: any;
     recipe: any;
     subscription: any;
 
@@ -22,7 +26,21 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private recipesApiService: RecipesApiService,
         private recipeTypesApiService: RecipeTypesApiService
-    ) { }
+    ) {}
+
+    reprocess() {
+        console.log(_.isEqual(this.recipeType.definition, this.originalRecipeType.definition));
+        this.nodeOptions = [];
+        this.selectedNodes = [];
+        this.forcedNodes = {
+            all: false,
+            nodes: [],
+            sub_recipes: {}
+        };
+        _.forEach(_.keys(this.recipeType.definition.nodes), node => {
+            this.nodeOptions.push(node);
+        });
+    }
 
     unsubscribe() {
         if (this.subscription) {
@@ -37,6 +55,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                 this.recipe = recipe;
                 // get full recipe type to retrieve job types with manifests
                 this.recipeTypesApiService.getRecipeType(recipe.recipe_type.name).subscribe(recipeType => {
+                    this.originalRecipeType = recipeType;
                     // add recipe detail data to nodes
                     _.forEach(recipe.recipe_type_rev.definition.nodes, node => {
                         const recipeDetail = _.find(this.recipe.details.nodes, rd => {
