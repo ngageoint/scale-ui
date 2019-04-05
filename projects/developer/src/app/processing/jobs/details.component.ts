@@ -48,12 +48,17 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         const now = moment.utc();
         const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
         this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
-        this.exeStatus = this.job.execution.ended ?
+        this.exeStatus = this.job.execution && this.job.execution.ended ?
             `${_.toLower(this.job.execution.status)} ${moment.utc(this.job.execution.last_modified).from(now)}` :
-            `${_.toLower(this.job.execution.status)}`;
+            this.job.execution && this.job.execution.status ?
+                `${_.toLower(this.job.execution.status)}` :
+                'status unavailable';
         this.options = {
             elements: {
-                font: 'Roboto'
+                font: 'Roboto',
+                colorFunction: () => {
+                    return Color('#017cce');
+                }
             },
             scales: {
                 xAxes: [{
@@ -84,9 +89,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             plugins: {
                 datalabels: false,
                 timeline: true
-            },
-            colorFunction: () => {
-                return Color('#017cce');
             },
             maintainAspectRatio: false
         };
