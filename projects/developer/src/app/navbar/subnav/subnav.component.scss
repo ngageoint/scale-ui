@@ -1,7 +1,7 @@
 @import '../navbar.component.scss';
 @import '../../../defaults/animations';
 
-$subnav-height: 47px;
+$subnav-height: 250px;
 
 .blue-subnav {
     background: var(--scale-primary);
@@ -34,32 +34,7 @@ $subnav-height: 47px;
     display: flex;
     height: $subnav-height;
     min-height: $subnav-height;
-    //padding: 2.0em 1.5em;
-
-    ul {
-        list-style-type: none;
-        margin: 14px 0 0 0;
-        padding: 0;
-
-        li {
-            display: inline-block;
-            margin: 0 30px 0 0;
-
-            a {
-                padding: 8px 10px;
-                text-decoration: none;
-                color: var(--white);
-
-                &:hover {
-                    color: var(--black);
-                }
-
-                i {
-                    margin-right: 5px;
-                }
-            }
-        }
-    }
+    padding: 2.0em 1.5em;
 
     .subnav__header {
         position: relative;
@@ -108,31 +83,7 @@ $subnav-height: 47px;
     }
 }
 
-.processing {
-    ul {
-        margin-left: $navbar-item-width;
-    }
-}
-
-.data {
-    ul {
-        margin-left: $navbar-item-width * 2;
-    }
-}
-
-.configuration {
-    ul {
-        margin-left: $navbar-item-width * 3;
-    }
-}
-
-.system {
-    ul {
-        margin-left: $navbar-item-width * 4;
-    }
-}
-
-$subnav-bg-color: var(--subnav-light);
+$subnav-bg-color: lighten($clr-scale-blue2, 3%);
 
 .subnav__header::before {
     color: $subnav-bg-color;

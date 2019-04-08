@@ -3,7 +3,6 @@
 $navbar-height: 72px;
 $navshadow: 0 0 0.5em var(--black);
 $navbar-status-width: 250px;
-$navbar-item-width: 150px;
 
 
 .navbar-ctr {
@@ -11,9 +10,9 @@ $navbar-item-width: 150px;
 }
 
 .navbar {
-    align-items: center;
-    background: var(--navbar-dark);
-    //box-shadow: $navshadow;
+    align-items: stretch;
+    background: $clr-navbar-dark;
+    box-shadow: $navshadow;
     display: flex;
     height: $navbar-height;
     justify-content: space-between;
@@ -39,7 +38,7 @@ $navbar-item-width: 150px;
         text-decoration: none;
         text-shadow: 0 1px 0 var(--navbar-dark);
         transition: $default-transition;
-        width: $navbar-item-width;
+        width: 125px;
 
         &:hover {
             background: var(--navbar-light);
