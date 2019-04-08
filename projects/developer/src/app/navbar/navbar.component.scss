@@ -11,7 +11,7 @@ $navbar-status-width: 250px;
 
 .navbar {
     align-items: stretch;
-    background: var(--navbar-dark);
+    background: $clr-navbar-dark;
     box-shadow: $navshadow;
     display: flex;
     height: $navbar-height;
