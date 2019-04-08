@@ -1,73 +1,31 @@
-<div [class]="getSubnavStyles()">
-
+<div [ngClass]="getSubnavStyles()">
     <!-- Processing -->
-    <div [class]="getSectionStyles('processing')">
-        <div class="subnav__header subnav__header-processing">
-            <h2><i class="fa fa-cogs"></i> Processing</h2>
-        </div>
-        <div class="subnav__links">
-            <h2>Current Status</h2>
-            <div>
-                <a pButton label="View Running Jobs" icon="fa-cube" routerLink="/processing/running-jobs" (click)="navigate()"></a>
-                <a pButton label="View Running Recipes" icon="fa-cubes" routerLink="/processing/recipes" (click)="navigate()"></a>
-            </div>
-            <h2>Recent History</h2>
-            <div>
-                <a pButton label="Jobs" icon="fa-cube" routerLink="/processing/jobs" (click)="navigate()"></a>
-                <a pButton label="Job Type Failure Rates" icon="fa-exclamation-triangle" routerLink="/processing/failure-rates"
-                   (click)="navigate()"></a>
-            </div>
-                <!-- <li>
-                    <a class="subnav__link"
-                    routerLink="/processing/jobs"
-                    (click)="navigate()">
-                        <i class="fa fa-cube"></i>
-                        View Running Jobs
-                    </a>
-                </li> -->
-        </div>
-        <div class="subnav__links">
-            <h2>Search for a Job</h2>
-            <dev-processing-form (search)="onSearch()"></dev-processing-form>
-        </div>
+    <div [ngClass]="getSectionStyles('processing')">
+        <ul>
+            <li><a routerLink="/processing/jobs" (click)="navigate()"><i class="fa fa-cube"></i> Jobs</a></li>
+            <li><a routerLink="/processing/recipes" (click)="navigate()"><i class="fa fa-cubes"></i> Recipes</a></li>
+            <li><a routerLink="/processing/running-jobs" (click)="navigate()"><i class="fa fa-arrow-circle-right"></i> Running Jobs</a></li>
+            <li><a routerLink="/processing/queued-jobs" (click)="navigate()"><i class="fa fa-clock-o"></i> Queued Jobs</a></li>
+            <li><a routerLink="/processing/job-type-history" (click)="navigate()"><i class="fa fa-history"></i> Job Type History</a></li>
+            <li><a routerLink="/processing/batches" (click)="navigate()"><i class="fa fa-files-o"></i> Batches</a></li>
+        </ul>
     </div>
-
 
     <!-- Data -->
-    <div [class]="getSectionStyles('data')">
-        <div class="subnav__header subnav__header-data">
-            <h2>Data</h2>
-        </div>
-        <div class="subnav__links">
-            <h2>Files</h2>
-            <div>
-                <a pButton label="Sources" icon="fa-file-text-o" routerLink="/data/sources" (click)="navigate()"></a>
-            </div>
-            <h2>Metrics</h2>
-            <div>
-                <a pButton label="Metrics" icon="fa-bar-chart" routerLink="/data/metrics" (click)="navigate()"></a>
-            </div>
-        </div>
+    <div [ngClass]="getSectionStyles('data')">
+        <ul>
+            <li><a routerLink="/data/feed" (click)="navigate()"><i class="fa fa-line-chart"></i> Feed</a> </li>
+            <li><a routerLink="/data/ingest" (click)="navigate()"><i class="fa fa-clone"></i> Ingest Records</a></li>
+            <li><a routerLink="/data/metrics" (click)="navigate()"><i class="fa fa-bar-chart"></i> Metrics</a></li>
+        </ul>
     </div>
 
-
     <!-- Configuration -->
-    <div [class]="getSectionStyles('configuration')">
-        <div class="subnav__header subnav__header-configuration">
-            <h2>System Configuration</h2>
-        </div>
-        <div class="subnav__links">
-            <h2>Job Types</h2>
-            <div>
-                <a pButton label="Job Types" icon="fa-cube" routerLink="/configuration/job-types" (click)="navigate()"></a>
-                <a pButton label="Create a Job Type" icon="fa-plus-circle" routerLink="/configuration/job-types/edit/0"
-                   (click)="navigate()"></a>
-            </div>
-            <h2>Recipes</h2>
-            <div>
-                <a pButton label="Recipe Types" icon="fa-cubes" routerLink="/configuration/recipe-types" (click)="navigate()"></a>
-            </div>
-        </div>
+    <div [ngClass]="getSectionStyles('configuration')">
+        <ul>
+            <li><a routerLink="/configuration/job-types" (click)="navigate()"><i class="fa fa-cube"></i> Job Types</a></li>
+            <li><a routerLink="/configuration/recipe-types" (click)="navigate()"><i class="fa fa-cubes"></i> Recipe Types</a></li>
+        </ul>
     </div>
 
     <!-- System -->

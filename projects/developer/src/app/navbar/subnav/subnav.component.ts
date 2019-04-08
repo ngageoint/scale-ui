@@ -16,9 +16,9 @@ export class SubnavComponent implements OnInit {
 
     getSectionStyles(section) {
         if (section === this.sectionId) {
-            return 'subnav'; // show it
+            return `${section} subnav`; // show it
         }
-        return 'subnav hidden'; // hide it
+        return `${section} subnav hidden`; // hide it
     }
 
     getSubnavStyles() {
