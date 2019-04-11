@@ -128,9 +128,11 @@
 }
 
 ::ng-deep .ui-dialog {
-    width: 500px;
+    &.recipe-dialog {
+        width: 500px;
 
-    .ui-dialog-content {
-        padding: 12px 12px 0 0 !important;
+        .ui-dialog-content {
+            padding: 12px 12px 0 0 !important;
+        }
     }
 }

@@ -1,3 +1,4 @@
+<dev-loading-indicator [loading]="loading"></dev-loading-indicator>
 <div *ngIf="recipe && recipeType">
     <div class="flexed space-between">
         <div>
@@ -9,7 +10,7 @@
             </h2>
             <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
         </div>
-        <p-button type="button" icon="fa fa-refresh" pTooltip="Reprocess Recipe" (click)="reprocess()"
+        <p-button type="button" icon="fa fa-repeat" pTooltip="Reprocess Recipe" (click)="reprocess()"
                   *ngIf="!recipe.is_superseded"></p-button>
     </div>
     <p-table [value]="[recipe]">
@@ -46,4 +47,19 @@
     </p-table>
     <dev-recipe-graph [recipeData]="recipeType" [jobMetrics]="recipe.jobMetrics" jobMetricsTitle="Node Jobs">
     </dev-recipe-graph>
+    <p-dialog [(visible)]="showReprocess" [draggable]="false" [resizable]="false" [modal]="true" [blockScroll]="true"
+              [style]="{width: '500px'}" header="Reprocess Recipe">
+        <strong>Nodes to Reprocess</strong>
+        <div class="margin-top-sm margin-bottom-sm">
+            <p-checkbox id="allNodes" label="All Nodes" (onChange)="setAllNodes($event)"></p-checkbox>
+        </div>
+        <p-multiSelect [options]="nodeOptions" [(ngModel)]="selectedNodes" [maxSelectedLabels]="1"
+                       [style]="{width: '100%'}" [disabled]="allNodes" appendTo="body">
+            <ng-template let-node p-template="item">
+                {{ node.label }}
+            </ng-template>
+        </p-multiSelect>
+        <button pButton type="button" label="Reprocess" icon="fa fa-repeat" (click)="handleReprocess()"
+                [disabled]="allNodes === false && selectedNodes.length === 0"></button>
+    </p-dialog>
 </div>

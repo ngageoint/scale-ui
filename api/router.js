@@ -47,6 +47,7 @@ var scanCreate = require('./handlers/scanCreate');
 var scanEdit = require('./handlers/scanEdit');
 var scanValidate = require('./handlers/scanValidate');
 var errors = require('./handlers/errors');
+var recipeTypesValidate = require('./handlers/recipeTypesValidate');
 
 var apiVersion = 'v6';
 
@@ -71,9 +72,23 @@ module.exports = {
         });
 
         server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/recipes/{id}/reprocess/',
+            handler: function () {
+                return {};
+            }
+        });
+
+        server.route({
             method: 'GET',
             path: '/mocks/' + apiVersion + '/recipe-types/{name}/',
             handler: recipeTypeDetails
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/recipe-types/validation/',
+            handler: recipeTypesValidate
         });
 
         server.route({

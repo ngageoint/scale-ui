@@ -81,4 +81,9 @@ export class RecipesApiService {
                 catchError(DataService.handleError)
             );
     }
+
+    reprocessRecipe(id: number, forcedNodes: any): any {
+        return this.http.post<any>(`${this.apiPrefix}/recipes/${id}/reprocess/`, forcedNodes)
+            .pipe(catchError(DataService.handleError));
+    }
 }

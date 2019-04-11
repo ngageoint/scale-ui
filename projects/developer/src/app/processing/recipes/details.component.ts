@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -13,13 +14,15 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
     styleUrls: ['./details.component.scss']
 })
 export class RecipeDetailsComponent implements OnInit, OnDestroy {
-    originalRecipeType: any;
     recipeType: any;
     forcedNodes: any;
-    nodeOptions: any;
-    selectedNodes: any;
+    allNodes = false;
+    nodeOptions: SelectItem[] = [];
+    selectedNodes = [];
     recipe: any;
     subscription: any;
+    showReprocess = false;
+    loading = false;
 
     constructor(
         private messageService: MessageService,
@@ -29,17 +32,79 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     ) {}
 
     reprocess() {
-        console.log(_.isEqual(this.recipeType.definition, this.originalRecipeType.definition));
-        this.nodeOptions = [];
-        this.selectedNodes = [];
-        this.forcedNodes = {
-            all: false,
-            nodes: [],
-            sub_recipes: {}
-        };
-        _.forEach(_.keys(this.recipeType.definition.nodes), node => {
-            this.nodeOptions.push(node);
+        this.loading = true;
+        this.recipeTypesApiService.validateRecipeType({
+            name: this.recipeType.name,
+            definition: this.recipeType.definition
+        }).subscribe(result => {
+            this.loading = false;
+            this.showReprocess = true;
+            if (result.diff.can_be_reprocessed) {
+                this.nodeOptions = [];
+                this.selectedNodes = [];
+                this.forcedNodes = {
+                    all: false,
+                    nodes: [],
+                    sub_recipes: {}
+                };
+                _.forEach(_.keys(this.recipeType.definition.nodes), node => {
+                    const nodeObj = this.recipeType.definition.nodes[node];
+                    const nodeType = this.recipeType.definition.nodes[node].node_type.node_type;
+                    let label = null;
+                    if (nodeType === 'job') {
+                        const jobType: any = _.find(this.recipe.job_types, {
+                            name: nodeObj.node_type.job_type_name,
+                            version: nodeObj.node_type.job_type_version
+                        });
+                        label = `${jobType.title} v${jobType.version}`;
+                    } else if (nodeType === 'recipe') {
+                        const recipeType: any = _.find(this.recipe.sub_recipe_types, {
+                            name: nodeObj.node_type.recipe_type_name
+                        });
+                        label = recipeType.title;
+                    }
+                    if (nodeType !== 'condition') {
+                        this.nodeOptions.push({
+                            label: label,
+                            value: node
+                        });
+                    }
+                });
+            } else {
+                console.log('recipe cannot be reprocessed');
+            }
+        }, err => {
+            console.log(err);
+            this.messageService.add({ severity: 'error', summary: 'Error validating recipe type', detail: err.statusText });
         });
+    }
+
+    handleReprocess() {
+        this.showReprocess = false;
+        const subRecipes = {};
+        // all aspects of all sub recipes will be reprocessed
+        _.forEach(this.recipeType.sub_recipe_types, recipeType => {
+            subRecipes[recipeType.name] = {
+                all: true
+            };
+        });
+        const forcedNodes = {
+            all: this.allNodes,
+            nodes: this.selectedNodes,
+            sub_recipes: subRecipes
+        };
+        this.loading = true;
+        this.recipesApiService.reprocessRecipe(this.recipe.id, forcedNodes).subscribe(() => {
+            this.messageService.add({severity: 'success', summary: 'Reprocess request successful'});
+            this.loading = false;
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error reprocessing recipe', detail: err.statusText});
+            this.loading = false;
+        });
+    }
+
+    setAllNodes(event) {
+        this.allNodes = event;
     }
 
     unsubscribe() {
@@ -51,11 +116,11 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (this.route.snapshot) {
             const id = +this.route.snapshot.paramMap.get('id');
+            this.loading = true;
             this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(recipe => {
                 this.recipe = recipe;
                 // get full recipe type to retrieve job types with manifests
                 this.recipeTypesApiService.getRecipeType(recipe.recipe_type.name).subscribe(recipeType => {
-                    this.originalRecipeType = recipeType;
                     // add recipe detail data to nodes
                     _.forEach(recipe.recipe_type_rev.definition.nodes, node => {
                         const recipeDetail = _.find(this.recipe.details.nodes, rd => {
@@ -83,11 +148,14 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                             last_modified: recipe.recipe_type_rev.recipe_type.last_modified
                         }
                     );
+                    this.loading = false;
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type', detail: err.statusText});
+                    this.loading = false;
                 });
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving recipe', detail: err.statusText});
+                this.loading = false;
             });
         }
     }

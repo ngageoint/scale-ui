@@ -66,4 +66,11 @@ export class RecipeTypesApiService {
                 catchError(DataService.handleError)
             );
     }
+
+    validateRecipeType(recipeType: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/recipe-types/validation/`, recipeType)
+            .pipe(
+                catchError(DataService.handleError)
+            );
+    }
 }
