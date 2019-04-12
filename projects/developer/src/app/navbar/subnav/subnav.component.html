@@ -37,4 +37,10 @@
             <li><a routerLink="/system/workspaces" (click)="navigate()"><i class="fa fa-database"></i> Workspaces</a></li>
         </ul>
     </div>
+    <div [ngClass]="getSectionStyles('testing')">
+        <ul>
+            <li><a routerLink="/testing/chart" (click)="navigate()"><i class="fa fa-circle-o"></i> Chart</a></li>
+            <li><a routerLink="/testing/other" (click)="navigate()"><i class="fa fa-circle-o"></i> Other</a></li>
+        </ul>
+    </div>
 </div>

@@ -18,6 +18,9 @@
             <div [ngClass]="getNavItemStyles('system')">
                 <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
             </div>
+            <div [ngClass]="getNavItemStyles('testing')">
+                <a (click)="selectNavItem($event, 'testing')"><i class="fa fa-television"></i> Testing</a>
+            </div>
         </div>
         <div class="flexed" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
