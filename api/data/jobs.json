@@ -30,8 +30,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2016-04-27T19:11:57Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 1,
+                "recipe_type": {
+                    "id": 1,
+                    "name": "landsat8",
+                    "title": "Landsat 8",
+                    "description": "Process Landsat 8 sensor data",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "COMPLETED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 97,
             "num_exes": 94,
             "timeout": 2317,
@@ -74,8 +102,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T13:33:01Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 2,
+                "recipe_type": {
+                    "id": 2,
+                    "name": "spectral-analysis",
+                    "title": "Spectral Analysis",
+                    "description": "Perform spectral analysis using SAM, SCM, and CEM algorithms",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "QUEUED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 16,
             "num_exes": 56,
             "timeout": 2004,
@@ -118,8 +174,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T05:20:30Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 2,
+                "recipe_type": {
+                    "id": 2,
+                    "name": "spectral-analysis",
+                    "title": "Spectral Analysis",
+                    "description": "Perform spectral analysis using SAM, SCM, and CEM algorithms",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "CANCELED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 78,
             "num_exes": 72,
             "timeout": 1489,
@@ -162,8 +246,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2016-04-27T21:46:06Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 2,
+                "recipe_type": {
+                    "id": 2,
+                    "name": "spectral-analysis",
+                    "title": "Spectral Analysis",
+                    "description": "Perform spectral analysis using SAM, SCM, and CEM algorithms",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "PENDING",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 44,
             "num_exes": 80,
             "timeout": 2959,
@@ -206,8 +318,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T00:46:34Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 3,
+                "recipe_type": {
+                    "id": 3,
+                    "name": "worldview",
+                    "title": "WorldView",
+                    "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "CANCELED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 98,
             "num_exes": 73,
             "timeout": 1187,
@@ -250,8 +390,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T05:15:41Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 3,
+                "recipe_type": {
+                    "id": 3,
+                    "name": "worldview",
+                    "title": "WorldView",
+                    "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "PENDING",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 44,
             "num_exes": 98,
             "timeout": 2756,
@@ -294,8 +462,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T05:11:46Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 1,
+                "recipe_type": {
+                    "id": 1,
+                    "name": "landsat8",
+                    "title": "Landsat 8",
+                    "description": "Process Landsat 8 sensor data",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "COMPLETED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 82,
             "num_exes": 91,
             "timeout": 1175,
@@ -338,8 +534,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T12:53:31Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 1,
+                "recipe_type": {
+                    "id": 1,
+                    "name": "landsat8",
+                    "title": "Landsat 8",
+                    "description": "Process Landsat 8 sensor data",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "COMPLETED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 66,
             "num_exes": 32,
             "timeout": 2764,
@@ -382,8 +606,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2018-01-16T01:07:31Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 3,
+                "recipe_type": {
+                    "id": 3,
+                    "name": "worldview",
+                    "title": "WorldView",
+                    "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "QUEUED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 23,
             "num_exes": 71,
             "timeout": 1504,
@@ -426,8 +678,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2016-05-06T21:16:09Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 1,
+                "recipe_type": {
+                    "id": 1,
+                    "name": "landsat8",
+                    "title": "Landsat 8",
+                    "description": "Process Landsat 8 sensor data",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": true,
+            "superseded_job": null,
             "status": "FAILED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 80,
             "num_exes": 43,
             "timeout": 2361,
@@ -441,8 +721,7 @@
             "started": "2018-01-16T16:16:48Z",
             "ended": "2018-01-16T16:25:43Z",
             "last_status_change": "2018-01-16T16:25:43Z",
-            "last_modified": "2018-01-16T16:25:43Z",
-            "is_superseded": true
+            "last_modified": "2018-01-16T16:25:43Z"
         },
         {
             "id": 11,
@@ -471,8 +750,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2016-05-14T21:16:09Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 4,
+                "recipe_type": {
+                    "id": 4,
+                    "name": "oil-detection",
+                    "title": "Oil Detection",
+                    "description": "Detect oil on the surface of water",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": true,
+            "superseded_job": null,
             "status": "COMPLETED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 80,
             "num_exes": 43,
             "timeout": 2361,
@@ -515,8 +822,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2016-05-14T21:16:09Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 5,
+                "recipe_type": {
+                    "id": 5,
+                    "name": "caffe-aircraft-detection",
+                    "title": "Caffe Aircraft Detection",
+                    "description": "Detect aircraft using BVL Caffe deep learning algorithms",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": true,
+            "superseded_job": null,
             "status": "COMPLETED",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 80,
             "num_exes": 43,
             "timeout": 2361,
@@ -559,8 +894,36 @@
                 "type": "STRIKE_TRANSFER",
                 "occurred": "2016-04-27T19:11:57Z"
             },
-            "error": null,
+            "recipe": {
+                "id": 1,
+                "recipe_type": {
+                    "id": 1,
+                    "name": "landsat8",
+                    "title": "Landsat 8",
+                    "description": "Process Landsat 8 sensor data",
+                    "revision_num": 1
+                },
+                "recipe_type_rev": {
+                    "id": 1
+                },
+                "event": {
+                    "id": 1
+                }
+            },
+            "batch": {
+                "id": 1,
+                "title": "My Batch",
+                "description": "My batch of recipes",
+                "created": "2015-08-28T17:55:41.005Z"
+            },
+            "is_superseded": false,
+            "superseded_job": null,
             "status": "RUNNING",
+            "node": {
+                "id": 1,
+                "hostname": "scale.dcos.aisohio.node1"
+            },
+            "error": null,
             "priority": 97,
             "num_exes": 94,
             "timeout": 2317,

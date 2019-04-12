@@ -74,6 +74,11 @@
                        [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
                     {{ rowData.job_type.title }} {{ rowData.job_type.version }}
                 </div>
+                <div *ngSwitchCase="'recipe'">
+                    <a routerLink="/processing/recipes/{{ rowData.recipe.id }}">
+                        {{ rowData.recipe.recipe_type.title }}
+                    </a>
+                </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">
                         {{ rowData.createdDisplay }}

@@ -29,6 +29,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     datatableLoading: boolean;
     columns = [
         { field: 'job_type', header: 'Job Type' },
+        { field: 'recipe', header: 'Recipe' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node.hostname', header: 'Node' },
