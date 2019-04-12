@@ -233,10 +233,9 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     onDuplicateClick() {
+        delete this.scan.id;
         this.scan.clean();
         this.scan.name += ' copy';
-        // need to just update not null out
-        this.scan.id += 5;
         this.isEditing = true;
         this.items = _.clone(this.editMenu);
         this.initEdit();
