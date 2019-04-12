@@ -15,7 +15,7 @@
                         <tr *ngIf="job.recipe">
                             <td>Recipe:</td>
                             <td>
-                                <a routerLink="/processing/recipes/{{job.id}}">
+                                <a routerLink="/processing/recipes/{{job.recipe.id}}">
                                     {{ job.recipe.recipe_type.title }} {{ job.recipe.recipe_type.version }}
                                 </a>
                             </td>
