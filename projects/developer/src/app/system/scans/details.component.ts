@@ -19,7 +19,8 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
 export class ScanDetailsComponent implements OnInit, OnDestroy {
     private routeParams: any;
     private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
+        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } },
+        { label: 'Duplicate', icon: 'fa fa-copy', disabled: false, command: () => { this.onDuplicateClick(); } }
     ];
     private editMenu: MenuItem[] = [
         { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
@@ -231,6 +232,16 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         this.initEdit();
     }
 
+    onDuplicateClick() {
+        this.scan.clean();
+        this.scan.name += ' copy';
+        // need to just update not null out
+        this.scan.id += 5;
+        this.isEditing = true;
+        this.items = _.clone(this.editMenu);
+        this.initEdit();
+    }
+
     onValidateClick() {
         this.scansApiService.validateScan(this.scan.clean()).subscribe(data => {
             if (data.is_valid) {
@@ -259,7 +270,9 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // edit scan
             this.scansApiService.editScan(this.scan.id, this.scan.clean()).subscribe(data => {
                 this.redirect(this.scan.id);
+                console.log('yay');
             }, err => {
+                console.log('boo');
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error editing scan', detail: err.statusText});
             });
@@ -267,7 +280,9 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // create scan
             this.scansApiService.createScan(this.scan.clean()).subscribe(data => {
                 this.redirect(data.id);
+                console.log(':((');
             }, err => {
+                console.log(':(');
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
             });
