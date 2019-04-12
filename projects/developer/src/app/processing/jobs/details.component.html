@@ -15,9 +15,9 @@
                         <tr *ngIf="job.recipe">
                             <td>Recipe:</td>
                             <td>
-                                <!--<a ng-href="#/recipes/recipe/{{ vm.job.recipes[0].id }}">-->
-                                {{ job.recipe.recipe_type.title }} {{ job.recipe.recipe_type.version }}
-                                <!--</a>-->
+                                <a routerLink="/processing/recipes/{{job.id}}">
+                                    {{ job.recipe.recipe_type.title }} {{ job.recipe.recipe_type.version }}
+                                </a>
                             </td>
                         </tr>
                         <!--<tr ng-show="vm.job.superseded_by_job.id"><td>Superseded By:</td><td><a ng-href="#/jobs/job/{{ vm.job.superseded_by_job.id }}">{{ vm.job.superseded_by_job.job_type.title }} {{ vm.job.superseded_by_job.job_type.version }}</a></td></tr>-->
