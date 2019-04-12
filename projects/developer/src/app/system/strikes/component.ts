@@ -20,7 +20,8 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
 export class StrikesComponent implements OnInit, OnDestroy {
     private routeParams: any;
     private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
+        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } },
+        { label: 'Duplicate', icon: 'fa fa-copy', disabled: false, command: () => { this.onDuplicateClick(); } }
     ];
     private editMenu: MenuItem[] = [
         { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
@@ -285,6 +286,14 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onEditClick() {
+        this.isEditing = true;
+        this.items = _.clone(this.editMenu);
+        this.initEdit();
+    }
+
+    onDuplicateClick() {
+        this.selectedStrikeDetail.clean();
+        this.selectedStrikeDetail.name += " copy";
         this.isEditing = true;
         this.items = _.clone(this.editMenu);
         this.initEdit();
