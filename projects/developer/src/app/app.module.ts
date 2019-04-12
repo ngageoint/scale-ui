@@ -77,6 +77,7 @@ import { StrikesComponent } from './system/strikes/component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { WorkspacesComponent } from './system/workspaces/component';
+import { TestingComponent } from './testing/chart/component';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
@@ -132,7 +133,8 @@ const baseInitializer = () => {
         StatusComponent,
         StrikesComponent,
         SubnavComponent,
-        WorkspacesComponent
+        WorkspacesComponent,
+        TestingComponent
     ],
     imports: [
         AccordionModule,

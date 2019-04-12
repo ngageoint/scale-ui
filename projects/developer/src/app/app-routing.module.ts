@@ -24,6 +24,7 @@ import { StrikesComponent } from './system/strikes/component';
 import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
 import { WorkspacesComponent } from './system/workspaces/component';
+import { TestingComponent } from './testing/chart/component';
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', component: DashboardComponent },
@@ -54,7 +55,8 @@ const routes: Routes = [
     { path: 'system/scans', component: ScansComponent },
     { path: 'system/scans/:id', component: ScanDetailsComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
-    { path: 'system/workspaces/:id', component: WorkspacesComponent }
+    { path: 'system/workspaces/:id', component: WorkspacesComponent },
+    { path: 'testing/chart', component: TestingComponent }
 ];
 
 @NgModule({
