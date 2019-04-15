@@ -10,6 +10,12 @@ then
     jq '.auth.scheme.url = "'${AUTH_URL}'"' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
 fi
 
+if [[ "${AUTH_ENABLED}x" != "x" ]]
+then
+    AUTH_CLEANED=$(echo ${AUTH_ENABLED} | tr '[:upper:]' '[:lower:]')
+    jq '.auth.enabled = '${AUTH_CLEANED}'' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
+fi
+
 if [[ "${SILO_URL}x" != "x" ]]
 then
     jq '.siloUrl = "'${SILO_URL}'"' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
