@@ -292,6 +292,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onDuplicateClick() {
+        delete this.selectedStrikeDetail.id;
         this.selectedStrikeDetail.clean();
         this.selectedStrikeDetail.name += ' copy';
         this.isEditing = true;
