@@ -236,6 +236,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         delete this.scan.id;
         this.scan.clean();
         this.scan.name += ' copy';
+        this.scan.title += ' copy';
         this.isEditing = true;
         this.items = _.clone(this.editMenu);
         this.initEdit();

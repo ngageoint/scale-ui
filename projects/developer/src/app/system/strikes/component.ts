@@ -295,6 +295,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         delete this.selectedStrikeDetail.id;
         this.selectedStrikeDetail.clean();
         this.selectedStrikeDetail.name += ' copy';
+        this.selectedStrikeDetail.title += ' copy';
         this.isEditing = true;
         this.items = _.clone(this.editMenu);
         this.initEdit();
