@@ -269,9 +269,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // edit scan
             this.scansApiService.editScan(this.scan.id, this.scan.clean()).subscribe(data => {
                 this.redirect(this.scan.id);
-                console.log('yay');
             }, err => {
-                console.log('boo');
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error editing scan', detail: err.statusText});
             });
@@ -279,9 +277,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // create scan
             this.scansApiService.createScan(this.scan.clean()).subscribe(data => {
                 this.redirect(data.id);
-                console.log(':((');
             }, err => {
-                console.log(':(');
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
             });
