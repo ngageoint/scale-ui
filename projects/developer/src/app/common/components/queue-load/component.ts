@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 import {UIChart} from 'primeng/chart';
 import * as moment from 'moment';
 import * as _ from 'lodash';

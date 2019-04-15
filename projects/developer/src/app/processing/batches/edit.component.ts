@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import * as _ from 'lodash';
 
-import { MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 import { Batch } from './api.model';
 import { BatchesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';

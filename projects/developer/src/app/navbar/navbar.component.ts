@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
-import { MessageService } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
