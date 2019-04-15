@@ -78,6 +78,7 @@ import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { WorkspacesComponent } from './system/workspaces/component';
 import { TestingComponent } from './testing/chart/component';
+import { GanttComponent } from './testing/gantt/component';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
@@ -134,7 +135,8 @@ const baseInitializer = () => {
         StrikesComponent,
         SubnavComponent,
         WorkspacesComponent,
-        TestingComponent
+        TestingComponent,
+        GanttComponent
     ],
     imports: [
         AccordionModule,

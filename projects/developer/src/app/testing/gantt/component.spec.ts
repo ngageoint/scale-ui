@@ -10,16 +10,16 @@ import { DataService } from '../../common/services/data.service';
 import { JobsApiService } from './api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobsDatatableService } from './datatable.service';
-import { TestingComponent } from './component';
+import { GanttComponent } from './component';
 
 
 describe('JobsComponent', () => {
-    let component: TestingComponent;
-    let fixture: ComponentFixture<TestingComponent>;
+    let component: GanttComponent;
+    let fixture: ComponentFixture<GanttComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [TestingComponent],
+            declarations: [GanttComponent],
             imports: [HttpClientTestingModule],
             providers: [
                 DataService, JobsApiService, JobsDatatableService, JobTypesApiService, ConfirmationService, MessageService,
@@ -40,7 +40,7 @@ describe('JobsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(TestingComponent);
+        fixture = TestBed.createComponent(GanttComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

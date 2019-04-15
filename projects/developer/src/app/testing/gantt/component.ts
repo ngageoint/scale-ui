@@ -15,7 +15,7 @@ import { DataService } from '../../common/services/data.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class TestingComponent implements OnInit, OnDestroy {
+export class GanttComponent implements OnInit, OnDestroy {
     subscription: any;
     job: Job;
     loading: boolean;
