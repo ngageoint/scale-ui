@@ -53,7 +53,8 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     icons: SelectItem[] = [];
     items: MenuItem[];
     currentStepIdx: number;
-    modifiedJobTypeId: number;
+    modifiedJobTypeName: string;
+    modifiedJobTypeVersion: string;
 
     constructor(
         private messageService: MessageService,
@@ -154,6 +155,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.jobType.configuration = null;
         this.jobType.manifest = null;
         delete this.jobType.docker_image;
+        this.validated = false;
         this.validateForm();
     }
 
@@ -194,27 +196,31 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         if (this.mode === 'Create') {
             this.jobTypesApiService.createJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
-                this.modifiedJobTypeId = result.id;
+                this.modifiedJobTypeName = result.name;
+                this.modifiedJobTypeVersion = result.version;
                 _.forEach(this.items, item => {
                     item.disabled = true;
                 });
             }, err => {
                 console.log(err);
                 this.submitted = false;
-                this.modifiedJobTypeId = null;
+                this.modifiedJobTypeName = null;
+                this.modifiedJobTypeVersion = null;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.statusText });
             });
         } else {
             this.jobTypesApiService.updateJobType(this.cleanJobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
-                this.modifiedJobTypeId = result.id;
+                this.modifiedJobTypeName = result.name;
+                this.modifiedJobTypeVersion = result.version;
                 _.forEach(this.items, item => {
                     item.disabled = true;
                 });
             }, err => {
                 console.log(err);
                 this.submitted = false;
-                this.modifiedJobTypeId = null;
+                this.modifiedJobTypeName = null;
+                this.modifiedJobTypeVersion = null;
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.statusText });
             });
         }

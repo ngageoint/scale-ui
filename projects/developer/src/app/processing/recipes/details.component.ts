@@ -35,7 +35,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.recipeTypesApiService.validateRecipeType({
             name: this.recipeType.name,
-            definition: this.recipeType.definition
+            definition: RecipeType.cleanDefinition(this.recipeType.definition)
         }).subscribe(result => {
             this.loading = false;
             this.showReprocess = true;
@@ -71,7 +71,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                     }
                 });
             } else {
-                console.log('recipe cannot be reprocessed');
+                this.messageService.add({ severity: 'error', summary: 'Recipe cannot be reprocessed' });
             }
         }, err => {
             console.log(err);

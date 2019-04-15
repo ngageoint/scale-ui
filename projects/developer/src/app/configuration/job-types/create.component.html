@@ -19,13 +19,17 @@
                 </div>
                 <div class="p-col-10" *ngIf="currentStepIdx === 0">
                     <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
-                    <div class="p-grid" *ngIf="jobType.manifest">
-                        <div class="p-col-5 job-type__manifest">
-                            <div class="flexed space-between">
-                                <h3>{{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}</h3>
-                                <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Delete Seed Image"
-                                        (click)="onImageRemove()"></button>
-                            </div>
+                    <div class="margin-top-lg" *ngIf="jobType.manifest">
+                        <p-card>
+                            <p-header>
+                                <div class="flexed space-between ui-card-title job-type__manifest">
+                                    <div>
+                                        {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
+                                    </div>
+                                    <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Remove Seed Image"
+                                            tooltipPosition="left" (click)="onImageRemove()"></button>
+                                </div>
+                            </p-header>
                             {{ jobType.manifest.job.description }}
                             <ul class="list-unstyled">
                                 <li><strong>Maintainer:</strong> {{ jobType.manifest.job.maintainer.name }}</li>
@@ -39,7 +43,7 @@
                                     <strong>Phone:</strong> {{ jobType.manifest.job.maintainer.phone }}
                                 </li>
                             </ul>
-                        </div>
+                        </p-card>
                     </div>
                 </div>
                 <div class="p-col-10" *ngIf="currentStepIdx === 1">
@@ -69,7 +73,8 @@
                         <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
                                 (click)="onSubmit()" *ngIf="validated && !submitted"></button>
                         <a class="ui-button-success" pButton icon="fa fa-arrow-circle-right" label="View Job Type"
-                           routerLink="/configuration/job-types/{{ modifiedJobTypeId }}" *ngIf="submitted && modifiedJobTypeId"></a>
+                           routerLink="/configuration/job-types/{{ modifiedJobTypeName }}/{{ modifiedJobTypeVersion }}"
+                           *ngIf="submitted && modifiedJobTypeName && modifiedJobTypeVersion"></a>
                     </div>
                     <!--<div class="p-grid">-->
                     <!--<div class="p-col-2">-->

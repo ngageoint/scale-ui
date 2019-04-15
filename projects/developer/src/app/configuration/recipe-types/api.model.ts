@@ -42,6 +42,16 @@ export class RecipeType {
         return null;
     }
 
+    public static cleanDefinition(definition) {
+        return {
+            input: {
+                files: definition.input.files,
+                json: definition.input.json
+            },
+            nodes: definition.input.nodes
+        };
+    }
+
     public addCondition(condition) {
         if (!this.conditions || !Array.isArray(this.conditions)) {
             this.conditions = [];
