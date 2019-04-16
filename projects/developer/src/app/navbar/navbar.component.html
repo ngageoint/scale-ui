@@ -22,12 +22,15 @@
                 <a (click)="selectNavItem($event, 'testing')"><i class="fa fa-television"></i> Testing</a>
             </div>
         </div>
-        <div class="flexed" style="height: 100%">
+        <div class="flexed navbar__settings" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
                 <dev-status (statusChange)="onStatusChange($event)"></dev-status>
             </div>
+            <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
+                <span [ngClass]="themeIcon"></span>
+            </div>
             <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler" pTooltip="Scheduler Status"
-                 tooltipPosition="bottom" (click)="schedulerOp.toggle($event)">
+                 tooltipPosition="bottom" (click)="onSchedulerClick($event)">
                 <div class="navbar__icon">
                     <span class="fa fa-heartbeat"></span>
                     <span class="label label-danger" *ngIf="scheduler.warnings.length > 0">
@@ -35,10 +38,8 @@
                     </span>
                 </div>
             </div>
-            <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
-                <span [ngClass]="themeIcon"></span>
-            </div>
-            <div class="navbar__profile" *ngIf="env.auth.enabled" (click)="profileOp.toggle($event)" #profile>
+            <div class="navbar__profile" pTooltip="User Profile" tooltipPosition="bottom" *ngIf="env.auth.enabled"
+                 (click)="onProfileClick($event)" #profile>
                 <span class="fa fa-user-circle-o"></span>
             </div>
         </div>
@@ -63,12 +64,16 @@
 </p-overlayPanel>
 <p-overlayPanel styleClass="navbar__profile-overlaypanel" appendTo="body" [dismissable]="false"
                 (onShow)="handleOnProfileShow()" #profileOp>
-    <div class="navbar__profile-login" *ngIf="!isAuthenticated">
+    <div class="navbar__profile-login" *ngIf="!isAuthenticated && env.auth.scheme.type === 'form'">
         <input pInputText type="text" placeholder="Username" [(ngModel)]="username" (keypress)="handleKeyPress($event)"
                #user/>
         <input pInputText type="password" placeholder="Password" [(ngModel)]="password"
                (keypress)="handleKeyPress($event)"/>
         <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login" (click)="login()"
                 [disabled]="!username || !password"></button>
+    </div>
+    <div class="navbar__profile-data" *ngIf="isAuthenticated && userProfile">
+        <h3>Authenticated User</h3>
+        {{ userProfile.first_name }} {{ userProfile.last_name }}
     </div>
 </p-overlayPanel>

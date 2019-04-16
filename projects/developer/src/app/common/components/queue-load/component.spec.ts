@@ -3,7 +3,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 import { ColorService } from '../../services/color.service';
 import { DataService } from '../../services/data.service';

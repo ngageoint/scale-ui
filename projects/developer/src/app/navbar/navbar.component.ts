@@ -1,10 +1,11 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
-import { MessageService } from 'primeng/primeng';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
 import { ProfileService } from '../common/services/profile.service';
+import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
 
 @Component({
@@ -17,6 +18,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     @Input() theme: string;
     @Input() isAuthenticated: boolean;
     @ViewChild('profileOp') profileOp: OverlayPanel;
+    @ViewChild('schedulerOp') schedulerOp: OverlayPanel;
     @ViewChild('profile') profile: any;
     @ViewChild('user') usernameEl: any;
     env = environment;
@@ -29,10 +31,12 @@ export class NavbarComponent implements OnInit, OnChanges {
     scheduler: any;
     schedulerClass: string;
     schedulerIcon: string;
+    userProfile: any;
 
     constructor(
         private messageService: MessageService,
         private profileService: ProfileService,
+        private dataService: DataService,
         private themeService: ThemeService
     ) {}
 
@@ -99,6 +103,16 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
+    onSchedulerClick(event) {
+        this.profileOp.hide();
+        this.schedulerOp.toggle(event);
+    }
+
+    onProfileClick(event) {
+        this.schedulerOp.hide();
+        this.profileOp.toggle(event);
+    }
+
     onStatusChange(data) {
         this.scheduler = data.scheduler;
         this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
@@ -114,7 +128,9 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.userProfile = this.dataService.getUserProfile();
+    }
 
     ngOnChanges(changes: SimpleChanges) {
         if (changes.theme && changes.theme.currentValue) {

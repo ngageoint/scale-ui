@@ -304,7 +304,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                             return {
                                 text: dataset.icon ?
                                     dataset.icon :
-                                    dataset.label === this.selectedDataFeed.strike.title ?
+                                    dataset.label === this.selectedDataFeed && this.selectedDataFeed.strike.title ?
                                         'Ingest Rate' :
                                         dataset.label,
                                 fillStyle: dataset.backgroundColor,
