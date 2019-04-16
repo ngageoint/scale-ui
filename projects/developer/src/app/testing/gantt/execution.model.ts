@@ -1,10 +1,10 @@
 import * as moment from 'moment';
 
 import { environment } from '../../../environments/environment';
-import { Job } from './api.model';
+import { Recipe } from './api.model';
 import { JobType } from '../../configuration/job-types/api.model';
 
-export class JobExecution {
+export class RecipeExecution {
     created_formatted: string;
     queued_formatted: string;
     started_formatted: string;
@@ -14,7 +14,7 @@ export class JobExecution {
 
     private static build(data) {
         if (data) {
-            return new JobExecution(
+            return new RecipeExecution(
                 data.id,
                 data.status,
                 data.exe_num,
@@ -27,7 +27,6 @@ export class JobExecution {
                 data.job,
                 data.node,
                 data.error,
-                data.job_type,
                 data.timeout,
                 data.input_file_size,
                 data.task_results,
@@ -40,9 +39,9 @@ export class JobExecution {
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
-                return data.map(item => JobExecution.build(item));
+                return data.map(item => RecipeExecution.build(item));
             }
-            return JobExecution.build(data);
+            return RecipeExecution.build(data);
         }
         return null;
     }
@@ -57,10 +56,9 @@ export class JobExecution {
         public started: string,
         public ended: string,
         public last_modified: string,
-        public job: Job,
+        public job: Recipe,
         public node: any,
         public error: any,
-        public job_type: JobType,
         public timeout: any,
         public input_file_size: any,
         public task_results: any,

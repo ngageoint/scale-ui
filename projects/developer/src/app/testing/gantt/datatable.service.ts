@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 
-import { initialJobsDatatable, JobsDatatable } from './datatable.model';
+import { initialRecipesDatatable, RecipesDatatable } from './datatable.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class JobsDatatableService {
-    jobsDatatable: JobsDatatable;
+export class RecipesDatatableService {
+    recipesDatatable: RecipesDatatable;
 
     constructor() {
-        this.jobsDatatable = initialJobsDatatable;
+        this.recipesDatatable = initialRecipesDatatable;
     }
 
-    getJobsDatatableOptions(): JobsDatatable {
-        return this.jobsDatatable;
+    getRecipesDatatableOptions(): RecipesDatatable {
+        return this.recipesDatatable;
     }
-    setJobsDatatableOptions(params: JobsDatatable): void {
-        this.jobsDatatable = params;
+    setRecipesDatatableOptions(params: RecipesDatatable): void {
+        this.recipesDatatable = params;
     }
 }

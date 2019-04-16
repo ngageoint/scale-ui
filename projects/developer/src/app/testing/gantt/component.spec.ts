@@ -7,9 +7,9 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
-import { JobsApiService } from './api.service';
+import { RecipesApiService } from './api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { JobsDatatableService } from './datatable.service';
+import { RecipesDatatableService } from './datatable.service';
 import { GanttComponent } from './component';
 
 
@@ -22,7 +22,7 @@ describe('JobsComponent', () => {
             declarations: [GanttComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                DataService, JobsApiService, JobsDatatableService, JobTypesApiService, ConfirmationService, MessageService,
+                DataService, RecipesApiService, RecipesDatatableService, JobTypesApiService, ConfirmationService, MessageService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

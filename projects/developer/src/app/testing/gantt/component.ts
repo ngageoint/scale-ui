@@ -5,10 +5,11 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
-import { Job } from './api.model';
-import { JobExecution } from './execution.model';
-import { JobsApiService } from './api.service';
+import { Recipe } from './api.model';
+import { RecipeExecution } from './execution.model';
+import { RecipesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
+import { debuglog } from 'util';
 
 @Component({
     selector: 'dev-job-details',
@@ -17,7 +18,7 @@ import { DataService } from '../../common/services/data.service';
 })
 export class GanttComponent implements OnInit, OnDestroy {
     subscription: any;
-    job: Job;
+    recipe: Recipe;
     loading: boolean;
     loadingInputs: boolean;
     loadingOutputs: boolean;
@@ -37,21 +38,13 @@ export class GanttComponent implements OnInit, OnDestroy {
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private jobsApiService: JobsApiService
+        private jobsApiService: RecipesApiService
     ) {}
 
     private initJobDetail(data) {
-        this.job = data;
-        this.job.id = 1;
-            this.selectedJobExe = _.clone(this.job.execution);
+        this.recipe = data;
+        this.recipe.id = 4;
         const now = moment.utc();
-        const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
-        this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
-        this.exeStatus = this.job.execution && this.job.execution.ended ?
-            `${_.toLower(this.job.execution.status)} ${moment.utc(this.job.execution.last_modified).from(now)}` :
-            this.job.execution && this.job.execution.status ?
-                `${_.toLower(this.job.execution.status)}` :
-                'status unavailable';
         this.options = {
             elements: {
                 font: 'Roboto',
@@ -92,10 +85,10 @@ export class GanttComponent implements OnInit, OnDestroy {
             maintainAspectRatio: false
         };
         this.data = {
-            labels: ['Created', 'Queued', 'Executed'],
+            labels: [data.id],
             datasets: [{
                 data: [
-                    [data.created, data.queued, DataService.calculateDuration(data.created, data.queued, true)]
+                    [data.created, data.deprecated, DataService.calculateDuration(data.created, data.deprecated, true)]
                 ]
             }, {
                 data: [
@@ -107,17 +100,18 @@ export class GanttComponent implements OnInit, OnDestroy {
                 ]
             }]
         };
+        console.log(data.queued);
     }
 
     private getJobDetail(id: number) {
         this.loading = true;
-        this.subscription = this.jobsApiService.getJob(id, true).subscribe(data => {
+        this.subscription = this.jobsApiService.getRecipe(id, true).subscribe(data => {
             this.loading = false;
             this.initJobDetail(data);
 
             // get job inputs
             this.loadingInputs = true;
-            this.jobsApiService.getJobInputs(id)
+            this.jobsApiService.getRecipe(id)
                 .subscribe(inputData => {
                     this.loadingInputs = false;
                     _.forEach(inputData.results, d => {
@@ -127,7 +121,7 @@ export class GanttComponent implements OnInit, OnDestroy {
                         d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
                     });
                     this.jobInputs = inputData.results;
-                    this.inputClass = this.jobInputs.length > 0 && _.keys(data.input.json).length > 0 ? 'p-col-6' : 'p-col-12';
+                    this.inputClass = 'p-col-12';
                 }, err => {
                     this.loadingInputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
@@ -135,7 +129,7 @@ export class GanttComponent implements OnInit, OnDestroy {
 
             // get job outputs
             this.loadingOutputs = true;
-            this.jobsApiService.getJobOutputs(id)
+            this.jobsApiService.getRecipe(id)
                 .subscribe(outputData => {
                     this.loadingOutputs = false;
                     _.forEach(outputData.results, d => {
@@ -145,7 +139,7 @@ export class GanttComponent implements OnInit, OnDestroy {
                         d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
                     });
                     this.jobOutputs = outputData.results;
-                    this.outputClass = this.jobOutputs.length > 0 && _.keys(data.output.json).length > 0 ? 'p-col-6' : 'p-col-12';
+                    this.outputClass = 'p-col-12';
                 }, err => {
                     this.loadingOutputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
@@ -153,10 +147,10 @@ export class GanttComponent implements OnInit, OnDestroy {
 
             // get job executions
             this.loadingExecutions = true;
-            this.jobsApiService.getJobExecutions(id)
+            this.jobsApiService.getRecipe(id)
                 .subscribe(exeData => {
                     this.loadingExecutions = false;
-                    this.jobExecutions = JobExecution.transformer(exeData.results);
+                    this.jobExecutions = RecipeExecution.transformer(exeData.results);
                 }, err => {
                     this.loadingExecutions = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
