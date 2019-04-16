@@ -13,6 +13,7 @@ RUN apk -U --no-cache add jq moreutils && chmod 777 /usr/share/nginx/html
 ENV CONFIG_JSON=/usr/share/nginx/html/assets/appConfig.json
 
 COPY dist/developer /usr/share/nginx/html
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh && chmod 777 ${CONFIG_JSON} 
 
