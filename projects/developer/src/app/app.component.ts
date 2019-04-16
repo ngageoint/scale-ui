@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { environment } from '../environments/environment';
 import { ThemeService } from './theme';
 import { ProfileService } from './common/services/profile.service';
+import { DataService } from './common/services/data.service';
 
 @Component({
     selector: 'dev-root',
@@ -20,7 +21,8 @@ export class AppComponent implements OnInit {
 
     constructor(
         private themeService: ThemeService,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        private dataService: DataService
     ) {}
 
     ngOnInit() {
@@ -32,9 +34,9 @@ export class AppComponent implements OnInit {
             this.loading = true;
             this.profileService.getProfile().subscribe(data => {
                 this.loading = false;
-                console.log(data);
                 if (data) {
-                    // continue to app
+                    // set user data and continue to app
+                    this.dataService.setUserProfile(data);
                     this.isAuthenticated = true;
                 } else {
                     // attempt to authenticate
@@ -43,11 +45,18 @@ export class AppComponent implements OnInit {
                         this.header = 'Authentication is Required';
                         this.message = 'Redirecting to GEOAxIS...';
                         window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
-                    } else {
+                    } else if (environment.auth.scheme.type === 'form') {
                         // show login form
                         this.header = 'Authentication is Required';
                         this.message = 'Enter your username and password to continue.';
                         this.isAuthenticated = false;
+                    } else {
+                        // redirect
+                        this.header = 'Authentication is Required';
+                        this.message = 'Redirecting to login form...';
+                        setTimeout(() => {
+                            window.location.href = `${environment.auth.scheme.url}?next=${window.location.href}`;
+                        }, 3000);
                     }
                 }
             }, err => {
