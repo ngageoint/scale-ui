@@ -34,6 +34,9 @@ export class BatchDetailsComponent implements OnInit {
     batch: any;
     recipeType: RecipeType;
     items: MenuItem[] = _.clone(this.viewMenu);
+    recipeTypeOptions: SelectItem[] = [];
+    jobOptions: SelectItem[] = [];
+    previousBatchOptions: SelectItem[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -75,11 +78,6 @@ export class BatchDetailsComponent implements OnInit {
 
     private initBatchForm() {
         if (this.batch) {
-            // disable the name field if editing an existing batch
-            if (this.batch.id) {
-                this.createForm.get('name').disable();
-            }
-
             // add the remaining values from the object
             this.createForm.patchValue(this.batch);
 
@@ -144,6 +142,38 @@ export class BatchDetailsComponent implements OnInit {
         }
     }
 
+    private getRecipeTypes() {
+        return this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            const recipeTypes = RecipeType.transformer(data.results);
+            _.forEach(recipeTypes, (rt: any) => {
+                this.recipeTypeOptions.push({
+                    label: rt.title,
+                    value: rt
+                });
+            });
+        }, err => {
+            console.log('Error retrieving recipe types: ' + err);
+        });
+    }
+
+    handleRecipeTypeChange(event) {
+        this.batchesApiService.getBatches({recipe_type_name: event.value.name}).subscribe(data => {
+            const batches = Batch.transformer(data.results);
+            _.forEach(batches, (b: any) => {
+                this.previousBatchOptions.push({
+                    label: b.title,
+                    value: b.root_batch.id
+                });
+            });
+        });
+        _.forEach(this.batch.recipe_type_rev.definition.jobs, job => {
+            this.jobOptions.push({
+                label: job.name,
+                value: job.name
+            });
+        });
+    }
+
     onEditClick() {
         this.isEditing = true;
         this.items = _.clone(this.editMenu);
@@ -167,7 +197,12 @@ export class BatchDetailsComponent implements OnInit {
         this.redirect(this.batch.id || 'create');
     }
 
+    setAllJobs(event) {
+        this.batch.definition.all_jobs = event;
+    }
+
     ngOnInit() {
+        this.getRecipeTypes();
         this.initFormGroups();
         let id = null;
         if (this.route && this.route.paramMap) {
