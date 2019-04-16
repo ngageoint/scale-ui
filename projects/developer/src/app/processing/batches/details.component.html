@@ -2,7 +2,7 @@
     <h2><i class="fa fa-files-o"></i> Batch Details</h2>
 </div>
 <a routerLink="/processing/batches"><i class="fa fa-caret-left"></i> Batches List</a>
-<div *ngIf="batch">
+<div class="batches__details" *ngIf="batch">
     <p-panel>
         <p-header class="flexed space-between">
             <div>
@@ -47,7 +47,9 @@
                         <td>
                             <span *ngIf="batch.superseded_batch">
                                 <a routerLink="/processing/batches/{{ batch.superseded_batch.id }}">
-                                    <span [pTooltip]="batch.superseded_batch.description">{{ batch.superseded_batch.title }}</span>
+                                    <span [pTooltip]="batch.superseded_batch.description">
+                                        {{ batch.superseded_batch.title }}
+                                    </span>
                                 </a>
                             </span>
                             <span *ngIf="!batch.root_batch"><em>None</em></span>
@@ -73,70 +75,71 @@
         </div>
         <div *ngIf="isEditing && batch">
             <div [formGroup]="createForm">
-                <div class="p-grid">
-                    <div class="p-col-6">
-                        <div class="margin-bottom-md">
-                            <label for="title">Title *:</label>
-                            <input pInputText type="text" id="title" formControlName="title" class="full-width"/>
-                        </div>
-                        <div>
-                            <label for="description">Description:</label>
-                            <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
-                                      class="full-width"></textarea>
-                        </div>
+                <div class="margin-bottom-md">
+                    <label>
+                        <span>Title</span>
+                        <input pInputText type="text" id="title" formControlName="title" class="full-width"/>
+                    </label>
+                </div>
+                <div>
+                    <label>
+                        <span>Description</span>
+                        <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
+                                  class="full-width"></textarea>
+                    </label>
+                </div>
+                <div formGroupName="configuration">
+                    <label>
+                        <span>Priority</span>
+                        <input pInputText type="number" id="priority" formControlName="priority"
+                               class="full-width"/>
+                    </label>
+                </div>
+                <div *ngIf="!batch.id">
+                    <div class="margin-bottom-md">
+                        <label for="recipeType">Recipe Type *:</label>
+                        <p-dropdown id="recipeType" [options]="recipeTypeOptions" formControlName="recipe_type"
+                                    [style]="{'width': '100%'}" (onChange)="onRecipeTypeChange($event)">
+                            <ng-template let-recipeType p-template="item">
+                                {{ recipeType.title }} v{{ recipeType.version }}
+                            </ng-template>
+                        </p-dropdown>
                     </div>
-                    <div class="p-col-6">
-                        <div class="margin-bottom-md">
-                            <label for="recipeType">Recipe Type *:</label>
-                            <p-dropdown id="recipeType" [options]="recipeTypeOptions" placeholder="Select..."
-                                        formControlName="recipe_type" [style]="{'width': '100%'}"
-                                        (onChange)="handleRecipeTypeChange($event)">
-                                <ng-template let-recipeType p-template="item">
-                                    {{ recipeType.title }} v{{ recipeType.version }}
+
+                    <div formGroupName="definition">
+                        <div *ngIf="previousBatchOptions.length === 0" class="margin-bottom-md">
+                            <label for="previousBatch">Previous Batch:</label>
+                            Choose a recipe type in order to see relevant batches.
+                        </div>
+
+                        <div *ngIf="previousBatchOptions.length > 0" class="margin-bottom-md"
+                             formGroupName="previous_batch">
+                            <label for="previousBatch">Previous Batch:</label>
+                            <p-dropdown id="previousBatch" [options]="previousBatchOptions"
+                                        formControlName="root_batch_id" [style]="{'width': '100%'}">
+                                <ng-template let-previousBatch p-template="item">
+                                    {{ previousBatch.title }}
                                 </ng-template>
                             </p-dropdown>
                         </div>
 
-                        <div formGroupName="definition">
-                            <div *ngIf="previousBatchOptions.length === 0" class="margin-bottom-md">
-                                <label for="previousBatch">Previous Batch:</label>
-                                Choose a recipe type in order to see relevant batches.
-                            </div>
-
-                            <div *ngIf="previousBatchOptions.length > 0" class="margin-bottom-md" formGroupName="previous_batch">
-                                <label for="previousBatch">Previous Batch:</label>
-                                <p-dropdown id="previousBatch" [options]="previousBatchOptions" placeholder="Select..."
-                                            formControlName="root_batch_id" [style]="{'width': '100%'}">
-                                    <ng-template let-previousBatch p-template="item">
-                                        {{ previousBatch.title }}
-                                    </ng-template>
-                                </p-dropdown>
-                            </div>
-
-                            <div *ngIf="!batch.recipe_type" class="margin-bottom-md">
-                                <label for="jobNames">Job Names</label>
-                                Choose a recipe type in order to see relevant job names.
-                            </div>
-
-                            <div *ngIf="batch.recipe_type" class="margin-bottom-md">
-                                <label for="jobNames">Job Names</label>
-                                <p-multiSelect id="jobNames" [options]="jobOptions"
-                                               [style]="{'width':'100%', 'margin-bottom':'10px'}"
-                                               defaultLabel="Select..."></p-multiSelect>
-                            </div>
+                        <div *ngIf="!batch.recipe_type" class="margin-bottom-md">
+                            <label for="jobNames">Job Names</label>
+                            Choose a recipe type in order to see relevant job names.
                         </div>
 
-                        <div class="margin-bottom-md">
-                            <p-checkbox id="allJobs" label="All Jobs" (onChange)="setAllJobs($event)"
-                                        pTooltip="Reprocess every job. This overrides the values included in 'Job Names'">
-                            </p-checkbox>
+                        <div *ngIf="batch.recipe_type" class="margin-bottom-md">
+                            <label for="jobNames">Job Names</label>
+                            <p-multiSelect id="jobNames" [options]="jobOptions"
+                                           [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                           defaultLabel="Select..."></p-multiSelect>
                         </div>
+                    </div>
 
-                        <div formGroupName="configuration">
-                            <label for="priority">Priority:</label>
-                            <input pInputText type="number" id="priority" formControlname="priority"
-                                   class="full-width"/>
-                        </div>
+                    <div class="margin-bottom-md">
+                        <p-checkbox id="allJobs" label="All Jobs" (onChange)="setAllJobs($event)"
+                                    pTooltip="Reprocess every job">
+                        </p-checkbox>
                     </div>
                 </div>
             </div>

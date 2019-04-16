@@ -48,20 +48,30 @@ export class BatchDetailsComponent implements OnInit {
     ) {}
 
     private initFormGroups() {
-        this.createForm = this.fb.group({
-            title: ['', Validators.required],
-            description: [''],
-            recipe_type: [''],
-            definition: this.fb.group({
-                previous_batch: this.fb.group({
-                    root_batch_id: ['']
+        if (this.batch.id) {
+            this.createForm = this.fb.group({
+                title: ['', Validators.required],
+                description: [''],
+                recipe_type: [''],
+                definition: this.fb.group({
+                    previous_batch: this.fb.group({
+                        root_batch_id: ['']
+                    }),
+                    job_names: this.fb.array([])
                 }),
-                job_names: this.fb.array([])
-            }),
-            configuration: this.fb.group({
-                priority: ['']
-            })
-        });
+                configuration: this.fb.group({
+                    priority: ['']
+                })
+            });
+        } else {
+            this.createForm = this.fb.group({
+                title: ['', Validators.required],
+                description: [''],
+                configuration: this.fb.group({
+                    priority: ['']
+                })
+            });
+        }
     }
 
     private initValidation() {
@@ -78,6 +88,7 @@ export class BatchDetailsComponent implements OnInit {
 
     private initBatchForm() {
         if (this.batch) {
+            this.initFormGroups();
             // add the remaining values from the object
             this.createForm.patchValue(this.batch);
 
@@ -106,6 +117,12 @@ export class BatchDetailsComponent implements OnInit {
                 this.recipeTypesApiService.getRecipeType(data.recipe_type.name).subscribe(recipeTypeData => {
                     this.loading = false;
                     this.recipeType = recipeTypeData;
+                    _.forEach(recipeTypeData.job_types, jobType => {
+                        this.jobOptions.push({
+                            label: `${jobType.title} v${jobType.version}`,
+                            value: jobType
+                        });
+                    });
                 }, err => {
                     this.loading = false;
                     console.log(err);
@@ -148,15 +165,21 @@ export class BatchDetailsComponent implements OnInit {
             _.forEach(recipeTypes, (rt: any) => {
                 this.recipeTypeOptions.push({
                     label: rt.title,
-                    value: rt
+                    value: {
+                        id: rt.id,
+                        name: rt.name,
+                        title: rt.title,
+                        description: rt.description
+                    }
                 });
             });
+            this.recipeTypeOptions = _.orderBy(this.recipeTypeOptions, ['title'], ['asc']);
         }, err => {
             console.log('Error retrieving recipe types: ' + err);
         });
     }
 
-    handleRecipeTypeChange(event) {
+    onRecipeTypeChange(event) {
         this.batchesApiService.getBatches({recipe_type_name: event.value.name}).subscribe(data => {
             const batches = Batch.transformer(data.results);
             _.forEach(batches, (b: any) => {
@@ -164,12 +187,6 @@ export class BatchDetailsComponent implements OnInit {
                     label: b.title,
                     value: b.root_batch.id
                 });
-            });
-        });
-        _.forEach(this.batch.recipe_type_rev.definition.jobs, job => {
-            this.jobOptions.push({
-                label: job.name,
-                value: job.name
             });
         });
     }
@@ -203,12 +220,13 @@ export class BatchDetailsComponent implements OnInit {
 
     ngOnInit() {
         this.getRecipeTypes();
-        this.initFormGroups();
         let id = null;
         if (this.route && this.route.paramMap) {
             this.routeParams = this.route.paramMap.subscribe(params => {
-                this.unsubscribeFromForms();
-                this.createForm.reset();
+                if (this.createForm) {
+                    this.unsubscribeFromForms();
+                    this.createForm.reset();
+                }
 
                 // get id from url, and convert to an int if not null
                 id = params.get('id');

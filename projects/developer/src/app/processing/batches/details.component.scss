@@ -1,0 +1,16 @@
+.batches__details {
+    label {
+        font-weight: bold;
+        display: block;
+        margin: 0 0 10px 0;
+
+        input, textarea, select {
+            display: block;
+            width: 100%;
+        }
+
+        button, input, optgroup, select, textarea {
+            line-height: 1.5em;
+        }
+    }
+}
