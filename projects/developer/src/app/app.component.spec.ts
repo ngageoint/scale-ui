@@ -3,6 +3,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { ThemeService } from './theme';
 import { ACTIVE_THEME, THEMES } from './theme/symbols';
 import { ProfileService } from './common/services/profile.service';
+import { DataService } from './common/services/data.service';
 import { AppComponent } from './app.component';
 import { AppModule } from './app.module';
 
@@ -14,7 +15,7 @@ describe('AppComponent', () => {
             imports: [
                 AppModule
             ],
-            providers: [ThemeService, ProfileService, {
+            providers: [ThemeService, ProfileService, DataService, {
                 provide: THEMES,
                 useValue: THEMES
             }, {

@@ -16,6 +16,7 @@ export class DataService {
     selectedBatchRows = [];
     selectedIngestRows = [];
     selectedScanRows = [];
+    profile: any;
 
     constructor() {}
 
@@ -183,5 +184,13 @@ export class DataService {
 
     setSelectedScanRows(data) {
         this.selectedScanRows = data;
+    }
+
+    getUserProfile() {
+        return this.profile;
+    }
+
+    setUserProfile(data) {
+        this.profile = data;
     }
 }

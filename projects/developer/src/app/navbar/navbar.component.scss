@@ -89,31 +89,33 @@ $navbar-item-width: 150px;
     width: $navbar-status-width;
 }
 
-.navbar__scheduler, .navbar__theme, .navbar__profile {
-    margin: 0 0 0 1px;
-    color: var(--white);
-    font-size: 25px;
-    background-color: var(--navbar-background);
-    width: 80px;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: $default-transition;
+.navbar__settings {
+    .navbar__scheduler, .navbar__theme, .navbar__profile {
+        margin: 0 0 0 1px;
+        color: var(--white);
+        font-size: 25px;
+        background-color: var(--navbar-background);
+        width: 80px;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: $default-transition;
 
-    &:hover {
-        cursor: pointer;
-        background-color: var(--navbar-light);
-    }
+        &:hover {
+            cursor: pointer;
+            background-color: var(--navbar-light);
+        }
 
-    .navbar__icon {
-        position: relative;
+        .navbar__icon {
+            position: relative;
 
-        .label {
-            font-size: 10px;
-            position: absolute;
-            top: 4px;
-            right: -10px;
+            .label {
+                font-size: 10px;
+                position: absolute;
+                top: 4px;
+                right: -10px;
+            }
         }
     }
 }
@@ -123,15 +125,19 @@ $navbar-item-width: 150px;
         width: 350px;
         padding: 10px 0;
 
-        &:before, &:after {
-            left: 309px;
+        &:before {
+            margin-right: 13px;
+        }
+
+        &:after {
+            margin-right: 15px;
         }
 
         ul {
             padding: 0 0 0 17px;
         }
     }
-    &.navbar__scheduler-overlaypanel {
+    &.navbar__scheduler-overlaypanel, &.navbar__profile-overlaypanel {
         h3 {
             margin: 0;
             padding: 0;
@@ -146,6 +152,10 @@ $navbar-item-width: 150px;
                 display: block;
                 margin-bottom: 5px;
             }
+        }
+
+        .navbar__profile-data {
+            padding: 2px;
         }
     }
 }
