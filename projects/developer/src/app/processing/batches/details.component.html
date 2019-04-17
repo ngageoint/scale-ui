@@ -5,9 +5,10 @@
 <div class="batches__details" *ngIf="batch">
     <p-panel>
         <p-header class="flexed space-between">
-            <div>
+            <div *ngIf="batch.title">
                 {{ batch.title }}
             </div>
+            <div *ngIf="!batch.title">Untitled Batch</div>
             <div>
                 <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
                 <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
@@ -117,7 +118,7 @@
                                 Choose a recipe type in order to see relevant batches.
                             </div>
                             <div *ngIf="previousBatchOptions.length > 0">
-                                <p-dropdown id="previousBatch" [options]="previousBatchOptions"
+                                <p-dropdown id="previousBatch" [options]="previousBatchOptions" placeholder="Select..."
                                             formControlName="root_batch_id" [style]="{'width': '100%'}">
                                     <ng-template let-previousBatch p-template="item">
                                         {{ previousBatch.title }}

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -38,6 +38,7 @@ export class BatchDetailsComponent implements OnInit {
     nodeOptions: SelectItem[] = [];
     previousBatchOptions: SelectItem[] = [];
     layoutClass: string;
+    validated = false;
 
     constructor(
         private fb: FormBuilder,
@@ -66,7 +67,7 @@ export class BatchDetailsComponent implements OnInit {
                     previous_batch: this.fb.group({
                         root_batch_id: [''],
                         forced_nodes: this.fb.group({
-                            all: [''],
+                            all: [false],
                             nodes: [''],
                             sub_recipes: ['']
                         })
@@ -87,7 +88,7 @@ export class BatchDetailsComponent implements OnInit {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = !this.validated;
         }
     }
 
@@ -105,7 +106,6 @@ export class BatchDetailsComponent implements OnInit {
         this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.batch, changes);
-            console.log(this.batch);
             this.initValidation();
         });
     }
@@ -213,15 +213,55 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     onValidateClick() {
-        // validate batch
+        this.batchesApiService.validateBatch(this.batch).subscribe(result => {
+            if (!result.is_valid) {
+                this.validated = false;
+                _.forEach(result.warnings, warning => {
+                    this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+                });
+                _.forEach(result.errors, error => {
+                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                });
+            } else {
+                const action = this.batch.id ? 'edited' : 'created';
+                this.validated = true;
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: `Batch is valid and can be ${action}. Estimated recipes: ${result.recipes_estimated}`,
+                    life: 10000
+                });
+                const saveItem = _.find(this.items, { label: 'Save' });
+                if (saveItem) {
+                    saveItem.disabled = !this.validated;
+                }
+            }
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error validating batch', detail: err.statusText});
+        });
     }
 
     onSaveClick() {
-        this.createForm.reset();
         if (this.batch.id) {
             // edit batch
+            this.batchesApiService.editBatch(this.batch).subscribe(() => {
+                this.messageService.add({severity: 'success', summary: 'Batch edit successful'});
+                this.isEditing = false;
+                this.createForm.reset();
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error editing batch', detail: err.statusText});
+            });
         } else {
             // create batch
+            this.batchesApiService.createBatch(this.batch).subscribe(data => {
+                console.log(data);
+                this.router.navigate([`/processing/batches/${data.id}`]);
+            }, err => {
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error creating batch', detail: err.statusText});
+            });
         }
     }
 
@@ -230,7 +270,12 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     setAllNodes(event) {
-        this.batch.definition.forced_nodes.all = event;
+        if (event) {
+            this.createForm.controls.definition.controls.previous_batch.controls.forced_nodes.controls.nodes.disable();
+        } else {
+            this.createForm.controls.definition.controls.previous_batch.controls.forced_nodes.controls.nodes.enable();
+        }
+        this.batch.definition.previous_batch.forced_nodes.all = event;
     }
 
     onNodesChanged(event) {
