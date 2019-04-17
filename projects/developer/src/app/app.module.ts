@@ -36,7 +36,6 @@ import { AppConfigService } from './common/services/app-config.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesComponent } from './processing/batches/component';
-import { BatchesEditComponent } from './processing/batches/edit.component';
 import { CandyBarComponent } from './common/components/candy-bar/component';
 import { DashboardComponent } from './dashboard/component';
 import { DataFeedComponent } from './dashboard/data-feed/component';
@@ -93,7 +92,6 @@ const baseInitializer = () => {
         AppComponent,
         BatchDetailsComponent,
         BatchesComponent,
-        BatchesEditComponent,
         CandyBarComponent,
         DashboardComponent,
         DataFeedComponent,

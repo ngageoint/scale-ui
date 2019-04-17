@@ -72,12 +72,26 @@ export class BatchesApiService {
             );
     }
 
-    validateBatch(batch): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/batches/validation/`, batch)
+    validateBatch(batch: Batch): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/batches/validation/`, batch.cleanBatch())
+            .pipe(
+                catchError(DataService.handleError)
+            );
+    }
+
+    createBatch(batch: Batch): Observable<any> {
+        return this.http.post<Batch>(`${this.apiPrefix}/batches/`, batch.newBatch())
             .pipe(
                 map(response => {
-                    return response;
+                    return Batch.transformer(response);
                 }),
+                catchError(DataService.handleError)
+            );
+    }
+
+    editBatch(batch: Batch): Observable<any> {
+        return this.http.patch<Batch>(`${this.apiPrefix}/batches/${batch.id}/`, batch.editBatch())
+            .pipe(
                 catchError(DataService.handleError)
             );
     }
