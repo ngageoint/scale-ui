@@ -74,72 +74,72 @@
             </div>
         </div>
         <div *ngIf="isEditing && batch">
-            <div [formGroup]="createForm">
-                <div class="margin-bottom-md">
-                    <label>
-                        <span>Title</span>
-                        <input pInputText type="text" id="title" formControlName="title" class="full-width"/>
-                    </label>
-                </div>
-                <div>
-                    <label>
-                        <span>Description</span>
-                        <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
-                                  class="full-width"></textarea>
-                    </label>
-                </div>
-                <div formGroupName="configuration">
-                    <label>
-                        <span>Priority</span>
-                        <input pInputText type="number" id="priority" formControlName="priority"
-                               class="full-width"/>
-                    </label>
-                </div>
-                <div *ngIf="!batch.id">
+            <div class="p-grid" [formGroup]="createForm">
+                <div [ngClass]="layoutClass">
                     <div class="margin-bottom-md">
-                        <label for="recipeType">Recipe Type *:</label>
-                        <p-dropdown id="recipeType" [options]="recipeTypeOptions" formControlName="recipe_type"
-                                    [style]="{'width': '100%'}" (onChange)="onRecipeTypeChange($event)">
-                            <ng-template let-recipeType p-template="item">
-                                {{ recipeType.title }} v{{ recipeType.version }}
-                            </ng-template>
-                        </p-dropdown>
+                        <label>
+                            <span>Title</span>
+                            <input pInputText type="text" id="title" formControlName="title" class="full-width"/>
+                        </label>
                     </div>
-
-                    <div formGroupName="definition">
-                        <div *ngIf="previousBatchOptions.length === 0" class="margin-bottom-md">
-                            <label for="previousBatch">Previous Batch:</label>
-                            Choose a recipe type in order to see relevant batches.
-                        </div>
-
-                        <div *ngIf="previousBatchOptions.length > 0" class="margin-bottom-md"
-                             formGroupName="previous_batch">
-                            <label for="previousBatch">Previous Batch:</label>
-                            <p-dropdown id="previousBatch" [options]="previousBatchOptions"
-                                        formControlName="root_batch_id" [style]="{'width': '100%'}">
-                                <ng-template let-previousBatch p-template="item">
-                                    {{ previousBatch.title }}
+                    <div>
+                        <label>
+                            <span>Description</span>
+                            <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
+                                      class="full-width"></textarea>
+                        </label>
+                    </div>
+                    <div formGroupName="configuration">
+                        <label>
+                            <span>Priority</span>
+                            <input pInputText type="number" id="priority" formControlName="priority"
+                                   class="full-width"/>
+                        </label>
+                    </div>
+                </div>
+                <div class="p-col-6" *ngIf="!batch.id">
+                    <div class="margin-bottom-md">
+                        <label>
+                            <span>Recipe Type</span>
+                            <p-dropdown id="recipeType" [options]="recipeTypeOptions" formControlName="recipe_type"
+                                        placeholder="Select..." [style]="{'width': '100%'}"
+                                        (onChange)="onRecipeTypeChange($event)">
+                                <ng-template let-recipeType p-template="item">
+                                    {{ recipeType.title }} v{{ recipeType.version }}
                                 </ng-template>
                             </p-dropdown>
-                        </div>
-
-                        <div *ngIf="!batch.recipe_type" class="margin-bottom-md">
-                            <label for="jobNames">Job Names</label>
-                            Choose a recipe type in order to see relevant job names.
-                        </div>
-
-                        <div *ngIf="batch.recipe_type" class="margin-bottom-md">
-                            <label for="jobNames">Job Names</label>
-                            <p-multiSelect id="jobNames" [options]="jobOptions"
-                                           [style]="{'width':'100%', 'margin-bottom':'10px'}"
-                                           defaultLabel="Select..."></p-multiSelect>
-                        </div>
+                        </label>
                     </div>
-
-                    <div class="margin-bottom-md">
-                        <p-checkbox id="allJobs" label="All Jobs" (onChange)="setAllJobs($event)"
-                                    pTooltip="Reprocess every job">
-                        </p-checkbox>
+                    <div formGroupName="definition">
+                        <div class="margin-bottom-md" formGroupName="previous_batch">
+                            <strong>Previous Batch</strong>
+                            <div *ngIf="previousBatchOptions.length === 0">
+                                Choose a recipe type in order to see relevant batches.
+                            </div>
+                            <div *ngIf="previousBatchOptions.length > 0">
+                                <p-dropdown id="previousBatch" [options]="previousBatchOptions"
+                                            formControlName="root_batch_id" [style]="{'width': '100%'}">
+                                    <ng-template let-previousBatch p-template="item">
+                                        {{ previousBatch.title }}
+                                    </ng-template>
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="margin-bottom-md" formGroupName="previous_batch" *ngIf="batch.recipe_type">
+                            <p-checkbox label="All Nodes" (onChange)="setAllNodes($event)"
+                                        pTooltip="Reprocess every node">
+                            </p-checkbox>
+                        </div>
+                        <div class="margin-bottom-md" formGroupName="previous_batch">
+                            <strong>Forced Nodes</strong>
+                            <div *ngIf="!batch.recipe_type">Choose a recipe type in order to see relevant nodes.</div>
+                            <div formGroupName="forced_nodes" *ngIf="batch.recipe_type">
+                                <p-multiSelect [options]="nodeOptions" formControlName="nodes"
+                                               [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                               defaultLabel="Select...">
+                                </p-multiSelect>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -35,8 +35,9 @@ export class BatchDetailsComponent implements OnInit {
     recipeType: RecipeType;
     items: MenuItem[] = _.clone(this.viewMenu);
     recipeTypeOptions: SelectItem[] = [];
-    jobOptions: SelectItem[] = [];
+    nodeOptions: SelectItem[] = [];
     previousBatchOptions: SelectItem[] = [];
+    layoutClass: string;
 
     constructor(
         private fb: FormBuilder,
@@ -48,17 +49,10 @@ export class BatchDetailsComponent implements OnInit {
     ) {}
 
     private initFormGroups() {
-        if (this.batch.id) {
+        if (this.batch.id === 'create') {
             this.createForm = this.fb.group({
                 title: ['', Validators.required],
                 description: [''],
-                recipe_type: [''],
-                definition: this.fb.group({
-                    previous_batch: this.fb.group({
-                        root_batch_id: ['']
-                    }),
-                    job_names: this.fb.array([])
-                }),
                 configuration: this.fb.group({
                     priority: ['']
                 })
@@ -67,6 +61,17 @@ export class BatchDetailsComponent implements OnInit {
             this.createForm = this.fb.group({
                 title: ['', Validators.required],
                 description: [''],
+                recipe_type: [''],
+                definition: this.fb.group({
+                    previous_batch: this.fb.group({
+                        root_batch_id: [''],
+                        forced_nodes: this.fb.group({
+                            all: [''],
+                            nodes: [''],
+                            sub_recipes: ['']
+                        })
+                    }),
+                }),
                 configuration: this.fb.group({
                     priority: ['']
                 })
@@ -100,6 +105,7 @@ export class BatchDetailsComponent implements OnInit {
         this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.batch, changes);
+            console.log(this.batch);
             this.initValidation();
         });
     }
@@ -117,12 +123,6 @@ export class BatchDetailsComponent implements OnInit {
                 this.recipeTypesApiService.getRecipeType(data.recipe_type.name).subscribe(recipeTypeData => {
                     this.loading = false;
                     this.recipeType = recipeTypeData;
-                    _.forEach(recipeTypeData.job_types, jobType => {
-                        this.jobOptions.push({
-                            label: `${jobType.title} v${jobType.version}`,
-                            value: jobType
-                        });
-                    });
                 }, err => {
                     this.loading = false;
                     console.log(err);
@@ -165,12 +165,7 @@ export class BatchDetailsComponent implements OnInit {
             _.forEach(recipeTypes, (rt: any) => {
                 this.recipeTypeOptions.push({
                     label: rt.title,
-                    value: {
-                        id: rt.id,
-                        name: rt.name,
-                        title: rt.title,
-                        description: rt.description
-                    }
+                    value: rt
                 });
             });
             this.recipeTypeOptions = _.orderBy(this.recipeTypeOptions, ['title'], ['asc']);
@@ -180,6 +175,7 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     onRecipeTypeChange(event) {
+        // get batches associated with recipe type
         this.batchesApiService.getBatches({recipe_type_name: event.value.name}).subscribe(data => {
             const batches = Batch.transformer(data.results);
             _.forEach(batches, (b: any) => {
@@ -188,6 +184,25 @@ export class BatchDetailsComponent implements OnInit {
                     value: b.root_batch.id
                 });
             });
+        });
+
+        // populate node dropdown
+        this.recipeTypesApiService.getRecipeType(event.value.name).subscribe(data => {
+            _.forEach(data.job_types, jobType => {
+                const nodeName = _.findKey(data.definition.nodes, {
+                    node_type: {
+                        job_type_name: jobType.name,
+                        job_type_version: jobType.version
+                    }
+                });
+                this.nodeOptions.push({
+                    label: `${jobType.title} v${jobType.version}`,
+                    value: nodeName
+                });
+            });
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type details', detail: err.statusText});
         });
     }
 
@@ -214,8 +229,13 @@ export class BatchDetailsComponent implements OnInit {
         this.redirect(this.batch.id || 'create');
     }
 
-    setAllJobs(event) {
-        this.batch.definition.all_jobs = event;
+    setAllNodes(event) {
+        this.batch.definition.forced_nodes.all = event;
+    }
+
+    onNodesChanged(event) {
+        this.batch.definition.previous_batch.forced_nodes.nodes = event.value;
+        console.log(this.batch.definition);
     }
 
     ngOnInit() {
@@ -232,6 +252,7 @@ export class BatchDetailsComponent implements OnInit {
                 id = params.get('id');
                 id = id !== null && id !== 'create' ? +id : id;
 
+                this.layoutClass = id === 'create' ? 'p-col-6' : 'p-col-12';
                 this.isEditing = id === 'create';
                 this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
