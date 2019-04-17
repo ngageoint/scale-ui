@@ -13,7 +13,7 @@
             "revision_num": 1,
             "created": "2015-06-15T19:03:26.346Z",
             "last_modified": "2015-06-15T19:03:26.346Z",
-            "deprecated": null
+            "deprecated": "2015-09-03T19:03:26.346Z"
         },
         {
             "id": 2,
@@ -26,7 +26,7 @@
             "revision_num": 1,
             "created": "2016-04-29T19:03:26.346Z",
             "last_modified": "2016-04-29T19:03:26.346Z",
-            "deprecated": null
+            "deprecated": "2017-04-29T19:03:26.346Z"
         },
         {
             "id": 3,
@@ -39,7 +39,7 @@
             "revision_num": 1,
             "created": "2016-04-30T19:03:26.346Z",
             "last_modified": "2016-04-30T19:03:26.346Z",
-            "deprecated": null
+            "deprecated": "2016-04-31T19:03:26.346Z"
         },
         {
             "id": 4,

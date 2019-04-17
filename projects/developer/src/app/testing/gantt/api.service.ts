@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import polling from 'rx-polling';
 import * as _ from 'lodash';
 
 import { Observable } from 'rxjs';
@@ -8,52 +7,48 @@ import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
 import { ApiResults } from '../../common/models/api-results.model';
-import { RecipesDatatable } from './datatable.model';
-import { Recipe } from './api.model';
+import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 @Injectable({
     providedIn: 'root'
 })
-export class RecipesApiService {
+export class RecipeTypesApiService {
     apiPrefix: string;
 
     constructor(
         private http: HttpClient
     ) {
-        this.apiPrefix = DataService.getApiPrefix('recipes');
+        this.apiPrefix = DataService.getApiPrefix('recipe-types');
     }
 
-    getRecipes(params: RecipesDatatable, poll?: Boolean): Observable<any> {
-        const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
-        let apiParams: any = {
-            order: sortStr,
-            page: page.toString(),
-            page_size: params.rows ? params.rows.toString() : null,
-            started: params.started,
-            ended: params.ended,
-            recipe_type_id: params.recipe_type_id ? params.recipe_type_id.toString() : null,
-            recipe_type_name: params.recipe_type_name,
-            batch_id: params.batch_id ? params.batch_id.toString() : null,
-            is_superseded: params.is_superseded ? params.is_superseded.toString() : null
-        };
-        apiParams = _.pickBy(apiParams, (d) => {
+    getRecipeTypes(params?: any): Observable<ApiResults> {
+        let apiParams = {};
+        if (params) {
+            const sortStr = params.sortField ? params.sortOrder < 0 ? '-' + params.sortField : params.sortField : null;
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            apiParams = {
+                order: sortStr,
+                page: page,
+                page_size: params.rows ? params.rows : 1000,
+                started: params.started || null,
+                ended: params.ended || null,
+                keyword: params.keyword || null,
+                is_active: params.is_active || true,
+                is_system: params.is_system || null
+            };
+        } else {
+            apiParams = {
+                page_size: 1000,
+                is_active: true
+            };
+        }
+        apiParams = _.pickBy(apiParams, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
         const queryParams = new HttpParams({
             fromObject: apiParams
         });
-        if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/recipes/`, { params: queryParams })
-                .pipe(
-                    map(response => {
-                        return ApiResults.transformer(response);
-                    }),
-                    catchError(DataService.handleError)
-                );
-            return polling(request, { interval: 500000, attempts: 0 });
-        }
-        return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
+        return this.http.get<ApiResults>(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);
@@ -62,28 +57,20 @@ export class RecipesApiService {
             );
     }
 
-    getRecipe(id: number, poll?: Boolean): any {
-        if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/recipes/${id}/`)
-                .pipe(
-                    map(response => {
-                        return Recipe.transformer(response);
-                    }),
-                    catchError(DataService.handleError)
-                );
-            return polling(request, { interval: 500000, attempts: 0 });
-        }
-        return this.http.get<Recipe>(`${this.apiPrefix}/recipes/${id}/`)
+    getRecipeType(name: string): Observable<any> {
+        return this.http.get<RecipeType>(`${this.apiPrefix}/recipe-types/${name}/`)
             .pipe(
                 map(response => {
-                    return Recipe.transformer(response);
+                    return RecipeType.transformer(response);
                 }),
                 catchError(DataService.handleError)
             );
     }
 
-    reprocessRecipe(id: number, forcedNodes: any): any {
-        return this.http.post<any>(`${this.apiPrefix}/recipes/${id}/reprocess/`, forcedNodes)
-            .pipe(catchError(DataService.handleError));
+    validateRecipeType(recipeType: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/recipe-types/validation/`, recipeType)
+            .pipe(
+                catchError(DataService.handleError)
+            );
     }
 }

@@ -1,14 +1,17 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { SelectItem } from 'primeng/api';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
-import { Recipe } from './api.model';
+import { RecipeType } from './api.model';
 import { RecipeExecution } from './execution.model';
-import { RecipesApiService } from './api.service';
+import { RecipeTypesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
+import { RecipeTypeInput } from '../../configuration/recipe-types/api.input.model';
+import { RecipeTypeCondition } from '../../configuration/recipe-types/api.condition.model';
 import { debuglog } from 'util';
 
 @Component({
@@ -18,7 +21,7 @@ import { debuglog } from 'util';
 })
 export class GanttComponent implements OnInit, OnDestroy {
     subscription: any;
-    recipe: Recipe;
+    recipe: RecipeType;
     loading: boolean;
     loadingInputs: boolean;
     loadingOutputs: boolean;
@@ -34,17 +37,45 @@ export class GanttComponent implements OnInit, OnDestroy {
     logDisplay: boolean;
     inputClass = 'p-col-12';
     outputClass = 'p-col-12';
+    recipeGraphMinHeight = '70vh';
+    addRemoveDialogX: number;
+    addRemoveDialogY: number;
+    createForm: any;
+    createFormSubscription: any;
+    conditionForm: any;
+    conditionFormSubscription: any;
+    showFileInputs: boolean;
+    showJsonInputs: boolean;
+    showConditions: boolean;
+    jobTypeColumns: any[];
+    recipeTypeColumns: any[];
+    loadingRecipeType: boolean;
+    recipeTypeName: string;
+    jobTypes: any;
+    selectedJobTypes = [];
+    recipeTypes: any; // used for adding/removing recipe nodes from recipe
+    selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
+    recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
+    selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
+    selectedRecipeTypeDetail: any;
+    condition: any = RecipeTypeCondition.transformer(null);
+    conditions: any = [];
+    selectedConditions = [];
+    conditionColumns: any[];
+    showAddRemoveDisplay: boolean;
+    addRemoveDisplayType = 'job';
+    isEditing: boolean;
+    labels: any = [];
 
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private jobsApiService: RecipesApiService
+        private recipesApiService: RecipeTypesApiService
     ) {}
 
     private initJobDetail(data) {
         this.recipe = data;
         this.recipe.id = 4;
-        const now = moment.utc();
         this.options = {
             elements: {
                 font: 'Roboto',
@@ -84,40 +115,100 @@ export class GanttComponent implements OnInit, OnDestroy {
             },
             maintainAspectRatio: false
         };
+for (let index = 0; index < data.results.length; index++) {
+
+
         this.data = {
-            labels: [data.id],
+            labels: [data.results[index].name],
             datasets: [{
                 data: [
-                    [data.created, data.deprecated, DataService.calculateDuration(data.created, data.deprecated, true)]
+                    [data.results[index].created, data.results[index].deprecated,
+                    DataService.calculateDuration(data.created, data.deprecated, true)]
                 ]
-            }, {
-                data: [
-                    [data.queued, data.started, DataService.calculateDuration(data.queued, data.started, true)]
-                ]
-            }, {
-                data: [
-                    [data.started, data.ended, DataService.calculateDuration(data.started, data.ended, true)]
-                ]
-            }]
+        }]
         };
-        console.log(data.queued);
     }
+}
+
+    private getRecipeTypeDetail(name: string) {
+        this.loadingRecipeType = true;
+        this.recipesApiService.getRecipeType(name).subscribe(data => {
+            this.loadingRecipeType = false;
+            this.selectedRecipeTypeDetail = data;
+            const jtArray = [];
+            const jobNames = _.map(_.values(this.selectedRecipeTypeDetail.definition.nodes), 'node_type.job_type_name');
+            _.forEach(this.jobTypes, jt => {
+                if (_.includes(jobNames, jt.name)) {
+                    jtArray.push(jt);
+                }
+            });
+            this.selectedJobTypes = jtArray;
+        }, err => {
+            console.log(err);
+            this.loadingRecipeType = false;
+        });
+    }
+
+    private getRecipeTypes() {
+        this.recipeTypeOptions = [];
+        this.showAddRemoveDisplay = false;
+        this.selectedRecipeTypes = [];
+        this.recipesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
+            _.forEach(data.results, result => {
+                this.recipeTypeOptions.push({
+                    label: result.title,
+                    value: result
+                });
+                if (this.recipeTypeName === result.name) {
+                    this.selectedRecipeTypeOption = _.clone(result);
+                }
+            });
+            if (this.recipeTypeName && this.recipeTypeName !== 'create') {
+                this.isEditing = false;
+                this.getRecipeTypeDetail(this.recipeTypeName);
+            } else {
+                if (this.recipeTypeName === 'create') {
+                    this.selectedRecipeTypeOption = null;
+                    this.selectedRecipeTypeDetail = new RecipeType(
+                        null,
+                        null,
+                        'Untitled Recipe',
+                        null,
+                        true,
+                        false,
+                        null,
+                        {
+                            input: new RecipeTypeInput([], []),
+                            nodes: {}
+                        },
+                        null,
+                        null,
+                        null,
+                        null,
+                        null
+                    );
+                }
+            }
+        });
+    }
+
 
     private getJobDetail(id: number) {
         this.loading = true;
-        this.subscription = this.jobsApiService.getRecipe(id, true).subscribe(data => {
+        this.subscription = this.recipesApiService.getRecipeTypes(id).subscribe(data => {
             this.loading = false;
             this.initJobDetail(data);
 
             // get job inputs
             this.loadingInputs = true;
-            this.jobsApiService.getRecipe(id)
+            this.recipesApiService.getRecipeTypes(id)
                 .subscribe(inputData => {
                     this.loadingInputs = false;
                     _.forEach(inputData.results, d => {
                         d.createdTooltip = DataService.formatDate(d.created);
                         d.createdDisplay = DataService.formatDate(d.created, true);
-                        d.lastModifiedTooltip = DataService.formatDate(d.last_modified);
+                        d.lastModifiedTooltip = DataService.formatDate(d.deprecated);
                         d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
                     });
                     this.jobInputs = inputData.results;
@@ -129,14 +220,14 @@ export class GanttComponent implements OnInit, OnDestroy {
 
             // get job outputs
             this.loadingOutputs = true;
-            this.jobsApiService.getRecipe(id)
+            this.recipesApiService.getRecipeTypes(id)
                 .subscribe(outputData => {
                     this.loadingOutputs = false;
                     _.forEach(outputData.results, d => {
                         d.createdTooltip = DataService.formatDate(d.created);
                         d.createdDisplay = DataService.formatDate(d.created, true);
-                        d.lastModifiedTooltip = DataService.formatDate(d.last_modified);
-                        d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
+                        d.lastDeprecatedTooltip = DataService.formatDate(d.last_deprecated);
+                        d.lastDeprecatedDisplay = DataService.formatDate(d.last_deprecated, true);
                     });
                     this.jobOutputs = outputData.results;
                     this.outputClass = 'p-col-12';
@@ -147,7 +238,7 @@ export class GanttComponent implements OnInit, OnDestroy {
 
             // get job executions
             this.loadingExecutions = true;
-            this.jobsApiService.getRecipe(id)
+            this.recipesApiService.getRecipeTypes(id)
                 .subscribe(exeData => {
                     this.loadingExecutions = false;
                     this.jobExecutions = RecipeExecution.transformer(exeData.results);
@@ -193,8 +284,8 @@ export class GanttComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-            const id = 1;
-            this.getJobDetail(id);
+        const id = 4;
+       this.getJobDetail(id);
     }
 
     ngOnDestroy() {

@@ -2,18 +2,17 @@ import { TestBed, inject } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../common/services/data.service';
-import { RecipesApiService } from './api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
-
-describe('RecipesApiService', () => {
+describe('ApiService', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [DataService, RecipesApiService]
+            providers: [DataService, RecipeTypesApiService]
         });
     });
 
-    it('should be created', inject([RecipesApiService], (service: RecipesApiService) => {
+    it('should be created', inject([RecipeTypesApiService], (service: RecipeTypesApiService) => {
         expect(service).toBeTruthy();
     }));
 });
