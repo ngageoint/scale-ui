@@ -1,7 +1,6 @@
 import { RecipeTypeInput } from '../../configuration/recipe-types/api.input.model';
 import { JobType } from '../../configuration/job-types/api.model';
 import * as _ from 'lodash';
-import {RecipeTypeFilter} from '../../configuration/recipe-types/api.filter.model';
 
 export class RecipeType {
     conditions = [];

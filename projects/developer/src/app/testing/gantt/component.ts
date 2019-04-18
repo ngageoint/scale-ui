@@ -1,18 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { SelectItem } from 'primeng/api';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
 import { RecipeType } from './api.model';
-import { RecipeExecution } from './execution.model';
 import { RecipeTypesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
-import { RecipeTypeInput } from '../../configuration/recipe-types/api.input.model';
-import { RecipeTypeCondition } from '../../configuration/recipe-types/api.condition.model';
-import { debuglog } from 'util';
 
 @Component({
     selector: 'dev-job-details',
@@ -29,8 +24,6 @@ export class GanttComponent implements OnInit, OnDestroy {
     jobInputs = [];
     jobOutputs = [];
     jobExecutions: any;
-    jobStatus: string;
-    exeStatus: string;
     options: any;
     data: any;
     selectedJobExe: any;
@@ -38,34 +31,8 @@ export class GanttComponent implements OnInit, OnDestroy {
     inputClass = 'p-col-12';
     outputClass = 'p-col-12';
     recipeGraphMinHeight = '70vh';
-    addRemoveDialogX: number;
-    addRemoveDialogY: number;
-    createForm: any;
-    createFormSubscription: any;
-    conditionForm: any;
-    conditionFormSubscription: any;
-    showFileInputs: boolean;
-    showJsonInputs: boolean;
-    showConditions: boolean;
-    jobTypeColumns: any[];
-    recipeTypeColumns: any[];
-    loadingRecipeType: boolean;
-    recipeTypeName: string;
-    jobTypes: any;
-    selectedJobTypes = [];
-    recipeTypes: any; // used for adding/removing recipe nodes from recipe
-    selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
-    recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
-    selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
-    selectedRecipeTypeDetail: any;
-    condition: any = RecipeTypeCondition.transformer(null);
-    conditions: any = [];
-    selectedConditions = [];
-    conditionColumns: any[];
-    showAddRemoveDisplay: boolean;
-    addRemoveDisplayType = 'job';
-    isEditing: boolean;
-    labels: any = [];
+    labels = [];
+    dataset = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -116,83 +83,18 @@ export class GanttComponent implements OnInit, OnDestroy {
             maintainAspectRatio: false
         };
 for (let index = 0; index < data.results.length; index++) {
-
-
-        this.data = {
-            labels: [data.results[index].name],
-            datasets: [{
-                data: [
-                    [data.results[index].created, data.results[index].deprecated,
-                    DataService.calculateDuration(data.created, data.deprecated, true)]
-                ]
-        }]
-        };
-    }
+    this.labels.push(data.results[index].name);
+    this.dataset.push(data.results[index].created , data.results[index].deprecated,
+        DataService.calculateDuration(data.results[index].created, data.results[index].deprecated, true) );
 }
-
-    private getRecipeTypeDetail(name: string) {
-        this.loadingRecipeType = true;
-        this.recipesApiService.getRecipeType(name).subscribe(data => {
-            this.loadingRecipeType = false;
-            this.selectedRecipeTypeDetail = data;
-            const jtArray = [];
-            const jobNames = _.map(_.values(this.selectedRecipeTypeDetail.definition.nodes), 'node_type.job_type_name');
-            _.forEach(this.jobTypes, jt => {
-                if (_.includes(jobNames, jt.name)) {
-                    jtArray.push(jt);
-                }
-            });
-            this.selectedJobTypes = jtArray;
-        }, err => {
-            console.log(err);
-            this.loadingRecipeType = false;
-        });
-    }
-
-    private getRecipeTypes() {
-        this.recipeTypeOptions = [];
-        this.showAddRemoveDisplay = false;
-        this.selectedRecipeTypes = [];
-        this.recipesApiService.getRecipeTypes().subscribe(data => {
-            this.recipeTypes = data.results;
-            _.forEach(data.results, result => {
-                this.recipeTypeOptions.push({
-                    label: result.title,
-                    value: result
-                });
-                if (this.recipeTypeName === result.name) {
-                    this.selectedRecipeTypeOption = _.clone(result);
-                }
-            });
-            if (this.recipeTypeName && this.recipeTypeName !== 'create') {
-                this.isEditing = false;
-                this.getRecipeTypeDetail(this.recipeTypeName);
-            } else {
-                if (this.recipeTypeName === 'create') {
-                    this.selectedRecipeTypeOption = null;
-                    this.selectedRecipeTypeDetail = new RecipeType(
-                        null,
-                        null,
-                        'Untitled Recipe',
-                        null,
-                        true,
-                        false,
-                        null,
-                        {
-                            input: new RecipeTypeInput([], []),
-                            nodes: {}
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        null
-                    );
-                }
-            }
-        });
-    }
-
+        this.data = {
+            labels: this.labels,
+            datasets: {
+                data: this.dataset,
+            },
+    };
+    console.log(this.dataset)
+}
 
     private getJobDetail(id: number) {
         this.loading = true;
@@ -209,10 +111,9 @@ for (let index = 0; index < data.results.length; index++) {
                         d.createdTooltip = DataService.formatDate(d.created);
                         d.createdDisplay = DataService.formatDate(d.created, true);
                         d.lastModifiedTooltip = DataService.formatDate(d.deprecated);
-                        d.lastModifiedDisplay = DataService.formatDate(d.last_modified, true);
+                        d.lastModifiedDisplay = DataService.formatDate(d.deprecated, true);
                     });
                     this.jobInputs = inputData.results;
-                    this.inputClass = 'p-col-12';
                 }, err => {
                     this.loadingInputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
@@ -226,11 +127,10 @@ for (let index = 0; index < data.results.length; index++) {
                     _.forEach(outputData.results, d => {
                         d.createdTooltip = DataService.formatDate(d.created);
                         d.createdDisplay = DataService.formatDate(d.created, true);
-                        d.lastDeprecatedTooltip = DataService.formatDate(d.last_deprecated);
-                        d.lastDeprecatedDisplay = DataService.formatDate(d.last_deprecated, true);
+                        d.deprecatedTooltip = DataService.formatDate(d.deprecated);
+                        d.deprecatedDisplay = DataService.formatDate(d.deprecated, true);
                     });
                     this.jobOutputs = outputData.results;
-                    this.outputClass = 'p-col-12';
                 }, err => {
                     this.loadingOutputs = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
@@ -241,7 +141,6 @@ for (let index = 0; index < data.results.length; index++) {
             this.recipesApiService.getRecipeTypes(id)
                 .subscribe(exeData => {
                     this.loadingExecutions = false;
-                    this.jobExecutions = RecipeExecution.transformer(exeData.results);
                 }, err => {
                     this.loadingExecutions = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
