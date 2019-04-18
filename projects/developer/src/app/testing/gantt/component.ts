@@ -32,8 +32,9 @@ export class GanttComponent implements OnInit, OnDestroy {
     outputClass = 'p-col-12';
     recipeGraphMinHeight = '70vh';
     labels = [];
-    dataset = [];
-
+    datasetCreated = [];
+    datasetDeprecated = [];
+    datasetDuration = [];
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
@@ -84,17 +85,19 @@ export class GanttComponent implements OnInit, OnDestroy {
         };
 for (let index = 0; index < data.results.length; index++) {
     this.labels.push(data.results[index].name);
-    this.dataset.push(data.results[index].created , data.results[index].deprecated,
-        DataService.calculateDuration(data.results[index].created, data.results[index].deprecated, true) );
+    this.datasetCreated.push(data.results[index].created);
+    this.datasetDeprecated.push(data.results[index].deprecated);
+    this.datasetDuration.push( DataService.calculateDuration(data.results[index].created, data.results[index].deprecated, true))
 }
         this.data = {
             labels: this.labels,
-            datasets: {
-                data: this.dataset,
-            },
+            datasets: [{
+                data: [this.datasetCreated, this.datasetDeprecated, this.datasetDuration]
+            }]
     };
-    console.log(this.dataset)
+    console.log(this.datasetDuration);
 }
+
 
     private getJobDetail(id: number) {
         this.loading = true;
