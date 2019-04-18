@@ -11,10 +11,13 @@ LABEL \
 RUN apk -U --no-cache add jq moreutils && chmod 777 /usr/share/nginx/html
 
 ENV CONFIG_JSON=/usr/share/nginx/html/assets/appConfig.json
+ENV NGINX_CONF=/etc/nginx/conf.d/default.conf
+ENV BACKEND=http://scale-webserver.marathon.l4lb.thisdcos.directory
 
 COPY dist/developer /usr/share/nginx/html
-COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
-COPY docker/docker-entrypoint.sh /docker-entrypoint.sh
+COPY docker/nginx.conf ${NGINX_CONF}
+COPY docker/nginx-template.conf /
+COPY docker/docker-entrypoint.sh /
 RUN chmod +x /docker-entrypoint.sh && chmod 777 ${CONFIG_JSON} 
 
 ENTRYPOINT ["/docker-entrypoint.sh"]

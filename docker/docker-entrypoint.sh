@@ -21,6 +21,8 @@ then
     jq '.siloUrl = "'${SILO_URL}'"' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
 fi
 
+
+
 # We support duplicating the assets from the root to any number of contexts
 # This is necessary as Scale is served from DCOS at various contexts with one container. 
 # The front-end Angular routes need to know what their base HREF is and the only way we've 
@@ -40,7 +42,15 @@ then
         mkdir -p $WEB_ROOT/$ITEM
         cp -R /tmp/html/* $WEB_ROOT/$ITEM/
         cat /tmp/html/index.html | sed 's^base href="\/"^base href="'$ITEM'"^g' > $WEB_ROOT/$ITEM/index.html
+
+        # Adding contexts for backend
+        (cat /nginx-template.conf | sed 's^${CONTEXT}^'${ITEM}'^g' | sed 's^${BACKEND}^'${BACKEND}'^g' ) >> ${NGINX_CONF}
     done
 fi
+
+# Update the nginx conf with the backend for Scale
+cat ${NGINX_CONF} | sed 's^${BACKEND}^'${BACKEND}'^g' | sponge ${NGINX_CONF}
+# Terminate NGINX conf file
+echo "}" >> ${NGINX_CONF}
 
 exec "$@"
