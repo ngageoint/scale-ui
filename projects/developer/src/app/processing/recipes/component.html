@@ -1,12 +1,12 @@
 <h2><i class="fa fa-cubes"></i> Recipes</h2>
 <div class="recipes__header">
-    <div class="recipes__date-filter">
-        <div>
+    <div class="recipes__date-filter p-grid">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"
                             [format]="dateFormat"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"
                             [format]="dateFormat"></utc-datepicker>

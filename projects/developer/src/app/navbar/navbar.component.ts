@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
@@ -32,12 +33,14 @@ export class NavbarComponent implements OnInit, OnChanges {
     schedulerClass: string;
     schedulerIcon: string;
     userProfile: any;
+    isMobile: boolean;
 
     constructor(
         private messageService: MessageService,
         private profileService: ProfileService,
         private dataService: DataService,
-        private themeService: ThemeService
+        private themeService: ThemeService,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     selectNavItem(event, itemId) {
@@ -129,6 +132,19 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+
+        this.breakpointObserver
+      .observe(['(min-width: 500px)'])
+      .subscribe((state: BreakpointState) => {
+        if (state.matches) {
+            this.isMobile = true;
+          console.log('Viewport is 500px or over!');
+        } else {
+            this.isMobile = false;
+          console.log('Viewport is getting smaller!');
+        }
+      });
+
         this.userProfile = this.dataService.getUserProfile();
     }
 

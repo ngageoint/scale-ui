@@ -16,9 +16,9 @@
     <p-sidebar [(visible)]="showFilters" position="left" [style]="{'width':'25vw'}" [blockScroll]="true" baseZIndex="1002">
         <h2>Metrics Filters</h2>
         <label>From</label>
-        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+        <utc-datepicker class="noWrap" [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
         <label>To</label>
-        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+        <utc-datepicker class="noWrap" [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         <label>Data Source</label>
         <div class="metrics__filter-loading" *ngIf="dataTypesLoading">
             <i class="fa fa-circle-o-notch fa-spin"></i>

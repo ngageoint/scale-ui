@@ -1,12 +1,12 @@
 <h2><i class="fa fa-files-o"></i> Batches <span *ngIf="count">({{ count }})</span></h2>
 <div class="batches__header">
-    <div class="batches__date-filter">
-        <div>
+    <div class="batches__date-filter p-grid">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
                             (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
                             (dateChange)="onEndSelect($event)"></utc-datepicker>

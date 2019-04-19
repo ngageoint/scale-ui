@@ -1,11 +1,11 @@
 <h2><i class="fa fa-barcode"></i> Scans <span *ngIf="count">({{ count }})</span></h2>
 <div class="scans__header">
-    <div class="scans__date-filter">
-        <div>
+    <div class="scans__date-filter p-grid">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
