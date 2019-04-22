@@ -253,10 +253,8 @@ export class NavbarComponent implements OnInit, OnChanges {
       .subscribe((state: BreakpointState) => {
         if (state.matches) {
             this.isMobile = false;
-          console.log('Viewport is 700px or over!');
         } else {
             this.isMobile = true;
-          console.log('Viewport is getting smaller!');
         }
       });
 
