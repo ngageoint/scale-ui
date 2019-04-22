@@ -1,6 +1,6 @@
 <div class="navbar-ctr">
     <div class="navbar" (click)="selectNavItem($event, null)">
-        <div class="flexed">
+        <div class="flexed desktop" *ngIf="!isMobile">
             <div class="navbar__logo">
                 <a routerLink="/">
                     <dev-logo></dev-logo>
@@ -18,6 +18,15 @@
             <div [ngClass]="getNavItemStyles('system')">
                 <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
             </div>
+        </div>
+        <div class="flexed mobile" *ngIf="isMobile">
+            <div class="navbar__logo__mobile">
+                <a routerLink="/">
+                    <dev-logo></dev-logo>
+                </a>
+            </div>
+            <p-slideMenu #menu [model]="itemsMobile" [popup]="true" [viewportHeight]="250"></p-slideMenu>
+            <button #btn class="mobileNavButton" type="button" pButton icon="fa fa-bars" (click)="menu.toggle($event)"></button>
         </div>
         <div class="flexed navbar__settings" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
@@ -39,9 +48,10 @@
                  (click)="onProfileClick($event)" #profile>
                 <span class="fa fa-user-circle-o"></span>
             </div>
+            
+            </div>
         </div>
     </div>
-</div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
 <p-overlayPanel styleClass="navbar__scheduler-overlaypanel" appendTo="body" [dismissable]="false" #schedulerOp>
     <div class="navbar__scheduler-status" *ngIf="scheduler">

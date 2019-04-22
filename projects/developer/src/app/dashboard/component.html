@@ -41,9 +41,9 @@
             </div>
         </div>
         <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
-            <p-panel header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes">
+            <p-panel class="noWrapPanel" header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes">
                 <div class="dashboard__error-chart" *ngIf="dataFavs">
-                    <h3><span [pTooltip]="favorteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
+                    <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
                     <div class="scale-chart-container">
                         <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
                         <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
