@@ -1,4 +1,4 @@
-<div [ngClass]="getSubnavStyles()">
+<div [ngClass]="getSubnavStyles()" *ngIf='!isMobile'>
     <!-- Processing -->
     <div [ngClass]="getSectionStyles('processing')">
         <ul>
