@@ -1,5 +1,4 @@
 // Angular Modules
-import { APP_BASE_HREF } from '@angular/common';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -36,7 +35,6 @@ import { AppConfigService } from './common/services/app-config.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesComponent } from './processing/batches/component';
-import { BatchesEditComponent } from './processing/batches/edit.component';
 import { CandyBarComponent } from './common/components/candy-bar/component';
 import { DashboardComponent } from './dashboard/component';
 import { DataFeedComponent } from './dashboard/data-feed/component';
@@ -86,16 +84,11 @@ const appInitializer = (appConfig: AppConfigService) => {
     };
 };
 
-const baseInitializer = () => {
-    return window['app_base'] || '/';
-};
-
 @NgModule({
     declarations: [
         AppComponent,
         BatchDetailsComponent,
         BatchesComponent,
-        BatchesEditComponent,
         CandyBarComponent,
         DashboardComponent,
         DataFeedComponent,
@@ -199,10 +192,6 @@ const baseInitializer = () => {
         PaginatorModule
     ],
     providers: [
-        {
-            provide: APP_BASE_HREF,
-            useFactory: baseInitializer
-        },
         {
             provide: APP_INITIALIZER,
             useFactory: appInitializer,

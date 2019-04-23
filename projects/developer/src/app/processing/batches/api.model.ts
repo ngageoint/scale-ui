@@ -58,6 +58,7 @@ export class Batch {
         }
         return new Batch();
     }
+
     public static transformer(data) {
         if (data) {
             if (Array.isArray(data)) {
@@ -66,6 +67,32 @@ export class Batch {
             return Batch.build(data);
         }
         return Batch.build(null);
+    }
+
+    public cleanBatch() {
+        return {
+            recipe_type_id: this.recipe_type.id,
+            definition: this.definition,
+            configuration: this.configuration
+        };
+    }
+
+    public newBatch() {
+        return {
+            title: this.title,
+            description: this.description,
+            recipe_type_id: this.recipe_type.id,
+            definition: this.definition,
+            configuration: this.configuration
+        };
+    }
+
+    public editBatch() {
+        return {
+            title: this.title,
+            description: this.description,
+            configuration: this.configuration
+        };
     }
 
     constructor(
@@ -142,7 +169,7 @@ export class Batch {
         this.created = this.created || null;
         this.superseded = this.superseded || null;
         this.last_modified = this.last_modified || null;
-        this.definition = this.definition || { previous_batch: { root_batch_id: null, job_names: null, all_jobs: null } };
+        this.definition = this.definition || { previous_batch: { root_batch_id: null, forced_nodes: {} } };
         this.configuration = this.configuration || {priority: null};
         this.job_metrics = this.job_metrics || null;
         this.jobs_blocked_percentage = (this.jobs_blocked / this.jobs_total) * 100;

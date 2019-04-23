@@ -26,6 +26,8 @@ var jobInputs = require('./handlers/jobInputs');
 var files = require('./handlers/files');
 var jobExecutions = require('./handlers/jobExecutions');
 var batches = require('./handlers/batches');
+var batchesCreate = require('./handlers/batchCreate');
+var batchesEdit = require('./handlers/batchEdit');
 var batchDetails = require('./handlers/batchDetails');
 var batchValidate = require('./handlers/batchValidate');
 var strikes = require('./handlers/strikes');
@@ -248,9 +250,21 @@ module.exports = {
         });
 
         server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/batches/',
+            handler: batchesCreate
+        });
+
+        server.route({
             method: 'GET',
             path: '/mocks/' + apiVersion + '/batches/{id}/',
             handler: batchDetails
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/' + apiVersion + '/batches/{id}/',
+            handler: batchesEdit
         });
 
         server.route({
