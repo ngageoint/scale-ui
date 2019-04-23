@@ -3,7 +3,7 @@ const runningJobs = require('../data/running-jobs.json');
 
 module.exports = function (request) {
     var data = _.clone(runningJobs);
-    var params = request.url.query;
+    var params = request.query;
     if (_.keys(params).length > 0) {
         data.count = data.results.length;
         if (params.page && params.page_size) {
