@@ -1,3 +1,15 @@
+::ng-deep .job-types {
+    .ui-dataview {
+        .ui-dataview-header {
+            display: none;
+        }
+
+        .ui-dataview-content {
+            padding: 1em;
+        }
+    }
+}
+
 .job-type__header {
     display: flex;
     align-items: flex-end;

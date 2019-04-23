@@ -1,16 +1,28 @@
-<div class="job-type__header">
-    <h2><i class="fa fa-cube"></i> Job Types</h2>
-    <p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType" filter="filter" class="job-type__options"
-                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)"
-                placeholder="Select..." [showClear]="false"></p-dropdown>
-    <button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"></button>
+<!--<div class="job-type__header">-->
+    <!--<h2><i class="fa fa-cube"></i> Job Types</h2>-->
+    <!--<p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType" filter="filter" class="job-type__options"-->
+                <!--[style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)"-->
+                <!--placeholder="Select..." [showClear]="false"></p-dropdown>-->
+    <!--<button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"></button>-->
+<!--</div>-->
+<!--<hr />-->
+<h2><i class="fa fa-cube"></i> Job Types</h2>
+<div class="job-types" *ngIf="!selectedJobTypeDetail">
+    <p-dataView [value]="jobTypes" layout="grid">
+        <ng-template let-jobType pTemplate="gridItem">
+            <div class="p-col-12 p-md-3">
+                <p-panel [header]="jobType.label">
+                    {{ jobType.value.description }}
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataView>
 </div>
-<hr />
-<div class="job-type__details">
-    <div class="text-center" *ngIf="!selectedJobTypeDetail">
-        <h3>Select a job type to view its details</h3>
-    </div>
-    <div *ngIf="selectedJobTypeDetail && selectedJobTypeDetail.manifest.seedVersion">
+<div class="job-type__details" *ngIf="selectedJobTypeDetail">
+    <!--<div class="text-center" *ngIf="!selectedJobTypeDetail">-->
+        <!--<h3>Select a job type to view its details</h3>-->
+    <!--</div>-->
+    <div *ngIf="selectedJobTypeDetail.manifest.seedVersion">
         <div class="p-grid">
             <div class="p-col-12">
                 <p-panel>
@@ -136,7 +148,7 @@
             </div>
         </div>
     </div>
-    <div *ngIf="selectedJobTypeDetail && !selectedJobTypeDetail.manifest.seedVersion">
+    <div *ngIf="!selectedJobTypeDetail.manifest.seedVersion">
         <div class="p-grid">
             <div class="p-col-10">
                 <p-scrollPanel styleClass="scale-panel">
