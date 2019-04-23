@@ -6,7 +6,7 @@ const recipes = require('../data/recipes');
 module.exports = function (request) {
     var jobTypeData = _.clone(jobTypes);
     var recipeData = _.clone(recipes);
-    var params = request.url.query;
+    var params = request.query;
     var data = {
         count: 500,
         next: 'http://localhost/api/jobs/?page=2',

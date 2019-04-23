@@ -3,7 +3,7 @@ const workspaces = require('../data/workspaces.json');
 
 module.exports = function (request) {
     var data = _.clone(workspaces);
-    var params = request.url.query;
+    var params = request.query;
     if (_.keys(params).length > 0) {
         if (params.order) {
             if (_.startsWith(params.order, '-')) {

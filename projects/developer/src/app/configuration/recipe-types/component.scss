@@ -75,3 +75,13 @@
     font-size: 9px;
     margin: 0 0 0 7px;
 }
+
+::ng-deep .ui-dialog {
+    &.add-remove-dialog {
+        width: 500px;
+
+        .ui-dialog-content {
+            padding: 12px 12px 0 0 !important;
+        }
+    }
+}
