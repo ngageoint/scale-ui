@@ -2,7 +2,6 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@
 import { OverlayPanel } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {SlideMenuModule} from 'primeng/slidemenu';
 import {MenuItem} from 'primeng/api';
 import * as _ from 'lodash';
 
@@ -119,7 +118,7 @@ export class NavbarComponent implements OnInit, OnChanges {
         this.profileOp.toggle(event);
     }
 
-    createMobileMenu(){
+    createMobileMenu() {
             this.itemsMobile = [
                 {
                     label: 'Processing',
@@ -127,35 +126,35 @@ export class NavbarComponent implements OnInit, OnChanges {
                     items: [{
                             label: 'Jobs',
                             icon: 'fa fa-cube',
-                            url: "/processing/jobs"
+                            url: '/processing/jobs'
                         },
                         {
                             label: 'Recipes',
                             icon: 'fa fa-cube',
-                            url: "/processing/recipes"
+                            url: '/processing/recipes'
                         },
                         {
                             label: 'Running Jobs',
                             icon: 'fa fa-arrow-circle-right',
-                            url: "/processing/running-jobs"
+                            url: '/processing/running-jobs'
                         },
                         {
                             label: 'Queued Jobs',
                             icon: 'fa fa-clock-o',
-                            url: "/processing/queued-jobs"
+                            url: '/processing/queued-jobs'
                         },
                         {
                             label: 'Job Type History',
                             icon: 'fa fa-history',
-                            url: "/processing/job-type-history"
+                            url: '/processing/job-type-history'
                         },
                         {
                             label: 'Batches',
                             icon: 'fa fa-files-o',
-                            url: "/processing/batches"
+                            url: '/processing/batches'
                         },
-                        {separator:true},
-                        {label: 'Quit'}
+                        {separator: true},
+                        {label: 'Quit', icon: 'pi pi-fw pi-times'}
                     ]
                 },
                 {
@@ -164,20 +163,20 @@ export class NavbarComponent implements OnInit, OnChanges {
                     items: [{
                         label: 'Feed',
                         icon: 'fa fa-line-chart',
-                        url: "/data/feed"
+                        url: '/data/feed'
                     },
                     {
                         label: 'Ingest Records',
                         icon: 'fa fa-clone',
-                        url: "/data/ingest"
+                        url: '/data/ingest'
                     },
                     {
                         label: 'Metrics',
                         icon: 'fa fa-bar-chart',
-                        url: "/data/metrics"
+                        url: '/data/metrics'
                     },
-                    {separator:true},
-                    {label: 'Quit'}
+                    {separator: true},
+                    {label: 'Quit', icon: 'pi pi-fw pi-times'}
                 ]
                 },
                 {
@@ -186,15 +185,15 @@ export class NavbarComponent implements OnInit, OnChanges {
                     items: [{
                         label: 'Job Types',
                         icon: 'fa fa-cube',
-                        url: "/configuration/job-types"
+                        url: '/configuration/job-types'
                     },
                     {
                         label: 'Recipe Types',
                         icon: 'fa fa-cubes',
-                        url: "/configuration/recipe-types"
+                        url: '/configuration/recipe-types'
                     },
-                    {separator:true},
-                    {label: 'Quit'}
+                    {separator: true},
+                    {label: 'Quit', icon: 'pi pi-fw pi-times'}
                 ]
                 },
                 {
@@ -203,28 +202,28 @@ export class NavbarComponent implements OnInit, OnChanges {
                     items: [{
                         label: 'Nodes',
                         icon: 'fa fa-circle-o',
-                        url: "/system/nodes"
+                        url: '/system/nodes'
                     },
                     {
                         label: 'Scans',
                         icon: 'fa fa-barcode',
-                        url: "/system/scans"
+                        url: '/system/scans'
                     },
                     {
                         label: 'Strikes',
                         icon: 'fa fa-bolt',
-                        url: "/system/strikes"
+                        url: '/system/strikes'
                     },
                     {
                         label: 'Workspaces',
                         icon: 'fa fa-database',
-                        url: "/system/workspaces"
+                        url: '/system/workspaces'
                     },
-                    {separator:true},
-                    {label: 'Quit'}
+                    {separator: true},
+                    {label: 'Quit', icon: 'pi pi-fw pi-times'}
                 ]
                 },
-                {separator:true},
+                {separator: true},
                 {
                     label: 'Quit', icon: 'pi pi-fw pi-times'
                 }
