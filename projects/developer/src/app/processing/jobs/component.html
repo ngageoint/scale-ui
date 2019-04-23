@@ -69,6 +69,7 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'job__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                    <span class="ui-column-title">{{ col.header }}</span>
                 <div *ngSwitchCase="'job_type'">
                     <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
                        [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>

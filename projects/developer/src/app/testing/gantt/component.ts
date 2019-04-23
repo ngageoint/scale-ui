@@ -60,7 +60,7 @@ export class GanttComponent implements OnInit, OnDestroy {
                             if (!values[index]) {
                                 return;
                             }
-                            return moment.utc(values[index]['value']).format('YYYY-MM-DD');
+                            return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
                         }
                     }
                 }]
@@ -83,19 +83,22 @@ export class GanttComponent implements OnInit, OnDestroy {
             },
             maintainAspectRatio: false
         };
-for (let index = 0; index < data.results.length; index++) {
-    this.labels.push(data.results[index].name);
-    this.datasetCreated.push(data.results[index].created);
-    this.datasetDeprecated.push(data.results[index].deprecated);
-    this.datasetDuration.push( DataService.calculateDuration(data.results[index].created, data.results[index].deprecated, true))
-}
+
         this.data = {
-            labels: this.labels,
-            datasets: [{
-                data: [this.datasetCreated, this.datasetDeprecated, this.datasetDuration]
-            }]
-    };
-    console.log(this.datasetDuration);
+            labels: [],
+            datasets: []
+        };
+
+        _.forEach(data.results, result => {
+            this.data.labels.push(result.name);
+            // this.datasetCreated.push(data.results[index].deprecated);
+            // this.datasetCreated.push(DataService.calculateDuration(data.results[index].created, data.results[index].deprecated, true));
+
+            this.data.datasets.push({
+                data: [result.created, result.deprecated, DataService.calculateDuration(result.created, result.deprecated, true)]
+            });
+        });
+        console.log(this.data);
 }
 
 
