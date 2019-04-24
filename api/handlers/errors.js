@@ -3,7 +3,7 @@ const moment = require('moment');
 const jobTypes = require('../data/job-types');
 
 module.exports = function (request) {
-    var params = request.url.query;
+    var params = request.query;
     var data = {
         count: Math.floor(Math.random() * (100 - 10) + 10) + 1,
         next: null,

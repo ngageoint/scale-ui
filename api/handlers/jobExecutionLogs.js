@@ -1,7 +1,7 @@
 var moment = require('moment');
 
 module.exports = function (request) {
-    var params = request.url.query;
+    var params = request.query;
     var maxLines = 500;
     var log = {
         hits: {
