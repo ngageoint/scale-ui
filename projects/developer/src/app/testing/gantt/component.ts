@@ -60,7 +60,7 @@ export class GanttComponent implements OnInit, OnDestroy {
                             if (!values[index]) {
                                 return;
                             }
-                            return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
+                            return moment.utc(values[index]['value']).format('YYYY-MM-DD');
                         }
                     }
                 }]
@@ -88,17 +88,19 @@ export class GanttComponent implements OnInit, OnDestroy {
             labels: [],
             datasets: []
         };
-
-        _.forEach(data.results, result => {
+        let duration = '';
+         _.forEach(data.results, result => {
             this.data.labels.push(result.name);
-            // this.datasetCreated.push(data.results[index].deprecated);
-            // this.datasetCreated.push(DataService.calculateDuration(data.results[index].created, data.results[index].deprecated, true));
-
-            this.data.datasets.push({
-                data: [result.created, result.deprecated, DataService.calculateDuration(result.created, result.deprecated, true)]
+        //     this.datasetCreated.push(data.results[index].deprecated);
+        //     this.datasetCreated.push(DataService.calculateDuration(
+             duration = DataService.calculateDuration(result.created, result.deprecated, true);
+             this.data.datasets.push({
+                data: [
+                    [result.created, result.deprecated, DataService.calculateDuration(result.created, result.deprecated, true)]
+                ]
             });
         });
-        console.log(this.data);
+        console.log(this.data.datasets);
 }
 
 
