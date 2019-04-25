@@ -100,3 +100,10 @@
         background: var(--label-text-warning) !important;
     }
 }
+
+// the standard flex containers still break with the node sizes
+@media screen and (min-width: 770px) and (max-width: 1127px) {
+.responsive__node{
+    width: 100% !important;
+}
+}

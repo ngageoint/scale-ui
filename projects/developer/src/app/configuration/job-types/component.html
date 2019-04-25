@@ -35,7 +35,7 @@
                                 {{ selectedJobTypeDetail.manifest.job.description }}
                             </div>
                         </div>
-                        <div class="p-col-4">
+                        <div class="p-col-12 p-md-12 p-lg-4 p-xl-4 ">
                             <dl class="dl-horizontal">
                                 <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.created" [pTooltip]="selectedJobTypeDetail.createdTooltip">{{ selectedJobTypeDetail.createdDisplay }}</dd>
@@ -65,7 +65,8 @@
                                 <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
                             </dl>
                         </div>
-                        <div [ngClass]="interfaceClass" *ngIf="selectedJobTypeDetail.manifest.job.interface">
+                        <div class="p-grid jobTypeTables">
+                        <div class="p-col-12 p-md-12 p-lg-6 p-xl-6"[ngClass]="interfaceClass" *ngIf="selectedJobTypeDetail.manifest.job.interface">
                             <p-card header="Interface">
                                 <table class="table">
                                     <tbody>
@@ -111,7 +112,7 @@
                                 </table>
                             </p-card>
                         </div>
-                        <div [ngClass]="errorClass" *ngIf="selectedJobTypeDetail.manifest.job.errors">
+                        <div class="p-col-12 p-md-12 p-lg-6 p-xl-6" [ngClass]="errorClass" *ngIf="selectedJobTypeDetail.manifest.job.errors">
                             <p-card header="Errors">
                                 <table class="table table-striped">
                                     <thead>
@@ -131,6 +132,7 @@
                                 </table>
                             </p-card>
                         </div>
+                    </div>
                     </div>
                 </p-panel>
             </div>
