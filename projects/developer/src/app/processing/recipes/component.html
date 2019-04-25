@@ -51,6 +51,7 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'recipe__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <span class="ui-column-title"> {{ col.header }} </span>
                 <div *ngSwitchCase="'recipe_type.name'">
                     {{ rowData.recipe_type.title }} {{ rowData.recipe_type.version }}
                 </div>

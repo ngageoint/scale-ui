@@ -1,7 +1,7 @@
-<div class="feed__header">
+<div class="feed__header p-grid">
     <h2><i class="fa fa-line-chart"></i> Data Feed</h2>
     <div>
-        <p-multiSelect [options]="strikes" [(ngModel)]="selectedStrikes"
+        <p-multiSelect class = "p-col-3" [options]="strikes" [(ngModel)]="selectedStrikes"
                        (onChange)="onStrikesChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
                        (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
             <ng-template let-strike p-template="item">
@@ -10,7 +10,7 @@
         </p-multiSelect>
     </div>
     <div>
-        <p-dropdown [options]="timeValues" [(ngModel)]="selectedTimeValue" (onChange)="getLatestData()"
+        <p-dropdown class = "p-col-3" [options]="timeValues" [(ngModel)]="selectedTimeValue" (onChange)="getLatestData()"
                     [style]="{'width':'150px'}" placeholder="Select..."
                     [showClear]="false"></p-dropdown>
     </div>
