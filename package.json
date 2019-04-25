@@ -55,6 +55,7 @@
     "rxjs-compat": "^6.5.1",
     "seed-images": "^4.6.0",
     "shim-keyboard-event-key": "^1.0.3",
+    "webkit-line-clamp": "^1.2.0",
     "zone.js": "^0.9.0"
   },
   "devDependencies": {

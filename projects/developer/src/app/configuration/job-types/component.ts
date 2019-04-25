@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SelectItem } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from './api.service';
@@ -17,8 +18,12 @@ import { ScansApiService } from '../../system/scans/api.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
+    @ViewChild('dv') dv: any;
     private routeParams: any;
+    private isInitialized: boolean;
+    rows = 16;
     jobTypes: SelectItem[];
+    totalRecords: number;
     selectedJobType: any;
     selectedJobTypeDetail: any;
     options: any;
@@ -41,6 +46,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     scanBtnIcon = 'fa fa-barcode';
     interfaceClass = 'p-col-6';
     errorClass = 'p-col-6';
+    loadingJobTypes: boolean;
 
     constructor(
         private messageService: MessageService,
@@ -52,6 +58,19 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute
     ) {}
 
+    private clampText() {
+        setTimeout(() => {
+            const clampEls = document.getElementsByClassName('clamp');
+            _.forEach(clampEls, el => {
+                webkitLineClamp(el, 3);
+            });
+            // container elements are hidden by default to prevent flash of unstyled content
+            const containerEls = document.getElementsByClassName('job-type__container');
+            _.forEach(containerEls, (el: any) => {
+                el.style.visibility = 'visible';
+            });
+        });
+    }
     private getJobTypeDetail(name: string, version: string) {
         this.jobTypesApiService.getJobType(name, version).subscribe(data => {
             this.selectedJobTypeDetail = data;
@@ -69,22 +88,26 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
         });
     }
-    private getJobTypes(name?: string, version?: string) {
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
+    private getJobTypes(params?: any) {
+        this.loadingJobTypes = true;
+        this.jobTypes = [];
+        params = params || {
+            first: 0,
+            rows: this.rows
+        };
+        this.jobTypesApiService.getJobTypes(params).subscribe(data => {
+            this.totalRecords = data.count;
             _.forEach(data.results, result => {
                 this.jobTypes.push({
                     label: `${result.title} ${result.version}`,
                     value: result
                 });
-                if (name === result.name && version === result.version) {
-                    this.selectedJobType = result;
-                }
             });
-            if (name && version) {
-                this.getJobTypeDetail(name, version);
-            }
+            this.clampText();
+            this.loadingJobTypes = false;
         }, err => {
             console.log(err);
+            this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
         });
     }
@@ -111,11 +134,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     getUnicode(code) {
         return `&#x${code};`;
     }
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/job-types/${e.value.name}/${e.value.version}`);
+    onJobTypeClick(e, jobType) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open(`/configuration/job-types/${jobType.value.name}/${jobType.value.version}`);
         } else {
-            this.router.navigate([`/configuration/job-types/${e.value.name}/${e.value.version}`]);
+            this.router.navigate([`/configuration/job-types/${jobType.value.name}/${jobType.value.version}`]);
         }
     }
     onPauseClick() {
@@ -130,8 +153,25 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     onEditClick() {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.name}/${this.selectedJobTypeDetail.version}`]);
     }
+    onLazyLoad(e: LazyLoadEvent) {
+        // let ngOnInit handle loading data to ensure query params are respected
+        if (this.isInitialized) {
+            this.getJobTypes({
+                first: e.first,
+                rows: e.rows,
+                sortField: 'title'
+            });
+        } else {
+            // data was just loaded by ngOnInit, so set flag to true
+            this.isInitialized = true;
+        }
+    }
     onScanHide() {
         this.selectedWorkspace = null;
+    }
+    onFilterKeyup(e) {
+        this.dv.filter(e.target.value);
+        this.clampText();
     }
     scanWorkspace() {
         const scanObj = {
@@ -213,7 +253,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.routeParams = this.route.paramMap.subscribe(params => {
                 name = params.get('name');
                 version = params.get('version');
-                this.getJobTypes(name, version);
+                if (name && version) {
+                    this.getJobTypeDetail(name, version);
+                } else {
+                    this.getJobTypes();
+                }
             });
         }
     }

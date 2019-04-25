@@ -1,27 +1,30 @@
-<!--<div class="job-type__header">-->
-    <!--<h2><i class="fa fa-cube"></i> Job Types</h2>-->
-    <!--<p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType" filter="filter" class="job-type__options"-->
-                <!--[style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)"-->
-                <!--placeholder="Select..." [showClear]="false"></p-dropdown>-->
-    <!--<button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"></button>-->
-<!--</div>-->
-<!--<hr />-->
-<h2><i class="fa fa-cube"></i> Job Types</h2>
 <div class="job-types" *ngIf="!selectedJobTypeDetail">
-    <p-dataView [value]="jobTypes" layout="grid">
+    <div class="flexed space-between margin-bottom-sm">
+        <div class="flexed">
+            <h2><i class="fa fa-cube"></i> Job Types</h2>
+            <button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"
+                    pTooltip="Create New Job Type"></button>
+        </div>
+        <input type="search" pInputText placeholder="Search" class="job-type__filter" (keyup)="onFilterKeyup($event)">
+    </div>
+    <p-dataView [value]="jobTypes" [paginator]="true" [rows]="rows" [lazy]="true" [totalRecords]="totalRecords"
+                (onLazyLoad)="onLazyLoad($event)" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
         <ng-template let-jobType pTemplate="gridItem">
-            <div class="p-col-12 p-md-3">
-                <p-panel [header]="jobType.label">
-                    {{ jobType.value.description }}
+            <div class="p-col-12 p-md-3 job-type__container" (click)="onJobTypeClick($event, jobType)">
+                <p-panel>
+                    <p-header>
+                        <strong><span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span> {{ jobType.label }}</strong>
+                    </p-header>
+                    <div class="clamp">
+                        {{ jobType.value.description }}
+                    </div>
                 </p-panel>
             </div>
         </ng-template>
     </p-dataView>
 </div>
 <div class="job-type__details" *ngIf="selectedJobTypeDetail">
-    <!--<div class="text-center" *ngIf="!selectedJobTypeDetail">-->
-        <!--<h3>Select a job type to view its details</h3>-->
-    <!--</div>-->
+    <h2><i class="fa fa-cube"></i> Job Types</h2>
     <div *ngIf="selectedJobTypeDetail.manifest.seedVersion">
         <div class="p-grid">
             <div class="p-col-12">
