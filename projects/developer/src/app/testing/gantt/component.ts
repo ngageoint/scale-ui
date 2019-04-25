@@ -8,6 +8,7 @@ import * as Color from 'chartjs-color';
 import { RecipeType } from './api.model';
 import { RecipeTypesApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
+import { getLocaleDateFormat } from '@angular/common';
 
 @Component({
     selector: 'dev-job-details',
@@ -31,10 +32,6 @@ export class GanttComponent implements OnInit, OnDestroy {
     inputClass = 'p-col-12';
     outputClass = 'p-col-12';
     recipeGraphMinHeight = '70vh';
-    labels = [];
-    datasetCreated = [];
-    datasetDeprecated = [];
-    datasetDuration = [];
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
@@ -60,8 +57,10 @@ export class GanttComponent implements OnInit, OnDestroy {
                             if (!values[index]) {
                                 return;
                             }
-                            return moment.utc(values[index]['value']).format('YYYY-MM-DD');
-                        }
+                            return moment.utc(values[index]['value']).format('YYYY-MM-DD HH:mm:ss[Z]');
+                        },
+                        maxRotation: 90,
+                        minRotation: 90,
                     }
                 }]
             },
@@ -77,6 +76,12 @@ export class GanttComponent implements OnInit, OnDestroy {
                     }
                 }
             },
+            layout: {
+                padding: {
+                    top: 100,
+                    bottom: 100
+                }
+            },
             plugins: {
                 datalabels: false,
                 timeline: true
@@ -88,19 +93,29 @@ export class GanttComponent implements OnInit, OnDestroy {
             labels: [],
             datasets: []
         };
+
         let duration = '';
+        let todaysDate = '';
+
          _.forEach(data.results, result => {
             this.data.labels.push(result.name);
-        //     this.datasetCreated.push(data.results[index].deprecated);
-        //     this.datasetCreated.push(DataService.calculateDuration(
-             duration = DataService.calculateDuration(result.created, result.deprecated, true);
-             this.data.datasets.push({
-                data: [
-                    [result.created, result.deprecated, DataService.calculateDuration(result.created, result.deprecated, true)]
-                ]
-            });
+            if (result.deprecated == null) {
+                todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
+                duration = DataService.calculateDuration(result.created, todaysDate, true);
+                this.data.datasets.push({
+                    data: [
+                        [result.created, todaysDate, duration]
+                    ]
+                });
+            } else {
+                duration = DataService.calculateDuration(result.created, result.deprecated, true);
+                this.data.datasets.push({
+                    data: [
+                        [result.created, result.deprecated, duration]
+                    ]
+                });
+            }
         });
-        console.log(this.data.datasets);
 }
 
 
