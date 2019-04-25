@@ -3,7 +3,7 @@ const moment = require('moment');
 const metricsJobTypes = require('../data/metricsJobTypes.json');
 
 module.exports = function (request) {
-    var params = request.url.query;
+    var params = request.query;
     if (_.keys(params).length > 0) {
         var random = 0;
 

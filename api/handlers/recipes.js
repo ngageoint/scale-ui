@@ -4,7 +4,7 @@ const recipes = require('../data/recipes.json');
 
 module.exports = function (request) {
     var data = _.clone(recipes);
-    var params = request.url.query;
+    var params = request.query;
     if (_.keys(params).length > 0) {
         if (params.recipe_type_name) {
             data.results = _.filter(data.results, function (r) {

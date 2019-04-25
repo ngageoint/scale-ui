@@ -2,7 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 
 module.exports = function (request) {
-    var params = request.url.query;
+    var params = request.query;
     var data = {
         count: 10,
         next: 'http://localhost/api/jobs/1/inputs/?page=2',
