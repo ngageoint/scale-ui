@@ -33,6 +33,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
+    private headerItemsShowInactive: MenuItem[] = [
+        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewRecipe(); } },
+        { label: 'Show Inactive', icon: 'fa fa-circle', command: () => { this.toggleInactive(); } }
+    ];
+    private headerItemsHideInactive: MenuItem[] = [
+        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewRecipe(); } },
+        { label: 'Hide Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
+    ];
+    showInactive: boolean;
     loadingRecipeTypes: boolean;
     isInitialized: boolean;
     rows = 16;
@@ -64,6 +73,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
     isEditing: boolean;
+    headerItems: MenuItem[] = _.clone(this.headerItemsShowInactive);
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
         { label: 'Job Nodes', icon: 'fa fa-cube',
@@ -197,7 +207,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.loadingRecipeTypes = true;
         params = params || {
             first: 0,
-            rows: this.rows
+            rows: this.rows,
+            is_active: this.showInactive ? null : true
         };
         this.recipeTypeOptions = [];
         this.showAddRemoveDisplay = false;
@@ -496,6 +507,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         } else {
             this.router.navigate([`/configuration/recipe-types/${recipeType.value.name}`]);
         }
+    }
+
+    toggleInactive() {
+        this.showInactive = !this.showInactive;
+        this.headerItems = this.showInactive ? _.clone(this.headerItemsHideInactive) : _.clone(this.headerItemsShowInactive);
+        this.getRecipeTypes();
     }
 
     ngOnInit() {

@@ -2,8 +2,9 @@
     <div class="flexed space-between margin-bottom-sm">
         <div class="flexed">
             <h2><i class="fa fa-cubes"></i> Recipe Types</h2>
-            <button pButton class="btn__new-recipe-type" icon="fa fa-plus" (click)="createNewRecipe()"
-                    pTooltip="Create New Recipe Type"></button>
+            <p-menu #headerMenu [popup]="true" [model]="headerItems" appendTo="body"></p-menu>
+            <button pButton type="button" class="ui-button-secondary recipe-type__menu" icon="fa fa-bars"
+                    (click)="headerMenu.toggle($event)"></button>
         </div>
         <input type="search" pInputText placeholder="Search" class="recipe-type__filter" (keyup)="onFilterKeyup($event)">
     </div>

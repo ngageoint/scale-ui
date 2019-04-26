@@ -21,6 +21,24 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     private routeParams: any;
     private isInitialized: boolean;
+    private itemsWithPause: MenuItem[] = [
+        { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
+    ];
+    private itemsWithResume: MenuItem[] = [
+        { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
+    ];
+    private headerItemsShowInactive: MenuItem[] = [
+        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewJobType(); } },
+        { label: 'Show Inactive', icon: 'fa fa-circle', command: () => { this.toggleInactive(); } }
+    ];
+    private headerItemsHideInactive: MenuItem[] = [
+        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewJobType(); } },
+        { label: 'Hide Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
+    ];
     rows = 16;
     jobTypes: SelectItem[];
     totalRecords: number;
@@ -28,16 +46,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     selectedJobTypeDetail: any;
     options: any;
     items: MenuItem[];
-    itemsWithPause: MenuItem[] = [
-        { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
-    ];
-    itemsWithResume: MenuItem[] = [
-        { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
-    ];
+    headerItems: MenuItem[] = _.clone(this.headerItemsShowInactive);
     scanDisplay: boolean;
     workspaces: SelectItem[] = [];
     selectedWorkspace: any;
@@ -47,6 +56,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     interfaceClass = 'p-col-6';
     errorClass = 'p-col-6';
     loadingJobTypes: boolean;
+    showInactive: boolean;
 
     constructor(
         private messageService: MessageService,
@@ -93,7 +103,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.jobTypes = [];
         params = params || {
             first: 0,
-            rows: this.rows
+            rows: this.rows,
+            is_active: this.showInactive ? null : true
         };
         this.jobTypesApiService.getJobTypes(params).subscribe(data => {
             this.totalRecords = data.count;
@@ -172,6 +183,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     onFilterKeyup(e) {
         this.dv.filter(e.target.value);
         this.clampText();
+    }
+    toggleInactive() {
+        this.showInactive = !this.showInactive;
+        this.headerItems = this.showInactive ? _.clone(this.headerItemsHideInactive) : _.clone(this.headerItemsShowInactive);
+        this.getJobTypes();
     }
     scanWorkspace() {
         const scanObj = {

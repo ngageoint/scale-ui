@@ -2,8 +2,9 @@
     <div class="flexed space-between margin-bottom-sm">
         <div class="flexed">
             <h2><i class="fa fa-cube"></i> Job Types</h2>
-            <button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"
-                    pTooltip="Create New Job Type"></button>
+            <p-menu #headerMenu [popup]="true" [model]="headerItems" appendTo="body"></p-menu>
+            <button pButton type="button" class="ui-button-secondary job-type__menu" icon="fa fa-bars"
+                    (click)="headerMenu.toggle($event)"></button>
         </div>
         <input type="search" pInputText placeholder="Search" class="job-type__filter" (keyup)="onFilterKeyup($event)">
     </div>
