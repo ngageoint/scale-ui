@@ -151,9 +151,29 @@ export class JobTypesApiService {
             );
     }
 
-    getJobTypeStatus(poll?: Boolean): Observable<any> {
+    getJobTypeStatus(poll?: Boolean, params?: any): Observable<any> {
+        let apiParams = {};
+        if (params) {
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            apiParams = {
+                page: page,
+                page_size: params.rows || 1000,
+                started: params.started,
+                ended: params.ended
+            };
+        } else {
+            apiParams = {
+                page_size: 1000
+            };
+        }
+        apiParams = _.pickBy(apiParams, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        const queryParams = new HttpParams({
+            fromObject: apiParams
+        });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/job-types/status/`)
+            const request = this.http.get(`${this.apiPrefix}/job-types/status/`, { params: queryParams })
                 .pipe(
                     map(response => {
                         return ApiResults.transformer(response);
