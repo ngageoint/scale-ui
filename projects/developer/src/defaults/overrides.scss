@@ -50,6 +50,19 @@ body {
         padding: .6em 2em .6em .6em;
     }
 
+    .ui-slidemenu .ui-slidemenu-content {
+        height: 340px !important; 
+        width: 180px !important;
+        overflow-y: hidden !important;  
+    }
+    .ui-slidemenu .ui-slidemenu-wrapper {
+        width: 180px !important;
+        height: 340px !important;
+    }
+    .ui-slidemenu.ui-slidemenu-dynamic{
+        width: auto !important;
+    }
+
     p-inputswitch {
         line-height: 0;
     }
@@ -140,6 +153,13 @@ body {
     }
     .ui-table-responsive .ui-table-tbody > tr{
         border: 1px solid #c8c8c8 !important;
+    }
+
+    .ui-sidebar-left{
+        width: auto !important;
+    }
+    .ui-sidebar-right{
+        width: auto !important;
     }
     .pull-right {
         float: left !important;
