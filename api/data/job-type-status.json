@@ -8,16 +8,144 @@
                 "name": "landsat8-parse",
                 "version": "1.0.0",
                 "title": "Landsat 8 Parse",
-                "description": "Parse Landsat 8 multi-tif files in tar.gz archives",
-                "category": "Landsat",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
+                "icon_code": "f248",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f248"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/landsat8-parse_1.0:dev",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "landsat8-parse",
+                        "jobVersion": "1.0.0",
+                        "packageVersion": "",
+                        "title": "Landsat 8 Parse",
+                        "description": "The Landsat 8 satellite images the entire Earth every 16 days in an 8-day offset from Landsat 7. Data collected by the instruments onboard the satellite are available to download at no charge from GloVis, EarthExplorer, or via the LandsatLook Viewer within 24 hours of reception. Landsat 8 carries two instruments: The Operational Land Imager (OLI) sensor includes refined heritage bands, along with three new bands: a deep blue band for coastal/aerosol studies, a shortwave infrared band for cirrus detection*, and a Quality Assessment band. The Thermal Infrared Sensor (TIRS) provides two thermal bands. These sensors both provide improved signal-to-noise (SNR) radiometric performance quantized over a 12-bit dynamic range. (This translates into 4096 potential grey levels in an image compared with only 256 grey levels in previous 8-bit instruments.) Improved signal to noise performance enable better characterization of land cover state and condition. Products are delivered as 16-bit images (scaled to 55,000 grey levels).",
+                        "tags": [],
+                        "timeout": 0,
+                        "maintainer": {
+                            "name": "USGS",
+                            "email": ""
+                        },
+                        "resources": {
+                            "scalar": [
+                                {
+                                    "name": "cpus",
+                                    "value": 4
+                                },
+                                {
+                                    "name": "mem",
+                                    "value": 18960
+                                },
+                                {
+                                    "name": "disk",
+                                    "value": 204200
+                                }
+                            ]
+                        },
+                        "interface": {
+                            "command": "./parse_landsat.sh",
+                            "inputs": {
+                                "files": [
+                                    {
+                                        "name": "infile",
+                                        "required": true,
+                                        "mediaTypes": ["application/octet-stream"]
+                                    }
+                                ],
+                                "json": [
+                                    {
+                                        "example": "this is an example string input"
+                                    }
+                                ]
+                            },
+                            "outputs": {
+                                "files": [
+                                    {
+                                        "name": "multispectral",
+                                        "mediaType": "image/tiff",
+                                        "multiple": true,
+                                        "pattern": "multispectral*.tiff",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "panchromatic",
+                                        "mediaType": "image/nitf",
+                                        "multiple": true,
+                                        "pattern": "panchromatic*.nitf",
+                                        "required": true
+                                    },
+                                    {
+                                        "name": "thermal",
+                                        "mediaType": "image/tiff",
+                                        "multiple": true,
+                                        "pattern": "thermal*.tiff",
+                                        "required": true
+                                    }
+                                ],
+                                "json": [
+                                    {
+                                        "name": "example",
+                                        "type": "string"
+                                    }
+                                ]
+                            },
+                            "mounts": [],
+                            "settings": []
+                        },
+                        "errors": [
+                            {
+                                "code": 1,
+                                "name": "error-1",
+                                "title": "Error 1",
+                                "description": "Error description",
+                                "category": "job"
+                            },
+                            {
+                                "code": 2,
+                                "name": "error-2",
+                                "title": "Error 2",
+                                "description": "Error description",
+                                "category": "data"
+                            },
+                            {
+                                "code": 3,
+                                "name": "error-3",
+                                "title": "Error 3",
+                                "description": "Error description",
+                                "category": "job"
+                            },
+                            {
+                                "code": 4,
+                                "name": "error-4",
+                                "title": "Error 4",
+                                "description": "Error description",
+                                "category": "job"
+                            }
+                        ]
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {
+                    "mounts": {
+                        "mount_1": {"type": "host", "host_path": "/the/host/path"},
+                        "mount_2": {"type": "volume", "driver": "docker-driver", "driver_opts": {"opt_1": "foo"}}
+                    },
+                    "output_workspaces": {
+                        "default": "workspace_1",
+                        "outputs": {"output_1": "workspace_2"}
+                    },
+                    "priority": 100,
+                    "settings": {"setting_1": "foo", "setting_2": "bar"}
+                },
+                "created": "2015-05-15T12:02:52.455Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-05-15T12:02:52.455Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -39,16 +167,61 @@
                 "name": "sam",
                 "version": "1.0",
                 "title": "Spectral Angle Mapper",
-                "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra.",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra. This technique, developed by J.W. Boardman, determines the spectral similarity between given reference spectra, r, (i.e., the image endmember in this case) and the spectra found at each pixel, t (Kruse, et al., 1992). The result of the comparison is reported as the angular difference (in radians) between the two spectra. Each pair of spectra is treated as a vector in nb-space, allowing the similarity of the spectra to be determined without regard to their relative brightness values. The result of the SAM calculation is an image for each reference spectrum, with high values (displayed in brighter values) corresponding to a better match between reference and test spectra.",
+                "icon_code": "f0e7",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f0e7"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/sam:1.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "sam",
+                        "jobVersion": "1.0",
+                        "packageVersion": "",
+                        "title": "Spectral Angle Mapper",
+                        "description": "The algorithm determines the spectral similarity between two spectra by calculating the angle between the spectra. This technique, developed by J.W. Boardman, determines the spectral similarity between given reference spectra, r, (i.e., the image endmember in this case) and the spectra found at each pixel, t (Kruse, et al., 1992). The result of the comparison is reported as the angular difference (in radians) between the two spectra. Each pair of spectra is treated as a vector in nb-space, allowing the similarity of the spectra to be determined without regard to their relative brightness values. The result of the SAM calculation is an image for each reference spectrum, with high values (displayed in brighter values) corresponding to a better match between reference and test spectra.",
+                        "maintainer": {
+                            "name": "Boardman",
+                            "email": ""
+                        },
+                        "timeout": 30,
+                        "interface": {
+                            "command": "./sam.sh",
+                            "inputs": {
+                                "files": [{
+                                    "mediaTypes": ["image/nitf"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "image"
+                                },{
+                                    "mediaTypes": ["text/csv"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "signature"
+                                }]
+                            },
+                            "outputs": {
+                                "files": [{
+                                    "mediaType": "image/tiff",
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "sam-detections"
+                                }]
+                            },
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-09-13T11:15:32.645Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-09-13T11:15:32.645Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -88,16 +261,61 @@
                 "name": "scm",
                 "version": "1.0",
                 "title": "Spectral Correlation Mapper",
-                "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity.",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity. The Spectral Correlation Mapper (SCM) method is a derivative of Pearsonian Correlation Coefficient that eliminates negative correlation and maintains the SAM characteristic of minimizing the shading effect resulting in better results. The SCM varies from –1 to 1 and cos (SAM) varies from 0 to 1. Figure 1 – Graphic area in relation to the deviations beginning at x mean and y mean. Figure 2 – Exemplification of correlation: a) positive – with the major part of points presenting signals similar in relation at x mean and y mean; b) negative – with the major part of points with apposite signals in relation at x mean and y mean. The SCM algorithm method, similar to SAM, uses the reference spectrum defined by the investigator, in accordance with the image s/he wants to classify.",
+                "icon_code": "f140",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f140"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/scm:1.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "scm",
+                        "jobVersion": "1.0",
+                        "packageVersion": "",
+                        "title": "Spectral Correlation Mapper",
+                        "description": "An improvement on the Spectral Angle Mapper for evaluating spectra similarity. The Spectral Correlation Mapper (SCM) method is a derivative of Pearsonian Correlation Coefficient that eliminates negative correlation and maintains the SAM characteristic of minimizing the shading effect resulting in better results. The SCM varies from –1 to 1 and cos (SAM) varies from 0 to 1. Figure 1 – Graphic area in relation to the deviations beginning at x mean and y mean. Figure 2 – Exemplification of correlation: a) positive – with the major part of points presenting signals similar in relation at x mean and y mean; b) negative – with the major part of points with apposite signals in relation at x mean and y mean. The SCM algorithm method, similar to SAM, uses the reference spectrum defined by the investigator, in accordance with the image s/he wants to classify.",
+                        "maintainer": {
+                            "name": "Universidade de Brasília",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./scm.sh",
+                            "inputs": {
+                                "files": [{
+                                    "mediaTypes": ["image/nitf"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "image"
+                                },{
+                                    "mediaTypes": ["text/csv"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "signature"
+                                }]
+                            },
+                            "outputs": {
+                                "files": [{
+                                    "mediaType": "image/tiff",
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "scm-detections"
+                                }]
+                            },
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-10-05T19:46:27.294Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-10-05T19:46:27.294Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -126,15 +344,61 @@
                 "version": "1.0",
                 "title": "Constrained Energy Minimization",
                 "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "icon_code": "f185",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f185"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/cem:1.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "cem",
+                        "jobVersion": "1.0",
+                        "packageVersion": "",
+                        "title": "Constrained Energy Minimization",
+                        "description": "CEM is used for target detection in hyperspectral remote sensing imagery.",
+                        "maintainer": {
+                            "name": "DigitalGlobe",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./cem.sh",
+                            "inputs": {
+                                "files": [{
+                                    "mediaTypes": ["image/nitf"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "image"
+                                },{
+                                    "mediaTypes": ["text/csv"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "signature"
+                                }]
+                            },
+                            "outputs": {
+                                "files": [{
+                                    "mediaType": "image/tiff",
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "cem-detections"
+                                }]
+                            },
+                            "mounts": [],
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-04-25T16:34:12.321Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-04-25T16:34:12.321Z"
             },
             "job_counts": []
         },
@@ -144,16 +408,59 @@
                 "name": "wv2-parse",
                 "version": "1.0.1",
                 "title": "WorldView-2 Parse",
-                "description": "Parses WorldView-2 GeoTiffs",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "description": "Parses WorldView-2 imagery. WorldView-2 is a commercial Earth observation satellite owned by DigitalGlobe. WorldView-2 provides commercially available panchromatic imagery of .46 m resolution, and eight-band multispectral imagery with 1.84 m (6 ft 0 in) resolution. It was launched October 8, 2009 to become DigitalGlobe's third satellite in orbit, joining WorldView-1 which was launched in 2007 and QuickBird which was launched in 2001. It takes a new photograph of any place on Earth every 1.1 days.",
+                "icon_code": "f0c2",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f0c2"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "wv2-parse",
+                        "jobVersion": "1.0.1",
+                        "packageVersion": "",
+                        "title": "WorldView-2 Parse",
+                        "description": "Parses WorldView-2 imagery. WorldView-2 is a commercial Earth observation satellite owned by DigitalGlobe. WorldView-2 provides commercially available panchromatic imagery of .46 m resolution, and eight-band multispectral imagery with 1.84 m (6 ft 0 in) resolution. It was launched October 8, 2009 to become DigitalGlobe's third satellite in orbit, joining WorldView-1 which was launched in 2007 and QuickBird which was launched in 2001. It takes a new photograph of any place on Earth every 1.1 days.",
+                        "maintainer": {
+                            "name": "DigitalGlobe",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./parse_wv2.sh",
+                            "inputs": {
+                                "files": [
+                                    {
+                                        "name": "input_file",
+                                        "required": true,
+                                        "mediaTypes": ["image/tiff"]
+                                    }
+                                ]
+                            },
+                            "outputs": {
+                                "files": [
+                                    {
+                                        "name": "output_file",
+                                        "mediaType": "image/tiff",
+                                        "pattern": "output_file*.tiff",
+                                        "required": true
+                                    }
+                                ]
+                            },
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-07-01T00:36:56.106Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-07-01T00:36:56.106Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -176,15 +483,41 @@
                 "version": "1.0.1",
                 "title": "WorldView-2 Atmospheric Correction",
                 "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "icon_code": "f14e",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f14e"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/wv2-parse:1.0.1",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "wv2-atmosphere-corr",
+                        "jobVersion": "1.0.1",
+                        "packageVersion": "",
+                        "title": "WorldView-2 Atmospheric Correction",
+                        "description": "Applies Atmospheric Correction to WorldView-2 GeoTiffs",
+                        "maintainer": {
+                            "name": "DigitalGlobe",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./correct_wv2.sh",
+                            "inputs": {},
+                            "outputs": {},
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-03-31T07:54:09.492Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-03-31T07:54:09.492Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -215,19 +548,62 @@
         {
             "job_type": {
                 "id": 7,
-                "name": "ls8-atmos-corr",
+                "name": "landsat8-atmos-corr",
                 "version": "2.1.9",
                 "title": "Landsat 8 Atmospheric Correction",
                 "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "icon_code": "f00c",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f00c"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/ls8-atmos-corr:2.1.9",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "landsat8-atmos-corr",
+                        "jobVersion": "2.1.9",
+                        "packageVersion": "",
+                        "title": "Landsat 8 Atmospheric Correction",
+                        "description": "Applies Atmospheric Correction to Landsat 8 GeoTiffs",
+                        "maintainer": {
+                            "name": "USGS",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./correct_ls8.sh",
+                            "inputs": {
+                                "files": [
+                                    {
+                                        "name": "infile",
+                                        "required": true,
+                                        "mediaTypes": ["image/tiff"]
+                                    }
+                                ]
+                            },
+                            "outputs": {
+                                "files": [
+                                    {
+                                        "name": "ls8-corrected",
+                                        "required": true,
+                                        "mediaType": "image/nitf"
+
+                                    }
+                                ]
+                            },
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-11-01T06:44:19.537Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-11-01T06:44:19.537Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -246,19 +622,61 @@
         {
             "job_type": {
                 "id": 8,
-                "name": "ls8-ortho",
-                "version": "2.1.9",
-                "title": "Landsat 8 Ortho",
-                "description": "Applies Orthorectification to Landsat 8 data",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "name": "landsat8-ortho",
+                "version": "2.0",
+                "title": "Landsat 8 Ortho (OSSIM)",
+                "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
+                "icon_code": "f1c0",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f1c0"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/ls8-ortho:2.1.9",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "landsat8-ortho",
+                        "jobVersion": "2.0",
+                        "packageVersion": "",
+                        "title": "Landsat 8 Ortho (OSSIM)",
+                        "description": "OSSIM is a powerful suite of geospatial libraries and applications used to process imagery, maps, terrain, and vector data. The software has been under active development since 1996 and is deployed across a number of private, federal and civilian agencies.",
+                        "maintainer": {
+                            "name": "Radiant Blue",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./ls8_ortho.py",
+                            "inputs": {
+                                "files": [
+                                    {
+                                        "name": "infile",
+                                        "required": true,
+                                        "mediaTypes": ["image/nitf"]
+                                    }
+                                ]
+                            },
+                            "outputs": {
+                                "files": [
+                                    {
+                                        "name": "ls8-corrected",
+                                        "required": true,
+                                        "mediaType": "image/tiff"
+                                    }
+                                ]
+                            },
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-01-30T22:58:00.000Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-01-30T22:58:00.000Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -287,15 +705,41 @@
                 "version": "2.0",
                 "title": "WorldView-2 Rigorous Orthorectification",
                 "description": "Applies Orthorectification to WorldView-2 data",
-                "category": "spectral",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "icon_code": "f219",
+                "is_published": false,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f219"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/wv2-ortho:2.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "wv2-ortho",
+                        "jobVersion": "2.0",
+                        "packageVersion": "",
+                        "title": "WorldView-2 Rigorous Orthorectification",
+                        "description": "Applies Orthorectification to WorldView-2 data",
+                        "maintainer": {
+                            "name": "DigitalGlobe",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./wv2_ortho.py",
+                            "inputs": {},
+                            "outputs": {},
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-12-19T13:02:46.551Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-12-19T13:02:46.551Z"
             },
             "job_counts": [{
                     "status": "RUNNING",
@@ -318,15 +762,56 @@
                 "version": "2.0",
                 "title": "Export Shapefile",
                 "description": "Creates shapefile (.shp) from raster data",
-                "category": "system",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "icon_code": "f06e",
+                "is_published": true,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f06e"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/export-shp:2.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "export-shp",
+                        "jobVersion": "2.0",
+                        "packageVersion": "",
+                        "title": "Export Shapefile",
+                        "description": "Creates shapefile (.shp) from raster data",
+                        "maintainer": {
+                            "name": "USGS",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./export_shapefile.sh",
+                            "inputs": {
+                                "files": [{
+                                    "mediaTypes": ["application/octet-stream"],
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "infile"
+                                }]
+                            },
+                            "outputs": {
+                                "files": [{
+                                    "mediaType": "application/xml",
+                                    "required": true,
+                                    "type": "file",
+                                    "name": "shapefile"
+                                }]
+                            },
+                            "mounts": [],
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-08-02T09:23:33.254Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-08-02T09:23:33.254Z"
             },
             "job_counts": [{
                 "status": "COMPLETED",
@@ -339,18 +824,44 @@
             "job_type": {
                 "id": 11,
                 "name": "export-kml",
-                "version": "1.5",
+                "version": "1.0.0",
                 "title": "Export KML",
                 "description": "Creates KML from data",
-                "category": "system",
-                "author_name": null,
-                "author_url": null,
-                "is_system": true,
-                "is_long_running": false,
+                "icon_code": "f0ac",
+                "is_published": true,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f0ac"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/export-kml:2.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "export-kml",
+                        "jobVersion": "1.0.0",
+                        "packageVersion": "",
+                        "title": "Export KML",
+                        "description": "Creates KML from data",
+                        "maintainer": {
+                            "name": "",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./export_kml.sh",
+                            "inputs": {},
+                            "outputs": {},
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-02-14T18:25:41.925Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-02-14T18:25:41.925Z"
             },
             "job_counts": [{
                 "status": "COMPLETED",
@@ -363,18 +874,44 @@
             "job_type": {
                 "id": 12,
                 "name": "caffe-aircraft-detection",
-                "title": "Caffe Aircraft Detection",
                 "version": "1.0",
+                "title": "Caffe Aircraft Detection",
                 "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
-                "category": "export",
-                "author_name": "Yangqing Jia ",
-                "author_url": "http://caffe.berkeleyvision.org/",
-                "is_system": false,
-                "is_long_running": false,
+                "icon_code": "f072",
+                "is_published": true,
                 "is_active": true,
-                "is_operational": true,
                 "is_paused": false,
-                "icon_code": "f072"
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/caffe-aircraft-detection:1.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "caffe-aircraft-detection",
+                        "jobVersion": "1.0",
+                        "packageVersion": "",
+                        "title": "Caffe Aircraft Detection",
+                        "description": "Caffe is a deep learning framework made with expression, speed, and modularity in mind. It is developed by the Berkeley Vision and Learning Center (BVLC) and by community contributors. Yangqing Jia created the project during his PhD at UC Berkeley.",
+                        "maintainer": {
+                            "name": "Yangqing Jia",
+                            "email": ""
+                        },
+                        "timeout": 0,
+                        "interface": {
+                            "command": "./aircraft.py",
+                            "inputs": {},
+                            "outputs": {},
+                            "settings": []
+                        }
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-06-01T14:22:38.384Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-06-01T14:22:38.384Z"
             },
             "job_counts": [{
                 "status": "COMPLETED",

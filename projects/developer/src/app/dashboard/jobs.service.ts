@@ -15,11 +15,11 @@ export class DashboardJobsService {
     }
 
     isFavorite(jobType) {
-        return _.find(this.favorites, jobType);
+        return _.find(this.favorites, { name: jobType.name, version: jobType.version });
     }
 
     toggleFavorite(jobType) {
-        if (_.find(this.favorites, jobType)) {
+        if (_.find(this.favorites, { name: jobType.name, version: jobType.version })) {
             // remove it
             _.remove(this.favorites, jobType);
         } else {
