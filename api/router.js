@@ -197,6 +197,12 @@ module.exports = {
 
         server.route({
             method: 'GET',
+            path: '/mocks/' + apiVersion + '/metrics/recipes/',
+            handler: metricsDataTypes
+        });
+
+        server.route({
+            method: 'GET',
             path: '/mocks/' + apiVersion + '/metrics/{type}/plot-data/',
             handler: metricsPlotData
         });
