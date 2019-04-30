@@ -34,13 +34,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
         { label: 'Favorite', icon: 'fa fa-star-o', command: () => { this.toggleFavorite(); } }
     ];
-    private headerItemsShowInactive: MenuItem[] = [
-        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewJobType(); } },
-        { label: 'Show Inactive', icon: 'fa fa-circle', command: () => { this.toggleInactive(); } }
-    ];
-    private headerItemsHideInactive: MenuItem[] = [
-        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewJobType(); } },
-        { label: 'Hide Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
+    filterItems: MenuItem[] = [
+        { label: 'Favorites', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorites($event); } },
+        { label: 'Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
     ];
     isFavorite: any;
     rows = 16;
@@ -49,7 +45,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     selectedJobTypeDetail: any;
     options: any;
     items: MenuItem[];
-    headerItems: MenuItem[] = _.clone(this.headerItemsShowInactive);
     scanDisplay: boolean;
     workspaces: SelectItem[] = [];
     selectedWorkspace: any;
@@ -59,7 +54,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     interfaceClass = 'p-col-6';
     errorClass = 'p-col-6';
     loadingJobTypes: boolean;
+    showFavorites: boolean;
     showInactive: boolean;
+    filterBtnClass = 'ui-button-secondary';
 
     constructor(
         private messageService: MessageService,
@@ -124,7 +121,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         params = params || {
             first: 0,
             rows: this.rows,
-            is_active: this.showInactive ? null : true
+            is_active: this.showInactive ? null : true,
+            sortField: 'title'
         };
         this.jobTypesApiService.getJobTypes(params).subscribe(data => {
             this.totalRecords = data.count;
@@ -134,6 +132,12 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     value: result
                 });
             });
+            this.jobTypes = _.orderBy(this.jobTypes, ['value.title'], ['asc']);
+            if (this.showFavorites) {
+                this.jobTypes = _.filter(this.jobTypes, jt => {
+                    return typeof this.dashboardJobsService.isFavorite(jt.value) !== 'undefined';
+                });
+            }
             this.clampText();
             this.loadingJobTypes = false;
         }, err => {
@@ -204,9 +208,19 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.dv.filter(e.target.value);
         this.clampText();
     }
+    toggleFavorites(e) {
+        e.originalEvent.preventDefault();
+        this.showFavorites = !this.showFavorites;
+        this.filterBtnClass = this.showFavorites || this.showInactive ? 'ui-button-info' : 'ui-button-secondary';
+        const favoritesItem: any = _.find(this.filterItems, { label: 'Favorites' });
+        favoritesItem.icon = this.showFavorites ? 'fa fa-star' : 'fa fa-star-o';
+        this.getJobTypes();
+    }
     toggleInactive() {
         this.showInactive = !this.showInactive;
-        this.headerItems = this.showInactive ? _.clone(this.headerItemsHideInactive) : _.clone(this.headerItemsShowInactive);
+        this.filterBtnClass = this.showFavorites || this.showInactive ? 'ui-button-info' : 'ui-button-secondary';
+        const inactiveItem: any = _.find(this.filterItems, { label: 'Inactive' });
+        inactiveItem.icon = this.showInactive ? 'fa fa-circle' : 'fa fa-circle-o';
         this.getJobTypes();
     }
     scanWorkspace() {

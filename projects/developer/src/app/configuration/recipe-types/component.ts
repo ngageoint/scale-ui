@@ -33,14 +33,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
-    private headerItemsShowInactive: MenuItem[] = [
-        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewRecipe(); } },
-        { label: 'Show Inactive', icon: 'fa fa-circle', command: () => { this.toggleInactive(); } }
+    filterItems: MenuItem[] = [
+        { label: 'Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
     ];
-    private headerItemsHideInactive: MenuItem[] = [
-        { label: 'Create New', icon: 'fa fa-plus', command: () => { this.createNewRecipe(); } },
-        { label: 'Hide Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
-    ];
+    filterBtnClass = 'ui-button-secondary';
     showInactive: boolean;
     loadingRecipeTypes: boolean;
     isInitialized: boolean;
@@ -73,7 +69,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
     isEditing: boolean;
-    headerItems: MenuItem[] = _.clone(this.headerItemsShowInactive);
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
         { label: 'Job Nodes', icon: 'fa fa-cube',
@@ -208,7 +203,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         params = params || {
             first: 0,
             rows: this.rows,
-            is_active: this.showInactive ? null : true
+            is_active: this.showInactive ? null : true,
+            sortField: 'title'
         };
         this.recipeTypeOptions = [];
         this.showAddRemoveDisplay = false;
@@ -224,6 +220,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                         value: result
                     });
                 });
+                this.recipeTypeOptions = _.orderBy(this.recipeTypeOptions, ['value.title'], ['asc']);
                 this.clampText();
                 this.loadingRecipeTypes = false;
             } else {
@@ -511,7 +508,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     toggleInactive() {
         this.showInactive = !this.showInactive;
-        this.headerItems = this.showInactive ? _.clone(this.headerItemsHideInactive) : _.clone(this.headerItemsShowInactive);
+        this.filterBtnClass = this.showInactive ? 'ui-button-info' : 'ui-button-secondary';
+        const inactiveItem: any = _.find(this.filterItems, { label: 'Inactive' });
+        inactiveItem.icon = this.showInactive ? 'fa fa-circle' : 'fa fa-circle-o';
         this.getRecipeTypes();
     }
 

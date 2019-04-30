@@ -1,10 +1,14 @@
 <div class="job-types" *ngIf="!selectedJobTypeDetail">
     <div class="flexed space-between margin-bottom-sm">
         <div class="flexed">
-            <h2><i class="fa fa-cube"></i> Job Types</h2>
-            <p-menu #headerMenu [popup]="true" [model]="headerItems" appendTo="body"></p-menu>
-            <button pButton type="button" class="ui-button-secondary job-type__menu" icon="fa fa-bars"
-                    (click)="headerMenu.toggle($event)"></button>
+            <h2><i class="fa fa-cube"></i> Job Types ({{ totalRecords }})</h2>
+            <div class="job-type__actions">
+                <button pButton type="button" class="ui-button-secondary job-type__button" icon="fa fa-plus"
+                        (click)="createNewJobType()"></button>
+                <p-menu #filterMenu [popup]="true" [model]="filterItems" appendTo="body"></p-menu>
+                <button pButton type="button" [ngClass]="filterBtnClass" icon="fa fa-filter"
+                        (click)="filterMenu.toggle($event)"></button>
+            </div>
         </div>
         <input type="search" pInputText placeholder="Search" class="job-type__filter" (keyup)="onFilterKeyup($event)">
     </div>

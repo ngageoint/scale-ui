@@ -39,12 +39,16 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.unsubscribe();
         this.subscription = this.statusApiService.getStatus(true).subscribe(data => {
             this.loading = false;
-            this.statusChange.emit(data);
-            this.status = data;
-            this.pctCpu = this.getUsage(this.status.resources.cpus);
-            this.pctMem = this.getUsage(this.status.resources.mem);
-            this.pctDisk = this.getUsage(this.status.resources.disk);
-            this.pctGpu = this.getUsage(this.status.resources.gpus);
+            if (data) {
+                this.statusChange.emit(data);
+                this.status = data;
+                this.pctCpu = this.getUsage(this.status.resources.cpus);
+                this.pctMem = this.getUsage(this.status.resources.mem);
+                this.pctDisk = this.getUsage(this.status.resources.disk);
+                this.pctGpu = this.getUsage(this.status.resources.gpus);
+            } else {
+                this.messageService.add({severity: 'warn', summary: 'System Status', detail: 'System status is unavailable.'});
+            }
         }, err => {
             this.loading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving system status', detail: err.statusText});

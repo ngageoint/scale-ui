@@ -1,10 +1,14 @@
 <div class="recipe-types" *ngIf="!selectedRecipeTypeDetail">
     <div class="flexed space-between margin-bottom-sm">
         <div class="flexed">
-            <h2><i class="fa fa-cubes"></i> Recipe Types</h2>
-            <p-menu #headerMenu [popup]="true" [model]="headerItems" appendTo="body"></p-menu>
-            <button pButton type="button" class="ui-button-secondary recipe-type__menu" icon="fa fa-bars"
-                    (click)="headerMenu.toggle($event)"></button>
+            <h2><i class="fa fa-cubes"></i> Recipe Types ({{ totalRecords }})</h2>
+            <div class="recipe-type__actions">
+                <button pButton type="button" class="ui-button-secondary" icon="fa fa-plus"
+                        (click)="createNewRecipe()"></button>
+                <p-menu #filterMenu [popup]="true" [model]="filterItems" appendTo="body"></p-menu>
+                <button pButton type="button" [ngClass]="filterBtnClass" icon="fa fa-filter"
+                        (click)="filterMenu.toggle($event)"></button>
+            </div>
         </div>
         <input type="search" pInputText placeholder="Search" class="recipe-type__filter" (keyup)="onFilterKeyup($event)">
     </div>

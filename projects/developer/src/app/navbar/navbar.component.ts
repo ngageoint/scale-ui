@@ -114,17 +114,19 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     onStatusChange(data) {
-        this.scheduler = data.scheduler;
-        this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
-        if (this.scheduler.state.name === 'READY') {
-            this.schedulerClass = 'label label-success';
-            this.schedulerIcon = 'fa fa-check-circle';
-        } else if (this.scheduler.state.name === 'PAUSED') {
-            this.schedulerClass = 'label label-paused';
-            this.schedulerIcon = 'fa fa-pause';
-        } else {
-            this.schedulerClass = 'label label-default';
-            this.schedulerIcon = 'fa fa-circle';
+        if (data) {
+            this.scheduler = data.scheduler;
+            this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
+            if (this.scheduler.state.name === 'READY') {
+                this.schedulerClass = 'label label-success';
+                this.schedulerIcon = 'fa fa-check-circle';
+            } else if (this.scheduler.state.name === 'PAUSED') {
+                this.schedulerClass = 'label label-paused';
+                this.schedulerIcon = 'fa fa-pause';
+            } else {
+                this.schedulerClass = 'label label-default';
+                this.schedulerIcon = 'fa fa-circle';
+            }
         }
     }
 
