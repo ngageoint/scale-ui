@@ -152,7 +152,7 @@ export class ScansComponent implements OnInit, OnDestroy {
         this.selectedRows = this.dataService.getSelectedScanRows();
 
         this.breakpointObserver
-        .observe(['(min-width: 1150px)'])
+        .observe(['(min-width: 1220px)'])
         .subscribe((state: BreakpointState) => {
             if (state.matches) {
                 this.isMobile = false;

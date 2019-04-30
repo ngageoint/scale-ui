@@ -187,7 +187,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         this.selectedRows = this.dataService.getSelectedRecipeRows();
 
         this.breakpointObserver
-        .observe(['(min-width: 1185px)'])
+        .observe(['(min-width: 1220px)'])
         .subscribe((state: BreakpointState) => {
             if (state.matches) {
                 this.isMobile = false;
