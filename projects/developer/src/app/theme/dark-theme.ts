@@ -89,6 +89,8 @@ export const darkTheme: Theme = {
         '--recipe-connection-background': '#444',
         '--pre-background': '#303b41',
         '--pre-border': '#777',
-        '--pre-on': '#f5f5f5'
+        '--pre-on': '#f5f5f5',
+        '--panel-header-hover': '#333',
+        '--panel-content-hover': '#3d4952'
     }
 };

@@ -1,20 +1,35 @@
-.recipe-type__header {
-    display: flex;
+::ng-deep .recipe-types {
+    .ui-dataview {
+        .ui-dataview-header {
+            display: none;
+        }
 
-    .recipe-type__options {
-        margin: 0 10px;
+        .ui-dataview-content {
+            padding: 1em;
+        }
+    }
+}
 
-        ::ng-deep .ui-dropdown {
-            width: 300px;
-            min-height: 36px;
+.recipe-type__menu {
+    margin: 0 10px;
+}
 
-            .ui-dropdown-label {
-                padding-top: 0.5em;
-            }
+.recipe-type__filter {
+    width: 300px;
+    font-size: 1.2em;
+}
 
-            .ui-dropdown-trigger {
-                padding: 0.25em;
-            }
+.recipe-type__container {
+    visibility: hidden;
+
+    &:hover {
+        cursor: pointer;
+
+        ::ng-deep .ui-panel-titlebar {
+            background: var(--panel-header-hover) !important;
+        }
+        ::ng-deep .ui-panel-content {
+            background: var(--panel-content-hover) !important;
         }
     }
 }
