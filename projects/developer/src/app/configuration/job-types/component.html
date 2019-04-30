@@ -11,12 +11,19 @@
     <p-dataView [value]="jobTypes" [paginator]="true" [rows]="rows" [lazy]="true" [totalRecords]="totalRecords"
                 (onLazyLoad)="onLazyLoad($event)" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
         <ng-template let-jobType pTemplate="gridItem">
-            <div class="p-col-12 p-md-3 job-type__container" (click)="onJobTypeClick($event, jobType)">
+            <div class="p-col-12 p-md-3 job-type__container">
                 <p-panel>
                     <p-header>
-                        <strong><span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span> {{ jobType.label }}</strong>
+                        <div class="flexed space-between">
+                            <div>
+                                <strong><span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span> {{ jobType.label }}</strong>
+                            </div>
+                            <div>
+                                <button pButton type="button" class="ui-button-secondary" [icon]="jobType.value.favoriteIcon" (click)="toggleFavorite(jobType.value.name, jobType.value.version)"></button>
+                            </div>
+                        </div>
                     </p-header>
-                    <div class="clamp">
+                    <div class="clamp" (click)="onJobTypeClick($event, jobType)">
                         {{ jobType.value.description }}
                     </div>
                 </p-panel>

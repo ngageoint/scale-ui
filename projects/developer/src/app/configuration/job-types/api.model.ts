@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
 
 import { DataService } from '../../common/services/data.service';
+import { DashboardJobsService } from '../../dashboard/jobs.service';
 
 export class JobType {
     createdTooltip: any;
@@ -10,6 +11,8 @@ export class JobType {
     cpus: number;
     mem: any;
     disk: any;
+    favoriteIcon: string;
+    dashboardJobsService = new DashboardJobsService();
 
     private static build(data) {
         if (data) {
@@ -89,5 +92,6 @@ export class JobType {
             this.mem = mem ? DataService.calculateFileSizeFromMib(mem.value) : null;
             this.disk = disk ? DataService.calculateFileSizeFromMib(disk.value) : null;
         }
+        this.favoriteIcon = this.dashboardJobsService.isFavorite(this) ? 'fa fa-star' : 'fa fa-star-o';
     }
 }
