@@ -85,7 +85,15 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             });
         });
     }
-    private setFavoriteIcon() {
+    private setFavoriteIcon(jobType?: any) {
+        jobType = jobType || null;
+        if (this.selectedJobTypeDetail) {
+            this.selectedJobTypeDetail.favoriteIcon = this.isFavorite ? 'fa fa-star' : 'fa fa-star-o';
+        } else {
+            if (jobType) {
+                jobType.favoriteIcon = this.isFavorite ? 'fa fa-star' : 'fa fa-star-o';
+            }
+        }
         const favoriteItem: any = _.find(this.items, { label: 'Favorite' });
         if (favoriteItem) {
             favoriteItem.icon = this.isFavorite ? 'fa fa-star' : 'fa fa-star-o';
@@ -266,23 +274,17 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     toggleFavorite(name?: string, version?: string) {
         if (!this.selectedJobTypeDetail) {
-            this.jobTypesApiService.getJobType(name, version).subscribe(data => {
-                this.dashboardJobsService.toggleFavorite(data);
-                this.isFavorite = this.dashboardJobsService.isFavorite(data);
-                this.setFavoriteIcon();
-            }, err => {
-                console.log(err);
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText});
-            });
+            const jobType: any = _.find(this.jobTypes, { value: { name: name, version: version } });
+            if (jobType) {
+                this.dashboardJobsService.toggleFavorite(jobType.value);
+                this.isFavorite = this.dashboardJobsService.isFavorite(jobType.value);
+                this.setFavoriteIcon(jobType.value);
+            }
         } else {
             this.dashboardJobsService.toggleFavorite(this.selectedJobTypeDetail);
             this.isFavorite = this.dashboardJobsService.isFavorite(this.selectedJobTypeDetail);
             this.setFavoriteIcon();
         }
-    }
-    getFavoriteIcon(jobType: any) {
-        console.log('getFavoriteIcon');
-        return this.dashboardJobsService.isFavorite(jobType) ? 'fa fa-star' : 'fa fa-star-o';
     }
     ngOnInit() {
         this.options = {

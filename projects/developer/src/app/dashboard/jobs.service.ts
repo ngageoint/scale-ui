@@ -21,7 +21,7 @@ export class DashboardJobsService {
     toggleFavorite(jobType) {
         if (_.find(this.favorites, { name: jobType.name, version: jobType.version })) {
             // remove it
-            _.remove(this.favorites, jobType);
+            _.remove(this.favorites, { name: jobType.name, version: jobType.version });
         } else {
             // add it
             this.favorites.push(jobType);

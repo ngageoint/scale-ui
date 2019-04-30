@@ -19,7 +19,7 @@
                                 <strong><span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span> {{ jobType.label }}</strong>
                             </div>
                             <div>
-                                <button pButton type="button" class="ui-button-secondary" [icon]="getFavoriteIcon(jobType.value)" (click)="toggleFavorite(jobType.value.name, jobType.value.version)"></button>
+                                <button pButton type="button" class="ui-button-secondary" [icon]="jobType.value.favoriteIcon" (click)="toggleFavorite(jobType.value.name, jobType.value.version)"></button>
                             </div>
                         </div>
                     </p-header>
