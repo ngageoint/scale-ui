@@ -13,7 +13,7 @@
         </div>
         <button pButton class="recipes__date-filter-btn p-grid" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
-        <div class="recipes__date-filter-ranges">
+        <div class="recipes__date-filter-ranges"  *ngIf="!isMobile">
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 6 Hours"
                     (click)="setDateFilterRange('h', 6)"></button>
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 12 Hours"
@@ -25,6 +25,10 @@
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
+        <p-multiSelect [options]="mobileDropdown" 
+                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
+                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
+        </p-multiSelect>
     </div>
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"

@@ -11,7 +11,7 @@
         </div>
         <button pButton class="ui-button-primary scans__date-filter-btn" label="Apply"
                 (click)="onDateFilterApply()"></button>
-        <div class="scans__date-filter-ranges">
+        <div class="scans__date-filter-ranges" *ngIf="!isMobile">
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 6 Hours"
                     (click)="setDateFilterRange('h', 6)"></button>
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 12 Hours"
@@ -23,6 +23,10 @@
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
+        <p-multiSelect [options]="mobileDropdown" 
+                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
+                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
+        </p-multiSelect>
     </div>
     <div class="scans__controls">
         <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>

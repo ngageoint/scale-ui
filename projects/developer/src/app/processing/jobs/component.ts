@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -84,6 +85,15 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
+    isMobile: boolean;
+    mobileDropdown = [
+        { label: 'Last 6 Hours', value: 'h, 6'},
+        { label: 'Last 12 Hours', value: 'h, 12'},
+        { label: 'Last 24 Hours', value: 'h, 24'},
+        { label: 'Last 3 Days', value: 'd, 3'},
+        { label: 'Last 7 Days', value: 'd, 7'}
+    ];
+
     constructor(
         private dataService: DataService,
         private jobsDatatableService: JobsDatatableService,
@@ -92,7 +102,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     private updateData() {
@@ -222,6 +233,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
+
     setDateFilterRange(unit: any, range: any) {
         this.started = moment.utc().subtract(range, unit).toISOString();
         this.ended = moment.utc().toISOString();
@@ -330,6 +342,17 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
+
+        this.breakpointObserver
+        .observe(['(min-width: 1150px)'])
+        .subscribe((state: BreakpointState) => {
+            if (state.matches) {
+                this.isMobile = false;
+            } else {
+                this.isMobile = true;
+            }
+        });
+
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         }

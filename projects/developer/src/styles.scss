@@ -42,6 +42,10 @@ $transparent-running: transparentize(#529D39, 0.65);
     width: 100%;
 }
 
+.mobile-filter {
+    margin-top: 20px;
+    margin-left: 20px;
+}
 .completed {
     background: var(--status-completed) !important;
 }
