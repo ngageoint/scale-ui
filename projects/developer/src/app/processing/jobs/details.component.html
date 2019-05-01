@@ -12,6 +12,14 @@
                 <p-scrollPanel>
                     <table class="table table-striped">
                         <tbody>
+                        <tr>
+                            <td>Job Type:</td>
+                            <td>
+                                <a routerLink="/configuration/job-types/{{ job.job_type.name }}/{{ job.job_type.version }}">
+                                    {{ job.job_type.title }} v{{ job.job_type.version }}
+                                </a>
+                            </td>
+                        </tr>
                         <tr *ngIf="job.recipe">
                             <td>Recipe:</td>
                             <td>
