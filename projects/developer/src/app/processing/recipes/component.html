@@ -1,6 +1,6 @@
 <h2><i class="fa fa-cubes"></i> Recipes</h2>
-<div class="recipes__header">
-    <div class="recipes__date-filter p-grid">
+<div class="recipes__header flexed space-between">
+    <div class="recipes__date-filter flexed">
         <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"
@@ -25,10 +25,12 @@
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
-        <p-multiSelect [options]="mobileDropdown" 
-                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
-                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
-        </p-multiSelect>
+        <div class="recipes__date-filter-dropdown">
+            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+            </p-dropdown>
+        </div>
     </div>
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
