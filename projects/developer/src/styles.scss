@@ -42,6 +42,10 @@ $transparent-running: transparentize(#529D39, 0.65);
     width: 100%;
 }
 
+.mobile-filter {
+    margin-top: 20px;
+    margin-left: 20px;
+}
 .completed {
     background: var(--status-completed) !important;
 }
@@ -100,6 +104,7 @@ $transparent-running: transparentize(#529D39, 0.65);
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-wrap: wrap;
 
     &.space-between {
         justify-content: space-between;

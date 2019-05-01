@@ -16,9 +16,9 @@
     <p-sidebar [(visible)]="showFilters" position="left" [style]="{'width':'25vw'}" [blockScroll]="true" baseZIndex="1002">
         <h2>Metrics Filters</h2>
         <label>From</label>
-        <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
+        <utc-datepicker class="noWrap" [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
         <label>To</label>
-        <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+        <utc-datepicker class="noWrap" [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         <label>Data Source</label>
         <div class="metrics__filter-loading" *ngIf="dataTypesLoading">
             <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -39,9 +39,11 @@
             <label>Secondary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         </div>
+        <label>Primary Metric Display</label>
+        <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType1" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         <div *ngIf="selectedMetric2">
             <label>Secondary Metric Display</label>
-            <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
+            <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType2" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         </div>
         <button pButton icon="fa fa-refresh" label="Update Chart" (click)="updateChart()"
                 [disabled]="!selectedMetric1"></button>

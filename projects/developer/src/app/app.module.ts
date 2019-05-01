@@ -1,5 +1,4 @@
 // Angular Modules
-import { APP_BASE_HREF } from '@angular/common';
 import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -18,7 +17,7 @@ import {
     AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
     DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
     MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
-    StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule
+    StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
 } from 'primeng/primeng';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
@@ -81,10 +80,6 @@ const appInitializer = (appConfig: AppConfigService) => {
     return () => {
         return appConfig.loadAppConfig('./assets/appConfig.json');
     };
-};
-
-const baseInitializer = () => {
-    return window['app_base'] || '/';
 };
 
 @NgModule({
@@ -174,6 +169,7 @@ const baseInitializer = () => {
         ScrollPanelModule,
         SeedImagesModule,
         SidebarModule,
+        SlideMenuModule,
         SpinnerModule,
         StepsModule,
         TableModule,
@@ -193,10 +189,6 @@ const baseInitializer = () => {
         PaginatorModule
     ],
     providers: [
-        {
-            provide: APP_BASE_HREF,
-            useFactory: baseInitializer
-        },
         {
             provide: APP_INITIALIZER,
             useFactory: appInitializer,

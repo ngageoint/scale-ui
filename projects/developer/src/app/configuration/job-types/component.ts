@@ -1,14 +1,16 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
 import { WorkspacesApiService } from '../../system/workspaces/api.service';
 import { ScansApiService } from '../../system/scans/api.service';
+import { DashboardJobsService } from '../../dashboard/jobs.service';
 
 @Component({
     selector: 'dev-job-types',
@@ -17,22 +19,27 @@ import { ScansApiService } from '../../system/scans/api.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
+    @ViewChild('dv') dv: any;
     private routeParams: any;
+    private itemsWithPause: MenuItem[] = [
+        { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } }
+    ];
+    private itemsWithResume: MenuItem[] = [
+        { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } }
+    ];
+    isFavorite: any;
+    rows = 16;
     jobTypes: SelectItem[];
-    selectedJobType: any;
+    totalRecords: number;
     selectedJobTypeDetail: any;
     options: any;
     items: MenuItem[];
-    itemsWithPause: MenuItem[] = [
-        { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
-    ];
-    itemsWithResume: MenuItem[] = [
-        { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } }
-    ];
     scanDisplay: boolean;
     workspaces: SelectItem[] = [];
     selectedWorkspace: any;
@@ -41,6 +48,9 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     scanBtnIcon = 'fa fa-barcode';
     interfaceClass = 'p-col-6';
     errorClass = 'p-col-6';
+    loadingJobTypes: boolean;
+    showFavorites: boolean;
+    showInactive = false;
 
     constructor(
         private messageService: MessageService,
@@ -48,13 +58,42 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private colorService: ColorService,
         private workspacesApiService: WorkspacesApiService,
         private scansApiService: ScansApiService,
+        private dashboardJobsService: DashboardJobsService,
         private router: Router,
         private route: ActivatedRoute
     ) {}
 
+    private clampText() {
+        setTimeout(() => {
+            const clampEls = document.getElementsByClassName('clamp');
+            _.forEach(clampEls, el => {
+                webkitLineClamp(el, 3);
+            });
+            // container elements are hidden by default to prevent flash of unstyled content
+            const containerEls = document.getElementsByClassName('job-type__container');
+            _.forEach(containerEls, (el: any) => {
+                el.style.visibility = 'visible';
+            });
+        });
+    }
+    private setFavoriteIcon(jobType?: any) {
+        jobType = jobType || null;
+        if (this.selectedJobTypeDetail) {
+            this.selectedJobTypeDetail.favoriteIcon = this.isFavorite ? 'fa fa-star' : 'fa fa-star-o';
+        } else {
+            if (jobType) {
+                jobType.favoriteIcon = this.isFavorite ? 'fa fa-star' : 'fa fa-star-o';
+            }
+        }
+        const favoriteItem: any = _.find(this.items, { label: 'Favorite' });
+        if (favoriteItem) {
+            favoriteItem.icon = this.isFavorite ? 'fa fa-star' : 'fa fa-star-o';
+        }
+    }
     private getJobTypeDetail(name: string, version: string) {
         this.jobTypesApiService.getJobType(name, version).subscribe(data => {
             this.selectedJobTypeDetail = data;
+            this.isFavorite = this.dashboardJobsService.isFavorite(this.selectedJobTypeDetail);
             if (data.manifest.job.interface && data.manifest.job.errors) {
                 this.interfaceClass = 'p-col-6';
                 this.errorClass = 'p-col-6';
@@ -64,27 +103,39 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 this.errorClass = 'p-col-12';
             }
             this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
+            this.setFavoriteIcon();
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type details', detail: err.statusText, life: 10000});
         });
     }
-    private getJobTypes(name?: string, version?: string) {
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
+    private getJobTypes(params?: any) {
+        this.loadingJobTypes = true;
+        this.jobTypes = [];
+        params = params || {
+            rows: 1000,
+            is_active: !this.showInactive,
+            sortField: 'title'
+        };
+        this.jobTypesApiService.getJobTypes(params).subscribe(data => {
+            this.totalRecords = data.count;
             _.forEach(data.results, result => {
                 this.jobTypes.push({
                     label: `${result.title} ${result.version}`,
                     value: result
                 });
-                if (name === result.name && version === result.version) {
-                    this.selectedJobType = result;
-                }
             });
-            if (name && version) {
-                this.getJobTypeDetail(name, version);
+            this.jobTypes = _.orderBy(this.jobTypes, ['value.title'], ['asc']);
+            if (this.showFavorites) {
+                this.jobTypes = _.filter(this.jobTypes, jt => {
+                    return typeof this.dashboardJobsService.isFavorite(jt.value) !== 'undefined';
+                });
             }
+            this.clampText();
+            this.loadingJobTypes = false;
         }, err => {
             console.log(err);
+            this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
         });
     }
@@ -111,11 +162,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     getUnicode(code) {
         return `&#x${code};`;
     }
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/job-types/${e.value.name}/${e.value.version}`);
+    onJobTypeClick(e, jobType) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open(`/configuration/job-types/${jobType.value.name}/${jobType.value.version}`);
         } else {
-            this.router.navigate([`/configuration/job-types/${e.value.name}/${e.value.version}`]);
+            this.router.navigate([`/configuration/job-types/${jobType.value.name}/${jobType.value.version}`]);
         }
     }
     onPauseClick() {
@@ -132,6 +183,10 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onScanHide() {
         this.selectedWorkspace = null;
+    }
+    onFilterKeyup(e) {
+        this.dv.filter(e.target.value);
+        this.clampText();
     }
     scanWorkspace() {
         const scanObj = {
@@ -196,6 +251,21 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     createNewJobType() {
         this.router.navigate(['/configuration/job-types/create']);
     }
+    toggleFavorite(e, name?: string, version?: string) {
+        e.stopPropagation();
+        if (!this.selectedJobTypeDetail) {
+            const jobType: any = _.find(this.jobTypes, { value: { name: name, version: version } });
+            if (jobType) {
+                this.dashboardJobsService.toggleFavorite(jobType.value);
+                this.isFavorite = this.dashboardJobsService.isFavorite(jobType.value);
+                this.setFavoriteIcon(jobType.value);
+            }
+        } else {
+            this.dashboardJobsService.toggleFavorite(this.selectedJobTypeDetail);
+            this.isFavorite = this.dashboardJobsService.isFavorite(this.selectedJobTypeDetail);
+            this.setFavoriteIcon();
+        }
+    }
     ngOnInit() {
         this.options = {
             legend: false,
@@ -213,7 +283,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.routeParams = this.route.paramMap.subscribe(params => {
                 name = params.get('name');
                 version = params.get('version');
-                this.getJobTypes(name, version);
+                if (name && version) {
+                    this.getJobTypeDetail(name, version);
+                } else {
+                    this.getJobTypes();
+                }
             });
         }
     }

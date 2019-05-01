@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -44,6 +45,15 @@ export class RecipesComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
+    isMobile: boolean;
+    dateRangeOptions = [
+        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
+        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
+        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
+        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
+        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
+    ];
+    selectedDateRange: any;
 
     constructor(
         private dataService: DataService,
@@ -52,7 +62,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
         private recipesApiService: RecipesApiService,
         private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     private updateData() {
@@ -175,6 +186,17 @@ export class RecipesComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedRecipeRows();
+
+        this.breakpointObserver
+        .observe(['(min-width: 1220px)'])
+        .subscribe((state: BreakpointState) => {
+            if (state.matches) {
+                this.isMobile = false;
+            } else {
+                this.isMobile = true;
+            }
+        });
+
         this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {

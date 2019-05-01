@@ -6,7 +6,7 @@ const recipes = require('../data/recipes');
 module.exports = function (request) {
     var jobTypeData = _.clone(jobTypes);
     var recipeData = _.clone(recipes);
-    var params = request.url.query;
+    var params = request.query;
     var data = {
         count: 500,
         next: 'http://localhost/api/jobs/?page=2',
@@ -74,12 +74,14 @@ module.exports = function (request) {
     }
     // var data = _.clone(jobs);
     if (_.keys(params).length > 0) {
-        if (params.job_type_id) {
+        if (params.job_type_name && params.job_type_version) {
             data.results = _.filter(data.results, function (r) {
                 if (Array.isArray(params.job_type_id)) {
-                    return _.includes(params.job_type_id, r.job_type.id.toString());
+                    return _.includes(params.job_type_name, r.job_type.name) &&
+                           _.includes(params.job_type_version, r.job_type.version);
                 }
-                return r.job_type.id === parseInt(params.job_type_id);
+                return r.job_type.name === params.job_type_name
+                       && r.job_type.version === params.job_type_version;
             });
         }
         if (params.order) {

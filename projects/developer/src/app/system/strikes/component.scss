@@ -21,7 +21,7 @@
 
     ::ng-deep .ui-button {
         .ui-button-text {
-            padding: 0.529em 1em 0.529em 2em !important;
+            padding: 0.529em 1em 0.529em 2em !important;           
         }
     }
 }
@@ -125,4 +125,7 @@ pre{
                 white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
                 white-space: -pre-wrap;      /* Opera 4-6 */
                 white-space: -o-pre-wrap;
+}
+.node__filters{
+    margin-top: 1em !important;
 }

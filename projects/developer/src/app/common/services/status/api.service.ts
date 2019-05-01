@@ -25,7 +25,9 @@ export class StatusApiService {
             const request = this.http.get<any>(`${this.apiPrefix}/status/`)
                 .pipe(
                     map(response => {
-                        response.nodes = NodeStatus.transformer(response.nodes, response.job_types);
+                        if (response) {
+                            response.nodes = NodeStatus.transformer(response.nodes, response.job_types);
+                        }
                         return response;
                     }),
                     catchError(DataService.handleError)
@@ -35,7 +37,9 @@ export class StatusApiService {
         return this.http.get<any>(`${this.apiPrefix}/status/`)
             .pipe(
                 map(response => {
-                    response.nodes = NodeStatus.transformer(response.nodes, response.job_types);
+                    if (response) {
+                        response.nodes = NodeStatus.transformer(response.nodes, response.job_types);
+                    }
                     return response;
                 }),
                 catchError(DataService.handleError)

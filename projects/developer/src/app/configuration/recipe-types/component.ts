@@ -1,9 +1,10 @@
-import {Component, OnInit, OnDestroy, ViewChild} from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { MessageService } from 'primeng/components/common/messageservice';
+import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
 
 import { RecipeTypesApiService } from './api.service';
@@ -20,6 +21,7 @@ import { RecipeTypeCondition } from './api.condition.model';
 })
 
 export class RecipeTypesComponent implements OnInit, OnDestroy {
+    @ViewChild('dv') dv: any;
     @ViewChild('addRemoveDialog') addRemoveDialog: Dialog;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
@@ -31,6 +33,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
+    showInactive = false;
+    loadingRecipeTypes: boolean;
+    isInitialized: boolean;
+    rows = 16;
+    totalRecords: number;
     recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;
     addRemoveDialogY: number;
@@ -49,8 +56,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedJobTypes = [];
     recipeTypes: any; // used for adding/removing recipe nodes from recipe
     selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
-    recipeTypeOptions: SelectItem[]; // used for dropdown navigation between recipe types
-    selectedRecipeTypeOption: SelectItem; // used for dropdown navigation between recipe types
+    recipeTypeOptions: SelectItem[]; // used for main recipe types dataview
     selectedRecipeTypeDetail: any;
     condition: any = RecipeTypeCondition.transformer(null);
     conditions: any = [];
@@ -99,6 +105,20 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.conditionColumns = [
             { field: 'name', header: 'Name', filterMatchMode: 'contains' }
         ];
+    }
+
+    private clampText() {
+        setTimeout(() => {
+            const clampEls = document.getElementsByClassName('clamp');
+            _.forEach(clampEls, el => {
+                webkitLineClamp(el, 3);
+            });
+            // container elements are hidden by default to prevent flash of unstyled content
+            const containerEls = document.getElementsByClassName('recipe-type__container');
+            _.forEach(containerEls, (el: any) => {
+                el.style.visibility = 'visible';
+            });
+        });
     }
 
     private initFormGroups() {
@@ -174,27 +194,36 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private getRecipeTypes() {
+    private getRecipeTypes(params?: any) {
+        this.loadingRecipeTypes = true;
+        params = params || {
+            rows: 1000,
+            is_active: !this.showInactive,
+            sortField: 'title'
+        };
         this.recipeTypeOptions = [];
         this.showAddRemoveDisplay = false;
         this.selectedRecipeTypes = [];
-        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-            this.recipeTypes = data.results;
-            _.forEach(data.results, result => {
-                this.recipeTypeOptions.push({
-                    label: result.title,
-                    value: result
+        this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
+            if (!this.recipeTypeName) {
+                // show grid of recipe types
+                this.totalRecords = data.count;
+                this.recipeTypes = data.results;
+                _.forEach(data.results, result => {
+                    this.recipeTypeOptions.push({
+                        label: result.title,
+                        value: result
+                    });
                 });
-                if (this.recipeTypeName === result.name) {
-                    this.selectedRecipeTypeOption = _.clone(result);
-                }
-            });
-            if (this.recipeTypeName && this.recipeTypeName !== 'create') {
-                this.isEditing = false;
-                this.getRecipeTypeDetail(this.recipeTypeName);
+                this.recipeTypeOptions = _.orderBy(this.recipeTypeOptions, ['value.title'], ['asc']);
+                this.clampText();
+                this.loadingRecipeTypes = false;
             } else {
-                if (this.recipeTypeName === 'create') {
-                    this.selectedRecipeTypeOption = null;
+                // show recipe type details
+                if (this.recipeTypeName !== 'create') {
+                    this.isEditing = false;
+                    this.getRecipeTypeDetail(this.recipeTypeName);
+                } else {
                     this.selectedRecipeTypeDetail = new RecipeType(
                         null,
                         null,
@@ -405,14 +434,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         return `&#x${code};`;
     }
 
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/recipe-types/${e.value.name}`);
-        } else {
-            this.router.navigate([`/configuration/recipe-types/${e.value.name}`]);
-        }
-    }
-
     toggleFileInputs() {
         this.showFileInputs = !this.showFileInputs;
     }
@@ -442,6 +463,19 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             this.removeNode({
                 data: condition
             });
+        }
+    }
+
+    onFilterKeyup(e) {
+        this.dv.filter(e.target.value);
+        this.clampText();
+    }
+
+    onRecipeTypeClick(e, recipeType) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open(`/configuration/recipe-types/${recipeType.value.name}`);
+        } else {
+            this.router.navigate([`/configuration/recipe-types/${recipeType.value.name}`]);
         }
     }
 

@@ -87,6 +87,8 @@ export const lightTheme: Theme = {
         '--recipe-connection-background': '#f3f3f3',
         '--pre-background': '#f5f5f5',
         '--pre-border': '#ccc',
-        '--pre-on': '#333'
+        '--pre-on': '#333',
+        '--panel-header-hover': '#eee',
+        '--panel-content-hover': '#f9f9f9'
     }
 };

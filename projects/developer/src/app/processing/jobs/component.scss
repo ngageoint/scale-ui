@@ -8,25 +8,22 @@ label {
     display: block;
 }
 .jobs__header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
     margin-bottom: 10px;
+    align-items: flex-end;
 
     .jobs__date-filter {
-        display: flex;
+        align-items: flex-end;
 
         div {
             margin-right: 20px;
         }
 
-        .jobs__date-filter-btn {
+        .jobs__date-filter-btn, .jobs__date-filter-dropdown {
             padding-top: 0;
             padding-bottom: 0;
-            margin-top: 20px;
         }
 
-        .jobs__date-filter-ranges {
+        .jobs__date-filter-ranges, .jobs__date-filter-dropdown {
             margin-left: 20px;
 
             button {
@@ -38,6 +35,7 @@ label {
     .jobs__controls {
         button {
             margin-left: 5px;
+            margin-top: 5px;
         }
     }
 }
@@ -56,4 +54,23 @@ label {
 }
 ::ng-deep .jobs__error-tooltip.ui-tooltip {
     max-width: 50%;
+}
+
+@media screen and (max-width: 858px) {
+    .jobs__date-filter-btn, .jobs__date-filter-dropdown, .jobs__date-filter-ranges {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    .jobs__date-filter-dropdown, .jobs__date-filter-btn {
+        margin-top: 5px !important;
+        margin-right: 5px !important;
+    }
+
+    .jobs__controls {
+        button {
+            margin-left: 0 !important;
+            margin-right: 5px;
+        }
+    }
 }

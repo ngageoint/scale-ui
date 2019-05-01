@@ -3,7 +3,7 @@ const recipeTypes = require('../data/recipe-types.json');
 
 module.exports = function (request) {
     var data = _.clone(recipeTypes);
-    var params = request.url.query;
+    var params = request.query;
     if (_.keys(params).length > 0) {
         if (params.order) {
             if (_.startsWith(params.order, '-')) {
@@ -21,7 +21,7 @@ module.exports = function (request) {
         data.count = data.results.length;
         if (params.page && params.page_size) {
             var pagedResults = _.chunk(data.results, params.page_size);
-            data.results = pagedResults[params.page - 1];
+            data.results = pagedResults.length > 0 ? pagedResults[params.page - 1] : pagedResults;
         }
     }
 

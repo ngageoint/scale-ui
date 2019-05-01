@@ -26,6 +26,7 @@ export class RecipeTypesApiService {
         if (params) {
             const sortStr = params.sortField ? params.sortOrder < 0 ? '-' + params.sortField : params.sortField : null;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            const isActive = params.is_active === true || params.is_active === false || params.is_active === null ? params.is_active : true;
             apiParams = {
                 order: sortStr,
                 page: page,
@@ -33,7 +34,7 @@ export class RecipeTypesApiService {
                 started: params.started || null,
                 ended: params.ended || null,
                 keyword: params.keyword || null,
-                is_active: params.is_active || true,
+                is_active: isActive,
                 is_system: params.is_system || null
             };
         } else {
