@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
@@ -21,22 +21,17 @@ import { DashboardJobsService } from '../../dashboard/jobs.service';
 export class JobTypesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     private routeParams: any;
-    private isInitialized: boolean;
     private itemsWithPause: MenuItem[] = [
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
-        { label: 'Favorite', icon: 'fa fa-star-o', command: () => { this.toggleFavorite(); } }
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } }
     ];
     private itemsWithResume: MenuItem[] = [
         { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
-        { label: 'Favorite', icon: 'fa fa-star-o', command: () => { this.toggleFavorite(); } }
-    ];
-    filterItems: MenuItem[] = [
-        { label: 'Favorites', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorites($event); } },
-        { label: 'Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } }
     ];
     isFavorite: any;
     rows = 16;
@@ -56,7 +51,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     loadingJobTypes: boolean;
     showFavorites: boolean;
     showInactive: boolean;
-    filterBtnClass = 'ui-button-secondary';
 
     constructor(
         private messageService: MessageService,
@@ -119,8 +113,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.loadingJobTypes = true;
         this.jobTypes = [];
         params = params || {
-            first: 0,
-            rows: this.rows,
+            rows: 1000,
             is_active: this.showInactive ? null : true,
             sortField: 'title'
         };
@@ -188,40 +181,12 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     onEditClick() {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.name}/${this.selectedJobTypeDetail.version}`]);
     }
-    onLazyLoad(e: LazyLoadEvent) {
-        // let ngOnInit handle loading data to ensure query params are respected
-        if (this.isInitialized) {
-            this.getJobTypes({
-                first: e.first,
-                rows: e.rows,
-                sortField: 'title'
-            });
-        } else {
-            // data was just loaded by ngOnInit, so set flag to true
-            this.isInitialized = true;
-        }
-    }
     onScanHide() {
         this.selectedWorkspace = null;
     }
     onFilterKeyup(e) {
         this.dv.filter(e.target.value);
         this.clampText();
-    }
-    toggleFavorites(e) {
-        e.originalEvent.preventDefault();
-        this.showFavorites = !this.showFavorites;
-        this.filterBtnClass = this.showFavorites || this.showInactive ? 'ui-button-info' : 'ui-button-secondary';
-        const favoritesItem: any = _.find(this.filterItems, { label: 'Favorites' });
-        favoritesItem.icon = this.showFavorites ? 'fa fa-star' : 'fa fa-star-o';
-        this.getJobTypes();
-    }
-    toggleInactive() {
-        this.showInactive = !this.showInactive;
-        this.filterBtnClass = this.showFavorites || this.showInactive ? 'ui-button-info' : 'ui-button-secondary';
-        const inactiveItem: any = _.find(this.filterItems, { label: 'Inactive' });
-        inactiveItem.icon = this.showInactive ? 'fa fa-circle' : 'fa fa-circle-o';
-        this.getJobTypes();
     }
     scanWorkspace() {
         const scanObj = {
@@ -286,7 +251,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     createNewJobType() {
         this.router.navigate(['/configuration/job-types/create']);
     }
-    toggleFavorite(name?: string, version?: string) {
+    toggleFavorite(e, name?: string, version?: string) {
+        e.stopPropagation();
         if (!this.selectedJobTypeDetail) {
             const jobType: any = _.find(this.jobTypes, { value: { name: name, version: version } });
             if (jobType) {
