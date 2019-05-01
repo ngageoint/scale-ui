@@ -66,6 +66,12 @@ body {
         background-color: #be292e !important;
         border: 1px solid #be292e !important;
     }
+    
+    .ui-dialog .ui-dialog-titlebar-icon{
+        position: absolute !important;
+        float: right !important;
+        right: 10px !important;
+    }
 
     .seed-jobs {
         .results {

@@ -100,6 +100,12 @@
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
         </span>
+        <div class="jobs__controls">
+            <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
+            (click)="requeueAllConfirm()"></button>
+            <button pButton type="button" class="ui-button-primary" icon="fa fa-ban" pTooltip="Cancel All Jobs"
+            (click)="cancelAllConfirm()"></button>
+        </div>     
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">
