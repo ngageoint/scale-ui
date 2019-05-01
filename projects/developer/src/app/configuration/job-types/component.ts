@@ -50,7 +50,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     errorClass = 'p-col-6';
     loadingJobTypes: boolean;
     showFavorites: boolean;
-    showInactive: boolean;
+    showInactive = false;
 
     constructor(
         private messageService: MessageService,
@@ -114,7 +114,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.jobTypes = [];
         params = params || {
             rows: 1000,
-            is_active: this.showInactive ? null : true,
+            is_active: !this.showInactive,
             sortField: 'title'
         };
         this.jobTypesApiService.getJobTypes(params).subscribe(data => {

@@ -9,11 +9,11 @@
         </div>
         <div class="flexed">
             <div class="margin-right-md">
-                <p-toggleButton offLabel="Favorite Job Types" offIcon="fa fa-star-o" onLabel="Favorite Job Types"
-                                onIcon="fa fa-star" [(ngModel)]="showFavorites" (onChange)="getJobTypes()"
+                <p-toggleButton offLabel="Toggle Favorites" offIcon="fa fa-toggle-off" onLabel="Toggle Favorites"
+                                onIcon="fa fa-toggle-on" [(ngModel)]="showFavorites" (onChange)="getJobTypes()"
                                 [style]="{'margin-right': '5px'}"></p-toggleButton>
-                <p-toggleButton offLabel="Inactive Job Types" offIcon="fa fa-times-circle-o"
-                                onLabel="Inactive Job Types" onIcon="fa fa-times-circle" [(ngModel)]="showInactive"
+                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
+                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
                                 (onChange)="getJobTypes()"></p-toggleButton>
             </div>
             <input type="search" pInputText placeholder="Search" class="job-type__filter"

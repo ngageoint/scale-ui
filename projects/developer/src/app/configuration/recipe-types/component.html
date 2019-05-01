@@ -2,18 +2,22 @@
     <div class="flexed space-between margin-bottom-sm">
         <div class="flexed">
             <h2><i class="fa fa-cubes"></i> Recipe Types ({{ totalRecords }})</h2>
-            <div class="recipe-type__actions">
-                <button pButton type="button" class="ui-button-secondary" icon="fa fa-plus"
-                        (click)="createNewRecipe()"></button>
-                <p-menu #filterMenu [popup]="true" [model]="filterItems" appendTo="body"></p-menu>
-                <button pButton type="button" [ngClass]="filterBtnClass" icon="fa fa-filter"
-                        (click)="filterMenu.toggle($event)"></button>
+            <div class="margin-left-md">
+                <button pButton type="button" icon="fa fa-plus" (click)="createNewRecipe()"
+                        pTooltip="Create Recipe Type"></button>
             </div>
         </div>
-        <input type="search" pInputText placeholder="Search" class="recipe-type__filter" (keyup)="onFilterKeyup($event)">
+        <div class="flexed">
+            <div class="margin-right-md">
+                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
+                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
+                                (onChange)="getRecipeTypes()"></p-toggleButton>
+            </div>
+            <input type="search" pInputText placeholder="Search" class="recipe-type__filter"
+                   (keyup)="onFilterKeyup($event)">
+        </div>
     </div>
-    <p-dataView [value]="recipeTypeOptions" [paginator]="true" [rows]="rows" [lazy]="true" [totalRecords]="totalRecords"
-                (onLazyLoad)="onLazyLoad($event)" filterBy="value.title" layout="grid" [loading]="loadingRecipeTypes" #dv>
+    <p-dataView [value]="recipeTypeOptions" filterBy="value.title" layout="grid" [loading]="loadingRecipeTypes" #dv>
         <ng-template let-recipeType pTemplate="gridItem">
             <div class="p-col-12 p-md-3 recipe-type__container" (click)="onRecipeTypeClick($event, recipeType)">
                 <p-panel>

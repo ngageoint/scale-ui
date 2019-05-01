@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
-import { LazyLoadEvent, MenuItem, SelectItem } from 'primeng/api';
+import { MenuItem, SelectItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
@@ -33,11 +33,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
-    filterItems: MenuItem[] = [
-        { label: 'Inactive', icon: 'fa fa-circle-o', command: () => { this.toggleInactive(); } }
-    ];
-    filterBtnClass = 'ui-button-secondary';
-    showInactive: boolean;
+    showInactive = false;
     loadingRecipeTypes: boolean;
     isInitialized: boolean;
     rows = 16;
@@ -201,9 +197,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private getRecipeTypes(params?: any) {
         this.loadingRecipeTypes = true;
         params = params || {
-            first: 0,
-            rows: this.rows,
-            is_active: this.showInactive ? null : true,
+            rows: 1000,
+            is_active: !this.showInactive,
             sortField: 'title'
         };
         this.recipeTypeOptions = [];
@@ -439,14 +434,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         return `&#x${code};`;
     }
 
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/configuration/recipe-types/${e.value.name}`);
-        } else {
-            this.router.navigate([`/configuration/recipe-types/${e.value.name}`]);
-        }
-    }
-
     toggleFileInputs() {
         this.showFileInputs = !this.showFileInputs;
     }
@@ -484,34 +471,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.clampText();
     }
 
-    onLazyLoad(e: LazyLoadEvent) {
-        // let ngOnInit handle loading data to ensure query params are respected
-        if (this.isInitialized) {
-            this.getRecipeTypes({
-                first: e.first,
-                rows: e.rows,
-                sortField: 'title'
-            });
-        } else {
-            // data was just loaded by ngOnInit, so set flag to true
-            this.isInitialized = true;
-        }
-    }
-
     onRecipeTypeClick(e, recipeType) {
         if (e.ctrlKey || e.metaKey) {
             window.open(`/configuration/recipe-types/${recipeType.value.name}`);
         } else {
             this.router.navigate([`/configuration/recipe-types/${recipeType.value.name}`]);
         }
-    }
-
-    toggleInactive() {
-        this.showInactive = !this.showInactive;
-        this.filterBtnClass = this.showInactive ? 'ui-button-info' : 'ui-button-secondary';
-        const inactiveItem: any = _.find(this.filterItems, { label: 'Inactive' });
-        inactiveItem.icon = this.showInactive ? 'fa fa-circle' : 'fa fa-circle-o';
-        this.getRecipeTypes();
     }
 
     ngOnInit() {
