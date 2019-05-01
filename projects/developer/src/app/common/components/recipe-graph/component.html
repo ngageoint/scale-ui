@@ -99,13 +99,7 @@
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
-        </span>
-        <div class="jobs__controls">
-            <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
-            (click)="requeueAllConfirm()"></button>
-            <button pButton type="button" class="ui-button-primary" icon="fa fa-ban" pTooltip="Cancel All Jobs"
-            (click)="cancelAllConfirm()"></button>
-        </div>     
+        </span>  
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">
@@ -318,6 +312,14 @@
             </p-dataList>
         </div>
     </div>
+    <p-footer>
+        <div class="jobs__controls">
+            <button pButton label="Requeue" type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue Job"
+            (click)="requeueConfirm()"></button>
+            <button pButton label="Cancel" type="button" class="ui-button-primary" icon="fa fa-ban" pTooltip="Cancel Job"
+            (click)="cancelConfirm()"></button>
+        </div>   
+    </p-footer>
 </p-dialog>
 <p-overlayPanel appendTo="body" #dependencyPanel>
     <div *ngIf="dependencyOptions.length === 0">

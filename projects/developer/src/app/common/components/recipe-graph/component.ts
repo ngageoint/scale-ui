@@ -3,11 +3,16 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { JobsApiService } from '../../../processing/jobs/api.service';
+import { ConfirmationService } from 'primeng/api';
+import { MessageService } from 'primeng/components/common/messageservice';
+
 
 @Component({
     selector: 'dev-recipe-graph',
     templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    styleUrls: ['./component.scss'],
+    providers: [ConfirmationService]
 })
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
@@ -61,7 +66,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
-    constructor() {
+    constructor(
+        private jobsApiService: JobsApiService,
+        private confirmationService: ConfirmationService,
+        private messageService: MessageService
+    ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
@@ -635,6 +644,54 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             return `${jobType.title} v${jobType.version}`;
         }
         return key;
+    }
+
+    private updateData() {
+
+    }
+    requeueJob(jobsParams?) {
+        this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
+        if (!jobsParams) {
+            jobsParams = {
+                started: this.selectedJobType.started,
+                ended: this.selectedJobType.ended,
+                error_categories: this.selectedJobType.error_category ? [this.selectedJobType.error_category] : null,
+                status: this.selectedJobType.status === 'CANCELED' || this.selectedJobType.status === 'FAILED' ?
+                this.selectedJobType.status :
+                    null,
+                job_type_names: this.selectedJobType.job_type_name ? [this.selectedJobType.job_type_name] : null
+            };
+            // remove null properties
+            jobsParams = _.pickBy(jobsParams);
+        }
+        this.jobsApiService.requeueJobs(jobsParams)
+            .subscribe(() => {
+                this.updateData();
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
+            });
+    }
+
+    requeueConfirm() {
+        // query for canceled and failed jobs with current params to report an accurate requeue count
+        const requeueParams = _.clone(this.selectedJobType);
+        requeueParams.status = ['CANCELED', 'FAILED'];
+        this.jobsApiService.getJobs(requeueParams)
+            .subscribe(data => {
+                this.confirmationService.confirm({
+                    message: `This will requeue <span class="label label-danger"><strong>${data.count}</strong></span> canceled and failed
+                              jobs. Are you sure that you want to proceed?`,
+                    header: 'Requeue All Jobs',
+                    accept: () => {
+                        this.requeueJob();
+                    },
+                    reject: () => {
+                        console.log('requeue rejected');
+                    }
+                });
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
+            });
     }
 
     ngOnChanges(changes) {
