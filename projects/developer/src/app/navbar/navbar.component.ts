@@ -119,116 +119,133 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     createMobileMenu() {
-            this.itemsMobile = [
-                {
-                    label: 'Processing',
-                    icon: 'fa fa-gears',
-                    items: [{
-                            label: 'Jobs',
-                            icon: 'fa fa-cube',
-                            url: '/processing/jobs'
-                        },
-                        {
-                            label: 'Recipes',
-                            icon: 'fa fa-cube',
-                            url: '/processing/recipes'
-                        },
-                        {
-                            label: 'Running Jobs',
-                            icon: 'fa fa-arrow-circle-right',
-                            url: '/processing/running-jobs'
-                        },
-                        {
-                            label: 'Queued Jobs',
-                            icon: 'fa fa-clock-o',
-                            url: '/processing/queued-jobs'
-                        },
-                        {
-                            label: 'Job Type History',
-                            icon: 'fa fa-history',
-                            url: '/processing/job-type-history'
-                        },
-                        {
-                            label: 'Batches',
-                            icon: 'fa fa-files-o',
-                            url: '/processing/batches'
-                        },
-                        {separator: true},
-                        {label: 'Quit', icon: 'pi pi-fw pi-times'}
-                    ]
-                },
-                {
-                    label: 'Data',
-                    icon: 'fa fa-hdd-o',
-                    items: [{
+        this.itemsMobile = [
+            {
+                label: 'Processing',
+                icon: 'fa fa-fw fa-gears',
+                items: [
+                    {
+                        label: 'Jobs',
+                        icon: 'fa fa-fw fa-cube',
+                        url: '/processing/jobs'
+                    },
+                    {
+                        label: 'Recipes',
+                        icon: 'fa fa-fw fa-cube',
+                        url: '/processing/recipes'
+                    },
+                    {
+                        label: 'Running Jobs',
+                        icon: 'fa fa-fw fa-arrow-circle-right',
+                        url: '/processing/running-jobs'
+                    },
+                    {
+                        label: 'Queued Jobs',
+                        icon: 'fa fa-fw fa-clock-o',
+                        url: '/processing/queued-jobs'
+                    },
+                    {
+                        label: 'Job Type History',
+                        icon: 'fa fa-fw fa-history',
+                        url: '/processing/job-type-history'
+                    },
+                    {
+                        label: 'Batches',
+                        icon: 'fa fa-fw fa-files-o',
+                        url: '/processing/batches'
+                    },
+                    {separator: true},
+                    {
+                        label: 'Close',
+                        icon: 'fa fa-fw fa-times'
+                    }
+                ]
+            },
+            {
+                label: 'Data',
+                icon: 'fa fa-fw fa-hdd-o',
+                items: [
+                    {
                         label: 'Feed',
-                        icon: 'fa fa-line-chart',
+                        icon: 'fa fa-fw fa-line-chart',
                         url: '/data/feed'
                     },
                     {
                         label: 'Ingest Records',
-                        icon: 'fa fa-clone',
+                        icon: 'fa fa-fw fa-clone',
                         url: '/data/ingest'
                     },
                     {
                         label: 'Metrics',
-                        icon: 'fa fa-bar-chart',
+                        icon: 'fa fa-fw fa-bar-chart',
                         url: '/data/metrics'
                     },
                     {separator: true},
-                    {label: 'Quit', icon: 'pi pi-fw pi-times'}
+                    {
+                        label: 'Close',
+                        icon: 'fa fa-fw fa-times'
+                    }
                 ]
-                },
-                {
-                    label: 'Configuration',
-                    icon: 'fa fa-wrench',
-                    items: [{
+            },
+            {
+                label: 'Configuration',
+                icon: 'fa fa-fw fa-wrench',
+                items: [
+                    {
                         label: 'Job Types',
-                        icon: 'fa fa-cube',
+                        icon: 'fa fa-fw fa-cube',
                         url: '/configuration/job-types'
                     },
                     {
                         label: 'Recipe Types',
-                        icon: 'fa fa-cubes',
+                        icon: 'fa fa-fw fa-cubes',
                         url: '/configuration/recipe-types'
                     },
                     {separator: true},
-                    {label: 'Quit', icon: 'pi pi-fw pi-times'}
+                    {
+                        label: 'Close',
+                        icon: 'fa fa-fw fa-times'
+                    }
                 ]
-                },
-                {
-                    label: 'System',
-                    icon: 'fa fa-television',
-                    items: [{
+            },
+            {
+                label: 'System',
+                icon: 'fa fa-fw fa-television',
+                items: [
+                    {
                         label: 'Nodes',
-                        icon: 'fa fa-circle-o',
+                        icon: 'fa fa-fw fa-circle-o',
                         url: '/system/nodes'
                     },
                     {
                         label: 'Scans',
-                        icon: 'fa fa-barcode',
+                        icon: 'fa fa-fw fa-barcode',
                         url: '/system/scans'
                     },
                     {
                         label: 'Strikes',
-                        icon: 'fa fa-bolt',
+                        icon: 'fa fa-fw fa-bolt',
                         url: '/system/strikes'
                     },
                     {
                         label: 'Workspaces',
-                        icon: 'fa fa-database',
+                        icon: 'fa fa-fw fa-database',
                         url: '/system/workspaces'
                     },
                     {separator: true},
-                    {label: 'Quit', icon: 'pi pi-fw pi-times'}
+                    {
+                        label: 'Quit',
+                        icon: 'fa fa-fw fa-times'
+                    }
                 ]
-                },
-                {separator: true},
-                {
-                    label: 'Quit', icon: 'pi pi-fw pi-times'
-                }
-            ];
-        }
+            },
+            {separator: true},
+            {
+                label: 'Close',
+                icon: 'fa fa-fw fa-times'
+            }
+        ];
+    }
 
     onStatusChange(data) {
         if (data) {
@@ -248,16 +265,9 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-
-        this.breakpointObserver
-      .observe(['(min-width: 1150px)'])
-      .subscribe((state: BreakpointState) => {
-        if (state.matches) {
-            this.isMobile = false;
-        } else {
-            this.isMobile = true;
-        }
-      });
+        this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
+            this.isMobile = !state.matches;
+        });
 
         this.createMobileMenu();
         this.userProfile = this.dataService.getUserProfile();

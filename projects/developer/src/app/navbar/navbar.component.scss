@@ -85,7 +85,7 @@ $navbar-item-width: 150px;
     }
 }
 
-.navbar__logo__mobile {
+.navbar__logo-mobile {
     color: var(--white);
     padding: 0.8em 1.25em 0.5em 1.25em;
     text-align: center;
@@ -171,15 +171,15 @@ $navbar-item-width: 150px;
         }
     }
 }
-.mobileNavButton {
-    background-color: var(--navbar-dark);
+.navbar__mobile-nav-button {
+    background: none;
     border: none;
     height: $navbar-height;
     font-size: 30px;
     padding: .5em;
 }
 
-.navbar__scheduler-overlaypanel{
+.navbar__scheduler-overlaypanel {
     top: 72px;
 }
 
