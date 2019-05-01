@@ -1,6 +1,6 @@
 <h2><i class="fa fa-cube"></i> Jobs <span *ngIf="count">({{ count }})</span></h2>
-<div class="jobs__header">
-    <div class="jobs__date-filter p-grid">
+<div class="jobs__header flexed space-between">
+    <div class="jobs__date-filter flexed">
         <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
@@ -25,10 +25,12 @@
             <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
-        <p-multiSelect [options]="mobileDropdown" 
-                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
-                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
-        </p-multiSelect>
+        <div class="jobs__date-filter-dropdown">
+            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+            </p-dropdown>
+        </div>
     </div>
     <div class="jobs__controls">
         <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
