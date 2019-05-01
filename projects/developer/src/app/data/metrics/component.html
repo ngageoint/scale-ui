@@ -39,9 +39,11 @@
             <label>Secondary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         </div>
+        <label>Primary Metric Display</label>
+        <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType1" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         <div *ngIf="selectedMetric2">
             <label>Secondary Metric Display</label>
-            <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
+            <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType2" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
         </div>
         <button pButton icon="fa fa-refresh" label="Update Chart" (click)="updateChart()"
                 [disabled]="!selectedMetric1"></button>
