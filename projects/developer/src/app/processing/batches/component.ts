@@ -46,13 +46,14 @@ export class BatchesComponent implements OnInit, OnDestroy {
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
-    mobileDropdown = [
-        { label: 'Last 6 Hours', value: 'h, 6'},
-        { label: 'Last 12 Hours', value: 'h, 12'},
-        { label: 'Last 24 Hours', value: 'h, 24'},
-        { label: 'Last 3 Days', value: 'd, 3'},
-        { label: 'Last 7 Days', value: 'd, 7'}
+    dateRangeOptions = [
+        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
+        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
+        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
+        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
+        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
     ];
+    selectedDateRange: any;
 
     constructor(
         private dataService: DataService,

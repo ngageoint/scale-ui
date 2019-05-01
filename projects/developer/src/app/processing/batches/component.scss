@@ -8,24 +8,22 @@ label {
     display: block;
 }
 .batches__header {
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 10px;
+    align-items: flex-end;
 
     .batches__date-filter {
-        display: flex;
+        align-items: flex-end;
 
         div {
             margin-right: 20px;
         }
 
-        .batches__date-filter-btn {
+        .batches__date-filter-btn, .batches__date-filter-dropdown {
             padding-top: 0;
             padding-bottom: 0;
-            margin-top: 20px;
         }
 
-        .batches__date-filter-ranges {
+        .batches__date-filter-ranges, .batches__date-filter-dropdown {
             margin-left: 20px;
 
             button {
@@ -34,8 +32,8 @@ label {
         }
     }
     .batches__controls {
-        display: flex;
-        flex-direction: column-reverse;
+        margin-left: 5px;
+        margin-top: 5px;
     }
 }
 .batches__table {
@@ -53,4 +51,21 @@ label {
 }
 ::ng-deep .batches__error-tooltip.ui-tooltip {
     max-width: 50%;
+}
+
+@media screen and (max-width: 858px) {
+    .batches__date-filter-btn, .batches__date-filter-dropdown, .batches__date-filter-ranges {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    .batches__date-filter-dropdown, .batches__date-filter-btn {
+        margin-top: 5px !important;
+        margin-right: 5px !important;
+    }
+
+    .batches__controls {
+        margin-left: 0 !important;
+        margin-right: 5px;
+    }
 }
