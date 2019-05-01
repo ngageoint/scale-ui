@@ -50,6 +50,19 @@ body {
         padding: .6em 2em .6em .6em;
     }
 
+    .ui-slidemenu .ui-slidemenu-content {
+        height: 340px !important; 
+        width: 180px !important;
+        overflow-y: hidden !important;  
+    }
+    .ui-slidemenu .ui-slidemenu-wrapper {
+        width: 180px !important;
+        height: 340px !important;
+    }
+    .ui-slidemenu.ui-slidemenu-dynamic{
+        width: auto !important;
+    }
+
     p-inputswitch {
         line-height: 0;
     }
@@ -104,5 +117,61 @@ body {
 
     .angular-utc-datepicker_datepicker .angular-utc-datepicker_calendar-popup .angular-utc-datepicker_day-names .angular-utc-datepicker_name {
         height: 21px !important;
+        
+    }
+    .noWrap{
+        white-space: nowrap;
+    }
+    .noWrapPanel .ui-panel-titlebar {
+        white-space: nowrap;
+    }
+}
+@media screen and (max-width: 858px) {
+    .ui-table-responsive .ui-table-thead > tr > th,
+    .ui-table-responsive .ui-table-tfoot > tr > td {
+        display: none !important;
+    }
+
+    .ui-table-responsive .ui-table-tbody > tr > td {
+        text-align: left !important;
+        display: block !important;  
+        border: 0px none!important;
+        width: 100% !important;
+		-webkit-box-sizing: border-box !important;
+		-moz-box-sizing: border-box !important;
+		box-sizing: border-box !important;
+		float: left !important;
+		clear: left !important;
+    }
+
+    .ui-table-responsive .ui-table-tbody > tr > td .ui-column-title {
+        padding: .4em !important;
+        min-width: 30% !important;
+        display: inline-block !important;
+        margin: -.4em 1em -.4em -.4em !important;
+        font-weight: bold !important;
+    }
+    .ui-table-responsive .ui-table-tbody > tr{
+        border: 1px solid #c8c8c8 !important;
+    }
+
+    .ui-sidebar-left{
+        width: auto !important;
+    }
+    .ui-sidebar-right{
+        width: auto !important;
+    }
+    .pull-right {
+        float: left !important;
+        padding-right: .5em !important;
+    }
+    .navbar__status{
+        width: 200px !important;
+    }
+    .navbar__theme{
+        width: 50px !important;
+    }
+    .navbar__scheduler{
+        width: 50px !important;
     }
 }

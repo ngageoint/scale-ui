@@ -85,6 +85,18 @@ $navbar-item-width: 150px;
     }
 }
 
+.navbar__logo__mobile {
+    color: var(--white);
+    padding: 0.8em 1.25em 0.5em 1.25em;
+    text-align: center;
+
+    a {
+        color: var(--white);
+        text-decoration: none;
+        text-shadow: none;
+    }
+}
+
 .navbar__status {
     width: $navbar-status-width;
 }
@@ -157,5 +169,22 @@ $navbar-item-width: 150px;
         .navbar__profile-data {
             padding: 2px;
         }
+    }
+}
+.mobileNavButton {
+    background-color: var(--navbar-dark);
+    border: none;
+    height: $navbar-height;
+    font-size: 30px;
+    padding: .5em;
+}
+
+.navbar__scheduler-overlaypanel{
+    top: 72px;
+}
+
+@media screen and (max-width: 500px) {
+    .navbar__status {
+        display: none;
     }
 }

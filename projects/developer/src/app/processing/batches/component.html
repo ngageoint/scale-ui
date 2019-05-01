@@ -1,19 +1,19 @@
 <h2><i class="fa fa-files-o"></i> Batches <span *ngIf="count">({{ count }})</span></h2>
 <div class="batches__header">
-    <div class="batches__date-filter">
-        <div>
+    <div class="batches__date-filter p-grid">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
                             (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
                             (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
         <button pButton class="batches__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
-        <div class="batches__date-filter-ranges">
+        <div class="batches__date-filter-ranges"  *ngIf="!isMobile">
             <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 6 Hours"
                     (click)="setDateFilterRange('h', 6)"></button>
             <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 12 Hours"
@@ -25,6 +25,10 @@
             <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
+        <p-multiSelect [options]="mobileDropdown" 
+                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
+                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
+        </p-multiSelect>
     </div>
     <div class="batches__controls">
         <a pButton routerLink="/processing/batches/create" class="ui-button-primary" icon="fa fa-plus"

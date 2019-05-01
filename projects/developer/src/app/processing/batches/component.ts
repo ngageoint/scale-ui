@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -44,6 +45,14 @@ export class BatchesComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
+    isMobile: boolean;
+    mobileDropdown = [
+        { label: 'Last 6 Hours', value: 'h, 6'},
+        { label: 'Last 12 Hours', value: 'h, 12'},
+        { label: 'Last 24 Hours', value: 'h, 24'},
+        { label: 'Last 3 Days', value: 'd, 3'},
+        { label: 'Last 7 Days', value: 'd, 7'}
+    ];
 
     constructor(
         private dataService: DataService,
@@ -52,7 +61,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
         private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private route: ActivatedRoute,
-        private messageService: MessageService
+        private messageService: MessageService,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     private updateData() {
@@ -176,6 +186,17 @@ export class BatchesComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedBatchRows();
+
+        this.breakpointObserver
+        .observe(['(min-width: 1220px)'])
+        .subscribe((state: BreakpointState) => {
+            if (state.matches) {
+                this.isMobile = false;
+            } else {
+                this.isMobile = true;
+            }
+        });
+
         if (!this.datatableOptions) {
             this.datatableOptions = this.batchesDatatableService.getBatchesDatatableOptions();
         }
