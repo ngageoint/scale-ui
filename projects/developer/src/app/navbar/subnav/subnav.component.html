@@ -17,6 +17,7 @@
             <li><a routerLink="/data/feed" (click)="navigate()"><i class="fa fa-line-chart"></i> Feed</a> </li>
             <li><a routerLink="/data/ingest" (click)="navigate()"><i class="fa fa-clone"></i> Ingest Records</a></li>
             <li><a routerLink="/data/metrics" (click)="navigate()"><i class="fa fa-bar-chart"></i> Metrics</a></li>
+            <li><a routerLink="/data/timeline" (click)="navigate()"><i class="fa fa-calendar"></i> Timeline</a></li>
         </ul>
     </div>
 
@@ -35,12 +36,6 @@
             <li><a routerLink="/system/scans" (click)="navigate()"><i class="fa fa-barcode"></i> Scans</a></li>
             <li><a routerLink="/system/strikes" (click)="navigate()"><i class="fa fa-bolt"></i> Strikes</a></li>
             <li><a routerLink="/system/workspaces" (click)="navigate()"><i class="fa fa-database"></i> Workspaces</a></li>
-        </ul>
-    </div>
-    <div [ngClass]="getSectionStyles('testing')">
-        <ul>
-            <li><a routerLink="/testing/chart" (click)="navigate()"><i class="fa fa-circle-o"></i> Chart</a></li>
-            <li><a routerLink="/testing/gantt" (click)="navigate()"><i class="fa fa-circle-o"></i> Gantt</a></li>
         </ul>
     </div>
 </div>

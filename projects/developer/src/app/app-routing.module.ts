@@ -12,6 +12,7 @@ import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { JobTypeHistoryComponent } from './processing/job-type-history/component';
 import { JobTypeHistoryDetailsComponent } from './processing/job-type-history/details.component';
 import { MetricsComponent } from './data/metrics/component';
+import { TimelineComponent } from './data/timeline/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { BatchesComponent } from './processing/batches/component';
@@ -23,8 +24,6 @@ import { StrikesComponent } from './system/strikes/component';
 import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
 import { WorkspacesComponent } from './system/workspaces/component';
-import { TestingComponent } from './testing/chart/component';
-import { GanttComponent } from './testing/gantt/component';
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', component: DashboardComponent },
@@ -49,15 +48,14 @@ const routes: Routes = [
     { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/metrics', component: MetricsComponent },
+    { path: 'data/timeline', component: TimelineComponent },
     { path: 'system/nodes', component: NodesComponent },
     { path: 'system/strikes', component: StrikesComponent },
     { path: 'system/strikes/:id', component: StrikesComponent },
     { path: 'system/scans', component: ScansComponent },
     { path: 'system/scans/:id', component: ScanDetailsComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
-    { path: 'system/workspaces/:id', component: WorkspacesComponent },
-    { path: 'testing/chart', component: TestingComponent },
-    { path: 'testing/gantt', component: GanttComponent }
+    { path: 'system/workspaces/:id', component: WorkspacesComponent }
 ];
 
 @NgModule({

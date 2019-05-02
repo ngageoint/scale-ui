@@ -74,9 +74,8 @@ import { StatusComponent } from './navbar/status/component';
 import { StrikesComponent } from './system/strikes/component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
+import { TimelineComponent } from './data/timeline/component';
 import { WorkspacesComponent } from './system/workspaces/component';
-import { TestingComponent } from './testing/chart/component';
-import { GanttComponent } from './testing/gantt/component';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
@@ -127,9 +126,8 @@ const appInitializer = (appConfig: AppConfigService) => {
         StatusComponent,
         StrikesComponent,
         SubnavComponent,
-        WorkspacesComponent,
-        TestingComponent,
-        GanttComponent
+        TimelineComponent,
+        WorkspacesComponent
     ],
     imports: [
         AccordionModule,

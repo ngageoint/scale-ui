@@ -1,0 +1,46 @@
+h2 {
+    .ui-button {
+        font-size: 0.7em;
+    }
+}
+label {
+    font-weight: bold;
+    display: block;
+}
+.timeline__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 10px;
+
+    .timeline__date-filter {
+        display: flex;
+
+        div {
+            margin-right: 20px;
+        }
+
+        .timeline__date-filter-btn {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 20px;
+        }
+
+        .timeline__date-filter-ranges {
+            margin-left: 20px;
+
+            button {
+                margin-left: 3px;
+            }
+        }
+    }
+
+    .jobs__controls {
+        button {
+            margin-left: 5px;
+        }
+    }
+}
+.label-info {
+    padding: .2em .6em .1em .6em;
+}

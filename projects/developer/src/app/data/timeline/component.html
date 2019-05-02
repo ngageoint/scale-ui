@@ -1,0 +1,25 @@
+<h2><i class="fa fa-calendar"></i> Timeline</h2>
+<div class="timeline__header">
+    <div class="timeline__date-filter">
+        <div>
+            <label>From:</label>
+            <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
+                            (dateChange)="onStartSelect($event)"></utc-datepicker>
+        </div>
+        <div>
+            <label>To:</label>
+            <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
+                            (dateChange)="onEndSelect($event)"></utc-datepicker>
+        </div>
+        <button pButton class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
+                (click)="onDateFilterApply()"></button>
+    </div>
+</div>
+
+<div class="fullScreenChart p-col-12">
+    <div class="scale-chart-container">
+        <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
+        <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
+    </div>
+</div>
+
