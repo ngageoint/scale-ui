@@ -27,9 +27,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
     data: any;
     selectedJobExe: any;
     logDisplay: boolean;
-    inputClass = 'p-col-12';
-    outputClass = 'p-col-12';
     recipeGraphMinHeight = '70vh';
+    dataOptions = [
+        { label: 'Recipes', value: { unit: 'h', range: 6 } },
+        { label: 'Jobs', value: { unit: 'h', range: 12 } }
+    ];
+
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
@@ -74,11 +77,9 @@ export class TimelineComponent implements OnInit, OnDestroy {
                     }
                 }
             },
-            layout: {
-                padding: {
-                    top: 100,
-                    bottom: 100
-                }
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
             },
             plugins: {
                 datalabels: false,
