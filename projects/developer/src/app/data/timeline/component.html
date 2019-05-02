@@ -14,9 +14,9 @@
         <button pButton class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
         <div class="timeline__date-filter-dropdown">
-            <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDateRange"
-                            (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
-                            [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false">
+            <p-dropdown [options]="dataOptions" [(ngModel)]="value"
+                            (onChange)="selectDataType(value)"
+                            [style]="{'width':'150px'}" placeholder="Recipes" [showClear]="false">
             </p-dropdown>
         </div>
     </div>

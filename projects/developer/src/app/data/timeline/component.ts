@@ -7,6 +7,7 @@ import * as Color from 'chartjs-color';
 
 import { RecipeType } from './api.model';
 import { RecipeTypesApiService } from './api.service';
+import { JobsApiService } from '../../processing/jobs/api.service';
 import { DataService } from '../../common/services/data.service';
 
 @Component({
@@ -29,19 +30,18 @@ export class TimelineComponent implements OnInit, OnDestroy {
     logDisplay: boolean;
     recipeGraphMinHeight = '70vh';
     dataOptions = [
-        { label: 'Recipes', value: { unit: 'h', range: 6 } },
-        { label: 'Jobs', value: { unit: 'h', range: 12 } }
+        { label: 'Recipes', value: 'recipe' },
+        { label: 'Jobs', value: 'job' }
     ];
 
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private recipesApiService: RecipeTypesApiService
+        private recipesApiService: RecipeTypesApiService,
+        private jobsApiService: JobsApiService
     ) {}
 
-    private initJobDetail(data) {
-        this.recipe = data;
-        this.recipe.id = 4;
+    private createRecipeTimeline(data) {
         this.options = {
             elements: {
                 font: 'Roboto',
@@ -70,9 +70,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
                     label: (tooltipItem, chartData) => {
                         const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                         return [
-                            d[2],
-                            moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
-                            moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
+                            'Total Time: ' + d[2],
+                            'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
+                            'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
+
                         ];
                     }
                 }
@@ -115,87 +116,84 @@ export class TimelineComponent implements OnInit, OnDestroy {
                 });
             }
         });
-}
+    }
 
 
-    private getJobDetail(id: number) {
-        this.loading = true;
-        this.subscription = this.recipesApiService.getRecipeTypes(id).subscribe(data => {
-            this.loading = false;
-            this.initJobDetail(data);
+    private createJobTimeline(data) {
+        this.options = {
+            elements: {
+                font: 'Roboto',
+                colorFunction: () => {
+                    return Color('#42f45f');
+                }
+            },
+            scales: {
+                xAxes: [{
+                    type: 'timeline',
+                    bounds: 'ticks',
+                    ticks: {
+                        callback: (value, index, values) => {
+                            if (!values[index]) {
+                                return;
+                            }
+                            return moment.utc(values[index]['value']).format('YYYY-MM-DD HH:mm:ss[Z]');
+                        },
+                        maxRotation: 90,
+                        minRotation: 90,
+                    }
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: (tooltipItem, chartData) => {
+                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return [
+                            'Total Time: ' + d[2],
+                            'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
+                            'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
 
-            // get job inputs
-            this.loadingInputs = true;
-            this.recipesApiService.getRecipeTypes(id)
-                .subscribe(inputData => {
-                    this.loadingInputs = false;
-                    _.forEach(inputData.results, d => {
-                        d.createdTooltip = DataService.formatDate(d.created);
-                        d.createdDisplay = DataService.formatDate(d.created, true);
-                        d.lastModifiedTooltip = DataService.formatDate(d.deprecated);
-                        d.lastModifiedDisplay = DataService.formatDate(d.deprecated, true);
-                    });
-                    this.jobInputs = inputData.results;
-                }, err => {
-                    this.loadingInputs = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job inputs', detail: err.statusText});
+                        ];
+                    }
+                }
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false
+            },
+            plugins: {
+                datalabels: false,
+                timeline: true
+            },
+            maintainAspectRatio: false
+        };
+
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+
+        let duration = '';
+        let todaysDate = '';
+
+        _.forEach(data.results, result => {
+            this.data.labels.push(result.name);
+            if (result.ended == null) {
+                todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
+                duration = DataService.calculateDuration(result.started, todaysDate, true);
+                this.data.datasets.push({
+                    data: [
+                        [result.started, todaysDate, duration]
+                    ]
                 });
-
-            // get job outputs
-            this.loadingOutputs = true;
-            this.recipesApiService.getRecipeTypes(id)
-                .subscribe(outputData => {
-                    this.loadingOutputs = false;
-                    _.forEach(outputData.results, d => {
-                        d.createdTooltip = DataService.formatDate(d.created);
-                        d.createdDisplay = DataService.formatDate(d.created, true);
-                        d.deprecatedTooltip = DataService.formatDate(d.deprecated);
-                        d.deprecatedDisplay = DataService.formatDate(d.deprecated, true);
-                    });
-                    this.jobOutputs = outputData.results;
-                }, err => {
-                    this.loadingOutputs = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+            } else {
+                duration = DataService.calculateDuration(result.started, result.ended, true);
+                this.data.datasets.push({
+                    data: [
+                        [result.started, result.ended, duration]
+                    ]
                 });
-
-            // get job executions
-            this.loadingExecutions = true;
-            this.recipesApiService.getRecipeTypes(id)
-                .subscribe(exeData => {
-                    this.loadingExecutions = false;
-                }, err => {
-                    this.loadingExecutions = false;
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
-                });
-            }, err => {
-                this.loading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job details', detail: err.statusText});
-            });
-    }
-
-    calculateFileSize(fileSize) {
-        return DataService.calculateFileSizeFromBytes(fileSize, 0);
-    }
-
-    getUnicode(code) {
-        return `&#x${code};`;
-    }
-
-    showExeLog(event, exe) {
-        this.selectedJobExe = exe;
-        this.logDisplay = true;
-    }
-
-    hideExeLog() {
-        this.selectedJobExe = null;
-    }
-
-    showStatus(statusPanel, $event) {
-        statusPanel.show($event);
-    }
-
-    hideStatus(statusPanel) {
-        statusPanel.hide();
+            }
+        });
     }
 
     unsubscribe() {
@@ -205,11 +203,24 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        const id = 4;
-       this.getJobDetail(id);
     }
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    selectDataType(value) {
+        if (value === 'recipe') { 
+        this.subscription = this.recipesApiService.getRecipeTypes().subscribe(data => {
+        this.createRecipeTimeline(data);
+        });
+        } else if (value === 'job') {
+            this.subscription = this.jobsApiService.getJobs().subscribe(data => {
+                this.createJobTimeline(data);
+                });
+        } else {
+            console.log(value);
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job details'});
+        }
     }
 }
