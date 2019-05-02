@@ -159,7 +159,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
-            this.messageService.add({severity: 'warning', summary: 'Selected the same metric twice'});
+            this.messageService.add({severity: 'warn', summary: 'Selected the same metric twice'});
             return false;
         }
         this.showChart = true;
