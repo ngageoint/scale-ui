@@ -63,7 +63,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         private recipeTypesApiService: RecipeTypesApiService,
         private router: Router,
         private route: ActivatedRoute,
-        public breakpointObserver: BreakpointObserver
+        private breakpointObserver: BreakpointObserver
     ) {}
 
     private updateData() {
@@ -187,14 +187,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedRecipeRows();
 
-        this.breakpointObserver
-        .observe(['(min-width: 1220px)'])
-        .subscribe((state: BreakpointState) => {
-            if (state.matches) {
-                this.isMobile = false;
-            } else {
-                this.isMobile = true;
-            }
+        this.breakpointObserver.observe(['(min-width: 1220px)']).subscribe((state: BreakpointState) => {
+            this.isMobile = !state.matches;
         });
 
         this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
