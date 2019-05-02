@@ -1,6 +1,6 @@
 <div class="navbar-ctr">
     <div class="navbar" (click)="selectNavItem($event, null)">
-        <div class="flexed">
+        <div class="flexed desktop" *ngIf="!isMobile">
             <div class="navbar__logo">
                 <a routerLink="/">
                     <dev-logo></dev-logo>
@@ -21,6 +21,16 @@
             <div [ngClass]="getNavItemStyles('testing')">
                 <a (click)="selectNavItem($event, 'testing')"><i class="fa fa-television"></i> Testing</a>
             </div>
+        </div>
+        <div class="flexed mobile" *ngIf="isMobile">
+            <div class="navbar__logo-mobile">
+                <a routerLink="/">
+                    <dev-logo></dev-logo>
+                </a>
+            </div>
+            <p-slideMenu #menu [model]="itemsMobile" [popup]="true" [viewportHeight]="340"></p-slideMenu>
+            <button pButton type="button" class="navbar__mobile-nav-button" icon="fa fa-bars"
+                    (click)="menu.toggle($event)"></button>
         </div>
         <div class="flexed navbar__settings" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">

@@ -7,11 +7,19 @@
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
     <div class="p-grid">
-        <div class="p-col-4">
+        <div class="p-col-12 p-md-12 p-lg-4 p-xl-4 ">
             <p-panel header="Overview">
                 <p-scrollPanel>
                     <table class="table table-striped">
                         <tbody>
+                        <tr>
+                            <td>Job Type:</td>
+                            <td>
+                                <a routerLink="/configuration/job-types/{{ job.job_type.name }}/{{ job.job_type.version }}">
+                                    {{ job.job_type.title }} v{{ job.job_type.version }}
+                                </a>
+                            </td>
+                        </tr>
                         <tr *ngIf="job.recipe">
                             <td>Recipe:</td>
                             <td>
@@ -63,7 +71,7 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="p-col-5">
+        <div class="p-col-12 p-md-12 p-lg-5 p-xl-5 ">
             <p-panel header="Timeline">
                 <p-scrollPanel>
                     <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
@@ -81,7 +89,7 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="p-col-3">
+        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 ">
             <p-panel header="Executions">
                 <p-scrollPanel>
                     <dev-loading-indicator [loading]="loadingExecutions"></dev-loading-indicator>
@@ -117,7 +125,7 @@
         </div>
     </div>
     <div class="p-grid">
-        <div class="p-col-6">
+        <div class="p-col-12 p-md-12 p-lg-6 p-xl-6 ">
             <p-panel header="Inputs">
                 <div class="p-grid">
                     <div [ngClass]="inputClass" *ngIf="jobInputs.length > 0">
@@ -171,7 +179,7 @@
                 </div>
             </p-panel>
         </div>
-        <div class="p-col-6">
+        <div class="p-col-12 p-md-12 p-lg-6 p-xl-6 ">
             <p-panel header="Outputs">
                 <p-scrollPanel styleClass="scale-panel">
                     <dev-loading-indicator [loading]="loadingOutputs"></dev-loading-indicator>

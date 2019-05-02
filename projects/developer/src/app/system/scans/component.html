@@ -1,17 +1,17 @@
 <h2><i class="fa fa-barcode"></i> Scans <span *ngIf="count">({{ count }})</span></h2>
 <div class="scans__header">
-    <div class="scans__date-filter">
-        <div>
+    <div class="scans__date-filter p-grid">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
         <button pButton class="ui-button-primary scans__date-filter-btn" label="Apply"
                 (click)="onDateFilterApply()"></button>
-        <div class="scans__date-filter-ranges">
+        <div class="scans__date-filter-ranges" *ngIf="!isMobile">
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 6 Hours"
                     (click)="setDateFilterRange('h', 6)"></button>
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 12 Hours"
@@ -23,6 +23,10 @@
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
+        <p-multiSelect [options]="mobileDropdown" 
+                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
+                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
+        </p-multiSelect>
     </div>
     <div class="scans__controls">
         <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>
@@ -46,6 +50,7 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'scan__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <span class="ui-column-title">{{ col.header }}</span>
                 <div *ngSwitchCase="'name'">
                     <span [pTooltip]="rowData.description">
                         {{ rowData.name }}

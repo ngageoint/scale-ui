@@ -1,16 +1,53 @@
-<div class="job-type__header">
-    <h2><i class="fa fa-cube"></i> Job Types</h2>
-    <p-dropdown [options]="jobTypes" [(ngModel)]="selectedJobType" filter="filter" class="job-type__options"
-                [style]="{'width':'300px', 'margin-top':'-10px'}" (onChange)="onRowSelect($event)"
-                placeholder="Select..." [showClear]="false"></p-dropdown>
-    <button pButton class="btn__new-job-type" icon="fa fa-plus" (click)="createNewJobType()"></button>
-</div>
-<hr />
-<div class="job-type__details">
-    <div class="text-center" *ngIf="!selectedJobTypeDetail">
-        <h3>Select a job type to view its details</h3>
+<div class="job-types" *ngIf="!selectedJobTypeDetail">
+    <div class="flexed space-between margin-bottom-sm">
+        <div class="flexed">
+            <h2><i class="fa fa-cube"></i> Job Types ({{ totalRecords }})</h2>
+            <div class="margin-left-md">
+                <button pButton type="button" icon="fa fa-plus" (click)="createNewJobType()" pTooltip="Create Job Type">
+                </button>
+            </div>
+        </div>
+        <div class="flexed">
+            <div class="margin-right-md">
+                <p-toggleButton offLabel="Toggle Favorites" offIcon="fa fa-toggle-off" onLabel="Toggle Favorites"
+                                onIcon="fa fa-toggle-on" [(ngModel)]="showFavorites" (onChange)="getJobTypes()"
+                                [style]="{'margin-right': '5px'}"></p-toggleButton>
+                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
+                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
+                                (onChange)="getJobTypes()"></p-toggleButton>
+            </div>
+            <input type="search" pInputText placeholder="Search" class="job-type__filter"
+                   (keyup)="onFilterKeyup($event)">
+        </div>
     </div>
-    <div *ngIf="selectedJobTypeDetail && selectedJobTypeDetail.manifest.seedVersion">
+    <p-dataView [value]="jobTypes" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
+        <ng-template let-jobType pTemplate="gridItem">
+            <div class="p-col-12 p-md-3 job-type__container" (click)="onJobTypeClick($event, jobType)">
+                <p-panel>
+                    <p-header>
+                        <div class="flexed space-between">
+                            <div>
+                                <strong><span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span> {{ jobType.label }}</strong>
+                            </div>
+                            <div>
+                                <button pButton type="button" class="ui-button-secondary"
+                                        [icon]="jobType.value.favoriteIcon"
+                                        (click)="toggleFavorite($event, jobType.value.name, jobType.value.version)">
+                                </button>
+                            </div>
+                        </div>
+                    </p-header>
+                    <div class="clamp">
+                        {{ jobType.value.description }}
+                    </div>
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataView>
+</div>
+<div class="job-type__details" *ngIf="selectedJobTypeDetail">
+    <h2><i class="fa fa-cube"></i> Job Types</h2>
+    <div *ngIf="selectedJobTypeDetail.manifest.seedVersion">
         <div class="p-grid">
             <div class="p-col-12">
                 <p-panel>
@@ -35,7 +72,7 @@
                                 {{ selectedJobTypeDetail.manifest.job.description }}
                             </div>
                         </div>
-                        <div class="p-col-4">
+                        <div class="p-col-12 p-md-12 p-lg-4 p-xl-4 ">
                             <dl class="dl-horizontal">
                                 <dt *ngIf="selectedJobTypeDetail.created">Created:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.created" [pTooltip]="selectedJobTypeDetail.createdTooltip">{{ selectedJobTypeDetail.createdDisplay }}</dd>
@@ -65,7 +102,8 @@
                                 <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
                             </dl>
                         </div>
-                        <div [ngClass]="interfaceClass" *ngIf="selectedJobTypeDetail.manifest.job.interface">
+                        <div class="p-grid jobTypeTables">
+                        <div class="p-col-12 p-md-12 p-lg-6 p-xl-6"[ngClass]="interfaceClass" *ngIf="selectedJobTypeDetail.manifest.job.interface">
                             <p-card header="Interface">
                                 <table class="table">
                                     <tbody>
@@ -111,7 +149,7 @@
                                 </table>
                             </p-card>
                         </div>
-                        <div [ngClass]="errorClass" *ngIf="selectedJobTypeDetail.manifest.job.errors">
+                        <div class="p-col-12 p-md-12 p-lg-6 p-xl-6" [ngClass]="errorClass" *ngIf="selectedJobTypeDetail.manifest.job.errors">
                             <p-card header="Errors">
                                 <table class="table table-striped">
                                     <thead>
@@ -132,11 +170,12 @@
                             </p-card>
                         </div>
                     </div>
+                    </div>
                 </p-panel>
             </div>
         </div>
     </div>
-    <div *ngIf="selectedJobTypeDetail && !selectedJobTypeDetail.manifest.seedVersion">
+    <div *ngIf="!selectedJobTypeDetail.manifest.seedVersion">
         <div class="p-grid">
             <div class="p-col-10">
                 <p-scrollPanel styleClass="scale-panel">

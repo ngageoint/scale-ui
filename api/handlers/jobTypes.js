@@ -21,7 +21,7 @@ module.exports = function (request) {
         data.count = data.results.length;
         if (params.page && params.page_size && params.page !== 'null' && params.page_size !== 'null') {
             var pagedResults = _.chunk(data.results, params.page_size);
-            data.results = pagedResults[params.page - 1];
+            data.results = pagedResults.length > 0 ? pagedResults[params.page - 1] : pagedResults;
         }
     }
 

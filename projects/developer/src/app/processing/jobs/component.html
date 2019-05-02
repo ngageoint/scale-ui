@@ -1,19 +1,19 @@
 <h2><i class="fa fa-cube"></i> Jobs <span *ngIf="count">({{ count }})</span></h2>
-<div class="jobs__header">
-    <div class="jobs__date-filter">
-        <div>
+<div class="jobs__header flexed space-between">
+    <div class="jobs__date-filter flexed">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
                             (dateChange)="onStartSelect($event)"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
                             (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
         <button pButton class="jobs__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
-        <div class="jobs__date-filter-ranges">
+        <div class="jobs__date-filter-ranges" *ngIf="!isMobile">
             <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 6 Hours"
                     (click)="setDateFilterRange('h', 6)"></button>
             <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 12 Hours"
@@ -24,6 +24,12 @@
                     (click)="setDateFilterRange('d', 3)"></button>
             <button pButton class="ui-button-secondary jobs__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
+        </div>
+        <div class="jobs__date-filter-dropdown">
+            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+            </p-dropdown>
         </div>
     </div>
     <div class="jobs__controls">
@@ -69,7 +75,7 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'job__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
-                    <span class="ui-column-title">{{ col.header }}</span>
+                <span class="ui-column-title">{{ col.header }}</span>
                 <div *ngSwitchCase="'job_type'">
                     <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
                        [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>

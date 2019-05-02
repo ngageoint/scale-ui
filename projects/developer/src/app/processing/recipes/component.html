@@ -1,19 +1,19 @@
 <h2><i class="fa fa-cubes"></i> Recipes</h2>
-<div class="recipes__header">
-    <div class="recipes__date-filter">
-        <div>
+<div class="recipes__header flexed space-between">
+    <div class="recipes__date-filter flexed">
+        <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"
                             [format]="dateFormat"></utc-datepicker>
         </div>
-        <div>
+        <div class="noWrap">
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"
                             [format]="dateFormat"></utc-datepicker>
         </div>
-        <button pButton class="recipes__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
+        <button pButton class="recipes__date-filter-btn p-grid" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
-        <div class="recipes__date-filter-ranges">
+        <div class="recipes__date-filter-ranges"  *ngIf="!isMobile">
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 6 Hours"
                     (click)="setDateFilterRange('h', 6)"></button>
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 12 Hours"
@@ -24,6 +24,12 @@
                     (click)="setDateFilterRange('d', 3)"></button>
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
+        </div>
+        <div class="recipes__date-filter-dropdown">
+            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+            </p-dropdown>
         </div>
     </div>
 </div>
@@ -51,6 +57,7 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'recipe__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                <span class="ui-column-title"> {{ col.header }} </span>
                 <div *ngSwitchCase="'recipe_type.name'">
                     {{ rowData.recipe_type.title }} {{ rowData.recipe_type.version }}
                 </div>

@@ -30,12 +30,13 @@ export class JobTypesApiService {
         if (params) {
             const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
             const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            const isActive = params.is_active === true || params.is_active === false || params.is_active === null ? params.is_active : true;
             apiParams = {
                 page: page,
                 page_size: params.rows || 1000,
                 keyword: params.keyword,
                 id: params.id,
-                is_active: params.is_active || true,
+                is_active: isActive,
                 is_system: params.is_system,
                 order: sortStr
             };
@@ -151,9 +152,29 @@ export class JobTypesApiService {
             );
     }
 
-    getJobTypeStatus(poll?: Boolean): Observable<any> {
+    getJobTypeStatus(poll?: Boolean, params?: any): Observable<any> {
+        let apiParams = {};
+        if (params) {
+            const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
+            apiParams = {
+                page: page,
+                page_size: params.rows || 1000,
+                started: params.started,
+                ended: params.ended
+            };
+        } else {
+            apiParams = {
+                page_size: 1000
+            };
+        }
+        apiParams = _.pickBy(apiParams, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        const queryParams = new HttpParams({
+            fromObject: apiParams
+        });
         if (poll) {
-            const request = this.http.get(`${this.apiPrefix}/job-types/status/`)
+            const request = this.http.get(`${this.apiPrefix}/job-types/status/`, { params: queryParams })
                 .pipe(
                     map(response => {
                         return ApiResults.transformer(response);

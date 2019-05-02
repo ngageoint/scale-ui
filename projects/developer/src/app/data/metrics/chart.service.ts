@@ -22,7 +22,8 @@ export class ChartService {
         multiAxis: boolean,
         primaryMetric?: any,
         secondaryMetric?: any,
-        type?: string
+        primaryType?: string,
+        secondaryType?: string
     ): any {
         let valueArr = [],
             colArr = [],
@@ -110,6 +111,15 @@ export class ChartService {
                         const bgColor = colorObj ?
                             ColorService.getRgba(colorObj.color, opacity) :
                             this.randomColorGenerator();
+                        let type = 'bar';
+                        let fill = false;
+                        if (isPrimary) {
+                            type = primaryType === 'area' ? 'line' : primaryType;
+                            fill = primaryType === 'area';
+                        } else {
+                            type = secondaryType === 'area' ? 'line' : secondaryType;
+                            fill = secondaryType === 'area';
+                        }
                         datasets.push({
                             id: filter.id,
                             yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
@@ -120,8 +130,8 @@ export class ChartService {
                             borderWidth: 2,
                             data: filterData ? filterData.data : [],
                             isPrimary: isPrimary,
-                            type: isPrimary ? 'bar' : type || 'bar',
-                            fill: false,
+                            type: type,
+                            fill: fill,
                             borderColor: bgColor
                         });
                     });
@@ -138,6 +148,15 @@ export class ChartService {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
                 const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
+                let type = 'bar';
+                let fill = false;
+                if (isPrimary) {
+                    type = primaryType === 'area' ? 'line' : primaryType;
+                    fill = primaryType === 'area';
+                } else {
+                    type = secondaryType === 'area' ? 'line' : secondaryType;
+                    fill = secondaryType === 'area';
+                }
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];
@@ -160,8 +179,8 @@ export class ChartService {
                         backgroundColor: bgColor,
                         data: valueArr,
                         isPrimary: isPrimary,
-                        type: isPrimary ? 'bar' : type || 'bar',
-                        fill: false,
+                        type: type,
+                        fill: fill,
                         borderColor: bgColor
                     });
 

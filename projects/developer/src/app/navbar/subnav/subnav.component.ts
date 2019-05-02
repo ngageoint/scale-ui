@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 
 @Component({
     selector: 'dev-subnav',
@@ -9,9 +10,19 @@ export class SubnavComponent implements OnInit {
 
     @Input() sectionId: string;
     @Output() navigateEvent: EventEmitter<any> = new EventEmitter();
-    constructor() { }
+    isMobile: boolean;
+    constructor(public breakpointObserver: BreakpointObserver) { }
 
     ngOnInit() {
+        this.breakpointObserver
+        .observe(['(min-width: 1150px)'])
+        .subscribe((state: BreakpointState) => {
+          if (state.matches) {
+              this.isMobile = false;
+          } else {
+              this.isMobile = true;
+          }
+        });
     }
 
     getSectionStyles(section) {

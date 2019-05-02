@@ -9,6 +9,7 @@ import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
 import { WorkspacesApiService } from '../../system/workspaces/api.service';
 import { ScansApiService } from '../../system/scans/api.service';
+import { DashboardJobsService } from '../../dashboard/jobs.service';
 import { JobTypesComponent } from './component';
 
 
@@ -21,7 +22,7 @@ describe('JobTypesComponent', () => {
             declarations: [JobTypesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, DataService, JobTypesApiService, ColorService, WorkspacesApiService, ScansApiService,
+                MessageService, DataService, JobTypesApiService, ColorService, WorkspacesApiService, ScansApiService, DashboardJobsService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

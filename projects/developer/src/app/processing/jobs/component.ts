@@ -3,6 +3,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -84,6 +85,16 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
+    isMobile: boolean;
+    dateRangeOptions = [
+        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
+        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
+        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
+        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
+        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
+    ];
+    selectedDateRange: any;
+
     constructor(
         private dataService: DataService,
         private jobsDatatableService: JobsDatatableService,
@@ -92,7 +103,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        public breakpointObserver: BreakpointObserver
     ) {}
 
     private updateData() {
@@ -222,6 +234,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
+
     setDateFilterRange(unit: any, range: any) {
         this.started = moment.utc().subtract(range, unit).toISOString();
         this.ended = moment.utc().toISOString();
@@ -330,6 +343,17 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
+
+        this.breakpointObserver
+        .observe(['(min-width: 1275px)'])
+        .subscribe((state: BreakpointState) => {
+            if (state.matches) {
+                this.isMobile = false;
+            } else {
+                this.isMobile = true;
+            }
+        });
+
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         }
