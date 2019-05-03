@@ -23,6 +23,9 @@ export class AppConfigService {
                 environment.defaultTheme = data.defaultTheme;
                 environment.siloUrl = data.siloUrl;
                 environment.themeKey = data.themeKey;
+                environment.primaryColor = data.primaryColor;
+                environment.secondaryLightColor = data.secondaryLightColor;
+                environment.secondaryDarkColor = data.secondaryDarkColor;
             });
     }
 }
