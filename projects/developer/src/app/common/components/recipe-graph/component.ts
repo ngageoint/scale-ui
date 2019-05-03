@@ -3,7 +3,10 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { Job } from '../../../processing/jobs/api.model';
 import { JobsApiService } from '../../../processing/jobs/api.service';
+import { JobsDatatable } from '../../../processing/jobs/datatable.model';
+import { JobsDatatableService } from '../../../processing/jobs/datatable.service';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
@@ -21,9 +24,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
     @Input() minHeight = '70vh';
+    @Input() datatableOptions: JobsDatatable;
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
+    count: number;
     columns: any[];
     dependencyOptions = [];
     nodeInputs = [];
@@ -33,6 +38,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     showLegend = false;
     orientation: string; // LR, RL, TB, BT
     curve: any;
+    selectedJob: Job;
     selectedJobType: any;
     selectedRecipeType: any;
     selectedCondition: any;
@@ -40,6 +46,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedNodeConnections = [];
     showMetrics: boolean;
     showRecipeDialog: boolean;
+    subscription: any;
     recipeDialogX: number;
     recipeDialogY: number;
     metricData: any;
@@ -66,6 +73,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
+    datatableLoading: boolean;
+    jobs: Job | Job[];
     constructor(
         private jobsApiService: JobsApiService,
         private confirmationService: ConfirmationService,
@@ -645,21 +654,39 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         return key;
     }
-
-    private updateData() {
-
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
-    requeueJob(jobsParams?) {
+    private updateData() {
+        this.datatableLoading = true;
+        this.unsubscribe();
+        this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
+            this.datatableLoading = false;
+            this.count = data.count;
+            _.forEach(data.results, result => {
+                const job = _.find(this.selectedJob, { data: { id: result.id } });
+                result.selected =  !!job;
+            });
+            this.jobs = Job.transformer(data.results);
+        }, err => {
+            this.datatableLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
+        });
+    }
+
+    requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
         if (!jobsParams) {
             jobsParams = {
-                started: this.selectedJobType.started,
-                ended: this.selectedJobType.ended,
-                error_categories: this.selectedJobType.error_category ? [this.selectedJobType.error_category] : null,
-                status: this.selectedJobType.status === 'CANCELED' || this.selectedJobType.status === 'FAILED' ?
-                this.selectedJobType.status :
+                started: this.datatableOptions.started,
+                ended: this.datatableOptions.ended,
+                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
+                status: this.datatableOptions.status === 'CANCELED' || this.datatableOptions.status === 'FAILED' ?
+                    this.datatableOptions.status :
                     null,
-                job_type_names: this.selectedJobType.job_type_name ? [this.selectedJobType.job_type_name] : null
+                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
             };
             // remove null properties
             jobsParams = _.pickBy(jobsParams);
@@ -671,29 +698,28 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
             });
     }
-
-    requeueConfirm() {
-        // query for canceled and failed jobs with current params to report an accurate requeue count
-        const requeueParams = _.clone(this.selectedJobType);
-        requeueParams.status = ['CANCELED', 'FAILED'];
-        this.jobsApiService.getJobs(requeueParams)
-            .subscribe(data => {
-                this.confirmationService.confirm({
-                    message: `This will requeue <span class="label label-danger"><strong>${data.count}</strong></span> canceled and failed
-                              jobs. Are you sure that you want to proceed?`,
-                    header: 'Requeue All Jobs',
-                    accept: () => {
-                        this.requeueJob();
-                    },
-                    reject: () => {
-                        console.log('requeue rejected');
-                    }
-                });
+    cancelJobs(jobsParams?) {
+        this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
+        if (!jobsParams) {
+            jobsParams = {
+                started: this.datatableOptions.started,
+                ended: this.datatableOptions.ended,
+                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
+                status: this.datatableOptions.status === 'RUNNING' || this.datatableOptions.status === 'QUEUED' ?
+                    this.datatableOptions.status :
+                    null,
+                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
+            };
+            // remove null properties
+            jobsParams = _.pickBy(jobsParams);
+        }
+        this.jobsApiService.cancelJobs(jobsParams)
+            .subscribe(() => {
+                this.updateData();
             }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
             });
     }
-
     ngOnChanges(changes) {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);
