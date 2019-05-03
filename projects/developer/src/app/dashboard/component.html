@@ -2,7 +2,7 @@
     <div class="p-grid">
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__favs-container">
             <p-panel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
-                <p-scrollPanel>
+                <p-scrollPanel [style]="{height: '368px'}">
                     <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
                              #datatable>
                         <ng-template pTemplate="header" let-columns>
