@@ -36,7 +36,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showInactive = false;
     loadingRecipeTypes: boolean;
     isInitialized: boolean;
-    rows = 16;
     totalRecords: number;
     recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;

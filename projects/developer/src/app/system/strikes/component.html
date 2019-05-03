@@ -1,206 +1,223 @@
-<div class="strikes__header">
-    <h2><i class="fa fa-bolt"></i> Strikes</h2>
-    <p-dropdown [options]="strikes" [(ngModel)]="selectedStrike" filter="filter"
-                class="strikes__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
-                (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
-    <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"></button>
-</div>
-<hr />
-<div class="strikes__details">
-    <div class="text-center" *ngIf="!selectedStrike && !isEditing">
-        <h3>Select a strike to view its details</h3>
-    </div>
-    <div *ngIf="selectedStrikeDetail">
-        <p-panel>
-            <p-header class="strikes__title">
-                <div>
-                    {{ selectedStrikeDetail.title }}
-                </div>
-                <div>
-                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                            (click)="menu.toggle($event)"></button>
-                </div>
-            </p-header>
-            <div *ngIf="!isEditing && selectedStrikeDetail.id">
-                <dl>
-                    <dt>Description:</dt>
-                    <dd>{{ selectedStrikeDetail.description }}</dd>
-                    <dt *ngIf="selectedStrikeDetail.job.id">Job:</dt>
-                    <dd *ngIf="selectedStrikeDetail.job.id">
-                        <a routerLink="/jobs/job/{{ selectedStrikeDetail.job.id }}">
-                            <i class="fa" [innerHtml]="strikeJobIcon"></i>
-                            View Job Details ({{ selectedStrike.job.status }})
-                        </a>
-                    </dd>
-                    <dt>Created:</dt>
-                    <dd>
-                        <span [pTooltip]="selectedStrikeDetail.createdTooltip">
-                            {{ selectedStrikeDetail.createdDisplay }}
-                        </span>
-                    </dd>
-                    <dt>Last Modified:</dt>
-                    <dd>
-                        <span [pTooltip]="selectedStrikeDetail.lastModifiedTooltip">
-                            {{ selectedStrikeDetail.lastModifiedDisplay }}
-                        </span>
-                    </dd>
-                    <dt>Configuration:</dt>
-                    <dd><pre>{{ selectedStrikeDetail.configurationDisplay }}</pre></dd>
-                </dl>
+<div class="strikes" *ngIf="!selectedStrikeDetail">
+    <div class="flexed space-between margin-bottom-sm">
+        <div class="flexed">
+            <h2><i class="fa fa-bolt"></i> Strikes ({{ totalRecords }})</h2>
+            <div class="margin-left-md">
+                <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"
+                        pTooltip="Create Strike"></button>
             </div>
-            <div *ngIf="isEditing && selectedStrikeDetail">
-                <div [formGroup]="createForm">
+        </div>
+        <div class="flexed">
+            <input type="search" pInputText placeholder="Search" class="strikes__filter"
+                   (keyup)="onFilterKeyup($event)">
+        </div>
+    </div>
+    <p-dataView [value]="strikes" filterBy="value.title" layout="grid" [loading]="loading" #dv>
+        <ng-template let-strike pTemplate="gridItem">
+            <div class="p-col-12 p-md-3 strikes__container" (click)="onStrikeClick($event, strike)">
+                <p-panel>
+                    <p-header>
+                        <strong>{{ strike.label }}</strong>
+                    </p-header>
+                    <div class="clamp">
+                        {{ strike.value.description }}
+                    </div>
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataView>
+</div>
+<div class="strikes__details" *ngIf="selectedStrikeDetail">
+    <h2><i class="fa fa-bolt"></i> Strikes</h2>
+    <p-panel>
+        <p-header class="strikes__title">
+            <div>
+                <strong>{{ selectedStrikeDetail.title }}</strong>
+            </div>
+            <div>
+                <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                        (click)="menu.toggle($event)"></button>
+            </div>
+        </p-header>
+        <div *ngIf="!isEditing && selectedStrikeDetail.id">
+            <dl>
+                <dt>Description:</dt>
+                <dd>{{ selectedStrikeDetail.description }}</dd>
+                <dt *ngIf="selectedStrikeDetail.job.id">Job:</dt>
+                <dd *ngIf="selectedStrikeDetail.job.id">
+                    <a routerLink="/jobs/job/{{ selectedStrikeDetail.job.id }}">
+                        <i class="fa" [innerHtml]="strikeJobIcon"></i>
+                        View Job Details ({{ selectedStrikeDetail.job.status }})
+                    </a>
+                </dd>
+                <dt>Created:</dt>
+                <dd>
+                    <span [pTooltip]="selectedStrikeDetail.createdTooltip">
+                        {{ selectedStrikeDetail.createdDisplay }}
+                    </span>
+                </dd>
+                <dt>Last Modified:</dt>
+                <dd>
+                    <span [pTooltip]="selectedStrikeDetail.lastModifiedTooltip">
+                        {{ selectedStrikeDetail.lastModifiedDisplay }}
+                    </span>
+                </dd>
+                <dt>Configuration:</dt>
+                <dd><pre>{{ selectedStrikeDetail.configurationDisplay }}</pre></dd>
+            </dl>
+        </div>
+        <div *ngIf="isEditing && selectedStrikeDetail">
+            <div [formGroup]="createForm">
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <label>
+                            <span>Name</span>
+                            <input type="text" pInputText formControlName="name" required/>
+                        </label>
+                    </div>
+                    <div class="p-col-6">
+                        <label>
+                            <span>Title</span>
+                            <input type="text" pInputText formControlName="title" required/>
+                        </label>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <label>
+                            <span>Description</span>
+                            <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
+                                      [autoResize]="true"></textarea>
+                        </label>
+                    </div>
+                    <div class="p-col-6" formGroupName="configuration">
+                        <label>
+                            <span>Recipe</span>
+                            <p-dropdown [options]="recipeOptions" formControlName="recipe"
+                                        [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                            </p-dropdown>
+                        </label>
+                    </div>
+                </div>
+                <div formGroupName="configuration">
+                    <div class="p-grid">
+                        <div class="p-col-6">
+                            <div>
+                                <label>
+                                    <span>Workspace</span>
+                                    <p-dropdown [options]="workspacesOptions" formControlName="workspace"
+                                                (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
+                                                placeholder="Select..." [showClear]="false">
+                                    </p-dropdown>
+                                </label>
+                            </div>
+                            <div formGroupName="monitor">
+                                <label>
+                                    <span>Monitor Type</span>
+                                    <input type="text" pInputText formControlName="type" required/>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="p-col-6" formGroupName="monitor">
+                            <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
+                                <span>Transfer Suffix</span>
+                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                            </label>
+                            <label *ngIf="createForm.get('configuration.monitor.sqs_name').enabled">
+                                <span>SQS Name</span>
+                                <input type="text" pInputText formControlName="sqs_name" required/>
+                            </label>
+                            <div formGroupName="credentials"
+                                 *ngIf="createForm.get('configuration.monitor.credentials').enabled">
+                                <label>
+                                    <span>Access Key ID</span>
+                                    <input type="text" pInputText formControlName="access_key_id"/>
+                                </label>
+                                <label>
+                                    <span>Secret Access Key</span>
+                                    <input type="text" pInputText formControlName="secret_access_key" required/>
+                                </label>
+                            </div>
+                            <label *ngIf="createForm.get('configuration.monitor.region_name').enabled">
+                                <span>Region Name</span>
+                                <input type="text" pInputText formControlName="region_name"/>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div [formGroup]="ingestFileForm" class="margin-top-lg">
+                <p-panel header="Ingest File Rules (at least 1 is required)" [styleClass]="ingestFilePanelClass">
                     <div class="p-grid">
                         <div class="p-col-6">
                             <label>
-                                <span>Name</span>
-                                <input type="text" pInputText formControlName="name" required/>
+                                <span>Filename Regex</span>
+                                <input type="text" pInputText formControlName="filename_regex" required/>
+                                <div class="help-block">
+                                    A regular expression to check against the names of newly copied files (required)
+                                </div>
                             </label>
                         </div>
                         <div class="p-col-6">
                             <label>
-                                <span>Title</span>
-                                <input type="text" pInputText formControlName="title" required/>
+                                <span>Data Types</span>
+                                <p-chips formControlName="data_types" [style]="{'width':'100%'}"
+                                         [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
+                                <div class="help-block">
+                                    Any file that matches the corresponding file name regular expression will have
+                                    these data type strings "tagged" with the file (optional)
+                                </div>
                             </label>
                         </div>
                     </div>
                     <div class="p-grid">
                         <div class="p-col-6">
                             <label>
-                                <span>Description</span>
-                                <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
-                                          [autoResize]="true"></textarea>
-                            </label>
-                        </div>
-                        <div class="p-col-6" formGroupName="configuration">
-                            <label>
-                                <span>Recipe</span>
-                                <p-dropdown [options]="recipeOptions" formControlName="recipe"
+                                <span>New Workspace</span>
+                                <p-dropdown [options]="newWorkspacesOptions" formControlName="new_workspace"
                                             [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
+                                <div class="help-block">
+                                    New workspace to which the file should be copied (optional)
+                                </div>
+                            </label>
+                        </div>
+                        <div class="p-col-6">
+                            <label>
+                                <span>New File Path</span>
+                                <input pInputText type="text" formControlName="new_file_path"/>
+                                <div class="help-block">
+                                    String that specifies a new relative path for storing new files (optional)
+                                </div>
                             </label>
                         </div>
                     </div>
-                    <div formGroupName="configuration">
-                        <div class="p-grid">
-                            <div class="p-col-6">
-                                <div>
-                                    <label>
-                                        <span>Workspace</span>
-                                        <p-dropdown [options]="workspacesOptions" formControlName="workspace"
-                                                    (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
-                                                    placeholder="Select..." [showClear]="false">
-                                        </p-dropdown>
-                                    </label>
-                                </div>
-                                <div formGroupName="monitor">
-                                    <label>
-                                        <span>Monitor Type</span>
-                                        <input type="text" pInputText formControlName="type" required/>
-                                    </label>
-                                </div>
+                    <div class="text-center">
+                        <button pButton icon="fa fa-plus" (click)="onAddRuleClick()"
+                                label="Add Rule to Configuration"
+                                [disabled]="ingestFileForm.status === 'INVALID'"></button>
+                    </div>
+                    <div>
+                        <h3>Current Rules</h3>
+                        <div *ngIf="selectedStrikeDetail.configuration">
+                            <span *ngIf="selectedStrikeDetail.configuration.files_to_ingest_display.length === 0">
+                                No files in configuration.
+                            </span>
+                            <div *ngFor="let file of selectedStrikeDetail.configuration.files_to_ingest_display">
+                                <pre class="flexed space-between">
+                                    <span>{{ file.label }}</span>
+                                    <button pButton class="ui-button-danger" icon="fa fa-remove"
+                                            pTooltip="Remove Rule" (click)="onRemoveRuleClick(file.value)"></button>
+                                </pre>
                             </div>
-                            <div class="p-col-6" formGroupName="monitor">
-                                <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
-                                    <span>Transfer Suffix</span>
-                                    <input type="text" pInputText formControlName="transfer_suffix" required/>
-                                </label>
-                                <label *ngIf="createForm.get('configuration.monitor.sqs_name').enabled">
-                                    <span>SQS Name</span>
-                                    <input type="text" pInputText formControlName="sqs_name" required/>
-                                </label>
-                                <div formGroupName="credentials"
-                                     *ngIf="createForm.get('configuration.monitor.credentials').enabled">
-                                    <label>
-                                        <span>Access Key ID</span>
-                                        <input type="text" pInputText formControlName="access_key_id"/>
-                                    </label>
-                                    <label>
-                                        <span>Secret Access Key</span>
-                                        <input type="text" pInputText formControlName="secret_access_key" required/>
-                                    </label>
-                                </div>
-                                <label *ngIf="createForm.get('configuration.monitor.region_name').enabled">
-                                    <span>Region Name</span>
-                                    <input type="text" pInputText formControlName="region_name"/>
-                                </label>
-                            </div>
+                        </div>
+                        <div *ngIf="!selectedStrikeDetail.configuration">
+                            No files in configuration.
                         </div>
                     </div>
-                </div>
-                <div [formGroup]="ingestFileForm" class="margin-top-lg">
-                    <p-panel header="Ingest File Rules (at least 1 is required)" [styleClass]="ingestFilePanelClass">
-                        <div class="p-grid">
-                            <div class="p-col-6">
-                                <label>
-                                    <span>Filename Regex</span>
-                                    <input type="text" pInputText formControlName="filename_regex" required/>
-                                    <div class="help-block">
-                                        A regular expression to check against the names of newly copied files (required)
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="p-col-6">
-                                <label>
-                                    <span>Data Types</span>
-                                    <p-chips formControlName="data_types" [style]="{'width':'100%'}"
-                                             [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
-                                    <div class="help-block">
-                                        Any file that matches the corresponding file name regular expression will have
-                                        these data type strings "tagged" with the file (optional)
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="p-grid">
-                            <div class="p-col-6">
-                                <label>
-                                    <span>New Workspace</span>
-                                    <p-dropdown [options]="newWorkspacesOptions" formControlName="new_workspace"
-                                                [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
-                                    </p-dropdown>
-                                    <div class="help-block">
-                                        New workspace to which the file should be copied (optional)
-                                    </div>
-                                </label>
-                            </div>
-                            <div class="p-col-6">
-                                <label>
-                                    <span>New File Path</span>
-                                    <input pInputText type="text" formControlName="new_file_path"/>
-                                    <div class="help-block">
-                                        String that specifies a new relative path for storing new files (optional)
-                                    </div>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="text-center">
-                            <button pButton icon="fa fa-plus" (click)="onAddRuleClick()"
-                                    label="Add Rule to Configuration"
-                                    [disabled]="ingestFileForm.status === 'INVALID'"></button>
-                        </div>
-                        <div>
-                            <h3>Current Rules</h3>
-                            <div *ngIf="selectedStrikeDetail.configuration">
-                                <span *ngIf="selectedStrikeDetail.configuration.files_to_ingest_display.length === 0">
-                                    No files in configuration.
-                                </span>
-                                <div *ngFor="let file of selectedStrikeDetail.configuration.files_to_ingest_display">
-                                    <pre class="flexed space-between">
-                                        <span>{{ file.label }}</span>
-                                        <button pButton class="ui-button-danger" icon="fa fa-remove"
-                                                pTooltip="Remove Rule" (click)="onRemoveRuleClick(file.value)"></button>
-                                    </pre>
-                                </div>
-                            </div>
-                            <div *ngIf="!selectedStrikeDetail.configuration">
-                                No files in configuration.
-                            </div>
-                        </div>
-                    </p-panel>
-                </div>
+                </p-panel>
             </div>
-        </p-panel>
-    </div>
+        </div>
+    </p-panel>
 </div>
