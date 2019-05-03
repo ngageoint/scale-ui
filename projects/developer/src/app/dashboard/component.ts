@@ -19,7 +19,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     allJobTypes: any[];
     allJobTypesTooltip: string;
     favoriteJobTypes: any[];
-    favorteJobTypesTooltip: string;
+    favoriteJobTypesTooltip: string;
     pieChartOptions: any;
     totalAll: number;
     failedAll: number;
@@ -88,22 +88,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const dataErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
             return jobCount.status === 'FAILED' && jobCount.category === 'DATA';
         }), 'count'));
-        const total = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-            return jobCount.status !== 'RUNNING';
+        const running = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+            return jobCount.status === 'RUNNING';
         }), 'count'));
+        const completed = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+            return jobCount.status === 'COMPLETED';
+        }), 'count'));
+        const total = _.sum(_.map(allJobCounts, 'count'));
         const failed = sysErrors + algErrors + dataErrors;
         const chartData = {
             datasets: [{
-                data: [sysErrors, algErrors, dataErrors],
+                data: [sysErrors, algErrors, dataErrors, running, completed],
                 borderColor: '#fff',
                 borderWidth: 1,
                 backgroundColor: [
                     ColorService.ERROR_SYSTEM,   // system
                     ColorService.ERROR_ALGORITHM,  // algorithm
-                    ColorService.ERROR_DATA  // data
+                    ColorService.ERROR_DATA,  // data,
+                    ColorService.RUNNING,
+                    ColorService.COMPLETED
                 ]
             }],
-            labels: ['SYSTEM', 'ALGORITHM', 'DATA']
+            labels: ['SYSTEM', 'ALGORITHM', 'DATA', 'RUNNING', 'COMPLETED']
         };
         return {
             total: total,
@@ -142,7 +148,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.dataFavs = favoriteJobStats.chartData;
             this.allJobTypesTooltip = this.allJobTypes.length > 0 && this.failedAll > 0 ?
                 `${this.failedAll} Failure(s) / ${this.totalAll} Total` : null;
-            this.favorteJobTypesTooltip = this.favoriteJobTypes.length > 0 && this.failedFavs > 0 ?
+            this.favoriteJobTypesTooltip = this.favoriteJobTypes.length > 0 && this.failedFavs > 0 ?
                 `${this.failedFavs} Failure(s) / ${this.totalFavs} Total` : null;
 
             this.dataFeedChartTitle = 'Data Feed';
