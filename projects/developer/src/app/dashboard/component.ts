@@ -146,10 +146,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.totalFavs = favoriteJobStats.total;
             this.failedFavs = favoriteJobStats.failed;
             this.dataFavs = favoriteJobStats.chartData;
-            this.allJobTypesTooltip = this.allJobTypes.length > 0 && this.failedAll > 0 ?
-                `${this.failedAll} Failure(s) / ${this.totalAll} Total` : null;
-            this.favoriteJobTypesTooltip = this.favoriteJobTypes.length > 0 && this.failedFavs > 0 ?
-                `${this.failedFavs} Failure(s) / ${this.totalFavs} Total` : null;
+            this.allJobTypesTooltip = this.allJobTypes.length > 0 ?
+                `${this.totalAll} Total` : null;
+            this.favoriteJobTypesTooltip = this.favoriteJobTypes.length > 0 ?
+                `${this.totalFavs} Total` : null;
 
             this.dataFeedChartTitle = 'Data Feed';
             this.dataFeedChartTitle = favs.length > 0 ?
