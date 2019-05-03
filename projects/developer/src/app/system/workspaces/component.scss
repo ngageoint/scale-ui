@@ -1,23 +1,33 @@
-.workspaces__header {
-    display: flex;
-    align-items: flex-end;
+::ng-deep .workspaces {
+    .ui-dataview {
+        .ui-dataview-header {
+            display: none;
+        }
 
-    .workspaces__options {
-        margin: 0 10px;
-
-        ::ng-deep .ui-dropdown {
-            width: 300px;
-            min-height: 36px;
-
-            .ui-dropdown-label {
-                padding-top: 0.5em;
-            }
-
-            .ui-dropdown-trigger {
-                padding: 0.25em;
-            }
+        .ui-dataview-content {
+            padding: 1em;
         }
     }
+}
+
+.workspaces__container {
+    visibility: hidden;
+
+    &:hover {
+        cursor: pointer;
+
+        ::ng-deep .ui-panel-titlebar {
+            background: var(--panel-header-hover) !important;
+        }
+        ::ng-deep .ui-panel-content {
+            background: var(--panel-content-hover) !important;
+        }
+    }
+}
+
+.workspaces__filter {
+    width: 300px;
+    font-size: 1.2em;
 }
 
 .workspaces__title {

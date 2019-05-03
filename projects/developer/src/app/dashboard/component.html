@@ -41,16 +41,15 @@
             </div>
         </div>
         <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
-            <p-panel class="noWrapPanel" header="Errors (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes">
+            <p-panel class="noWrapPanel" header="Job Status Counts (Last 3 Hours)" *ngIf="favoriteJobTypes || allJobTypes">
                 <div class="dashboard__error-chart" *ngIf="dataFavs">
                     <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
                     <div class="scale-chart-container">
                         <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
                         <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
-                                 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0"></p-chart>
+                                 *ngIf="favoriteJobTypes.length > 0"></p-chart>
                     </div>
                     <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
-                    <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
                 <hr />
                 <div class="dashboard__error-chart">
@@ -58,10 +57,9 @@
                     <div class="scale-chart-container">
                         <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
                         <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"
-                                 *ngIf="allJobTypes.length > 0 && failedAll > 0"></p-chart>
+                                 *ngIf="allJobTypes.length > 0"></p-chart>
                     </div>
                     <span *ngIf="allJobTypes.length === 0">No job types found.</span>
-                    <span *ngIf="failedAll === 0 && allJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
         </div>
