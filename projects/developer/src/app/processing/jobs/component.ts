@@ -242,18 +242,46 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
+        let errorCategories = null;
+        if (this.datatableOptions.error_category) {
+            if (Array.isArray(this.datatableOptions.error_category)) {
+                errorCategories = this.datatableOptions.error_category;
+            } else {
+                errorCategories = [this.datatableOptions.error_category];
+            }
+        }
+        let jobTypeNames = null;
+        if (this.datatableOptions.job_type_name) {
+            if (Array.isArray(this.datatableOptions.job_type_name)) {
+                jobTypeNames = this.datatableOptions.job_type_name;
+            } else {
+                jobTypeNames = [this.datatableOptions.job_type_name];
+            }
+        }
+        let status = null;
+        if (this.datatableOptions.status) {
+            if (Array.isArray(this.datatableOptions.status)) {
+                _.forEach(this.datatableOptions.status, s => {
+                    if (s === 'FAILED' || s === 'CANCELED') {
+                        status = s;
+                    }
+                });
+            } else {
+                status = this.datatableOptions.status;
+            }
+        }
         if (!jobsParams) {
             jobsParams = {
                 started: this.datatableOptions.started,
                 ended: this.datatableOptions.ended,
-                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
-                status: this.datatableOptions.status === 'CANCELED' || this.datatableOptions.status === 'FAILED' ?
-                    this.datatableOptions.status :
-                    null,
-                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
+                error_categories: errorCategories,
+                status: status,
+                job_type_names: jobTypeNames
             };
             // remove null properties
-            jobsParams = _.pickBy(jobsParams);
+            jobsParams = _.pickBy(jobsParams, d => {
+                return d !== null && typeof d !== 'undefined' && d !== '';
+            });
         }
         this.jobsApiService.requeueJobs(jobsParams)
             .subscribe(() => {
