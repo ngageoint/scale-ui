@@ -47,10 +47,9 @@
                     <div class="scale-chart-container">
                         <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
                         <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
-                                 *ngIf="favoriteJobTypes.length > 0 && failedFavs > 0"></p-chart>
+                                 *ngIf="favoriteJobTypes.length > 0"></p-chart>
                     </div>
                     <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
-                    <span *ngIf="failedFavs === 0 && favoriteJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
                 <hr />
                 <div class="dashboard__error-chart">
@@ -58,10 +57,9 @@
                     <div class="scale-chart-container">
                         <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
                         <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"
-                                 *ngIf="allJobTypes.length > 0 && failedAll > 0"></p-chart>
+                                 *ngIf="allJobTypes.length > 0"></p-chart>
                     </div>
                     <span *ngIf="allJobTypes.length === 0">No job types found.</span>
-                    <span *ngIf="failedAll === 0 && allJobTypes.length > 0">No errors have occurred during the past 3 hours</span>
                 </div>
             </p-panel>
         </div>
