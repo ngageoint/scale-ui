@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -7,8 +6,9 @@ import * as Color from 'chartjs-color';
 
 import { RecipeType } from './api.model';
 import { RecipeTypesApiService } from './api.service';
-import { JobsApiService } from '../../processing/jobs/api.service';
+import { JobsApiService } from './api.service.job';
 import { DataService } from '../../common/services/data.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
     templateUrl: './component.html',
@@ -17,25 +17,19 @@ import { DataService } from '../../common/services/data.service';
 export class TimelineComponent implements OnInit, OnDestroy {
     subscription: any;
     recipe: RecipeType;
-    loading: boolean;
-    loadingInputs: boolean;
-    loadingOutputs: boolean;
-    loadingExecutions: boolean;
-    jobInputs = [];
-    jobOutputs = [];
-    jobExecutions: any;
     options: any;
     data: any;
     selectedJobExe: any;
     logDisplay: boolean;
-    recipeGraphMinHeight = '70vh';
+    applyBtnClass = 'ui-button-secondary';
+    started: string;
+    ended: string;
     dataOptions = [
         { label: 'Recipes', value: 'recipe' },
         { label: 'Jobs', value: 'job' }
     ];
 
     constructor(
-        private route: ActivatedRoute,
         private messageService: MessageService,
         private recipesApiService: RecipeTypesApiService,
         private jobsApiService: JobsApiService
@@ -84,7 +78,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
             },
             plugins: {
                 datalabels: false,
-                timeline: true
+                timeline: true,
             },
             maintainAspectRatio: false
         };
@@ -149,8 +143,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
                         const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                         return [
                             'Total Time: ' + d[2],
-                            'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
-                            'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
+                            'Started: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
+                            'Ended: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
 
                         ];
                     }
@@ -176,7 +170,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
         let todaysDate = '';
 
         _.forEach(data.results, result => {
-            this.data.labels.push(result.name);
+            this.data.labels.push(result.job_type.name);
             if (result.ended == null) {
                 todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
                 duration = DataService.calculateDuration(result.started, todaysDate, true);
@@ -196,6 +190,15 @@ export class TimelineComponent implements OnInit, OnDestroy {
         });
     }
 
+    onStartSelect(e) {
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
+        this.applyBtnClass = 'ui-button-primary';
+    }
+    onEndSelect(e) {
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
+        this.applyBtnClass = 'ui-button-primary';
+    }
+
     unsubscribe() {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -208,9 +211,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         this.unsubscribe();
     }
-
+    onDateFilterApply() {
+            this.applyBtnClass = 'ui-button-secondary';
+            return( moment.utc(this.started, environment.dateFormat).toISOString(),
+            moment.utc(this.ended, environment.dateFormat).toISOString());
+    }
     selectDataType(value) {
-        if (value === 'recipe') { 
+        if (value === 'recipe') {
         this.subscription = this.recipesApiService.getRecipeTypes().subscribe(data => {
         this.createRecipeTimeline(data);
         });
@@ -219,8 +226,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
                 this.createJobTimeline(data);
                 });
         } else {
-            console.log(value);
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job details'});
+                this.messageService.add({severity: 'error', summary: 'Error retrieving Timeline data'});
         }
     }
 }

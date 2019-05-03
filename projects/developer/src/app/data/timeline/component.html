@@ -11,14 +11,14 @@
             <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
                             (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
-        <button pButton class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
-                (click)="onDateFilterApply()"></button>
         <div class="timeline__date-filter-dropdown">
             <p-dropdown [options]="dataOptions" [(ngModel)]="value"
                             (onChange)="selectDataType(value)"
-                            [style]="{'width':'150px'}" placeholder="Recipes" [showClear]="false">
+                            [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false">
             </p-dropdown>
         </div>
+        <button pButton class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
+                (click)="onDateFilterApply()"></button>
     </div>
 </div>
 
@@ -26,4 +26,3 @@
         <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
         <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="650"></p-chart>
 </div>
-
