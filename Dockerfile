@@ -8,7 +8,7 @@ LABEL \
     SOURCE="https://github.com/ngageoint/scale-ui" \
     DESCRIPTION="UI for Scale processing framework for containerized algorithms"
 
-RUN apk -U --no-cache add jq moreutils && chmod 777 /usr/share/nginx/html
+RUN apk -U --no-cache add jq && chmod 777 /usr/share/nginx/html
 
 ENV CONFIG_JSON=/usr/share/nginx/html/assets/appConfig.json
 ENV NGINX_CONF=/etc/nginx/conf.d/default.conf
