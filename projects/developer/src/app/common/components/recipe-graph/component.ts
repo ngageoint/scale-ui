@@ -78,7 +78,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     constructor(
         private jobsApiService: JobsApiService,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private jobsDatatableService: JobsDatatableService
     ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -676,21 +677,18 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         });
     }
 
-    requeueJobs(jobsParams?) {
+    requeueJobs() {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
-        if (!jobsParams) {
-            jobsParams = {
-                started: this.datatableOptions.started,
-                ended: this.datatableOptions.ended,
-                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
-                status: this.datatableOptions.status === 'CANCELED' || this.datatableOptions.status === 'FAILED' ?
-                    this.datatableOptions.status :
+            const jobsParams = {
+                started: this.selectedJobType.started,
+                ended: this.selectedJobType.ended,
+                error_categories: this.selectedJobType.error_category ? [this.selectedJobType.error_category] : null,
+                status: this.selectedJobType.status === 'CANCELED' || this.selectedJobType.status === 'FAILED' ?
+                this.selectedJobType.status :
                     null,
-                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
+                job_type_names: this.selectedJobType.job_type_name ? [this.selectedJobType.job_type_name] : null
             };
-            // remove null properties
-            jobsParams = _.pickBy(jobsParams);
-        }
+
         this.jobsApiService.requeueJobs(jobsParams)
             .subscribe(() => {
                 this.updateData();
@@ -698,21 +696,17 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
             });
     }
-    cancelJobs(jobsParams?) {
+    cancelJobs() {
         this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
-        if (!jobsParams) {
-            jobsParams = {
-                started: this.datatableOptions.started,
-                ended: this.datatableOptions.ended,
-                error_categories: this.datatableOptions.error_category ? [this.datatableOptions.error_category] : null,
-                status: this.datatableOptions.status === 'RUNNING' || this.datatableOptions.status === 'QUEUED' ?
-                    this.datatableOptions.status :
-                    null,
-                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
-            };
-            // remove null properties
-            jobsParams = _.pickBy(jobsParams);
-        }
+        const jobsParams = {
+            started: this.selectedJobType.started,
+            ended: this.selectedJobType.ended,
+            error_categories: this.selectedJobType.error_category ? [this.selectedJobType.error_category] : null,
+            status: this.selectedJobType.status === 'CANCELED' || this.selectedJobType.status === 'FAILED' ?
+            this.selectedJobType.status :
+                null,
+            job_type_names: this.selectedJobType.job_type_name ? [this.selectedJobType.job_type_name] : null
+        };
         this.jobsApiService.cancelJobs(jobsParams)
             .subscribe(() => {
                 this.updateData();
