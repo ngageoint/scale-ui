@@ -8,24 +8,22 @@ label {
     display: block;
 }
 .ingest__header {
-    display: flex;
-    justify-content: space-between;
     margin-bottom: 10px;
 
     .ingest__date-filter {
-        display: flex;
+        align-items: flex-end;
+        margin-bottom: 10px;
 
         div {
             margin-right: 20px;
         }
 
-        .ingest__date-filter-btn {
+        .ingest__date-filter-btn, .ingest__date-filter-dropdown {
             padding-top: 0;
             padding-bottom: 0;
-            margin-top: 20px;
         }
 
-        .ingest__date-filter-ranges {
+        .ingest__date-filter-ranges, .ingest__date-filter-dropdown {
             margin-left: 20px;
 
             button {
@@ -49,4 +47,16 @@ label {
 }
 ::ng-deep .ingest__error-tooltip.ui-tooltip {
     max-width: 50%;
+}
+
+@media screen and (max-width: 858px) {
+    .ingest__date-filter-btn, .ingest__date-filter-dropdown, .ingest__date-filter-ranges {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    .ingest__date-filter-dropdown, .ingest__date-filter-btn {
+        margin-top: 5px !important;
+        margin-right: 5px !important;
+    }
 }

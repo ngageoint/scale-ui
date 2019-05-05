@@ -122,6 +122,8 @@ export class ChartService {
                         }
                         datasets.push({
                             id: filter.id,
+                            name: filter.name,
+                            version: filter.version,
                             yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
                             stack: `stack${idx.toString()}`,
                             label: label,
@@ -150,15 +152,15 @@ export class ChartService {
                 const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 let type = 'bar';
                 let fill = false;
-                if (isPrimary) {
-                    type = primaryType === 'area' ? 'line' : primaryType;
-                    fill = primaryType === 'area';
-                } else {
-                    type = secondaryType === 'area' ? 'line' : secondaryType;
-                    fill = secondaryType === 'area';
-                }
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
+                    if (isPrimary) {
+                        type = primaryType === 'area' ? 'line' : primaryType;
+                        fill = primaryType === 'area';
+                    } else {
+                        type = secondaryType === 'area' ? 'line' : secondaryType;
+                        fill = secondaryType === 'area';
+                    }
                     valueArr = [];
                     // add result values to valueArr
                     _.forEach(dataLabels, (xDate) => {

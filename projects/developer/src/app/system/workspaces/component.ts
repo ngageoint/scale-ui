@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
 
 import { WorkspacesApiService } from './api.service';
@@ -15,6 +16,7 @@ import { Workspace } from './api.model';
     styleUrls: ['./component.scss']
 })
 export class WorkspacesComponent implements OnInit, OnDestroy {
+    @ViewChild('dv') dv: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
@@ -27,12 +29,13 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     isEditing: boolean;
+    totalRecords: number;
     workspaces: SelectItem[] = [];
-    selectedWorkspace: Workspace;
     selectedWorkspaceDetail: any;
     createForm: any;
     createFormSubscription: any;
     items: MenuItem[] = _.clone(this.viewMenu);
+    showInactive = false;
     typeOptions: SelectItem[] = [
         {
             label: 'Host',
@@ -55,6 +58,20 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService
     ) {}
+
+    private clampText() {
+        setTimeout(() => {
+            const clampEls = document.getElementsByClassName('clamp');
+            _.forEach(clampEls, el => {
+                webkitLineClamp(el, 3);
+            });
+            // container elements are hidden by default to prevent flash of unstyled content
+            const containerEls = document.getElementsByClassName('workspaces__container');
+            _.forEach(containerEls, (el: any) => {
+                el.style.visibility = 'visible';
+            });
+        });
+    }
 
     private initFormGroups() {
         this.createForm = this.fb.group({
@@ -156,7 +173,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         } else if (id === 'create') {
             // creating a new workspace
             this.isEditing = true;
-            this.selectedWorkspace = null;
             this.selectedWorkspaceDetail = Workspace.transformer(null);
             this.initWorkspaceForm();
         }
@@ -165,23 +181,33 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     private getWorkspaces(id: any) {
         this.workspaces = [];
         this.loading = true;
-        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
-            this.loading = false;
-            _.forEach(data.results, result => {
-                this.workspaces.push({
-                    label: result.title,
-                    value: result
+        if (!id) {
+            // show a grid of workspaces
+            this.workspacesApiService.getWorkspaces({
+                sortField: 'title',
+                rows: 1000
+            }).subscribe(data => {
+                _.forEach(data.results, result => {
+                    this.workspaces.push({
+                        label: result.title,
+                        value: result
+                    });
                 });
-                if (id && id === result.id) {
-                    this.selectedWorkspace = result;
-                }
+                this.workspaces = _.orderBy(_.filter(this.workspaces, workspace => {
+                    return workspace.value.is_active === !this.showInactive;
+                }), ['value.title'], ['asc']);
+                this.totalRecords = this.workspaces.length;
+                this.clampText();
+                this.loading = false;
+            }, err => {
+                this.loading = false;
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
             });
+        } else {
+            // retrieve specific workspace detail
             this.getWorkspaceDetail(id);
-        }, err => {
-            this.loading = false;
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
-        });
+        }
     }
 
     private unsubscribeFromForm() {
@@ -287,11 +313,16 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         this.initBroker();
     }
 
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/system/workspaces/${e.value.id}`);
+    onFilterKeyup(e) {
+        this.dv.filter(e.target.value);
+        this.clampText();
+    }
+
+    onWorkspaceClick(e, workspace) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open(`/system/workspaces/${workspace.value.id}`);
         } else {
-            this.router.navigate([`/system/workspaces/${e.value.id}`]);
+            this.router.navigate([`/system/workspaces/${workspace.value.id}`]);
         }
     }
 

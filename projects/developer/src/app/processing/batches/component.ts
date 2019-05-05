@@ -188,14 +188,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedBatchRows();
 
-        this.breakpointObserver
-        .observe(['(min-width: 1220px)'])
-        .subscribe((state: BreakpointState) => {
-            if (state.matches) {
-                this.isMobile = false;
-            } else {
-                this.isMobile = true;
-            }
+        this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
+            this.isMobile = !state.matches;
         });
 
         if (!this.datatableOptions) {

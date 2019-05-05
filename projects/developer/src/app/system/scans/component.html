@@ -1,6 +1,6 @@
 <h2><i class="fa fa-barcode"></i> Scans <span *ngIf="count">({{ count }})</span></h2>
-<div class="scans__header">
-    <div class="scans__date-filter p-grid">
+<div class="scans__header flexed space-between">
+    <div class="scans__date-filter flexed">
         <div class="noWrap">
             <label>From:</label>
             <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
@@ -23,10 +23,12 @@
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
-        <p-multiSelect [options]="mobileDropdown" 
-                                (onChange)="setDateFilterRange($event)" styleClass="mobile-filter" [maxSelectedLabels]="1"
-                                (click)="setDateFilterRange($event)" [filter]="true" filterBy="value.created" appendTo="body" *ngIf="isMobile">
-        </p-multiSelect>
+        <div class="scans__date-filter-dropdown" *ngIf="isMobile">
+            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false">
+            </p-dropdown>
+        </div>
     </div>
     <div class="scans__controls">
         <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>
