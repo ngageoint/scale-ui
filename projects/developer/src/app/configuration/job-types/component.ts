@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import {SelectButtonModule} from 'primeng/selectbutton';
 import { SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -51,6 +52,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     loadingJobTypes: boolean;
     showFavorites: boolean;
     showInactive = false;
+    types: SelectItem[] = [
+            {label: 'Favorites', value: 'showFavorites', icon: 'fa fa-star'},
+            {label: 'Inactive', value: 'showInactive', icon: 'fa fa-times'}
+        ];
+
 
     constructor(
         private messageService: MessageService,
