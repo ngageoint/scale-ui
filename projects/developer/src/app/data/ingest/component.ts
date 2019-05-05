@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -70,6 +71,15 @@ export class IngestComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
+    isMobile: boolean;
+    dateRangeOptions = [
+        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
+        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
+        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
+        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
+        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
+    ];
+    selectedDateRange: any;
 
     constructor(
         private dataService: DataService,
@@ -78,7 +88,8 @@ export class IngestComponent implements OnInit, OnDestroy {
         private strikesApiService: StrikesApiService,
         private router: Router,
         private route: ActivatedRoute,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private breakpointObserver: BreakpointObserver
     ) {}
 
     private updateData() {
@@ -214,6 +225,9 @@ export class IngestComponent implements OnInit, OnDestroy {
         e.stopPropagation();
     }
     ngOnInit() {
+        this.breakpointObserver.observe(['(min-width: 1220px)']).subscribe((state: BreakpointState) => {
+            this.isMobile = !state.matches;
+        });
         this.selectedRows = this.dataService.getSelectedIngestRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.ingestDatatableService.getIngestDatatableOptions();

@@ -25,10 +25,10 @@
             <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 7 Days"
                     (click)="setDateFilterRange('d', 7)"></button>
         </div>
-        <div class="recipes__date-filter-dropdown">
+        <div class="recipes__date-filter-dropdown" *ngIf="isMobile">
             <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
                         (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
-                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false">
             </p-dropdown>
         </div>
     </div>

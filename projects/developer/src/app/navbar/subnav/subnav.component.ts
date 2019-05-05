@@ -14,14 +14,8 @@ export class SubnavComponent implements OnInit {
     constructor(public breakpointObserver: BreakpointObserver) { }
 
     ngOnInit() {
-        this.breakpointObserver
-        .observe(['(min-width: 1150px)'])
-        .subscribe((state: BreakpointState) => {
-          if (state.matches) {
-              this.isMobile = false;
-          } else {
-              this.isMobile = true;
-          }
+        this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
+            this.isMobile = !state.matches;
         });
     }
 

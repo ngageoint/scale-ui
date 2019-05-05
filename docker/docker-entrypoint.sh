@@ -5,13 +5,19 @@
 : ${AUTH_ENABLED:=true}
 : ${SILO_URL:=http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com}
 
+jq_in_place() {
+    tmp=$(mktemp)
+    jq $1 $2 > ${tmp}
+    mv ${tmp} $2
+}
+
 # Ensure valid all lower case true/false value for AUTH_ENABLED
 AUTH_CLEANED=$(echo ${AUTH_ENABLED} | tr '[:upper:]' '[:lower:]')
 
-jq '.apiPrefix = "'${API_PREFIX}'"' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
-jq '.auth.scheme.url = "'${AUTH_URL}'"' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
-jq '.auth.enabled = '${AUTH_CLEANED}'' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
-jq '.siloUrl = "'${SILO_URL}'"' ${CONFIG_JSON} | sponge ${CONFIG_JSON}
+jq_in_place '.apiPrefix="'${API_PREFIX}'"' ${CONFIG_JSON}
+jq_in_place '.auth.scheme.url="'${AUTH_URL}'"' ${CONFIG_JSON}
+jq_in_place '.auth.enabled='${AUTH_CLEANED}'' ${CONFIG_JSON}
+jq_in_place '.siloUrl="'${SILO_URL}'"' ${CONFIG_JSON}
 
 # We support duplicating the assets from the root to any number of contexts
 # This is necessary as Scale is served from DCOS at various contexts with one container. 
@@ -35,7 +41,7 @@ then
         ITEM_CONFIG_JSON=$WEB_ROOT/$ITEM/assets/appConfig.json
 
         jq '.apiPrefix = "'${ITEM}'/api"' ${CONFIG_JSON} > ${ITEM_CONFIG_JSON}
-        jq '.auth.scheme.url = "'${ITEM}'/api/login/"' ${ITEM_CONFIG_JSON} | sponge ${ITEM_CONFIG_JSON}
+        jq_in_place '.auth.scheme.url="'${ITEM}'/api/login/"' ${ITEM_CONFIG_JSON}
         cat /tmp/html/index.html | sed 's^base href="\/"^base href="'$ITEM'\/"^g' > $WEB_ROOT/$ITEM/index.html
 
         # Adding contexts for backend
@@ -44,7 +50,8 @@ then
 fi
 
 # Update the nginx conf with the backend for Scale
-cat ${NGINX_CONF} | sed 's^${BACKEND}^'${BACKEND}'^g' | sponge ${NGINX_CONF}
+cat ${NGINX_CONF} | sed 's^${BACKEND}^'${BACKEND}'^g' > /tmp/nginx.conf
+mv /tmp/nginx.conf ${NGINX_CONF}
 # Terminate NGINX conf file
 echo "}" >> ${NGINX_CONF}
 

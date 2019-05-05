@@ -1,9 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
 
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
@@ -18,6 +19,7 @@ import { IngestFile } from '../../common/models/api.ingest-file.model';
     styleUrls: ['./component.scss']
 })
 export class StrikesComponent implements OnInit, OnDestroy {
+    @ViewChild('dv') dv: any;
     private routeParams: any;
     private viewMenu: MenuItem[] = [
         { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } },
@@ -32,9 +34,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
     loading: boolean;
     isEditing: boolean;
     strikes: SelectItem[] = [];
-    selectedStrike: Strike;
     selectedStrikeDetail: any;
     strikeJobIcon = '';
+    totalRecords: number;
     recipes: any = [];
     recipeOptions: SelectItem[] = [];
     selectedRecipe: any;
@@ -58,6 +60,20 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private workspacesApiService: WorkspacesApiService,
         private strikesApiService: StrikesApiService
     ) {}
+
+    private clampText() {
+        setTimeout(() => {
+            const clampEls = document.getElementsByClassName('clamp');
+            _.forEach(clampEls, el => {
+                webkitLineClamp(el, 3);
+            });
+            // container elements are hidden by default to prevent flash of unstyled content
+            const containerEls = document.getElementsByClassName('strikes__container');
+            _.forEach(containerEls, (el: any) => {
+                el.style.visibility = 'visible';
+            });
+        });
+    }
 
     private initFormGroups() {
         this.createForm = this.fb.group({
@@ -231,7 +247,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
         } else if (id === 'create') {
             // creating a new strike
             this.isEditing = true;
-            this.selectedStrike = null;
             this.selectedStrikeDetail = Strike.transformer(null);
             this.initEdit();
         }
@@ -240,23 +255,27 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private getStrikes(id: any) {
         this.strikes = [];
         this.loading = true;
-        this.strikesApiService.getStrikes({ sortField: 'title' }).subscribe(data => {
-            this.loading = false;
-            _.forEach(data.results, result => {
-                this.strikes.push({
-                    label: result.title,
-                    value: result
+        if (!id) {
+            // show a grid of strikes
+            this.strikesApiService.getStrikes({ sortField: 'title', rows: 1000 }).subscribe(data => {
+                this.totalRecords = data.count;
+                _.forEach(data.results, result => {
+                    this.strikes.push({
+                        label: result.title,
+                        value: result
+                    });
                 });
-                if (id && id === result.id) {
-                    this.selectedStrike = result;
-                }
+                this.clampText();
+                this.loading = false;
+            }, err => {
+                this.loading = false;
+                console.log(err);
+                this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
             });
+        } else {
+            // retrieve specific strike detail
             this.getStrikeDetail(id);
-        }, err => {
-            this.loading = false;
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
-        });
+        }
     }
 
     private unsubscribeFromForms() {
@@ -398,11 +417,16 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
     }
 
-    onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/system/strikes/${e.value.id}`);
+    onFilterKeyup(e) {
+        this.dv.filter(e.target.value);
+        this.clampText();
+    }
+
+    onStrikeClick(e, strike) {
+        if (e.ctrlKey || e.metaKey) {
+            window.open(`/system/strikes/${strike.value.id}`);
         } else {
-            this.router.navigate([`/system/strikes/${e.value.id}`]);
+            this.router.navigate([`/system/strikes/${strike.value.id}`]);
         }
     }
 

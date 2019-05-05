@@ -159,7 +159,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
-            this.messageService.add({severity: 'warning', summary: 'Selected the same metric twice'});
+            this.messageService.add({severity: 'warn', summary: 'Selected the same metric twice'});
             return false;
         }
         this.showChart = true;
@@ -171,7 +171,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         const yAxes = [{
             id: 'yAxis1',
             position: this.multiAxis ? 'right' : 'left',
-            stacked: true,
+            stacked: this.filtersApplied.length > 0,
             scaleLabel: {
                 display: true,
                 labelString: this.selectedMetric1.title
@@ -188,7 +188,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             yAxes.push({
                 id: 'yAxis2',
                 position: 'left',
-                stacked: true,
+                stacked: this.filtersApplied.length > 0,
                 scaleLabel: {
                     display: true,
                     labelString: this.selectedMetric2.title

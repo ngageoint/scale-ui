@@ -1,167 +1,189 @@
-<div class="workspaces__header">
-    <h2><i class="fa fa-database"></i> Workspaces</h2>
-    <p-dropdown [options]="workspaces" [(ngModel)]="selectedWorkspace" filter="filter"
-                class="workspaces__options" [style]="{'width':'300px', 'margin-top':'-10px'}"
-                (onChange)="onRowSelect($event)" placeholder="Select..." [showClear]="false"></p-dropdown>
-    <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"></button>
+<div class="workspaces" *ngIf="!selectedWorkspaceDetail">
+    <div class="flexed space-between margin-bottom-sm">
+        <div class="flexed">
+            <h2><i class="fa fa-database"></i> Workspaces ({{ totalRecords }})</h2>
+            <div class="margin-left-md">
+                <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"
+                        pTooltip="Create Workspace"></button>
+            </div>
+        </div>
+        <div class="flexed">
+            <div class="margin-right-md">
+                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
+                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
+                                (onChange)="getWorkspaces()"></p-toggleButton>
+            </div>
+            <input type="search" pInputText placeholder="Search" class="workspaces__filter"
+                   (keyup)="onFilterKeyup($event)">
+        </div>
+    </div>
+    <p-dataView [value]="workspaces" filterBy="value.title" layout="grid" [loading]="loading" #dv>
+        <ng-template let-workspace pTemplate="gridItem">
+            <div class="p-col-12 p-md-3 workspaces__container" (click)="onWorkspaceClick($event, workspace)">
+                <p-panel>
+                    <p-header>
+                        <strong>{{ workspace.label }}</strong>
+                    </p-header>
+                    <div class="clamp">
+                        {{ workspace.value.description }}
+                    </div>
+                </p-panel>
+            </div>
+        </ng-template>
+    </p-dataView>
 </div>
-<hr />
-<div class="workspaces__details">
-    <div class="text-center" *ngIf="!selectedWorkspace && !isEditing">
-        <h3>Select a workspace to view its details</h3>
-    </div>
-    <div *ngIf="selectedWorkspaceDetail">
-        <p-panel>
-            <p-header class="workspaces__title">
-                <div>
-                    {{ selectedWorkspaceDetail.title }}
-                </div>
-                <div>
-                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                            (click)="menu.toggle($event)"></button>
-                </div>
-            </p-header>
-            <div *ngIf="!isEditing && selectedWorkspaceDetail.id">
-                <dl>
-                    <dt>Description:</dt>
-                    <dd>{{ selectedWorkspaceDetail.description }}</dd>
-                    <dt>Type:</dt>
-                    <dd>{{ selectedWorkspaceDetail.configuration.broker.type }}</dd>
-                    <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3' ||
-                               selectedWorkspaceDetail.configuration.broker.type === 'host'">Host Path:</dt>
-                    <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3' ||
-                               selectedWorkspaceDetail.configuration.broker.type === 'host'">
-                        {{ selectedWorkspaceDetail.configuration.broker.host_path }}
-                    </dd>
-                    <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">NFS Path:</dt>
-                    <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">
-                        {{ selectedWorkspaceDetail.configuration.broker.nfs_path }}
-                    </dd>
-                    <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Bucket Name:</dt>
-                    <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.bucket_name }}
-                    </dd>
-                    <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Access Key ID:</dt>
-                    <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{
-                            selectedWorkspaceDetail.configuration.broker.credentials ?
-                                selectedWorkspaceDetail.configuration.broker.credentials.access_key_id :
-                                ''
-                        }}
-                    </dd>
-                    <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Secret Access Key:</dt>
-                    <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{
-                            selectedWorkspaceDetail.configuration.broker.credentials ?
-                                selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key :
-                                ''
-                        }}
-                    </dd>
-                    <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Region Name Override:</dt>
-                    <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
-                        {{ selectedWorkspaceDetail.configuration.broker.region_name || '' }}
-                    </dd>
-                    <dt>Created:</dt>
-                    <dd>
-                        <span [pTooltip]="selectedWorkspaceDetail.createdTooltip">
-                            {{ selectedWorkspaceDetail.createdDisplay }}
-                        </span>
-                    </dd>
-                    <dt>Last Modified:</dt>
-                    <dd>
-                        <span [pTooltip]="selectedWorkspaceDetail.lastModifiedTooltip">
-                            {{ selectedWorkspaceDetail.lastModifiedDisplay }}
-                        </span>
-                    </dd>
-                </dl>
+<div class="workspaces__details" *ngIf="selectedWorkspaceDetail">
+    <h2><i class="fa fa-database"></i> Workspaces</h2>
+    <p-panel>
+        <p-header class="workspaces__title">
+            <div>
+                <strong>{{ selectedWorkspaceDetail.title }}</strong>
             </div>
-            <div *ngIf="isEditing && selectedWorkspaceDetail">
-                <div [formGroup]="createForm">
-                    <div class="p-grid">
-                        <div class="p-col-6">
-                            <label>
-                                <span>Name</span>
-                                <input type="text" pInputText formControlName="name" required/>
-                            </label>
-                        </div>
-                        <div class="p-col-6">
-                            <label>
-                                <span>Title</span>
-                                <input type="text" pInputText formControlName="title" required/>
-                            </label>
-                        </div>
+            <div>
+                <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
+                <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                        (click)="menu.toggle($event)"></button>
+            </div>
+        </p-header>
+        <div *ngIf="!isEditing && selectedWorkspaceDetail.id">
+            <dl>
+                <dt>Description:</dt>
+                <dd>{{ selectedWorkspaceDetail.description }}</dd>
+                <dt>Type:</dt>
+                <dd>{{ selectedWorkspaceDetail.configuration.broker.type }}</dd>
+                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3' ||
+                           selectedWorkspaceDetail.configuration.broker.type === 'host'">Host Path:</dt>
+                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3' ||
+                           selectedWorkspaceDetail.configuration.broker.type === 'host'">
+                    {{ selectedWorkspaceDetail.configuration.broker.host_path }}
+                </dd>
+                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">NFS Path:</dt>
+                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">
+                    {{ selectedWorkspaceDetail.configuration.broker.nfs_path }}
+                </dd>
+                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Bucket Name:</dt>
+                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
+                    {{ selectedWorkspaceDetail.configuration.broker.bucket_name }}
+                </dd>
+                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Access Key ID:</dt>
+                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
+                    {{
+                        selectedWorkspaceDetail.configuration.broker.credentials ?
+                            selectedWorkspaceDetail.configuration.broker.credentials.access_key_id :
+                            ''
+                    }}
+                </dd>
+                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Secret Access Key:</dt>
+                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
+                    {{
+                        selectedWorkspaceDetail.configuration.broker.credentials ?
+                            selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key :
+                            ''
+                    }}
+                </dd>
+                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Region Name Override:</dt>
+                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
+                    {{ selectedWorkspaceDetail.configuration.broker.region_name || '' }}
+                </dd>
+                <dt>Created:</dt>
+                <dd>
+                    <span [pTooltip]="selectedWorkspaceDetail.createdTooltip">
+                        {{ selectedWorkspaceDetail.createdDisplay }}
+                    </span>
+                </dd>
+                <dt>Last Modified:</dt>
+                <dd>
+                    <span [pTooltip]="selectedWorkspaceDetail.lastModifiedTooltip">
+                        {{ selectedWorkspaceDetail.lastModifiedDisplay }}
+                    </span>
+                </dd>
+            </dl>
+        </div>
+        <div *ngIf="isEditing && selectedWorkspaceDetail">
+            <div [formGroup]="createForm">
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <label>
+                            <span>Name</span>
+                            <input type="text" pInputText formControlName="name" required/>
+                        </label>
                     </div>
-                    <div class="p-grid">
-                        <div class="p-col-12">
-                            <label>
-                                <span>Description</span>
-                                <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
-                                          [autoResize]="true"></textarea>
-                            </label>
-                        </div>
+                    <div class="p-col-6">
+                        <label>
+                            <span>Title</span>
+                            <input type="text" pInputText formControlName="title" required/>
+                        </label>
                     </div>
-                    <div class="p-grid">
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <label>
+                            <span>Description</span>
+                            <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
+                                      [autoResize]="true"></textarea>
+                        </label>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <label>
+                            <span>Base URL</span>
+                            <input type="text" pInputText formControlName="base_url"/>
+                        </label>
+                    </div>
+                    <div class="p-col-6">
+                        <label>
+                            <span>Workspace Status</span>
+                            <p-toggleButton formControlName="is_active" onLabel="Active" offLabel="Inactive"
+                                            onIcon="fa fa-check" offIcon="fa fa-remove"
+                                            [style]="{'width':'100%', 'display':'block'}"
+                                            (onChange)="onIsActiveClick($event)"></p-toggleButton>
+                        </label>
+                    </div>
+                </div>
+                <div formGroupName="configuration">
+                    <div class="p-grid" formGroupName="broker">
                         <div class="p-col-6">
                             <label>
-                                <span>Base URL</span>
-                                <input type="text" pInputText formControlName="base_url"/>
+                                <span>Type</span>
+                                <p-dropdown [options]="typeOptions" formControlName="type"
+                                            (onChange)="onTypeChange()" [style]="{'width':'100%'}"
+                                            placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
                             </label>
                         </div>
                         <div class="p-col-6">
-                            <label>
-                                <span>Workspace Status</span>
-                                <p-toggleButton formControlName="is_active" onLabel="Active" offLabel="Inactive"
-                                                onIcon="fa fa-check" offIcon="fa fa-remove"
-                                                [style]="{'width':'100%', 'display':'block'}"
-                                                (onChange)="onIsActiveClick($event)"></p-toggleButton>
+                            <label *ngIf="createForm.get('configuration.broker.nfs_path').enabled">
+                                <span>NFS Path</span>
+                                <input type="text" pInputText formControlName="nfs_path" required/>
                             </label>
-                        </div>
-                    </div>
-                    <div formGroupName="configuration">
-                        <div class="p-grid" formGroupName="broker">
-                            <div class="p-col-6">
+                            <label *ngIf="createForm.get('configuration.broker.host_path').enabled">
+                                <span>Host Path</span>
+                                <input type="text" pInputText formControlName="host_path" required/>
+                            </label>
+                            <label *ngIf="createForm.get('configuration.broker.bucket_name').enabled">
+                                <span>Bucket Name</span>
+                                <input type="text" pInputText formControlName="bucket_name" required/>
+                            </label>
+                            <div formGroupName="credentials"
+                                 *ngIf="createForm.get('configuration.broker.credentials').enabled">
                                 <label>
-                                    <span>Type</span>
-                                    <p-dropdown [options]="typeOptions" formControlName="type"
-                                                (onChange)="onTypeChange()" [style]="{'width':'100%'}"
-                                                placeholder="Select..." [showClear]="false">
-                                    </p-dropdown>
+                                    <span>Access Key ID</span>
+                                    <input type="text" pInputText formControlName="access_key_id"/>
+                                </label>
+                                <label>
+                                    <span>Secret Access Key</span>
+                                    <input type="text" pInputText formControlName="secret_access_key" required/>
                                 </label>
                             </div>
-                            <div class="p-col-6">
-                                <label *ngIf="createForm.get('configuration.broker.nfs_path').enabled">
-                                    <span>NFS Path</span>
-                                    <input type="text" pInputText formControlName="nfs_path" required/>
-                                </label>
-                                <label *ngIf="createForm.get('configuration.broker.host_path').enabled">
-                                    <span>Host Path</span>
-                                    <input type="text" pInputText formControlName="host_path" required/>
-                                </label>
-                                <label *ngIf="createForm.get('configuration.broker.bucket_name').enabled">
-                                    <span>Bucket Name</span>
-                                    <input type="text" pInputText formControlName="bucket_name" required/>
-                                </label>
-                                <div formGroupName="credentials"
-                                     *ngIf="createForm.get('configuration.broker.credentials').enabled">
-                                    <label>
-                                        <span>Access Key ID</span>
-                                        <input type="text" pInputText formControlName="access_key_id"/>
-                                    </label>
-                                    <label>
-                                        <span>Secret Access Key</span>
-                                        <input type="text" pInputText formControlName="secret_access_key" required/>
-                                    </label>
-                                </div>
-                                <label *ngIf="createForm.get('configuration.broker.region_name').enabled">
-                                    <span>Region Name Override</span>
-                                    <input type="text" pInputText formControlName="region_name"/>
-                                </label>
-                            </div>
+                            <label *ngIf="createForm.get('configuration.broker.region_name').enabled">
+                                <span>Region Name Override</span>
+                                <input type="text" pInputText formControlName="region_name"/>
+                            </label>
                         </div>
                     </div>
                 </div>
             </div>
-        </p-panel>
-    </div>
+        </div>
+    </p-panel>
 </div>
