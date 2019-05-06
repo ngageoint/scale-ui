@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
+import { TooltipModule } from 'primeng/primeng';
 
 import { DashboardJobsService } from '../jobs.service';
 import { JobTypeItemComponent } from './component';
@@ -11,7 +12,7 @@ describe('JobTypeItemComponent', () => {
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            imports: [RouterTestingModule],
+            imports: [RouterTestingModule, TooltipModule],
             declarations: [JobTypeItemComponent],
             providers: [DashboardJobsService]
         })

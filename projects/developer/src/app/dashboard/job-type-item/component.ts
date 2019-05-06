@@ -8,7 +8,6 @@ import { DashboardJobsService } from '../jobs.service';
     styleUrls: ['./component.scss']
 })
 export class JobTypeItemComponent implements OnInit {
-
     @Input() item: any;
     constructor(private jobsService: DashboardJobsService) {
         this.item = {
