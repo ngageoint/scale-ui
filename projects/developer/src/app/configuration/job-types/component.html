@@ -8,9 +8,9 @@
             </div>
         </div>
         <div class="flexed">
-            <div class="margin-right-md">
-                <p>Selected Types: <span style="font-weight: bold" *ngFor="let type of selectedTypes">{{type}} </span></p>
-                <p-selectButton [options]="types" [(ngModel)]="selectedTypes" multiple="multiple" (onChange)="getJobTypes($event)" ></p-selectButton>                 
+            <div class="margin-right-md select-button">
+                
+                <p-selectButton [options]="filterOptions" [(ngModel)]="selectedTypes" multiple="multiple" (onChange)="filterTypes($event)" ></p-selectButton>
                 <!-- <p-toggleButton offLabel="Toggle Favorites" offIcon="fa fa-toggle-off" onLabel="Toggle Favorites"
                                 onIcon="fa fa-toggle-on" [(ngModel)]="showFavorites" (onChange)="getJobTypes()"
                                 [style]="{'margin-right': '5px'}"></p-toggleButton>
@@ -18,9 +18,14 @@
                                 onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
                                 (onChange)="getJobTypes()"></p-toggleButton> -->
             </div>
+           
             <input type="search" pInputText placeholder="Search" class="job-type__filter"
                    (keyup)="onFilterKeyup($event)">
+                  
         </div>
+    </div>
+    <div >
+        <p class="filter__display">Displaying Types: <span style="font-weight: bold" *ngFor="let type of selectedTypes">{{type}} </span></p>
     </div>
     <p-dataView [value]="jobTypes" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
         <ng-template let-jobType pTemplate="gridItem">
