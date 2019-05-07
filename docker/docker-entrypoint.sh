@@ -28,6 +28,7 @@ jq_in_place '.siloUrl="'${SILO_URL}'"' ${CONFIG_JSON}
 if [[ "${CONTEXTS}x" != "x" ]]
 then
     WEB_ROOT=/usr/share/nginx/html
+    chmod -R 777 ${WEB_ROOT}
     cp -R ${WEB_ROOT} /tmp/
 
     ITEMS=$(echo ${CONTEXTS} | tr "," "\n")
@@ -43,7 +44,7 @@ then
         jq '.apiPrefix = "'${ITEM}'/api"' ${CONFIG_JSON} > ${ITEM_CONFIG_JSON}
         jq_in_place '.auth.scheme.url="'${ITEM}'/api/login/"' ${ITEM_CONFIG_JSON}
         cat /tmp/html/index.html | sed 's^base href="\/"^base href="'$ITEM'\/"^g' > $WEB_ROOT/$ITEM/index.html
-
+        chmod 777 ${ITEM_CONFIG_JSON}
         # Adding contexts for backend
         (cat /nginx-template.conf | sed 's^${CONTEXT}^'${ITEM}'^g' | sed 's^${BACKEND}^'${BACKEND}'^g' ) >> ${NGINX_CONF}
     done
