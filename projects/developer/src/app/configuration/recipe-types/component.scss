@@ -32,6 +32,18 @@
             background: var(--panel-content-hover) !important;
         }
     }
+
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+            margin-right: 2px;
+        }
+    }
 }
 
 .recipe-type__node-type-row {
