@@ -64,6 +64,10 @@
                                 <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
                                 {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
                                 <span class="label label-paused" *ngIf="selectedJobTypeDetail.is_paused">Paused</span>
+                                <span class="warning-text" *ngIf="selectedJobTypeDetail.unmet_resources">
+                                    <span class="fa fa-warning"
+                                          [pTooltip]="selectedJobTypeDetail.unmetResourcesTooltip"></span>
+                                </span>
                             </strong>
                         </div>
                         <div>
