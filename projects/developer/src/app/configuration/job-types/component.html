@@ -115,7 +115,7 @@
                                         <td>Command</td>
                                         <td>{{ selectedJobTypeDetail.manifest.job.interface.command }}</td>
                                     </tr>
-                                    <tr>
+                                    <tr *ngIf="selectedJobTypeDetail.manifest.job.interface.inputs">
                                         <td>Input Data</td>
                                         <td>
                                             <table class="table table-striped">
@@ -132,7 +132,7 @@
                                             </table>
                                         </td>
                                     </tr>
-                                    <tr>
+                                    <tr *ngIf="selectedJobTypeDetail.manifest.job.interface.outputs">
                                         <td>Output Data</td>
                                         <td>
                                             <table class="table table-striped">

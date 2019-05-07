@@ -244,6 +244,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     this.initRecipeTypeForm();
                 }
             }
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
     }
 
