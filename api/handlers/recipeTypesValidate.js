@@ -4,10 +4,10 @@ module.exports = function (request) {
     var warnings = [];
     var errors = [];
     var nodes = {};
-    if (!request.payload.manifest) {
+    if (!request.payload.definition) {
         warnings.push({
-            id: 'Missing Manifest',
-            details: 'Job Type Seed Manifest is undefined'
+            id: 'Missing Definition',
+            details: 'Recipe type definition is undefined'
         });
     }
     _.forEach(_.keys(request.payload.definition.nodes), function (key) {
