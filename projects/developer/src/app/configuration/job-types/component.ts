@@ -15,7 +15,8 @@ import { DashboardJobsService } from '../../dashboard/jobs.service';
 @Component({
     selector: 'dev-job-types',
     templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    styleUrls: ['./component.scss'],
+    providers: [MessageService]
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
