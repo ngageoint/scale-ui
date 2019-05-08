@@ -11,6 +11,25 @@
             "is_active": true,
             "is_system": null,
             "revision_num": 1,
+            "job_types": [
+                {
+                    "name": "landsat8-parse",
+                    "version": "1.0.0"
+                },
+                {
+                    "name": "landsat8-atmos-corr",
+                    "version": "2.1.9"
+                },
+                {
+                    "name": "landsat8-ortho",
+                    "version": "2.0"
+                },
+                {
+                    "name": "export-shp",
+                    "version": "2.0"
+                }
+            ],
+            "sub_recipe_types": ["spectral", "worldview"],
             "created": "2015-06-15T19:03:26.346Z",
             "last_modified": "2015-06-15T19:03:26.346Z",
             "deprecated": null
@@ -24,6 +43,25 @@
             "is_active": true,
             "is_system": null,
             "revision_num": 1,
+            "job_types": [
+                {
+                    "name": "sam",
+                    "version": "1.0"
+                },
+                {
+                    "name": "scm",
+                    "version": "1.0"
+                },
+                {
+                    "name": "cem",
+                    "version": "1.0"
+                },
+                {
+                    "name": "export-shp",
+                    "version": "2.0"
+                }
+            ],
+            "sub_recipe_types": [],
             "created": "2016-04-29T19:03:26.346Z",
             "last_modified": "2016-04-29T19:03:26.346Z",
             "deprecated": null
@@ -37,6 +75,25 @@
             "is_active": true,
             "is_system": null,
             "revision_num": 1,
+            "job_types": [
+                {
+                    "name": "wv2-parse",
+                    "version": "1.0.1"
+                },
+                {
+                    "name": "wv2-atmosphere-corr",
+                    "version": "1.0.1"
+                },
+                {
+                    "name": "wv2-ortho",
+                    "version": "2.0"
+                },
+                {
+                    "name": "export-shp",
+                    "version": "2.0"
+                }
+            ],
+            "sub_recipe_types": [],
             "created": "2016-04-30T19:03:26.346Z",
             "last_modified": "2016-04-30T19:03:26.346Z",
             "deprecated": null
@@ -50,6 +107,17 @@
             "is_active": true,
             "is_system": null,
             "revision_num": 1,
+            "job_types": [
+                {
+                    "name": "sam",
+                    "version": "1.0"
+                },
+                {
+                    "name": "export-kml",
+                    "version": "1.0.0"
+                }
+            ],
+            "sub_recipe_types": [],
             "created": "2016-05-15T19:03:26.346Z",
             "last_modified": "2016-05-15T19:03:26.346Z",
             "deprecated": null
@@ -63,6 +131,13 @@
             "is_active": true,
             "is_system": null,
             "revision_num": 1,
+            "job_types": [
+                {
+                    "name": "caffe-aircraft-detection",
+                    "version": "1.0"
+                }
+            ],
+            "sub_recipe_types": [],
             "created": "2016-05-10T21:19:16.320Z",
             "last_modified": "2016-05-10T21:19:16.320Z",
             "deprecated": null

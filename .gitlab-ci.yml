@@ -8,13 +8,13 @@
 # NGINX_IMAGE
 
 variables:
-  CHROME_IMAGE: 'appliedis/nodejs-chrome'
-  DIND_IMAGE: 'docker:dind'
-  DOCKER_IMAGE: 'docker:stable'
-  GIT_DEPTH: 1
-  IMAGE_PREFIX: 'scale-ui'
-  NODE_IMAGE: 'node:10'
-  REGISTRY: 'docker.io'
+  'CHROME_IMAGE': 'appliedis/nodejs-chrome'
+  'DIND_IMAGE': 'docker:dind'
+  'DOCKER_IMAGE': 'docker:stable'
+  'GIT_DEPTH': '1'
+  'IMAGE_PREFIX': 'scale-ui'
+  'NODE_IMAGE': 'node:10'
+  'REGISTRY': 'docker.io'
 
 build_ui:
   image: ${NODE_IMAGE}

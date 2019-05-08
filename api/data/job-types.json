@@ -16,7 +16,7 @@
             "max_scheduled": 1,
             "revision_num": 1,
             "docker_image": "",
-            "unmet_resources": null,
+            "unmet_resources": "cpu,mem,disk",
             "created": "2015-05-15T12:02:52.455Z",
             "deprecated": null,
             "paused": null,

@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { ColorService } from '../common/services/color.service';
+import { JobType } from '../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-dashboard',
@@ -16,7 +17,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     columnsFavs: any[];
     columnsAll: any[];
     subscription: any;
-    allJobTypes: any[];
+    allJobTypes: any;
     allJobTypesTooltip: string;
     favoriteJobTypes: any[];
     favoriteJobTypesTooltip: string;
@@ -122,10 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.loadingJobTypes = true;
         this.unsubscribe();
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
-            this.allJobTypes = _.filter(data.results, result => {
-                return result.job_type.is_active === true;
-            });
-            this.allJobTypes = _.orderBy(this.allJobTypes, ['job_type.title', 'job_type.version'], ['asc', 'asc']);
+            this.allJobTypes = _.orderBy(data.results, ['job_type.title', 'job_type.version'], ['asc', 'asc']);
             this.jobsService.setAllJobs(this.allJobTypes);
 
             const favs = [];

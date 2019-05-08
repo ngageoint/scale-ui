@@ -76,10 +76,15 @@
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'job__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <span class="ui-column-title">{{ col.header }}</span>
-                <div *ngSwitchCase="'job_type'">
-                    <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
-                       [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
-                    {{ rowData.job_type.title }} {{ rowData.job_type.version }}
+                <div class="flexed space-between" *ngSwitchCase="'job_type'">
+                    <div>
+                        <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
+                           [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
+                        {{ rowData.job_type.title }} {{ rowData.job_type.version }}
+                    </div>
+                    <div class="warning-text" *ngIf="rowData.job_type.unmet_resources">
+                        <span class="fa fa-warning" [pTooltip]="rowData.job_type.unmetResourcesTooltip"></span>
+                    </div>
                 </div>
                 <div *ngSwitchCase="'recipe'">
                     <div *ngIf="rowData.recipe">
@@ -109,6 +114,11 @@
                                 *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>
                     </div>
                     {{ rowData.status }}
+                </div>
+                <div *ngSwitchCase="'error.category'">
+                    <div *ngIf="rowData.error">
+                        {{ rowData.error.category }}
+                    </div>
                 </div>
                 <div *ngSwitchCase="'error.title'">
                     <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}" tooltipPosition="left"

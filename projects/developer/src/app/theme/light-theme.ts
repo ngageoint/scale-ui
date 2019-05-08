@@ -81,6 +81,8 @@ export const lightTheme: Theme = {
         '--label-paused': '#0FA3BD',
         '--label-ready': '#2AC992',
         '--label-scheduler-stopped': '#be292e',
+        '--label-job-type': '#efefef',
+        '--label-recipe-type': '#efefef',
         '--table-striped-even': '#ededed',
         '--table-striped-odd': '#fff',
         '--recipe-container-background': '#fff',

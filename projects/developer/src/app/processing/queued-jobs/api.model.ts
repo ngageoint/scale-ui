@@ -9,7 +9,7 @@ export class QueuedJob {
     private static build(data) {
         if (data) {
             return new QueuedJob(
-                data.job_type,
+                JobType.transformer(data.job_type),
                 data.count,
                 data.longest_queued,
                 data.highest_priority
@@ -26,7 +26,7 @@ export class QueuedJob {
         return null;
     }
     constructor(
-        public job_type: JobType,
+        public job_type: any,
         public count: number,
         public longest_queued: string,
         public highest_priority: number

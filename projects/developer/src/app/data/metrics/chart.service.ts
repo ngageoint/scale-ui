@@ -122,6 +122,8 @@ export class ChartService {
                         }
                         datasets.push({
                             id: filter.id,
+                            name: filter.name,
+                            version: filter.version,
                             yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
                             stack: `stack${idx.toString()}`,
                             label: label,

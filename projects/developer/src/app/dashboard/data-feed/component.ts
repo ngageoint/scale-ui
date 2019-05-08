@@ -87,6 +87,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             this.jobsApiService.getJobs({
                 started: moment.utc().startOf('d').toISOString(),
                 ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
+                rows: 1000,
                 status: 'COMPLETED',
                 job_type_name: job_type_name,
                 job_type_version: job_type_version
