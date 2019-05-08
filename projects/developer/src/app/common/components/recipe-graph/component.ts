@@ -6,8 +6,6 @@ import { ColorService } from '../../services/color.service';
 import { Job } from '../../../processing/jobs/api.model';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { JobsDatatable } from '../../../processing/jobs/datatable.model';
-import { JobsDatatableService } from '../../../processing/jobs/datatable.service';
-import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 
@@ -15,7 +13,6 @@ import { MessageService } from 'primeng/components/common/messageservice';
     selector: 'dev-recipe-graph',
     templateUrl: './component.html',
     styleUrls: ['./component.scss'],
-    providers: [ConfirmationService]
 })
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
@@ -77,9 +74,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     jobs: Job | Job[];
     constructor(
         private jobsApiService: JobsApiService,
-        private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private jobsDatatableService: JobsDatatableService
     ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
