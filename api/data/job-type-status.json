@@ -17,7 +17,7 @@
                 "max_scheduled": 1,
                 "revision_num": 1,
                 "docker_image": "10.4.4.10:5000/landsat8-parse_1.0:dev",
-                "unmet_resources": null,
+                "unmet_resources": "cpu,mem,disk",
                 "manifest": {
                     "job": {
                         "name": "landsat8-parse",

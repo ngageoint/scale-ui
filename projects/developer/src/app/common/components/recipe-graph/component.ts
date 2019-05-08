@@ -151,9 +151,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                         version: node.node_type.job_type_version
                     });
                     id = _.camelCase(node.node_type.job_type_name); // id can't have dashes or anything
-                    label = `${jobType.title} v${jobType.version}`;
-                    icon = String.fromCharCode(parseInt(jobType.icon_code, 16));
-                    publisher = jobType.is_published || false;
+                    label = jobType ?
+                        `${jobType.title} v${jobType.version}` :
+                        `${node.node_type.job_type_name} v${node.node_type.job_type_version}`;
+                    icon = jobType ? String.fromCharCode(parseInt(jobType.icon_code, 16)) : String.fromCharCode(parseInt('f1b2', 16));
+                    publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
                     id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
                     label = node.node_type.recipe_type_name;

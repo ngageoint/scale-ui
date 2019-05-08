@@ -27,6 +27,16 @@
                     <div class="clamp">
                         {{ recipeType.value.description }}
                     </div>
+                    <ul>
+                        <li *ngFor="let jobType of recipeType.value.job_types">
+                            <span class="label label-job-type">
+                                <i class="fa fa-cube"></i> {{ jobType.name }} v{{ jobType.version }}
+                            </span>
+                        </li>
+                        <li *ngFor="let recipeType of recipeType.value.sub_recipe_types">
+                            <span class="label label-recipe-type"><i class="fa fa-cubes"></i> {{ recipeType }}</span>
+                        </li>
+                    </ul>
                 </p-panel>
             </div>
         </ng-template>

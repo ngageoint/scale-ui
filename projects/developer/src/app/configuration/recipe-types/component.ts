@@ -244,6 +244,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     this.initRecipeTypeForm();
                 }
             }
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
     }
 
@@ -450,9 +452,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     onAddConditionClick() {
-        this.conditions.push(RecipeTypeCondition.transformer(this.condition));
-        this.conditionForm.reset();
-        this.condition = RecipeTypeCondition.transformer(null);
+        if (this.selectedRecipeTypeDetail.definition.nodes[this.condition.name]) {
+            this.messageService.add({
+                severity: 'error',
+                summary: `Node ${this.condition.name} already exists`,
+                detail: 'Node names must be unique.'
+            });
+        } else {
+            this.conditions.push(RecipeTypeCondition.transformer(this.condition));
+            this.conditionForm.reset();
+            this.condition = RecipeTypeCondition.transformer(null);
+        }
     }
 
     onRemoveConditionClick(condition) {

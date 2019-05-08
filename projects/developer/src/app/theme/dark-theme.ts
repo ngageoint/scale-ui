@@ -82,6 +82,8 @@ export const darkTheme: Theme = {
         '--label-paused': '#0FA3BD',
         '--label-ready': '#2AC992',
         '--label-scheduler-stopped': '#be292e',
+        '--label-job-type': '#efefef',
+        '--label-recipe-type': '#efefef',
         '--table-striped-even': '#303b41',
         '--table-striped-odd': '#1f1f1f',
         '--recipe-container-background': '#303b41',
