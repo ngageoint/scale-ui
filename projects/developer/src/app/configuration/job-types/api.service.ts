@@ -190,7 +190,11 @@ export class JobTypesApiService {
         return this.http.get<ApiResults>(`${this.apiPrefix}/job-types/status/`)
             .pipe(
                 map(response => {
-                    return ApiResults.transformer(response);
+                    const data =  ApiResults.transformer(response);
+                    _.forEach(data.results, result => {
+                        result.job_type = JobType.transformer(result.job_type);
+                    });
+                    return data;
                 }),
                 catchError(DataService.handleError)
             );
