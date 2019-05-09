@@ -18,9 +18,6 @@
             <div [ngClass]="getNavItemStyles('system')">
                 <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
             </div>
-            <div [ngClass]="getNavItemStyles('testing')">
-                <a (click)="selectNavItem($event, 'testing')"><i class="fa fa-television"></i> Testing</a>
-            </div>
         </div>
         <div class="flexed mobile" *ngIf="isMobile">
             <div class="navbar__logo-mobile">
