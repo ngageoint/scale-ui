@@ -10,7 +10,7 @@
         <div class="flexed">
             <div class="margin-right-md select-button">
                 
-                <p-selectButton [options]="filterOptions" [(ngModel)]="selectedTypes" multiple="multiple" (onChange)="filterTypes($event)" ></p-selectButton>
+                <!-- <p-selectButton [options]="filterOptions" [(ngModel)]="selectedTypes" multiple="multiple" (onChange)="filterTypes($event)" ></p-selectButton> -->
                 <!-- <p-toggleButton offLabel="Toggle Favorites" offIcon="fa fa-toggle-off" onLabel="Toggle Favorites"
                                 onIcon="fa fa-toggle-on" [(ngModel)]="showFavorites" (onChange)="getJobTypes()"
                                 [style]="{'margin-right': '5px'}"></p-toggleButton>
@@ -24,10 +24,20 @@
                   
         </div>
     </div>
-    <div >
-        <p class="filter__display">Displaying Types: <span style="font-weight: bold" *ngFor="let type of selectedTypes">{{type}} </span></p>
-    </div>
     <p-dataView [value]="jobTypes" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
+            <p-header>
+                    <div class="flexed space-between">
+                        <div class="node__filters">
+                            <button pButton type="button" class="ui-button-rounded" [ngClass]="showFavorites"
+                                    [icon]="fa-check" [label]="Favorites" (click)="filterTypes('Favorites')"></button>
+                        </div>
+                        <div class="flexed">
+                            <span class="node__type-label">{{ inactiveLabel }}</span>
+                            <p-inputSwitch [(ngModel)]="showInactive" (onChange)="getJobTypes()"
+                                           class="margin-right-md"></p-inputSwitch>
+                        </div>
+                    </div>
+                </p-header>
         <ng-template let-jobType pTemplate="gridItem">
             <div class="p-col-12 p-md-3 job-type__container" (click)="onJobTypeClick($event, jobType)">
                 <p-panel>

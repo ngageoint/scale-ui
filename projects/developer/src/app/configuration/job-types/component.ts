@@ -52,6 +52,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     loadingJobTypes: boolean;
     showFavorites: boolean;
     showInactive = false;
+    inactiveLabel: string;
     filterOptions: SelectItem[] = [
             {label: 'Favorites', value: 'Favorites', icon: 'fa fa-star'},
             {label: 'Inactive', value: 'Inactive', icon: 'fa fa-times'}
@@ -118,21 +119,14 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     filterTypes(filter) {
         this.showInactive = false;
         this.showFavorites = false;
-        if (filter.value[0] === 'Favorites') {
+        if (filter === 'Favorites') {
             this.showFavorites = true;
-            if (filter.value[1] === 'Inactive') {
-                this.showInactive = true;
-            }
+            this.getJobTypes();
         }
-        if (filter.value[0] === 'Inactive') {
-            this.showInactive = true;
-            if (filter.value[1] === 'Favorites') {
-                this.showFavorites = true;
-            }
-        }
-        this.getJobTypes();
+        
     }
     private getJobTypes(params?: any) {
+       // this.inactiveLabel = this.showInactive ? 'Show Only Active Job Types' : 'Show Only Inactive Job Types';
         this.loadingJobTypes = true;
         this.jobTypes = [];
         params = params || {
