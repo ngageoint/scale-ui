@@ -5,6 +5,7 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RecipeGraphComponent } from './component';
 import { ColorService } from '../../services/color.service';
 import { DataService } from '../../services/data.service';
+import { MessageService } from 'primeng/api';
 
 describe('RecipeGraphComponent', () => {
     let component: RecipeGraphComponent;
@@ -14,7 +15,7 @@ describe('RecipeGraphComponent', () => {
         TestBed.configureTestingModule({
             declarations: [RecipeGraphComponent],
             imports: [HttpClientTestingModule],
-            providers: [ColorService, DataService],
+            providers: [ColorService, DataService, MessageService],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
