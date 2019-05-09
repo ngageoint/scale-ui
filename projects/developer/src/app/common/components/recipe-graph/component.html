@@ -312,13 +312,11 @@
             </p-dataList>
         </div>
     </div>
-    <p-footer>
-        <div class="jobs__controls">
-            <button pButton label="Requeue Job" type="button" class="ui-button-primary" icon="fa fa-repeat"
-            (click)="requeueJobs()"></button>
-            <button pButton label="Cancel Job" type="button" class="ui-button-primary" icon="fa fa-ban"
-            (click)="cancelJobs()"></button>
-        </div>   
+    <p-footer *ngIf="selectedNode && selectedNode.node_type.job_id">
+        <button pButton label="Requeue Job" type="button" class="ui-button-primary" icon="fa fa-repeat"
+                (click)="requeueJob()"></button>
+        <button pButton label="Cancel Job" type="button" class="ui-button-primary" icon="fa fa-ban"
+                (click)="cancelJob()"></button>
     </p-footer>
 </p-dialog>
 <p-overlayPanel appendTo="body" #dependencyPanel>

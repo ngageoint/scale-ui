@@ -3,16 +3,13 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
-import { Job } from '../../../processing/jobs/api.model';
 import { JobsApiService } from '../../../processing/jobs/api.service';
-import { JobsDatatable } from '../../../processing/jobs/datatable.model';
 import { MessageService } from 'primeng/components/common/messageservice';
-
 
 @Component({
     selector: 'dev-recipe-graph',
     templateUrl: './component.html',
-    styleUrls: ['./component.scss'],
+    styleUrls: ['./component.scss']
 })
 export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
@@ -21,11 +18,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
     @Input() minHeight = '70vh';
-    @Input() datatableOptions: JobsDatatable;
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
-    count: number;
     columns: any[];
     dependencyOptions = [];
     nodeInputs = [];
@@ -35,7 +30,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     showLegend = false;
     orientation: string; // LR, RL, TB, BT
     curve: any;
-    selectedJob: Job;
     selectedJobType: any;
     selectedRecipeType: any;
     selectedCondition: any;
@@ -43,7 +37,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     selectedNodeConnections = [];
     showMetrics: boolean;
     showRecipeDialog: boolean;
-    subscription: any;
     recipeDialogX: number;
     recipeDialogY: number;
     metricData: any;
@@ -70,8 +63,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
-    datatableLoading: boolean;
-    jobs: Job | Job[];
     constructor(
         private jobsApiService: JobsApiService,
         private messageService: MessageService,
@@ -652,64 +643,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         return key;
     }
-    unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
-    private updateData() {
-        this.datatableLoading = true;
-        this.unsubscribe();
-        this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
-            this.datatableLoading = false;
-            this.count = data.count;
-            _.forEach(data.results, result => {
-                const job = _.find(this.selectedJob, { data: { id: result.id } });
-                result.selected =  !!job;
-            });
-            this.jobs = Job.transformer(data.results);
+    requeueJob() {
+        this.jobsApiService.requeueJobs({job_ids: [this.selectedNode.node_type.job_id]}).subscribe(() => {
+            this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
         }, err => {
-            this.datatableLoading = false;
-            this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
+            this.messageService.add({severity: 'error', summary: 'Error requeuing job', detail: err.statusText});
         });
     }
-
-    requeueJobs() {
-        this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
-            const jobsParams = {
-                started: this.selectedJobType.started,
-                ended: this.selectedJobType.ended,
-                error_categories: this.selectedJobType.error_category ? [this.selectedJobType.error_category] : null,
-                status: this.selectedJobType.status === 'CANCELED' || this.selectedJobType.status === 'FAILED' ?
-                this.selectedJobType.status :
-                    null,
-                job_type_names: this.selectedJobType.job_type_name ? [this.selectedJobType.job_type_name] : null
-            };
-
-        this.jobsApiService.requeueJobs(jobsParams)
-            .subscribe(() => {
-                this.updateData();
-            }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
-            });
-    }
-    cancelJobs() {
-        this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
-        const jobsParams = {
-            started: this.selectedJobType.started,
-            ended: this.selectedJobType.ended,
-            error_categories: this.selectedJobType.error_category ? [this.selectedJobType.error_category] : null,
-            status: this.selectedJobType.status === 'CANCELED' || this.selectedJobType.status === 'FAILED' ?
-            this.selectedJobType.status :
-                null,
-            job_type_names: this.selectedJobType.job_type_name ? [this.selectedJobType.job_type_name] : null
-        };
-        this.jobsApiService.cancelJobs(jobsParams)
-            .subscribe(() => {
-                this.updateData();
-            }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
-            });
+    cancelJob() {
+        this.jobsApiService.cancelJobs({job_ids: [this.selectedNode.node_type.job_id]}).subscribe(() => {
+            this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
+        });
     }
     ngOnChanges(changes) {
         if (changes.jobMetrics) {
@@ -719,7 +665,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (changes.jobMetricsTitle) {
             this.chartOptions.title = {
                 display: !!changes.jobMetricsTitle.currentValue,
-                    text: changes.jobMetricsTitle.currentValue
+                text: changes.jobMetricsTitle.currentValue
             };
         }
         if (changes.recipeData) {
