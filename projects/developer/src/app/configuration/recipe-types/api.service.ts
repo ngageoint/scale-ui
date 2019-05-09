@@ -74,4 +74,18 @@ export class RecipeTypesApiService {
                 catchError(DataService.handleError)
             );
     }
+
+    createRecipeType(recipeType: any): Observable<any> {
+        return this.http.post<any>(`${this.apiPrefix}/recipe-types/`, recipeType)
+            .pipe(
+                catchError(DataService.handleError)
+            );
+    }
+
+    editRecipeType(name: string, recipeType: any): Observable<any> {
+        return this.http.patch<any>(`${this.apiPrefix}/recipe-types/${name}/`, recipeType)
+            .pipe(
+                catchError(DataService.handleError)
+            );
+    }
 }

@@ -1,7 +1,6 @@
 import { RecipeTypeInput } from './api.input.model';
 import { JobType } from '../job-types/api.model';
 import * as _ from 'lodash';
-import {RecipeTypeFilter} from './api.filter.model';
 
 export class RecipeType {
     conditions = [];
@@ -48,7 +47,22 @@ export class RecipeType {
                 files: definition.input.files,
                 json: definition.input.json
             },
-            nodes: definition.input.nodes
+            nodes: definition.nodes
+        };
+    }
+
+    public static cleanRecipeTypeForValidate(recipeType) {
+        return {
+            name: recipeType.name,
+            definition: this.cleanDefinition(recipeType.definition)
+        };
+    }
+
+    public static cleanRecipeTypeForSave(recipeType) {
+        return {
+            title: recipeType.title,
+            description: recipeType.description,
+            definition: this.cleanDefinition(recipeType.definition)
         };
     }
 

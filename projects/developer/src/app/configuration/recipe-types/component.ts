@@ -35,7 +35,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     ];
     showInactive = false;
     loadingRecipeTypes: boolean;
-    isInitialized: boolean;
+    validated: boolean;
     totalRecords: number;
     recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;
@@ -64,6 +64,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
     isEditing: boolean;
+    autoUpdate = false;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
         { label: 'Job Nodes', icon: 'fa fa-cube',
@@ -149,7 +150,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
         }
     }
 
@@ -244,6 +245,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     this.initRecipeTypeForm();
                 }
             }
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
     }
 
@@ -422,11 +425,66 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     validateRecipeType() {
-        console.log('validate');
+        const cleanRecipeType = RecipeType.cleanRecipeTypeForValidate(this.selectedRecipeTypeDetail);
+        this.recipeTypesApiService.validateRecipeType(cleanRecipeType).subscribe(result => {
+            if (!result.is_valid) {
+                this.validated = false;
+                _.forEach(result.warnings, warning => {
+                    this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+                });
+                _.forEach(result.errors, error => {
+                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                });
+            } else {
+                this.validated = true;
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Recipe Type is valid and can be created.'
+                });
+                this.initValidation();
+            }
+        }, err => {
+            console.log(err);
+            this.messageService.add({ severity: 'error', summary: 'Error validating recipe type', detail: err.statusText });
+        });
     }
 
     saveRecipeType() {
-        console.log('save');
+        const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
+        if (this.recipeTypeName === 'create') {
+            this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
+                this.isEditing = false;
+                this.showAddRemoveDisplay = false;
+                this.showFileInputs = false;
+                this.showJsonInputs = false;
+                this.showConditions = false;
+                this.selectedRecipeTypeDetail = RecipeType.transformer(result);
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: `${result.title} successfully created` });
+                // modify url without reloading view
+                window.history.pushState({}, '', `/configuration/recipe-types/${result.name}`);
+            }, err => {
+                console.log(err);
+                this.messageService.add({ severity: 'error', summary: 'Error creating recipe type', detail: err.statusText });
+            });
+        } else {
+            cleanRecipeType.auto_update = this.autoUpdate;
+            this.recipeTypesApiService.editRecipeType(this.selectedRecipeTypeDetail.name, cleanRecipeType).subscribe(() => {
+                this.isEditing = false;
+                this.showAddRemoveDisplay = false;
+                this.showFileInputs = false;
+                this.showJsonInputs = false;
+                this.showConditions = false;
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: `${this.selectedRecipeTypeDetail.title} successfully edited`
+                });
+            }, err => {
+                console.log(err);
+                this.messageService.add({ severity: 'error', summary: 'Error editing recipe type', detail: err.statusText });
+            });
+        }
     }
 
     getUnicode(code) {
@@ -450,9 +508,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     onAddConditionClick() {
-        this.conditions.push(RecipeTypeCondition.transformer(this.condition));
-        this.conditionForm.reset();
-        this.condition = RecipeTypeCondition.transformer(null);
+        if (this.selectedRecipeTypeDetail.definition.nodes[this.condition.name]) {
+            this.messageService.add({
+                severity: 'error',
+                summary: `Node ${this.condition.name} already exists`,
+                detail: 'Node names must be unique.'
+            });
+        } else {
+            this.conditions.push(RecipeTypeCondition.transformer(this.condition));
+            this.conditionForm.reset();
+            this.condition = RecipeTypeCondition.transformer(null);
+        }
     }
 
     onRemoveConditionClick(condition) {

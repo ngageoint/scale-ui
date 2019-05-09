@@ -12,9 +12,14 @@
     <ng-template pTemplate="body" let-rowData let-columns="columns">
         <tr [pSelectableRow]="rowData">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
-                <div *ngSwitchCase="'job_type.name'">
-                    <i class="fa fa-fw" [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
-                    {{ rowData.job_type.title }}
+                <div class="flexed space-between" *ngSwitchCase="'job_type.name'">
+                    <div>
+                        <i class="fa fa-fw" [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
+                        {{ rowData.job_type.title }}
+                    </div>
+                    <div class="warning-text" *ngIf="rowData.job_type.unmet_resources">
+                        <span class="fa fa-warning" [pTooltip]="rowData.job_type.unmetResourcesTooltip"></span>
+                    </div>
                 </div>
                 <div *ngSwitchCase="'job_type.version'">
                     {{ rowData.job_type.version }}

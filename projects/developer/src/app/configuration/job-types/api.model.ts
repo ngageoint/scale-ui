@@ -13,6 +13,7 @@ export class JobType {
     disk: any;
     favoriteIcon: string;
     dashboardJobsService = new DashboardJobsService();
+    unmetResourcesTooltip = '';
 
     private static build(data) {
         if (data) {
@@ -93,5 +94,13 @@ export class JobType {
             this.disk = disk ? DataService.calculateFileSizeFromMib(disk.value) : null;
         }
         this.favoriteIcon = this.dashboardJobsService.isFavorite(this) ? 'fa fa-star' : 'fa fa-star-o';
+        if (this.unmet_resources) {
+            _.forEach(this.unmet_resources.split(','), resource => {
+                this.unmetResourcesTooltip = this.unmetResourcesTooltip === '' ?
+                    _.upperCase(resource) :
+                    `${this.unmetResourcesTooltip}, ${_.upperCase(resource)}`;
+            });
+            this.unmetResourcesTooltip = `This job type cannot be scheduled due to the following unmet resources: ${this.unmetResourcesTooltip}`; // tslint:disable-line:max-line-length
+        }
     }
 }

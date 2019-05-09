@@ -1,12 +1,17 @@
 <div class="jti">
-    <div [class]="getStatusClass()">
+    <div [ngClass]="getStatusClass()">
         <i *ngIf="getRunningCount() > 0" class="jti__status-isrunning fa fa-circle-o-notch"></i>
         <i class="jti__status-icon" [innerHTML]="getUnicode(item.job_type.icon_code)"></i>
         <span class="jti__status-runningcount">{{ getRunningCount() }}</span>
     </div>
     <div class="jti__info">
         <div class="jti__meta">
-            <div class="jti__heading">{{ item.job_type.title }}</div>
+            <div class="jti__heading">
+                {{ item.job_type.title }}
+                <span class="warning-text" *ngIf="item.job_type.unmet_resources">
+                    <span class="fa fa-warning" [pTooltip]="item.job_type.unmetResourcesTooltip"></span>
+                </span>
+            </div>
             <div class="jti__subheading">
                 Version {{ item.job_type.version }}
             </div>
@@ -15,7 +20,7 @@
             <a [routerLink]="['/configuration/job-types/', item.job_type.name, item.job_type.version]" class="jti__btn">Details</a>
             <a routerLink="/processing/jobs"
                [queryParams]="{job_type_name: item.job_type.name, job_type_version: item.job_type.version}" class="jti__btn">Jobs</a>
-            <div class="jti__btn" (click)="toggleFavorite()"><i [class]="getFavoriteBtnClass()"></i></div>
+            <div class="jti__btn" (click)="toggleFavorite()"><i [ngClass]="getFavoriteBtnClass()"></i></div>
         </div>
     </div>
 </div>
