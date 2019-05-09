@@ -21,9 +21,9 @@ export const environment = {
     defaultTheme: '',
     siloUrl: '',
     themeKey: '',
-    primaryColor: '#017cce',
-    secondaryLightColor: '#5c97bf',
-    secondaryDarkColor: '#24567f'
+    primaryColor: '',
+    secondaryLightColor: '',
+    secondaryDarkColor: ''
 
 };
 
