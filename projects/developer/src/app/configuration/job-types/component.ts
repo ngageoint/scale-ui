@@ -49,6 +49,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     scanBtnIcon = 'fa fa-barcode';
     interfaceClass = 'p-col-6';
     errorClass = 'p-col-6';
+    favoriteBtnIcon = 'fa fa-check';
+    favoriteBtnLabel = 'Favorites';
     loadingJobTypes: boolean;
     showFavorites: boolean;
     showInactive = false;
@@ -117,13 +119,18 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         });
     }
     filterTypes(filter) {
-        this.showInactive = false;
-        this.showFavorites = false;
-        if (filter === 'Favorites') {
-            this.showFavorites = true;
+        if(this.favoriteBtnIcon === "fa fa-check"){
+            if (filter === 'Favorites') {
+                this.showFavorites = true;
+                this.favoriteBtnIcon = "fa fa-remove";
+                this.getJobTypes();
+            }
+        } else{
+            this.showFavorites = false;
+            this.favoriteBtnIcon = "fa fa-check";
             this.getJobTypes();
         }
-        
+
     }
     private getJobTypes(params?: any) {
        // this.inactiveLabel = this.showInactive ? 'Show Only Active Job Types' : 'Show Only Inactive Job Types';

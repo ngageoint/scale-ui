@@ -28,8 +28,8 @@
             <p-header>
                     <div class="flexed space-between">
                         <div class="node__filters">
-                            <button pButton type="button" class="ui-button-rounded" [ngClass]="showFavorites"
-                                    [icon]="fa-check" [label]="Favorites" (click)="filterTypes('Favorites')"></button>
+                            <button pButton type="button" class="ui-button-rounded"
+                                    [icon]="favoriteBtnIcon" [label]="favoriteBtnLabel" (click)="filterTypes('Favorites')"></button>
                         </div>
                         <div class="flexed">
                             <span class="node__type-label">{{ inactiveLabel }}</span>
