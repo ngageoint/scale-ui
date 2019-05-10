@@ -32,7 +32,7 @@
                                     [icon]="favoriteBtnIcon" [label]="favoriteBtnLabel" (click)="filterTypes('Favorites')"></button>
                         </div>
                         <div class="flexed">
-                            <span class="node__type-label">{{ inactiveLabel }}</span>
+                            <span class="job-type__toggle-label">{{ inactiveLabel }}</span>
                             <p-inputSwitch [(ngModel)]="showInactive" (onChange)="getJobTypes()"
                                            class="margin-right-md"></p-inputSwitch>
                         </div>

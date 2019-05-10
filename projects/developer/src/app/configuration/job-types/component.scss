@@ -10,6 +10,12 @@
     }
 }
 
+.job-type__toggle-label {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin: 0 7px;
+}
+
 .job-type__filter {
     width: 300px;
     font-size: 1.2em;
@@ -122,8 +128,4 @@
     .dl-horizontal{
         word-wrap: break-word;
     }
-}
-.filter-display{
-    float: right;
-    padding-right: 100px;
 }

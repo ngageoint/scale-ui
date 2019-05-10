@@ -133,7 +133,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
 
     }
     private getJobTypes(params?: any) {
-       // this.inactiveLabel = this.showInactive ? 'Show Only Active Job Types' : 'Show Only Inactive Job Types';
+       this.inactiveLabel = this.showInactive ? 'Show Only Active Job Types' : 'Show Only Inactive Job Types';
         this.loadingJobTypes = true;
         this.jobTypes = [];
         params = params || {
