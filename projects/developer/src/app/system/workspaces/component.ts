@@ -239,7 +239,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail.clean()).subscribe(data => {
+        this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
             if (data.is_valid) {
                 if (data.warnings.length > 0) {
                     _.forEach(data.warnings, warning => {
@@ -262,8 +262,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     onSaveClick() {
         if (this.selectedWorkspaceDetail.id) {
             // edit workspace
-            const cleanWorkspace = this.selectedWorkspaceDetail.clean();
-            this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, cleanWorkspace).subscribe(() => {
+            this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, this.selectedWorkspaceDetail).subscribe(() => {
                 this.redirect(this.selectedWorkspaceDetail.id);
             }, err => {
                 console.log(err);
@@ -271,7 +270,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             });
         } else {
             // create workspace
-            this.workspacesApiService.createWorkspace(this.selectedWorkspaceDetail.clean()).subscribe(data => {
+            this.workspacesApiService.createWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
                 this.redirect(data.id);
             }, err => {
                 console.log(err);

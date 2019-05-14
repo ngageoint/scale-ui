@@ -234,7 +234,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
 
     onDuplicateClick() {
         delete this.scan.id;
-        this.scan.clean();
+        this.scan = Scan.cleanScan(this.scan);
         this.scan.name += ' copy';
         this.scan.title += ' copy';
         this.isEditing = true;
@@ -243,7 +243,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        this.scansApiService.validateScan(this.scan.clean()).subscribe(data => {
+        this.scansApiService.validateScan(this.scan).subscribe(data => {
             if (data.is_valid) {
                 if (data.warnings.length > 0) {
                     _.forEach(data.warnings, warning => {
@@ -268,7 +268,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         this.ingestFileForm.reset();
         if (this.scan.id) {
             // edit scan
-            this.scansApiService.editScan(this.scan.id, this.scan.clean()).subscribe(data => {
+            this.scansApiService.editScan(this.scan.id, this.scan).subscribe(data => {
                 this.redirect(this.scan.id);
             }, err => {
                 console.log(err);
@@ -276,7 +276,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             });
         } else {
             // create scan
-            this.scansApiService.createScan(this.scan.clean()).subscribe(data => {
+            this.scansApiService.createScan(this.scan).subscribe(data => {
                 this.redirect(data.id);
             }, err => {
                 console.log(err);

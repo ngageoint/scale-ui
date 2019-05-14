@@ -312,7 +312,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onDuplicateClick() {
         delete this.selectedStrikeDetail.id;
-        this.selectedStrikeDetail.clean();
+        this.selectedStrikeDetail = Strike.cleanStrikeForSave(this.selectedStrikeDetail);
         this.selectedStrikeDetail.name += ' copy';
         this.selectedStrikeDetail.title += ' copy';
         this.isEditing = true;
@@ -321,7 +321,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        this.strikesApiService.validateStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
+        this.strikesApiService.validateStrike(this.selectedStrikeDetail).subscribe(data => {
             if (data.is_valid) {
                 if (data.warnings.length > 0) {
                     _.forEach(data.warnings, warning => {
@@ -344,7 +344,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     onSaveClick() {
         if (this.selectedStrikeDetail.id) {
             // edit strike
-            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail.clean()).subscribe(data => {
+            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(data => {
                 this.redirect(this.selectedStrikeDetail.id);
             }, err => {
                 console.log(err);
@@ -352,7 +352,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
             });
         } else {
             // create strike
-            this.strikesApiService.createStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
+            this.strikesApiService.createStrike(this.selectedStrikeDetail).subscribe(data => {
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
