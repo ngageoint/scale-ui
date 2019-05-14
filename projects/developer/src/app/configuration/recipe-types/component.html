@@ -74,6 +74,12 @@
                             <textarea pInputTextarea formControlName="description" rows="5"></textarea>
                         </label>
                     </div>
+                    <div class="margin-top-md">
+                        <p-checkbox [(ngModel)]="autoUpdate" label="Auto Update" binary="true"></p-checkbox>
+                        <div class="help-block">
+                            Controls whether recipes containing this type will be automatically updated.
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="p-grid">
