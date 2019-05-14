@@ -47,7 +47,12 @@ export class Strike {
         return {
             title: strike.title,
             description: strike.description,
-            configuration: strike.configuration
+            configuration: {
+                workspace: strike.configuration.workspace,
+                monitor: strike.configuration.monitor,
+                files_to_ingest: strike.configuration.files_to_ingest,
+                recipe: strike.configuration.recipe
+            }
         };
     }
 

@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { ScansApiService } from './api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { Scan } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
 
@@ -42,6 +43,8 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
     items: MenuItem[] = _.clone(this.viewMenu);
+    recipes: any;
+    recipeOptions: SelectItem[] = [];
 
     constructor(
         private fb: FormBuilder,
@@ -49,7 +52,8 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService,
-        private scansApiService: ScansApiService
+        private scansApiService: ScansApiService,
+        private recipeTypesApiService: RecipeTypesApiService
     ) {}
 
     private initFormGroups() {
@@ -64,7 +68,8 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                     transfer_suffix: ['', Validators.required]
                 }),
                 recursive: [''],
-                files_to_ingest: this.fb.array([], Validators.required)
+                files_to_ingest: this.fb.array([], Validators.required),
+                recipe: ['']
             })
         });
         this.ingestFileForm = this.fb.group({
@@ -123,6 +128,16 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                 });
             });
 
+            _.forEach(this.recipes, recipe => {
+                this.recipeOptions.push({
+                    label: recipe.title,
+                    value: {
+                        name: recipe.name,
+                        revision_num: recipe.revision_num
+                    }
+                });
+            });
+
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
@@ -167,8 +182,15 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                 // set up workspaces
                 this.workspaces = workspaces.results;
 
-                // set up the form
-                this.initScanForm();
+                // get recipe type options
+                this.recipeTypesApiService.getRecipeTypes({ sortField: 'title', page: 1, page_size: 1000 }).subscribe(recipes => {
+                    this.loading = false;
+
+                    this.recipes = recipes.results;
+
+                    // set up the form
+                    this.initScanForm();
+                });
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});

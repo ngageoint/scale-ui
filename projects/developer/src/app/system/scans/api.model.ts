@@ -40,7 +40,13 @@ export class Scan {
         return {
             title: scan.title,
             description: scan.description,
-            configuration: scan.configuration
+            configuration: {
+                workspace: scan.configuration.workspace,
+                scanner: scan.configuration.scanner,
+                resursive: scan.configuration.recursive,
+                files_to_ingest: scan.configuration.files_to_ingest,
+                recipe: scan.configuration.recipe
+            }
         };
     }
 
