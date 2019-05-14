@@ -34,12 +34,20 @@ export class Strike {
         return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null));
     }
 
-    public clean(): object {
+    public static cleanStrikeForValidate(strike) {
         return {
-            name: this.name,
-            title: this.title,
-            description: this.description,
-            configuration: this.configuration
+            name: strike.name,
+            title: strike.title,
+            description: strike.description,
+            configuration: strike.configuration
+        };
+    }
+
+    public static cleanStrikeForSave(strike) {
+        return {
+            title: strike.title,
+            description: strike.description,
+            configuration: strike.configuration
         };
     }
 

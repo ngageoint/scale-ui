@@ -36,11 +36,11 @@ export class Scan {
         return new Scan(null, 'untitled-scan', 'Untitled Scan', null, null, null, null, null, null, ScanConfiguration.transformer(null));
     }
 
-    public clean(): object {
+    public static cleanScan(scan) {
         return {
-            title: this.title,
-            description: this.description,
-            configuration: this.configuration
+            title: scan.title,
+            description: scan.description,
+            configuration: scan.configuration
         };
     }
 
