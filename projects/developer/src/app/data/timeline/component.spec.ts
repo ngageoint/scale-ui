@@ -7,21 +7,21 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
-import { RecipeTypesApiService } from './api.service';
-import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { GanttComponent } from './component';
+import { RecipesApiService } from '../../processing/recipes/api.service';
+import { JobsApiService } from '../../processing/jobs/api.service';
+import { TimelineComponent } from './component';
 
 
 describe('JobsComponent', () => {
-    let component: GanttComponent;
-    let fixture: ComponentFixture<GanttComponent>;
+    let component: TimelineComponent;
+    let fixture: ComponentFixture<TimelineComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [GanttComponent],
+            declarations: [TimelineComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                DataService, RecipeTypesApiService, JobTypesApiService, ConfirmationService, MessageService,
+                DataService, RecipesApiService, JobsApiService, ConfirmationService, MessageService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
@@ -39,7 +39,7 @@ describe('JobsComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(GanttComponent);
+        fixture = TestBed.createComponent(TimelineComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

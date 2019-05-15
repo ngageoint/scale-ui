@@ -5,7 +5,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
-import { RecipeType } from './api.model';
+import { Recipe } from '../../processing/recipes/api.model';
 import { RecipesApiService } from '../../processing/recipes/api.service';
 import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
 import { JobsApiService } from '../../processing/jobs/api.service';
@@ -19,7 +19,7 @@ import { environment } from '../../../environments/environment';
 })
 export class TimelineComponent implements OnInit {
     subscription: any;
-    recipe: RecipeType;
+    recipe: Recipe;
     options: any;
     data: any;
     selectedJobExe: any;
@@ -69,8 +69,8 @@ export class TimelineComponent implements OnInit {
                         const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                         return [
                             'Total Time: ' + d[2],
-                            'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
-                            'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
+                            'Started: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
+                            'Ended: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
 
                         ];
                     }
@@ -97,19 +97,20 @@ export class TimelineComponent implements OnInit {
 
          _.forEach(data.results, result => {
             this.data.labels.push(result.name);
+            console.log(result.name);
             if (result.deprecated == null) {
                 todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
-                duration = DataService.calculateDuration(result.created, todaysDate, true);
+                duration = DataService.calculateDuration(result.started, todaysDate, true);
                 this.data.datasets.push({
                     data: [
-                        [result.created, todaysDate, duration]
+                        [result.started, todaysDate, duration]
                     ]
                 });
             } else {
-                duration = DataService.calculateDuration(result.created, result.deprecated, true);
+                duration = DataService.calculateDuration(result.created, result.ended, true);
                 this.data.datasets.push({
                     data: [
-                        [result.created, result.deprecated, duration]
+                        [result.started, result.ended, duration]
                     ]
                 });
             }
@@ -222,6 +223,7 @@ export class TimelineComponent implements OnInit {
             params.started = this.started;
             params.ended = this.ended;
             this.recipesApiService.getRecipes(params).subscribe(data => {
+                console.log(data);
                 this.createRecipeTimeline(data);
             }, err => {
                 console.log(err);
