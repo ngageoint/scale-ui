@@ -12,13 +12,12 @@
                             (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
         <div class="timeline__date-filter-dropdown">
-            <p-dropdown [options]="dataOptions" [(ngModel)]="value"
-                            (onChange)="selectDataType(value)"
+            <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDataOption"
                             [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false">
             </p-dropdown>
         </div>
         <button pButton class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
-                (click)="onDateFilterApply()"></button>
+                (click)="onApplyClick()"></button>
     </div>
 </div>
 

@@ -1,12 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { SelectItem } from 'primeng/api';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
 import { RecipeType } from './api.model';
-import { RecipeTypesApiService } from './api.service';
-import { JobsApiService } from './api.service.job';
+import { RecipesApiService } from '../../processing/recipes/api.service';
+import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
+import { JobsApiService } from '../../processing/jobs/api.service';
+import { JobsDatatable } from '../../processing/jobs/datatable.model';
 import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
 
@@ -14,7 +17,7 @@ import { environment } from '../../../environments/environment';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class TimelineComponent implements OnInit, OnDestroy {
+export class TimelineComponent implements OnInit {
     subscription: any;
     recipe: RecipeType;
     options: any;
@@ -22,16 +25,17 @@ export class TimelineComponent implements OnInit, OnDestroy {
     selectedJobExe: any;
     logDisplay: boolean;
     applyBtnClass = 'ui-button-secondary';
-    started: string;
-    ended: string;
-    dataOptions = [
+    started = moment.utc().subtract(3, 'd').startOf('d').toISOString();
+    ended = moment.utc().endOf('d').toISOString();
+    dataOptions: SelectItem[] = [
         { label: 'Recipes', value: 'recipe' },
         { label: 'Jobs', value: 'job' }
     ];
+    selectedDataOption: string;
 
     constructor(
         private messageService: MessageService,
-        private recipesApiService: RecipeTypesApiService,
+        private recipesApiService: RecipesApiService,
         private jobsApiService: JobsApiService
     ) {}
 
@@ -199,34 +203,29 @@ export class TimelineComponent implements OnInit, OnDestroy {
         this.applyBtnClass = 'ui-button-primary';
     }
 
-    unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
-
     ngOnInit() {
     }
 
-    ngOnDestroy() {
-        this.unsubscribe();
-    }
-    onDateFilterApply() {
-            this.applyBtnClass = 'ui-button-secondary';
-            return( moment.utc(this.started, environment.dateFormat).toISOString(),
-            moment.utc(this.ended, environment.dateFormat).toISOString());
-    }
-    selectDataType(value) {
-        if (value === 'recipe') {
-        this.subscription = this.recipesApiService.getRecipeTypes().subscribe(data => {
-        this.createRecipeTimeline(data);
-        });
-        } else if (value === 'job') {
-            this.subscription = this.jobsApiService.getJobs().subscribe(data => {
+    onApplyClick() {
+        this.applyBtnClass = 'ui-button-secondary';
+        if (this.selectedDataOption === 'job') {
+            this.jobsApiService.getJobs({
+                started: this.started,
+                ended: this.ended
+            }).subscribe(data => {
                 this.createJobTimeline(data);
-                });
+            }, err => {
+                console.log(err);
+            });
         } else {
-                this.messageService.add({severity: 'error', summary: 'Error retrieving Timeline data'});
+            const params: RecipesDatatable = initialRecipesDatatable;
+            params.started = this.started;
+            params.ended = this.ended;
+            this.recipesApiService.getRecipes(params).subscribe(data => {
+                this.createRecipeTimeline(data);
+            }, err => {
+                console.log(err);
+            });
         }
     }
 }
