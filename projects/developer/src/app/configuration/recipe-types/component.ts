@@ -427,16 +427,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     validateRecipeType() {
         const cleanRecipeType = RecipeType.cleanRecipeTypeForValidate(this.selectedRecipeTypeDetail);
         this.recipeTypesApiService.validateRecipeType(cleanRecipeType).subscribe(result => {
-            if (!result.is_valid) {
-                this.validated = false;
-                _.forEach(result.warnings, warning => {
-                    this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
-                });
-                _.forEach(result.errors, error => {
-                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
-                });
-            } else {
-                this.validated = true;
+            this.validated = result.is_valid;
+            if (result.is_valid) {
                 this.messageService.add({
                     severity: 'info',
                     summary: 'Validation Successful',
@@ -444,6 +436,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 });
                 this.initValidation();
             }
+            _.forEach(result.warnings, warning => {
+                this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+            });
+            _.forEach(result.errors, error => {
+                this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+            });
         }, err => {
             console.log(err);
             this.messageService.add({ severity: 'error', summary: 'Error validating recipe type', detail: err.statusText });

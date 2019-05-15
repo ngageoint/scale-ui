@@ -31,6 +31,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     isEditing: boolean;
+    validated: boolean;
     scan: any;
     scanJobIcon = '';
     workspaces: any = [];
@@ -110,7 +111,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
         }
 
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
@@ -266,19 +267,21 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
 
     onValidateClick() {
         this.scansApiService.validateScan(this.scan).subscribe(data => {
+            this.validated = data.is_valid;
             if (data.is_valid) {
-                if (data.warnings.length > 0) {
-                    _.forEach(data.warnings, warning => {
-                        this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
-                    });
-                } else {
-                    this.messageService.add({severity: 'success', summary: 'Scan is valid'});
-                }
-            } else {
-                _.forEach(data.errors, error => {
-                    this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Scan is valid and can be created.'
                 });
+                this.initValidation();
             }
+            _.forEach(data.warnings, warning => {
+                this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+            });
+            _.forEach(data.errors, error => {
+                this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+            });
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error validating scan', detail: err.statusText});
@@ -290,7 +293,8 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         this.ingestFileForm.reset();
         if (this.scan.id) {
             // edit scan
-            this.scansApiService.editScan(this.scan.id, this.scan).subscribe(data => {
+            this.scansApiService.editScan(this.scan.id, this.scan).subscribe(() => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully edited' });
                 this.redirect(this.scan.id);
             }, err => {
                 console.log(err);
@@ -299,6 +303,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         } else {
             // create scan
             this.scansApiService.createScan(this.scan).subscribe(data => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully created' });
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
@@ -309,14 +314,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
 
     onCancelClick() {
         this.redirect(this.scan.id || 'create');
-    }
-
-    onCreateClick(e) {
-        if (e.ctrlKey || e.metaKey) {
-            window.open('/system/scans/create');
-        } else {
-            this.router.navigate([`/system/scans/create`]);
-        }
     }
 
     onWorkspaceChange() {

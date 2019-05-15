@@ -72,37 +72,37 @@
                                             placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
-                            <div class="p-grid">
-                                <div class="p-col-3" formGroupName="scanner">
-                                    <label>
-                                        <span>Scanner Type</span>
-                                        <input type="text" pInputText formControlName="type" required/>
-                                    </label>
-                                </div>
-                                <div class="p-col-3" formGroupName="scanner">
-                                    <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
-                                        <span>Transfer Suffix</span>
-                                        <input type="text" pInputText formControlName="transfer_suffix" required/>
-                                    </label>
-                                </div>
-                                <div class="p-col-3">
-                                    <label>
-                                        <span>Recursive</span>
-                                        <p-toggleButton formControlName="recursive" onLabel="True" offLabel="False"
-                                                        onIcon="fa fa-check" offIcon="fa fa-remove"
-                                                        [style]="{'width':'100%', 'display':'block'}"
-                                                        (onChange)="onRecursiveClick($event)"></p-toggleButton>
-                                    </label>
-                                </div>
-                                <div class="p-col-3">
-                                    <label>
-                                        <span>Recipe</span>
-                                        <p-dropdown [options]="recipeOptions" formControlName="recipe"
-                                                    [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
-                                        </p-dropdown>
-                                    </label>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="p-grid" formGroupName="configuration">
+                        <div class="p-col-3">
+                            <label>
+                                <span>Recipe</span>
+                                <p-dropdown [options]="recipeOptions" formControlName="recipe"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                        <div class="p-col-3">
+                            <label>
+                                <span>Recursive</span>
+                                <p-toggleButton formControlName="recursive" onLabel="True" offLabel="False"
+                                                onIcon="fa fa-check" offIcon="fa fa-remove"
+                                                [style]="{'width':'100%', 'display':'block'}"
+                                                (onChange)="onRecursiveClick($event)"></p-toggleButton>
+                            </label>
+                        </div>
+                        <div class="p-col-3" formGroupName="scanner">
+                            <label>
+                                <span>Scanner Type</span>
+                                <input type="text" pInputText formControlName="type" required/>
+                            </label>
+                        </div>
+                        <div class="p-col-3" formGroupName="scanner">
+                            <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
+                                <span>Transfer Suffix</span>
+                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                            </label>
                         </div>
                     </div>
                 </div>

@@ -29,6 +29,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     isEditing: boolean;
+    validated: boolean;
     totalRecords: number;
     workspaces: SelectItem[] = [];
     selectedWorkspaceDetail: any;
@@ -131,7 +132,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
         }
     }
 
@@ -240,19 +241,21 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     onValidateClick() {
         this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
+            this.validated = data.is_valid;
             if (data.is_valid) {
-                if (data.warnings.length > 0) {
-                    _.forEach(data.warnings, warning => {
-                        this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
-                    });
-                } else {
-                    this.messageService.add({severity: 'success', summary: 'Workspace is valid'});
-                }
-            } else {
-                _.forEach(data.errors, error => {
-                    this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Workspace is valid and can be created.'
                 });
+                this.initValidation();
             }
+            _.forEach(data.warnings, warning => {
+                this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+            });
+            _.forEach(data.errors, error => {
+                this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+            });
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error validating workspace', detail: err.statusText});
@@ -263,6 +266,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         if (this.selectedWorkspaceDetail.id) {
             // edit workspace
             this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, this.selectedWorkspaceDetail).subscribe(() => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace successfully edited' });
                 this.redirect(this.selectedWorkspaceDetail.id);
             }, err => {
                 console.log(err);
@@ -271,6 +275,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         } else {
             // create workspace
             this.workspacesApiService.createWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace successfully created' });
                 this.redirect(data.id);
             }, err => {
                 console.log(err);

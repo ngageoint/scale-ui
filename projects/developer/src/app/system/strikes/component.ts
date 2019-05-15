@@ -33,6 +33,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     isEditing: boolean;
+    validated: boolean;
     strikes: SelectItem[] = [];
     selectedStrikeDetail: any;
     strikeJobIcon = '';
@@ -140,7 +141,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
         }
 
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
@@ -322,19 +323,21 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onValidateClick() {
         this.strikesApiService.validateStrike(this.selectedStrikeDetail).subscribe(data => {
+            this.validated = data.is_valid;
             if (data.is_valid) {
-                if (data.warnings.length > 0) {
-                    _.forEach(data.warnings, warning => {
-                        this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
-                    });
-                } else {
-                    this.messageService.add({severity: 'success', summary: 'Strike is valid'});
-                }
-            } else {
-                _.forEach(data.errors, error => {
-                    this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Strike is valid and can be created.'
                 });
+                this.initValidation();
             }
+            _.forEach(data.warnings, warning => {
+                this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+            });
+            _.forEach(data.errors, error => {
+                this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+            });
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error validating strike', detail: err.statusText});
@@ -344,7 +347,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     onSaveClick() {
         if (this.selectedStrikeDetail.id) {
             // edit strike
-            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(data => {
+            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(() => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully edited' });
                 this.redirect(this.selectedStrikeDetail.id);
             }, err => {
                 console.log(err);
@@ -353,6 +357,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         } else {
             // create strike
             this.strikesApiService.createStrike(this.selectedStrikeDetail).subscribe(data => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully created' });
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
