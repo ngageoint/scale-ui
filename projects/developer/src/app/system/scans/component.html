@@ -59,7 +59,7 @@
                     </span>
                 </div>
                 <div *ngSwitchCase="'job'">
-                        {{ rowData.job.job_type.title }}
+                    <span *ngIf="rowData.job">{{ rowData.job.job_type.title }}</span>
                 </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">

@@ -17,8 +17,8 @@
                 <dl>
                     <dt>Description:</dt>
                     <dd>{{ scan.description }}</dd>
-                    <dt *ngIf="scan.job.id">Job:</dt>
-                    <dd *ngIf="scan.job.id">
+                    <dt *ngIf="scan.job && scan.job.id">Job:</dt>
+                    <dd *ngIf="scan.job && scan.job.id">
                         <a routerLink="/jobs/job/{{ scan.job.id }}">
                             <i class="fa" [innerHtml]="scanJobIcon"></i>
                             View Job Details ({{ scan.job.status }})
