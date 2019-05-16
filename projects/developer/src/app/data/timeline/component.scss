@@ -6,7 +6,40 @@ h2 {
 label {
     font-weight: bold;
     display: block;
+    margin: 15px 0 0 0;
 }
+
+.label-info {
+    padding: .2em .6em .1em .6em;
+}
+
+button {
+    margin: 15px 0;
+}
+
+.timeline__filter-toggle {
+    position: fixed;
+    top: 130px;
+    left: 0;
+    height: 120px;
+    width: 30px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.timeline__filter-loading {
+    text-align: center;
+    margin: 15px 0 0 0;
+}
+
+::ng-deep .ui-sidebar {
+    overflow-y: auto;
+}
+
+.timeline__chart{
+    margin-top: 40px;
+}
+
 .timeline__header {
     display: flex;
     justify-content: space-between;
@@ -37,40 +70,4 @@ label {
             margin-left: 5px;
         }
     }
-}
-.label-info {
-    padding: .2em .6em .1em .6em;
-}
-
-label {
-    display: block;
-    font-weight: bold;
-    margin: 15px 0 0 0;
-}
-
-button {
-    margin: 15px 0;
-}
-
-.timeline__filter-toggle {
-    position: fixed;
-    top: 130px;
-    left: 0;
-    height: 120px;
-    width: 30px;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-}
-
-.timeline__filter-loading {
-    text-align: center;
-    margin: 15px 0 0 0;
-}
-
-::ng-deep canvas {
-    margin-top: -39px;
-}
-
-::ng-deep .ui-sidebar {
-    overflow-y: auto;
 }
