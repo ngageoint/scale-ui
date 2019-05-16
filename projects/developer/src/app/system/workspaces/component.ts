@@ -43,10 +43,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             value: 'host'
         },
         {
-            label: 'NFS',
-            value: 'nfs'
-        },
-        {
             label: 'S3',
             value: 's3'
         }
@@ -84,7 +80,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 broker: this.fb.group({
                     type: [''],
                     host_path: [''],
-                    nfs_path: [''],
                     bucket_name: [''],
                     credentials: this.fb.group({
                         access_key_id: [''],
@@ -99,7 +94,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         this.createForm.get('configuration.broker.region_name').disable();
         this.createForm.get('configuration.broker.credentials.access_key_id').disable();
         this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
-        this.createForm.get('configuration.broker.nfs_path').disable();
     }
 
     private initBroker() {
@@ -110,21 +104,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 this.createForm.get('configuration.broker.region_name').enable();
                 this.createForm.get('configuration.broker.credentials.access_key_id').enable();
                 this.createForm.get('configuration.broker.credentials.secret_access_key').enable();
-                this.createForm.get('configuration.broker.nfs_path').disable();
             } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
                 this.createForm.get('configuration.broker.host_path').enable();
                 this.createForm.get('configuration.broker.bucket_name').disable();
                 this.createForm.get('configuration.broker.region_name').disable();
                 this.createForm.get('configuration.broker.credentials.access_key_id').disable();
                 this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
-                this.createForm.get('configuration.broker.nfs_path').disable();
-            } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'nfs') {
-                this.createForm.get('configuration.broker.host_path').disable();
-                this.createForm.get('configuration.broker.bucket_name').disable();
-                this.createForm.get('configuration.broker.region_name').disable();
-                this.createForm.get('configuration.broker.credentials.access_key_id').disable();
-                this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
-                this.createForm.get('configuration.broker.nfs_path').enable();
             }
         }
     }
@@ -302,20 +287,11 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onTypeChange() {
-        if (this.selectedWorkspaceDetail.configuration.broker.type === 's3') {
-            this.createForm.get('configuration.broker.nfs_path').setValue(null);
-        } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
+        if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
             this.createForm.get('configuration.broker.bucket_name').setValue(null);
             this.createForm.get('configuration.broker.region_name').setValue(null);
             this.createForm.get('configuration.broker.credentials.access_key_id').setValue(null);
             this.createForm.get('configuration.broker.credentials.secret_access_key').setValue(null);
-            this.createForm.get('configuration.broker.nfs_path').setValue(null);
-        } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'nfs') {
-            this.createForm.get('configuration.broker.bucket_name').setValue(null);
-            this.createForm.get('configuration.broker.region_name').setValue(null);
-            this.createForm.get('configuration.broker.credentials.access_key_id').setValue(null);
-            this.createForm.get('configuration.broker.credentials.secret_access_key').setValue(null);
-            this.createForm.get('configuration.broker.host_path').setValue(null);
         }
 
         // determine which broker fields to display
