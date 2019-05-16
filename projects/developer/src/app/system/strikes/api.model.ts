@@ -1,6 +1,7 @@
 import { DataService } from '../../common/services/data.service';
 import { Job } from '../../processing/jobs/api.model';
 import { StrikeConfiguration } from './api.configuration.model';
+import * as _ from 'lodash';
 
 export class Strike {
     createdDisplay: string;
@@ -41,7 +42,7 @@ export class Strike {
             description: strike.description,
             configuration: {
                 workspace: strike.configuration.workspace,
-                monitor: strike.configuration.monitor,
+                monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
                 files_to_ingest: strike.configuration.files_to_ingest,
                 recipe: strike.configuration.recipe
             }
@@ -49,16 +50,19 @@ export class Strike {
     }
 
     public static cleanStrikeForSave(strike) {
-        return {
+        const returnStrike = {
             title: strike.title,
             description: strike.description,
             configuration: {
                 workspace: strike.configuration.workspace,
-                monitor: strike.configuration.monitor,
+                monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
                 files_to_ingest: strike.configuration.files_to_ingest,
                 recipe: strike.configuration.recipe
             }
         };
+        return _.pickBy(returnStrike, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
     }
 
     constructor(

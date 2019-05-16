@@ -392,7 +392,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 if (data.configuration.broker.type === 'host' || data.configuration.broker.type === 'nfs') {
                     this.selectedStrikeDetail.configuration.monitor.type = 'dir-watcher';
                     this.selectedStrikeDetail.configuration.monitor.sqs_name = null;
-                    this.selectedStrikeDetail.configuration.monitor.credentials = {};
+                    this.selectedStrikeDetail.configuration.monitor.credentials = null;
                     this.selectedStrikeDetail.configuration.monitor.region_name = null;
                 } else if (data.configuration.broker.type === 's3') {
                     this.selectedStrikeDetail.configuration.monitor.type = 's3';
