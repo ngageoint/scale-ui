@@ -386,7 +386,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
             // get workspace detail to obtain configuration data
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
-                if (data.configuration.broker.type === 'host') {
+                if (data.configuration.broker.type === 'host' || data.configuration.broker.type === 'nfs') {
                     this.selectedStrikeDetail.configuration.monitor.type = 'dir-watcher';
                     this.selectedStrikeDetail.configuration.monitor.sqs_name = null;
                     this.selectedStrikeDetail.configuration.monitor.credentials = {};
