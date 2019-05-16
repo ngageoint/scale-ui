@@ -76,7 +76,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     private initFormGroups() {
         this.createForm = this.fb.group({
-            name: ['', Validators.required],
             title: ['', Validators.required],
             description: [''],
             base_url: [''],
@@ -95,6 +94,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 })
             })
         });
+        this.createForm.get('configuration.broker.host_path').disable();
+        this.createForm.get('configuration.broker.bucket_name').disable();
+        this.createForm.get('configuration.broker.region_name').disable();
+        this.createForm.get('configuration.broker.credentials.access_key_id').disable();
+        this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
+        this.createForm.get('configuration.broker.nfs_path').disable();
     }
 
     private initBroker() {
@@ -179,7 +184,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getWorkspaces(id: any) {
+    private getWorkspaces(id?: any) {
         this.workspaces = [];
         this.loading = true;
         if (!id) {

@@ -78,7 +78,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     private initFormGroups() {
         this.createForm = this.fb.group({
-            name: ['', Validators.required],
             title: ['', Validators.required],
             description: [''],
             configuration: this.fb.group({
@@ -103,6 +102,10 @@ export class StrikesComponent implements OnInit, OnDestroy {
             new_workspace: [''],
             new_file_path: ['']
         });
+        this.createForm.get('configuration.monitor.sqs_name').disable();
+        this.createForm.get('configuration.monitor.credentials').disable();
+        this.createForm.get('configuration.monitor.region_name').disable();
+        this.createForm.get('configuration.monitor.transfer_suffix').disable();
     }
 
     private initNewWorkspacesOptions() {

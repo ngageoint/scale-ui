@@ -59,7 +59,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
 
     private initFormGroups() {
         this.createForm = this.fb.group({
-            name: ['', Validators.required],
             title: ['', Validators.required],
             description: [''],
             configuration: this.fb.group({

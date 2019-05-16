@@ -3,7 +3,7 @@ const moment = require('moment');
 module.exports = function (request) {
     return {
         id: 1,
-        name: request.payload.name,
+        name: _.kebabCase(request.payload.title),
         title: request.payload.title,
         description: request.payload.description,
         job: {
