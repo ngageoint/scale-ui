@@ -52,7 +52,9 @@ export class Workspace {
             description: workspace.description,
             base_url: workspace.base_url,
             is_active: workspace.is_active,
-            configuration: workspace.configuration
+            configuration: {
+                broker: workspace.configuration.broker
+            }
         };
     }
 
@@ -62,7 +64,9 @@ export class Workspace {
             description: workspace.description,
             base_url: workspace.base_url,
             is_active: workspace.is_active,
-            configuration: workspace.configuration
+            configuration: {
+                broker: workspace.configuration.broker
+            }
         };
     }
 
