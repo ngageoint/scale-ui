@@ -19,7 +19,7 @@
                 [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false"></p-dropdown>
     <div *ngIf="selectedDataOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" [style]="{'width':'100%'}"></p-multiSelect>
+        <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" [style]="{'width':'100%'}" maxSelectedLabels = "5"></p-multiSelect>
     </div>
     <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
     (click)="onApplyClick()"></button>
