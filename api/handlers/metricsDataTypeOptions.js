@@ -2,7 +2,6 @@ const _ = require('lodash');
 const errorTypes = require('../data/metricsErrorTypes.json');
 const ingest = require('../data/metricsIngest.json');
 const jobTypes = require('../data/metricsJobTypes.json');
-const recipesTimeline = require('../data/metricsRecipes.json');
 
 module.exports = function (request) {
     var dataType = request.url.href.split('/');
