@@ -43,7 +43,7 @@ export class Scan {
             configuration: {
                 workspace: scan.configuration.workspace,
                 scanner: scan.configuration.scanner,
-                resursive: scan.configuration.recursive,
+                recursive: scan.configuration.recursive,
                 files_to_ingest: scan.configuration.files_to_ingest,
                 recipe: scan.configuration.recipe
             }
