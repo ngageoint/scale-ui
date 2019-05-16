@@ -98,10 +98,9 @@ export class TimelineComponent implements OnInit {
         let todaysDate = '';
 
          _.forEach(data.results, result => {
-             if(result.job_type.name != 'undefined'){
+            if (result.job_type.name !== 'undefined') {
             this.data.labels.push(result.job_type.name);
-            }
-            else{
+            } else {
                 this.data.labels.push(result.name);
             }
             console.log(result.job_type);
