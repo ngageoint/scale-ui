@@ -288,8 +288,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
-        this.createForm.reset();
-        this.ingestFileForm.reset();
         if (this.scan.id) {
             // edit scan
             this.scansApiService.editScan(this.scan.id, this.scan).subscribe(() => {
