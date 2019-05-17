@@ -4,6 +4,12 @@
 : ${AUTH_URL:=/api/login/}
 : ${AUTH_ENABLED:=true}
 : ${SILO_URL:=/silo}
+: ${SILO_BACKEND:=http://scale-silo.marathon.l4lb.thisdcos.directory:9000/}
+: ${API_BACKEND:=http://scale-webserver.marathon.l4lb.thisdcos.directory:80/}
+
+# Trim trailing slash from backend addresses
+SILO_BACKEND=$(echo ${SILO_BACKEND} | sed 's^/$^^')
+API_BACKEND=$(echo ${API_BACKEND} | sed 's^/$^^')
 
 jq_in_place() {
     tmp=$(mktemp)
@@ -46,12 +52,12 @@ then
         cat /tmp/html/index.html | sed 's^base href="\/"^base href="'$ITEM'\/"^g' > $WEB_ROOT/$ITEM/index.html
         chmod 755 ${ITEM_CONFIG_JSON}
         # Adding contexts for backend
-        (cat /nginx-template.conf | sed 's^${CONTEXT}^'${ITEM}'^g' | sed 's^${BACKEND_URL}^'${BACKEND_URL}'^g' | sed 's^${SILO_URL}^'${SILO_URL}'^g' ) >> ${NGINX_CONF}
+        (cat /nginx-template.conf | sed 's^${CONTEXT}^'${ITEM}'^g' | sed 's^${API_BACKEND}^'${API_BACKEND}'^g' | sed 's^${SILO_BACKEND}^'${SILO_BACKEND}'^g' ) >> ${NGINX_CONF}
     done
 fi
 
 # Update the nginx conf with the backend for Scale
-cat ${NGINX_CONF} | sed 's^${BACKEND_URL}^'${BACKEND_URL}'^g' | sed 's^${SILO_URL}^'${SILO_URL}'^g' > /tmp/nginx.conf
+cat ${NGINX_CONF} | sed 's^${API_BACKEND}^'${API_BACKEND}'^g' | sed 's^${SILO_BACKEND}^'${SILO_BACKEND}'^g' > /tmp/nginx.conf
 mv /tmp/nginx.conf ${NGINX_CONF}
 # Terminate NGINX conf file
 echo "}" >> ${NGINX_CONF}
