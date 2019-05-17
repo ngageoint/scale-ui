@@ -41,15 +41,17 @@ then
     
     for ITEM in ${ITEMS}
     do
+        # Strip leading and trailing slashes
+	ITEM=$(echo ${ITEM} | sed 's~/$~~' | sed 's~^/~~')
         echo "Creating instance of Scale UI at $WEB_ROOT/$ITEM..."
         mkdir -p $WEB_ROOT/$ITEM
         cp -R /tmp/html/* $WEB_ROOT/$ITEM/
 
         ITEM_CONFIG_JSON=$WEB_ROOT/$ITEM/assets/appConfig.json
 
-        jq '.apiPrefix = "'${ITEM}'/api"' ${CONFIG_JSON} > ${ITEM_CONFIG_JSON}
-        jq_in_place '.auth.scheme.url="'${ITEM}'/api/login/"' ${ITEM_CONFIG_JSON}
-        cat /tmp/html/index.html | sed 's^base href="\/"^base href="'$ITEM'\/"^g' > $WEB_ROOT/$ITEM/index.html
+        jq '.apiPrefix = "/'${ITEM}'/api"' ${CONFIG_JSON} > ${ITEM_CONFIG_JSON}
+        jq_in_place '.auth.scheme.url="/'${ITEM}'/api/login/"' ${ITEM_CONFIG_JSON}
+        cat /tmp/html/index.html | sed 's^base href="\/"^base href="/'$ITEM'\/"^g' > $WEB_ROOT/$ITEM/index.html
         chmod 755 ${ITEM_CONFIG_JSON}
         # Adding contexts for backend
         (cat /nginx-template.conf | sed 's^${CONTEXT}^'${ITEM}'^g' | sed 's^${API_BACKEND}^'${API_BACKEND}'^g' | sed 's^${SILO_BACKEND}^'${SILO_BACKEND}'^g' ) >> ${NGINX_CONF}
