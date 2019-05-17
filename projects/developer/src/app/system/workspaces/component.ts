@@ -89,11 +89,13 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 })
             })
         });
-        this.createForm.get('configuration.broker.host_path').disable();
-        this.createForm.get('configuration.broker.bucket_name').disable();
-        this.createForm.get('configuration.broker.region_name').disable();
-        this.createForm.get('configuration.broker.credentials.access_key_id').disable();
-        this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
+        if (this.createForm) {
+            this.createForm.get('configuration.broker.host_path').disable();
+            this.createForm.get('configuration.broker.bucket_name').disable();
+            this.createForm.get('configuration.broker.region_name').disable();
+            this.createForm.get('configuration.broker.credentials.access_key_id').disable();
+            this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
+        }
     }
 
     private initBroker() {
