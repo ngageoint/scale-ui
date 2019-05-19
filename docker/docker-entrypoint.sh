@@ -48,10 +48,12 @@ then
         cp -R /tmp/html/* $WEB_ROOT/$ITEM/
 
         ITEM_CONFIG_JSON=$WEB_ROOT/$ITEM/assets/appConfig.json
+        cp ${CONFIG_JSON} ${ITEM_CONFIG_JSON}
 
-        jq '.apiPrefix = "/'${ITEM}'/api"' ${CONFIG_JSON} > ${ITEM_CONFIG_JSON}
-        jq_in_place '.auth.scheme.url="/'${ITEM}'/api/login/"' ${ITEM_CONFIG_JSON}
-        cat /tmp/html/index.html | sed 's^base href="\/"^base href="/'$ITEM'\/"^g' > $WEB_ROOT/$ITEM/index.html
+        jq_in_place '.apiPrefix="/'${ITEM}${API_PREFIX}'"' ${ITEM_CONFIG_JSON}
+        jq_in_place '.siloUrl="/'${ITEM}${SILO_URL}'"' ${ITEM_CONFIG_JSON}
+        jq_in_place '.auth.scheme.url="/'${ITEM}${AUTH_URL}'"' ${ITEM_CONFIG_JSON}
+        cat /tmp/html/index.html | sed 's^base href="\/"^base href="/'${ITEM}'\/"^g' > $WEB_ROOT/$ITEM/index.html
         chmod 755 ${ITEM_CONFIG_JSON}
         # Adding contexts for backend
         (cat /nginx-template.conf | sed 's^${CONTEXT}^'${ITEM}'^g' | sed 's^${API_BACKEND}^'${API_BACKEND}'^g' | sed 's^${SILO_BACKEND}^'${SILO_BACKEND}'^g' ) >> ${NGINX_CONF}
