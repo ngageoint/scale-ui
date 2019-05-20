@@ -36,7 +36,8 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     createForm: any;
     createFormSubscription: any;
     items: MenuItem[] = _.clone(this.viewMenu);
-    showInactive = false;
+    showActive = true;
+    activeLabel = 'Active Workspaces';
     typeOptions: SelectItem[] = [
         {
             label: 'Host',
@@ -130,11 +131,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     private initWorkspaceForm() {
         if (this.selectedWorkspaceDetail) {
-            // disable the name field if editing an existing workspace
-            if (this.selectedWorkspaceDetail.id) {
-                this.createForm.get('name').disable();
-            }
-
             // determine which broker fields to display
             this.initBroker();
 
@@ -187,7 +183,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.workspaces = _.orderBy(_.filter(this.workspaces, workspace => {
-                    return workspace.value.is_active === !this.showInactive;
+                    return workspace.value.is_active === this.showActive;
                 }), ['value.title'], ['asc']);
                 this.totalRecords = this.workspaces.length;
                 this.clampText();
@@ -315,6 +311,11 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     onIsActiveClick(e) {
         e.originalEvent.preventDefault();
+    }
+
+    toggleShowActive() {
+        this.activeLabel = this.showActive ? 'Active Workspaces' : 'Deprecated Workspaces';
+        this.getWorkspaces();
     }
 
     ngOnInit() {

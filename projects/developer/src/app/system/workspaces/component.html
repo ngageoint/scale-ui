@@ -7,17 +7,19 @@
                         pTooltip="Create Workspace"></button>
             </div>
         </div>
-        <div class="flexed">
-            <div class="margin-right-md">
-                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
-                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
-                                (onChange)="getWorkspaces()"></p-toggleButton>
-            </div>
-            <input type="search" pInputText placeholder="Search" class="workspaces__filter"
-                   (keyup)="onFilterKeyup($event)">
-        </div>
     </div>
     <p-dataView [value]="workspaces" filterBy="value.title" layout="grid" [loading]="loading" #dv>
+        <p-header>
+            <div class="flexed workspaces__filter">
+                <div class="flexed">
+                    <span class="workspaces__label">{{ activeLabel }}</span>
+                    <p-inputSwitch [(ngModel)]="showActive" (onChange)="toggleShowActive()"
+                                   class="margin-right-md"></p-inputSwitch>
+                </div>
+                <input type="search" pInputText placeholder="Search" class="workspaces__filter-input"
+                       (keyup)="onFilterKeyup($event)">
+            </div>
+        </p-header>
         <ng-template let-workspace pTemplate="gridItem">
             <div class="p-col-12 p-md-3 workspaces__container" (click)="onWorkspaceClick($event, workspace)">
                 <p-panel>

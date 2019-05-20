@@ -33,7 +33,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
-    showInactive = false;
+    showActive = true;
+    activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
     validated: boolean;
     totalRecords: number;
@@ -198,7 +199,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.loadingRecipeTypes = true;
         params = params || {
             rows: 1000,
-            is_active: !this.showInactive,
+            is_active: this.showActive,
             sortField: 'title'
         };
         this.recipeTypeOptions = [];
@@ -422,6 +423,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.getRecipeTypeDetail(this.recipeTypeName);
             }
         }
+    }
+
+    toggleShowActive() {
+        this.activeLabel = this.showActive ? 'Active Recipe Types' : 'Deprecated Recipe Types';
+        this.getRecipeTypes();
     }
 
     validateRecipeType() {

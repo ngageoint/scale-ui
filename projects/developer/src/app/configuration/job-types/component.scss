@@ -1,18 +1,21 @@
-::ng-deep .job-types {
-    .ui-dataview {
-        .ui-dataview-header {
-            display: none;
-        }
+.job-type__filter {
+    button {
+        margin-right: 5px;
+        padding: 0;
+        font-size: 0.8em;
+        margin-top: 5px;
+    }
 
-        .ui-dataview-content {
-            padding: 1em;
-        }
+    .job-type__filter-input {
+        width: 300px;
+        font-size: 1.2em;
     }
 }
 
-.job-type__filter {
-    width: 300px;
-    font-size: 1.2em;
+.job-type__label {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin: 0 7px;
 }
 
 .job-type__container {
@@ -121,5 +124,23 @@
     }
     .dl-horizontal{
         word-wrap: break-word;
+    }
+}
+
+::ng-deep .job-types__dataview {
+    .ui-dataview-header {
+        .ui-button-secondary {
+            background-color: var(--off-white) !important;
+            border: 1px solid var(--off-white) !important;
+        }
+    }
+
+    .ui-dataview-content {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+
+    .ui-panel-titlebar {
+        padding: 0.2em 0.5em !important;
     }
 }
