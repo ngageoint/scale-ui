@@ -179,11 +179,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
-            // disable the name field if editing an existing strike
-            if (this.selectedStrikeDetail.id) {
-                this.createForm.get('name').disable();
-            }
-
             // determine what to show in monitor input, and which monitor fields to display
             this.initMonitor();
 

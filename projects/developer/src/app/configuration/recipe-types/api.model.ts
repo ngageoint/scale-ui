@@ -42,9 +42,12 @@ export class RecipeType {
     }
 
     public static cleanDefinition(definition) {
+        const files = _.forEach(definition.input.files, file => {
+            delete file.disabled;
+        });
         return {
             input: {
-                files: definition.input.files,
+                files: files,
                 json: definition.input.json
             },
             nodes: definition.nodes
