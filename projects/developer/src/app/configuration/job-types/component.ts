@@ -119,18 +119,17 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         });
     }
     filterTypes(filter) {
-        if(this.favoriteBtnIcon === "fa fa-check"){
+        if (this.favoriteBtnIcon === 'fa fa-check') {
             if (filter === 'Favorites') {
                 this.showFavorites = true;
-                this.favoriteBtnIcon = "fa fa-remove";
+                this.favoriteBtnIcon = 'fa fa-remove';
                 this.getJobTypes();
             }
-        } else{
+        } else {
             this.showFavorites = false;
-            this.favoriteBtnIcon = "fa fa-check";
+            this.favoriteBtnIcon = 'fa fa-check';
             this.getJobTypes();
         }
-
     }
     private getJobTypes(params?: any) {
        this.inactiveLabel = this.showInactive ? 'Show Only Active Job Types' : 'Show Only Inactive Job Types';
