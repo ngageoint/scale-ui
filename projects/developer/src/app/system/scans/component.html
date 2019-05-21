@@ -9,7 +9,7 @@
             <label>To:</label>
             <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
         </div>
-        <button pButton class="ui-button-primary scans__date-filter-btn" label="Apply"
+        <button pButton class="scans__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
                 (click)="onDateFilterApply()"></button>
         <div class="scans__date-filter-ranges" *ngIf="!isMobile">
             <button pButton class="ui-button-secondary scans__date-filter-btn" label="Last 6 Hours"
@@ -59,7 +59,7 @@
                     </span>
                 </div>
                 <div *ngSwitchCase="'job'">
-                        {{ rowData.job.job_type.title }}
+                    <span *ngIf="rowData.job">{{ rowData.job.job_type.title }}</span>
                 </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">

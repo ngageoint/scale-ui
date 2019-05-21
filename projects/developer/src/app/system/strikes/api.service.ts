@@ -78,21 +78,24 @@ export class StrikesApiService {
     }
 
     validateStrike(strike: any): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/strikes/validation/`, strike)
+        const cleanStrike = Strike.cleanStrikeForValidate(strike);
+        return this.http.post<any>(`${this.apiPrefix}/strikes/validation/`, cleanStrike)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     editStrike(id: number, strike: any): Observable<any> {
-        return this.http.patch<any>(`${this.apiPrefix}/strikes/${id}/`, strike)
+        const cleanStrike = Strike.cleanStrikeForSave(strike);
+        return this.http.patch<any>(`${this.apiPrefix}/strikes/${id}/`, cleanStrike)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     createStrike(strike: any): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/strikes/`, strike)
+        const cleanStrike = Strike.cleanStrikeForSave(strike);
+        return this.http.post<any>(`${this.apiPrefix}/strikes/`, cleanStrike)
             .pipe(
                 catchError(DataService.handleError)
             );

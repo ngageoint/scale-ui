@@ -139,7 +139,8 @@
                     </ng-template>
                 </p-dataList>
                 <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.files" [scrollable]="true"
-                            scrollHeight="300px" class="recipe-io-container">
+                            scrollHeight="300px" class="recipe-io-container"
+                            *ngIf="selectedJobType.manifest.job.interface.inputs">
                     <p-header>
                         <strong>Inputs</strong>
                     </p-header>

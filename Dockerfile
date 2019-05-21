@@ -12,7 +12,7 @@ RUN apk -U --no-cache add jq && chmod 777 /usr/share/nginx/html
 
 ENV CONFIG_JSON=/usr/share/nginx/html/assets/appConfig.json
 ENV NGINX_CONF=/etc/nginx/conf.d/default.conf
-ENV BACKEND=http://scale-webserver.marathon.l4lb.thisdcos.directory
+ENV BACKEND_URL=http://scale-webserver.marathon.l4lb.thisdcos.directory
 
 COPY dist/developer /usr/share/nginx/html
 COPY docker/nginx.conf ${NGINX_CONF}

@@ -78,21 +78,24 @@ export class ScansApiService {
     }
 
     validateScan(scan: any): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/scans/validation/`, scan)
+        const cleanScan = Scan.cleanScan(scan);
+        return this.http.post<any>(`${this.apiPrefix}/scans/validation/`, cleanScan)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     editScan(id: number, scan: any): Observable<any> {
-        return this.http.patch<any>(`${this.apiPrefix}/scans/${id}/`, scan)
+        const cleanScan = Scan.cleanScan(scan);
+        return this.http.patch<any>(`${this.apiPrefix}/scans/${id}/`, cleanScan)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     createScan(scan: any): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/scans/`, scan)
+        const cleanScan = Scan.cleanScan(scan);
+        return this.http.post<any>(`${this.apiPrefix}/scans/`, cleanScan)
             .pipe(
                 catchError(DataService.handleError)
             );

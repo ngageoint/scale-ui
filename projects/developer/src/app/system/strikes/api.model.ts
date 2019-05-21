@@ -1,6 +1,7 @@
 import { DataService } from '../../common/services/data.service';
 import { Job } from '../../processing/jobs/api.model';
 import { StrikeConfiguration } from './api.configuration.model';
+import * as _ from 'lodash';
 
 export class Strike {
     createdDisplay: string;
@@ -34,13 +35,34 @@ export class Strike {
         return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null));
     }
 
-    public clean(): object {
+    public static cleanStrikeForValidate(strike) {
         return {
-            name: this.name,
-            title: this.title,
-            description: this.description,
-            configuration: this.configuration
+            name: strike.name,
+            title: strike.title,
+            description: strike.description,
+            configuration: {
+                workspace: strike.configuration.workspace,
+                monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
+                files_to_ingest: strike.configuration.files_to_ingest,
+                recipe: strike.configuration.recipe
+            }
         };
+    }
+
+    public static cleanStrikeForSave(strike) {
+        const returnStrike = {
+            title: strike.title,
+            description: strike.description,
+            configuration: {
+                workspace: strike.configuration.workspace,
+                monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
+                files_to_ingest: strike.configuration.files_to_ingest,
+                recipe: strike.configuration.recipe
+            }
+        };
+        return _.pickBy(returnStrike, d => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
     }
 
     constructor(
