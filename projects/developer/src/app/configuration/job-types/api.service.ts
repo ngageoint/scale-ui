@@ -146,7 +146,7 @@ export class JobTypesApiService {
         const updatedJobType = {
             is_paused: jobType.is_paused
         };
-        return this.http.patch<any>(`${this.apiPrefix}/job-types/${jobType.id}/`, updatedJobType)
+        return this.http.patch<any>(`${this.apiPrefix}/job-types/${jobType.name}/${jobType.version}/`, updatedJobType)
             .pipe(
                 catchError(DataService.handleError)
             );

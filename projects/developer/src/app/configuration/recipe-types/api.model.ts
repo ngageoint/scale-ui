@@ -45,6 +45,12 @@ export class RecipeType {
         const files = _.forEach(definition.input.files, file => {
             delete file.disabled;
         });
+        _.forEach(definition.nodes, node => {
+            _.forEach(node.dependencies, d => {
+                delete d.connections;
+                delete d.type;
+            });
+        });
         return {
             input: {
                 files: files,
