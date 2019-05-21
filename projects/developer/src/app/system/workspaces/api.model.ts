@@ -1,5 +1,6 @@
 import { WorkspaceConfiguration } from './api.configuration.model';
 import { DataService } from '../../common/services/data.service';
+import * as _ from 'lodash';
 
 export class Workspace {
     createdDisplay: string;
@@ -45,14 +46,28 @@ export class Workspace {
         );
     }
 
-    public clean(): object {
+    public static cleanWorkspaceForValidate(workspace) {
         return {
-            name: this.name,
-            title: this.title,
-            description: this.description,
-            base_url: this.base_url,
-            is_active: this.is_active,
-            configuration: this.configuration
+            name: workspace.name,
+            title: workspace.title,
+            description: workspace.description,
+            base_url: workspace.base_url,
+            is_active: workspace.is_active,
+            configuration: {
+                broker: _.pickBy(workspace.configuration.broker, d => d !== null && typeof d !== 'undefined' && d !== '')
+            }
+        };
+    }
+
+    public static cleanWorkspaceForSave(workspace) {
+        return {
+            title: workspace.title,
+            description: workspace.description,
+            base_url: workspace.base_url,
+            is_active: workspace.is_active,
+            configuration: {
+                broker: _.pickBy(workspace.configuration.broker, d => d !== null && typeof d !== 'undefined' && d !== '')
+            }
         };
     }
 

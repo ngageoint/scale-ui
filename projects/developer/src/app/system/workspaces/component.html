@@ -57,10 +57,6 @@
                            selectedWorkspaceDetail.configuration.broker.type === 'host'">
                     {{ selectedWorkspaceDetail.configuration.broker.host_path }}
                 </dd>
-                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">NFS Path:</dt>
-                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">
-                    {{ selectedWorkspaceDetail.configuration.broker.nfs_path }}
-                </dd>
                 <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Bucket Name:</dt>
                 <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
                     {{ selectedWorkspaceDetail.configuration.broker.bucket_name }}
@@ -104,19 +100,11 @@
                 <div class="p-grid">
                     <div class="p-col-6">
                         <label>
-                            <span>Name</span>
-                            <input type="text" pInputText formControlName="name" required/>
-                        </label>
-                    </div>
-                    <div class="p-col-6">
-                        <label>
                             <span>Title</span>
                             <input type="text" pInputText formControlName="title" required/>
                         </label>
                     </div>
-                </div>
-                <div class="p-grid">
-                    <div class="p-col-12">
+                    <div class="p-col-6">
                         <label>
                             <span>Description</span>
                             <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
@@ -153,10 +141,6 @@
                             </label>
                         </div>
                         <div class="p-col-6">
-                            <label *ngIf="createForm.get('configuration.broker.nfs_path').enabled">
-                                <span>NFS Path</span>
-                                <input type="text" pInputText formControlName="nfs_path" required/>
-                            </label>
                             <label *ngIf="createForm.get('configuration.broker.host_path').enabled">
                                 <span>Host Path</span>
                                 <input type="text" pInputText formControlName="host_path" required/>

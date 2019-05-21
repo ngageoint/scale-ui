@@ -29,6 +29,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     isEditing: boolean;
+    validated: boolean;
     totalRecords: number;
     workspaces: SelectItem[] = [];
     selectedWorkspaceDetail: any;
@@ -40,10 +41,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         {
             label: 'Host',
             value: 'host'
-        },
-        {
-            label: 'NFS',
-            value: 'nfs'
         },
         {
             label: 'S3',
@@ -75,7 +72,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     private initFormGroups() {
         this.createForm = this.fb.group({
-            name: ['', Validators.required],
             title: ['', Validators.required],
             description: [''],
             base_url: [''],
@@ -84,7 +80,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 broker: this.fb.group({
                     type: [''],
                     host_path: [''],
-                    nfs_path: [''],
                     bucket_name: [''],
                     credentials: this.fb.group({
                         access_key_id: [''],
@@ -94,6 +89,11 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 })
             })
         });
+        this.createForm.get('configuration.broker.host_path').disable();
+        this.createForm.get('configuration.broker.bucket_name').disable();
+        this.createForm.get('configuration.broker.region_name').disable();
+        this.createForm.get('configuration.broker.credentials.access_key_id').disable();
+        this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
     }
 
     private initBroker() {
@@ -104,21 +104,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 this.createForm.get('configuration.broker.region_name').enable();
                 this.createForm.get('configuration.broker.credentials.access_key_id').enable();
                 this.createForm.get('configuration.broker.credentials.secret_access_key').enable();
-                this.createForm.get('configuration.broker.nfs_path').disable();
             } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
                 this.createForm.get('configuration.broker.host_path').enable();
                 this.createForm.get('configuration.broker.bucket_name').disable();
                 this.createForm.get('configuration.broker.region_name').disable();
                 this.createForm.get('configuration.broker.credentials.access_key_id').disable();
                 this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
-                this.createForm.get('configuration.broker.nfs_path').disable();
-            } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'nfs') {
-                this.createForm.get('configuration.broker.host_path').disable();
-                this.createForm.get('configuration.broker.bucket_name').disable();
-                this.createForm.get('configuration.broker.region_name').disable();
-                this.createForm.get('configuration.broker.credentials.access_key_id').disable();
-                this.createForm.get('configuration.broker.credentials.secret_access_key').disable();
-                this.createForm.get('configuration.broker.nfs_path').enable();
             }
         }
     }
@@ -131,7 +122,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
         }
     }
 
@@ -178,7 +169,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private getWorkspaces(id: any) {
+    private getWorkspaces(id?: any) {
         this.workspaces = [];
         this.loading = true;
         if (!id) {
@@ -239,20 +230,22 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail.clean()).subscribe(data => {
+        this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
+            this.validated = data.is_valid;
             if (data.is_valid) {
-                if (data.warnings.length > 0) {
-                    _.forEach(data.warnings, warning => {
-                        this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
-                    });
-                } else {
-                    this.messageService.add({severity: 'success', summary: 'Workspace is valid'});
-                }
-            } else {
-                _.forEach(data.errors, error => {
-                    this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Workspace is valid and can be created.'
                 });
+                this.initValidation();
             }
+            _.forEach(data.warnings, warning => {
+                this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+            });
+            _.forEach(data.errors, error => {
+                this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+            });
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error validating workspace', detail: err.statusText});
@@ -262,8 +255,8 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     onSaveClick() {
         if (this.selectedWorkspaceDetail.id) {
             // edit workspace
-            const cleanWorkspace = this.selectedWorkspaceDetail.clean();
-            this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, cleanWorkspace).subscribe(() => {
+            this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, this.selectedWorkspaceDetail).subscribe(() => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace successfully edited' });
                 this.redirect(this.selectedWorkspaceDetail.id);
             }, err => {
                 console.log(err);
@@ -271,7 +264,8 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
             });
         } else {
             // create workspace
-            this.workspacesApiService.createWorkspace(this.selectedWorkspaceDetail.clean()).subscribe(data => {
+            this.workspacesApiService.createWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace successfully created' });
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
@@ -293,20 +287,11 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onTypeChange() {
-        if (this.selectedWorkspaceDetail.configuration.broker.type === 's3') {
-            this.createForm.get('configuration.broker.nfs_path').setValue(null);
-        } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
+        if (this.selectedWorkspaceDetail.configuration.broker.type === 'host') {
             this.createForm.get('configuration.broker.bucket_name').setValue(null);
             this.createForm.get('configuration.broker.region_name').setValue(null);
             this.createForm.get('configuration.broker.credentials.access_key_id').setValue(null);
             this.createForm.get('configuration.broker.credentials.secret_access_key').setValue(null);
-            this.createForm.get('configuration.broker.nfs_path').setValue(null);
-        } else if (this.selectedWorkspaceDetail.configuration.broker.type === 'nfs') {
-            this.createForm.get('configuration.broker.bucket_name').setValue(null);
-            this.createForm.get('configuration.broker.region_name').setValue(null);
-            this.createForm.get('configuration.broker.credentials.access_key_id').setValue(null);
-            this.createForm.get('configuration.broker.credentials.secret_access_key').setValue(null);
-            this.createForm.get('configuration.broker.host_path').setValue(null);
         }
 
         // determine which broker fields to display

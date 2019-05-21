@@ -63,21 +63,24 @@ export class WorkspacesApiService {
     }
 
     validateWorkspace(workspace: any): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/workspaces/validation/`, workspace)
+        const cleanWorkspace = Workspace.cleanWorkspaceForValidate(workspace);
+        return this.http.post<any>(`${this.apiPrefix}/workspaces/validation/`, cleanWorkspace)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     editWorkspace(id: number, workspace: any): Observable<any> {
-        return this.http.patch<any>(`${this.apiPrefix}/workspaces/${id}/`, workspace)
+        const cleanWorkspace = Workspace.cleanWorkspaceForSave(workspace);
+        return this.http.patch<any>(`${this.apiPrefix}/workspaces/${id}/`, cleanWorkspace)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     createWorkspace(workspace: any): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/workspaces/`, workspace)
+        const cleanWorkspace = Workspace.cleanWorkspaceForSave(workspace);
+        return this.http.post<any>(`${this.apiPrefix}/workspaces/`, cleanWorkspace)
             .pipe(
                 catchError(DataService.handleError)
             );

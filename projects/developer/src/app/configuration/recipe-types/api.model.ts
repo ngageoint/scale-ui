@@ -53,7 +53,7 @@ export class RecipeType {
 
     public static cleanRecipeTypeForValidate(recipeType) {
         return {
-            name: recipeType.name,
+            name: recipeType.name || _.kebabCase(recipeType.title),
             definition: this.cleanDefinition(recipeType.definition)
         };
     }
