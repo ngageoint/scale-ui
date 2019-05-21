@@ -614,8 +614,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                             output: providerOutput.name
                         };
                     }
+                    // TODO figure out a better way of preventing duplicate mappings
                     // set output as disabled to prevent duplicate mappings
-                    providerOutput.disabled = true;
+                    // providerOutput.disabled = true;
                 } else {
                     console.log('compatible media type not found');
                 }
