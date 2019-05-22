@@ -79,13 +79,13 @@
                 <div [ngClass]="layoutClass">
                     <div class="margin-bottom-md">
                         <label>
-                            <span>Title</span>
+                            <span>Title <span aria-hidden="true" class="required">*</span></span>
                             <input pInputText type="text" id="title" formControlName="title" class="full-width"/>
                         </label>
                     </div>
                     <div>
                         <label>
-                            <span>Description</span>
+                            <span>Description <span aria-hidden="true" class="required">*</span></span>
                             <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
                                       class="full-width"></textarea>
                         </label>
@@ -101,7 +101,7 @@
                 <div class="p-col-6" *ngIf="!batch.id">
                     <div class="margin-bottom-md">
                         <label>
-                            <span>Recipe Type</span>
+                            <span>Recipe Type <span aria-hidden="true" class="required">*</span></span>
                             <p-dropdown id="recipeType" [options]="recipeTypeOptions" formControlName="recipe_type"
                                         placeholder="Select..." [style]="{'width': '100%'}"
                                         (onChange)="onRecipeTypeChange($event)">

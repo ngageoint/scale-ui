@@ -66,11 +66,11 @@
                 <div class="p-col-12">
                     <div [formGroup]="createForm">
                         <label>
-                            <span>Title</span>
+                            <span>Title <span aria-hidden="true" class="required">*</span></span>
                             <input pInputText type="text" formControlName="title"/>
                         </label>
                         <label style="margin-bottom: 0">
-                            <span>Description</span>
+                            <span>Description <span aria-hidden="true" class="required">*</span></span>
                             <textarea pInputTextarea formControlName="description" rows="5"></textarea>
                         </label>
                     </div>

@@ -45,13 +45,13 @@
                     <div class="p-grid">
                         <div class="p-col-6">
                             <label>
-                                <span>Title</span>
+                                <span>Title <span aria-hidden="true" class="required">*</span></span>
                                 <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
                         <div class="p-col-6">
                             <label>
-                                <span>Description</span>
+                                <span>Description <span aria-hidden="true" class="required">*</span></span>
                                 <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
                                           [autoResize]="true"></textarea>
                             </label>
@@ -60,7 +60,7 @@
                     <div class="p-grid" formGroupName="configuration">
                         <div class="p-col-6">
                             <label>
-                                <span>Workspace</span>
+                                <span>Workspace <span aria-hidden="true" class="required">*</span></span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
                                             (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
@@ -75,7 +75,7 @@
                         </div>
                         <div class="p-col-3" formGroupName="scanner">
                             <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
-                                <span>Transfer Suffix</span>
+                                <span>Transfer Suffix <span aria-hidden="true" class="required">*</span></span>
                                 <input type="text" pInputText formControlName="transfer_suffix" required/>
                             </label>
                         </div>
@@ -83,7 +83,7 @@
                     <div class="p-grid" formGroupName="configuration">
                         <div class="p-col-6">
                             <label>
-                                <span>Recipe</span>
+                                <span>Recipe <span aria-hidden="true" class="required">*</span></span>
                                 <p-dropdown [options]="recipeOptions" formControlName="recipe"
                                             [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
@@ -105,7 +105,7 @@
                         <div class="p-grid">
                             <div class="p-col-6">
                                 <label>
-                                    <span>Filename Regex</span>
+                                    <span>Filename Regex <span aria-hidden="true" class="required">*</span></span>
                                     <input type="text" pInputText formControlName="filename_regex" required/>
                                     <div class="help-block">
                                         A regular expression to check against the names of newly copied files (required)

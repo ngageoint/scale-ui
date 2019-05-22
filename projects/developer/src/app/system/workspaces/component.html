@@ -102,13 +102,13 @@
                 <div class="p-grid">
                     <div class="p-col-6">
                         <label>
-                            <span>Title</span>
+                            <span>Title <span aria-hidden="true" class="required">*</span></span>
                             <input type="text" pInputText formControlName="title" required/>
                         </label>
                     </div>
                     <div class="p-col-6">
                         <label>
-                            <span>Description</span>
+                            <span>Description <span aria-hidden="true" class="required">*</span></span>
                             <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
                                       [autoResize]="true"></textarea>
                         </label>
@@ -117,7 +117,7 @@
                 <div class="p-grid">
                     <div class="p-col-6">
                         <label>
-                            <span>Base URL</span>
+                            <span>Base URL <span aria-hidden="true" class="required">*</span></span>
                             <input type="text" pInputText formControlName="base_url"/>
                         </label>
                     </div>
@@ -135,7 +135,7 @@
                     <div class="p-grid" formGroupName="broker">
                         <div class="p-col-6">
                             <label>
-                                <span>Type</span>
+                                <span>Type <span aria-hidden="true" class="required">*</span></span>
                                 <p-dropdown [options]="typeOptions" formControlName="type"
                                             (onChange)="onTypeChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
@@ -144,11 +144,11 @@
                         </div>
                         <div class="p-col-6">
                             <label *ngIf="createForm.get('configuration.broker.host_path').enabled">
-                                <span>Host Path</span>
+                                <span>Host Path <span aria-hidden="true" class="required">*</span></span>
                                 <input type="text" pInputText formControlName="host_path" required/>
                             </label>
                             <label *ngIf="createForm.get('configuration.broker.bucket_name').enabled">
-                                <span>Bucket Name</span>
+                                <span>Bucket Name <span aria-hidden="true" class="required">*</span></span>
                                 <input type="text" pInputText formControlName="bucket_name" required/>
                             </label>
                             <div formGroupName="credentials"
@@ -158,7 +158,7 @@
                                     <input type="text" pInputText formControlName="access_key_id"/>
                                 </label>
                                 <label>
-                                    <span>Secret Access Key</span>
+                                    <span>Secret Access Key <span aria-hidden="true" class="required">*</span></span>
                                     <input type="text" pInputText formControlName="secret_access_key" required/>
                                 </label>
                             </div>
