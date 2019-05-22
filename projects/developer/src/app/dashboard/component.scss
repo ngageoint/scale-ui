@@ -55,3 +55,22 @@
     min-height: 400px;
     padding: 0.5em 1.0em;
 }
+@media screen and (min-width: 1320px) and (max-width: 1651px) {
+    .dashboard__error-charts {
+        width: 21.2% !important;
+    }
+    .dashboard__favs-container {
+        width: 20% !important;
+    }
+}
+@media screen and  (max-width: 1320px) {
+    .dashboard__error-charts {
+        width: 100% !important;
+    }
+    .dashboard__favs-container {
+        width: 100% !important;
+    }
+    .p-xl-7 {
+        width: 100% !important;
+    }
+}

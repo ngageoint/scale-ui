@@ -265,7 +265,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
+        this.breakpointObserver.observe(['(min-width: 1152px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
         });
 
