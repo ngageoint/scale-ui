@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { SelectItem } from 'primeng/api';
 import * as moment from 'moment';
@@ -9,6 +9,8 @@ import { Recipe } from '../../processing/recipes/api.model';
 import { RecipesApiService } from '../../processing/recipes/api.service';
 import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
 import { JobsApiService } from '../../processing/jobs/api.service';
+import { JobsDatatable } from '../../processing/jobs/datatable.model';
+import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
 
@@ -17,6 +19,7 @@ import { environment } from '../../../environments/environment';
     styleUrls: ['./component.scss']
 })
 export class TimelineComponent implements OnInit {
+    @Input() datatableOptions: JobsDatatable;
     subscription: any;
     recipe: Recipe;
     options: any;
@@ -33,11 +36,15 @@ export class TimelineComponent implements OnInit {
     ];
     selectedDataOption: string;
     showFilters: boolean;
+    jobTypes: any;
+    jobTypeOptions: SelectItem[];
+    selectedJobType: any = [];
 
     constructor(
         private messageService: MessageService,
         private recipesApiService: RecipesApiService,
-        private jobsApiService: JobsApiService
+        private jobsApiService: JobsApiService,
+        private jobTypesApiService: JobTypesApiService
     ) {}
 
     private createTimeline(data) {
@@ -120,6 +127,26 @@ export class TimelineComponent implements OnInit {
                     ]
                 });
             }
+        });
+    }
+
+    private getJobTypes() {
+        this.selectedJobType = [];
+        this.jobTypesApiService.getJobTypes().subscribe(data => {
+            this.jobTypes = data.results;
+            const selectItems = [];
+            _.forEach(this.jobTypes, jobType => {
+                selectItems.push({
+                    label: jobType.title + ' ' + jobType.version,
+                    value: jobType
+                });
+                console.log(selectItems);
+                
+                    this.selectedJobType.push(jobType);
+            });
+            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
     }
 
