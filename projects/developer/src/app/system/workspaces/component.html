@@ -7,17 +7,19 @@
                         pTooltip="Create Workspace"></button>
             </div>
         </div>
-        <div class="flexed">
-            <div class="margin-right-md">
-                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
-                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
-                                (onChange)="getWorkspaces()"></p-toggleButton>
-            </div>
-            <input type="search" pInputText placeholder="Search" class="workspaces__filter"
-                   (keyup)="onFilterKeyup($event)">
-        </div>
     </div>
     <p-dataView [value]="workspaces" filterBy="value.title" layout="grid" [loading]="loading" #dv>
+        <p-header>
+            <div class="flexed workspaces__filter">
+                <div class="flexed">
+                    <span class="workspaces__label">{{ activeLabel }}</span>
+                    <p-inputSwitch [(ngModel)]="showActive" (onChange)="toggleShowActive()"
+                                   class="margin-right-md"></p-inputSwitch>
+                </div>
+                <input type="search" pInputText placeholder="Search" class="workspaces__filter-input"
+                       (keyup)="onFilterKeyup($event)">
+            </div>
+        </p-header>
         <ng-template let-workspace pTemplate="gridItem">
             <div class="p-col-12 p-md-3 workspaces__container" (click)="onWorkspaceClick($event, workspace)">
                 <p-panel>
@@ -56,10 +58,6 @@
                 <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3' ||
                            selectedWorkspaceDetail.configuration.broker.type === 'host'">
                     {{ selectedWorkspaceDetail.configuration.broker.host_path }}
-                </dd>
-                <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">NFS Path:</dt>
-                <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 'nfs'">
-                    {{ selectedWorkspaceDetail.configuration.broker.nfs_path }}
                 </dd>
                 <dt *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">Bucket Name:</dt>
                 <dd *ngIf="selectedWorkspaceDetail.configuration.broker.type === 's3'">
@@ -104,19 +102,11 @@
                 <div class="p-grid">
                     <div class="p-col-6">
                         <label>
-                            <span>Name</span>
-                            <input type="text" pInputText formControlName="name" required/>
-                        </label>
-                    </div>
-                    <div class="p-col-6">
-                        <label>
                             <span>Title</span>
                             <input type="text" pInputText formControlName="title" required/>
                         </label>
                     </div>
-                </div>
-                <div class="p-grid">
-                    <div class="p-col-12">
+                    <div class="p-col-6">
                         <label>
                             <span>Description</span>
                             <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
@@ -153,10 +143,6 @@
                             </label>
                         </div>
                         <div class="p-col-6">
-                            <label *ngIf="createForm.get('configuration.broker.nfs_path').enabled">
-                                <span>NFS Path</span>
-                                <input type="text" pInputText formControlName="nfs_path" required/>
-                            </label>
                             <label *ngIf="createForm.get('configuration.broker.host_path').enabled">
                                 <span>Host Path</span>
                                 <input type="text" pInputText formControlName="host_path" required/>

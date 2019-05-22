@@ -1,13 +1,7 @@
-::ng-deep .recipe-types {
-    .ui-dataview {
-        .ui-dataview-header {
-            display: none;
-        }
-
-        .ui-dataview-content {
-            padding: 1em;
-        }
-    }
+.recipe-type__label {
+    font-weight: bold;
+    font-size: 0.9em;
+    margin: 0 7px;
 }
 
 .recipe-type__actions {
@@ -15,8 +9,12 @@
 }
 
 .recipe-type__filter {
-    width: 300px;
-    font-size: 1.2em;
+    justify-content: flex-end;
+
+    .recipe-type__filter-input {
+        width: 300px;
+        font-size: 1.2em;
+    }
 }
 
 .recipe-type__container {
@@ -111,4 +109,22 @@
             padding: 12px 12px 0 0 !important;
         }
     }
+}
+
+::ng-deep .recipe-types__dataview {
+    .ui-dataview-header {
+        .ui-button-secondary {
+            background-color: var(--off-white) !important;
+            border: 1px solid var(--off-white) !important;
+        }
+    }
+
+    .ui-dataview-content {
+        padding-top: 15px !important;
+        padding-bottom: 15px !important;
+    }
+
+    //.ui-panel-titlebar {
+    //    padding: 0.2em 0.5em !important;
+    //}
 }

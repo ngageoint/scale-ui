@@ -17,8 +17,8 @@
                 <dl>
                     <dt>Description:</dt>
                     <dd>{{ scan.description }}</dd>
-                    <dt *ngIf="scan.job.id">Job:</dt>
-                    <dd *ngIf="scan.job.id">
+                    <dt *ngIf="scan.job && scan.job.id">Job:</dt>
+                    <dd *ngIf="scan.job && scan.job.id">
                         <a routerLink="/jobs/job/{{ scan.job.id }}">
                             <i class="fa" [innerHtml]="scanJobIcon"></i>
                             View Job Details ({{ scan.job.status }})
@@ -45,18 +45,10 @@
                     <div class="p-grid">
                         <div class="p-col-6">
                             <label>
-                                <span>Name</span>
-                                <input type="text" pInputText formControlName="name" required/>
-                            </label>
-                        </div>
-                        <div class="p-col-6">
-                            <label>
                                 <span>Title</span>
                                 <input type="text" pInputText formControlName="title" required/>
                             </label>
                         </div>
-                    </div>
-                    <div class="p-grid">
                         <div class="p-col-6">
                             <label>
                                 <span>Description</span>
@@ -64,7 +56,9 @@
                                           [autoResize]="true"></textarea>
                             </label>
                         </div>
-                        <div class="p-col-6" formGroupName="configuration">
+                    </div>
+                    <div class="p-grid" formGroupName="configuration">
+                        <div class="p-col-6">
                             <label>
                                 <span>Workspace</span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
@@ -72,29 +66,37 @@
                                             placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
-                            <div class="p-grid">
-                                <div class="p-col-4" formGroupName="scanner" style="padding-left: 0">
-                                    <label>
-                                        <span>Scanner Type</span>
-                                        <input type="text" pInputText formControlName="type" required/>
-                                    </label>
-                                </div>
-                                <div class="p-col-4" formGroupName="scanner">
-                                    <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
-                                        <span>Transfer Suffix</span>
-                                        <input type="text" pInputText formControlName="transfer_suffix" required/>
-                                    </label>
-                                </div>
-                                <div class="p-col-4" style="padding-right: 0">
-                                    <label>
-                                        <span>Recursive</span>
-                                        <p-toggleButton formControlName="recursive" onLabel="True" offLabel="False"
-                                                        onIcon="fa fa-check" offIcon="fa fa-remove"
-                                                        [style]="{'width':'100%', 'display':'block'}"
-                                                        (onChange)="onRecursiveClick($event)"></p-toggleButton>
-                                    </label>
-                                </div>
-                            </div>
+                        </div>
+                        <div class="p-col-3" formGroupName="scanner">
+                            <label>
+                                <span>Scanner Type</span>
+                                <input type="text" pInputText formControlName="type" required/>
+                            </label>
+                        </div>
+                        <div class="p-col-3" formGroupName="scanner">
+                            <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
+                                <span>Transfer Suffix</span>
+                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="p-grid" formGroupName="configuration">
+                        <div class="p-col-6">
+                            <label>
+                                <span>Recipe</span>
+                                <p-dropdown [options]="recipeOptions" formControlName="recipe"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                        <div class="p-col-2">
+                            <label>
+                                <span>Recursive</span>
+                                <p-toggleButton formControlName="recursive" onLabel="True" offLabel="False"
+                                                onIcon="fa fa-check" offIcon="fa fa-remove"
+                                                [style]="{'width':'100%', 'display':'block'}"
+                                                (onChange)="onRecursiveClick($event)"></p-toggleButton>
+                            </label>
                         </div>
                     </div>
                 </div>

@@ -46,7 +46,7 @@ export class RecipeTypeFileComponent implements OnInit, OnDestroy {
         control.push(new FormControl(addedFile));
         this.inputChange.emit();
         this.formChange.emit();
-        this.form.reset();
+        this.fileForm.reset();
     }
 
     onRemoveFileClick(file) {

@@ -99,7 +99,7 @@
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
-        </span>
+        </span>  
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">
@@ -139,13 +139,14 @@
                     </ng-template>
                 </p-dataList>
                 <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.files" [scrollable]="true"
-                            scrollHeight="300px" class="recipe-io-container">
+                            scrollHeight="300px" class="recipe-io-container"
+                            *ngIf="selectedJobType.manifest.job.interface.inputs">
                     <p-header>
                         <strong>Inputs</strong>
                     </p-header>
                     <ng-template let-input pTemplate="item">
                         <div class="recipe-io">
-                            <div class="p-col">
+                            <div class="p-grid">
                                 <div class="p-col-10 p-col-nopad">
                                     {{ input.name }} <span *ngIf="input.required">*</span>
                                     <ul class="list-unstyled media-type-list">
@@ -312,6 +313,12 @@
             </p-dataList>
         </div>
     </div>
+    <p-footer *ngIf="selectedNode && selectedNode.node_type.job_id">
+        <button pButton label="Requeue Job" type="button" class="ui-button-primary" icon="fa fa-repeat"
+                (click)="requeueJob()"></button>
+        <button pButton label="Cancel Job" type="button" class="ui-button-primary" icon="fa fa-ban"
+                (click)="cancelJob()"></button>
+    </p-footer>
 </p-dialog>
 <p-overlayPanel appendTo="body" #dependencyPanel>
     <div *ngIf="dependencyOptions.length === 0">
@@ -346,8 +353,8 @@
         <strong>{{ input.title }}</strong>
         <ul class="recipe__option-list">
             <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, input.version, option)"
-                [class]="option.disabled ? 'disabled' : ''">
-                {{ option.name }}
+                [ngClass]="option.disabled ? 'disabled' : ''">
+                <span>{{ option.name }}</span>
             </li>
         </ul>
     </div>

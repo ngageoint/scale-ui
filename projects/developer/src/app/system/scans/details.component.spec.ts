@@ -10,6 +10,7 @@ import { ScanDetailsComponent } from './details.component';
 import { ScansApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
 describe('ScanDetailsComponent', () => {
     let component: ScanDetailsComponent;
@@ -20,7 +21,7 @@ describe('ScanDetailsComponent', () => {
             declarations: [ScanDetailsComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, ScansApiService, DataService, WorkspacesApiService,
+                MessageService, ScansApiService, DataService, WorkspacesApiService, RecipeTypesApiService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

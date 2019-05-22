@@ -65,7 +65,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
                     }
                 }
                 _.forEach(this.execLog, line => {
-                    this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }`);
+                    this.execLogStr = this.execLogStr.concat(`${line._source['@timestamp']}: ${line._source.message }\n`);
                 });
             } else {
                 this.execLogStr = 'Waiting for log output...';

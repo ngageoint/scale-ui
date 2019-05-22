@@ -33,6 +33,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ];
     loading: boolean;
     isEditing: boolean;
+    validated: boolean;
     strikes: SelectItem[] = [];
     selectedStrikeDetail: any;
     strikeJobIcon = '';
@@ -77,7 +78,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     private initFormGroups() {
         this.createForm = this.fb.group({
-            name: ['', Validators.required],
             title: ['', Validators.required],
             description: [''],
             configuration: this.fb.group({
@@ -102,6 +102,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
             new_workspace: [''],
             new_file_path: ['']
         });
+        if (this.createForm) {
+            this.createForm.get('configuration.monitor.sqs_name').disable();
+            this.createForm.get('configuration.monitor.credentials').disable();
+            this.createForm.get('configuration.monitor.region_name').disable();
+            this.createForm.get('configuration.monitor.transfer_suffix').disable();
+        }
     }
 
     private initNewWorkspacesOptions() {
@@ -140,7 +146,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         }
         const saveItem = _.find(this.items, { label: 'Save' });
         if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID';
+            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
         }
 
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
@@ -172,11 +178,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
-
-            // disable the name field if editing an existing strike
-            if (this.selectedStrikeDetail.id) {
-                this.createForm.get('name').disable();
-            }
 
             // determine what to show in monitor input, and which monitor fields to display
             this.initMonitor();
@@ -312,7 +313,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onDuplicateClick() {
         delete this.selectedStrikeDetail.id;
-        this.selectedStrikeDetail.clean();
+        this.selectedStrikeDetail = Strike.cleanStrikeForSave(this.selectedStrikeDetail);
         this.selectedStrikeDetail.name += ' copy';
         this.selectedStrikeDetail.title += ' copy';
         this.isEditing = true;
@@ -321,20 +322,22 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        this.strikesApiService.validateStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
+        this.strikesApiService.validateStrike(this.selectedStrikeDetail).subscribe(data => {
+            this.validated = data.is_valid;
             if (data.is_valid) {
-                if (data.warnings.length > 0) {
-                    _.forEach(data.warnings, warning => {
-                        this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
-                    });
-                } else {
-                    this.messageService.add({severity: 'success', summary: 'Strike is valid'});
-                }
-            } else {
-                _.forEach(data.errors, error => {
-                    this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Strike is valid and can be created.'
                 });
+                this.initValidation();
             }
+            _.forEach(data.warnings, warning => {
+                this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+            });
+            _.forEach(data.errors, error => {
+                this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+            });
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error validating strike', detail: err.statusText});
@@ -344,7 +347,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
     onSaveClick() {
         if (this.selectedStrikeDetail.id) {
             // edit strike
-            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail.clean()).subscribe(data => {
+            this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(() => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully edited' });
                 this.redirect(this.selectedStrikeDetail.id);
             }, err => {
                 console.log(err);
@@ -352,7 +356,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
             });
         } else {
             // create strike
-            this.strikesApiService.createStrike(this.selectedStrikeDetail.clean()).subscribe(data => {
+            this.strikesApiService.createStrike(this.selectedStrikeDetail).subscribe(data => {
+                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully created' });
                 this.redirect(data.id);
             }, err => {
                 console.log(err);
@@ -381,10 +386,10 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
             // get workspace detail to obtain configuration data
             this.workspacesApiService.getWorkspace(workspaceObj.id).subscribe(data => {
-                if (data.configuration.broker.type === 'host') {
+                if (data.configuration.broker.type === 'host' || data.configuration.broker.type === 'nfs') {
                     this.selectedStrikeDetail.configuration.monitor.type = 'dir-watcher';
                     this.selectedStrikeDetail.configuration.monitor.sqs_name = null;
-                    this.selectedStrikeDetail.configuration.monitor.credentials = {};
+                    this.selectedStrikeDetail.configuration.monitor.credentials = null;
                     this.selectedStrikeDetail.configuration.monitor.region_name = null;
                 } else if (data.configuration.broker.type === 's3') {
                     this.selectedStrikeDetail.configuration.monitor.type = 's3';

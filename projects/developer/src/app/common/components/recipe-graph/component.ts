@@ -3,6 +3,8 @@ import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { JobsApiService } from '../../../processing/jobs/api.service';
+import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -61,7 +63,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
-    constructor() {
+    constructor(
+        private jobsApiService: JobsApiService,
+        private messageService: MessageService,
+    ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
@@ -216,6 +221,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     name: nodeKey,
                     output: connection ? connection.name : null
                 });
+            } else {
+                const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
+                if (connection) {
+                    this.selectedNodeConnections.push({
+                        name: 'Start',
+                        output: connection.name
+                    });
+                }
             }
         });
     }
@@ -486,8 +499,26 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     showInputConnections(event, input) {
-        // inspect dependencies and display possible connections
         this.nodeInputs = [];
+        // inspect recipe type inputs and display possible connections
+        _.forEach(this.recipeData.definition.input.files, file => {
+            const optionsArr = [];
+            _.forEach(file.media_types, type => {
+                if (_.includes(input.mediaTypes, type)) {
+                    optionsArr.push(file);
+                }
+            });
+            this.nodeInputs.push({
+                title: null,
+                name: 'Start',
+                version: null,
+                options: optionsArr
+            });
+        });
+        _.forEach(this.recipeData.definition.input.json, json => {
+            console.log(json);
+        });
+        // inspect dependencies and display possible connections
         _.forEach(this.selectedNode.dependencies, dep => {
             const jobType = this.getJobTypeFromNodeKey(dep.name);
             const condition: any = _.find(this.recipeData.conditions, {
@@ -570,13 +601,22 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                         name: providerName,
                         output: providerOutput.name
                     });
-                    this.selectedNode.input[currInput.name] = {
-                        type: 'dependency',
-                        node: providerName,
-                        output: providerOutput.name
-                    };
+                    if (this.selectedNode.dependencies.length === 0) {
+                        // no dependencies means this is coming from the recipe input
+                        this.selectedNode.input[currInput.name] = {
+                            type: 'recipe',
+                            input: providerOutput.name
+                        };
+                    } else {
+                        this.selectedNode.input[currInput.name] = {
+                            type: 'dependency',
+                            node: providerName,
+                            output: providerOutput.name
+                        };
+                    }
+                    // TODO figure out a better way of preventing duplicate mappings
                     // set output as disabled to prevent duplicate mappings
-                    providerOutput.disabled = true;
+                    // providerOutput.disabled = true;
                 } else {
                     console.log('compatible media type not found');
                 }
@@ -586,6 +626,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         } else {
             console.log('node not selected');
         }
+        this.inputPanel.hide();
     }
 
     removeInputConnection(conn) {
@@ -638,7 +679,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         }
         return key;
     }
-
+    requeueJob() {
+        this.jobsApiService.requeueJobs({job_ids: [this.selectedNode.node_type.job_id]}).subscribe(() => {
+            this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error requeuing job', detail: err.statusText});
+        });
+    }
+    cancelJob() {
+        this.jobsApiService.cancelJobs({job_ids: [this.selectedNode.node_type.job_id]}).subscribe(() => {
+            this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
+        });
+    }
     ngOnChanges(changes) {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);
@@ -647,7 +701,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         if (changes.jobMetricsTitle) {
             this.chartOptions.title = {
                 display: !!changes.jobMetricsTitle.currentValue,
-                    text: changes.jobMetricsTitle.currentValue
+                text: changes.jobMetricsTitle.currentValue
             };
         }
         if (changes.recipeData) {

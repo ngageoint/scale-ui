@@ -12,7 +12,8 @@ export class ScanConfiguration {
                 data.workspace,
                 data.scanner,
                 data.recursive,
-                IngestFile.transformer(data.files_to_ingest)
+                IngestFile.transformer(data.files_to_ingest),
+                data.recipe
             );
         }
     }
@@ -21,7 +22,7 @@ export class ScanConfiguration {
         if (data) {
             return ScanConfiguration.build(data);
         }
-        return new ScanConfiguration('', {}, false, []);
+        return new ScanConfiguration('', {}, false, [], {});
     }
 
     public addIngestFile(file): object {
@@ -55,7 +56,8 @@ export class ScanConfiguration {
         public workspace: string,
         public scanner: any,
         public recursive: boolean,
-        public files_to_ingest: any
+        public files_to_ingest: any,
+        public recipe: any
     ) {
         if (this.files_to_ingest) {
             _.forEach(this.files_to_ingest, file => {
