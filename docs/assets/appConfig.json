@@ -1,6 +1,6 @@
 {
     "apiDefaultVersion": "v6",
-    "apiPrefix": "/mocks",
+    "apiPrefix": "//scale-ui-api.azurewebsites.net/mocks",
     "apiVersions": [],
     "auth": {
         "enabled": false,
