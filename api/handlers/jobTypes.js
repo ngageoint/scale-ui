@@ -18,6 +18,11 @@ module.exports = function (request) {
                 return result.is_active === isActive;
             });
         }
+        if (typeof params.keyword !== 'undefined') {
+            data.results = _.filter(data.results, function (result) {
+                return _.includes(result.title, params.keyword);
+            });
+        }
         data.count = data.results.length;
         if (params.page && params.page_size && params.page !== 'null' && params.page_size !== 'null') {
             var pagedResults = _.chunk(data.results, params.page_size);

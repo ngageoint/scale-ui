@@ -15,11 +15,11 @@
         <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>
     
-    <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDataOption" (onChange)="getJobTypes()"
+    <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDataOption" (onChange)="getTypesFilter($event)"
                 [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false"></p-dropdown>
     <div *ngIf="selectedDataOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType" maxSelectedLabels="5"
+        <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedType" maxSelectedLabels="2"
          [style]="{'width':'100%'}"></p-multiSelect>
     </div>
     <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
@@ -28,5 +28,5 @@
 
 <div class="timeline__chart">
         <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
-        <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="1000"></p-chart>
+        <p-chart type="timeline" maintainAspectRatio="true" responsive="true" [options]="options" [data]="data" *ngIf="data"[height]='1000' ></p-chart>
 </div>

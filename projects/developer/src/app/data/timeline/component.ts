@@ -6,7 +6,7 @@ import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
 import { Recipe } from '../../processing/recipes/api.model';
-import { RecipesApiService } from '../../processing/recipes/api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { JobsDatatable } from '../../processing/jobs/datatable.model';
@@ -37,13 +37,13 @@ export class TimelineComponent implements OnInit {
     selectedDataOption: string;
     showFilters: boolean;
     jobTypes: any;
+    recipeTypes: any;
     jobTypeOptions: SelectItem[];
-    selectedJobType: any = [];
+    selectedType: any = [];
 
     constructor(
         private messageService: MessageService,
-        private recipesApiService: RecipesApiService,
-        private jobsApiService: JobsApiService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private jobTypesApiService: JobTypesApiService
     ) {}
 
@@ -104,59 +104,73 @@ export class TimelineComponent implements OnInit {
         let duration = '';
         let todaysDate = '';
 
-         _.forEach(data.results, result => {
-            if (result.job_type.name !== 'undefined') {
-            this.data.labels.push(result.job_type.name);
-            } else {
-                this.data.labels.push(result.name);
-            }
-            console.log(result.job_type);
-            if (result.deprecated == null) {
+            _.forEach(this.selectedType, filterType =>{
+                this.data.labels.push(filterType.name);
+                console.log(filterType.name);
+            
+           
+            if (filterType.deprecated == null) {
                 todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
-                duration = DataService.calculateDuration(result.started, todaysDate, true);
+                duration = DataService.calculateDuration(filterType.created, todaysDate, true);
                 this.data.datasets.push({
                     data: [
-                        [result.started, todaysDate, duration]
+                        [filterType.created, todaysDate, duration]
                     ]
                 });
             } else {
-                duration = DataService.calculateDuration(result.created, result.ended, true);
+                duration = DataService.calculateDuration(filterType.created, filterType.deprecated, true);
                 this.data.datasets.push({
                     data: [
-                        [result.started, result.ended, duration]
+                        [filterType.created, filterType.deprecated, duration]
                     ]
                 });
             }
         });
     }
 
-    private getJobTypes() {
-        this.selectedJobType = [];
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
-            this.jobTypes = data.results;
-            const selectItems = [];
-            _.forEach(this.jobTypes, jobType => {
-                selectItems.push({
-                    label: jobType.title + ' ' + jobType.version,
-                    value: jobType
+    private getTypesFilter() {
+        this.selectedType = [];
+        if(this.selectedDataOption === 'Job Types') {
+            this.jobTypesApiService.getJobTypes().subscribe(data => {
+                this.jobTypes = data.results;
+                const selectItems = [];
+                _.forEach(this.jobTypes, jobType => {
+                    selectItems.push({
+                        label: jobType.title + ' ' + jobType.version,
+                        value: jobType
+                    });
+                    this.selectedType.push(jobType);
                 });
-                console.log(selectItems);
-                
-                    this.selectedJobType.push(jobType);
+                this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
-            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-        });
+        } else {
+            this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+                this.recipeTypes = data.results;
+                const selectItems = [];
+                _.forEach(this.recipeTypes, recipeType => {
+                    selectItems.push({
+                        label: recipeType.title + ' ' + recipeType.version,
+                        value: recipeType
+                    });
+                    this.selectedType.push(recipeType);
+                });
+                this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+        }
     }
 
     onApplyClick() {
         this.applyBtnClass = 'ui-button-secondary';
         if (this.selectedDataOption === 'Job Types') {
             this.chartColor = '#42f45f';
-            this.jobsApiService.getJobs({
-                started: this.started,
-                ended: this.ended
+            this.jobTypesApiService.getJobTypes({
+                isActive: true,
+                created: this.started,
+                deprecated: this.ended,
             }).subscribe(data => {
                 this.createTimeline(data);
             }, err => {
@@ -168,7 +182,7 @@ export class TimelineComponent implements OnInit {
             params.started = this.started;
             params.ended = this.ended;
             console.log(params);
-            this.recipesApiService.getRecipes(params).subscribe(data => {
+            this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
                 this.createTimeline(data);
             }, err => {
                 console.log(err);
