@@ -112,6 +112,7 @@
 
         ::ng-deep .ui-datalist-content {
             padding-bottom: 15px;
+            overflow-x: hidden;
         }
 
         .recipe-dependencies {

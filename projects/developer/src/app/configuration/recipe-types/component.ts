@@ -33,7 +33,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
-    showInactive = false;
+    showActive = true;
+    activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
     validated: boolean;
     totalRecords: number;
@@ -198,7 +199,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.loadingRecipeTypes = true;
         params = params || {
             rows: 1000,
-            is_active: !this.showInactive,
+            is_active: this.showActive,
             sortField: 'title'
         };
         this.recipeTypeOptions = [];
@@ -424,6 +425,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
+    toggleShowActive() {
+        this.activeLabel = this.showActive ? 'Active Recipe Types' : 'Deprecated Recipe Types';
+        this.getRecipeTypes();
+    }
+
     validateRecipeType() {
         const cleanRecipeType = RecipeType.cleanRecipeTypeForValidate(this.selectedRecipeTypeDetail);
         this.recipeTypesApiService.validateRecipeType(cleanRecipeType).subscribe(result => {
@@ -437,7 +443,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.initValidation();
             }
             _.forEach(result.warnings, warning => {
-                this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+                this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
             });
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });

@@ -209,7 +209,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.statusText });
             });
         } else {
-            this.jobTypesApiService.updateJobType(this.cleanJobType).subscribe(result => {
+            this.jobTypesApiService.updateJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
                 this.modifiedJobTypeName = result.name;
                 this.modifiedJobTypeVersion = result.version;

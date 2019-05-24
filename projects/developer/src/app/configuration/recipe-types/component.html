@@ -1,23 +1,23 @@
 <div class="recipe-types" *ngIf="!selectedRecipeTypeDetail">
-    <div class="flexed space-between margin-bottom-sm">
-        <div class="flexed">
-            <h2><i class="fa fa-cubes"></i> Recipe Types ({{ totalRecords }})</h2>
-            <div class="margin-left-md">
-                <button pButton type="button" icon="fa fa-plus" (click)="createNewRecipe()"
-                        pTooltip="Create Recipe Type"></button>
-            </div>
-        </div>
-        <div class="flexed">
-            <div class="margin-right-md">
-                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
-                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
-                                (onChange)="getRecipeTypes()"></p-toggleButton>
-            </div>
-            <input type="search" pInputText placeholder="Search" class="recipe-type__filter"
-                   (keyup)="onFilterKeyup($event)">
+    <div class="flexed margin-bottom-sm">
+        <h2><i class="fa fa-cubes"></i> Recipe Types ({{ totalRecords }})</h2>
+        <div class="margin-left-md">
+            <button pButton type="button" icon="fa fa-plus" (click)="createNewRecipe()"
+                    pTooltip="Create Recipe Type"></button>
         </div>
     </div>
-    <p-dataView [value]="recipeTypeOptions" filterBy="value.title" layout="grid" [loading]="loadingRecipeTypes" #dv>
+    <p-dataView class="recipe-types__dataview" [value]="recipeTypeOptions" filterBy="value.title" layout="grid" [loading]="loadingRecipeTypes" #dv>
+        <p-header>
+            <div class="flexed recipe-type__filter">
+                <div class="flexed">
+                    <span class="recipe-type__label">{{ activeLabel }}</span>
+                    <p-inputSwitch [(ngModel)]="showActive" (onChange)="toggleShowActive()"
+                                   class="margin-right-md"></p-inputSwitch>
+                </div>
+                <input type="search" pInputText placeholder="Search" class="recipe-type__filter-input"
+                       (keyup)="onFilterKeyup($event)">
+            </div>
+        </p-header>
         <ng-template let-recipeType pTemplate="gridItem">
             <div class="p-col-12 p-md-3 recipe-type__container" (click)="onRecipeTypeClick($event, recipeType)">
                 <p-panel>

@@ -7,12 +7,14 @@
                         pTooltip="Create Strike"></button>
             </div>
         </div>
-        <div class="flexed">
-            <input type="search" pInputText placeholder="Search" class="strikes__filter"
-                   (keyup)="onFilterKeyup($event)">
-        </div>
     </div>
     <p-dataView [value]="strikes" filterBy="value.title" layout="grid" [loading]="loading" #dv>
+        <p-header>
+            <div class="flexed strikes__filter">
+                <input type="search" pInputText placeholder="Search" class="strikes__filter-input"
+                       (keyup)="onFilterKeyup($event)">
+            </div>
+        </p-header>
         <ng-template let-strike pTemplate="gridItem">
             <div class="p-col-12 p-md-3 strikes__container" (click)="onStrikeClick($event, strike)">
                 <p-panel>

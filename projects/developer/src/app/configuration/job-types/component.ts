@@ -50,7 +50,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     errorClass = 'p-col-6';
     loadingJobTypes: boolean;
     showFavorites: boolean;
-    showInactive = false;
+    showActive = true;
+    favoritesBtnIcon = 'fa fa-remove';
+    favoritesBtnLabel = 'Favorites';
+    favoritesBtnClass = 'ui-button-secondary';
+    activeLabel = 'Active Job Types';
 
     constructor(
         private messageService: MessageService,
@@ -114,7 +118,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         this.jobTypes = [];
         params = params || {
             rows: 1000,
-            is_active: !this.showInactive,
+            is_active: this.showActive,
             sortField: 'title'
         };
         this.jobTypesApiService.getJobTypes(params).subscribe(data => {
@@ -187,6 +191,16 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     onFilterKeyup(e) {
         this.dv.filter(e.target.value);
         this.clampText();
+    }
+    onFilterBtnClick() {
+        this.showFavorites = !this.showFavorites;
+        this.favoritesBtnClass = this.showFavorites ? 'ui-button-primary' : 'ui-button-secondary';
+        this.favoritesBtnIcon = this.showFavorites ? 'fa fa-check' : 'fa fa-remove';
+        this.getJobTypes();
+    }
+    toggleShowActive() {
+        this.activeLabel = this.showActive ? 'Active Job Types' : 'Deprecated Job Types';
+        this.getJobTypes();
     }
     scanWorkspace() {
         const scanObj = {

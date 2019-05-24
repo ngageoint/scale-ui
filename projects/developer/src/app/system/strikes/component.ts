@@ -102,10 +102,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
             new_workspace: [''],
             new_file_path: ['']
         });
-        this.createForm.get('configuration.monitor.sqs_name').disable();
-        this.createForm.get('configuration.monitor.credentials').disable();
-        this.createForm.get('configuration.monitor.region_name').disable();
-        this.createForm.get('configuration.monitor.transfer_suffix').disable();
+        if (this.createForm) {
+            this.createForm.get('configuration.monitor.sqs_name').disable();
+            this.createForm.get('configuration.monitor.credentials').disable();
+            this.createForm.get('configuration.monitor.region_name').disable();
+            this.createForm.get('configuration.monitor.transfer_suffix').disable();
+        }
     }
 
     private initNewWorkspacesOptions() {
@@ -176,11 +178,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
-
-            // disable the name field if editing an existing strike
-            if (this.selectedStrikeDetail.id) {
-                this.createForm.get('name').disable();
-            }
 
             // determine what to show in monitor input, and which monitor fields to display
             this.initMonitor();

@@ -7,20 +7,22 @@
                 </button>
             </div>
         </div>
-        <div class="flexed">
-            <div class="margin-right-md">
-                <p-toggleButton offLabel="Toggle Favorites" offIcon="fa fa-toggle-off" onLabel="Toggle Favorites"
-                                onIcon="fa fa-toggle-on" [(ngModel)]="showFavorites" (onChange)="getJobTypes()"
-                                [style]="{'margin-right': '5px'}"></p-toggleButton>
-                <p-toggleButton offLabel="Toggle Inactive" offIcon="fa fa-toggle-off"
-                                onLabel="Toggle Inactive" onIcon="fa fa-toggle-on" [(ngModel)]="showInactive"
-                                (onChange)="getJobTypes()"></p-toggleButton>
-            </div>
-            <input type="search" pInputText placeholder="Search" class="job-type__filter"
-                   (keyup)="onFilterKeyup($event)">
-        </div>
     </div>
-    <p-dataView [value]="jobTypes" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
+    <p-dataView class="job-types__dataview" [value]="jobTypes" filterBy="value.title" layout="grid" [loading]="loadingJobTypes" #dv>
+        <p-header>
+            <div class="flexed space-between job-type__filter">
+                <button pButton type="button" class="ui-button-rounded" [ngClass]="favoritesBtnClass"
+                        [icon]="favoritesBtnIcon" [label]="favoritesBtnLabel"
+                        (click)="onFilterBtnClick()"></button>
+                <div class="flexed">
+                    <span class="job-type__label">{{ activeLabel }}</span>
+                    <p-inputSwitch [(ngModel)]="showActive" (onChange)="toggleShowActive()"
+                                   class="margin-right-md"></p-inputSwitch>
+                    <input type="search" pInputText placeholder="Search" class="job-type__filter-input"
+                           (keyup)="onFilterKeyup($event)">
+                </div>
+            </div>
+        </p-header>
         <ng-template let-jobType pTemplate="gridItem">
             <div class="p-col-12 p-md-3 job-type__container" (click)="onJobTypeClick($event, jobType)">
                 <p-panel>

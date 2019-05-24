@@ -146,7 +146,7 @@
                     </p-header>
                     <ng-template let-input pTemplate="item">
                         <div class="recipe-io">
-                            <div class="p-col">
+                            <div class="p-grid">
                                 <div class="p-col-10 p-col-nopad">
                                     {{ input.name }} <span *ngIf="input.required">*</span>
                                     <ul class="list-unstyled media-type-list">
@@ -353,8 +353,8 @@
         <strong>{{ input.title }}</strong>
         <ul class="recipe__option-list">
             <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, input.version, option)"
-                [class]="option.disabled ? 'disabled' : ''">
-                {{ option.name }}
+                [ngClass]="option.disabled ? 'disabled' : ''">
+                <span>{{ option.name }}</span>
             </li>
         </ul>
     </div>
