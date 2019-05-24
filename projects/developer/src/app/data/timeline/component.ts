@@ -8,7 +8,6 @@ import * as Color from 'chartjs-color';
 import { Recipe } from '../../processing/recipes/api.model';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
-import { JobsApiService } from '../../processing/jobs/api.service';
 import { JobsDatatable } from '../../processing/jobs/datatable.model';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { DataService } from '../../common/services/data.service';
@@ -78,8 +77,8 @@ export class TimelineComponent implements OnInit {
                         const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                         return [
                             'Total Time: ' + d[2],
-                            'Started: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
-                            'Ended: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
+                            'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
+                            'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
 
                         ];
                     }
@@ -105,10 +104,7 @@ export class TimelineComponent implements OnInit {
         let todaysDate = '';
 
             _.forEach(this.selectedType, filterType =>{
-                this.data.labels.push(filterType.name);
-                console.log(filterType.name);
-            
-           
+            this.data.labels.push(filterType.name);
             if (filterType.deprecated == null) {
                 todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
                 duration = DataService.calculateDuration(filterType.created, todaysDate, true);
