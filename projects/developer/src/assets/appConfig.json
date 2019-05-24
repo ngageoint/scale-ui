@@ -12,5 +12,8 @@
     "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
     "defaultTheme": "light",
     "siloUrl": "//silo.omega.aisohio.net",
-    "themeKey": "scale.theme"
+    "themeKey": "scale.theme",
+    "primaryColor": "#017cce",
+    "secondaryLightColor": "#5c97bf",
+    "secondaryDarkColor": "#24567f"
 }

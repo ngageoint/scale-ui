@@ -13,11 +13,18 @@ export class ThemeService {
     ) {}
 
     getTheme(name: string) {
-        const theme = this.themes.find(t => t.name === name);
-        if (!theme) {
-            throw new Error(`Theme not found: '${name}'`);
+        if (name) {
+            const theme = this.themes.find(t => t.name === name);
+            if (!theme) {
+                throw new Error(`Theme not found: '${name}'`);
+            }
+            return theme;
         }
-        return theme;
+        return null;
+    }
+
+    getThemes() {
+        return this.themes;
     }
 
     getActiveTheme() {
@@ -39,14 +46,15 @@ export class ThemeService {
 
     updateTheme(name: string, properties: { [key: string]: string; }) {
         const theme = this.getTheme(name);
-        theme.properties = {
-            ...theme.properties,
-            ...properties
-        };
+        if (theme) {
+            theme.properties = {
+                ...theme.properties,
+                ...properties
+            };
 
-        if (name === this.theme) {
-            this.themeChange.emit(theme);
+            if (name === this.theme) {
+                this.themeChange.emit(theme);
+            }
         }
     }
-
 }
