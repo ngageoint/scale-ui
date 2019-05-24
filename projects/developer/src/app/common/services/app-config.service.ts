@@ -33,11 +33,13 @@ export class AppConfigService {
                 // update themes with values from config
                 const themes = this.themeService.getThemes();
                 _.forEach(themes, theme => {
-                    this.themeService.updateTheme(theme.name, {
-                        '--scale-primary': data.primaryColor,
-                        '--scale-secondary-light': data.secondaryLightColor,
-                        '--scale-secondary-dark': data.secondaryDarkColor
-                    });
+                    if (theme) {
+                        this.themeService.updateTheme(theme.name, {
+                            '--scale-primary': data.primaryColor,
+                            '--scale-secondary-light': data.secondaryLightColor,
+                            '--scale-secondary-dark': data.secondaryDarkColor
+                        });
+                    }
                 });
             });
     }
