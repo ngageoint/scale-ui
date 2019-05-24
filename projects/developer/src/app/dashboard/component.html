@@ -1,4 +1,5 @@
 <div class="dashboard">
+    <p-selectButton [options]="dateRangeOptions" [(ngModel)]="selectedDateRangeOption"></p-selectButton>
     <div class="p-grid">
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__favs-container">
             <p-panel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
@@ -36,7 +37,7 @@
         <div class="p-col-12 p-md-12 p-lg-7 p-xl-7">
             <div class="charts" *ngIf="allJobTypes.length > 0">
                 <p-panel [header]="dataFeedChartTitle">
-                    <dev-data-feed></dev-data-feed>
+                    <dev-data-feed [dateRange]="selectedDateRangeOption"></dev-data-feed>
                 </p-panel>
             </div>
         </div>

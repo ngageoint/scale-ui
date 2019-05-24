@@ -16,8 +16,8 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 import {
     AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
     DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
-    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
-    StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
+    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SelectButtonModule,
+    SidebarModule, SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
 } from 'primeng/primeng';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
@@ -171,6 +171,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         ReactiveFormsModule,
         ScrollPanelModule,
         SeedImagesModule,
+        SelectButtonModule,
         SidebarModule,
         SlideMenuModule,
         SpinnerModule,

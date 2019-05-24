@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { UIChart } from 'primeng/primeng';
@@ -11,14 +11,14 @@ import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { FilesApiService } from '../../common/services/files/api.service';
 
 @Component({
     selector: 'dev-data-feed',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    @Input() dateRange: string;
     @ViewChild('chart') chart: UIChart;
     chartLoading: boolean;
     feedParams: any;
@@ -35,7 +35,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     feedSubscription: any;
     jobSubscription: any;
     favoritesSubscription: any;
-    jobParams: any;
+    started: string;
+    ended: string;
 
     private FEED_DATA = 'scale.dashboard.selectedDataFeed';
 
@@ -46,7 +47,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         private chartService: ChartService,
         private metricsApiService: MetricsApiService,
         private jobsApiService: JobsApiService,
-        private filesApiService: FilesApiService
     ) {
         this.feedDataset = {
             data: []
@@ -85,8 +85,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     private fetchJobsData(job_type_name: string, job_type_version: string, chartData: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.jobsApiService.getJobs({
-                started: moment.utc().startOf('d').toISOString(),
-                ended: moment.utc().add(1, 'h').startOf('h').toISOString(),
+                started: this.started,
+                ended: this.ended,
                 rows: 1000,
                 status: 'COMPLETED',
                 job_type_name: job_type_name,
@@ -116,8 +116,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chartLoading = true;
         this.unsubscribe();
         this.feedParams = {
-            started: moment.utc().subtract(3, 'd').toISOString(),
-            ended: moment.utc().toISOString(),
+            started: this.started,
+            ended: this.ended,
             use_ingest_time: true
         };
         this.feedSubscription = this.ingestApiService.getIngestStatus(this.feedParams, true).subscribe(data => {
@@ -154,8 +154,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     { column: 'completed_count', color: ColorService.SCALE_BLUE2 }
                 ],
                 dataType: 'job-types',
-                started: moment.utc().subtract(3, 'd').toISOString(),
-                ended: moment.utc().add(1, 'd').toISOString(),
+                started: this.started,
+                ended: this.ended,
                 group: ['overview'],
                 page: 1,
                 page_size: null
@@ -324,15 +324,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 }
             }
         };
-        const storedDataFeed = localStorage.getItem(this.FEED_DATA);
-        if (storedDataFeed) {
-            this.selectedDataFeed = JSON.parse(storedDataFeed);
-        }
-        this.fetchChartData(true);
-        this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
-            // don't duplicate data feeds in dropdown
-            this.fetchChartData(false);
-        });
     }
 
     ngAfterViewInit() {
@@ -346,5 +337,22 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.favoritesSubscription) {
             this.favoritesSubscription.unsubscribe();
         }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.started = changes.dateRange.currentValue === 'hours' ?
+            moment.utc().subtract(1, 'd').toISOString() :
+            moment.utc().subtract(1, 'w').toISOString();
+        this.ended = moment.utc().toISOString();
+
+        const storedDataFeed = localStorage.getItem(this.FEED_DATA);
+        if (storedDataFeed) {
+            this.selectedDataFeed = JSON.parse(storedDataFeed);
+        }
+        this.fetchChartData(true);
+        this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
+            // don't duplicate data feeds in dropdown
+            this.fetchChartData(false);
+        });
     }
 }

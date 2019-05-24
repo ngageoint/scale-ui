@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { ColorService } from '../common/services/color.service';
-import { JobType } from '../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-dashboard',
@@ -31,6 +31,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dataFeedChartTitle: string;
     historyChartTitle: string;
     activityChartTitle: string;
+    dateRangeOptions: SelectItem[] = [{
+        label: '24 Hours',
+        value: 'hours',
+        icon: 'fa fa-clock-o'
+    }, {
+        label: '7 Days',
+        value: 'days',
+        icon: 'fa fa-calendar'
+    }];
+    selectedDateRangeOption = 'hours';
 
     constructor(
         private messageService: MessageService,
@@ -61,21 +71,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
             }
         };
-    }
-
-    unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
-    ngOnInit() {
-        this.refreshAllJobTypes();
-        this.jobsService.favoritesUpdated.subscribe(() => {
-            this.refreshAllJobTypes();
-        });
-    }
-    ngOnDestroy() {
-        this.unsubscribe();
     }
 
     private generateStats(jobData: any[]): any {
@@ -165,5 +160,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});
         });
+    }
+
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+    ngOnInit() {
+        this.refreshAllJobTypes();
+        this.jobsService.favoritesUpdated.subscribe(() => {
+            this.refreshAllJobTypes();
+        });
+    }
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }
