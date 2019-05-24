@@ -10,18 +10,18 @@ import { DataService } from '../../common/services/data.service';
   providedIn: 'root'
 })
 export class VersionService {
-  apiPrefix: string;
+    apiPrefix: string;
 
-  constructor(
-    private http: HttpClient
-  ) {
-    this.apiPrefix = DataService.getApiPrefix('version');
-  }
+    constructor(
+        private http: HttpClient
+    ) {
+        this.apiPrefix = DataService.getApiPrefix('version');
+    }
 
-  getVersion() {
-    return this.http.get(`${this.apiPrefix}/version/`)
-    .pipe(
-      catchError(DataService.handleError)
-    );
-  }
+    getVersion() {
+        return this.http.get(`${this.apiPrefix}/version/`)
+        .pipe(
+        catchError(DataService.handleError)
+        );
+    }
 }
