@@ -1,5 +1,4 @@
 import { Theme } from './symbols';
-import { environment } from '../../environments/environment';
 
 export const darkTheme: Theme = {
     name: 'dark',
@@ -36,9 +35,9 @@ export const darkTheme: Theme = {
         '--grey-15': '#222222',
         '--grey-10': '#171717',
         '--black': '#000000',
-        '--scale-primary': environment.primaryColor,
-        '--scale-secondary-light': environment.secondaryLightColor,
-        '--scale-secondary-dark': environment.secondaryDarkColor,
+        '--scale-primary': '#017cce',
+        '--scale-secondary-light': '#5C97BF',
+        '--scale-secondary-dark': '#24567F',
         '--navbar-dark': '#22292E',
         '--navbar-light': '#2E3F50',
         '--navbar-text': '#fff',

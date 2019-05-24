@@ -24,7 +24,6 @@ export const environment = {
     primaryColor: '',
     secondaryLightColor: '',
     secondaryDarkColor: ''
-
 };
 
 /*

@@ -20,6 +20,10 @@ export class ThemeService {
         return theme;
     }
 
+    getThemes() {
+        return this.themes;
+    }
+
     getActiveTheme() {
         return this.getTheme(this.theme);
     }
@@ -48,5 +52,4 @@ export class ThemeService {
             this.themeChange.emit(theme);
         }
     }
-
 }
