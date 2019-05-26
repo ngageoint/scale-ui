@@ -103,7 +103,7 @@ export class TimelineComponent implements OnInit {
         let duration = '';
         let todaysDate = '';
 
-            _.forEach(this.selectedType, filterType =>{
+            _.forEach(this.selectedType, filterType => {
             this.data.labels.push(filterType.name);
             if (filterType.deprecated == null) {
                 todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
@@ -126,7 +126,7 @@ export class TimelineComponent implements OnInit {
 
     private getTypesFilter() {
         this.selectedType = [];
-        if(this.selectedDataOption === 'Job Types') {
+        if (this.selectedDataOption === 'Job Types') {
             this.jobTypesApiService.getJobTypes().subscribe(data => {
                 this.jobTypes = data.results;
                 const selectItems = [];
