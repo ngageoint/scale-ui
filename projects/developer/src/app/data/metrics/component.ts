@@ -5,6 +5,8 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { MetricsApiService } from './api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
+import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
 import { ChartService } from './chart.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/primeng';
@@ -26,6 +28,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     filtersApplied: any[] = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
+    recipeTypeSelected: any[] = [];
+    recipeTypeOptions: any[] = [];
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
     filteredChoicesLoading: boolean;
@@ -42,9 +46,11 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     data: any;
     options: any;
     showFilters = true;
+    isJobTypes = false;
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private chartService: ChartService
     ) {
         this.chartTypes = [
@@ -97,10 +103,23 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
             if (result.name === 'job-types') {
+                this.isJobTypes = true;
                 // filter out inactive job types from result set
                 this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
                     return choice.is_active === true;
                 });
+                const params: RecipesDatatable = initialRecipesDatatable;
+                this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
+                    console.log(data);
+                this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
+                    return choice.is_active === true;
+                });
+            }, err => {
+                console.log(err);
+            });
+
+            } else {
+                this.isJobTypes = false;
             }
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
