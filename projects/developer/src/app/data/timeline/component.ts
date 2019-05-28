@@ -39,6 +39,7 @@ export class TimelineComponent implements OnInit {
     recipeTypes: any;
     jobTypeOptions: SelectItem[];
     selectedType: any = [];
+    showChart: boolean;
 
     constructor(
         private messageService: MessageService,
@@ -47,6 +48,7 @@ export class TimelineComponent implements OnInit {
     ) {}
 
     private createTimeline(data) {
+        this.showChart = true;
         this.showFilters = false;
         this.options = {
             elements: {
@@ -196,6 +198,7 @@ export class TimelineComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.showChart = false;
         this.showFilters = true;
     }
 

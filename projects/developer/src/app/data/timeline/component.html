@@ -1,6 +1,11 @@
 <h2><i class="fa fa-calendar"></i> Timeline - {{selectedDataOption}}</h2>
 <div class="timeline__header">
 </div>
+
+<div *ngIf="!showChart">
+    Open the <a (click)="showFilters = true">filters dialog</a> to select a data source.
+</div>
+
 <button pButton type="button" class="ui-button-primary timeline__filter-toggle" icon="fa fa-filter"
             (click)="showFilters = !showFilters"></button>
 
@@ -25,6 +30,8 @@
     <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
     (click)="onApplyClick()"></button>
 </p-sidebar>
+
+
 
 <div class="timeline__chart">
         <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>

@@ -22,7 +22,7 @@ button {
     top: 130px;
     left: 0;
     height: 120px;
-    width: 30px;
+    width: 30px !important;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
 }
@@ -45,7 +45,6 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
-    margin-bottom: 10px;
 
     .timeline__date-filter {
         display: flex;
@@ -63,12 +62,6 @@ button {
         .timeline__date-filter-dropdown {
             margin-top: 20px;
             margin-left: 10px;
-        }
-    }
-
-    .jobs__controls {
-        button {
-            margin-left: 5px;
         }
     }
 }
