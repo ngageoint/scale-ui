@@ -25,7 +25,7 @@
     <div *ngIf="selectedDataOption">
         <label>Types to compare: </label>
         <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedType" maxSelectedLabels="2"
-         [style]="{'width':'100%'}"></p-multiSelect>
+         [style]="{'width':'100%'}" selectionLimit="5" default=''></p-multiSelect>
     </div>
     <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
     (click)="onApplyClick()"></button>

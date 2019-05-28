@@ -137,9 +137,12 @@ export class TimelineComponent implements OnInit {
                         label: jobType.title + ' ' + jobType.version,
                         value: jobType
                     });
-                    this.selectedType.push(jobType);
+                   // this.selectedType.push(jobType);
                 });
                 this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+                console.log(this.jobTypeOptions);
+                // this.checkMax(this.selectedType);
+                console.log(this.jobTypeOptions);
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
@@ -152,9 +155,10 @@ export class TimelineComponent implements OnInit {
                         label: recipeType.title + ' ' + recipeType.version,
                         value: recipeType
                     });
-                    this.selectedType.push(recipeType);
+                    // this.selectedType.push(recipeType);
                 });
                 this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+                // this.checkMax(selectItems);
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
@@ -176,17 +180,25 @@ export class TimelineComponent implements OnInit {
             });
         } else {
             this.chartColor = '#017cce';
-            const params: RecipesDatatable = initialRecipesDatatable;
-            params.started = this.started;
-            params.ended = this.ended;
-            console.log(params);
-            this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
+            this.recipeTypesApiService.getRecipeTypes({
+                isActive: true,
+                created: this.started,
+                deprecated: this.ended,
+            }).subscribe(data => {
+                console.log(data);
                 this.createTimeline(data);
             }, err => {
                 console.log(err);
             });
         }
     }
+    // checkMax(filter) {
+    //     const LIMIT_NUMBER = 5;
+    //     if (filter.value.length > LIMIT_NUMBER) {
+    //         filter.value.pop();
+    //         this.checkMax(filter);
+    //     }
+    // }
 
     onStartSelect(e) {
         this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
