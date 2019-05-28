@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { version } from '../../../../../package.json';
 
+import { environment } from '../../environments/environment';
 import { VersionService } from './../common/services/version.service';
 
 @Component({
@@ -9,15 +11,17 @@ import { VersionService } from './../common/services/version.service';
 })
 
 export class FooterComponent implements OnInit {
-    version: string;
+    documentation = environment.documentation;
+    uiVersion = version;
+    apiVersion: string;
 
     constructor(
         private versionService: VersionService,
-    ) { }
+    ) {}
 
     ngOnInit() {
         this.versionService.getVersion().subscribe((result: any) => {
-            this.version = result.version;
+            this.apiVersion = result.version;
         });
     }
 }

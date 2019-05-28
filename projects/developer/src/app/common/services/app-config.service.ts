@@ -24,6 +24,7 @@ export class AppConfigService {
                 environment.auth = data.auth;
                 environment.dateFormat = data.dateFormat;
                 environment.defaultTheme = data.defaultTheme;
+                environment.documentation = data.documentation;
                 environment.siloUrl = data.siloUrl;
                 environment.themeKey = data.themeKey;
                 environment.primaryColor = data.primaryColor;
