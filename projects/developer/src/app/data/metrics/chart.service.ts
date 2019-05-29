@@ -23,8 +23,10 @@ export class ChartService {
         primaryMetric?: any,
         secondaryMetric?: any,
         primaryType?: string,
-        secondaryType?: string
+        secondaryType?: string,
+        dateRange?: string
     ): any {
+        dateRange = dateRange || 'days';
         let valueArr = [],
             colArr = [],
             queryFilter = null,
@@ -33,9 +35,11 @@ export class ChartService {
         const datasets = [];
         const dataLabels = [];
 
-        const numDays = moment.utc(params.ended, 'YYYY-MM-DD').diff(moment.utc(params.started, 'YYYY-MM-DD'), 'd');
-        for (let i = 0; i < numDays; i++) {
-            dataLabels.push(moment.utc(params.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
+        const unit = dateRange === 'days' ? 'd' : 'h';
+        const format = dateRange === 'days' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+        const numUnits = moment.utc(params.ended, format).diff(moment.utc(params.started, format), unit);
+        for (let i = 0; i < numUnits; i++) {
+            dataLabels.push(moment.utc(params.started, format).add(i, unit).startOf(unit).format(format));
         }
 
         if (filtersApplied.length > 0) {
@@ -85,7 +89,7 @@ export class ChartService {
                             // add result values to valueArr
                             _.forEach(dataLabels, (xDate) => {
                                 const valueObj = _.find(queryDates, (qDate) => {
-                                    return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                                    return moment.utc(qDate.date, format).isSame(moment.utc(xDate, format), unit);
                                 });
                                 // push 0 if data for xDate is not present in queryDates
                                 valueArr.push(valueObj ? valueObj.value : 0);
@@ -165,7 +169,7 @@ export class ChartService {
                     // add result values to valueArr
                     _.forEach(dataLabels, (xDate) => {
                         const valueObj = _.find(result.values, (qDate) => {
-                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                            return moment.utc(qDate.date, format).isSame(moment.utc(xDate, format), unit);
                         });
                         // push 0 if data for xDate is not present in result.values
                         valueArr.push(valueObj ? valueObj.value : 0);

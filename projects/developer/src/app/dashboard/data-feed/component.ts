@@ -165,7 +165,18 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 const filters = this.favorites.length > 0 ?
                     this.favorites :
                     [];
-                const chartData = this.chartService.formatPlotResults(plotData, this.plotParams, filters, '', true);
+                const chartData = this.chartService.formatPlotResults(
+                    plotData,
+                    this.plotParams,
+                    filters,
+                    '',
+                    true,
+                    null,
+                    null,
+                    null,
+                    null,
+                    this.dateRange
+                );
                 const promises = [];
 
                 // refactor data to match this chart's format
