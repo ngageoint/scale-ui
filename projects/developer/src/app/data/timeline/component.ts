@@ -18,30 +18,26 @@ import { environment } from '../../../environments/environment';
 })
 export class TimelineComponent implements OnInit {
     @Input() datatableOptions: JobsDatatable;
-    subscription: any;
-    recipe: Recipe;
-    options: any;
     data: any;
-    chartColor: any;
-    selectedJobExe: any;
-    logDisplay: boolean;
+    options: any;
+    selectedDataOption: string;
+    showFilters: boolean;
+    jobTypes: any;
+    recipeTypes: any;
+    typeDropdownOptions: SelectItem[];
+    selectedType: any = [];
+    showChart: boolean;
+    typeSelected: boolean;
+    dateFiltered: any;
     applyBtnClass = 'ui-button-secondary';
+    todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
     started = moment.utc().subtract(4, 'y').startOf('d').toISOString();
     ended = moment.utc().endOf('d').toISOString();
     dataOptions: SelectItem[] = [
         { label: 'Recipe Types', value: 'Recipe Types' },
         { label: 'Job Types', value: 'Job Types' }
     ];
-    selectedDataOption: string;
-    showFilters: boolean;
-    jobTypes: any;
-    recipeTypes: any;
-    jobTypeOptions: SelectItem[];
-    selectedType: any = [];
-    showChart: boolean;
-    testing: boolean;
-    dateFiltered: any;
-    todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
+
     constructor(
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
@@ -128,9 +124,9 @@ export class TimelineComponent implements OnInit {
 
     enableButton() {
         if (this.selectedType.length === 0) {
-            this.testing = true;
+            this.typeSelected = true;
         } else {
-            this.testing = false;
+            this.typeSelected = false;
         }
     }
 
@@ -145,7 +141,7 @@ export class TimelineComponent implements OnInit {
                     value: jobType
                 });
             });
-            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+            this.typeDropdownOptions = _.orderBy(selectItems, 'label', 'asc');
         } else if (this.selectedDataOption === 'Recipe Types') {
             const selectItems = [];
             _.forEach(this.recipeTypes, recipeType => {
@@ -154,7 +150,7 @@ export class TimelineComponent implements OnInit {
                     value: recipeType
                 });
             });
-            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+            this.typeDropdownOptions = _.orderBy(selectItems, 'label', 'asc');
         }
     }
 
@@ -180,7 +176,7 @@ export class TimelineComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.testing = true;
+        this.typeSelected = true;
         this.showChart = false;
         this.showFilters = true;
 

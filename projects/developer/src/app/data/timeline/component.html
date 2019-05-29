@@ -24,12 +24,12 @@
                 [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false"></p-dropdown>
     <div *ngIf="selectedDataOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedType" maxSelectedLabels="2"
+        <p-multiSelect [options]="typeDropdownOptions" [(ngModel)]="selectedType" maxSelectedLabels="2"
          [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect><br />
          Select up to five types to compare.
     </div>
     <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
-    (click)="onApplyClick()" [disabled]="testing"></button>
+    (click)="onApplyClick()" [disabled]="typeSelected"></button>
 </p-sidebar>
 
 
