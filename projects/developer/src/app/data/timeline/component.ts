@@ -7,7 +7,6 @@ import * as Color from 'chartjs-color';
 
 import { Recipe } from '../../processing/recipes/api.model';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
-import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
 import { JobsDatatable } from '../../processing/jobs/datatable.model';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { DataService } from '../../common/services/data.service';
@@ -27,7 +26,7 @@ export class TimelineComponent implements OnInit {
     selectedJobExe: any;
     logDisplay: boolean;
     applyBtnClass = 'ui-button-secondary';
-    started = moment.utc().subtract(3, 'd').startOf('d').toISOString();
+    started = moment.utc().subtract(4, 'y').startOf('d').toISOString();
     ended = moment.utc().endOf('d').toISOString();
     dataOptions: SelectItem[] = [
         { label: 'Recipe Types', value: 'Recipe Types' },
@@ -40,7 +39,9 @@ export class TimelineComponent implements OnInit {
     jobTypeOptions: SelectItem[];
     selectedType: any = [];
     showChart: boolean;
-
+    testing: boolean;
+    dateFiltered: any;
+    todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
     constructor(
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
@@ -54,7 +55,7 @@ export class TimelineComponent implements OnInit {
             elements: {
                 font: 'Roboto',
                 colorFunction: () => {
-                    return Color(this.chartColor);
+                    return Color('#017cce');
                 }
             },
             scales: {
@@ -81,7 +82,6 @@ export class TimelineComponent implements OnInit {
                             'Total Time: ' + d[2],
                             'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
                             'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
-
                         ];
                     }
                 }
@@ -103,16 +103,16 @@ export class TimelineComponent implements OnInit {
         };
 
         let duration = '';
-        let todaysDate = '';
 
-            _.forEach(this.selectedType, filterType => {
-            this.data.labels.push(filterType.name);
+        _.forEach(this.selectedType, filteredLabels => {
+            this.data.labels.push(filteredLabels.title + ' ' + filteredLabels.version);
+        });
+        _.forEach(data, filterType => {
             if (filterType.deprecated == null) {
-                todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
-                duration = DataService.calculateDuration(filterType.created, todaysDate, true);
+                duration = DataService.calculateDuration(filterType.created, this.todaysDate, true);
                 this.data.datasets.push({
                     data: [
-                        [filterType.created, todaysDate, duration]
+                        [filterType.created, this.todaysDate, duration]
                     ]
                 });
             } else {
@@ -126,79 +126,49 @@ export class TimelineComponent implements OnInit {
         });
     }
 
-    private getTypesFilter() {
-        this.selectedType = [];
-        if (this.selectedDataOption === 'Job Types') {
-            this.jobTypesApiService.getJobTypes().subscribe(data => {
-                this.jobTypes = data.results;
-                const selectItems = [];
-                _.forEach(this.jobTypes, jobType => {
-                    selectItems.push({
-                        label: jobType.title + ' ' + jobType.version,
-                        value: jobType
-                    });
-                   // this.selectedType.push(jobType);
-                });
-                this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
-                console.log(this.jobTypeOptions);
-                // this.checkMax(this.selectedType);
-                console.log(this.jobTypeOptions);
-            }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-            });
+    enableButton() {
+        if (this.selectedType.length === 0) {
+            this.testing = true;
         } else {
-            this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-                this.recipeTypes = data.results;
-                const selectItems = [];
-                _.forEach(this.recipeTypes, recipeType => {
-                    selectItems.push({
-                        label: recipeType.title + ' ' + recipeType.version,
-                        value: recipeType
-                    });
-                    // this.selectedType.push(recipeType);
+            this.testing = false;
+        }
+    }
+
+    getTypesFilter() {
+        this.selectedType = [];
+        this.enableButton();
+        if (this.selectedDataOption === 'Job Types') {
+            const selectItems = [];
+                _.forEach(this.jobTypes, jobType => {
+                selectItems.push({
+                    label: jobType.title + ' ' + jobType.version,
+                    value: jobType
                 });
-                this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
-                // this.checkMax(selectItems);
-            }, err => {
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
+            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+        } else if (this.selectedDataOption === 'Recipe Types') {
+            const selectItems = [];
+            _.forEach(this.recipeTypes, recipeType => {
+                selectItems.push({
+                    label: recipeType.title + ' ' + recipeType.version,
+                    value: recipeType
+                });
+            });
+            this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
         }
     }
 
     onApplyClick() {
         this.applyBtnClass = 'ui-button-secondary';
-        if (this.selectedDataOption === 'Job Types') {
-            this.chartColor = '#42f45f';
-            this.jobTypesApiService.getJobTypes({
-                isActive: true,
-                created: this.started,
-                deprecated: this.ended,
-            }).subscribe(data => {
-                this.createTimeline(data);
-            }, err => {
-                console.log(err);
+        this.dateFiltered = _.filter(this.selectedType, (result: any) => {
+            if (result.deprecated == null) {
+                result.deprecated = this.todaysDate;
+            }
+            return moment.utc(result.created).isSameOrAfter(moment.utc(this.started)) &&
+                moment.utc(result.deprecated).isSameOrBefore(moment.utc(this.ended));
             });
-        } else {
-            this.chartColor = '#017cce';
-            this.recipeTypesApiService.getRecipeTypes({
-                isActive: true,
-                created: this.started,
-                deprecated: this.ended,
-            }).subscribe(data => {
-                console.log(data);
-                this.createTimeline(data);
-            }, err => {
-                console.log(err);
-            });
-        }
+            this.createTimeline(this.dateFiltered);
     }
-    // checkMax(filter) {
-    //     const LIMIT_NUMBER = 5;
-    //     if (filter.value.length > LIMIT_NUMBER) {
-    //         filter.value.pop();
-    //         this.checkMax(filter);
-    //     }
-    // }
 
     onStartSelect(e) {
         this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
@@ -210,8 +180,21 @@ export class TimelineComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.testing = true;
         this.showChart = false;
         this.showFilters = true;
+
+        this.jobTypesApiService.getJobTypes().subscribe(data => {
+            this.jobTypes = data.results;
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+        });
+
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+        });
     }
 
 }

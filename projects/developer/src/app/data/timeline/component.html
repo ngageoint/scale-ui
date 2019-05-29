@@ -20,15 +20,16 @@
         <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>
     
-    <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDataOption" (onChange)="getTypesFilter($event)"
+    <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDataOption" (onChange)="getTypesFilter()"
                 [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false"></p-dropdown>
     <div *ngIf="selectedDataOption">
         <label>Types to compare: </label>
         <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedType" maxSelectedLabels="2"
-         [style]="{'width':'100%'}" selectionLimit="5" default=''></p-multiSelect>
+         [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect><br />
+         Select up to five types to compare.
     </div>
     <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
-    (click)="onApplyClick()"></button>
+    (click)="onApplyClick()" [disabled]="testing"></button>
 </p-sidebar>
 
 
