@@ -15,6 +15,7 @@ export const environment = {
     },
     dateFormat: '',
     defaultTheme: '',
+    documentation: '',
     siloUrl: '',
     themeKey: '',
     primaryColor: '',
