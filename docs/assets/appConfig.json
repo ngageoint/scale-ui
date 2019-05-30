@@ -1,6 +1,6 @@
 {
     "apiDefaultVersion": "v6",
-    "apiPrefix": "https://scale-ui-api.azurewebsites.net/mocks",
+    "apiPrefix": "//scale-ui-api.azurewebsites.net/mocks",
     "apiVersions": [],
     "auth": {
         "enabled": false,
@@ -11,6 +11,6 @@
     },
     "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
     "defaultTheme": "light",
-    "siloUrl": "http://ec2-18-217-60-133.us-east-2.compute.amazonaws.com",
+    "siloUrl": "//silo.omega.aisohio.net",
     "themeKey": "scale.theme"
 }

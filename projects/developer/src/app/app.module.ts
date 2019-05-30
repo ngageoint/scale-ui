@@ -79,7 +79,10 @@ import { WorkspacesComponent } from './system/workspaces/component';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
-        return appConfig.loadAppConfig('./assets/appConfig.json');
+        return appConfig.loadAppConfig('./assets/appConfig.json')
+            .catch(err => {
+                console.log(err);
+            });
     };
 };
 
