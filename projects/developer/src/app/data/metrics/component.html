@@ -34,8 +34,9 @@
             To view an aggregate count for the data source, leave this filter unselected.
         </div>
         <div *ngIf="isJobTypes">
-            <label>Recipe Types</label>
-            <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" [style]="{'width':'100%'}"></p-multiSelect>
+            <label>Recipes</label>
+            <p-multiSelect [options]="recipeChoicesOptions" [(ngModel)]="recipeChoiceSelected" [style]="{'width':'100%'}" (onChange)="getRecipeJobTypes()"></p-multiSelect><br />
+            Select a specific recipe to view all of the job types associated with it.
         </div>
         <div *ngIf="columns.length > 0">
             <label>Primary Metric</label>

@@ -28,8 +28,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     filtersApplied: any[] = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
-    recipeTypeSelected: any[] = [];
-    recipeTypeOptions: any[] = [];
+    recipeChoiceSelected: any[] = [];
+    recipeChoicesOptions: any[] = [];
+    recipeTypes: any[] = [];
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
     filteredChoicesLoading: boolean;
@@ -99,6 +100,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
+        });
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
@@ -108,19 +112,25 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
                     return choice.is_active === true;
                 });
-                const params: RecipesDatatable = initialRecipesDatatable;
-                this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
-                    console.log(data);
-                this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
-                    return choice.is_active === true;
-                });
-            }, err => {
-                console.log(err);
-            });
-
             } else {
                 this.isJobTypes = false;
             }
+            const recipeChoicesOptions = [];
+            _.forEach(this.recipeTypes, (choice) => {
+                const jobTypeValue = _.filter(result.choices, value => {
+                    console.log(value.name);
+                    console.log(choice.name);
+                    if (value.name = choice.name ) {
+                        return value;
+                    }
+                });
+                recipeChoicesOptions.push({
+                    label: choice.version ? choice.title + ' ' + choice.version : choice.title,
+                    value: jobTypeValue
+                });
+            });
+            this.recipeChoicesOptions = recipeChoicesOptions;
+            console.log(this.recipeChoicesOptions);
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :
@@ -136,6 +146,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 });
             });
             this.filteredChoicesOptions = filteredChoicesOptions;
+            console.log(this.filteredChoicesOptions);
             this.columns = _.orderBy(result.columns, ['title'], ['asc']);
             _.forEach(this.columns, (column) => {
                 const option = {
@@ -176,6 +187,22 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.getDataTypeOptions();
         }
     }
+    getRecipeJobTypes() {
+        _.forEach(this.filteredChoicesOptions, (filter) => {
+            _.forEach(this.recipeChoiceSelected, (selected) => {
+                _.forEach(selected.job_types, (selectedJob) => {
+                    if (filter.value.name = selectedJob.name ) {
+                    _.forEach(selected.job_types, (choice) => {
+                        this.filtersApplied.push({
+                            label: choice.version ? filter.value.title + ' ' + choice.version : choice.name,
+                            value: filter.value
+                        });
+                        });
+                    }
+                });
+            });
+        });
+    }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
             this.messageService.add({severity: 'warn', summary: 'Selected the same metric twice'});
@@ -201,7 +228,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 }
             }
         }];
-
+        console.log(yAxes);
         if (this.selectedMetric2 && this.multiAxis) {
             // user selected a second metric; another axis is needed
             yAxes.push({
