@@ -85,6 +85,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
     private fetchJobsData(job_type_name: string, job_type_version: string, chartData: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.jobsApiService.getJobs({
+                sortField: 'last_status_change',
                 started: this.started,
                 ended: this.ended,
                 rows: 1000,
@@ -92,19 +93,26 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 job_type_name: job_type_name,
                 job_type_version: job_type_version
             }).subscribe(jobData => {
-                let chartDataIdx = _.indexOf(chartData.data, _.find(chartData.data, { name: job_type_name, version: job_type_version }));
-                chartDataIdx = chartDataIdx > -1 ? chartDataIdx : 0;
-                // remove last element, since that will always have a 0 count
-                chartData.data[chartDataIdx].data.pop();
-                // add counts for today from jobData
-                chartData.data[chartDataIdx].data.push({
-                    x: moment.utc().toISOString(),
-                    y: jobData.count
+                const format = this.dateRange === 'days' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+                const unit = this.dateRange === 'days' ? 'd' : 'h';
+                _.forEach(chartData.labels, label => {
+                    const sortedData = _.filter(jobData.results, result => {
+                        return moment.utc(result.last_status_change).isBetween(
+                            moment.utc(label, format),
+                            moment.utc(label, format).add(1, unit)
+                        );
+                    });
+                    chartData.data[0].data.push({
+                        x: moment.utc(label, format).format(format),
+                        y: sortedData.length
+                    });
                 });
-                _.forEach(chartData.data, d => {
-                    d.fill = true;
-                    d.type = 'line';
-                });
+                chartData.data[0].fill = true;
+                chartData.data[0].type = 'line';
+                chartData.data[0].yAxisID = 'yAxis1';
+                chartData.data[0].pointBorderColor = '#fff';
+                chartData.data[0].borderColor = '#d0eaff';
+                console.log(chartData);
                 resolve(chartData);
             }, err => {
                 reject(err);
@@ -161,81 +169,90 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 page_size: null
             };
 
-            this.metricsApiService.getPlotData(this.plotParams).subscribe(plotData => {
-                const filters = this.favorites.length > 0 ?
-                    this.favorites :
-                    [];
-                const chartData = this.chartService.formatPlotResults(
-                    plotData,
-                    this.plotParams,
-                    filters,
-                    '',
-                    true,
-                    null,
-                    null,
-                    null,
-                    null,
-                    this.dateRange
-                );
-                const promises = [];
+            const filters = this.favorites.length > 0 ?
+                this.favorites :
+                [];
+            const format = this.dateRange === 'days' ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm';
+            const chartData = this.chartService.formatPlotResults(
+                { results: [
+                    {
+                        column: {
+                            title: 'Completed Count',
+                            name: 'completed_count'
+                        },
+                        min_x: moment.utc(this.started).format(format),
+                        max_x: moment.utc(this.ended).format(format),
+                        min_y: 1,
+                        max_y: 1000,
+                        values: []
+                    }
+                ]},
+                this.plotParams,
+                filters,
+                '',
+                true,
+                null,
+                null,
+                null,
+                null,
+                this.dateRange
+            );
+            chartData.data = [
+                {
+                    data: []
+                }
+            ];
+            const promises = [];
 
-                // refactor data to match this chart's format
-                _.forEach(chartData.data, d1 => {
-                    const newData = [];
-                    _.forEach(d1.data, (d2, idx) => {
-                        newData.push({
-                            x: moment.utc(chartData.labels[idx], 'YYYY-MM-DD').toISOString(),
-                            y: d2
-                        });
-                    });
-                    d1.data = newData;
-                    d1.pointBorderColor = '#fff';
-                    d1.borderColor = '#d0eaff';
-                    // get completed counts for the current day
-                    // need to use the jobs api for this, since metrics only does 1 full day at a time
-                    promises.push(this.fetchJobsData(d1.name, d1.version, chartData));
+            // get completed counts for the current day
+            // need to use the jobs api for this, since metrics only does 1 full day at a time
+            if (filters.length > 0) {
+                _.forEach(filters, f => {
+                    promises.push(this.fetchJobsData(f.name, f.version, chartData));
                 });
-                Promise.all(promises).then(values => {
-                    // use unique objects from data arrays
-                    this.jobsDatasets = _.uniq(_.flatten(_.map(values, 'data')));
-                    this.updateFeedData();
-                    this.chartLoading = false;
-                    // if (this.favorites && this.favorites.length > 0) {
-                    //     this.filesApiService.getFiles({
-                    //         page: 1,
-                    //         modified_started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
-                    //         modified_ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
-                    //         job_type_id: _.map(this.favorites, 'id'),
-                    //         sortOrder: 1,
-                    //         sortField: 'created'
-                    //     }).subscribe(filesData => {
-                    //         this.filesDataset = {
-                    //             label: 'Files',
-                    //             fill: false,
-                    //             borderColor: ColorService.WARNING,
-                    //             backgroundColor: ColorService.WARNING,
-                    //             borderWidth: 2,
-                    //             pointRadius: 2,
-                    //             pointBackgroundColor: ColorService.WARNING,
-                    //             data: []
-                    //         };
-                    //         const files = _.toPairs(_.groupBy(filesData.results, r => {
-                    //             return moment.utc(r.created).startOf('d').toISOString();
-                    //         }));
-                    //         _.forEach(files, f => {
-                    //             this.filesDataset.data.push({
-                    //                 x: f[0],
-                    //                 y: f[1].length
-                    //             });
-                    //         });
-                    //         this.updateFeedData();
-                    //         this.chartLoading = false;
-                    //     });
-                    // } else {
-                    //     this.updateFeedData();
-                    //     this.chartLoading = false;
-                    // }
-                });
+            } else {
+                promises.push(this.fetchJobsData(null, null, chartData));
+            }
+            Promise.all(promises).then(values => {
+                // use unique objects from data arrays
+                this.jobsDatasets = _.uniq(_.flatten(_.map(values, 'data')));
+                this.updateFeedData();
+                this.chartLoading = false;
+                // if (this.favorites && this.favorites.length > 0) {
+                //     this.filesApiService.getFiles({
+                //         page: 1,
+                //         modified_started: moment.utc().subtract(3, 'd').startOf('d').toISOString(),
+                //         modified_ended: moment.utc().add(1, 'd').startOf('d').toISOString(),
+                //         job_type_id: _.map(this.favorites, 'id'),
+                //         sortOrder: 1,
+                //         sortField: 'created'
+                //     }).subscribe(filesData => {
+                //         this.filesDataset = {
+                //             label: 'Files',
+                //             fill: false,
+                //             borderColor: ColorService.WARNING,
+                //             backgroundColor: ColorService.WARNING,
+                //             borderWidth: 2,
+                //             pointRadius: 2,
+                //             pointBackgroundColor: ColorService.WARNING,
+                //             data: []
+                //         };
+                //         const files = _.toPairs(_.groupBy(filesData.results, r => {
+                //             return moment.utc(r.created).startOf('d').toISOString();
+                //         }));
+                //         _.forEach(files, f => {
+                //             this.filesDataset.data.push({
+                //                 x: f[0],
+                //                 y: f[1].length
+                //             });
+                //         });
+                //         this.updateFeedData();
+                //         this.chartLoading = false;
+                //     });
+                // } else {
+                //     this.updateFeedData();
+                //     this.chartLoading = false;
+                // }
             });
         }, err => {
             this.chartLoading = false;
