@@ -53,6 +53,10 @@ var recipeTypesValidate = require('./handlers/recipeTypesValidate');
 var recipeTypeCreate = require('./handlers/recipeTypeCreate');
 var recipeTypeEdit = require('./handlers/recipeTypeEdit');
 var version = require('./handlers/version');
+var siloJobs = require('./handlers/siloJobs');
+var siloJobDetails = require('./handlers/siloJobDetails');
+var siloManifestDetails = require('./handlers/siloManifestDetails');
+var siloImageDetails = require('./handlers/siloImageDetails');
 
 var apiVersion = 'v6';
 
@@ -406,6 +410,30 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/version/',
             handler: version
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/silo/jobs',
+            handler: siloJobs
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/silo/jobs/{id}',
+            handler: siloJobDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/silo/images/{id}/manifest',
+            handler: siloManifestDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/silo/images/{id}',
+            handler: siloImageDetails
         });
     }
 };
