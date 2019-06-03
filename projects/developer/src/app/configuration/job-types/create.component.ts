@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, FormBuilder } from '@angular/forms';
+import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -41,11 +41,23 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         readOnly: 'nocursor',
         viewportMargin: Infinity
     };
-    workspaces: SelectItem[] = [];
+    workspacesOptions: SelectItem[] = [];
     jobType: any;
     cleanJobType: any;
     createForm: FormGroup = this.fb.group({
-        'icon': new FormControl('')
+        icon: [''],
+        configuration: this.fb.group({
+            output_workspaces: this.fb.group({
+                default: ['', Validators.required],
+                outputs: ['']
+            }),
+            mounts: this.fb.group({
+                type: [''],
+                host_path: [''],
+                driver: [''],
+                driver_opts: ['']
+            })
+        })
     });
     validated: boolean;
     submitted: boolean;
@@ -262,7 +274,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         label: 'Seed Image'
                     },
                     {
-                        label: 'General Information'
+                        label: 'Configuration'
+                    },
+                    {
+                        label: 'Icon'
                     },
                     {
                         label: 'Validate and Create',
@@ -271,6 +286,19 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 ];
             });
         }
+
+        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
+            // set up workspaces
+            _.forEach(workspaces.results, workspace => {
+                this.workspacesOptions.push({
+                    label: workspace.title,
+                    value: workspace.name
+                });
+            });
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+        });
     }
 
     ngOnDestroy() {

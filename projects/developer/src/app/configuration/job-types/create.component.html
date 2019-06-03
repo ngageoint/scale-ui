@@ -46,7 +46,21 @@
                         </p-card>
                     </div>
                 </div>
-                <div class="p-col-10" *ngIf="currentStepIdx === 1">
+                <div class="p-col-10" *ngIf="currentStepIdx === 1" formGroupName="configuration">
+                    <h4>Output Workspaces</h4>
+                    Select workspaces for the outputs of this job type
+                    <div class="p-grid">
+                        <div class="p-col-6" formGroupName="output_workspaces">
+                            <label>
+                                <span>Default</span>
+                                <p-dropdown [options]="workspacesOptions" formControlName="default"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-10" *ngIf="currentStepIdx === 2">
                     <div class="p-grid">
                         <div class="p-col-6">
                             Select an icon which will be used to represent this job type in Scale.
