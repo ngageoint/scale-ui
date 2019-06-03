@@ -10,6 +10,7 @@ import { RecipesDatatable, initialRecipesDatatable } from '../../processing/reci
 import { ChartService } from './chart.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/primeng';
+import { JobType } from '../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-metrics',
@@ -117,20 +118,16 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             }
             const recipeChoicesOptions = [];
             _.forEach(this.recipeTypes, (choice) => {
-                const jobTypeValue = _.filter(result.choices, value => {
-                    console.log(value.name);
-                    console.log(choice.name);
-                    if (value.name = choice.name ) {
-                        return value;
-                    }
-                });
                 recipeChoicesOptions.push({
                     label: choice.version ? choice.title + ' ' + choice.version : choice.title,
-                    value: jobTypeValue
+                    value: _.forEach(choice.job_types, (jobType) => {
+                            if (JobType.name === result.choices.name ) {
+                                return result.choices;
+                            }
+                    })
                 });
             });
             this.recipeChoicesOptions = recipeChoicesOptions;
-            console.log(this.recipeChoicesOptions);
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :
@@ -187,22 +184,25 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.getDataTypeOptions();
         }
     }
+
     getRecipeJobTypes() {
-        _.forEach(this.filteredChoicesOptions, (filter) => {
-            _.forEach(this.recipeChoiceSelected, (selected) => {
-                _.forEach(selected.job_types, (selectedJob) => {
-                    if (filter.value.name = selectedJob.name ) {
-                    _.forEach(selected.job_types, (choice) => {
-                        this.filtersApplied.push({
-                            label: choice.version ? filter.value.title + ' ' + choice.version : choice.name,
-                            value: filter.value
-                        });
-                        });
+        if (this.recipeChoiceSelected != null) {
+            const filtersApplied = [];
+            _.forEach(this.recipeChoiceSelected, (outerRecipe) => {
+                _.forEach(outerRecipe, (selectedRecipe) => {
+                _.forEach(this.filteredChoicesOptions, (jobTypeInfo) => {
+                    if ((jobTypeInfo.value.name === selectedRecipe.name)) {
+                            filtersApplied.push(jobTypeInfo.value);
                     }
                 });
+                });
             });
-        });
+            this.filtersApplied = filtersApplied;
+        } else {
+            this.changeDataTypeSelection();
+        }
     }
+
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
             this.messageService.add({severity: 'warn', summary: 'Selected the same metric twice'});
