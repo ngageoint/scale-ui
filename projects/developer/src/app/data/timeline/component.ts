@@ -5,9 +5,7 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import * as Color from 'chartjs-color';
 
-import { Recipe } from '../../processing/recipes/api.model';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
-import { JobsDatatable } from '../../processing/jobs/datatable.model';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
@@ -17,26 +15,21 @@ import { environment } from '../../../environments/environment';
     styleUrls: ['./component.scss']
 })
 export class TimelineComponent implements OnInit {
-    @Input() datatableOptions: JobsDatatable;
+    chartTitle: string[] = [];
     data: any;
+    dataTypesLoading: boolean;
     options: any;
-    selectedDataOption: string;
     showFilters: boolean;
     jobTypes: any;
     recipeTypes: any;
-    typeDropdownOptions: SelectItem[];
-    selectedType: any = [];
-    showChart: boolean;
-    typeSelected: boolean;
-    dateFiltered: any;
-    applyBtnClass = 'ui-button-secondary';
-    todaysDate = moment.utc().format('YYYY-MM-DD HH:mm:ss[Z]');
-    started = moment.utc().subtract(4, 'y').startOf('d').toISOString();
-    ended = moment.utc().endOf('d').toISOString();
-    dataOptions: SelectItem[] = [
+    dataTypeOptions: SelectItem[] = [
         { label: 'Recipe Types', value: 'Recipe Types' },
         { label: 'Job Types', value: 'Job Types' }
     ];
+    selectedDataTypeOption: string;
+    filterOptions = [];
+    selectedFilters = [];
+    showChart: boolean;
 
     constructor(
         private messageService: MessageService,
@@ -44,10 +37,103 @@ export class TimelineComponent implements OnInit {
         private jobTypesApiService: JobTypesApiService
     ) {}
 
+    // init chart data
     private createTimeline(data) {
         this.showChart = true;
         this.showFilters = false;
+        this.data = {
+            labels: [],
+            datasets: []
+        };
+
+        // create y-axis labels
+        _.forEach(this.selectedFilters, filter => {
+            const label = this.selectedDataTypeOption === 'Job Types' ?
+                `${filter.title} v${filter.version}` :
+                `${filter.title} rev ${filter.revision_num}`;
+            this.data.labels.push(label);
+        });
+
+        // set chart title
+        const chartTitle: string[] = [];
+        chartTitle.push(this.selectedDataTypeOption);
+        this.options.title = {
+            display: true,
+            text: chartTitle,
+            fontSize: 16
+        };
+
+        // calculate duration between created date and deprecated date for each recipe type or job type selected
+        _.forEach(data, d => {
+            // if type has not been deprecated, use the current date
+            const deprecated = d.deprecated ? d.deprecated : moment.utc().toISOString();
+            this.data.datasets.push({
+                data: [
+                    [d.created, deprecated, DataService.calculateDuration(d.created, deprecated, true)]
+                ]
+            });
+        });
+    }
+
+    // enable or disable button based on selected type(s)
+    enableButton() {
+        return this.selectedFilters.length > 0;
+    }
+
+    // retrieve job types or recipe types and populate filter dropdown options
+    getFilterOptions() {
+        this.dataTypesLoading = true;
+        this.filterOptions = [];
+        this.selectedFilters = [];
+        this.enableButton();
+        if (this.selectedDataTypeOption === 'Job Types') {
+            this.jobTypesApiService.getJobTypes().subscribe(data => {
+                this.dataTypesLoading = false;
+                this.jobTypes = data.results;
+                _.forEach(this.jobTypes, jobType => {
+                    this.filterOptions.push({
+                        label: `${jobType.title} v${jobType.version}`,
+                        value: jobType
+                    });
+                });
+                this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
+            }, err => {
+                console.log(err);
+                this.dataTypesLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+        } else if (this.selectedDataTypeOption === 'Recipe Types') {
+            this.recipeTypesApiService.getRecipeTypes({ is_active: null }).subscribe(data => {
+                this.dataTypesLoading = false;
+                this.recipeTypes = data.results;
+                _.forEach(this.recipeTypes, recipeType => {
+                    this.filterOptions.push({
+                        label: `${recipeType.title} rev ${recipeType.revision_num}`,
+                        value: recipeType
+                    });
+                });
+                this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
+            }, err => {
+                console.log(err);
+                this.dataTypesLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+        }
+    }
+
+    onUpdateChartClick() {
+        this.createTimeline(this.selectedFilters);
+    }
+
+    ngOnInit() {
+        this.showChart = false;
+        this.showFilters = true;
         this.options = {
+            title: {
+                display: false,
+                text: [],
+                fontSize: 16
+            },
             elements: {
                 font: 'Roboto',
                 colorFunction: () => {
@@ -63,10 +149,11 @@ export class TimelineComponent implements OnInit {
                             if (!values[index]) {
                                 return;
                             }
-                            return moment.utc(values[index]['value']).format('YYYY-MM-DD HH:mm:ss[Z]');
+                            return moment.utc(values[index]['value']).format(environment.dateFormat);
                         },
                         maxRotation: 90,
-                        minRotation: 90,
+                        minRotation: 45,
+                        autoSkip: true
                     }
                 }]
             },
@@ -76,121 +163,19 @@ export class TimelineComponent implements OnInit {
                         const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
                         return [
                             'Total Time: ' + d[2],
-                            'Created: ' + moment.utc(d[0]).format('YYYY-MM-DD HH:mm'),
-                            'Deprecated: ' + moment.utc(d[1]).format('YYYY-MM-DD HH:mm')
+                            'Created: ' + moment.utc(d[0]).format(environment.dateFormat),
+                            'Deprecated: ' + moment.utc(d[1]).format(environment.dateFormat)
                         ];
                     }
                 }
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false
             },
             plugins: {
                 datalabels: false,
                 timeline: true,
             },
+            responsive: true,
             maintainAspectRatio: false
         };
-
-        this.data = {
-            labels: [],
-            datasets: []
-        };
-
-        let duration = '';
-
-        _.forEach(this.selectedType, filteredLabels => {
-            this.data.labels.push(filteredLabels.title + ' ' + filteredLabels.version);
-        });
-        _.forEach(data, filterType => {
-            if (filterType.deprecated == null) {
-                duration = DataService.calculateDuration(filterType.created, this.todaysDate, true);
-                this.data.datasets.push({
-                    data: [
-                        [filterType.created, this.todaysDate, duration]
-                    ]
-                });
-            } else {
-                duration = DataService.calculateDuration(filterType.created, filterType.deprecated, true);
-                this.data.datasets.push({
-                    data: [
-                        [filterType.created, filterType.deprecated, duration]
-                    ]
-                });
-            }
-        });
-    }
-
-    enableButton() {
-        if (this.selectedType.length === 0) {
-            this.typeSelected = true;
-        } else {
-            this.typeSelected = false;
-        }
-    }
-
-    getTypesFilter() {
-        this.selectedType = [];
-        this.enableButton();
-        if (this.selectedDataOption === 'Job Types') {
-            const selectItems = [];
-                _.forEach(this.jobTypes, jobType => {
-                selectItems.push({
-                    label: jobType.title + ' ' + jobType.version,
-                    value: jobType
-                });
-            });
-            this.typeDropdownOptions = _.orderBy(selectItems, 'label', 'asc');
-        } else if (this.selectedDataOption === 'Recipe Types') {
-            const selectItems = [];
-            _.forEach(this.recipeTypes, recipeType => {
-                selectItems.push({
-                    label: recipeType.title + ' ' + recipeType.version,
-                    value: recipeType
-                });
-            });
-            this.typeDropdownOptions = _.orderBy(selectItems, 'label', 'asc');
-        }
-    }
-
-    onApplyClick() {
-        this.applyBtnClass = 'ui-button-secondary';
-        this.dateFiltered = _.filter(this.selectedType, (result: any) => {
-            if (result.deprecated == null) {
-                result.deprecated = this.todaysDate;
-            }
-            return moment.utc(result.created).isSameOrAfter(moment.utc(this.started)) &&
-                moment.utc(result.deprecated).isSameOrBefore(moment.utc(this.ended));
-            });
-            this.createTimeline(this.dateFiltered);
-    }
-
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-
-    ngOnInit() {
-        this.typeSelected = true;
-        this.showChart = false;
-        this.showFilters = true;
-
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
-            this.jobTypes = data.results;
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-        });
-
-        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-            this.recipeTypes = data.results;
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-        });
     }
 
 }

@@ -1,40 +1,29 @@
-<h2><i class="fa fa-calendar"></i> Timeline - {{selectedDataOption}}</h2>
-<div class="timeline__header">
-</div>
-
+<h2><i class="fa fa-calendar"></i> Timeline</h2>
+Visualize the created/deprecated history of job types or recipe types.
+<div class="timeline__header"></div>
 <div *ngIf="!showChart">
     Open the <a (click)="showFilters = true">filters dialog</a> to select a data source.
 </div>
-
 <button pButton type="button" class="ui-button-primary timeline__filter-toggle" icon="fa fa-filter"
-            (click)="showFilters = !showFilters"></button>
-
+        (click)="showFilters = !showFilters"></button>
 <p-sidebar [(visible)]="showFilters" position="left" [style]="{'width':'25vw'}" [blockScroll]="true" baseZIndex="1002">
-    <h2>Timeline Filters</h2>
-    <label>From</label>
-    <utc-datepicker class="noWrap" [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
-    <label>To</label>
-    <utc-datepicker class="noWrap" [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
+    <h2>Timeline</h2>
     <label>Data Source</label>
     <div class="timeline__filter-loading" *ngIf="dataTypesLoading">
         <i class="fa fa-circle-o-notch fa-spin"></i>
     </div>
-    
-    <p-dropdown [options]="dataOptions" [(ngModel)]="selectedDataOption" (onChange)="getTypesFilter()"
-                [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false"></p-dropdown>
-    <div *ngIf="selectedDataOption">
+    <p-dropdown [options]="dataTypeOptions" [(ngModel)]="selectedDataTypeOption" (onChange)="getFilterOptions()"
+                [style]="{'width':'100%'}" placeholder="Select..." *ngIf="!dataTypesLoading" [showClear]="false">
+    </p-dropdown>
+    <div *ngIf="selectedDataTypeOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="typeDropdownOptions" [(ngModel)]="selectedType" maxSelectedLabels="2"
-         [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect><br />
+        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" maxSelectedLabels="2"
+                       [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect>
          Select up to five types to compare.
     </div>
-    <button pButton icon="fa fa-refresh" class="timeline__date-filter-btn" [ngClass]="applyBtnClass" label="Update Chart"
-    (click)="onApplyClick()" [disabled]="typeSelected"></button>
+    <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
+            (click)="onUpdateChartClick()" [disabled]="selectedFilters.length === 0"></button>
 </p-sidebar>
-
-
-
 <div class="timeline__chart">
-        <dev-loading-indicator [loading]="chartLoading"></dev-loading-indicator>
-        <p-chart type="timeline" maintainAspectRatio="true" responsive="true" [options]="options" [data]="data" *ngIf="data" [height]="500" ></p-chart>
+    <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="500" ></p-chart>
 </div>
