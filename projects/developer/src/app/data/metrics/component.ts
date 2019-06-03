@@ -228,7 +228,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 }
             }
         }];
-        console.log(yAxes);
         if (this.selectedMetric2 && this.multiAxis) {
             // user selected a second metric; another axis is needed
             yAxes.push({
