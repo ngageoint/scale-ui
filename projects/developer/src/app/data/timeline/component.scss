@@ -1,0 +1,68 @@
+h2 {
+    .ui-button {
+        font-size: 0.7em;
+    }
+}
+label {
+    font-weight: bold;
+    display: block;
+    margin: 15px 0 0 0;
+}
+
+.label-info {
+    padding: .2em .6em .1em .6em;
+}
+
+button {
+    margin: 15px 0;
+}
+
+.timeline__filter-toggle {
+    position: fixed;
+    top: 130px;
+    left: 0;
+    height: 120px;
+    width: 30px !important;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.timeline__filter-loading {
+    text-align: center;
+    margin: 15px 0 0 0;
+}
+
+::ng-deep .ui-sidebar {
+    overflow-y: auto;
+}
+
+.timeline__chart {
+    margin-top: 40px;
+    position: relative;
+    min-height: 500px;
+}
+
+.timeline__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .timeline__date-filter {
+        display: flex;
+
+        div {
+            margin-right: 20px;
+        }
+
+        .timeline__date-filter-btn {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 20px;
+        }
+
+        .timeline__date-filter-dropdown {
+            margin-top: 20px;
+            margin-left: 10px;
+        }
+    }
+}

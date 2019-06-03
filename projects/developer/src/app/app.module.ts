@@ -74,6 +74,7 @@ import { StatusComponent } from './navbar/status/component';
 import { StrikesComponent } from './system/strikes/component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
+import { TimelineComponent } from './data/timeline/component';
 import { WorkspacesComponent } from './system/workspaces/component';
 
 const appInitializer = (appConfig: AppConfigService) => {
@@ -128,6 +129,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         StatusComponent,
         StrikesComponent,
         SubnavComponent,
+        TimelineComponent,
         WorkspacesComponent
     ],
     imports: [

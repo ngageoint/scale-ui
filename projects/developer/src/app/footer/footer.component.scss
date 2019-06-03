@@ -3,12 +3,29 @@
     box-shadow: 0 0 0.5em var(--black);
     margin-top: 2.0em;
     min-height: 35px;
-}
-.version {
-    float: right;
-    margin-right: 10px;
+    text-align: right;
     padding-top: 10px;
-    color: var(--grey-85);
     padding-bottom: 0;
-    margin-bottom: 0;
+    color: var(--grey-85);
+    font-size: 0.9em;
+
+    ul {
+        list-style-type: none;
+        margin: 0 1em 0 0;
+        padding: 0;
+
+        li {
+            display: inline;
+            margin: 0 8px;
+
+            a {
+                color: var(--grey-85);
+                text-decoration: underline;
+
+                &:hover {
+                    text-decoration: none;
+                }
+            }
+        }
+    }
 }

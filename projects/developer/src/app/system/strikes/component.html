@@ -48,7 +48,7 @@
                 <dd>{{ selectedStrikeDetail.description }}</dd>
                 <dt *ngIf="selectedStrikeDetail.job.id">Job:</dt>
                 <dd *ngIf="selectedStrikeDetail.job.id">
-                    <a routerLink="/jobs/job/{{ selectedStrikeDetail.job.id }}">
+                    <a routerLink="/processing/jobs/{{ selectedStrikeDetail.job.id }}">
                         <i class="fa" [innerHtml]="strikeJobIcon"></i>
                         View Job Details ({{ selectedStrikeDetail.job.status }})
                     </a>

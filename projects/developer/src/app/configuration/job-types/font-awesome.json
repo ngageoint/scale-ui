@@ -1,2702 +1,2704 @@
-[
-    {
-        "label": "fa-500px",
-        "value": "f26e"
-    },
-    {
-        "label": "fa-address-book",
-        "value": "f2b9"
-    },
-    {
-        "label": "fa-address-book-o",
-        "value": "f2ba"
-    },
-    {
-        "label": "fa-address-card",
-        "value": "f2bb"
-    },
-    {
-        "label": "fa-address-card-o",
-        "value": "f2bc"
-    },
-    {
-        "label": "fa-adjust",
-        "value": "f042"
-    },
-    {
-        "label": "fa-adn",
-        "value": "f170"
-    },
-    {
-        "label": "fa-align-center",
-        "value": "f037"
-    },
-    {
-        "label": "fa-align-justify",
-        "value": "f039"
-    },
-    {
-        "label": "fa-align-left",
-        "value": "f036"
-    },
-    {
-        "label": "fa-align-right",
-        "value": "f038"
-    },
-    {
-        "label": "fa-amazon",
-        "value": "f270"
-    },
-    {
-        "label": "fa-ambulance",
-        "value": "f0f9"
-    },
-    {
-        "label": "fa-american-sign-language-interpreting",
-        "value": "f2a3"
-    },
-    {
-        "label": "fa-anchor",
-        "value": "f13d"
-    },
-    {
-        "label": "fa-android",
-        "value": "f17b"
-    },
-    {
-        "label": "fa-angellist",
-        "value": "f209"
-    },
-    {
-        "label": "fa-angle-double-down",
-        "value": "f103"
-    },
-    {
-        "label": "fa-angle-double-left",
-        "value": "f100"
-    },
-    {
-        "label": "fa-angle-double-right",
-        "value": "f101"
-    },
-    {
-        "label": "fa-angle-double-up",
-        "value": "f102"
-    },
-    {
-        "label": "fa-angle-down",
-        "value": "f107"
-    },
-    {
-        "label": "fa-angle-left",
-        "value": "f104"
-    },
-    {
-        "label": "fa-angle-right",
-        "value": "f105"
-    },
-    {
-        "label": "fa-angle-up",
-        "value": "f106"
-    },
-    {
-        "label": "fa-apple",
-        "value": "f179"
-    },
-    {
-        "label": "fa-archive",
-        "value": "f187"
-    },
-    {
-        "label": "fa-area-chart",
-        "value": "f1fe"
-    },
-    {
-        "label": "fa-arrow-circle-down",
-        "value": "f0ab"
-    },
-    {
-        "label": "fa-arrow-circle-left",
-        "value": "f0a8"
-    },
-    {
-        "label": "fa-arrow-circle-o-down",
-        "value": "f01a"
-    },
-    {
-        "label": "fa-arrow-circle-o-left",
-        "value": "f190"
-    },
-    {
-        "label": "fa-arrow-circle-o-right",
-        "value": "f18e"
-    },
-    {
-        "label": "fa-arrow-circle-o-up",
-        "value": "f01b"
-    },
-    {
-        "label": "fa-arrow-circle-right",
-        "value": "f0a9"
-    },
-    {
-        "label": "fa-arrow-circle-up",
-        "value": "f0aa"
-    },
-    {
-        "label": "fa-arrow-down",
-        "value": "f063"
-    },
-    {
-        "label": "fa-arrow-left",
-        "value": "f060"
-    },
-    {
-        "label": "fa-arrow-right",
-        "value": "f061"
-    },
-    {
-        "label": "fa-arrow-up",
-        "value": "f062"
-    },
-    {
-        "label": "fa-arrows",
-        "value": "f047"
-    },
-    {
-        "label": "fa-arrows-alt",
-        "value": "f0b2"
-    },
-    {
-        "label": "fa-arrows-h",
-        "value": "f07e"
-    },
-    {
-        "label": "fa-arrows-v",
-        "value": "f07d"
-    },
-    {
-        "label": "fa-assistive-listening-systems",
-        "value": "f2a2"
-    },
-    {
-        "label": "fa-asterisk",
-        "value": "f069"
-    },
-    {
-        "label": "fa-at",
-        "value": "f1fa"
-    },
-    {
-        "label": "fa-audio-description",
-        "value": "f29e"
-    },
-    {
-        "label": "fa-backward",
-        "value": "f04a"
-    },
-    {
-        "label": "fa-balance-scale",
-        "value": "f24e"
-    },
-    {
-        "label": "fa-ban",
-        "value": "f05e"
-    },
-    {
-        "label": "fa-bandcamp",
-        "value": "f2d5"
-    },
-    {
-        "label": "fa-bar-chart",
-        "value": "f080"
-    },
-    {
-        "label": "fa-barcode",
-        "value": "f02a"
-    },
-    {
-        "label": "fa-bars",
-        "value": "f0c9"
-    },
-    {
-        "label": "fa-bath",
-        "value": "f2cd"
-    },
-    {
-        "label": "fa-battery-empty",
-        "value": "f244"
-    },
-    {
-        "label": "fa-battery-full",
-        "value": "f240"
-    },
-    {
-        "label": "fa-battery-half",
-        "value": "f242"
-    },
-    {
-        "label": "fa-battery-quarter",
-        "value": "f243"
-    },
-    {
-        "label": "fa-battery-three-quarters",
-        "value": "f241"
-    },
-    {
-        "label": "fa-bed",
-        "value": "f236"
-    },
-    {
-        "label": "fa-beer",
-        "value": "f0fc"
-    },
-    {
-        "label": "fa-behance",
-        "value": "f1b4"
-    },
-    {
-        "label": "fa-behance-square",
-        "value": "f1b5"
-    },
-    {
-        "label": "fa-bell",
-        "value": "f0f3"
-    },
-    {
-        "label": "fa-bell-o",
-        "value": "f0a2"
-    },
-    {
-        "label": "fa-bell-slash",
-        "value": "f1f6"
-    },
-    {
-        "label": "fa-bell-slash-o",
-        "value": "f1f7"
-    },
-    {
-        "label": "fa-bicycle",
-        "value": "f206"
-    },
-    {
-        "label": "fa-binoculars",
-        "value": "f1e5"
-    },
-    {
-        "label": "fa-birthday-cake",
-        "value": "f1fd"
-    },
-    {
-        "label": "fa-bitbucket",
-        "value": "f171"
-    },
-    {
-        "label": "fa-bitbucket-square",
-        "value": "f172"
-    },
-    {
-        "label": "fa-black-tie",
-        "value": "f27e"
-    },
-    {
-        "label": "fa-blind",
-        "value": "f29d"
-    },
-    {
-        "label": "fa-bluetooth",
-        "value": "f293"
-    },
-    {
-        "label": "fa-bluetooth-b",
-        "value": "f294"
-    },
-    {
-        "label": "fa-bold",
-        "value": "f032"
-    },
-    {
-        "label": "fa-bolt",
-        "value": "f0e7"
-    },
-    {
-        "label": "fa-bomb",
-        "value": "f1e2"
-    },
-    {
-        "label": "fa-book",
-        "value": "f02d"
-    },
-    {
-        "label": "fa-bookmark",
-        "value": "f02e"
-    },
-    {
-        "label": "fa-bookmark-o",
-        "value": "f097"
-    },
-    {
-        "label": "fa-braille",
-        "value": "f2a1"
-    },
-    {
-        "label": "fa-briefcase",
-        "value": "f0b1"
-    },
-    {
-        "label": "fa-btc",
-        "value": "f15a"
-    },
-    {
-        "label": "fa-bug",
-        "value": "f188"
-    },
-    {
-        "label": "fa-building",
-        "value": "f1ad"
-    },
-    {
-        "label": "fa-building-o",
-        "value": "f0f7"
-    },
-    {
-        "label": "fa-bullhorn",
-        "value": "f0a1"
-    },
-    {
-        "label": "fa-bullseye",
-        "value": "f140"
-    },
-    {
-        "label": "fa-bus",
-        "value": "f207"
-    },
-    {
-        "label": "fa-buysellads",
-        "value": "f20d"
-    },
-    {
-        "label": "fa-calculator",
-        "value": "f1ec"
-    },
-    {
-        "label": "fa-calendar",
-        "value": "f073"
-    },
-    {
-        "label": "fa-calendar-check-o",
-        "value": "f274"
-    },
-    {
-        "label": "fa-calendar-minus-o",
-        "value": "f272"
-    },
-    {
-        "label": "fa-calendar-o",
-        "value": "f133"
-    },
-    {
-        "label": "fa-calendar-plus-o",
-        "value": "f271"
-    },
-    {
-        "label": "fa-calendar-times-o",
-        "value": "f273"
-    },
-    {
-        "label": "fa-camera",
-        "value": "f030"
-    },
-    {
-        "label": "fa-camera-retro",
-        "value": "f083"
-    },
-    {
-        "label": "fa-car",
-        "value": "f1b9"
-    },
-    {
-        "label": "fa-caret-down",
-        "value": "f0d7"
-    },
-    {
-        "label": "fa-caret-left",
-        "value": "f0d9"
-    },
-    {
-        "label": "fa-caret-right",
-        "value": "f0da"
-    },
-    {
-        "label": "fa-caret-square-o-down",
-        "value": "f150"
-    },
-    {
-        "label": "fa-caret-square-o-left",
-        "value": "f191"
-    },
-    {
-        "label": "fa-caret-square-o-right",
-        "value": "f152"
-    },
-    {
-        "label": "fa-caret-square-o-up",
-        "value": "f151"
-    },
-    {
-        "label": "fa-caret-up",
-        "value": "f0d8"
-    },
-    {
-        "label": "fa-cart-arrow-down",
-        "value": "f218"
-    },
-    {
-        "label": "fa-cart-plus",
-        "value": "f217"
-    },
-    {
-        "label": "fa-cc",
-        "value": "f20a"
-    },
-    {
-        "label": "fa-cc-amex",
-        "value": "f1f3"
-    },
-    {
-        "label": "fa-cc-diners-club",
-        "value": "f24c"
-    },
-    {
-        "label": "fa-cc-discover",
-        "value": "f1f2"
-    },
-    {
-        "label": "fa-cc-jcb",
-        "value": "f24b"
-    },
-    {
-        "label": "fa-cc-mastercard",
-        "value": "f1f1"
-    },
-    {
-        "label": "fa-cc-paypal",
-        "value": "f1f4"
-    },
-    {
-        "label": "fa-cc-stripe",
-        "value": "f1f5"
-    },
-    {
-        "label": "fa-cc-visa",
-        "value": "f1f0"
-    },
-    {
-        "label": "fa-certificate",
-        "value": "f0a3"
-    },
-    {
-        "label": "fa-chain-broken",
-        "value": "f127"
-    },
-    {
-        "label": "fa-check",
-        "value": "f00c"
-    },
-    {
-        "label": "fa-check-circle",
-        "value": "f058"
-    },
-    {
-        "label": "fa-check-circle-o",
-        "value": "f05d"
-    },
-    {
-        "label": "fa-check-square",
-        "value": "f14a"
-    },
-    {
-        "label": "fa-check-square-o",
-        "value": "f046"
-    },
-    {
-        "label": "fa-chevron-circle-down",
-        "value": "f13a"
-    },
-    {
-        "label": "fa-chevron-circle-left",
-        "value": "f137"
-    },
-    {
-        "label": "fa-chevron-circle-right",
-        "value": "f138"
-    },
-    {
-        "label": "fa-chevron-circle-up",
-        "value": "f139"
-    },
-    {
-        "label": "fa-chevron-down",
-        "value": "f078"
-    },
-    {
-        "label": "fa-chevron-left",
-        "value": "f053"
-    },
-    {
-        "label": "fa-chevron-right",
-        "value": "f054"
-    },
-    {
-        "label": "fa-chevron-up",
-        "value": "f077"
-    },
-    {
-        "label": "fa-child",
-        "value": "f1ae"
-    },
-    {
-        "label": "fa-chrome",
-        "value": "f268"
-    },
-    {
-        "label": "fa-circle",
-        "value": "f111"
-    },
-    {
-        "label": "fa-circle-o",
-        "value": "f10c"
-    },
-    {
-        "label": "fa-circle-o-notch",
-        "value": "f1ce"
-    },
-    {
-        "label": "fa-circle-thin",
-        "value": "f1db"
-    },
-    {
-        "label": "fa-clipboard",
-        "value": "f0ea"
-    },
-    {
-        "label": "fa-clock-o",
-        "value": "f017"
-    },
-    {
-        "label": "fa-clone",
-        "value": "f24d"
-    },
-    {
-        "label": "fa-cloud",
-        "value": "f0c2"
-    },
-    {
-        "label": "fa-cloud-download",
-        "value": "f0ed"
-    },
-    {
-        "label": "fa-cloud-upload",
-        "value": "f0ee"
-    },
-    {
-        "label": "fa-code",
-        "value": "f121"
-    },
-    {
-        "label": "fa-code-fork",
-        "value": "f126"
-    },
-    {
-        "label": "fa-codepen",
-        "value": "f1cb"
-    },
-    {
-        "label": "fa-codiepie",
-        "value": "f284"
-    },
-    {
-        "label": "fa-coffee",
-        "value": "f0f4"
-    },
-    {
-        "label": "fa-cog",
-        "value": "f013"
-    },
-    {
-        "label": "fa-cogs",
-        "value": "f085"
-    },
-    {
-        "label": "fa-columns",
-        "value": "f0db"
-    },
-    {
-        "label": "fa-comment",
-        "value": "f075"
-    },
-    {
-        "label": "fa-comment-o",
-        "value": "f0e5"
-    },
-    {
-        "label": "fa-commenting",
-        "value": "f27a"
-    },
-    {
-        "label": "fa-commenting-o",
-        "value": "f27b"
-    },
-    {
-        "label": "fa-comments",
-        "value": "f086"
-    },
-    {
-        "label": "fa-comments-o",
-        "value": "f0e6"
-    },
-    {
-        "label": "fa-compass",
-        "value": "f14e"
-    },
-    {
-        "label": "fa-compress",
-        "value": "f066"
-    },
-    {
-        "label": "fa-connectdevelop",
-        "value": "f20e"
-    },
-    {
-        "label": "fa-contao",
-        "value": "f26d"
-    },
-    {
-        "label": "fa-copyright",
-        "value": "f1f9"
-    },
-    {
-        "label": "fa-creative-commons",
-        "value": "f25e"
-    },
-    {
-        "label": "fa-credit-card",
-        "value": "f09d"
-    },
-    {
-        "label": "fa-credit-card-alt",
-        "value": "f283"
-    },
-    {
-        "label": "fa-crop",
-        "value": "f125"
-    },
-    {
-        "label": "fa-crosshairs",
-        "value": "f05b"
-    },
-    {
-        "label": "fa-css3",
-        "value": "f13c"
-    },
-    {
-        "label": "fa-cube",
-        "value": "f1b2"
-    },
-    {
-        "label": "fa-cubes",
-        "value": "f1b3"
-    },
-    {
-        "label": "fa-cutlery",
-        "value": "f0f5"
-    },
-    {
-        "label": "fa-dashcube",
-        "value": "f210"
-    },
-    {
-        "label": "fa-database",
-        "value": "f1c0"
-    },
-    {
-        "label": "fa-deaf",
-        "value": "f2a4"
-    },
-    {
-        "label": "fa-delicious",
-        "value": "f1a5"
-    },
-    {
-        "label": "fa-desktop",
-        "value": "f108"
-    },
-    {
-        "label": "fa-deviantart",
-        "value": "f1bd"
-    },
-    {
-        "label": "fa-diamond",
-        "value": "f219"
-    },
-    {
-        "label": "fa-digg",
-        "value": "f1a6"
-    },
-    {
-        "label": "fa-dot-circle-o",
-        "value": "f192"
-    },
-    {
-        "label": "fa-download",
-        "value": "f019"
-    },
-    {
-        "label": "fa-dribbble",
-        "value": "f17d"
-    },
-    {
-        "label": "fa-dropbox",
-        "value": "f16b"
-    },
-    {
-        "label": "fa-drupal",
-        "value": "f1a9"
-    },
-    {
-        "label": "fa-edge",
-        "value": "f282"
-    },
-    {
-        "label": "fa-eercast",
-        "value": "f2da"
-    },
-    {
-        "label": "fa-eject",
-        "value": "f052"
-    },
-    {
-        "label": "fa-ellipsis-h",
-        "value": "f141"
-    },
-    {
-        "label": "fa-ellipsis-v",
-        "value": "f142"
-    },
-    {
-        "label": "fa-empire",
-        "value": "f1d1"
-    },
-    {
-        "label": "fa-envelope",
-        "value": "f0e0"
-    },
-    {
-        "label": "fa-envelope-o",
-        "value": "f003"
-    },
-    {
-        "label": "fa-envelope-open",
-        "value": "f2b6"
-    },
-    {
-        "label": "fa-envelope-open-o",
-        "value": "f2b7"
-    },
-    {
-        "label": "fa-envelope-square",
-        "value": "f199"
-    },
-    {
-        "label": "fa-envira",
-        "value": "f299"
-    },
-    {
-        "label": "fa-eraser",
-        "value": "f12d"
-    },
-    {
-        "label": "fa-etsy",
-        "value": "f2d7"
-    },
-    {
-        "label": "fa-eur",
-        "value": "f153"
-    },
-    {
-        "label": "fa-exchange",
-        "value": "f0ec"
-    },
-    {
-        "label": "fa-exclamation",
-        "value": "f12a"
-    },
-    {
-        "label": "fa-exclamation-circle",
-        "value": "f06a"
-    },
-    {
-        "label": "fa-exclamation-triangle",
-        "value": "f071"
-    },
-    {
-        "label": "fa-expand",
-        "value": "f065"
-    },
-    {
-        "label": "fa-expeditedssl",
-        "value": "f23e"
-    },
-    {
-        "label": "fa-external-link",
-        "value": "f08e"
-    },
-    {
-        "label": "fa-external-link-square",
-        "value": "f14c"
-    },
-    {
-        "label": "fa-eye",
-        "value": "f06e"
-    },
-    {
-        "label": "fa-eye-slash",
-        "value": "f070"
-    },
-    {
-        "label": "fa-eyedropper",
-        "value": "f1fb"
-    },
-    {
-        "label": "fa-facebook",
-        "value": "f09a"
-    },
-    {
-        "label": "fa-facebook-official",
-        "value": "f230"
-    },
-    {
-        "label": "fa-facebook-square",
-        "value": "f082"
-    },
-    {
-        "label": "fa-fast-backward",
-        "value": "f049"
-    },
-    {
-        "label": "fa-fast-forward",
-        "value": "f050"
-    },
-    {
-        "label": "fa-fax",
-        "value": "f1ac"
-    },
-    {
-        "label": "fa-female",
-        "value": "f182"
-    },
-    {
-        "label": "fa-fighter-jet",
-        "value": "f0fb"
-    },
-    {
-        "label": "fa-file",
-        "value": "f15b"
-    },
-    {
-        "label": "fa-file-archive-o",
-        "value": "f1c6"
-    },
-    {
-        "label": "fa-file-audio-o",
-        "value": "f1c7"
-    },
-    {
-        "label": "fa-file-code-o",
-        "value": "f1c9"
-    },
-    {
-        "label": "fa-file-excel-o",
-        "value": "f1c3"
-    },
-    {
-        "label": "fa-file-image-o",
-        "value": "f1c5"
-    },
-    {
-        "label": "fa-file-o",
-        "value": "f016"
-    },
-    {
-        "label": "fa-file-pdf-o",
-        "value": "f1c1"
-    },
-    {
-        "label": "fa-file-powerpoint-o",
-        "value": "f1c4"
-    },
-    {
-        "label": "fa-file-text",
-        "value": "f15c"
-    },
-    {
-        "label": "fa-file-text-o",
-        "value": "f0f6"
-    },
-    {
-        "label": "fa-file-video-o",
-        "value": "f1c8"
-    },
-    {
-        "label": "fa-file-word-o",
-        "value": "f1c2"
-    },
-    {
-        "label": "fa-files-o",
-        "value": "f0c5"
-    },
-    {
-        "label": "fa-film",
-        "value": "f008"
-    },
-    {
-        "label": "fa-filter",
-        "value": "f0b0"
-    },
-    {
-        "label": "fa-fire",
-        "value": "f06d"
-    },
-    {
-        "label": "fa-fire-extinguisher",
-        "value": "f134"
-    },
-    {
-        "label": "fa-firefox",
-        "value": "f269"
-    },
-    {
-        "label": "fa-first-order",
-        "value": "f2b0"
-    },
-    {
-        "label": "fa-flag",
-        "value": "f024"
-    },
-    {
-        "label": "fa-flag-checkered",
-        "value": "f11e"
-    },
-    {
-        "label": "fa-flag-o",
-        "value": "f11d"
-    },
-    {
-        "label": "fa-flask",
-        "value": "f0c3"
-    },
-    {
-        "label": "fa-flickr",
-        "value": "f16e"
-    },
-    {
-        "label": "fa-floppy-o",
-        "value": "f0c7"
-    },
-    {
-        "label": "fa-folder",
-        "value": "f07b"
-    },
-    {
-        "label": "fa-folder-o",
-        "value": "f114"
-    },
-    {
-        "label": "fa-folder-open",
-        "value": "f07c"
-    },
-    {
-        "label": "fa-folder-open-o",
-        "value": "f115"
-    },
-    {
-        "label": "fa-font",
-        "value": "f031"
-    },
-    {
-        "label": "fa-font-awesome",
-        "value": "f2b4"
-    },
-    {
-        "label": "fa-fonticons",
-        "value": "f280"
-    },
-    {
-        "label": "fa-fort-awesome",
-        "value": "f286"
-    },
-    {
-        "label": "fa-forumbee",
-        "value": "f211"
-    },
-    {
-        "label": "fa-forward",
-        "value": "f04e"
-    },
-    {
-        "label": "fa-foursquare",
-        "value": "f180"
-    },
-    {
-        "label": "fa-free-code-camp",
-        "value": "f2c5"
-    },
-    {
-        "label": "fa-frown-o",
-        "value": "f119"
-    },
-    {
-        "label": "fa-futbol-o",
-        "value": "f1e3"
-    },
-    {
-        "label": "fa-gamepad",
-        "value": "f11b"
-    },
-    {
-        "label": "fa-gavel",
-        "value": "f0e3"
-    },
-    {
-        "label": "fa-gbp",
-        "value": "f154"
-    },
-    {
-        "label": "fa-genderless",
-        "value": "f22d"
-    },
-    {
-        "label": "fa-get-pocket",
-        "value": "f265"
-    },
-    {
-        "label": "fa-gg",
-        "value": "f260"
-    },
-    {
-        "label": "fa-gg-circle",
-        "value": "f261"
-    },
-    {
-        "label": "fa-gift",
-        "value": "f06b"
-    },
-    {
-        "label": "fa-git",
-        "value": "f1d3"
-    },
-    {
-        "label": "fa-git-square",
-        "value": "f1d2"
-    },
-    {
-        "label": "fa-github",
-        "value": "f09b"
-    },
-    {
-        "label": "fa-github-alt",
-        "value": "f113"
-    },
-    {
-        "label": "fa-github-square",
-        "value": "f092"
-    },
-    {
-        "label": "fa-gitlab",
-        "value": "f296"
-    },
-    {
-        "label": "fa-glass",
-        "value": "f000"
-    },
-    {
-        "label": "fa-glide",
-        "value": "f2a5"
-    },
-    {
-        "label": "fa-glide-g",
-        "value": "f2a6"
-    },
-    {
-        "label": "fa-globe",
-        "value": "f0ac"
-    },
-    {
-        "label": "fa-google",
-        "value": "f1a0"
-    },
-    {
-        "label": "fa-google-plus",
-        "value": "f0d5"
-    },
-    {
-        "label": "fa-google-plus-official",
-        "value": "f2b3"
-    },
-    {
-        "label": "fa-google-plus-square",
-        "value": "f0d4"
-    },
-    {
-        "label": "fa-google-wallet",
-        "value": "f1ee"
-    },
-    {
-        "label": "fa-graduation-cap",
-        "value": "f19d"
-    },
-    {
-        "label": "fa-gratipay",
-        "value": "f184"
-    },
-    {
-        "label": "fa-grav",
-        "value": "f2d6"
-    },
-    {
-        "label": "fa-h-square",
-        "value": "f0fd"
-    },
-    {
-        "label": "fa-hacker-news",
-        "value": "f1d4"
-    },
-    {
-        "label": "fa-hand-lizard-o",
-        "value": "f258"
-    },
-    {
-        "label": "fa-hand-o-down",
-        "value": "f0a7"
-    },
-    {
-        "label": "fa-hand-o-left",
-        "value": "f0a5"
-    },
-    {
-        "label": "fa-hand-o-right",
-        "value": "f0a4"
-    },
-    {
-        "label": "fa-hand-o-up",
-        "value": "f0a6"
-    },
-    {
-        "label": "fa-hand-paper-o",
-        "value": "f256"
-    },
-    {
-        "label": "fa-hand-peace-o",
-        "value": "f25b"
-    },
-    {
-        "label": "fa-hand-pointer-o",
-        "value": "f25a"
-    },
-    {
-        "label": "fa-hand-rock-o",
-        "value": "f255"
-    },
-    {
-        "label": "fa-hand-scissors-o",
-        "value": "f257"
-    },
-    {
-        "label": "fa-hand-spock-o",
-        "value": "f259"
-    },
-    {
-        "label": "fa-handshake-o",
-        "value": "f2b5"
-    },
-    {
-        "label": "fa-hashtag",
-        "value": "f292"
-    },
-    {
-        "label": "fa-hdd-o",
-        "value": "f0a0"
-    },
-    {
-        "label": "fa-header",
-        "value": "f1dc"
-    },
-    {
-        "label": "fa-headphones",
-        "value": "f025"
-    },
-    {
-        "label": "fa-heart",
-        "value": "f004"
-    },
-    {
-        "label": "fa-heart-o",
-        "value": "f08a"
-    },
-    {
-        "label": "fa-heartbeat",
-        "value": "f21e"
-    },
-    {
-        "label": "fa-history",
-        "value": "f1da"
-    },
-    {
-        "label": "fa-home",
-        "value": "f015"
-    },
-    {
-        "label": "fa-hospital-o",
-        "value": "f0f8"
-    },
-    {
-        "label": "fa-hourglass",
-        "value": "f254"
-    },
-    {
-        "label": "fa-hourglass-end",
-        "value": "f253"
-    },
-    {
-        "label": "fa-hourglass-half",
-        "value": "f252"
-    },
-    {
-        "label": "fa-hourglass-o",
-        "value": "f250"
-    },
-    {
-        "label": "fa-hourglass-start",
-        "value": "f251"
-    },
-    {
-        "label": "fa-houzz",
-        "value": "f27c"
-    },
-    {
-        "label": "fa-html5",
-        "value": "f13b"
-    },
-    {
-        "label": "fa-i-cursor",
-        "value": "f246"
-    },
-    {
-        "label": "fa-id-badge",
-        "value": "f2c1"
-    },
-    {
-        "label": "fa-id-card",
-        "value": "f2c2"
-    },
-    {
-        "label": "fa-id-card-o",
-        "value": "f2c3"
-    },
-    {
-        "label": "fa-ils",
-        "value": "f20b"
-    },
-    {
-        "label": "fa-imdb",
-        "value": "f2d8"
-    },
-    {
-        "label": "fa-inbox",
-        "value": "f01c"
-    },
-    {
-        "label": "fa-indent",
-        "value": "f03c"
-    },
-    {
-        "label": "fa-industry",
-        "value": "f275"
-    },
-    {
-        "label": "fa-info",
-        "value": "f129"
-    },
-    {
-        "label": "fa-info-circle",
-        "value": "f05a"
-    },
-    {
-        "label": "fa-inr",
-        "value": "f156"
-    },
-    {
-        "label": "fa-instagram",
-        "value": "f16d"
-    },
-    {
-        "label": "fa-internet-explorer",
-        "value": "f26b"
-    },
-    {
-        "label": "fa-ioxhost",
-        "value": "f208"
-    },
-    {
-        "label": "fa-italic",
-        "value": "f033"
-    },
-    {
-        "label": "fa-joomla",
-        "value": "f1aa"
-    },
-    {
-        "label": "fa-jpy",
-        "value": "f157"
-    },
-    {
-        "label": "fa-jsfiddle",
-        "value": "f1cc"
-    },
-    {
-        "label": "fa-key",
-        "value": "f084"
-    },
-    {
-        "label": "fa-keyboard-o",
-        "value": "f11c"
-    },
-    {
-        "label": "fa-krw",
-        "value": "f159"
-    },
-    {
-        "label": "fa-language",
-        "value": "f1ab"
-    },
-    {
-        "label": "fa-laptop",
-        "value": "f109"
-    },
-    {
-        "label": "fa-lastfm",
-        "value": "f202"
-    },
-    {
-        "label": "fa-lastfm-square",
-        "value": "f203"
-    },
-    {
-        "label": "fa-leaf",
-        "value": "f06c"
-    },
-    {
-        "label": "fa-leanpub",
-        "value": "f212"
-    },
-    {
-        "label": "fa-lemon-o",
-        "value": "f094"
-    },
-    {
-        "label": "fa-level-down",
-        "value": "f149"
-    },
-    {
-        "label": "fa-level-up",
-        "value": "f148"
-    },
-    {
-        "label": "fa-life-ring",
-        "value": "f1cd"
-    },
-    {
-        "label": "fa-lightbulb-o",
-        "value": "f0eb"
-    },
-    {
-        "label": "fa-line-chart",
-        "value": "f201"
-    },
-    {
-        "label": "fa-link",
-        "value": "f0c1"
-    },
-    {
-        "label": "fa-linkedin",
-        "value": "f0e1"
-    },
-    {
-        "label": "fa-linkedin-square",
-        "value": "f08c"
-    },
-    {
-        "label": "fa-linode",
-        "value": "f2b8"
-    },
-    {
-        "label": "fa-linux",
-        "value": "f17c"
-    },
-    {
-        "label": "fa-list",
-        "value": "f03a"
-    },
-    {
-        "label": "fa-list-alt",
-        "value": "f022"
-    },
-    {
-        "label": "fa-list-ol",
-        "value": "f0cb"
-    },
-    {
-        "label": "fa-list-ul",
-        "value": "f0ca"
-    },
-    {
-        "label": "fa-location-arrow",
-        "value": "f124"
-    },
-    {
-        "label": "fa-lock",
-        "value": "f023"
-    },
-    {
-        "label": "fa-long-arrow-down",
-        "value": "f175"
-    },
-    {
-        "label": "fa-long-arrow-left",
-        "value": "f177"
-    },
-    {
-        "label": "fa-long-arrow-right",
-        "value": "f178"
-    },
-    {
-        "label": "fa-long-arrow-up",
-        "value": "f176"
-    },
-    {
-        "label": "fa-low-vision",
-        "value": "f2a8"
-    },
-    {
-        "label": "fa-magic",
-        "value": "f0d0"
-    },
-    {
-        "label": "fa-magnet",
-        "value": "f076"
-    },
-    {
-        "label": "fa-male",
-        "value": "f183"
-    },
-    {
-        "label": "fa-map",
-        "value": "f279"
-    },
-    {
-        "label": "fa-map-marker",
-        "value": "f041"
-    },
-    {
-        "label": "fa-map-o",
-        "value": "f278"
-    },
-    {
-        "label": "fa-map-pin",
-        "value": "f276"
-    },
-    {
-        "label": "fa-map-signs",
-        "value": "f277"
-    },
-    {
-        "label": "fa-mars",
-        "value": "f222"
-    },
-    {
-        "label": "fa-mars-double",
-        "value": "f227"
-    },
-    {
-        "label": "fa-mars-stroke",
-        "value": "f229"
-    },
-    {
-        "label": "fa-mars-stroke-h",
-        "value": "f22b"
-    },
-    {
-        "label": "fa-mars-stroke-v",
-        "value": "f22a"
-    },
-    {
-        "label": "fa-maxcdn",
-        "value": "f136"
-    },
-    {
-        "label": "fa-meanpath",
-        "value": "f20c"
-    },
-    {
-        "label": "fa-medium",
-        "value": "f23a"
-    },
-    {
-        "label": "fa-medkit",
-        "value": "f0fa"
-    },
-    {
-        "label": "fa-meetup",
-        "value": "f2e0"
-    },
-    {
-        "label": "fa-meh-o",
-        "value": "f11a"
-    },
-    {
-        "label": "fa-mercury",
-        "value": "f223"
-    },
-    {
-        "label": "fa-microchip",
-        "value": "f2db"
-    },
-    {
-        "label": "fa-microphone",
-        "value": "f130"
-    },
-    {
-        "label": "fa-microphone-slash",
-        "value": "f131"
-    },
-    {
-        "label": "fa-minus",
-        "value": "f068"
-    },
-    {
-        "label": "fa-minus-circle",
-        "value": "f056"
-    },
-    {
-        "label": "fa-minus-square",
-        "value": "f146"
-    },
-    {
-        "label": "fa-minus-square-o",
-        "value": "f147"
-    },
-    {
-        "label": "fa-mixcloud",
-        "value": "f289"
-    },
-    {
-        "label": "fa-mobile",
-        "value": "f10b"
-    },
-    {
-        "label": "fa-modx",
-        "value": "f285"
-    },
-    {
-        "label": "fa-money",
-        "value": "f0d6"
-    },
-    {
-        "label": "fa-moon-o",
-        "value": "f186"
-    },
-    {
-        "label": "fa-motorcycle",
-        "value": "f21c"
-    },
-    {
-        "label": "fa-mouse-pointer",
-        "value": "f245"
-    },
-    {
-        "label": "fa-music",
-        "value": "f001"
-    },
-    {
-        "label": "fa-neuter",
-        "value": "f22c"
-    },
-    {
-        "label": "fa-newspaper-o",
-        "value": "f1ea"
-    },
-    {
-        "label": "fa-object-group",
-        "value": "f247"
-    },
-    {
-        "label": "fa-object-ungroup",
-        "value": "f248"
-    },
-    {
-        "label": "fa-odnoklassniki",
-        "value": "f263"
-    },
-    {
-        "label": "fa-odnoklassniki-square",
-        "value": "f264"
-    },
-    {
-        "label": "fa-opencart",
-        "value": "f23d"
-    },
-    {
-        "label": "fa-openid",
-        "value": "f19b"
-    },
-    {
-        "label": "fa-opera",
-        "value": "f26a"
-    },
-    {
-        "label": "fa-optin-monster",
-        "value": "f23c"
-    },
-    {
-        "label": "fa-outdent",
-        "value": "f03b"
-    },
-    {
-        "label": "fa-pagelines",
-        "value": "f18c"
-    },
-    {
-        "label": "fa-paint-brush",
-        "value": "f1fc"
-    },
-    {
-        "label": "fa-paper-plane",
-        "value": "f1d8"
-    },
-    {
-        "label": "fa-paper-plane-o",
-        "value": "f1d9"
-    },
-    {
-        "label": "fa-paperclip",
-        "value": "f0c6"
-    },
-    {
-        "label": "fa-paragraph",
-        "value": "f1dd"
-    },
-    {
-        "label": "fa-pause",
-        "value": "f04c"
-    },
-    {
-        "label": "fa-pause-circle",
-        "value": "f28b"
-    },
-    {
-        "label": "fa-pause-circle-o",
-        "value": "f28c"
-    },
-    {
-        "label": "fa-paw",
-        "value": "f1b0"
-    },
-    {
-        "label": "fa-paypal",
-        "value": "f1ed"
-    },
-    {
-        "label": "fa-pencil",
-        "value": "f040"
-    },
-    {
-        "label": "fa-pencil-square",
-        "value": "f14b"
-    },
-    {
-        "label": "fa-pencil-square-o",
-        "value": "f044"
-    },
-    {
-        "label": "fa-percent",
-        "value": "f295"
-    },
-    {
-        "label": "fa-phone",
-        "value": "f095"
-    },
-    {
-        "label": "fa-phone-square",
-        "value": "f098"
-    },
-    {
-        "label": "fa-picture-o",
-        "value": "f03e"
-    },
-    {
-        "label": "fa-pie-chart",
-        "value": "f200"
-    },
-    {
-        "label": "fa-pied-piper",
-        "value": "f2ae"
-    },
-    {
-        "label": "fa-pied-piper-alt",
-        "value": "f1a8"
-    },
-    {
-        "label": "fa-pied-piper-pp",
-        "value": "f1a7"
-    },
-    {
-        "label": "fa-pinterest",
-        "value": "f0d2"
-    },
-    {
-        "label": "fa-pinterest-p",
-        "value": "f231"
-    },
-    {
-        "label": "fa-pinterest-square",
-        "value": "f0d3"
-    },
-    {
-        "label": "fa-plane",
-        "value": "f072"
-    },
-    {
-        "label": "fa-play",
-        "value": "f04b"
-    },
-    {
-        "label": "fa-play-circle",
-        "value": "f144"
-    },
-    {
-        "label": "fa-play-circle-o",
-        "value": "f01d"
-    },
-    {
-        "label": "fa-plug",
-        "value": "f1e6"
-    },
-    {
-        "label": "fa-plus",
-        "value": "f067"
-    },
-    {
-        "label": "fa-plus-circle",
-        "value": "f055"
-    },
-    {
-        "label": "fa-plus-square",
-        "value": "f0fe"
-    },
-    {
-        "label": "fa-plus-square-o",
-        "value": "f196"
-    },
-    {
-        "label": "fa-podcast",
-        "value": "f2ce"
-    },
-    {
-        "label": "fa-power-off",
-        "value": "f011"
-    },
-    {
-        "label": "fa-print",
-        "value": "f02f"
-    },
-    {
-        "label": "fa-product-hunt",
-        "value": "f288"
-    },
-    {
-        "label": "fa-puzzle-piece",
-        "value": "f12e"
-    },
-    {
-        "label": "fa-qq",
-        "value": "f1d6"
-    },
-    {
-        "label": "fa-qrcode",
-        "value": "f029"
-    },
-    {
-        "label": "fa-question",
-        "value": "f128"
-    },
-    {
-        "label": "fa-question-circle",
-        "value": "f059"
-    },
-    {
-        "label": "fa-question-circle-o",
-        "value": "f29c"
-    },
-    {
-        "label": "fa-quora",
-        "value": "f2c4"
-    },
-    {
-        "label": "fa-quote-left",
-        "value": "f10d"
-    },
-    {
-        "label": "fa-quote-right",
-        "value": "f10e"
-    },
-    {
-        "label": "fa-random",
-        "value": "f074"
-    },
-    {
-        "label": "fa-ravelry",
-        "value": "f2d9"
-    },
-    {
-        "label": "fa-rebel",
-        "value": "f1d0"
-    },
-    {
-        "label": "fa-recycle",
-        "value": "f1b8"
-    },
-    {
-        "label": "fa-reddit",
-        "value": "f1a1"
-    },
-    {
-        "label": "fa-reddit-alien",
-        "value": "f281"
-    },
-    {
-        "label": "fa-reddit-square",
-        "value": "f1a2"
-    },
-    {
-        "label": "fa-refresh",
-        "value": "f021"
-    },
-    {
-        "label": "fa-registered",
-        "value": "f25d"
-    },
-    {
-        "label": "fa-renren",
-        "value": "f18b"
-    },
-    {
-        "label": "fa-repeat",
-        "value": "f01e"
-    },
-    {
-        "label": "fa-reply",
-        "value": "f112"
-    },
-    {
-        "label": "fa-reply-all",
-        "value": "f122"
-    },
-    {
-        "label": "fa-retweet",
-        "value": "f079"
-    },
-    {
-        "label": "fa-road",
-        "value": "f018"
-    },
-    {
-        "label": "fa-rocket",
-        "value": "f135"
-    },
-    {
-        "label": "fa-rss",
-        "value": "f09e"
-    },
-    {
-        "label": "fa-rss-square",
-        "value": "f143"
-    },
-    {
-        "label": "fa-rub",
-        "value": "f158"
-    },
-    {
-        "label": "fa-safari",
-        "value": "f267"
-    },
-    {
-        "label": "fa-scissors",
-        "value": "f0c4"
-    },
-    {
-        "label": "fa-scribd",
-        "value": "f28a"
-    },
-    {
-        "label": "fa-search",
-        "value": "f002"
-    },
-    {
-        "label": "fa-search-minus",
-        "value": "f010"
-    },
-    {
-        "label": "fa-search-plus",
-        "value": "f00e"
-    },
-    {
-        "label": "fa-sellsy",
-        "value": "f213"
-    },
-    {
-        "label": "fa-server",
-        "value": "f233"
-    },
-    {
-        "label": "fa-share",
-        "value": "f064"
-    },
-    {
-        "label": "fa-share-alt",
-        "value": "f1e0"
-    },
-    {
-        "label": "fa-share-alt-square",
-        "value": "f1e1"
-    },
-    {
-        "label": "fa-share-square",
-        "value": "f14d"
-    },
-    {
-        "label": "fa-share-square-o",
-        "value": "f045"
-    },
-    {
-        "label": "fa-shield",
-        "value": "f132"
-    },
-    {
-        "label": "fa-ship",
-        "value": "f21a"
-    },
-    {
-        "label": "fa-shirtsinbulk",
-        "value": "f214"
-    },
-    {
-        "label": "fa-shopping-bag",
-        "value": "f290"
-    },
-    {
-        "label": "fa-shopping-basket",
-        "value": "f291"
-    },
-    {
-        "label": "fa-shopping-cart",
-        "value": "f07a"
-    },
-    {
-        "label": "fa-shower",
-        "value": "f2cc"
-    },
-    {
-        "label": "fa-sign-in",
-        "value": "f090"
-    },
-    {
-        "label": "fa-sign-language",
-        "value": "f2a7"
-    },
-    {
-        "label": "fa-sign-out",
-        "value": "f08b"
-    },
-    {
-        "label": "fa-signal",
-        "value": "f012"
-    },
-    {
-        "label": "fa-simplybuilt",
-        "value": "f215"
-    },
-    {
-        "label": "fa-sitemap",
-        "value": "f0e8"
-    },
-    {
-        "label": "fa-skyatlas",
-        "value": "f216"
-    },
-    {
-        "label": "fa-skype",
-        "value": "f17e"
-    },
-    {
-        "label": "fa-slack",
-        "value": "f198"
-    },
-    {
-        "label": "fa-sliders",
-        "value": "f1de"
-    },
-    {
-        "label": "fa-slideshare",
-        "value": "f1e7"
-    },
-    {
-        "label": "fa-smile-o",
-        "value": "f118"
-    },
-    {
-        "label": "fa-snapchat",
-        "value": "f2ab"
-    },
-    {
-        "label": "fa-snapchat-ghost",
-        "value": "f2ac"
-    },
-    {
-        "label": "fa-snapchat-square",
-        "value": "f2ad"
-    },
-    {
-        "label": "fa-snowflake-o",
-        "value": "f2dc"
-    },
-    {
-        "label": "fa-sort",
-        "value": "f0dc"
-    },
-    {
-        "label": "fa-sort-alpha-asc",
-        "value": "f15d"
-    },
-    {
-        "label": "fa-sort-alpha-desc",
-        "value": "f15e"
-    },
-    {
-        "label": "fa-sort-amount-asc",
-        "value": "f160"
-    },
-    {
-        "label": "fa-sort-amount-desc",
-        "value": "f161"
-    },
-    {
-        "label": "fa-sort-asc",
-        "value": "f0de"
-    },
-    {
-        "label": "fa-sort-desc",
-        "value": "f0dd"
-    },
-    {
-        "label": "fa-sort-numeric-asc",
-        "value": "f162"
-    },
-    {
-        "label": "fa-sort-numeric-desc",
-        "value": "f163"
-    },
-    {
-        "label": "fa-soundcloud",
-        "value": "f1be"
-    },
-    {
-        "label": "fa-space-shuttle",
-        "value": "f197"
-    },
-    {
-        "label": "fa-spinner",
-        "value": "f110"
-    },
-    {
-        "label": "fa-spoon",
-        "value": "f1b1"
-    },
-    {
-        "label": "fa-spotify",
-        "value": "f1bc"
-    },
-    {
-        "label": "fa-square",
-        "value": "f0c8"
-    },
-    {
-        "label": "fa-square-o",
-        "value": "f096"
-    },
-    {
-        "label": "fa-stack-exchange",
-        "value": "f18d"
-    },
-    {
-        "label": "fa-stack-overflow",
-        "value": "f16c"
-    },
-    {
-        "label": "fa-star",
-        "value": "f005"
-    },
-    {
-        "label": "fa-star-half",
-        "value": "f089"
-    },
-    {
-        "label": "fa-star-half-o",
-        "value": "f123"
-    },
-    {
-        "label": "fa-star-o",
-        "value": "f006"
-    },
-    {
-        "label": "fa-steam",
-        "value": "f1b6"
-    },
-    {
-        "label": "fa-steam-square",
-        "value": "f1b7"
-    },
-    {
-        "label": "fa-step-backward",
-        "value": "f048"
-    },
-    {
-        "label": "fa-step-forward",
-        "value": "f051"
-    },
-    {
-        "label": "fa-stethoscope",
-        "value": "f0f1"
-    },
-    {
-        "label": "fa-sticky-note",
-        "value": "f249"
-    },
-    {
-        "label": "fa-sticky-note-o",
-        "value": "f24a"
-    },
-    {
-        "label": "fa-stop",
-        "value": "f04d"
-    },
-    {
-        "label": "fa-stop-circle",
-        "value": "f28d"
-    },
-    {
-        "label": "fa-stop-circle-o",
-        "value": "f28e"
-    },
-    {
-        "label": "fa-street-view",
-        "value": "f21d"
-    },
-    {
-        "label": "fa-strikethrough",
-        "value": "f0cc"
-    },
-    {
-        "label": "fa-stumbleupon",
-        "value": "f1a4"
-    },
-    {
-        "label": "fa-stumbleupon-circle",
-        "value": "f1a3"
-    },
-    {
-        "label": "fa-subscript",
-        "value": "f12c"
-    },
-    {
-        "label": "fa-subway",
-        "value": "f239"
-    },
-    {
-        "label": "fa-suitcase",
-        "value": "f0f2"
-    },
-    {
-        "label": "fa-sun-o",
-        "value": "f185"
-    },
-    {
-        "label": "fa-superpowers",
-        "value": "f2dd"
-    },
-    {
-        "label": "fa-superscript",
-        "value": "f12b"
-    },
-    {
-        "label": "fa-table",
-        "value": "f0ce"
-    },
-    {
-        "label": "fa-tablet",
-        "value": "f10a"
-    },
-    {
-        "label": "fa-tachometer",
-        "value": "f0e4"
-    },
-    {
-        "label": "fa-tag",
-        "value": "f02b"
-    },
-    {
-        "label": "fa-tags",
-        "value": "f02c"
-    },
-    {
-        "label": "fa-tasks",
-        "value": "f0ae"
-    },
-    {
-        "label": "fa-taxi",
-        "value": "f1ba"
-    },
-    {
-        "label": "fa-telegram",
-        "value": "f2c6"
-    },
-    {
-        "label": "fa-television",
-        "value": "f26c"
-    },
-    {
-        "label": "fa-tencent-weibo",
-        "value": "f1d5"
-    },
-    {
-        "label": "fa-terminal",
-        "value": "f120"
-    },
-    {
-        "label": "fa-text-height",
-        "value": "f034"
-    },
-    {
-        "label": "fa-text-width",
-        "value": "f035"
-    },
-    {
-        "label": "fa-th",
-        "value": "f00a"
-    },
-    {
-        "label": "fa-th-large",
-        "value": "f009"
-    },
-    {
-        "label": "fa-th-list",
-        "value": "f00b"
-    },
-    {
-        "label": "fa-themeisle",
-        "value": "f2b2"
-    },
-    {
-        "label": "fa-thermometer-empty",
-        "value": "f2cb"
-    },
-    {
-        "label": "fa-thermometer-full",
-        "value": "f2c7"
-    },
-    {
-        "label": "fa-thermometer-half",
-        "value": "f2c9"
-    },
-    {
-        "label": "fa-thermometer-quarter",
-        "value": "f2ca"
-    },
-    {
-        "label": "fa-thermometer-three-quarters",
-        "value": "f2c8"
-    },
-    {
-        "label": "fa-thumb-tack",
-        "value": "f08d"
-    },
-    {
-        "label": "fa-thumbs-down",
-        "value": "f165"
-    },
-    {
-        "label": "fa-thumbs-o-down",
-        "value": "f088"
-    },
-    {
-        "label": "fa-thumbs-o-up",
-        "value": "f087"
-    },
-    {
-        "label": "fa-thumbs-up",
-        "value": "f164"
-    },
-    {
-        "label": "fa-ticket",
-        "value": "f145"
-    },
-    {
-        "label": "fa-times",
-        "value": "f00d"
-    },
-    {
-        "label": "fa-times-circle",
-        "value": "f057"
-    },
-    {
-        "label": "fa-times-circle-o",
-        "value": "f05c"
-    },
-    {
-        "label": "fa-tint",
-        "value": "f043"
-    },
-    {
-        "label": "fa-toggle-off",
-        "value": "f204"
-    },
-    {
-        "label": "fa-toggle-on",
-        "value": "f205"
-    },
-    {
-        "label": "fa-trademark",
-        "value": "f25c"
-    },
-    {
-        "label": "fa-train",
-        "value": "f238"
-    },
-    {
-        "label": "fa-transgender",
-        "value": "f224"
-    },
-    {
-        "label": "fa-transgender-alt",
-        "value": "f225"
-    },
-    {
-        "label": "fa-trash",
-        "value": "f1f8"
-    },
-    {
-        "label": "fa-trash-o",
-        "value": "f014"
-    },
-    {
-        "label": "fa-tree",
-        "value": "f1bb"
-    },
-    {
-        "label": "fa-trello",
-        "value": "f181"
-    },
-    {
-        "label": "fa-tripadvisor",
-        "value": "f262"
-    },
-    {
-        "label": "fa-trophy",
-        "value": "f091"
-    },
-    {
-        "label": "fa-truck",
-        "value": "f0d1"
-    },
-    {
-        "label": "fa-try",
-        "value": "f195"
-    },
-    {
-        "label": "fa-tty",
-        "value": "f1e4"
-    },
-    {
-        "label": "fa-tumblr",
-        "value": "f173"
-    },
-    {
-        "label": "fa-tumblr-square",
-        "value": "f174"
-    },
-    {
-        "label": "fa-twitch",
-        "value": "f1e8"
-    },
-    {
-        "label": "fa-twitter",
-        "value": "f099"
-    },
-    {
-        "label": "fa-twitter-square",
-        "value": "f081"
-    },
-    {
-        "label": "fa-umbrella",
-        "value": "f0e9"
-    },
-    {
-        "label": "fa-underline",
-        "value": "f0cd"
-    },
-    {
-        "label": "fa-undo",
-        "value": "f0e2"
-    },
-    {
-        "label": "fa-universal-access",
-        "value": "f29a"
-    },
-    {
-        "label": "fa-university",
-        "value": "f19c"
-    },
-    {
-        "label": "fa-unlock",
-        "value": "f09c"
-    },
-    {
-        "label": "fa-unlock-alt",
-        "value": "f13e"
-    },
-    {
-        "label": "fa-upload",
-        "value": "f093"
-    },
-    {
-        "label": "fa-usb",
-        "value": "f287"
-    },
-    {
-        "label": "fa-usd",
-        "value": "f155"
-    },
-    {
-        "label": "fa-user",
-        "value": "f007"
-    },
-    {
-        "label": "fa-user-circle",
-        "value": "f2bd"
-    },
-    {
-        "label": "fa-user-circle-o",
-        "value": "f2be"
-    },
-    {
-        "label": "fa-user-md",
-        "value": "f0f0"
-    },
-    {
-        "label": "fa-user-o",
-        "value": "f2c0"
-    },
-    {
-        "label": "fa-user-plus",
-        "value": "f234"
-    },
-    {
-        "label": "fa-user-secret",
-        "value": "f21b"
-    },
-    {
-        "label": "fa-user-times",
-        "value": "f235"
-    },
-    {
-        "label": "fa-users",
-        "value": "f0c0"
-    },
-    {
-        "label": "fa-venus",
-        "value": "f221"
-    },
-    {
-        "label": "fa-venus-double",
-        "value": "f226"
-    },
-    {
-        "label": "fa-venus-mars",
-        "value": "f228"
-    },
-    {
-        "label": "fa-viacoin",
-        "value": "f237"
-    },
-    {
-        "label": "fa-viadeo",
-        "value": "f2a9"
-    },
-    {
-        "label": "fa-viadeo-square",
-        "value": "f2aa"
-    },
-    {
-        "label": "fa-video-camera",
-        "value": "f03d"
-    },
-    {
-        "label": "fa-vimeo",
-        "value": "f27d"
-    },
-    {
-        "label": "fa-vimeo-square",
-        "value": "f194"
-    },
-    {
-        "label": "fa-vine",
-        "value": "f1ca"
-    },
-    {
-        "label": "fa-vk",
-        "value": "f189"
-    },
-    {
-        "label": "fa-volume-control-phone",
-        "value": "f2a0"
-    },
-    {
-        "label": "fa-volume-down",
-        "value": "f027"
-    },
-    {
-        "label": "fa-volume-off",
-        "value": "f026"
-    },
-    {
-        "label": "fa-volume-up",
-        "value": "f028"
-    },
-    {
-        "label": "fa-weibo",
-        "value": "f18a"
-    },
-    {
-        "label": "fa-weixin",
-        "value": "f1d7"
-    },
-    {
-        "label": "fa-whatsapp",
-        "value": "f232"
-    },
-    {
-        "label": "fa-wheelchair",
-        "value": "f193"
-    },
-    {
-        "label": "fa-wheelchair-alt",
-        "value": "f29b"
-    },
-    {
-        "label": "fa-wifi",
-        "value": "f1eb"
-    },
-    {
-        "label": "fa-wikipedia-w",
-        "value": "f266"
-    },
-    {
-        "label": "fa-window-close",
-        "value": "f2d3"
-    },
-    {
-        "label": "fa-window-close-o",
-        "value": "f2d4"
-    },
-    {
-        "label": "fa-window-maximize",
-        "value": "f2d0"
-    },
-    {
-        "label": "fa-window-minimize",
-        "value": "f2d1"
-    },
-    {
-        "label": "fa-window-restore",
-        "value": "f2d2"
-    },
-    {
-        "label": "fa-windows",
-        "value": "f17a"
-    },
-    {
-        "label": "fa-wordpress",
-        "value": "f19a"
-    },
-    {
-        "label": "fa-wpbeginner",
-        "value": "f297"
-    },
-    {
-        "label": "fa-wpexplorer",
-        "value": "f2de"
-    },
-    {
-        "label": "fa-wpforms",
-        "value": "f298"
-    },
-    {
-        "label": "fa-wrench",
-        "value": "f0ad"
-    },
-    {
-        "label": "fa-xing",
-        "value": "f168"
-    },
-    {
-        "label": "fa-xing-square",
-        "value": "f169"
-    },
-    {
-        "label": "fa-y-combinator",
-        "value": "f23b"
-    },
-    {
-        "label": "fa-yahoo",
-        "value": "f19e"
-    },
-    {
-        "label": "fa-yelp",
-        "value": "f1e9"
-    },
-    {
-        "label": "fa-yoast",
-        "value": "f2b1"
-    },
-    {
-        "label": "fa-youtube",
-        "value": "f167"
-    },
-    {
-        "label": "fa-youtube-play",
-        "value": "f16a"
-    },
-    {
-        "label": "fa-youtube-square",
-        "value": "f166"
-    }
-]
+{
+    "iconData": [
+        {
+            "label": "fa-500px",
+            "value": "f26e"
+        },
+        {
+            "label": "fa-address-book",
+            "value": "f2b9"
+        },
+        {
+            "label": "fa-address-book-o",
+            "value": "f2ba"
+        },
+        {
+            "label": "fa-address-card",
+            "value": "f2bb"
+        },
+        {
+            "label": "fa-address-card-o",
+            "value": "f2bc"
+        },
+        {
+            "label": "fa-adjust",
+            "value": "f042"
+        },
+        {
+            "label": "fa-adn",
+            "value": "f170"
+        },
+        {
+            "label": "fa-align-center",
+            "value": "f037"
+        },
+        {
+            "label": "fa-align-justify",
+            "value": "f039"
+        },
+        {
+            "label": "fa-align-left",
+            "value": "f036"
+        },
+        {
+            "label": "fa-align-right",
+            "value": "f038"
+        },
+        {
+            "label": "fa-amazon",
+            "value": "f270"
+        },
+        {
+            "label": "fa-ambulance",
+            "value": "f0f9"
+        },
+        {
+            "label": "fa-american-sign-language-interpreting",
+            "value": "f2a3"
+        },
+        {
+            "label": "fa-anchor",
+            "value": "f13d"
+        },
+        {
+            "label": "fa-android",
+            "value": "f17b"
+        },
+        {
+            "label": "fa-angellist",
+            "value": "f209"
+        },
+        {
+            "label": "fa-angle-double-down",
+            "value": "f103"
+        },
+        {
+            "label": "fa-angle-double-left",
+            "value": "f100"
+        },
+        {
+            "label": "fa-angle-double-right",
+            "value": "f101"
+        },
+        {
+            "label": "fa-angle-double-up",
+            "value": "f102"
+        },
+        {
+            "label": "fa-angle-down",
+            "value": "f107"
+        },
+        {
+            "label": "fa-angle-left",
+            "value": "f104"
+        },
+        {
+            "label": "fa-angle-right",
+            "value": "f105"
+        },
+        {
+            "label": "fa-angle-up",
+            "value": "f106"
+        },
+        {
+            "label": "fa-apple",
+            "value": "f179"
+        },
+        {
+            "label": "fa-archive",
+            "value": "f187"
+        },
+        {
+            "label": "fa-area-chart",
+            "value": "f1fe"
+        },
+        {
+            "label": "fa-arrow-circle-down",
+            "value": "f0ab"
+        },
+        {
+            "label": "fa-arrow-circle-left",
+            "value": "f0a8"
+        },
+        {
+            "label": "fa-arrow-circle-o-down",
+            "value": "f01a"
+        },
+        {
+            "label": "fa-arrow-circle-o-left",
+            "value": "f190"
+        },
+        {
+            "label": "fa-arrow-circle-o-right",
+            "value": "f18e"
+        },
+        {
+            "label": "fa-arrow-circle-o-up",
+            "value": "f01b"
+        },
+        {
+            "label": "fa-arrow-circle-right",
+            "value": "f0a9"
+        },
+        {
+            "label": "fa-arrow-circle-up",
+            "value": "f0aa"
+        },
+        {
+            "label": "fa-arrow-down",
+            "value": "f063"
+        },
+        {
+            "label": "fa-arrow-left",
+            "value": "f060"
+        },
+        {
+            "label": "fa-arrow-right",
+            "value": "f061"
+        },
+        {
+            "label": "fa-arrow-up",
+            "value": "f062"
+        },
+        {
+            "label": "fa-arrows",
+            "value": "f047"
+        },
+        {
+            "label": "fa-arrows-alt",
+            "value": "f0b2"
+        },
+        {
+            "label": "fa-arrows-h",
+            "value": "f07e"
+        },
+        {
+            "label": "fa-arrows-v",
+            "value": "f07d"
+        },
+        {
+            "label": "fa-assistive-listening-systems",
+            "value": "f2a2"
+        },
+        {
+            "label": "fa-asterisk",
+            "value": "f069"
+        },
+        {
+            "label": "fa-at",
+            "value": "f1fa"
+        },
+        {
+            "label": "fa-audio-description",
+            "value": "f29e"
+        },
+        {
+            "label": "fa-backward",
+            "value": "f04a"
+        },
+        {
+            "label": "fa-balance-scale",
+            "value": "f24e"
+        },
+        {
+            "label": "fa-ban",
+            "value": "f05e"
+        },
+        {
+            "label": "fa-bandcamp",
+            "value": "f2d5"
+        },
+        {
+            "label": "fa-bar-chart",
+            "value": "f080"
+        },
+        {
+            "label": "fa-barcode",
+            "value": "f02a"
+        },
+        {
+            "label": "fa-bars",
+            "value": "f0c9"
+        },
+        {
+            "label": "fa-bath",
+            "value": "f2cd"
+        },
+        {
+            "label": "fa-battery-empty",
+            "value": "f244"
+        },
+        {
+            "label": "fa-battery-full",
+            "value": "f240"
+        },
+        {
+            "label": "fa-battery-half",
+            "value": "f242"
+        },
+        {
+            "label": "fa-battery-quarter",
+            "value": "f243"
+        },
+        {
+            "label": "fa-battery-three-quarters",
+            "value": "f241"
+        },
+        {
+            "label": "fa-bed",
+            "value": "f236"
+        },
+        {
+            "label": "fa-beer",
+            "value": "f0fc"
+        },
+        {
+            "label": "fa-behance",
+            "value": "f1b4"
+        },
+        {
+            "label": "fa-behance-square",
+            "value": "f1b5"
+        },
+        {
+            "label": "fa-bell",
+            "value": "f0f3"
+        },
+        {
+            "label": "fa-bell-o",
+            "value": "f0a2"
+        },
+        {
+            "label": "fa-bell-slash",
+            "value": "f1f6"
+        },
+        {
+            "label": "fa-bell-slash-o",
+            "value": "f1f7"
+        },
+        {
+            "label": "fa-bicycle",
+            "value": "f206"
+        },
+        {
+            "label": "fa-binoculars",
+            "value": "f1e5"
+        },
+        {
+            "label": "fa-birthday-cake",
+            "value": "f1fd"
+        },
+        {
+            "label": "fa-bitbucket",
+            "value": "f171"
+        },
+        {
+            "label": "fa-bitbucket-square",
+            "value": "f172"
+        },
+        {
+            "label": "fa-black-tie",
+            "value": "f27e"
+        },
+        {
+            "label": "fa-blind",
+            "value": "f29d"
+        },
+        {
+            "label": "fa-bluetooth",
+            "value": "f293"
+        },
+        {
+            "label": "fa-bluetooth-b",
+            "value": "f294"
+        },
+        {
+            "label": "fa-bold",
+            "value": "f032"
+        },
+        {
+            "label": "fa-bolt",
+            "value": "f0e7"
+        },
+        {
+            "label": "fa-bomb",
+            "value": "f1e2"
+        },
+        {
+            "label": "fa-book",
+            "value": "f02d"
+        },
+        {
+            "label": "fa-bookmark",
+            "value": "f02e"
+        },
+        {
+            "label": "fa-bookmark-o",
+            "value": "f097"
+        },
+        {
+            "label": "fa-braille",
+            "value": "f2a1"
+        },
+        {
+            "label": "fa-briefcase",
+            "value": "f0b1"
+        },
+        {
+            "label": "fa-btc",
+            "value": "f15a"
+        },
+        {
+            "label": "fa-bug",
+            "value": "f188"
+        },
+        {
+            "label": "fa-building",
+            "value": "f1ad"
+        },
+        {
+            "label": "fa-building-o",
+            "value": "f0f7"
+        },
+        {
+            "label": "fa-bullhorn",
+            "value": "f0a1"
+        },
+        {
+            "label": "fa-bullseye",
+            "value": "f140"
+        },
+        {
+            "label": "fa-bus",
+            "value": "f207"
+        },
+        {
+            "label": "fa-buysellads",
+            "value": "f20d"
+        },
+        {
+            "label": "fa-calculator",
+            "value": "f1ec"
+        },
+        {
+            "label": "fa-calendar",
+            "value": "f073"
+        },
+        {
+            "label": "fa-calendar-check-o",
+            "value": "f274"
+        },
+        {
+            "label": "fa-calendar-minus-o",
+            "value": "f272"
+        },
+        {
+            "label": "fa-calendar-o",
+            "value": "f133"
+        },
+        {
+            "label": "fa-calendar-plus-o",
+            "value": "f271"
+        },
+        {
+            "label": "fa-calendar-times-o",
+            "value": "f273"
+        },
+        {
+            "label": "fa-camera",
+            "value": "f030"
+        },
+        {
+            "label": "fa-camera-retro",
+            "value": "f083"
+        },
+        {
+            "label": "fa-car",
+            "value": "f1b9"
+        },
+        {
+            "label": "fa-caret-down",
+            "value": "f0d7"
+        },
+        {
+            "label": "fa-caret-left",
+            "value": "f0d9"
+        },
+        {
+            "label": "fa-caret-right",
+            "value": "f0da"
+        },
+        {
+            "label": "fa-caret-square-o-down",
+            "value": "f150"
+        },
+        {
+            "label": "fa-caret-square-o-left",
+            "value": "f191"
+        },
+        {
+            "label": "fa-caret-square-o-right",
+            "value": "f152"
+        },
+        {
+            "label": "fa-caret-square-o-up",
+            "value": "f151"
+        },
+        {
+            "label": "fa-caret-up",
+            "value": "f0d8"
+        },
+        {
+            "label": "fa-cart-arrow-down",
+            "value": "f218"
+        },
+        {
+            "label": "fa-cart-plus",
+            "value": "f217"
+        },
+        {
+            "label": "fa-cc",
+            "value": "f20a"
+        },
+        {
+            "label": "fa-cc-amex",
+            "value": "f1f3"
+        },
+        {
+            "label": "fa-cc-diners-club",
+            "value": "f24c"
+        },
+        {
+            "label": "fa-cc-discover",
+            "value": "f1f2"
+        },
+        {
+            "label": "fa-cc-jcb",
+            "value": "f24b"
+        },
+        {
+            "label": "fa-cc-mastercard",
+            "value": "f1f1"
+        },
+        {
+            "label": "fa-cc-paypal",
+            "value": "f1f4"
+        },
+        {
+            "label": "fa-cc-stripe",
+            "value": "f1f5"
+        },
+        {
+            "label": "fa-cc-visa",
+            "value": "f1f0"
+        },
+        {
+            "label": "fa-certificate",
+            "value": "f0a3"
+        },
+        {
+            "label": "fa-chain-broken",
+            "value": "f127"
+        },
+        {
+            "label": "fa-check",
+            "value": "f00c"
+        },
+        {
+            "label": "fa-check-circle",
+            "value": "f058"
+        },
+        {
+            "label": "fa-check-circle-o",
+            "value": "f05d"
+        },
+        {
+            "label": "fa-check-square",
+            "value": "f14a"
+        },
+        {
+            "label": "fa-check-square-o",
+            "value": "f046"
+        },
+        {
+            "label": "fa-chevron-circle-down",
+            "value": "f13a"
+        },
+        {
+            "label": "fa-chevron-circle-left",
+            "value": "f137"
+        },
+        {
+            "label": "fa-chevron-circle-right",
+            "value": "f138"
+        },
+        {
+            "label": "fa-chevron-circle-up",
+            "value": "f139"
+        },
+        {
+            "label": "fa-chevron-down",
+            "value": "f078"
+        },
+        {
+            "label": "fa-chevron-left",
+            "value": "f053"
+        },
+        {
+            "label": "fa-chevron-right",
+            "value": "f054"
+        },
+        {
+            "label": "fa-chevron-up",
+            "value": "f077"
+        },
+        {
+            "label": "fa-child",
+            "value": "f1ae"
+        },
+        {
+            "label": "fa-chrome",
+            "value": "f268"
+        },
+        {
+            "label": "fa-circle",
+            "value": "f111"
+        },
+        {
+            "label": "fa-circle-o",
+            "value": "f10c"
+        },
+        {
+            "label": "fa-circle-o-notch",
+            "value": "f1ce"
+        },
+        {
+            "label": "fa-circle-thin",
+            "value": "f1db"
+        },
+        {
+            "label": "fa-clipboard",
+            "value": "f0ea"
+        },
+        {
+            "label": "fa-clock-o",
+            "value": "f017"
+        },
+        {
+            "label": "fa-clone",
+            "value": "f24d"
+        },
+        {
+            "label": "fa-cloud",
+            "value": "f0c2"
+        },
+        {
+            "label": "fa-cloud-download",
+            "value": "f0ed"
+        },
+        {
+            "label": "fa-cloud-upload",
+            "value": "f0ee"
+        },
+        {
+            "label": "fa-code",
+            "value": "f121"
+        },
+        {
+            "label": "fa-code-fork",
+            "value": "f126"
+        },
+        {
+            "label": "fa-codepen",
+            "value": "f1cb"
+        },
+        {
+            "label": "fa-codiepie",
+            "value": "f284"
+        },
+        {
+            "label": "fa-coffee",
+            "value": "f0f4"
+        },
+        {
+            "label": "fa-cog",
+            "value": "f013"
+        },
+        {
+            "label": "fa-cogs",
+            "value": "f085"
+        },
+        {
+            "label": "fa-columns",
+            "value": "f0db"
+        },
+        {
+            "label": "fa-comment",
+            "value": "f075"
+        },
+        {
+            "label": "fa-comment-o",
+            "value": "f0e5"
+        },
+        {
+            "label": "fa-commenting",
+            "value": "f27a"
+        },
+        {
+            "label": "fa-commenting-o",
+            "value": "f27b"
+        },
+        {
+            "label": "fa-comments",
+            "value": "f086"
+        },
+        {
+            "label": "fa-comments-o",
+            "value": "f0e6"
+        },
+        {
+            "label": "fa-compass",
+            "value": "f14e"
+        },
+        {
+            "label": "fa-compress",
+            "value": "f066"
+        },
+        {
+            "label": "fa-connectdevelop",
+            "value": "f20e"
+        },
+        {
+            "label": "fa-contao",
+            "value": "f26d"
+        },
+        {
+            "label": "fa-copyright",
+            "value": "f1f9"
+        },
+        {
+            "label": "fa-creative-commons",
+            "value": "f25e"
+        },
+        {
+            "label": "fa-credit-card",
+            "value": "f09d"
+        },
+        {
+            "label": "fa-credit-card-alt",
+            "value": "f283"
+        },
+        {
+            "label": "fa-crop",
+            "value": "f125"
+        },
+        {
+            "label": "fa-crosshairs",
+            "value": "f05b"
+        },
+        {
+            "label": "fa-css3",
+            "value": "f13c"
+        },
+        {
+            "label": "fa-cube",
+            "value": "f1b2"
+        },
+        {
+            "label": "fa-cubes",
+            "value": "f1b3"
+        },
+        {
+            "label": "fa-cutlery",
+            "value": "f0f5"
+        },
+        {
+            "label": "fa-dashcube",
+            "value": "f210"
+        },
+        {
+            "label": "fa-database",
+            "value": "f1c0"
+        },
+        {
+            "label": "fa-deaf",
+            "value": "f2a4"
+        },
+        {
+            "label": "fa-delicious",
+            "value": "f1a5"
+        },
+        {
+            "label": "fa-desktop",
+            "value": "f108"
+        },
+        {
+            "label": "fa-deviantart",
+            "value": "f1bd"
+        },
+        {
+            "label": "fa-diamond",
+            "value": "f219"
+        },
+        {
+            "label": "fa-digg",
+            "value": "f1a6"
+        },
+        {
+            "label": "fa-dot-circle-o",
+            "value": "f192"
+        },
+        {
+            "label": "fa-download",
+            "value": "f019"
+        },
+        {
+            "label": "fa-dribbble",
+            "value": "f17d"
+        },
+        {
+            "label": "fa-dropbox",
+            "value": "f16b"
+        },
+        {
+            "label": "fa-drupal",
+            "value": "f1a9"
+        },
+        {
+            "label": "fa-edge",
+            "value": "f282"
+        },
+        {
+            "label": "fa-eercast",
+            "value": "f2da"
+        },
+        {
+            "label": "fa-eject",
+            "value": "f052"
+        },
+        {
+            "label": "fa-ellipsis-h",
+            "value": "f141"
+        },
+        {
+            "label": "fa-ellipsis-v",
+            "value": "f142"
+        },
+        {
+            "label": "fa-empire",
+            "value": "f1d1"
+        },
+        {
+            "label": "fa-envelope",
+            "value": "f0e0"
+        },
+        {
+            "label": "fa-envelope-o",
+            "value": "f003"
+        },
+        {
+            "label": "fa-envelope-open",
+            "value": "f2b6"
+        },
+        {
+            "label": "fa-envelope-open-o",
+            "value": "f2b7"
+        },
+        {
+            "label": "fa-envelope-square",
+            "value": "f199"
+        },
+        {
+            "label": "fa-envira",
+            "value": "f299"
+        },
+        {
+            "label": "fa-eraser",
+            "value": "f12d"
+        },
+        {
+            "label": "fa-etsy",
+            "value": "f2d7"
+        },
+        {
+            "label": "fa-eur",
+            "value": "f153"
+        },
+        {
+            "label": "fa-exchange",
+            "value": "f0ec"
+        },
+        {
+            "label": "fa-exclamation",
+            "value": "f12a"
+        },
+        {
+            "label": "fa-exclamation-circle",
+            "value": "f06a"
+        },
+        {
+            "label": "fa-exclamation-triangle",
+            "value": "f071"
+        },
+        {
+            "label": "fa-expand",
+            "value": "f065"
+        },
+        {
+            "label": "fa-expeditedssl",
+            "value": "f23e"
+        },
+        {
+            "label": "fa-external-link",
+            "value": "f08e"
+        },
+        {
+            "label": "fa-external-link-square",
+            "value": "f14c"
+        },
+        {
+            "label": "fa-eye",
+            "value": "f06e"
+        },
+        {
+            "label": "fa-eye-slash",
+            "value": "f070"
+        },
+        {
+            "label": "fa-eyedropper",
+            "value": "f1fb"
+        },
+        {
+            "label": "fa-facebook",
+            "value": "f09a"
+        },
+        {
+            "label": "fa-facebook-official",
+            "value": "f230"
+        },
+        {
+            "label": "fa-facebook-square",
+            "value": "f082"
+        },
+        {
+            "label": "fa-fast-backward",
+            "value": "f049"
+        },
+        {
+            "label": "fa-fast-forward",
+            "value": "f050"
+        },
+        {
+            "label": "fa-fax",
+            "value": "f1ac"
+        },
+        {
+            "label": "fa-female",
+            "value": "f182"
+        },
+        {
+            "label": "fa-fighter-jet",
+            "value": "f0fb"
+        },
+        {
+            "label": "fa-file",
+            "value": "f15b"
+        },
+        {
+            "label": "fa-file-archive-o",
+            "value": "f1c6"
+        },
+        {
+            "label": "fa-file-audio-o",
+            "value": "f1c7"
+        },
+        {
+            "label": "fa-file-code-o",
+            "value": "f1c9"
+        },
+        {
+            "label": "fa-file-excel-o",
+            "value": "f1c3"
+        },
+        {
+            "label": "fa-file-image-o",
+            "value": "f1c5"
+        },
+        {
+            "label": "fa-file-o",
+            "value": "f016"
+        },
+        {
+            "label": "fa-file-pdf-o",
+            "value": "f1c1"
+        },
+        {
+            "label": "fa-file-powerpoint-o",
+            "value": "f1c4"
+        },
+        {
+            "label": "fa-file-text",
+            "value": "f15c"
+        },
+        {
+            "label": "fa-file-text-o",
+            "value": "f0f6"
+        },
+        {
+            "label": "fa-file-video-o",
+            "value": "f1c8"
+        },
+        {
+            "label": "fa-file-word-o",
+            "value": "f1c2"
+        },
+        {
+            "label": "fa-files-o",
+            "value": "f0c5"
+        },
+        {
+            "label": "fa-film",
+            "value": "f008"
+        },
+        {
+            "label": "fa-filter",
+            "value": "f0b0"
+        },
+        {
+            "label": "fa-fire",
+            "value": "f06d"
+        },
+        {
+            "label": "fa-fire-extinguisher",
+            "value": "f134"
+        },
+        {
+            "label": "fa-firefox",
+            "value": "f269"
+        },
+        {
+            "label": "fa-first-order",
+            "value": "f2b0"
+        },
+        {
+            "label": "fa-flag",
+            "value": "f024"
+        },
+        {
+            "label": "fa-flag-checkered",
+            "value": "f11e"
+        },
+        {
+            "label": "fa-flag-o",
+            "value": "f11d"
+        },
+        {
+            "label": "fa-flask",
+            "value": "f0c3"
+        },
+        {
+            "label": "fa-flickr",
+            "value": "f16e"
+        },
+        {
+            "label": "fa-floppy-o",
+            "value": "f0c7"
+        },
+        {
+            "label": "fa-folder",
+            "value": "f07b"
+        },
+        {
+            "label": "fa-folder-o",
+            "value": "f114"
+        },
+        {
+            "label": "fa-folder-open",
+            "value": "f07c"
+        },
+        {
+            "label": "fa-folder-open-o",
+            "value": "f115"
+        },
+        {
+            "label": "fa-font",
+            "value": "f031"
+        },
+        {
+            "label": "fa-font-awesome",
+            "value": "f2b4"
+        },
+        {
+            "label": "fa-fonticons",
+            "value": "f280"
+        },
+        {
+            "label": "fa-fort-awesome",
+            "value": "f286"
+        },
+        {
+            "label": "fa-forumbee",
+            "value": "f211"
+        },
+        {
+            "label": "fa-forward",
+            "value": "f04e"
+        },
+        {
+            "label": "fa-foursquare",
+            "value": "f180"
+        },
+        {
+            "label": "fa-free-code-camp",
+            "value": "f2c5"
+        },
+        {
+            "label": "fa-frown-o",
+            "value": "f119"
+        },
+        {
+            "label": "fa-futbol-o",
+            "value": "f1e3"
+        },
+        {
+            "label": "fa-gamepad",
+            "value": "f11b"
+        },
+        {
+            "label": "fa-gavel",
+            "value": "f0e3"
+        },
+        {
+            "label": "fa-gbp",
+            "value": "f154"
+        },
+        {
+            "label": "fa-genderless",
+            "value": "f22d"
+        },
+        {
+            "label": "fa-get-pocket",
+            "value": "f265"
+        },
+        {
+            "label": "fa-gg",
+            "value": "f260"
+        },
+        {
+            "label": "fa-gg-circle",
+            "value": "f261"
+        },
+        {
+            "label": "fa-gift",
+            "value": "f06b"
+        },
+        {
+            "label": "fa-git",
+            "value": "f1d3"
+        },
+        {
+            "label": "fa-git-square",
+            "value": "f1d2"
+        },
+        {
+            "label": "fa-github",
+            "value": "f09b"
+        },
+        {
+            "label": "fa-github-alt",
+            "value": "f113"
+        },
+        {
+            "label": "fa-github-square",
+            "value": "f092"
+        },
+        {
+            "label": "fa-gitlab",
+            "value": "f296"
+        },
+        {
+            "label": "fa-glass",
+            "value": "f000"
+        },
+        {
+            "label": "fa-glide",
+            "value": "f2a5"
+        },
+        {
+            "label": "fa-glide-g",
+            "value": "f2a6"
+        },
+        {
+            "label": "fa-globe",
+            "value": "f0ac"
+        },
+        {
+            "label": "fa-google",
+            "value": "f1a0"
+        },
+        {
+            "label": "fa-google-plus",
+            "value": "f0d5"
+        },
+        {
+            "label": "fa-google-plus-official",
+            "value": "f2b3"
+        },
+        {
+            "label": "fa-google-plus-square",
+            "value": "f0d4"
+        },
+        {
+            "label": "fa-google-wallet",
+            "value": "f1ee"
+        },
+        {
+            "label": "fa-graduation-cap",
+            "value": "f19d"
+        },
+        {
+            "label": "fa-gratipay",
+            "value": "f184"
+        },
+        {
+            "label": "fa-grav",
+            "value": "f2d6"
+        },
+        {
+            "label": "fa-h-square",
+            "value": "f0fd"
+        },
+        {
+            "label": "fa-hacker-news",
+            "value": "f1d4"
+        },
+        {
+            "label": "fa-hand-lizard-o",
+            "value": "f258"
+        },
+        {
+            "label": "fa-hand-o-down",
+            "value": "f0a7"
+        },
+        {
+            "label": "fa-hand-o-left",
+            "value": "f0a5"
+        },
+        {
+            "label": "fa-hand-o-right",
+            "value": "f0a4"
+        },
+        {
+            "label": "fa-hand-o-up",
+            "value": "f0a6"
+        },
+        {
+            "label": "fa-hand-paper-o",
+            "value": "f256"
+        },
+        {
+            "label": "fa-hand-peace-o",
+            "value": "f25b"
+        },
+        {
+            "label": "fa-hand-pointer-o",
+            "value": "f25a"
+        },
+        {
+            "label": "fa-hand-rock-o",
+            "value": "f255"
+        },
+        {
+            "label": "fa-hand-scissors-o",
+            "value": "f257"
+        },
+        {
+            "label": "fa-hand-spock-o",
+            "value": "f259"
+        },
+        {
+            "label": "fa-handshake-o",
+            "value": "f2b5"
+        },
+        {
+            "label": "fa-hashtag",
+            "value": "f292"
+        },
+        {
+            "label": "fa-hdd-o",
+            "value": "f0a0"
+        },
+        {
+            "label": "fa-header",
+            "value": "f1dc"
+        },
+        {
+            "label": "fa-headphones",
+            "value": "f025"
+        },
+        {
+            "label": "fa-heart",
+            "value": "f004"
+        },
+        {
+            "label": "fa-heart-o",
+            "value": "f08a"
+        },
+        {
+            "label": "fa-heartbeat",
+            "value": "f21e"
+        },
+        {
+            "label": "fa-history",
+            "value": "f1da"
+        },
+        {
+            "label": "fa-home",
+            "value": "f015"
+        },
+        {
+            "label": "fa-hospital-o",
+            "value": "f0f8"
+        },
+        {
+            "label": "fa-hourglass",
+            "value": "f254"
+        },
+        {
+            "label": "fa-hourglass-end",
+            "value": "f253"
+        },
+        {
+            "label": "fa-hourglass-half",
+            "value": "f252"
+        },
+        {
+            "label": "fa-hourglass-o",
+            "value": "f250"
+        },
+        {
+            "label": "fa-hourglass-start",
+            "value": "f251"
+        },
+        {
+            "label": "fa-houzz",
+            "value": "f27c"
+        },
+        {
+            "label": "fa-html5",
+            "value": "f13b"
+        },
+        {
+            "label": "fa-i-cursor",
+            "value": "f246"
+        },
+        {
+            "label": "fa-id-badge",
+            "value": "f2c1"
+        },
+        {
+            "label": "fa-id-card",
+            "value": "f2c2"
+        },
+        {
+            "label": "fa-id-card-o",
+            "value": "f2c3"
+        },
+        {
+            "label": "fa-ils",
+            "value": "f20b"
+        },
+        {
+            "label": "fa-imdb",
+            "value": "f2d8"
+        },
+        {
+            "label": "fa-inbox",
+            "value": "f01c"
+        },
+        {
+            "label": "fa-indent",
+            "value": "f03c"
+        },
+        {
+            "label": "fa-industry",
+            "value": "f275"
+        },
+        {
+            "label": "fa-info",
+            "value": "f129"
+        },
+        {
+            "label": "fa-info-circle",
+            "value": "f05a"
+        },
+        {
+            "label": "fa-inr",
+            "value": "f156"
+        },
+        {
+            "label": "fa-instagram",
+            "value": "f16d"
+        },
+        {
+            "label": "fa-internet-explorer",
+            "value": "f26b"
+        },
+        {
+            "label": "fa-ioxhost",
+            "value": "f208"
+        },
+        {
+            "label": "fa-italic",
+            "value": "f033"
+        },
+        {
+            "label": "fa-joomla",
+            "value": "f1aa"
+        },
+        {
+            "label": "fa-jpy",
+            "value": "f157"
+        },
+        {
+            "label": "fa-jsfiddle",
+            "value": "f1cc"
+        },
+        {
+            "label": "fa-key",
+            "value": "f084"
+        },
+        {
+            "label": "fa-keyboard-o",
+            "value": "f11c"
+        },
+        {
+            "label": "fa-krw",
+            "value": "f159"
+        },
+        {
+            "label": "fa-language",
+            "value": "f1ab"
+        },
+        {
+            "label": "fa-laptop",
+            "value": "f109"
+        },
+        {
+            "label": "fa-lastfm",
+            "value": "f202"
+        },
+        {
+            "label": "fa-lastfm-square",
+            "value": "f203"
+        },
+        {
+            "label": "fa-leaf",
+            "value": "f06c"
+        },
+        {
+            "label": "fa-leanpub",
+            "value": "f212"
+        },
+        {
+            "label": "fa-lemon-o",
+            "value": "f094"
+        },
+        {
+            "label": "fa-level-down",
+            "value": "f149"
+        },
+        {
+            "label": "fa-level-up",
+            "value": "f148"
+        },
+        {
+            "label": "fa-life-ring",
+            "value": "f1cd"
+        },
+        {
+            "label": "fa-lightbulb-o",
+            "value": "f0eb"
+        },
+        {
+            "label": "fa-line-chart",
+            "value": "f201"
+        },
+        {
+            "label": "fa-link",
+            "value": "f0c1"
+        },
+        {
+            "label": "fa-linkedin",
+            "value": "f0e1"
+        },
+        {
+            "label": "fa-linkedin-square",
+            "value": "f08c"
+        },
+        {
+            "label": "fa-linode",
+            "value": "f2b8"
+        },
+        {
+            "label": "fa-linux",
+            "value": "f17c"
+        },
+        {
+            "label": "fa-list",
+            "value": "f03a"
+        },
+        {
+            "label": "fa-list-alt",
+            "value": "f022"
+        },
+        {
+            "label": "fa-list-ol",
+            "value": "f0cb"
+        },
+        {
+            "label": "fa-list-ul",
+            "value": "f0ca"
+        },
+        {
+            "label": "fa-location-arrow",
+            "value": "f124"
+        },
+        {
+            "label": "fa-lock",
+            "value": "f023"
+        },
+        {
+            "label": "fa-long-arrow-down",
+            "value": "f175"
+        },
+        {
+            "label": "fa-long-arrow-left",
+            "value": "f177"
+        },
+        {
+            "label": "fa-long-arrow-right",
+            "value": "f178"
+        },
+        {
+            "label": "fa-long-arrow-up",
+            "value": "f176"
+        },
+        {
+            "label": "fa-low-vision",
+            "value": "f2a8"
+        },
+        {
+            "label": "fa-magic",
+            "value": "f0d0"
+        },
+        {
+            "label": "fa-magnet",
+            "value": "f076"
+        },
+        {
+            "label": "fa-male",
+            "value": "f183"
+        },
+        {
+            "label": "fa-map",
+            "value": "f279"
+        },
+        {
+            "label": "fa-map-marker",
+            "value": "f041"
+        },
+        {
+            "label": "fa-map-o",
+            "value": "f278"
+        },
+        {
+            "label": "fa-map-pin",
+            "value": "f276"
+        },
+        {
+            "label": "fa-map-signs",
+            "value": "f277"
+        },
+        {
+            "label": "fa-mars",
+            "value": "f222"
+        },
+        {
+            "label": "fa-mars-double",
+            "value": "f227"
+        },
+        {
+            "label": "fa-mars-stroke",
+            "value": "f229"
+        },
+        {
+            "label": "fa-mars-stroke-h",
+            "value": "f22b"
+        },
+        {
+            "label": "fa-mars-stroke-v",
+            "value": "f22a"
+        },
+        {
+            "label": "fa-maxcdn",
+            "value": "f136"
+        },
+        {
+            "label": "fa-meanpath",
+            "value": "f20c"
+        },
+        {
+            "label": "fa-medium",
+            "value": "f23a"
+        },
+        {
+            "label": "fa-medkit",
+            "value": "f0fa"
+        },
+        {
+            "label": "fa-meetup",
+            "value": "f2e0"
+        },
+        {
+            "label": "fa-meh-o",
+            "value": "f11a"
+        },
+        {
+            "label": "fa-mercury",
+            "value": "f223"
+        },
+        {
+            "label": "fa-microchip",
+            "value": "f2db"
+        },
+        {
+            "label": "fa-microphone",
+            "value": "f130"
+        },
+        {
+            "label": "fa-microphone-slash",
+            "value": "f131"
+        },
+        {
+            "label": "fa-minus",
+            "value": "f068"
+        },
+        {
+            "label": "fa-minus-circle",
+            "value": "f056"
+        },
+        {
+            "label": "fa-minus-square",
+            "value": "f146"
+        },
+        {
+            "label": "fa-minus-square-o",
+            "value": "f147"
+        },
+        {
+            "label": "fa-mixcloud",
+            "value": "f289"
+        },
+        {
+            "label": "fa-mobile",
+            "value": "f10b"
+        },
+        {
+            "label": "fa-modx",
+            "value": "f285"
+        },
+        {
+            "label": "fa-money",
+            "value": "f0d6"
+        },
+        {
+            "label": "fa-moon-o",
+            "value": "f186"
+        },
+        {
+            "label": "fa-motorcycle",
+            "value": "f21c"
+        },
+        {
+            "label": "fa-mouse-pointer",
+            "value": "f245"
+        },
+        {
+            "label": "fa-music",
+            "value": "f001"
+        },
+        {
+            "label": "fa-neuter",
+            "value": "f22c"
+        },
+        {
+            "label": "fa-newspaper-o",
+            "value": "f1ea"
+        },
+        {
+            "label": "fa-object-group",
+            "value": "f247"
+        },
+        {
+            "label": "fa-object-ungroup",
+            "value": "f248"
+        },
+        {
+            "label": "fa-odnoklassniki",
+            "value": "f263"
+        },
+        {
+            "label": "fa-odnoklassniki-square",
+            "value": "f264"
+        },
+        {
+            "label": "fa-opencart",
+            "value": "f23d"
+        },
+        {
+            "label": "fa-openid",
+            "value": "f19b"
+        },
+        {
+            "label": "fa-opera",
+            "value": "f26a"
+        },
+        {
+            "label": "fa-optin-monster",
+            "value": "f23c"
+        },
+        {
+            "label": "fa-outdent",
+            "value": "f03b"
+        },
+        {
+            "label": "fa-pagelines",
+            "value": "f18c"
+        },
+        {
+            "label": "fa-paint-brush",
+            "value": "f1fc"
+        },
+        {
+            "label": "fa-paper-plane",
+            "value": "f1d8"
+        },
+        {
+            "label": "fa-paper-plane-o",
+            "value": "f1d9"
+        },
+        {
+            "label": "fa-paperclip",
+            "value": "f0c6"
+        },
+        {
+            "label": "fa-paragraph",
+            "value": "f1dd"
+        },
+        {
+            "label": "fa-pause",
+            "value": "f04c"
+        },
+        {
+            "label": "fa-pause-circle",
+            "value": "f28b"
+        },
+        {
+            "label": "fa-pause-circle-o",
+            "value": "f28c"
+        },
+        {
+            "label": "fa-paw",
+            "value": "f1b0"
+        },
+        {
+            "label": "fa-paypal",
+            "value": "f1ed"
+        },
+        {
+            "label": "fa-pencil",
+            "value": "f040"
+        },
+        {
+            "label": "fa-pencil-square",
+            "value": "f14b"
+        },
+        {
+            "label": "fa-pencil-square-o",
+            "value": "f044"
+        },
+        {
+            "label": "fa-percent",
+            "value": "f295"
+        },
+        {
+            "label": "fa-phone",
+            "value": "f095"
+        },
+        {
+            "label": "fa-phone-square",
+            "value": "f098"
+        },
+        {
+            "label": "fa-picture-o",
+            "value": "f03e"
+        },
+        {
+            "label": "fa-pie-chart",
+            "value": "f200"
+        },
+        {
+            "label": "fa-pied-piper",
+            "value": "f2ae"
+        },
+        {
+            "label": "fa-pied-piper-alt",
+            "value": "f1a8"
+        },
+        {
+            "label": "fa-pied-piper-pp",
+            "value": "f1a7"
+        },
+        {
+            "label": "fa-pinterest",
+            "value": "f0d2"
+        },
+        {
+            "label": "fa-pinterest-p",
+            "value": "f231"
+        },
+        {
+            "label": "fa-pinterest-square",
+            "value": "f0d3"
+        },
+        {
+            "label": "fa-plane",
+            "value": "f072"
+        },
+        {
+            "label": "fa-play",
+            "value": "f04b"
+        },
+        {
+            "label": "fa-play-circle",
+            "value": "f144"
+        },
+        {
+            "label": "fa-play-circle-o",
+            "value": "f01d"
+        },
+        {
+            "label": "fa-plug",
+            "value": "f1e6"
+        },
+        {
+            "label": "fa-plus",
+            "value": "f067"
+        },
+        {
+            "label": "fa-plus-circle",
+            "value": "f055"
+        },
+        {
+            "label": "fa-plus-square",
+            "value": "f0fe"
+        },
+        {
+            "label": "fa-plus-square-o",
+            "value": "f196"
+        },
+        {
+            "label": "fa-podcast",
+            "value": "f2ce"
+        },
+        {
+            "label": "fa-power-off",
+            "value": "f011"
+        },
+        {
+            "label": "fa-print",
+            "value": "f02f"
+        },
+        {
+            "label": "fa-product-hunt",
+            "value": "f288"
+        },
+        {
+            "label": "fa-puzzle-piece",
+            "value": "f12e"
+        },
+        {
+            "label": "fa-qq",
+            "value": "f1d6"
+        },
+        {
+            "label": "fa-qrcode",
+            "value": "f029"
+        },
+        {
+            "label": "fa-question",
+            "value": "f128"
+        },
+        {
+            "label": "fa-question-circle",
+            "value": "f059"
+        },
+        {
+            "label": "fa-question-circle-o",
+            "value": "f29c"
+        },
+        {
+            "label": "fa-quora",
+            "value": "f2c4"
+        },
+        {
+            "label": "fa-quote-left",
+            "value": "f10d"
+        },
+        {
+            "label": "fa-quote-right",
+            "value": "f10e"
+        },
+        {
+            "label": "fa-random",
+            "value": "f074"
+        },
+        {
+            "label": "fa-ravelry",
+            "value": "f2d9"
+        },
+        {
+            "label": "fa-rebel",
+            "value": "f1d0"
+        },
+        {
+            "label": "fa-recycle",
+            "value": "f1b8"
+        },
+        {
+            "label": "fa-reddit",
+            "value": "f1a1"
+        },
+        {
+            "label": "fa-reddit-alien",
+            "value": "f281"
+        },
+        {
+            "label": "fa-reddit-square",
+            "value": "f1a2"
+        },
+        {
+            "label": "fa-refresh",
+            "value": "f021"
+        },
+        {
+            "label": "fa-registered",
+            "value": "f25d"
+        },
+        {
+            "label": "fa-renren",
+            "value": "f18b"
+        },
+        {
+            "label": "fa-repeat",
+            "value": "f01e"
+        },
+        {
+            "label": "fa-reply",
+            "value": "f112"
+        },
+        {
+            "label": "fa-reply-all",
+            "value": "f122"
+        },
+        {
+            "label": "fa-retweet",
+            "value": "f079"
+        },
+        {
+            "label": "fa-road",
+            "value": "f018"
+        },
+        {
+            "label": "fa-rocket",
+            "value": "f135"
+        },
+        {
+            "label": "fa-rss",
+            "value": "f09e"
+        },
+        {
+            "label": "fa-rss-square",
+            "value": "f143"
+        },
+        {
+            "label": "fa-rub",
+            "value": "f158"
+        },
+        {
+            "label": "fa-safari",
+            "value": "f267"
+        },
+        {
+            "label": "fa-scissors",
+            "value": "f0c4"
+        },
+        {
+            "label": "fa-scribd",
+            "value": "f28a"
+        },
+        {
+            "label": "fa-search",
+            "value": "f002"
+        },
+        {
+            "label": "fa-search-minus",
+            "value": "f010"
+        },
+        {
+            "label": "fa-search-plus",
+            "value": "f00e"
+        },
+        {
+            "label": "fa-sellsy",
+            "value": "f213"
+        },
+        {
+            "label": "fa-server",
+            "value": "f233"
+        },
+        {
+            "label": "fa-share",
+            "value": "f064"
+        },
+        {
+            "label": "fa-share-alt",
+            "value": "f1e0"
+        },
+        {
+            "label": "fa-share-alt-square",
+            "value": "f1e1"
+        },
+        {
+            "label": "fa-share-square",
+            "value": "f14d"
+        },
+        {
+            "label": "fa-share-square-o",
+            "value": "f045"
+        },
+        {
+            "label": "fa-shield",
+            "value": "f132"
+        },
+        {
+            "label": "fa-ship",
+            "value": "f21a"
+        },
+        {
+            "label": "fa-shirtsinbulk",
+            "value": "f214"
+        },
+        {
+            "label": "fa-shopping-bag",
+            "value": "f290"
+        },
+        {
+            "label": "fa-shopping-basket",
+            "value": "f291"
+        },
+        {
+            "label": "fa-shopping-cart",
+            "value": "f07a"
+        },
+        {
+            "label": "fa-shower",
+            "value": "f2cc"
+        },
+        {
+            "label": "fa-sign-in",
+            "value": "f090"
+        },
+        {
+            "label": "fa-sign-language",
+            "value": "f2a7"
+        },
+        {
+            "label": "fa-sign-out",
+            "value": "f08b"
+        },
+        {
+            "label": "fa-signal",
+            "value": "f012"
+        },
+        {
+            "label": "fa-simplybuilt",
+            "value": "f215"
+        },
+        {
+            "label": "fa-sitemap",
+            "value": "f0e8"
+        },
+        {
+            "label": "fa-skyatlas",
+            "value": "f216"
+        },
+        {
+            "label": "fa-skype",
+            "value": "f17e"
+        },
+        {
+            "label": "fa-slack",
+            "value": "f198"
+        },
+        {
+            "label": "fa-sliders",
+            "value": "f1de"
+        },
+        {
+            "label": "fa-slideshare",
+            "value": "f1e7"
+        },
+        {
+            "label": "fa-smile-o",
+            "value": "f118"
+        },
+        {
+            "label": "fa-snapchat",
+            "value": "f2ab"
+        },
+        {
+            "label": "fa-snapchat-ghost",
+            "value": "f2ac"
+        },
+        {
+            "label": "fa-snapchat-square",
+            "value": "f2ad"
+        },
+        {
+            "label": "fa-snowflake-o",
+            "value": "f2dc"
+        },
+        {
+            "label": "fa-sort",
+            "value": "f0dc"
+        },
+        {
+            "label": "fa-sort-alpha-asc",
+            "value": "f15d"
+        },
+        {
+            "label": "fa-sort-alpha-desc",
+            "value": "f15e"
+        },
+        {
+            "label": "fa-sort-amount-asc",
+            "value": "f160"
+        },
+        {
+            "label": "fa-sort-amount-desc",
+            "value": "f161"
+        },
+        {
+            "label": "fa-sort-asc",
+            "value": "f0de"
+        },
+        {
+            "label": "fa-sort-desc",
+            "value": "f0dd"
+        },
+        {
+            "label": "fa-sort-numeric-asc",
+            "value": "f162"
+        },
+        {
+            "label": "fa-sort-numeric-desc",
+            "value": "f163"
+        },
+        {
+            "label": "fa-soundcloud",
+            "value": "f1be"
+        },
+        {
+            "label": "fa-space-shuttle",
+            "value": "f197"
+        },
+        {
+            "label": "fa-spinner",
+            "value": "f110"
+        },
+        {
+            "label": "fa-spoon",
+            "value": "f1b1"
+        },
+        {
+            "label": "fa-spotify",
+            "value": "f1bc"
+        },
+        {
+            "label": "fa-square",
+            "value": "f0c8"
+        },
+        {
+            "label": "fa-square-o",
+            "value": "f096"
+        },
+        {
+            "label": "fa-stack-exchange",
+            "value": "f18d"
+        },
+        {
+            "label": "fa-stack-overflow",
+            "value": "f16c"
+        },
+        {
+            "label": "fa-star",
+            "value": "f005"
+        },
+        {
+            "label": "fa-star-half",
+            "value": "f089"
+        },
+        {
+            "label": "fa-star-half-o",
+            "value": "f123"
+        },
+        {
+            "label": "fa-star-o",
+            "value": "f006"
+        },
+        {
+            "label": "fa-steam",
+            "value": "f1b6"
+        },
+        {
+            "label": "fa-steam-square",
+            "value": "f1b7"
+        },
+        {
+            "label": "fa-step-backward",
+            "value": "f048"
+        },
+        {
+            "label": "fa-step-forward",
+            "value": "f051"
+        },
+        {
+            "label": "fa-stethoscope",
+            "value": "f0f1"
+        },
+        {
+            "label": "fa-sticky-note",
+            "value": "f249"
+        },
+        {
+            "label": "fa-sticky-note-o",
+            "value": "f24a"
+        },
+        {
+            "label": "fa-stop",
+            "value": "f04d"
+        },
+        {
+            "label": "fa-stop-circle",
+            "value": "f28d"
+        },
+        {
+            "label": "fa-stop-circle-o",
+            "value": "f28e"
+        },
+        {
+            "label": "fa-street-view",
+            "value": "f21d"
+        },
+        {
+            "label": "fa-strikethrough",
+            "value": "f0cc"
+        },
+        {
+            "label": "fa-stumbleupon",
+            "value": "f1a4"
+        },
+        {
+            "label": "fa-stumbleupon-circle",
+            "value": "f1a3"
+        },
+        {
+            "label": "fa-subscript",
+            "value": "f12c"
+        },
+        {
+            "label": "fa-subway",
+            "value": "f239"
+        },
+        {
+            "label": "fa-suitcase",
+            "value": "f0f2"
+        },
+        {
+            "label": "fa-sun-o",
+            "value": "f185"
+        },
+        {
+            "label": "fa-superpowers",
+            "value": "f2dd"
+        },
+        {
+            "label": "fa-superscript",
+            "value": "f12b"
+        },
+        {
+            "label": "fa-table",
+            "value": "f0ce"
+        },
+        {
+            "label": "fa-tablet",
+            "value": "f10a"
+        },
+        {
+            "label": "fa-tachometer",
+            "value": "f0e4"
+        },
+        {
+            "label": "fa-tag",
+            "value": "f02b"
+        },
+        {
+            "label": "fa-tags",
+            "value": "f02c"
+        },
+        {
+            "label": "fa-tasks",
+            "value": "f0ae"
+        },
+        {
+            "label": "fa-taxi",
+            "value": "f1ba"
+        },
+        {
+            "label": "fa-telegram",
+            "value": "f2c6"
+        },
+        {
+            "label": "fa-television",
+            "value": "f26c"
+        },
+        {
+            "label": "fa-tencent-weibo",
+            "value": "f1d5"
+        },
+        {
+            "label": "fa-terminal",
+            "value": "f120"
+        },
+        {
+            "label": "fa-text-height",
+            "value": "f034"
+        },
+        {
+            "label": "fa-text-width",
+            "value": "f035"
+        },
+        {
+            "label": "fa-th",
+            "value": "f00a"
+        },
+        {
+            "label": "fa-th-large",
+            "value": "f009"
+        },
+        {
+            "label": "fa-th-list",
+            "value": "f00b"
+        },
+        {
+            "label": "fa-themeisle",
+            "value": "f2b2"
+        },
+        {
+            "label": "fa-thermometer-empty",
+            "value": "f2cb"
+        },
+        {
+            "label": "fa-thermometer-full",
+            "value": "f2c7"
+        },
+        {
+            "label": "fa-thermometer-half",
+            "value": "f2c9"
+        },
+        {
+            "label": "fa-thermometer-quarter",
+            "value": "f2ca"
+        },
+        {
+            "label": "fa-thermometer-three-quarters",
+            "value": "f2c8"
+        },
+        {
+            "label": "fa-thumb-tack",
+            "value": "f08d"
+        },
+        {
+            "label": "fa-thumbs-down",
+            "value": "f165"
+        },
+        {
+            "label": "fa-thumbs-o-down",
+            "value": "f088"
+        },
+        {
+            "label": "fa-thumbs-o-up",
+            "value": "f087"
+        },
+        {
+            "label": "fa-thumbs-up",
+            "value": "f164"
+        },
+        {
+            "label": "fa-ticket",
+            "value": "f145"
+        },
+        {
+            "label": "fa-times",
+            "value": "f00d"
+        },
+        {
+            "label": "fa-times-circle",
+            "value": "f057"
+        },
+        {
+            "label": "fa-times-circle-o",
+            "value": "f05c"
+        },
+        {
+            "label": "fa-tint",
+            "value": "f043"
+        },
+        {
+            "label": "fa-toggle-off",
+            "value": "f204"
+        },
+        {
+            "label": "fa-toggle-on",
+            "value": "f205"
+        },
+        {
+            "label": "fa-trademark",
+            "value": "f25c"
+        },
+        {
+            "label": "fa-train",
+            "value": "f238"
+        },
+        {
+            "label": "fa-transgender",
+            "value": "f224"
+        },
+        {
+            "label": "fa-transgender-alt",
+            "value": "f225"
+        },
+        {
+            "label": "fa-trash",
+            "value": "f1f8"
+        },
+        {
+            "label": "fa-trash-o",
+            "value": "f014"
+        },
+        {
+            "label": "fa-tree",
+            "value": "f1bb"
+        },
+        {
+            "label": "fa-trello",
+            "value": "f181"
+        },
+        {
+            "label": "fa-tripadvisor",
+            "value": "f262"
+        },
+        {
+            "label": "fa-trophy",
+            "value": "f091"
+        },
+        {
+            "label": "fa-truck",
+            "value": "f0d1"
+        },
+        {
+            "label": "fa-try",
+            "value": "f195"
+        },
+        {
+            "label": "fa-tty",
+            "value": "f1e4"
+        },
+        {
+            "label": "fa-tumblr",
+            "value": "f173"
+        },
+        {
+            "label": "fa-tumblr-square",
+            "value": "f174"
+        },
+        {
+            "label": "fa-twitch",
+            "value": "f1e8"
+        },
+        {
+            "label": "fa-twitter",
+            "value": "f099"
+        },
+        {
+            "label": "fa-twitter-square",
+            "value": "f081"
+        },
+        {
+            "label": "fa-umbrella",
+            "value": "f0e9"
+        },
+        {
+            "label": "fa-underline",
+            "value": "f0cd"
+        },
+        {
+            "label": "fa-undo",
+            "value": "f0e2"
+        },
+        {
+            "label": "fa-universal-access",
+            "value": "f29a"
+        },
+        {
+            "label": "fa-university",
+            "value": "f19c"
+        },
+        {
+            "label": "fa-unlock",
+            "value": "f09c"
+        },
+        {
+            "label": "fa-unlock-alt",
+            "value": "f13e"
+        },
+        {
+            "label": "fa-upload",
+            "value": "f093"
+        },
+        {
+            "label": "fa-usb",
+            "value": "f287"
+        },
+        {
+            "label": "fa-usd",
+            "value": "f155"
+        },
+        {
+            "label": "fa-user",
+            "value": "f007"
+        },
+        {
+            "label": "fa-user-circle",
+            "value": "f2bd"
+        },
+        {
+            "label": "fa-user-circle-o",
+            "value": "f2be"
+        },
+        {
+            "label": "fa-user-md",
+            "value": "f0f0"
+        },
+        {
+            "label": "fa-user-o",
+            "value": "f2c0"
+        },
+        {
+            "label": "fa-user-plus",
+            "value": "f234"
+        },
+        {
+            "label": "fa-user-secret",
+            "value": "f21b"
+        },
+        {
+            "label": "fa-user-times",
+            "value": "f235"
+        },
+        {
+            "label": "fa-users",
+            "value": "f0c0"
+        },
+        {
+            "label": "fa-venus",
+            "value": "f221"
+        },
+        {
+            "label": "fa-venus-double",
+            "value": "f226"
+        },
+        {
+            "label": "fa-venus-mars",
+            "value": "f228"
+        },
+        {
+            "label": "fa-viacoin",
+            "value": "f237"
+        },
+        {
+            "label": "fa-viadeo",
+            "value": "f2a9"
+        },
+        {
+            "label": "fa-viadeo-square",
+            "value": "f2aa"
+        },
+        {
+            "label": "fa-video-camera",
+            "value": "f03d"
+        },
+        {
+            "label": "fa-vimeo",
+            "value": "f27d"
+        },
+        {
+            "label": "fa-vimeo-square",
+            "value": "f194"
+        },
+        {
+            "label": "fa-vine",
+            "value": "f1ca"
+        },
+        {
+            "label": "fa-vk",
+            "value": "f189"
+        },
+        {
+            "label": "fa-volume-control-phone",
+            "value": "f2a0"
+        },
+        {
+            "label": "fa-volume-down",
+            "value": "f027"
+        },
+        {
+            "label": "fa-volume-off",
+            "value": "f026"
+        },
+        {
+            "label": "fa-volume-up",
+            "value": "f028"
+        },
+        {
+            "label": "fa-weibo",
+            "value": "f18a"
+        },
+        {
+            "label": "fa-weixin",
+            "value": "f1d7"
+        },
+        {
+            "label": "fa-whatsapp",
+            "value": "f232"
+        },
+        {
+            "label": "fa-wheelchair",
+            "value": "f193"
+        },
+        {
+            "label": "fa-wheelchair-alt",
+            "value": "f29b"
+        },
+        {
+            "label": "fa-wifi",
+            "value": "f1eb"
+        },
+        {
+            "label": "fa-wikipedia-w",
+            "value": "f266"
+        },
+        {
+            "label": "fa-window-close",
+            "value": "f2d3"
+        },
+        {
+            "label": "fa-window-close-o",
+            "value": "f2d4"
+        },
+        {
+            "label": "fa-window-maximize",
+            "value": "f2d0"
+        },
+        {
+            "label": "fa-window-minimize",
+            "value": "f2d1"
+        },
+        {
+            "label": "fa-window-restore",
+            "value": "f2d2"
+        },
+        {
+            "label": "fa-windows",
+            "value": "f17a"
+        },
+        {
+            "label": "fa-wordpress",
+            "value": "f19a"
+        },
+        {
+            "label": "fa-wpbeginner",
+            "value": "f297"
+        },
+        {
+            "label": "fa-wpexplorer",
+            "value": "f2de"
+        },
+        {
+            "label": "fa-wpforms",
+            "value": "f298"
+        },
+        {
+            "label": "fa-wrench",
+            "value": "f0ad"
+        },
+        {
+            "label": "fa-xing",
+            "value": "f168"
+        },
+        {
+            "label": "fa-xing-square",
+            "value": "f169"
+        },
+        {
+            "label": "fa-y-combinator",
+            "value": "f23b"
+        },
+        {
+            "label": "fa-yahoo",
+            "value": "f19e"
+        },
+        {
+            "label": "fa-yelp",
+            "value": "f1e9"
+        },
+        {
+            "label": "fa-yoast",
+            "value": "f2b1"
+        },
+        {
+            "label": "fa-youtube",
+            "value": "f167"
+        },
+        {
+            "label": "fa-youtube-play",
+            "value": "f16a"
+        },
+        {
+            "label": "fa-youtube-square",
+            "value": "f166"
+        }
+    ]
+}

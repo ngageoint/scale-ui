@@ -8,6 +8,8 @@ addons:
 cache:
   directories:
   - "./node_modules"
+before_install:
+  - export NG_CLI_ANALYTICS=ci
 install:
 - npm install
 - npm install -g @angular/cli
