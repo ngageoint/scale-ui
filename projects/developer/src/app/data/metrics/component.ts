@@ -83,7 +83,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
         return data;
     }
-
     getDataTypes() {
         this.dataTypesLoading = true;
         this.metricsApiService.getDataTypes().subscribe((data) => {
@@ -143,7 +142,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 });
             });
             this.filteredChoicesOptions = filteredChoicesOptions;
-            console.log(this.filteredChoicesOptions);
             this.columns = _.orderBy(result.columns, ['title'], ['asc']);
             _.forEach(this.columns, (column) => {
                 const option = {
@@ -184,17 +182,16 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.getDataTypeOptions();
         }
     }
-
     getRecipeJobTypes() {
         if (this.recipeChoiceSelected != null) {
             const filtersApplied = [];
             _.forEach(this.recipeChoiceSelected, (outerRecipe) => {
                 _.forEach(outerRecipe, (selectedRecipe) => {
-                _.forEach(this.filteredChoicesOptions, (jobTypeInfo) => {
-                    if ((jobTypeInfo.value.name === selectedRecipe.name)) {
+                    _.forEach(this.filteredChoicesOptions, (jobTypeInfo) => {
+                        if (jobTypeInfo.value.name === selectedRecipe.name) {
                             filtersApplied.push(jobTypeInfo.value);
-                    }
-                });
+                        }
+                    });
                 });
             });
             this.filtersApplied = filtersApplied;
@@ -202,7 +199,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.changeDataTypeSelection();
         }
     }
-
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
             this.messageService.add({severity: 'warn', summary: 'Selected the same metric twice'});
