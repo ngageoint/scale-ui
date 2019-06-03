@@ -12,6 +12,7 @@ import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { JobTypeHistoryComponent } from './processing/job-type-history/component';
 import { JobTypeHistoryDetailsComponent } from './processing/job-type-history/details.component';
 import { MetricsComponent } from './data/metrics/component';
+import { TimelineComponent } from './data/timeline/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { BatchesComponent } from './processing/batches/component';
@@ -47,6 +48,7 @@ const routes: Routes = [
     { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/metrics', component: MetricsComponent },
+    { path: 'data/timeline', component: TimelineComponent },
     { path: 'system/nodes', component: NodesComponent },
     { path: 'system/strikes', component: StrikesComponent },
     { path: 'system/strikes/:id', component: StrikesComponent },
