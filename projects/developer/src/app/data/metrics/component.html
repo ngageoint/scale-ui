@@ -19,7 +19,7 @@
         <utc-datepicker class="noWrap" [date]="started" [button]="true" (dateChange)="onStartSelect($event)"></utc-datepicker>
         <label>To</label>
         <utc-datepicker class="noWrap" [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"></utc-datepicker>
-        <label>Data Source</label>
+        <label>Data Source <span aria-hidden="true" class="required">*</span></label>
         <div class="metrics__filter-loading" *ngIf="dataTypesLoading">
             <i class="fa fa-circle-o-notch fa-spin"></i>
         </div>
@@ -34,7 +34,7 @@
             To view an aggregate count for the data source, leave this filter unselected.
         </div>
         <div *ngIf="columns.length > 0">
-            <label>Primary Metric</label>
+            <label>Primary Metric <span aria-hidden="true" class="required">*</span></label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
             <label>Secondary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}" [showClear]="false"></p-dropdown>
