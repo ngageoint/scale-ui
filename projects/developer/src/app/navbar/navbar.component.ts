@@ -180,6 +180,11 @@ export class NavbarComponent implements OnInit, OnChanges {
                         icon: 'fa fa-fw fa-bar-chart',
                         url: '/data/metrics'
                     },
+                    {
+                        label: 'Timeline',
+                        icon: 'fa fa-fw fa-calendar',
+                        url: '/data/timeline'
+                    },
                     {separator: true},
                     {
                         label: 'Close',

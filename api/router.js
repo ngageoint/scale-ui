@@ -52,6 +52,7 @@ var errors = require('./handlers/errors');
 var recipeTypesValidate = require('./handlers/recipeTypesValidate');
 var recipeTypeCreate = require('./handlers/recipeTypeCreate');
 var recipeTypeEdit = require('./handlers/recipeTypeEdit');
+var version = require('./handlers/version');
 
 var apiVersion = 'v6';
 
@@ -399,6 +400,12 @@ module.exports = {
             method: 'GET',
             path: '/mocks/' + apiVersion + '/errors/',
             handler: errors
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/version/',
+            handler: version
         });
     }
 };
