@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {FormControl, FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -19,7 +19,6 @@ import { WorkspacesApiService } from '../../system/workspaces/api.service';
     styleUrls: ['./create.component.scss']
 })
 export class JobTypesCreateComponent implements OnInit, OnDestroy {
-    private routerEvents: any;
     private routeParams: any;
     env = environment;
     mode: string;
@@ -41,24 +40,35 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         readOnly: 'nocursor',
         viewportMargin: Infinity
     };
+    workspaces = [];
     workspacesOptions: SelectItem[] = [];
     jobType: any;
     cleanJobType: any;
     createForm: FormGroup = this.fb.group({
-        icon: [''],
+        icon_code: [''],
         configuration: this.fb.group({
             output_workspaces: this.fb.group({
                 default: ['', Validators.required],
-                outputs: ['']
+                outputs: this.fb.group({})
             }),
-            mounts: this.fb.group({
-                type: [''],
-                host_path: [''],
-                driver: [''],
-                driver_opts: ['']
-            })
+            mounts: this.fb.group({}),
+            settings: this.fb.group({})
         })
     });
+    driverOptsForm: FormGroup = this.fb.group({
+        key: [''],
+        value: ['']
+    });
+    mountTypeOptions: SelectItem[] = [
+        {
+            label: 'Host',
+            value: 'host'
+        },
+        {
+            label: 'Volume',
+            value: 'volume'
+        }
+    ];
     validated: boolean;
     submitted: boolean;
     iconData = iconData;
@@ -82,6 +92,29 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.items[this.items.length - 1].disabled = !this.createForm.valid ||
             !this.jobType.manifest ||
             _.keys(this.jobType.manifest).length === 0;
+    }
+
+    private initCreateForm() {
+        if (this.jobType) {
+            this.workspacesOptions = [];
+            // set up workspaces
+            _.forEach(this.workspaces, workspace => {
+                this.workspacesOptions.push({
+                    label: workspace.title,
+                    value: workspace.name
+                });
+            });
+
+            // add the remaining values from the object
+            this.createForm.patchValue(this.jobType);
+        }
+
+        // listen for changes to createForm fields
+        this.createForm.valueChanges.subscribe(changes => {
+            // need to merge these changes because there are fields in the model that aren't in the form
+            _.merge(this.jobType, changes);
+            this.validateForm();
+        });
     }
 
     getUnicode(code) {
@@ -120,55 +153,59 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.jobType.manifest = seedImage.manifest;
         this.jobType.docker_image = `${image.Registry}/${image.Org}/${image.Name}`;
 
-        // use manifest data to stub out a configuration
-        let mounts = null;
-        if (this.jobType.manifest.job.interface.mounts) {
-            mounts = {};
-            _.forEach(this.jobType.manifest.job.interface.mounts, mount => {
-                mounts[mount.name] = {};
-            });
-        }
-
-        let outputWorkspaces = null;
+        // set up output workspaces
         if (this.jobType.manifest.job.interface.outputs.files) {
-            outputWorkspaces = {
-                default: '',
-                outputs: {}
-            };
+            // iterate over job manifest output files and add appropriate properties and form controls
+            const outputsGroup: any = this.createForm.get('configuration.output_workspaces.outputs');
             _.forEach(this.jobType.manifest.job.interface.outputs.files, file => {
-                outputWorkspaces.outputs[file.name] = '';
+                this.jobType.configuration.output_workspaces.outputs[file.name] = null;
+                outputsGroup.addControl(file.name, new FormControl(null));
             });
         }
 
-        let settings = null;
+        // set up mounts
+        if (this.jobType.manifest.job.interface.mounts) {
+            // iterate over mounts in job manifest and add appropriate job type mounts
+            const mountsGroup: any = this.createForm.get('configuration.mounts');
+            _.forEach(this.jobType.manifest.job.interface.mounts, mount => {
+                this.jobType.configuration.mounts[mount.name] = {
+                    type: null,
+                    host_path: null,
+                    driver: null,
+                    driver_opts: {}
+                };
+                mountsGroup.addControl(mount.name, new FormGroup({}));
+                const mountGroup: any = this.createForm.get(`configuration.mounts.${mount.name}`);
+                mountGroup.addControl('type', new FormControl('', Validators.required));
+                mountGroup.addControl('host_path', new FormControl(null));
+                mountGroup.addControl('driver', new FormControl(null));
+                mountGroup.addControl('driver_opts', new FormGroup({}));
+            });
+        }
+
+        // set up settings
         if (this.jobType.manifest.job.interface.settings) {
-            settings = {};
+            // iterate over job manifest settings and add appropriate job type settings
+            const settingsGroup: any = this.createForm.get('configuration.settings');
             _.forEach(this.jobType.manifest.job.interface.settings, setting => {
-                settings[setting.name] = '';
+                this.jobType.configuration.settings[setting.name] = null;
+                settingsGroup.addControl(setting.name, new FormControl(null));
             });
         }
-
-        this.jobType.configuration = {
-            mounts: mounts,
-            output_workspaces: outputWorkspaces,
-            priority: 100,
-            settings: settings
-        };
-
-        this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
-            return d !== null && typeof d !== 'undefined' && d !== '';
-        });
-
-        this.validateForm();
-        console.log(this.jobType);
     }
 
     onImageRemove() {
-        this.jobType.configuration = null;
+        this.jobType.configuration = {
+            output_workspaces: {
+                default: '',
+                outputs: {}
+            },
+            mounts: {},
+            settings: {}
+        };
         this.jobType.manifest = null;
         delete this.jobType.docker_image;
         this.validated = false;
-        this.validateForm();
     }
 
     onValidate() {
@@ -200,12 +237,21 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
 
     selectIcon() {
-        this.jobType.icon_code = this.createForm.get('icon').value;
+        this.jobType.icon_code = this.createForm.get('icon_code').value;
+    }
+
+    addMountOption(mount) {
+        this.jobType.configuration.mounts[mount].driver_opts[this.driverOptsForm.get('key').value] = this.driverOptsForm.get('value').value;
+        this.driverOptsForm.reset();
     }
 
     onSubmit() {
         this.submitted = true;
         if (this.mode === 'Create') {
+            // remove falsey values from configuration
+            this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
+                return d !== null && typeof d !== 'undefined' && d !== '';
+            });
             this.jobTypesApiService.createJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
                 this.modifiedJobTypeName = result.name;
@@ -248,9 +294,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
 
         this.jsonModeBtnClass = 'ui-button-secondary';
         this.currentStepIdx = 0;
-        this.formSubscription = this.createForm.valueChanges.subscribe(() => {
-            this.validateForm();
-        });
 
         let name = null;
         let version = null;
@@ -287,14 +330,9 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
             });
         }
 
-        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
-            // set up workspaces
-            _.forEach(workspaces.results, workspace => {
-                this.workspacesOptions.push({
-                    label: workspace.title,
-                    value: workspace.name
-                });
-            });
+        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
+            this.workspaces = data.results;
+            this.initCreateForm();
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});

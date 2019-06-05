@@ -1,9 +1,33 @@
 .job-type__create {
+    label {
+        font-weight: bold;
+        display: block;
+        margin: 0 0 10px 0;
+
+        input, textarea, select {
+            display: block;
+            width: 100%;
+        }
+    }
+
     .job-type__title {
         font-weight: bold;
     }
 
     .job-type__manifest {
         padding: 0.6em 0.6em 0 0.6em;
+    }
+
+    .job-type__key-value-form {
+        label {
+            margin: 0 8px 0 0;
+            display: inline-block;
+
+            input {
+                display: inline-block;
+                width: auto;
+            }
+
+        }
     }
 }

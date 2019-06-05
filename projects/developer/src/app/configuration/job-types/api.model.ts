@@ -43,9 +43,31 @@ export class JobType {
     }
 
     public static cleanJobType(data) {
+        if (data.configuration) {
+            // remove falsey values from configuration
+            data.configuration = _.pickBy(data.configuration, d => {
+                return d !== null && typeof d !== 'undefined' && d !== '';
+            });
+        }
         return {
             configuration: data.configuration || null,
             manifest: data.manifest || null
+        };
+    }
+
+    public static initialJobType(data) {
+        return {
+            icon_code: data.icon_code || null,
+            docker_image: data.docker_image || null,
+            manifest: data.manifest || null,
+            configuration: data.configuration || {
+                output_workspaces: {
+                    default: '',
+                    outputs: {}
+                },
+                mounts: {},
+                settings: {}
+            }
         };
     }
 
@@ -56,7 +78,7 @@ export class JobType {
             }
             return JobType.build(data);
         }
-        return JobType.cleanJobType(new JobType());
+        return JobType.initialJobType(new JobType());
     }
 
     constructor(
