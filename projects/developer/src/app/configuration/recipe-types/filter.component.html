@@ -2,14 +2,14 @@
     <p-accordion [multiple]="true" styleClass="margin-bottom-md">
         <p-accordionTab header="Filters">
             <label>
-                <span>Name</span>
+                <span class="required">Name</span>
                 <input type="text" pInputText formControlName="name" required/>
                 <div class="help-block">
                     The name of the parameter this filter runs against (required)
                 </div>
             </label>
             <label>
-                <span>Type</span>
+                <span class="required">Type</span>
                 <p-dropdown [options]="typeOptions" formControlName="type" [style]="{'width':'100%'}"
                             placeholder="Select..." [showClear]="false">
                 </p-dropdown>
@@ -18,7 +18,7 @@
                 </div>
             </label>
             <label>
-                <span>Condition</span>
+                <span class="required">Condition</span>
                 <p-dropdown [options]="conditionOptions" formControlName="condition" [style]="{'width':'100%'}"
                             placeholder="Select..." [showClear]="false">
                 </p-dropdown>
@@ -27,7 +27,7 @@
                 </div>
             </label>
             <label>
-                <span>Values</span>
+                <span class="required">Values</span>
                 <p-chips formControlName="values" [style]="{'width':'100%'}"
                          [inputStyle]="{'width':'100%'}" [addOnBlur]="true"></p-chips>
                 <div class="help-block">

@@ -5,7 +5,7 @@ $subnav-height: 47px;
 
 .blue-subnav {
     background: var(--scale-primary);
-    background-image: linear-gradient(to bottom, var(--scale-primary), var(--subnav-dark));
+    background-image: linear-gradient(to bottom, var(--scale-primary), var(--scale-secondary-dark));
     border-bottom: 1px solid var(--grey-90);
     box-shadow: $navshadow;
     color: var(--white);
