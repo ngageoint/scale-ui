@@ -47,6 +47,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     createForm: FormGroup = this.fb.group({
         icon_code: [''],
         configuration: this.fb.group({
+            priority: ['', Validators.required],
             output_workspaces: this.fb.group({
                 default: ['', Validators.required],
                 outputs: this.fb.group({})
@@ -177,7 +178,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 mountsGroup.addControl(mount.name, new FormGroup({}));
                 const mountGroup: any = this.createForm.get(`configuration.mounts.${mount.name}`);
                 mountGroup.addControl('type', new FormControl('', Validators.required));
-                mountGroup.addControl('host_path', new FormControl(null));
+                mountGroup.addControl('host_path', new FormControl(null, Validators.required));
                 mountGroup.addControl('driver', new FormControl(null));
                 mountGroup.addControl('driver_opts', new FormGroup({}));
             });
@@ -240,6 +241,19 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.jobType.icon_code = this.createForm.get('icon_code').value;
     }
 
+    onMountTypeChange(e, mount) {
+        const mountGroup: any = this.createForm.get(`configuration.mounts.${mount}`);
+        mountGroup.addControl('host_path', new FormControl(null, Validators.required));
+        mountGroup.addControl('driver', new FormControl(null));
+        mountGroup.addControl('driver_opts', new FormGroup({}));
+        if (e.value === 'host') {
+            mountGroup.removeControl('driver');
+            mountGroup.removeControl('driver_opts');
+        } else if (e.value === 'volume') {
+            mountGroup.removeControl('host_path');
+        }
+    }
+
     addMountOption(mount) {
         this.jobType.configuration.mounts[mount].driver_opts[this.driverOptsForm.get('key').value] = this.driverOptsForm.get('value').value;
         this.driverOptsForm.reset();
@@ -250,7 +264,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         if (this.mode === 'Create') {
             // remove falsey values from configuration
             this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
-                return d !== null && typeof d !== 'undefined' && d !== '';
+                return d !== null && typeof d !== 'undefined' && d !== '' && d !== {};
             });
             this.jobTypesApiService.createJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });

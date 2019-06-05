@@ -70,15 +70,25 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="p-col-6" formGroupName="settings"
-                             *ngIf="jobType.manifest && jobType.manifest.job.interface.settings">
-                            <h2>Settings</h2>
-                            Provide values for settings in job type manifest
-                            <div *ngFor="let setting of jobType.manifest.job.interface.settings">
+                        <div class="p-col-6">
+                            <div>
+                                <h2>Priority</h2>
+                                The priority to use for scheduling the job off of the queue
                                 <label>
-                                    <span>{{ setting.name }}</span>
-                                    <input type="text" pInputText [formControlName]="setting.name"/>
+                                    <span class="required">Priority</span>
+                                    <input type="number" pInputText formControlName="priority"/>
                                 </label>
+                            </div>
+                            <div formGroupName="settings"
+                                 *ngIf="jobType.manifest && jobType.manifest.job.interface.settings">
+                                <h2>Settings</h2>
+                                Provide values for settings in job type manifest
+                                <div *ngFor="let setting of jobType.manifest.job.interface.settings">
+                                    <label>
+                                        <span>{{ setting.name }}</span>
+                                        <input type="text" pInputText [formControlName]="setting.name"/>
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -86,23 +96,33 @@
                         <h2>Mounts</h2>
                         Configure how the job type should handle provided mounts
                         <div class="p-grid">
-                            <div class="p-col-6" formGroupName="mounts" *ngFor="let mount of jobType.manifest.job.interface.mounts">
+                            <div class="p-col-6" formGroupName="mounts"
+                                 *ngFor="let mount of jobType.manifest.job.interface.mounts">
                                 <p-panel [header]="mount.name">
                                     <label [formGroupName]="mount.name">
                                         <span class="required">Type</span>
                                         <p-dropdown [options]="mountTypeOptions" formControlName="type"
+                                                    (onChange)="onMountTypeChange($event, mount.name)"
                                                     [style]="{'width':'100%'}" placeholder="Select...">
                                         </p-dropdown>
                                     </label>
-                                    <label [formGroupName]="mount.name" *ngIf="jobType.configuration.mounts[mount.name].type === 'host'">
-                                        <span>Host Path</span>
+                                    <label [formGroupName]="mount.name"
+                                           *ngIf="jobType.configuration.mounts[mount.name].type === 'host'">
+                                        <span class="required">Host Path</span>
                                         <input type="text" pInputText formControlName="host_path"/>
-                                        <span class="help-block">Absolute file-system path on the host to mount into the job's container</span>
+                                        <span class="help-block">
+                                            Absolute file-system path on the host to mount into the job's container
+                                            (required)
+                                        </span>
                                     </label>
-                                    <label [formGroupName]="mount.name" *ngIf="jobType.configuration.mounts[mount.name].type === 'volume'">
+                                    <label [formGroupName]="mount.name"
+                                           *ngIf="jobType.configuration.mounts[mount.name].type === 'volume'">
                                         <span>Driver</span>
                                         <input type="text" pInputText formControlName="driver"/>
-                                        <span class="help-block">Docker driver to use for creating the Docker volume that will be mounted into the job's container</span>
+                                        <span class="help-block">
+                                            Docker driver to use for creating the Docker volume that will be mounted
+                                            into the job's container
+                                        </span>
                                     </label>
                                     <div *ngIf="jobType.configuration.mounts[mount.name].type === 'volume'">
                                         <strong>Driver Options</strong>
