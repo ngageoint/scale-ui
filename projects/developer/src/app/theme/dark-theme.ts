@@ -80,7 +80,7 @@ export const darkTheme: Theme = {
         '--label-initial-cleanup': '#6c31c9',
         '--label-offline': '#aaa',
         '--label-paused': '#0FA3BD',
-        '--label-ready': '#2AC992',
+        '--label-ready': '#23A477',
         '--label-scheduler-stopped': '#be292e',
         '--label-job-type': '#efefef',
         '--label-recipe-type': '#efefef',
