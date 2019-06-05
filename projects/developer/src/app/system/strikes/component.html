@@ -74,13 +74,13 @@
                 <div class="p-grid">
                     <div class="p-col-6">
                         <label>
-                            <span>Title</span>
+                            <span class="required">Title</span>
                             <input type="text" pInputText formControlName="title" required/>
                         </label>
                     </div>
                     <div class="p-col-6">
                         <label>
-                            <span>Description</span>
+                            <span class="required">Description</span>
                             <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
                                       [autoResize]="true"></textarea>
                         </label>
@@ -89,7 +89,7 @@
                 <div class="p-grid" formGroupName="configuration">
                     <div class="p-col-6">
                         <label>
-                            <span>Recipe</span>
+                            <span class="required">Recipe</span>
                             <p-dropdown [options]="recipeOptions" formControlName="recipe"
                                         [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                             </p-dropdown>
@@ -98,7 +98,7 @@
                     <div class="p-col-6">
                         <div>
                             <label>
-                                <span>Workspace</span>
+                                <span class="required">Workspace</span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
                                             (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
@@ -111,17 +111,17 @@
                     <div class="p-grid">
                         <div class="p-col-6" formGroupName="monitor">
                             <label>
-                                <span>Monitor Type</span>
+                                <span class="required">Monitor Type</span>
                                 <input type="text" pInputText formControlName="type" required/>
                             </label>
                         </div>
                         <div class="p-col-6" formGroupName="monitor">
                             <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
-                                <span>Transfer Suffix</span>
+                                <span class="required">Transfer Suffix</span>
                                 <input type="text" pInputText formControlName="transfer_suffix" required/>
                             </label>
                             <label *ngIf="createForm.get('configuration.monitor.sqs_name').enabled">
-                                <span>SQS Name</span>
+                                <span class="required">SQS Name</span>
                                 <input type="text" pInputText formControlName="sqs_name" required/>
                             </label>
                             <div formGroupName="credentials"
@@ -131,7 +131,7 @@
                                     <input type="text" pInputText formControlName="access_key_id"/>
                                 </label>
                                 <label>
-                                    <span>Secret Access Key</span>
+                                    <span class="required">Secret Access Key</span>
                                     <input type="text" pInputText formControlName="secret_access_key" required/>
                                 </label>
                             </div>
@@ -148,10 +148,10 @@
                     <div class="p-grid">
                         <div class="p-col-6">
                             <label>
-                                <span>Filename Regex</span>
+                                <span class="required">Filename Regex</span>
                                 <input type="text" pInputText formControlName="filename_regex" required/>
                                 <div class="help-block">
-                                    A regular expression to check against the names of newly copied files (required)
+                                    A regular expression to check against the names of newly copied files
                                 </div>
                             </label>
                         </div>
