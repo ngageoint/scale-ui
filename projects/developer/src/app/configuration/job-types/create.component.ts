@@ -324,7 +324,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     },
                     {
                         label: 'Validate and Create',
-                        disabled: this.createForm.valid && this.mode === 'Create'
+                        disabled: !this.createForm.valid && this.mode === 'Create'
                     }
                 ];
             });

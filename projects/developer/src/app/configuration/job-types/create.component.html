@@ -70,7 +70,8 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="p-col-6" formGroupName="settings" *ngIf="jobType.manifest.job.interface.settings">
+                        <div class="p-col-6" formGroupName="settings"
+                             *ngIf="jobType.manifest && jobType.manifest.job.interface.settings">
                             <h2>Settings</h2>
                             Provide values for settings in job type manifest
                             <div *ngFor="let setting of jobType.manifest.job.interface.settings">
@@ -131,7 +132,7 @@
                     <div class="p-grid">
                         <div class="p-col-6">
                             Select an icon which will be used to represent this job type in Scale.
-                            <p-listbox [options]="icons" formControlName="icon" filter="filter"
+                            <p-listbox [options]="icons" formControlName="icon_code" filter="filter"
                                        (onChange)="selectIcon()"
                                        [style]="{'width':'100%','max-height':'300px','overflow':'auto','margin-top':'10px'}">
                                 <ng-template let-icon pTemplate="item">
@@ -144,7 +145,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-col-10 validate-and-create" *ngIf="currentStepIdx === 2">
+                <div class="p-col-10 validate-and-create" *ngIf="currentStepIdx === 3">
                     <div *ngIf="jobType.manifest">
                         <h3>
                             <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
