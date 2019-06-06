@@ -113,6 +113,8 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
 
         // listen for changes to createForm fields
         this.createForm.valueChanges.subscribe(changes => {
+            // force re-validation
+            this.validated = false;
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.jobType, changes);
             this.validateForm();
