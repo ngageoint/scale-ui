@@ -167,11 +167,45 @@
                 </div>
                 <div class="p-col-10 validate-and-create" *ngIf="currentStepIdx === 3">
                     <div *ngIf="jobType.manifest">
-                        <h3>
+                        <h2>
                             <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
                                [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i>
-                            {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
-                        </h3>
+                            {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}<br />
+                        </h2>
+                        <h3>Docker Image</h3>
+                        {{ jobType.docker_image }}
+                        <h3>Configuration</h3>
+                        <ul class="job-type__configuration">
+                            <li>Priority: {{ jobType.configuration.priority }}</li>
+                            <li *ngIf="jobType.configuration.output_workspaces">
+                                Output Workspaces
+                                <ul>
+                                    <li>Default: {{ jobType.configuration.output_workspaces.default }}</li>
+                                    <li *ngFor="let workspace of jobType.configuration.output_workspaces.outputs | keyvalue">
+                                        {{ workspace.key }}: {{ workspace.value }}
+                                    </li>
+                                </ul>
+                            </li>
+                            <li *ngIf="jobType.configuration.mounts">
+                                Mounts
+                                <ul *ngFor="let mount of jobType.configuration.mounts | keyvalue">
+                                    <li *ngIf="mount.key">
+                                        {{ mount.key }}
+                                        <ul>
+                                            <li *ngFor="let val of mount.value | keyvalue">
+                                                {{ val.key }}: {{ val.value }}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li *ngIf="jobType.configuration.settings">
+                                Settings
+                                <ul *ngFor="let setting of jobType.configuration.settings | keyvalue">
+                                    <li>{{ setting.key }}: {{ setting.value }}</li>
+                                </ul>
+                            </li>
+                        </ul>
                         <button class="ui-button-secondary" pButton icon="fa fa-check" label="Validate"
                                 (click)="onValidate()" *ngIf="!validated"></button>
                         <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
@@ -180,21 +214,8 @@
                            routerLink="/configuration/job-types/{{ modifiedJobTypeName }}/{{ modifiedJobTypeVersion }}"
                            *ngIf="submitted && modifiedJobTypeName && modifiedJobTypeVersion"></a>
                     </div>
-                    <!--<div class="p-grid">-->
-                    <!--<div class="p-col-2">-->
-                    <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
-                    <!--</div>-->
-                    <!--<div class="p-col-2">-->
-                    <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
-                    <!--</div>-->
-                    <!--</div>-->
                 </div>
             </div>
         </p-panel>
-        <!-- <div style="text-align:center;margin-top:20px" *ngIf="submitted">
-            Form Submitted
-            <br>
-            {{diagnostic}}
-        </div> -->
     </form>
 </div>

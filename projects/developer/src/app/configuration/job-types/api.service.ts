@@ -129,7 +129,7 @@ export class JobTypesApiService {
     }
 
     validateJobType(jobType: JobType): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/job-types/validation/`, jobType)
+        return this.http.post<any>(`${this.apiPrefix}/job-types/validation/`, JobType.cleanJobType(jobType))
             .pipe(
                 catchError(DataService.handleError)
             );

@@ -149,6 +149,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
 
     handleStepChange(index) {
         this.currentStepIdx = index;
+        if (index === 3) {
+            // remove falsey values when viewing the "Validate and Create" step
+            DataService.removeEmpty(this.jobType.configuration);
+        }
     }
 
     onImageImport(seedImage) {
@@ -214,10 +218,9 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
 
     onValidate() {
         // remove falsey values
-        this.cleanJobType = JobType.cleanJobType(this.jobType);
-
+        DataService.removeEmpty(this.jobType.configuration);
         // perform validation
-        this.jobTypesApiService.validateJobType(this.cleanJobType).subscribe(result => {
+        this.jobTypesApiService.validateJobType(_.cloneDeep(this.jobType)).subscribe(result => {
             if (!result.is_valid) {
                 this.validated = false;
                 _.forEach(result.warnings, warning => {
@@ -265,11 +268,8 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     onSubmit() {
         this.submitted = true;
         if (this.mode === 'Create') {
-            // remove falsey values from configuration
+            // remove falsey values
             DataService.removeEmpty(this.jobType.configuration);
-            // this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
-            //     return d !== null && typeof d !== 'undefined' && d !== '';
-            // });
             this.jobTypesApiService.createJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
                 this.modifiedJobTypeName = result.name;
