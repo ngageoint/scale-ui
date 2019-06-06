@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuItem, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 
 import { environment } from '../../../environments/environment';
 
+import { DataService } from '../../common/services/data.service';
 import { JobType } from './api.model';
 import { JobTypesApiService } from './api.service';
 import { iconData } from './font-awesome.json';
@@ -263,9 +264,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.submitted = true;
         if (this.mode === 'Create') {
             // remove falsey values from configuration
-            this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
-                return d !== null && typeof d !== 'undefined' && d !== '' && d !== {};
-            });
+            DataService.removeEmpty(this.jobType.configuration);
+            // this.jobType.configuration = _.pickBy(this.jobType.configuration, d => {
+            //     return d !== null && typeof d !== 'undefined' && d !== '';
+            // });
             this.jobTypesApiService.createJobType(this.jobType).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
                 this.modifiedJobTypeName = result.name;

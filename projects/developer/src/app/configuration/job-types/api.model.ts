@@ -45,9 +45,10 @@ export class JobType {
     public static cleanJobType(data) {
         if (data.configuration) {
             // remove falsey values from configuration
-            data.configuration = _.pickBy(data.configuration, d => {
-                return d !== null && typeof d !== 'undefined' && d !== '' && d !== {};
-            });
+            DataService.removeEmpty(data.configuration);
+            // data.configuration = _.pickBy(data.configuration, d => {
+            //     return d !== null && typeof d !== 'undefined' && d !== '';
+            // });
         }
         return {
             configuration: data.configuration || null,
