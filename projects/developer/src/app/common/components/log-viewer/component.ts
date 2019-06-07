@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnChanges, OnDestroy, ViewChild, AfterViewInit, EventEmitter, Output} from '@angular/core';
+import { Component, Input, OnInit, OnChanges, OnDestroy, ViewChild, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as Clipboard from 'clipboard';
 import * as _ from 'lodash';
@@ -101,6 +101,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     unsubscribe() {
         if (this.subscription) {
             console.log('unsubscribe');
+            this.logViewerApiService.setLogArgs({});
             this.subscription.unsubscribe();
         }
         this.close.emit();
@@ -111,7 +112,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     }
 
     ngOnInit() {
-        this.logViewerApiService.setLogArgs([]);
+        this.logViewerApiService.setLogArgs({});
         this.clipboardLog.on('success', () => {
             this.messageService.add({severity: 'success', summary: 'Success!', detail: 'Log copied to clipboard.'});
         });
