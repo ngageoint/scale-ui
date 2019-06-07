@@ -1,24 +1,27 @@
 <h2><i class="fa fa-cube"></i> {{ mode }} Job Type</h2>
 <div class="job-type__create">
-    <form [formGroup]="createForm" (ngSubmit)="createForm.value" *ngIf="jobType">
+    <form [formGroup]="createForm" *ngIf="jobType">
         <p-panel>
             <p-header>
                 <div class="flexed space-between">
                     <span class="job-type__title" *ngIf="jobType.manifest">{{ jobType.manifest.job.title }}</span>
                     <span class="job-type__title" *ngIf="!jobType.manifest">New Job Type</span>
-                    <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode" icon="fa fa-code"
-                            iconPos="left" (click)="onModeClick()"></button>
+                    <button pButton [ngClass]="jsonModeBtnClass" class="mode-button" type="button" label="JSON Mode"
+                            icon="fa fa-code" iconPos="left" (click)="onModeClick()"></button>
                 </div>
             </p-header>
             <div *ngIf="jsonMode">
-                <ngx-codemirror [(ngModel)]="jobTypeJson" [options]="jsonConfig" [ngModelOptions]="{standalone: true}"></ngx-codemirror>
+                <ngx-codemirror [(ngModel)]="jobTypeJson" [options]="jsonConfig" [ngModelOptions]="{standalone: true}">
+                </ngx-codemirror>
             </div>
-            <div class="p-grid" [hidden]="jsonMode">
+            <div class="p-grid margin-top-md" [hidden]="jsonMode">
                 <div class="p-col-2">
-                    <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx" (activeIndexChange)="handleStepChange($event)"></p-steps>
+                    <p-steps [model]="items" [readonly]="false" [activeIndex]="currentStepIdx"
+                             (activeIndexChange)="handleStepChange($event)"></p-steps>
                 </div>
                 <div class="p-col-10" *ngIf="currentStepIdx === 0">
-                    <seed-images [environment]="env" (imageImport)="onImageImport($event)" *ngIf="!jobType.manifest"></seed-images>
+                    <seed-images [environment]="env" (imageImport)="onImageImport($event)"
+                                 *ngIf="!jobType.manifest"></seed-images>
                     <div class="margin-top-lg" *ngIf="jobType.manifest">
                         <p-card>
                             <p-header>
@@ -26,8 +29,9 @@
                                     <div>
                                         {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
                                     </div>
-                                    <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove" pTooltip="Remove Seed Image"
-                                            tooltipPosition="left" (click)="onImageRemove()"></button>
+                                    <button pButton class="ui-button-danger margin-bottom-md" icon="fa fa-remove"
+                                            pTooltip="Remove Seed Image" tooltipPosition="left"
+                                            (click)="onImageRemove()"></button>
                                 </div>
                             </p-header>
                             {{ jobType.manifest.job.description }}
@@ -46,28 +50,162 @@
                         </p-card>
                     </div>
                 </div>
-                <div class="p-col-10" *ngIf="currentStepIdx === 1">
+                <div class="p-col-10" *ngIf="currentStepIdx === 1" formGroupName="configuration">
+                    <div class="p-grid">
+                        <div class="p-col-6" formGroupName="output_workspaces">
+                            <h2>Output Workspaces</h2>
+                            Select workspaces for the outputs of this job type
+                            <label>
+                                <span class="required">Default</span>
+                                <p-dropdown [options]="workspacesOptions" formControlName="default"
+                                            [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
+                                </p-dropdown>
+                            </label>
+                            <div *ngIf="jobType.manifest" formGroupName="outputs">
+                                <label *ngFor="let file of jobType.manifest.job.interface.outputs.files">
+                                    <span>{{ file.name }}</span>
+                                    <p-dropdown [options]="workspacesOptions" [formControlName]="file.name"
+                                                [style]="{'width':'100%'}" placeholder="Select...">
+                                    </p-dropdown>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="p-col-6">
+                            <div>
+                                <h2>Priority</h2>
+                                The priority to use for scheduling the job off of the queue
+                                <label>
+                                    <span class="required">Priority</span>
+                                    <input type="number" pInputText formControlName="priority"/>
+                                </label>
+                            </div>
+                            <div formGroupName="settings"
+                                 *ngIf="jobType.manifest && jobType.manifest.job.interface.settings">
+                                <h2>Settings</h2>
+                                Provide values for settings in job type manifest
+                                <div *ngFor="let setting of jobType.manifest.job.interface.settings">
+                                    <label>
+                                        <span>{{ setting.name }}</span>
+                                        <input type="text" pInputText [formControlName]="setting.name"/>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="jobType.manifest">
+                        <h2>Mounts</h2>
+                        Configure how the job type should handle provided mounts
+                        <div class="p-grid">
+                            <div class="p-col-6" formGroupName="mounts"
+                                 *ngFor="let mount of jobType.manifest.job.interface.mounts">
+                                <p-panel [header]="mount.name">
+                                    <label [formGroupName]="mount.name">
+                                        <span class="required">Type</span>
+                                        <p-dropdown [options]="mountTypeOptions" formControlName="type"
+                                                    (onChange)="onMountTypeChange($event, mount.name)"
+                                                    [style]="{'width':'100%'}" placeholder="Select...">
+                                        </p-dropdown>
+                                    </label>
+                                    <label [formGroupName]="mount.name"
+                                           *ngIf="jobType.configuration.mounts[mount.name].type === 'host'">
+                                        <span class="required">Host Path</span>
+                                        <input type="text" pInputText formControlName="host_path"/>
+                                        <span class="help-block">
+                                            Absolute file-system path on the host to mount into the job's container
+                                            (required)
+                                        </span>
+                                    </label>
+                                    <label [formGroupName]="mount.name"
+                                           *ngIf="jobType.configuration.mounts[mount.name].type === 'volume'">
+                                        <span>Driver</span>
+                                        <input type="text" pInputText formControlName="driver"/>
+                                        <span class="help-block">
+                                            Docker driver to use for creating the Docker volume that will be mounted
+                                            into the job's container
+                                        </span>
+                                    </label>
+                                    <div *ngIf="jobType.configuration.mounts[mount.name].type === 'volume'">
+                                        <strong>Driver Options</strong>
+                                        <div class="job-type__key-value-form" [formGroup]="driverOptsForm">
+                                            <label>
+                                                <input type="text" pInputText formControlName="key" placeholder="Key"/>
+                                            </label>
+                                            <label>
+                                                <input type="text" pInputText formControlName="value"
+                                                       placeholder="Value"/>
+                                            </label>
+                                            <button pButton type="button" icon="fa fa-plus"
+                                                    (click)="addMountOption(mount.name)"></button>
+                                        </div>
+                                        <ul>
+                                            <li *ngFor="let opt of jobType.configuration.mounts[mount.name].driver_opts | keyvalue">
+                                                {{ opt.key }}: {{ opt.value }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </p-panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-10" *ngIf="currentStepIdx === 2">
                     <div class="p-grid">
                         <div class="p-col-6">
                             Select an icon which will be used to represent this job type in Scale.
-                            <p-listbox [options]="icons" formControlName="icon" filter="filter" (onChange)="selectIcon()"
+                            <p-listbox [options]="icons" formControlName="icon_code" filter="filter"
+                                       (onChange)="selectIcon()"
                                        [style]="{'width':'100%','max-height':'300px','overflow':'auto','margin-top':'10px'}">
                                 <ng-template let-icon pTemplate="item">
                                     <div class="ui-helper-clearfix" *ngIf="icon.label">
-                                        <span class="fa fa-fw {{ icon.label }}"></span> {{ icon.label.replace('fa-','') }}
+                                        <span class="fa fa-fw {{ icon.label }}"></span>
+                                        {{ icon.label.replace('fa-','') }}
                                     </div>
                                 </ng-template>
                             </p-listbox>
                         </div>
                     </div>
                 </div>
-                <div class="p-col-10 validate-and-create" *ngIf="currentStepIdx === 2">
+                <div class="p-col-10 validate-and-create" *ngIf="currentStepIdx === 3">
                     <div *ngIf="jobType.manifest">
-                        <h3>
+                        <h2>
                             <i class="fa" *ngIf="jobType.icon_code && jobType.icon_code !== ''"
                                [innerHTML]="this.getUnicode(this.jobType.icon_code)"></i>
-                            {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}
-                        </h3>
+                            {{ jobType.manifest.job.title }} v{{ jobType.manifest.job.jobVersion }}<br />
+                        </h2>
+                        <h3>Docker Image</h3>
+                        {{ jobType.docker_image }}
+                        <h3>Configuration</h3>
+                        <ul class="job-type__configuration">
+                            <li>Priority: {{ jobType.configuration.priority }}</li>
+                            <li *ngIf="jobType.configuration.output_workspaces">
+                                Output Workspaces
+                                <ul>
+                                    <li>Default: {{ jobType.configuration.output_workspaces.default }}</li>
+                                    <li *ngFor="let workspace of jobType.configuration.output_workspaces.outputs | keyvalue">
+                                        {{ workspace.key }}: {{ workspace.value }}
+                                    </li>
+                                </ul>
+                            </li>
+                            <li *ngIf="jobType.configuration.mounts">
+                                Mounts
+                                <ul *ngFor="let mount of jobType.configuration.mounts | keyvalue">
+                                    <li *ngIf="mount.key">
+                                        {{ mount.key }}
+                                        <ul>
+                                            <li *ngFor="let val of mount.value | keyvalue">
+                                                {{ val.key }}: {{ val.value }}
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li *ngIf="jobType.configuration.settings">
+                                Settings
+                                <ul *ngFor="let setting of jobType.configuration.settings | keyvalue">
+                                    <li>{{ setting.key }}: {{ setting.value }}</li>
+                                </ul>
+                            </li>
+                        </ul>
                         <button class="ui-button-secondary" pButton icon="fa fa-check" label="Validate"
                                 (click)="onValidate()" *ngIf="!validated"></button>
                         <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
@@ -76,21 +214,8 @@
                            routerLink="/configuration/job-types/{{ modifiedJobTypeName }}/{{ modifiedJobTypeVersion }}"
                            *ngIf="submitted && modifiedJobTypeName && modifiedJobTypeVersion"></a>
                     </div>
-                    <!--<div class="p-grid">-->
-                    <!--<div class="p-col-2">-->
-                    <!--<button class="create-form-btn" pButton icon="fa-check" label="Validate"></button>-->
-                    <!--</div>-->
-                    <!--<div class="p-col-2">-->
-                    <!--<button class="create-form-btn" pButton icon="fa-arrow-circle-o-up" label="Create"></button>-->
-                    <!--</div>-->
-                    <!--</div>-->
                 </div>
             </div>
         </p-panel>
-        <!-- <div style="text-align:center;margin-top:20px" *ngIf="submitted">
-            Form Submitted
-            <br>
-            {{diagnostic}}
-        </div> -->
     </form>
 </div>

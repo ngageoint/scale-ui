@@ -146,6 +146,26 @@ export class DataService {
         });
     }
 
+    static removeEmpty(obj) {
+        Object.entries(obj).forEach(([key, val]) => {
+            if (val && typeof val === 'object') {
+                if (_.keys(val).length > 0) {
+                    this.removeEmpty(val);
+                } else {
+                    delete obj[key];
+                }
+            } else if (val === null || typeof val === 'undefined' || val === '') {
+                delete obj[key];
+            }
+            // check again to remove {} values
+            if (val && typeof val === 'object') {
+                if (_.keys(val).length === 0) {
+                    delete obj[key];
+                }
+            }
+        });
+    }
+
     getSelectedJobRows() {
         return this.selectedJobRows;
     }

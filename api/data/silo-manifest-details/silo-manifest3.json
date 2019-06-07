@@ -1,0 +1,103 @@
+{
+    "seedVersion": "1.0.0",
+    "job": {
+        "name": "addition-job",
+        "jobVersion": "0.0.1",
+        "packageVersion": "1.0.0",
+        "title": "Number Addition",
+        "description": "Adds numbers together",
+        "maintainer": {
+            "name": "Emily Smith",
+            "email": "esmith@example.com"
+        },
+        "timeout": 10,
+        "interface": {
+            "command": "${INPUT_FILE} ${OUTPUT_DIR}",
+            "inputs": {
+                "files": [{
+                    "name": "INPUT_FILE",
+                    "mediaTypes": ["text/plain"],
+                    "multiple": false,
+                    "partial": false,
+                    "required": true
+                }],
+                "json": [{
+                    "name": "a",
+                    "type": "integer",
+                    "required": false
+                }, {
+                    "name": "b",
+                    "type": "integer",
+                    "required": false
+                }]
+            },
+            "outputs": {
+                "files": [{
+                    "name": "OUTPUT_FILE",
+                    "mediaType": "text/plain",
+                    "multiple": true,
+                    "pattern": "*_output.txt",
+                    "required": true
+                }],
+                "json": [{
+                    "name": "x",
+                    "key": "",
+                    "type": "integer",
+                    "required": true
+                }, {
+                    "name": "y",
+                    "key": "",
+                    "type": "integer",
+                    "required": true
+                }, {
+                    "name": "z",
+                    "key": "total",
+                    "type": "integer",
+                    "required": true
+                }]
+            },
+            "mounts": [{
+                "name": "MOUNT_BIN",
+                "path": "/usr/bin/",
+                "mode": "ro"
+            }, {
+                "name": "MOUNT_TMP",
+                "path": "/tmp/",
+                "mode": "rw"
+            }],
+            "settings": [{
+                "name": "SETTING_ONE",
+                "secret": false
+            }, {
+                "name": "SETTING_TWO",
+                "secret": true
+            }]
+        },
+        "resources": {
+            "scalar": [{
+                "name": "cpus",
+                "value": 0.1,
+                "inputMultiplier": 0
+            }, {
+                "name": "mem",
+                "value": 16,
+                "inputMultiplier": 0
+            }, {
+                "name": "disk",
+                "value": 1,
+                "inputMultiplier": 1
+            }, {
+                "name": "sharedMem",
+                "value": 128,
+                "inputMultiplier": 0
+            }]
+        },
+        "errors": [{
+            "code": 1,
+            "name": "",
+            "title": "No Input Provided",
+            "description": "No input files have been given. No data to add.",
+            "category": "data"
+        }]
+    }
+}

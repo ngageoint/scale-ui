@@ -1,0 +1,34 @@
+{
+    "ID": 3,
+    "Name": "addition-job",
+    "LatestJobVersion": "0.0.1",
+    "LatestPackageVersion": "1.0.0",
+    "Title": "Number Addition",
+    "Maintainer": "Emily Smith",
+    "Email": "esmith@example.com",
+    "MaintOrg": "",
+    "Description": "Adds numbers together",
+    "ImageIDs": [4],
+    "JobVersions": [{
+        "ID": 3,
+        "JobName": "addition-job",
+        "JobId": 3,
+        "JobVersion": "0.0.1",
+        "LatestPackageVersion": "1.0.0",
+        "Images": [{
+            "ID": 3,
+            "RegistryId": 5,
+            "Name": "addition-job-0.0.1-seed:1.0.0",
+            "Registry": "docker.io",
+            "Org": "geointseed",
+            "JobName": "addition-job",
+            "Title": "Number Addition",
+            "Maintainer": "Emily Smith",
+            "Email": "esmith@example.com",
+            "MaintOrg": "",
+            "Description": "Adds numbers together",
+            "JobVersion": "0.0.1",
+            "PackageVersion": "1.0.0"
+        }]
+    }]
+}

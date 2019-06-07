@@ -12,7 +12,7 @@
     "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
     "defaultTheme": "light",
     "documentation": "http://ngageoint.github.io/scale/docs/index.html",
-    "siloUrl": "//silo.omega.aisohio.net",
+    "siloUrl": "/mocks/silo",
     "themeKey": "scale.theme",
     "primaryColor": "#017cce",
     "secondaryLightColor": "#5c97bf",
