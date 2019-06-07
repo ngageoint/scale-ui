@@ -5,9 +5,11 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 
 import { MetricsApiService } from './api.service';
+import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { ChartService } from './chart.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/primeng';
+import { JobType } from '../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-metrics',
@@ -26,6 +28,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     filtersApplied: any[] = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
+    recipeChoiceSelected: any[] = [];
+    recipeChoicesOptions: any[] = [];
+    recipeTypes: any[] = [];
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
     filteredChoicesLoading: boolean;
@@ -45,6 +50,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
+        private recipeTypesApiService: RecipeTypesApiService,
         private chartService: ChartService
     ) {
         this.chartTypes = [
@@ -75,7 +81,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
         return data;
     }
-
     getDataTypes() {
         this.dataTypesLoading = true;
         this.metricsApiService.getDataTypes().subscribe((data) => {
@@ -93,15 +98,30 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
+        });
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
-            if (result.name === 'job-types') {
+            if (this.selectedDataType.name === 'job-types') {
                 // filter out inactive job types from result set
                 this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
                     return choice.is_active === true;
                 });
             }
+            const recipeChoicesOptions = [];
+            _.forEach(this.recipeTypes, (choice) => {
+                recipeChoicesOptions.push({
+                    label: choice.version ? choice.title + ' ' + choice.version : choice.title,
+                    value: _.forEach(choice.job_types, (jobType) => {
+                            if (JobType.name === result.choices.name ) {
+                                return result.choices;
+                            }
+                    })
+                });
+            });
+            this.recipeChoicesOptions = recipeChoicesOptions;
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :
@@ -157,6 +177,23 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.getDataTypeOptions();
         }
     }
+    getRecipeJobTypes() {
+        if (this.recipeChoiceSelected != null) {
+            const filtersApplied = [];
+            _.forEach(this.recipeChoiceSelected, (outerRecipe) => {
+                _.forEach(outerRecipe, (selectedRecipe) => {
+                    _.forEach(this.filteredChoicesOptions, (jobTypeInfo) => {
+                        if (jobTypeInfo.value.name === selectedRecipe.name) {
+                            filtersApplied.push(jobTypeInfo.value);
+                        }
+                    });
+                });
+            });
+            this.filtersApplied = filtersApplied;
+        } else {
+            this.changeDataTypeSelection();
+        }
+    }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
             this.messageService.add({severity: 'warn', summary: 'Selected the same metric twice'});
@@ -182,7 +219,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 }
             }
         }];
-
         if (this.selectedMetric2 && this.multiAxis) {
             // user selected a second metric; another axis is needed
             yAxes.push({
