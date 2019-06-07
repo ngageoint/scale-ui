@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem, SortEvent } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -118,6 +118,15 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
+            console.log(this.jobs);
+            if (this.datatableOptions.sortField === 'duration') {
+                if (this.datatableOptions.sortOrder === 1) {
+                    data = _.sortBy(this.jobs, ['duration'], ['asc']);
+                } else if (this.datatableOptions.sortOrder === -1) {
+                    data = _.sortBy(this.jobs, ['duration'], ['desc']);
+                }
+                console.log(this.jobs);
+            }
         }, err => {
             this.datatableLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
@@ -159,7 +168,6 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
     }
-
     getUnicode(code) {
         return `&#x${code};`;
     }
