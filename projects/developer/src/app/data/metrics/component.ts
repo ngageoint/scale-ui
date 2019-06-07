@@ -6,7 +6,6 @@ import * as moment from 'moment';
 
 import { MetricsApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
-import { RecipesDatatable, initialRecipesDatatable } from '../../processing/recipes/datatable.model';
 import { ChartService } from './chart.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/primeng';
@@ -48,7 +47,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     data: any;
     options: any;
     showFilters = true;
-    isJobTypes = false;
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
@@ -106,14 +104,11 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
-            if (result.name === 'job-types') {
-                this.isJobTypes = true;
+            if (this.selectedDataType.name === 'job-types') {
                 // filter out inactive job types from result set
                 this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
                     return choice.is_active === true;
                 });
-            } else {
-                this.isJobTypes = false;
             }
             const recipeChoicesOptions = [];
             _.forEach(this.recipeTypes, (choice) => {
