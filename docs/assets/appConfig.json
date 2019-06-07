@@ -1,6 +1,6 @@
 {
     "apiDefaultVersion": "v6",
-    "apiPrefix": "//scale-ui-api.azurewebsites.net/mocks",
+    "apiPrefix": "http://scale-ui-api.azurewebsites.net/mocks",
     "apiVersions": [],
     "auth": {
         "enabled": false,
@@ -11,6 +11,10 @@
     },
     "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
     "defaultTheme": "light",
-    "siloUrl": "//silo.omega.aisohio.net",
-    "themeKey": "scale.theme"
+    "documentation": "http://ngageoint.github.io/scale/docs/index.html",
+    "siloUrl": "http://scale-ui-api.azurewebsites.net/mocks/silo",
+    "themeKey": "scale.theme",
+    "primaryColor": "#017cce",
+    "secondaryLightColor": "#5c97bf",
+    "secondaryDarkColor": "#24567f"
 }
