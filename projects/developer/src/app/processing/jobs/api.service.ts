@@ -17,7 +17,6 @@ import { JobExecution } from './execution.model';
 })
 export class JobsApiService {
     apiPrefix: string;
-    duration: any;
     constructor(
         private http: HttpClient
     ) {
@@ -25,15 +24,7 @@ export class JobsApiService {
     }
 
     getJobs(params: JobsDatatable, poll?: Boolean): Observable<any> {
-        let sortStr;
-        console.log(params.sortField);
-        console.log(params.sortOrder);
-        if (params.sortField === 'duration') {
-            sortStr = params.sortOrder < 0 ? '-' + 'recipe' : params.sortField;;
-        } else {
-            sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
-        }
-        console.log(sortStr);
+        const sortStr = params.sortOrder < 0 ? '-' + params.sortField : params.sortField;
         const page = params.first && params.rows ? (params.first / params.rows) + 1 : 1;
         let apiParams: any = {
             order: sortStr,

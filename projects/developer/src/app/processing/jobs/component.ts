@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LazyLoadEvent, SelectItem, SortEvent } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -29,16 +29,16 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
     datatableLoading: boolean;
     columns = [
-        { field: 'job_type', header: 'Job Type' },
-        { field: 'recipe', header: 'Recipe' },
-        { field: 'created', header: 'Created (Z)' },
-        { field: 'last_modified', header: 'Last Modified (Z)' },
-        { field: 'node.hostname', header: 'Node' },
-        { field: 'duration', header: 'Duration' },
-        { field: 'status', header: 'Status' },
-        { field: 'error.category', header: 'Error Category' },
-        { field: 'error.title', header: 'Error' },
-        { field: 'id', header: 'Log' }
+        { field: 'job_type', header: 'Job Type', value: 'sortable'},
+        { field: 'recipe', header: 'Recipe', value: 'sortable' },
+        { field: 'created', header: 'Created (Z)', value: 'sortable' },
+        { field: 'last_modified', header: 'Last Modified (Z)', value: 'sortable' },
+        { field: 'node.hostname', header: 'Node', value: 'sortable' },
+        { field: 'duration', header: 'Duration', value: 'unsortable' },
+        { field: 'status', header: 'Status', value: 'sortable' },
+        { field: 'error.category', header: 'Error Category', value: 'sortable' },
+        { field: 'error.title', header: 'Error', value: 'sortable' },
+        { field: 'id', header: 'Log', value: 'unsortable' }
     ];
     dateFormat = environment.dateFormat;
     jobTypes: any;
@@ -118,15 +118,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
-            console.log(this.jobs);
-            if (this.datatableOptions.sortField === 'duration') {
-                if (this.datatableOptions.sortOrder === 1) {
-                    data = _.sortBy(this.jobs, ['duration'], ['asc']);
-                } else if (this.datatableOptions.sortOrder === -1) {
-                    data = _.sortBy(this.jobs, ['duration'], ['desc']);
-                }
-                console.log(this.jobs);
-            }
         }, err => {
             this.datatableLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
