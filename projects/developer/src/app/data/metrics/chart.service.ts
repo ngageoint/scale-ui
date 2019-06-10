@@ -45,7 +45,8 @@ export class ChartService {
             _.forEach(data.results, (result) => {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
-                const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
+                // const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
+                // console.log(params.colors);
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];
@@ -101,42 +102,50 @@ export class ChartService {
 
                     // populate chart dataset
                     _.forEach(filtersApplied, (filter) => {
-                        const filterData = _.find(colArr, { id: filter.id });
-                        const label = filter.version ?
-                            `${filter.title} ${filter.version} ${result.column.title}` :
-                            `${filter.title} ${result.column.title}`;
-                        const stackId: any = { stack: `stack${idx.toString()}` };
-                        const stackHeight = _.filter(datasets, stackId).length;
-                        const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
-                        const bgColor = colorObj ?
-                            ColorService.getRgba(colorObj.color, opacity) :
-                            this.randomColorGenerator();
-                        let type = 'bar';
-                        let fill = false;
-                        if (isPrimary) {
-                            type = primaryType === 'area' ? 'line' : primaryType;
-                            fill = primaryType === 'area';
-                        } else {
-                            type = secondaryType === 'area' ? 'line' : secondaryType;
-                            fill = secondaryType === 'area';
-                        }
-                        datasets.push({
-                            id: filter.id,
-                            name: filter.name,
-                            version: filter.version,
-                            yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
-                            stack: `stack${idx.toString()}`,
-                            label: label,
-                            icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
-                            backgroundColor: bgColor,
-                            borderWidth: 2,
-                            data: filterData ? filterData.data : [],
-                            isPrimary: isPrimary,
-                            type: type,
-                            fill: fill,
-                            borderColor: bgColor
+                                let bgColor;
+                                const filterData = _.find(colArr, { id: filter.id });
+                                const label = filter.version ?
+                                    `${filter.title} ${filter.version} ${result.column.title}` :
+                                    `${filter.title} ${result.column.title}`;
+                                const stackId: any = { stack: `stack${idx.toString()}` };
+                                const stackHeight = _.filter(datasets, stackId).length;
+                                const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
+                                let type = 'bar';
+                                let fill = false;
+                                if (isPrimary) {
+                                    type = primaryType === 'area' ? 'line' : primaryType;
+                                    fill = primaryType === 'area';
+                                    _.forEach(params.primary_colors, (colorFilter) => {
+                                        if (filter.title === colorFilter.name) {
+                                            bgColor = colorFilter.color;
+                                        }
+                                    });
+                                } else {
+                                    type = secondaryType === 'area' ? 'line' : secondaryType;
+                                    fill = secondaryType === 'area';
+                                    _.forEach(params.secondary_colors, (colorFilter) => {
+                                        if (filter.title === colorFilter.name) {
+                                            bgColor = colorFilter.color;
+                                        }
+                                    });
+                                }
+                                datasets.push({
+                                    id: filter.id,
+                                    name: filter.name,
+                                    version: filter.version,
+                                    yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
+                                    stack: `stack${idx.toString()}`,
+                                    label: label,
+                                    icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
+                                    backgroundColor: bgColor,
+                                    borderWidth: 2,
+                                    data: filterData ? filterData.data : [],
+                                    isPrimary: isPrimary,
+                                    type: type,
+                                    fill: fill,
+                                    borderColor: bgColor
+                                });
                         });
-                    });
 
                     // increment result index
                     idx++;

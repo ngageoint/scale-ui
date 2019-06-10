@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { SelectItem } from 'primeng/primeng';
+import { SelectItem, ColorPickerModule } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -47,6 +47,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     data: any;
     options: any;
     showFilters = true;
+    primaryColorOptions: any[] = [];
+    secondaryColorOptions: any[] = [];
+
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
@@ -70,6 +73,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.selectedChartType1 = 'bar';
         this.selectedChartType2 = 'line';
     }
+
+    color2 = '#1976D2';
 
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
@@ -190,6 +195,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 });
             });
             this.filtersApplied = filtersApplied;
+            this.primaryColorGenerator();
+            this.secondaryColorGenerator();
         } else {
             this.changeDataTypeSelection();
         }
@@ -245,7 +252,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             choice_id: _.map(this.filtersApplied, 'id'),
             column: this.selectedMetric2 ? [this.selectedMetric1.name, this.selectedMetric2.name] : this.selectedMetric1.name,
             group: this.selectedMetric2 ? [this.selectedMetric1.group, this.selectedMetric2.group] : this.selectedMetric1.group,
-            dataType: this.selectedDataType.name
+            dataType: this.selectedDataType.name,
+            primary_colors: this.primaryColorOptions,
+            secondary_colors: this.secondaryColorOptions
         };
         this.metricsApiService.getPlotData(params).subscribe((data) => {
             const chartData = this.chartService.formatPlotResults(
@@ -331,6 +340,55 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.chartLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving plot data', detail: err.statusText});
         });
+    }
+
+    private primaryColorGenerator() {
+        // let colorOptions;
+        // if (this.primaryColorOptions.length > 0) {
+        //     colorOptions = this.primaryColorOptions;
+        //     if (this.filtersApplied.length > 0) {
+        //         _.forEach(this.filtersApplied, choice => {
+        //             _.forEach(this.primaryColorOptions, previouslySelected => {
+        //                 console.log(previouslySelected.value);
+        //                 console.log(choice.id);
+        //                 if (choice.id !== previouslySelected.value ) {
+        //                     colorOptions.push({
+        //                         name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+        //                         value: choice.id,
+        //                         color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+        //                     });
+        //                 }
+        //             });
+        //         });
+        //     }
+        // } else {
+            const colorOptions = [];
+            if (this.filtersApplied.length > 0) {
+                console.log(this.primaryColorOptions);
+                console.log(this.filtersApplied);
+                _.forEach(this.filtersApplied, choice => {
+                        colorOptions.push({
+                            name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                            value: choice.id,
+                            color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                        });
+                });
+            }
+        // }
+            this.primaryColorOptions = colorOptions;
+    }
+
+    private secondaryColorGenerator() {
+        const colorOptions = [];
+        if (this.filtersApplied.length > 0) {
+            _.forEach(this.filtersApplied, choice => {
+                colorOptions.push({
+                    name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                    color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                });
+            });
+        }
+        this.secondaryColorOptions = colorOptions;
     }
 
     ngOnInit() {
