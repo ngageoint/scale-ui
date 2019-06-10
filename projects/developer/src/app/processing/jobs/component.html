@@ -46,7 +46,8 @@
          [autoLayout]="true" class="jobs__table" #datatable>
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field" [pSortableColumnDisabled]="col.value == 'unsortable'">
+            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field" 
+                [pSortableColumnDisabled]="col.value == 'unsortable'">
                 {{ col.header }}
                 <p-sortIcon *ngIf="col.value == 'sortable'" [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type'">
@@ -58,7 +59,6 @@
                         </ng-template>
                     </p-multiSelect>
                 </div>
-
                 <div *ngSwitchCase="'status'">
                     <p-multiSelect [options]="statusValues" [(ngModel)]="selectedStatus"
                                 (onChange)="onStatusChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"

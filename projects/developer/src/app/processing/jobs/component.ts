@@ -159,6 +159,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
     }
+
     getUnicode(code) {
         return `&#x${code};`;
     }

@@ -17,6 +17,7 @@ import { JobExecution } from './execution.model';
 })
 export class JobsApiService {
     apiPrefix: string;
+
     constructor(
         private http: HttpClient
     ) {
