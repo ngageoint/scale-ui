@@ -50,12 +50,14 @@
             <label class="required">Primary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}"
                         [showClear]="false"></p-dropdown>
-                        Custom color selection: <p-checkbox [(ngModel)]="primaryValue" binary="false"></p-checkbox>
-            <div *ngIf="filtersApplied.length > 0 && primaryValue == true">
-                <label>Primary Metric Colors:</label>
-                <p *ngFor="let option of primaryColorOptions">
-                    <p-colorPicker [(ngModel)]="option.color"></p-colorPicker> {{ option.name }}   {{ option.color }}
-                </p>
+            <div *ngIf="selectedMetric1">
+                Custom color selection: <p-checkbox [(ngModel)]="primaryValue" binary="false"></p-checkbox>
+                <div *ngIf="filtersApplied.length > 0 && primaryValue == true">
+                    <label>Primary Metric Colors:</label>
+                    <p *ngFor="let option of primaryColorOptions">
+                        <p-colorPicker [(ngModel)]="option.color"></p-colorPicker> {{ option.name }}   {{ option.color }}
+                    </p>
+                </div>
             </div>
             <label>Secondary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}"

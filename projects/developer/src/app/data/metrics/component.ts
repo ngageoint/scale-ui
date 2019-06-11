@@ -172,6 +172,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.dataTypeFilterText = '';
         this.selectedMetric1 = null;
         this.selectedMetric2 = null;
+        this.recipeChoiceSelected = null;
         this.columns = [];
         this.metricOptions = [];
 
@@ -343,25 +344,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
 
     private primaryColorGenerator() {
-        // let colorOptions;
-        // if (this.primaryColorOptions.length > 0) {
-        //     colorOptions = this.primaryColorOptions;
-        //     if (this.filtersApplied.length > 0) {
-        //         _.forEach(this.filtersApplied, choice => {
-        //             _.forEach(this.primaryColorOptions, previouslySelected => {
-        //                 console.log(previouslySelected.value);
-        //                 console.log(choice.id);
-        //                 if (choice.id !== previouslySelected.value ) {
-        //                     colorOptions.push({
-        //                         name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-        //                         value: choice.id,
-        //                         color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-        //                     });
-        //                 }
-        //             });
-        //         });
-        //     }
-        // } else {
             const colorOptions = [];
             if (this.filtersApplied.length > 0) {
                 console.log(this.primaryColorOptions);
@@ -374,7 +356,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                         });
                 });
             }
-        // }
             this.primaryColorOptions = colorOptions;
     }
 
