@@ -217,7 +217,7 @@ export class BatchDetailsComponent implements OnInit {
             if (!result.is_valid) {
                 this.validated = false;
                 _.forEach(result.warnings, warning => {
-                    this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
                 });
                 _.forEach(result.errors, error => {
                     this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
