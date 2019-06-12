@@ -1,16 +1,16 @@
 {
-    "ID": 2,
+    "ID": 5,
     "RegistryId": 5,
     "JobId": 2,
     "JobVersionId": 2,
-    "FullName": "my-job-0.1.0-seed:0.1.0",
+    "FullName": "my-job-0.1.2-seed:2.0.0",
     "ShortName": "my-job",
     "Title": "My first job",
     "Maintainer": "John Doe",
     "Email": "jdoe@example.com",
     "MaintOrg": "E-corp",
-    "JobVersion": "1.0.0",
-    "PackageVersion": "0.1.0",
+    "JobVersion": "0.1.2",
+    "PackageVersion": "2.0.0",
     "Description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
     "Registry": "docker.io",
     "Org": "geointseed",
@@ -19,8 +19,8 @@
         "seedVersion": "1.0.0",
         "job": {
             "name": "my-job",
-            "jobVersion": "1.0.0",
-            "packageVersion": "0.1.0",
+            "jobVersion": "0.1.2",
+            "packageVersion": "2.0.0",
             "title": "My first job",
             "description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
             "tags": ["hdf5", "tiff", "csv", "image processing"],
@@ -100,13 +100,13 @@
             },
             "errors": [{
                 "code": 1,
-                "name": "",
+                "name": "error1",
                 "title": "Error Name",
                 "description": "Error Description",
                 "category": "data"
             }, {
                 "code": 2,
-                "name": "",
+                "name": "error2",
                 "title": "Error Name",
                 "description": "Error Description",
                 "category": "job"
