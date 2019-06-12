@@ -156,8 +156,9 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
 
     onImageImport(seedImage) {
-        // just grab the first job version and image for now
-        const image = seedImage.job.JobVersions[0].Images[0];
+        // use the information from seed-images to select the proper version and package
+        const job: any = _.find(seedImage.job.JobVersions, { JobVersion: seedImage.selectedJobVersion });
+        const image: any = _.find(job.Images, { PackageVersion: seedImage.selectedPackageVersion });
         this.jobType.manifest = seedImage.manifest;
         this.jobType.docker_image = `${image.Registry}/${image.Org}/${image.Name}`;
 
