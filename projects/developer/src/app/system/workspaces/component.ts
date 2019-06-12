@@ -239,7 +239,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 this.initValidation();
             }
             _.forEach(data.warnings, warning => {
-                this.messageService.add({severity: 'warning', summary: warning.name, detail: warning.description});
+                this.messageService.add({severity: 'warn', summary: warning.name, detail: warning.description});
             });
             _.forEach(data.errors, error => {
                 this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
