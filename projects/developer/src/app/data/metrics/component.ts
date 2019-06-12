@@ -49,6 +49,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     showFilters = true;
     primaryColorOptions: any[] = [];
     secondaryColorOptions: any[] = [];
+    colorOptions: any[] = [];
 
     constructor(
         private messageService: MessageService,
@@ -73,8 +74,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.selectedChartType1 = 'bar';
         this.selectedChartType2 = 'line';
     }
-
-    color2 = '#1976D2';
 
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
@@ -175,6 +174,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.recipeChoiceSelected = null;
         this.columns = [];
         this.metricOptions = [];
+        this.primaryColorOptions = [];
+        this.colorOptions = [];
 
         if (!this.selectedDataType.name || this.selectedDataType.name === '') {
             this.selectedDataType = {};
@@ -344,19 +345,24 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
 
     private primaryColorGenerator() {
-            const colorOptions = [];
+            if (this.colorOptions.length > this.filtersApplied.length) {
+                    const testing = _.differenceBy(this.filtersApplied, this.colorOptions, 'name');
+                    console.log(testing);
+                const badNumber  = this.colorOptions.indexOf(testing);
+                if (badNumber > -1) {
+                    this.colorOptions.splice(badNumber, 1);
+                }
+            }
             if (this.filtersApplied.length > 0) {
-                console.log(this.primaryColorOptions);
-                console.log(this.filtersApplied);
                 _.forEach(this.filtersApplied, choice => {
-                        colorOptions.push({
+                        this.colorOptions.push({
                             name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                            value: choice.id,
                             color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
                         });
                 });
             }
-            this.primaryColorOptions = colorOptions;
+            this.colorOptions = _.uniqBy(this.colorOptions, 'name');
+            this.primaryColorOptions = this.colorOptions;
     }
 
     private secondaryColorGenerator() {
