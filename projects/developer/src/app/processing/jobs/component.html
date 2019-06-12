@@ -47,9 +47,9 @@
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field" 
-                [pSortableColumnDisabled]="col.value == 'unsortable'">
+                [pSortableColumnDisabled]="col.sortableColumnDisabled || false">
                 {{ col.header }}
-                <p-sortIcon *ngIf="col.value == 'sortable'" [field]="col.field"></p-sortIcon>
+                <p-sortIcon *ngIf="!col.sortableColumnDisabled" [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type'">
                     <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
                                 (onChange)="onJobTypeChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"

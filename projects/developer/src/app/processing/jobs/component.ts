@@ -29,16 +29,16 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
     datatableLoading: boolean;
     columns = [
-        { field: 'job_type', header: 'Job Type', value: 'sortable'},
-        { field: 'recipe', header: 'Recipe', value: 'sortable' },
-        { field: 'created', header: 'Created (Z)', value: 'sortable' },
-        { field: 'last_modified', header: 'Last Modified (Z)', value: 'sortable' },
-        { field: 'node.hostname', header: 'Node', value: 'sortable' },
-        { field: 'duration', header: 'Duration', value: 'unsortable' },
-        { field: 'status', header: 'Status', value: 'sortable' },
-        { field: 'error.category', header: 'Error Category', value: 'sortable' },
-        { field: 'error.title', header: 'Error', value: 'sortable' },
-        { field: 'id', header: 'Log', value: 'unsortable' }
+        { field: 'job_type', header: 'Job Type' },
+        { field: 'recipe', header: 'Recipe' },
+        { field: 'created', header: 'Created (Z)' },
+        { field: 'last_modified', header: 'Last Modified (Z)' },
+        { field: 'node.hostname', header: 'Node' },
+        { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
+        { field: 'status', header: 'Status' },
+        { field: 'error.category', header: 'Error Category' },
+        { field: 'error.title', header: 'Error' },
+        { field: 'id', header: 'Log', sortableColumnDisabled: true }
     ];
     dateFormat = environment.dateFormat;
     jobTypes: any;
