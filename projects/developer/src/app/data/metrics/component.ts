@@ -48,8 +48,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     options: any;
     showFilters = true;
     primaryColorOptions: any[] = [];
+    primaryColorDisplay: any[] = [];
     secondaryColorOptions: any[] = [];
-    colorOptions: any[] = [];
+    secondaryColorDisplay: any[] = [];
 
     constructor(
         private messageService: MessageService,
@@ -175,7 +176,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.columns = [];
         this.metricOptions = [];
         this.primaryColorOptions = [];
-        this.colorOptions = [];
+        this.secondaryColorOptions = [];
 
         if (!this.selectedDataType.name || this.selectedDataType.name === '') {
             this.selectedDataType = {};
@@ -345,37 +346,69 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
 
     private primaryColorGenerator() {
-            if (this.colorOptions.length > this.filtersApplied.length) {
-                    const testing = _.differenceBy(this.filtersApplied, this.colorOptions, 'name');
-                    console.log(testing);
-                const badNumber  = this.colorOptions.indexOf(testing);
-                if (badNumber > -1) {
-                    this.colorOptions.splice(badNumber, 1);
-                }
+        const selected = [];
+            // to remove unselected data from the color array
+            if (this.primaryColorOptions.length > this.filtersApplied.length) {
+                // populate new color array to compare with the current one.
+                // Must populate the same to use the differenceBy function
+                _.forEach(this.filtersApplied, choice => {
+                    selected.push({
+                        name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                        color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                    });
+                });
+                const objectToRemove = _.differenceBy(this.primaryColorOptions, selected, 'name');
+                _.forEach(objectToRemove , object => {
+                    const indexToRemove = this.primaryColorOptions.findIndex(x => x.name === object.name);
+                    if (indexToRemove !== -1) {
+                        this.primaryColorOptions.splice(indexToRemove, 1);
+                    }
+                });
             }
             if (this.filtersApplied.length > 0) {
                 _.forEach(this.filtersApplied, choice => {
-                        this.colorOptions.push({
+                    this.primaryColorOptions.push({
                             name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
                             color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
                         });
                 });
             }
-            this.colorOptions = _.uniqBy(this.colorOptions, 'name');
-            this.primaryColorOptions = this.colorOptions;
+            // remove duplicate colors first
+            this.primaryColorOptions = _.uniqBy(this.primaryColorOptions, 'name');
+            this.primaryColorDisplay = this.primaryColorOptions;
     }
 
     private secondaryColorGenerator() {
-        const colorOptions = [];
-        if (this.filtersApplied.length > 0) {
+        const selected = [];
+        // to remove unselected data from the color array
+        if (this.secondaryColorOptions.length > this.filtersApplied.length) {
+            // populate new color array to compare with the current one.
+            // Must populate the same to use the differenceBy function
             _.forEach(this.filtersApplied, choice => {
-                colorOptions.push({
+                selected.push({
                     name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
                     color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
                 });
             });
+            const objectToRemove = _.differenceBy(this.secondaryColorOptions, selected, 'name');
+            _.forEach(objectToRemove , object => {
+                const indexToRemove = this.secondaryColorOptions.findIndex(x => x.name === object.name);
+                if (indexToRemove !== -1) {
+                    this.secondaryColorOptions.splice(indexToRemove, 1);
+                }
+            });
         }
-        this.secondaryColorOptions = colorOptions;
+        if (this.filtersApplied.length > 0) {
+            _.forEach(this.filtersApplied, choice => {
+                this.secondaryColorOptions.push({
+                        name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                        color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                    });
+            });
+        }
+        // remove duplicate colors first
+        this.secondaryColorOptions = _.uniqBy(this.secondaryColorOptions, 'name');
+        this.secondaryColorDisplay = this.secondaryColorOptions;
     }
 
     ngOnInit() {
