@@ -34,11 +34,11 @@ export class JobsComponent implements OnInit, OnDestroy {
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node.hostname', header: 'Node' },
-        { field: 'duration', header: 'Duration' },
+        { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
         { field: 'status', header: 'Status' },
         { field: 'error.category', header: 'Error Category' },
         { field: 'error.title', header: 'Error' },
-        { field: 'id', header: 'Log' }
+        { field: 'id', header: 'Log', sortableColumnDisabled: true }
     ];
     dateFormat = environment.dateFormat;
     jobTypes: any;

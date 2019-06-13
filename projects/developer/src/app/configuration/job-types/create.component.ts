@@ -156,10 +156,20 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     }
 
     onImageImport(seedImage) {
-        // just grab the first job version and image for now
-        const image = seedImage.job.JobVersions[0].Images[0];
+        // use the information from seed-images to select the proper version and package
+        const job: any = _.find(seedImage.job.JobVersions, { JobVersion: seedImage.selectedJobVersion });
+        const image: any = job ? _.find(job.Images, { PackageVersion: seedImage.selectedPackageVersion }) : null;
         this.jobType.manifest = seedImage.manifest;
-        this.jobType.docker_image = `${image.Registry}/${image.Org}/${image.Name}`;
+        this.jobType.docker_image = job && image ? `${image.Registry}/${image.Org}/${image.Name}` : null;
+
+        // alert user if docker image cannot be determined from imported seed image
+        if (!job || !image) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Missing Seed Image Job/Package Version',
+                detail: 'Unable to determine seed image job or package version. Docker Image for this job type must be manually specified.'
+            });
+        }
 
         // set up output workspaces
         if (this.jobType.manifest.job.interface.outputs.files) {
@@ -224,7 +234,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
             if (!result.is_valid) {
                 this.validated = false;
                 _.forEach(result.warnings, warning => {
-                    this.messageService.add({ severity: 'warning', summary: warning.name, detail: warning.description, sticky: true });
+                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
                 });
                 _.forEach(result.errors, error => {
                     this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });

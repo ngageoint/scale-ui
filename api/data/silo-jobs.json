@@ -41,17 +41,17 @@
     "Email": "jdoe@example.com",
     "MaintOrg": "E-corp",
     "Description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
-    "ImageIDs": [2, 3, 5],
+    "ImageIDs": [2, 5],
     "JobVersions": [{
         "ID": 2,
         "JobName": "my-job",
         "JobId": 2,
-        "JobVersion": "0.1.0",
+        "JobVersion": "1.0.0",
         "LatestPackageVersion": "0.1.0",
         "Images": [{
             "ID": 2,
             "RegistryId": 5,
-            "Name": "my-job-0.1.0-seed:0.1.0",
+            "Name": "my-job-1.0.0-seed:0.1.0",
             "Registry": "docker.io",
             "Org": "geointseed",
             "JobName": "my-job",
@@ -60,11 +60,11 @@
             "Email": "jdoe@example.com",
             "MaintOrg": "E-corp",
             "Description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
-            "JobVersion": "0.1.0",
+            "JobVersion": "1.0.0",
             "PackageVersion": "0.1.0"
         }]
     }, {
-        "ID": 3,
+        "ID": 5,
         "JobName": "my-job",
         "JobId": 2,
         "JobVersion": "0.1.2",
@@ -83,27 +83,6 @@
             "Description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
             "JobVersion": "0.1.2",
             "PackageVersion": "2.0.0"
-        }]
-    }, {
-        "ID": 5,
-        "JobName": "my-job",
-        "JobId": 2,
-        "JobVersion": "1.0.0",
-        "LatestPackageVersion": "0.1.0",
-        "Images": [{
-            "ID": 5,
-            "RegistryId": 5,
-            "Name": "my-job-1.0.0-seed:0.1.0",
-            "Registry": "docker.io",
-            "Org": "geointseed",
-            "JobName": "my-job",
-            "Title": "My first job",
-            "Maintainer": "John Doe",
-            "Email": "jdoe@example.com",
-            "MaintOrg": "E-corp",
-            "Description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
-            "JobVersion": "1.0.0",
-            "PackageVersion": "0.1.0"
         }]
     }]
 }, {

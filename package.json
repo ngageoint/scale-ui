@@ -54,7 +54,7 @@
     "rx-polling": "^1.0.1",
     "rxjs": "^6.5.2",
     "rxjs-compat": "^6.5.2",
-    "seed-images": "^4.6.0",
+    "seed-images": "^4.6.1",
     "shim-keyboard-event-key": "^1.0.3",
     "webkit-line-clamp": "^1.2.0",
     "zone.js": "^0.8.29"

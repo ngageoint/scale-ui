@@ -2,8 +2,8 @@
     "seedVersion": "1.0.0",
     "job": {
         "name": "my-job",
-        "jobVersion": "1.0.0",
-        "packageVersion": "0.1.0",
+        "jobVersion": "0.1.2",
+        "packageVersion": "2.0.0",
         "title": "My first job",
         "description": "Reads an HDF5 file and outputs two TIFF images, a CSV and manifest containing cell_count",
         "tags": ["hdf5", "tiff", "csv", "image processing"],
@@ -83,13 +83,13 @@
         },
         "errors": [{
             "code": 1,
-            "name": "",
+            "name": "error1",
             "title": "Error Name",
             "description": "Error Description",
             "category": "data"
         }, {
             "code": 2,
-            "name": "",
+            "name": "error2",
             "title": "Error Name",
             "description": "Error Description",
             "category": "job"
