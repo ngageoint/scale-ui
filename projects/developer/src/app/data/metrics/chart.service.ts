@@ -45,8 +45,6 @@ export class ChartService {
             _.forEach(data.results, (result) => {
                 params.column = Array.isArray(params.column) ? params.column : [params.column];
                 const colIdx = _.indexOf(params.column, result.column.name);
-                // const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
-                // console.log(params.colors);
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     valueArr = [];
