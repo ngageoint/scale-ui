@@ -176,7 +176,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.columns = [];
         this.metricOptions = [];
         this.primaryColorOptions = [];
-        this.secondaryColorOptions = [];
 
         if (!this.selectedDataType.name || this.selectedDataType.name === '') {
             this.selectedDataType = {};
@@ -368,9 +367,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             if (this.filtersApplied.length > 0) {
                 _.forEach(this.filtersApplied, choice => {
                     this.primaryColorOptions.push({
-                            name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                            color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-                        });
+                        name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                        color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                    });
                 });
             }
             // remove duplicate colors first
@@ -401,9 +400,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         if (this.filtersApplied.length > 0) {
             _.forEach(this.filtersApplied, choice => {
                 this.secondaryColorOptions.push({
-                        name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                        color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-                    });
+                    name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                    color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                });
             });
         }
         // remove duplicate colors first

@@ -50,26 +50,26 @@
             <label class="required">Primary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}"
                         [showClear]="false"></p-dropdown>
-            <div *ngIf="selectedMetric1">
+            <div *ngIf="filtersApplied.length > 0 && selectedMetric1">
                 Custom color selection: <p-checkbox [(ngModel)]="primaryValue" binary="false"></p-checkbox>
                 <div *ngIf="filtersApplied.length > 0 && primaryValue == true">
                     <label>Primary Metric Colors:</label>
-                    <p *ngFor="let option of primaryColorDisplay">
+                    <div *ngFor="let option of primaryColorDisplay">
                         <p-colorPicker [(ngModel)]="option.color"></p-colorPicker> {{ option.name }}
-                    </p>
+                    </div>
                 </div>
             </div>
             <label>Secondary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}"
                         [showClear]="false"></p-dropdown>
-            <div *ngIf="selectedMetric2">
-                    Custom color selection: <p-checkbox [(ngModel)]="secondaryValue" binary="false"></p-checkbox>
-                    <div *ngIf="filtersApplied.length > 0 && secondaryValue == true">
-                            <label>Secondary Metric Colors:</label>
-                            <p *ngFor="let option of secondaryColorDisplay">
-                                <p-colorPicker [(ngModel)]="option.color"></p-colorPicker> {{ option.name }}
-                            </p>
-                        </div>
+            <div *ngIf="filtersApplied.length > 0 && selectedMetric2">
+                Custom color selection: <p-checkbox [(ngModel)]="secondaryValue" binary="false"></p-checkbox>
+                <div *ngIf="filtersApplied.length > 0 && secondaryValue == true">
+                    <label>Secondary Metric Colors:</label>
+                    <div *ngFor="let option of secondaryColorDisplay">
+                        <p-colorPicker [(ngModel)]="option.color"></p-colorPicker> {{ option.name }}
+                    </div>
+                </div>
             </div>
         </div>
         <label>Primary Metric Display</label>
