@@ -38,7 +38,6 @@
                            [style]="{'width':'100%'}" (onChange)="getRecipeJobTypes($event)"></p-multiSelect>
             Select a specific recipe type to view all of its associated job types.
         </div>
-
         <div *ngIf="filteredChoicesOptions.length > 0">
             <label>{{ dataTypeFilterText }}</label>
             <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" (onChange)="primaryColorGenerator()"

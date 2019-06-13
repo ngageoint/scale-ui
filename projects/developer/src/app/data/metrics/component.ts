@@ -51,7 +51,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     primaryColorDisplay: any[] = [];
     secondaryColorOptions: any[] = [];
     secondaryColorDisplay: any[] = [];
-
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
