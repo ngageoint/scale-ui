@@ -186,7 +186,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 this.messageService.add({
                     severity: 'info',
                     summary: 'Validation Successful',
-                    detail: 'Job Type is valid and can be created.'
+                    detail: 'Job Type is valid and can be unpaused.'
                 });
                 this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
                     this.selectedJobTypeDetail = data;
