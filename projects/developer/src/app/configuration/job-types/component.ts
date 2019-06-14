@@ -174,12 +174,30 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         }
     }
     onPauseClick() {
-        this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
-        this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
-            this.selectedJobTypeDetail = data;
-            this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
+        this.jobTypesApiService.validateJobType(this.selectedJobTypeDetail).subscribe(result => {
+            if (!result.is_valid) {
+                _.forEach(result.warnings, warning => {
+                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                });
+                _.forEach(result.errors, error => {
+                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                });
+            } else {
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Validation Successful',
+                    detail: 'Job Type is valid and can be created.'
+                });
+                this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
+                    this.selectedJobTypeDetail = data;
+                    this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
+                }, err => {
+                    this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
+                });
+            }
         }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
+            console.log(err);
+            this.messageService.add({ severity: 'error', summary: 'Error validating job type', detail: err.statusText });
         });
     }
     onEditClick() {
