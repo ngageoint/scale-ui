@@ -148,7 +148,7 @@
                         <div class="recipe-io">
                             <div class="p-grid">
                                 <div class="p-col-10 p-col-nopad">
-                                    {{ input.name }} <span *ngIf="input.required">*</span>
+                                    <span [ngClass]="input.required ? 'required' : ''">{{ input.name }}</span>
                                     <ul class="list-unstyled media-type-list">
                                         <li *ngFor="let mediaType of input.mediaTypes">{{ mediaType }}</li>
                                     </ul>
@@ -173,7 +173,7 @@
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showInputConnections($event, input)"
                                             pTooltip="Add Input Connection"
-                                            *ngIf="isEditing && input.mediaTypes.length > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.files.length > selectedNodeConnections.length"></button>
                                 </div>
                             </div>
                         </div>

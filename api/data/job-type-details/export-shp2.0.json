@@ -29,7 +29,7 @@
                 "command": "./export_shapefile.sh",
                 "inputs": {
                     "files": [{
-                        "mediaTypes": ["application/octet-stream"],
+                        "mediaTypes": [],
                         "required": true,
                         "type": "file",
                         "name": "infile"
