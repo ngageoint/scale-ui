@@ -10,12 +10,14 @@
     }
 
     .scale-log__viewer {
-        ::ng-deep .CodeMirror {
-            height: 26em;
-            color: var(--main-text);
-        }
-        ::ng-deep .CodeMirror-linenumber{
-            color: var(--main-text);
+        ::ng-deep {
+            .CodeMirror {
+                height: 26em;
+                color: var(--main-text);
+            }
+            .CodeMirror-linenumber{
+                color: var(--main-text);
+            }
         }
     }
 }
