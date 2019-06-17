@@ -43,10 +43,25 @@ export class JobType {
     }
 
     public static cleanJobType(data) {
-        return {
+        const cleanJob = {
             configuration: data.configuration || null,
             manifest: data.manifest || null
         };
+        DataService.removeEmpty(cleanJob);
+        return cleanJob;
+    }
+
+    public static cleanJobTypeForUpdate(data) {
+        const cleanJob = {
+            icon_code: data.icon_code || null,
+            is_published: data.is_published || null,
+            is_active: data.is_active || null,
+            is_paused: data.is_paused || null,
+            max_scheduled: data.max_scheduled || null,
+            configuration: data.configuration || null
+        };
+        DataService.removeEmpty(cleanJob);
+        return cleanJob;
     }
 
     public static initialJobType(data) {
