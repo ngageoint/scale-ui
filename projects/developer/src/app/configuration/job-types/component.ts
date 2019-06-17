@@ -183,13 +183,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                     this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
                 });
             } else {
-                this.messageService.add({
-                    severity: 'info',
-                    summary: 'Validation Successful',
-                    detail: 'Job Type is valid and can be unpaused.'
-                });
-                this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(data => {
-                    this.selectedJobTypeDetail = data;
+                this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
+                this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(() => {
                     this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
