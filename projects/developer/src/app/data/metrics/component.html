@@ -40,8 +40,7 @@
         </div>
         <div *ngIf="filteredChoicesOptions.length > 0">
             <label>{{ dataTypeFilterText }}</label>
-            <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" (onChange)="colorGenerator('primary')"
-            (onChange)="colorGenerator('secondary')"
+            <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" (onChange)="colorGenerator()"
                 [style]="{'width':'100%'}"> </p-multiSelect>
             To view an aggregate count for the data source, leave this filter unselected.
         </div>

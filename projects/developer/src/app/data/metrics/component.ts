@@ -196,8 +196,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 });
             });
             this.filtersApplied = filtersApplied;
-            this.colorGenerator('primary');
-            this.colorGenerator('secondary');
+            this.colorGenerator();
         } else {
             this.changeDataTypeSelection();
         }
@@ -342,7 +341,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error retrieving plot data', detail: err.statusText});
         });
     }
-    private colorGenerator(metric) {
+    private colorGenerator() {
         const selected = [];
         // populate new color array to compare with the current one.
         // Must populate the same to use the differenceBy function
@@ -352,51 +351,48 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
             });
         });
-        if (metric === 'primary') {
-            if (this.primaryColorOptions.length > this.filtersApplied.length) {
-                const objectToRemove = _.differenceBy(this.primaryColorOptions, selected, 'name');
-                _.forEach(objectToRemove , object => {
-                    const indexToRemove = this.primaryColorOptions.findIndex(x => x.name === object.name);
-                    if (indexToRemove !== -1) {
-                        this.primaryColorOptions.splice(indexToRemove, 1);
-                    }
-                });
-            }
-            if (this.filtersApplied.length > 0) {
-                _.forEach(this.filtersApplied, choice => {
-                    this.primaryColorOptions.push({
-                        name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                        color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-                    });
-                });
-            }
-            // remove duplicate colors first
-            this.primaryColorOptions = _.uniqBy(this.primaryColorOptions, 'name');
-            this.primaryColorDisplay = this.primaryColorOptions;
-        } else if (metric === 'secondary') {
-            if (this.secondaryColorOptions.length > this.filtersApplied.length) {
-                // populate new color array to compare with the current one.
-                // Must populate the same to use the differenceBy function
-                const objectToRemove = _.differenceBy(this.secondaryColorOptions, selected, 'name');
-                _.forEach(objectToRemove , object => {
-                    const indexToRemove = this.secondaryColorOptions.findIndex(x => x.name === object.name);
-                    if (indexToRemove !== -1) {
-                        this.secondaryColorOptions.splice(indexToRemove, 1);
-                    }
-                });
-            }
-            if (this.filtersApplied.length > 0) {
-                _.forEach(this.filtersApplied, choice => {
-                    this.secondaryColorOptions.push({
-                        name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                        color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-                    });
-                });
-            }
-            // remove duplicate colors first
-            this.secondaryColorOptions = _.uniqBy(this.secondaryColorOptions, 'name');
-            this.secondaryColorDisplay = this.secondaryColorOptions;
+        if (this.primaryColorOptions.length > this.filtersApplied.length) {
+            const objectToRemove = _.differenceBy(this.primaryColorOptions, selected, 'name');
+            _.forEach(objectToRemove , object => {
+                const indexToRemove = this.primaryColorOptions.findIndex(x => x.name === object.name);
+                if (indexToRemove !== -1) {
+                    this.primaryColorOptions.splice(indexToRemove, 1);
+                }
+            });
         }
+        if (this.filtersApplied.length > 0) {
+            _.forEach(this.filtersApplied, choice => {
+                this.primaryColorOptions.push({
+                    name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                    color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                });
+            });
+        }
+        // remove duplicate colors first
+        this.primaryColorOptions = _.uniqBy(this.primaryColorOptions, 'name');
+        this.primaryColorDisplay = this.primaryColorOptions;
+        if (this.secondaryColorOptions.length > this.filtersApplied.length) {
+            // populate new color array to compare with the current one.
+            // Must populate the same to use the differenceBy function
+            const objectToRemove = _.differenceBy(this.secondaryColorOptions, selected, 'name');
+            _.forEach(objectToRemove , object => {
+                const indexToRemove = this.secondaryColorOptions.findIndex(x => x.name === object.name);
+                if (indexToRemove !== -1) {
+                    this.secondaryColorOptions.splice(indexToRemove, 1);
+                }
+            });
+        }
+        if (this.filtersApplied.length > 0) {
+            _.forEach(this.filtersApplied, choice => {
+                this.secondaryColorOptions.push({
+                    name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
+                    color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
+                });
+            });
+        }
+        // remove duplicate colors first
+        this.secondaryColorOptions = _.uniqBy(this.secondaryColorOptions, 'name');
+        this.secondaryColorDisplay = this.secondaryColorOptions;
     }
 
     ngOnInit() {
