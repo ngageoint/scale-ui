@@ -149,7 +149,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
                     id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
-                    label = node.node_type.recipe_type_name;
+                    label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
                     id = _.camelCase(node.node_type.name); // id can't have dashes or anything
@@ -467,13 +467,35 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                             });
                         });
                     }
+                    this.selectedCondition.interface = {
+                        files: files,
+                        json: json
+                    };
                     this.selectedNode.node_type.interface = {
                         files: files,
                         json: json
                     };
                 }
             }
+
+            // remove the dependency
             _.remove(this.selectedNode.dependencies, dependency);
+
+            // remove the dependency's input
+            const key: any = _.findKey(this.selectedNode.input, { node: dependency.name });
+            const input: any = _.find(this.selectedNode.input, { node: dependency.name });
+            if (key && input) {
+                if (this.selectedNode.node_type.node_type === 'condition') {
+                    this.selectedNode.input = _.omitBy(this.selectedNode.input, input);
+                } else {
+                    this.selectedNode.input[key] = {};
+                }
+
+                // remove the dependency's connection
+                _.remove(this.selectedNodeConnections, { name: input.node, output: input.output });
+            }
+
+            // redraw the recipe
             this.updateRecipe();
         } else {
             console.log('node not selected');
@@ -523,7 +545,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 };
                 _.forEach(condition.interface.files, output => {
                     const option = this.getInputConnectionOptions(output, condition);
-                    if (option && option.length > 0) {
+                    if (option) {
                         inputConnection.options = inputConnection.options.concat(option);
                     }
                 });

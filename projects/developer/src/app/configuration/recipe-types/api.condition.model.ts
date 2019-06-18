@@ -22,7 +22,7 @@ export class RecipeTypeCondition {
     public static transformer(data) {
         if (!data) {
             data = {
-                name: 'Untitled condition',
+                name: '',
                 condition_interface: {
                     files: [],
                     json: []

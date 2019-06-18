@@ -206,10 +206,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.showAddRemoveDisplay = false;
         this.selectedRecipeTypes = [];
         this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
+            this.recipeTypes = _.orderBy(data.results, ['title'], ['asc']);
             if (!this.recipeTypeName) {
                 // show grid of recipe types
                 this.totalRecords = data.count;
-                this.recipeTypes = data.results;
                 _.forEach(data.results, result => {
                     this.recipeTypeOptions.push({
                         label: result.title,
@@ -550,7 +550,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.jobTypesApiService.getJobTypes().subscribe(data => {
-            this.jobTypes = data.results;
+            this.jobTypes = _.orderBy(data.results, ['title', 'version'], ['asc', 'asc']);
         });
 
         this.initFormGroups();
