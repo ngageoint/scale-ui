@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem, SelectButtonModule } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -94,6 +94,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
     ];
     selectedDateRange: any;
+    displaySelected: any = [];
+    selectedButtonType: any = [];
 
     constructor(
         private dataService: DataService,
@@ -127,7 +129,6 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
         this.router.navigate(['/processing/jobs'], {
             queryParams: this.datatableOptions as Params,
@@ -192,14 +193,45 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onJobTypeChange(e) {
+        this.displaySelected = [];
         const name = _.map(e.value, 'name');
         const version = _.map(e.value, 'version');
         this.datatableOptions.job_type_name = name.length > 0 ? name : null;
         this.datatableOptions.job_type_version = version.length > 0 ? version : null;
+        _.forEach(this.selectedJobType, jobType => {
+            this.displaySelected.push({
+                label: jobType.title,
+                version: jobType.version
+            });
+        });
+        this.updateOptions();
+    }
+    changeJobTypeSelected(e) {
+        let selected = [];
+        const indexToRemoveFromButton = this.displaySelected.findIndex(x => x.label === e.option.label);
+        if (indexToRemoveFromButton !== -1) {
+            this.displaySelected.splice(indexToRemoveFromButton, 1);
+        }
+        selected = _.differenceBy(this.displaySelected, this.jobTypes, 'title');
+        this.selectedJobType = [];
+        _.forEach(this.jobTypes, jobType => {
+            _.forEach(selected, choice => {
+                if (choice.label === jobType.title) {
+                    this.selectedJobType.push(jobType);
+                }
+            });
+        });
+        console.log(this.selectedJobType);
+        const name = _.map(this.selectedJobType, 'name');
+        console.log(name);
+        const version = _.map(this.selectedJobType, 'version');
+        this.datatableOptions.job_type_name = name.length > 0 ? name : null;
+        this.datatableOptions.job_type_version = version.length > 0 ? version : null;
+        console.log( this.datatableOptions.job_type_version);
         this.updateOptions();
     }
     onStatusChange(e) {
-        this.datatableOptions.status = e.value.length > 0 ? e.value : null;
+        this.datatableOptions.status = e.length > 0 ? e.value : null;
         this.updateOptions();
     }
     onErrorCategoryChange(e) {
@@ -371,6 +403,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
+        this.selectedJobType = [];
 
         this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
@@ -427,6 +460,21 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
+            console.log(this.selectedJobType);
+            if (this.selectedJobType) {
+                this.displaySelected = [];
+                this.selectedButtonType = [];
+                _.forEach(this.selectedJobType, jobType => {
+                    this.displaySelected.push({
+                        label: jobType.title,
+                        version: jobType.version
+                    });
+                    this.selectedButtonType.push({
+                        label: jobType.title,
+                        version: jobType.version
+                    });
+            });
+            }
             this.getJobTypes();
         });
     }
