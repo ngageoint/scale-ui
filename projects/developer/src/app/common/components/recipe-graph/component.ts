@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { MessageService } from 'primeng/components/common/messageservice';
+import {RecipeTypeCondition} from '../../../configuration/recipe-types/api.condition.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -698,12 +699,42 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             };
         }
         if (changes.recipeData) {
-            if (this.selectedNode && this.showRecipeDialog) {
+            if (this.selectedNode && this.showRecipeDialog && this.selectedNode.node_type.node_type === 'job') {
                 if (!changes.recipeData.currentValue.definition.nodes[this.selectedNode.node_type.job_type_name]) {
                     // selected node is no longer in recipe
                     this.showRecipeDialog = false;
                     this.selectedJobType = null;
                     this.selectedNode = null;
+                }
+            }
+            let node = null;
+            if (this.selectedJobType) {
+                node = _.find(changes.recipeData.currentValue.definition.nodes, {
+                    node_type: {
+                        job_type_name: this.selectedJobType.name
+                    }
+                });
+                if (!node) {
+                    this.selectedJobType = null;
+                }
+            } else if (this.selectedRecipeType) {
+                node = _.find(changes.recipeData.currentValue.definition.nodes, {
+                    node_type: {
+                        recipe_type_name: this.selectedRecipeType.name
+                    }
+                });
+                if (!node) {
+                    this.selectedRecipeType = null;
+                }
+            } else if (this.selectedCondition) {
+                node = _.find(changes.recipeData.currentValue.definition.nodes, {
+                    node_type: {
+                        name: this.selectedCondition.name
+                    }
+                });
+                if (!node) {
+                    this.selectedCondition.reset();
+                    this.selectedCondition = null;
                 }
             }
             this.updateRecipe();

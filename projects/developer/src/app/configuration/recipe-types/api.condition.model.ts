@@ -38,6 +38,12 @@ export class RecipeTypeCondition {
         }
         return RecipeTypeCondition.build(data);
     }
+    public reset() {
+        this.interface = {
+            files: [],
+            json: []
+        };
+    }
     constructor(
         public name: string,
         public condition_interface: any,

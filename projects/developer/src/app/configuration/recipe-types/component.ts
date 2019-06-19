@@ -384,6 +384,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
         const nodeToRemove = recipeData.definition.nodes[event.data.name];
         if (nodeToRemove) {
+            // check for any dependencies that reference this node and remove them
+            _.forEach(recipeData.definition.nodes, node => {
+                if (node.dependencies && node.dependencies.length > 0) {
+                    _.remove(node.dependencies, (dependency: any) => {
+                        return dependency.name === event.data.name;
+                    });
+                }
+            });
+            // remove associated metadata
             if (nodeToRemove.node_type.node_type === 'job') {
                 _.remove(recipeData.job_types, (jt: any) => {
                     return jt.name === event.data.name && jt.version === event.data.version;
@@ -397,6 +406,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     return c.name === event.data.name;
                 });
             }
+            // delete node from recipe
             delete recipeData.definition.nodes[event.data.name];
             this.selectedRecipeTypeDetail = recipeData;
         } else {
