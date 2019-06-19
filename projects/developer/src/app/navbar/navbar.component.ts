@@ -33,6 +33,8 @@ export class NavbarComponent implements OnInit, OnChanges {
     scheduler: any;
     schedulerClass: string;
     schedulerIcon: string;
+    schedulerWarningsCount: number;
+    schedulerWarningsLabelVisible = true;
     userProfile: any;
     isMobile: boolean;
     itemsMobile: MenuItem[];
@@ -109,6 +111,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     }
 
     onSchedulerClick(event) {
+        this.schedulerWarningsLabelVisible = false;
         this.profileOp.hide();
         this.schedulerOp.toggle(event);
     }
@@ -254,6 +257,21 @@ export class NavbarComponent implements OnInit, OnChanges {
 
     onStatusChange(data) {
         if (data) {
+            if (this.scheduler) {
+                let warningsDiff = [];
+                // we only care about new warnings
+                if (this.scheduler.warnings.length <= data.scheduler.warnings.length) {
+                    warningsDiff = _.filter(data.scheduler.warnings, warn => {
+                        return _.findIndex(this.scheduler.warnings, warn) < 0;
+                    });
+                }
+                this.schedulerWarningsCount = this.schedulerWarningsLabelVisible ?
+                    data.scheduler.warnings.length :
+                    warningsDiff.length;
+                this.schedulerWarningsLabelVisible = this.schedulerWarningsCount > 0;
+            } else {
+                this.schedulerWarningsCount = data.scheduler.warnings.length;
+            }
             this.scheduler = data.scheduler;
             this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
             if (this.scheduler.state.name === 'READY') {

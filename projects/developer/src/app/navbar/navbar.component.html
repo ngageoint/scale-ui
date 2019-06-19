@@ -40,8 +40,9 @@
                  tooltipPosition="bottom" (click)="onSchedulerClick($event)">
                 <div class="navbar__icon">
                     <span class="fa fa-heartbeat"></span>
-                    <span class="label label-danger" *ngIf="scheduler.warnings.length > 0">
-                        {{ scheduler.warnings.length }}
+                    <span class="label label-danger"
+                          *ngIf="schedulerWarningsLabelVisible && schedulerWarningsCount > 0">
+                        {{ schedulerWarningsCount }}
                     </span>
                 </div>
             </div>
