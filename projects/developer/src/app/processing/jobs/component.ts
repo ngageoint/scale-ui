@@ -473,7 +473,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                         label: jobType.title,
                         version: jobType.version
                     });
-            });
+                });
             }
             this.getJobTypes();
         });
