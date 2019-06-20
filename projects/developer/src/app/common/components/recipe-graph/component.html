@@ -144,13 +144,13 @@
                     <p-header>
                         <strong>Inputs</strong>
                     </p-header>
-                    <ng-template let-input pTemplate="item">
+                    <ng-template let-file pTemplate="item">
                         <div class="recipe-io">
                             <div class="p-grid">
                                 <div class="p-col-10 p-col-nopad">
-                                    {{ input.name }} <span *ngIf="input.required">*</span>
-                                    <ul class="list-unstyled media-type-list">
-                                        <li *ngFor="let mediaType of input.mediaTypes">{{ mediaType }}</li>
+                                    <span [ngClass]="file.required ? 'required' : ''">{{ file.name }}</span>
+                                    <ul class="list-unstyled media-type-list" *ngIf="file.mediaTypes">
+                                        <li *ngFor="let mediaType of file.mediaTypes">{{ mediaType }}</li>
                                     </ul>
                                     <div class="connections"
                                          *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
@@ -171,9 +171,9 @@
                                 </div>
                                 <div class="p-col-2 p-col-nopad text-right">
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
-                                            (click)="showInputConnections($event, input)"
+                                            (click)="showInputConnections($event, file)"
                                             pTooltip="Add Input Connection"
-                                            *ngIf="isEditing && input.mediaTypes.length > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.files.length > selectedNodeConnections.length"></button>
                                 </div>
                             </div>
                         </div>
@@ -215,13 +215,13 @@
                 <p-header>
                     <strong>Inputs</strong>
                 </p-header>
-                <ng-template let-input pTemplate="item">
+                <ng-template let-file pTemplate="item">
                     <div class="recipe-io">
                         <div class="p-grid">
                             <div class="p-col-10 p-col-nopad">
-                                {{ input.name }} <span *ngIf="input.required">*</span>
-                                <ul class="list-unstyled media-type-list">
-                                    <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
+                                <span [ngClass]="file.required ? 'required' : ''">{{ file.name }}</span>
+                                <ul class="list-unstyled media-type-list" *ngIf="file.media_types">
+                                    <li *ngFor="let mediaType of file.media_types">{{ mediaType }}</li>
                                 </ul>
                                 <div class="connections"
                                      *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
@@ -229,8 +229,9 @@
                                     <ul class="list-unstyled">
                                         <li *ngFor="let connection of selectedNodeConnections" class="connection">
                                             <div>
-                                                <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
-                                                        (click)="removeInputConnection(connection)" *ngIf="isEditing">
+                                                <button pButton class="ui-button-danger margin-right-sm"
+                                                        icon="fa fa-remove" (click)="removeInputConnection(connection)"
+                                                        *ngIf="isEditing">
                                                 </button>
                                             </div>
                                             <div>
@@ -242,9 +243,9 @@
                             </div>
                             <div class="p-col-2 p-col-nopad text-right">
                                 <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
-                                        (click)="showInputConnections($event, input)"
+                                        (click)="showInputConnections($event, file)"
                                         pTooltip="Add Input Connection"
-                                        *ngIf="isEditing && input.media_types.length > selectedNodeConnections.length"></button>
+                                        *ngIf="isEditing && selectedRecipeType.definition.input.files.length > selectedNodeConnections.length"></button>
                             </div>
                         </div>
                     </div>
@@ -284,23 +285,20 @@
                 <p-header>
                     <strong>Inputs</strong>
                 </p-header>
-                <ng-template let-input pTemplate="item">
+                <ng-template let-file pTemplate="item">
                     <div class="recipe-io">
                         <div class="p-grid">
                             <div class="p-col-12 p-col-nopad">
-                                {{ input.name }} <span *ngIf="input.required">*</span>
-                                <ul class="list-unstyled media-type-list">
-                                    <li *ngFor="let mediaType of input.media_types">{{ mediaType }}</li>
+                                <span [ngClass]="file.required ? 'required' : ''">{{ file.name }}</span>
+                                <ul class="list-unstyled media-type-list" *ngIf="file.media_types">
+                                    <li *ngFor="let mediaType of file.media_types">{{ mediaType }}</li>
                                 </ul>
                                 <div class="connections"
                                      *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
                                         <li *ngFor="let connection of selectedNodeConnections">
-                                            <div class="connection" *ngIf="connection.output === input.name">
-                                                <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
-                                                        (click)="removeInputConnection(connection)" *ngIf="isEditing">
-                                                </button>
+                                            <div class="connection" *ngIf="connection.output === file.name">
                                                 <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
                                             </div>
                                         </li>
