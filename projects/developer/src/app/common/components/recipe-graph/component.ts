@@ -698,14 +698,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             };
         }
         if (changes.recipeData) {
-            if (this.selectedNode && this.showRecipeDialog && this.selectedNode.node_type.node_type === 'job') {
-                if (!changes.recipeData.currentValue.definition.nodes[this.selectedNode.node_type.job_type_name]) {
-                    // selected node is no longer in recipe
-                    this.showRecipeDialog = false;
-                    this.selectedJobType = null;
-                    this.selectedNode = null;
-                }
+            // if the node details dialog is open when a node is removed from the recipe type, make sure it clears out
+            if (this.selectedNode && this.showRecipeDialog) {
+                this.selectedNode = null;
+                this.showRecipeDialog = false;
             }
+
+            // set selected type to null if it no longer exists in recipe type definition
             let node = null;
             if (this.selectedJobType) {
                 node = _.find(changes.recipeData.currentValue.definition.nodes, {
