@@ -353,10 +353,13 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         });
         if (this.primaryColorOptions.length > this.filtersApplied.length) {
             const objectToRemove = _.differenceBy(this.primaryColorOptions, selected, 'name');
+            console.log(objectToRemove);
             _.forEach(objectToRemove , object => {
                 const indexToRemove = this.primaryColorOptions.findIndex(x => x.name === object.name);
+                console.log(indexToRemove);
                 if (indexToRemove !== -1) {
                     this.primaryColorOptions.splice(indexToRemove, 1);
+                    this.secondaryColorOptions.splice(indexToRemove, 1);
                 }
             });
         }
@@ -366,24 +369,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
                     color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
                 });
-            });
-        }
-        // remove duplicate colors first
-        this.primaryColorOptions = _.uniqBy(this.primaryColorOptions, 'name');
-        this.primaryColorDisplay = this.primaryColorOptions;
-        if (this.secondaryColorOptions.length > this.filtersApplied.length) {
-            // populate new color array to compare with the current one.
-            // Must populate the same to use the differenceBy function
-            const objectToRemove = _.differenceBy(this.secondaryColorOptions, selected, 'name');
-            _.forEach(objectToRemove , object => {
-                const indexToRemove = this.secondaryColorOptions.findIndex(x => x.name === object.name);
-                if (indexToRemove !== -1) {
-                    this.secondaryColorOptions.splice(indexToRemove, 1);
-                }
-            });
-        }
-        if (this.filtersApplied.length > 0) {
-            _.forEach(this.filtersApplied, choice => {
                 this.secondaryColorOptions.push({
                     name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
                     color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
@@ -391,7 +376,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             });
         }
         // remove duplicate colors first
+        this.primaryColorOptions = _.uniqBy(this.primaryColorOptions, 'name');
         this.secondaryColorOptions = _.uniqBy(this.secondaryColorOptions, 'name');
+        this.primaryColorDisplay = this.primaryColorOptions;
         this.secondaryColorDisplay = this.secondaryColorOptions;
     }
 
