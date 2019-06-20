@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { MessageService } from 'primeng/components/common/messageservice';
-import {RecipeTypeCondition} from '../../../configuration/recipe-types/api.condition.model';
 
 @Component({
     selector: 'dev-recipe-graph',
