@@ -200,7 +200,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         _.forEach(this.filtersApplied, filter => {
             filter.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
             filter.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
-        })
+        });
     }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {

@@ -166,7 +166,7 @@ export class ChartService {
                     if (isPrimary) {
                         type = primaryType === 'area' ? 'line' : primaryType;
                         fill = primaryType === 'area';
-                        bgColor = primaryMetric.color ?
+                        bgColor = primaryMetric && primaryMetric.color ?
                             primaryMetric.color :
                             colorObj ?
                                 colorObj.color :
