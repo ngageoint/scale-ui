@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { SelectItem, ColorPickerModule } from 'primeng/primeng';
+import { SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -28,8 +28,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     filtersApplied: any[] = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
-    recipeChoiceSelected: any[] = [];
-    recipeChoicesOptions: any[] = [];
+    recipeTypeOptions: SelectItem[] = [];
+    selectedRecipeTypes = [];
     recipeTypes: any[] = [];
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
@@ -47,10 +47,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     data: any;
     options: any;
     showFilters = true;
-    primaryColorOptions: any[] = [];
-    primaryColorDisplay: any[] = [];
-    secondaryColorOptions: any[] = [];
-    secondaryColorDisplay: any[] = [];
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
@@ -85,6 +81,30 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
         return data;
     }
+    private getRecipeTypes() {
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
+            _.forEach(this.recipeTypes, recipeType => {
+                this.recipeTypeOptions.push({
+                    label: `${recipeType.title} rev. ${recipeType.revision_num}`,
+                    value: recipeType
+                });
+            });
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
+        });
+    }
+    colorGenerator(e) {
+        if (e.itemValue) {
+            // multiselect option was chosen
+            e.itemValue.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+            e.itemValue.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+        } else {
+            // normal dropdown option was chosen
+            e.value.color = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+        }
+    }
     getDataTypes() {
         this.dataTypesLoading = true;
         this.metricsApiService.getDataTypes().subscribe((data) => {
@@ -102,9 +122,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
-        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-            this.recipeTypes = data.results;
-        });
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
@@ -114,18 +131,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     return choice.is_active === true;
                 });
             }
-            const recipeChoicesOptions = [];
-            _.forEach(this.recipeTypes, (choice) => {
-                recipeChoicesOptions.push({
-                    label: choice.version ? choice.title + ' ' + choice.version : choice.title,
-                    value: _.forEach(choice.job_types, (jobType) => {
-                            if (JobType.name === result.choices.name ) {
-                                return result.choices;
-                            }
-                    })
-                });
-            });
-            this.recipeChoicesOptions = recipeChoicesOptions;
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :
@@ -136,7 +141,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             const filteredChoicesOptions = [];
             _.forEach(this.filteredChoices, (choice) => {
                 filteredChoicesOptions.push({
-                    label: choice.version ? choice.title + ' ' + choice.version : choice.title,
+                    label: choice.version ? `${choice.title} ${choice.version}` : choice.title,
                     value: choice
                 });
             });
@@ -171,10 +176,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.dataTypeFilterText = '';
         this.selectedMetric1 = null;
         this.selectedMetric2 = null;
-        this.recipeChoiceSelected = null;
+        this.selectedRecipeTypes = null;
         this.columns = [];
         this.metricOptions = [];
-        this.primaryColorOptions = [];
 
         if (!this.selectedDataType.name || this.selectedDataType.name === '') {
             this.selectedDataType = {};
@@ -184,22 +188,19 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
     }
     getRecipeJobTypes() {
-        if (this.recipeChoiceSelected != null) {
-            const filtersApplied = [];
-            _.forEach(this.recipeChoiceSelected, (outerRecipe) => {
-                _.forEach(outerRecipe, (selectedRecipe) => {
-                    _.forEach(this.filteredChoicesOptions, (jobTypeInfo) => {
-                        if (jobTypeInfo.value.name === selectedRecipe.name) {
-                            filtersApplied.push(jobTypeInfo.value);
-                        }
-                    });
-                });
-            });
-            this.filtersApplied = filtersApplied;
-            this.colorGenerator();
-        } else {
-            this.changeDataTypeSelection();
-        }
+        this.filtersApplied = [];
+        // populate filtersApplied with selected recipe type job types
+        _.forEach(this.selectedRecipeTypes, recipeType => {
+            this.filtersApplied = _.uniq(this.filtersApplied.concat(_.filter(this.filteredChoices, choice => {
+                return _.findIndex(recipeType.job_types, { name: choice.name, version: choice.version }) >= 0;
+            })));
+        });
+
+        // assign colors to each filter
+        _.forEach(this.filtersApplied, filter => {
+            filter.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+            filter.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+        })
     }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
@@ -252,9 +253,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             choice_id: _.map(this.filtersApplied, 'id'),
             column: this.selectedMetric2 ? [this.selectedMetric1.name, this.selectedMetric2.name] : this.selectedMetric1.name,
             group: this.selectedMetric2 ? [this.selectedMetric1.group, this.selectedMetric2.group] : this.selectedMetric1.group,
-            dataType: this.selectedDataType.name,
-            primary_colors: this.primaryColorOptions,
-            secondary_colors: this.secondaryColorOptions
+            dataType: this.selectedDataType.name
         };
         this.metricsApiService.getPlotData(params).subscribe((data) => {
             const chartData = this.chartService.formatPlotResults(
@@ -341,49 +340,10 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error retrieving plot data', detail: err.statusText});
         });
     }
-    private colorGenerator() {
-        const selected = [];
-        // populate new color array to compare with the current one.
-        // Must populate the same to use the differenceBy function
-        _.forEach(this.filtersApplied, choice => {
-            selected.push({
-                name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-            });
-        });
-        if (this.primaryColorOptions.length > this.filtersApplied.length) {
-            const objectToRemove = _.differenceBy(this.primaryColorOptions, selected, 'name');
-            console.log(objectToRemove);
-            _.forEach(objectToRemove , object => {
-                const indexToRemove = this.primaryColorOptions.findIndex(x => x.name === object.name);
-                console.log(indexToRemove);
-                if (indexToRemove !== -1) {
-                    this.primaryColorOptions.splice(indexToRemove, 1);
-                    this.secondaryColorOptions.splice(indexToRemove, 1);
-                }
-            });
-        }
-        if (this.filtersApplied.length > 0) {
-            _.forEach(this.filtersApplied, choice => {
-                this.primaryColorOptions.push({
-                    name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                    color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-                });
-                this.secondaryColorOptions.push({
-                    name: choice.tile ? choice.title + ' ' + choice.version : choice.title,
-                    color: '#' + (Math.random().toString(16) + '0000000').slice(2, 8)
-                });
-            });
-        }
-        // remove duplicate colors first
-        this.primaryColorOptions = _.uniqBy(this.primaryColorOptions, 'name');
-        this.secondaryColorOptions = _.uniqBy(this.secondaryColorOptions, 'name');
-        this.primaryColorDisplay = this.primaryColorOptions;
-        this.secondaryColorDisplay = this.secondaryColorOptions;
-    }
 
     ngOnInit() {
         this.getDataTypes();
+        this.getRecipeTypes();
     }
 
     ngAfterViewInit() {

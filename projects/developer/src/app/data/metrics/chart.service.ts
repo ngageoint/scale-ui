@@ -110,25 +110,23 @@ export class ChartService {
                         const opacity = parseFloat((1 - (stackHeight / 10)).toFixed(2));
                         let type = 'bar';
                         let fill = false;
-                        let bgColor = colorObj ?
-                            ColorService.getRgba(colorObj.color, opacity) :
-                            this.randomColorGenerator();
-                        if (isPrimary &&  params.primary_colors) {
+                        let bgColor = null;
+                        if (isPrimary) {
+                            bgColor = filter.primaryColor ?
+                                filter.primaryColor :
+                                colorObj ?
+                                    ColorService.getRgba(colorObj.color, opacity) :
+                                    this.randomColorGenerator();
                             type = primaryType === 'area' ? 'line' : primaryType;
                             fill = primaryType === 'area';
-                            _.forEach(params.primary_colors, (colorFilter) => {
-                                if (filter.title === colorFilter.name) {
-                                    bgColor = colorFilter.color;
-                                }
-                            });
                         } else {
+                            bgColor = filter.secondaryColor ?
+                                filter.secondaryColor :
+                                colorObj ?
+                                    ColorService.getRgba(colorObj.color, opacity) :
+                                    this.randomColorGenerator();
                             type = secondaryType === 'area' ? 'line' : secondaryType;
                             fill = secondaryType === 'area';
-                            _.forEach(params.secondary_colors, (colorFilter) => {
-                                if (filter.title === colorFilter.name) {
-                                    bgColor = colorFilter.color;
-                                }
-                            });
                         }
                         datasets.push({
                             id: filter.id,
@@ -162,14 +160,25 @@ export class ChartService {
                 const colorObj: any = params.colors ? _.find(params.colors, { column: result.column.name }) : null;
                 let type = 'bar';
                 let fill = false;
+                let bgColor = null;
                 if (colIdx > -1) {
                     isPrimary = primaryMetric ? params.column[colIdx] === primaryMetric.name : true;
                     if (isPrimary) {
                         type = primaryType === 'area' ? 'line' : primaryType;
                         fill = primaryType === 'area';
+                        bgColor = primaryMetric.color ?
+                            primaryMetric.color :
+                            colorObj ?
+                                colorObj.color :
+                                this.randomColorGenerator();
                     } else {
                         type = secondaryType === 'area' ? 'line' : secondaryType;
                         fill = secondaryType === 'area';
+                        bgColor = secondaryMetric.color ?
+                            secondaryMetric.color :
+                            colorObj ?
+                                colorObj.color :
+                                this.randomColorGenerator();
                     }
                     valueArr = [];
                     // add result values to valueArr
@@ -182,7 +191,6 @@ export class ChartService {
                     });
 
                     // populate chart dataset
-                    const bgColor = colorObj ? colorObj.color : this.randomColorGenerator();
                     datasets.push({
                         yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
                         stack: colIdx.toString(),
