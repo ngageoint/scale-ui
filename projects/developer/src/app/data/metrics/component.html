@@ -34,24 +34,23 @@
         </div>
         <div *ngIf="selectedDataType && selectedDataType.name === 'job-types'">
             <label>Recipe Types</label>
-            <p-multiSelect [options]="recipeChoicesOptions" [(ngModel)]="recipeChoiceSelected"
-                           [style]="{'width':'100%'}" (onChange)="getRecipeJobTypes($event)"></p-multiSelect>
+            <p-multiSelect [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeTypes"
+                           [style]="{'width':'100%'}" (onChange)="getRecipeJobTypes()"></p-multiSelect>
             Select a specific recipe type to view all of its associated job types.
         </div>
         <div *ngIf="filteredChoicesOptions.length > 0">
-            <label>{{dataTypeFilterText}}</label>
-            <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied" [style]="{'width':'100%'}">
-            </p-multiSelect>
+            <label>{{ dataTypeFilterText }}</label>
+            <p-multiSelect [options]="filteredChoicesOptions" [(ngModel)]="filtersApplied"
+                           (onChange)="colorGenerator($event)" [style]="{'width':'100%'}"> </p-multiSelect>
             To view an aggregate count for the data source, leave this filter unselected.
         </div>
-        
         <div *ngIf="columns.length > 0">
             <label class="required">Primary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric1" [style]="{'width':'100%'}"
-                        [showClear]="false"></p-dropdown>
+                        [showClear]="false" (onChange)="colorGenerator($event)"></p-dropdown>
             <label>Secondary Metric</label>
             <p-dropdown [options]="metricOptions" [(ngModel)]="selectedMetric2" [style]="{'width':'100%'}"
-                        [showClear]="false"></p-dropdown>
+                        [showClear]="false" (onChange)="colorGenerator($event)"></p-dropdown>
         </div>
         <label>Primary Metric Display</label>
         <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType1" [style]="{'width':'100%'}"
@@ -61,6 +60,29 @@
             <p-dropdown [options]="chartTypes" [(ngModel)]="selectedChartType2" [style]="{'width':'100%'}"
                         [showClear]="false"></p-dropdown>
         </div>
+        <p-panel header="Metric Colors" [toggleable]="true" toggler="header" styleClass="metrics__colors"
+                 *ngIf="selectedMetric1 || selectedMetric2">
+            <div *ngIf="selectedMetric1 && filtersApplied.length === 0">
+                <p-colorPicker [style]="{'margin-bottom': '3px'}" [(ngModel)]="selectedMetric1.color"></p-colorPicker>
+                {{ selectedMetric1.title }}
+            </div>
+            <div *ngIf="selectedMetric2 && filtersApplied.length === 0">
+                <p-colorPicker [style]="{'margin-bottom': '3px'}" [(ngModel)]="selectedMetric2.color"></p-colorPicker>
+                {{ selectedMetric2.title }}
+            </div>
+            <div *ngIf="filtersApplied.length > 0">
+                <div *ngFor="let filter of filtersApplied">
+                    <div *ngIf="selectedMetric1">
+                        <p-colorPicker [style]="{'margin-bottom': '3px'}" [(ngModel)]="filter.primaryColor">
+                        </p-colorPicker> {{ filter.title }} ({{ selectedMetric1.title }})
+                    </div>
+                    <div *ngIf="selectedMetric2">
+                        <p-colorPicker [style]="{'margin-bottom': '3px'}" [(ngModel)]="filter.secondaryColor">
+                        </p-colorPicker> {{ filter.title }} ({{ selectedMetric2.title }})
+                    </div>
+                </div>
+            </div>
+        </p-panel>
         <button pButton icon="fa fa-refresh" label="Update Chart" (click)="updateChart()"
                 [disabled]="!selectedMetric1"></button>
     </p-sidebar>

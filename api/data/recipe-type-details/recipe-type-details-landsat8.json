@@ -5,10 +5,10 @@
     "description": "Process Landsat 8 sensor data",
     "is_active": true,
     "is_system": false,
-    "revision_num": 1,
-    "created": "2016-05-02T02:45:28.075Z",
+    "revision_num": 2,
+    "created": "2019-06-03T09:03:26.346Z",
     "deprecated": null,
-    "last_modified": "2016-05-02T02:45:28.075Z",
+    "last_modified": "2019-06-03T09:03:26.346Z",
     "definition": {
         "input": {
             "files": [{"name": "input_file", "media_types": ["image/tiff"], "required": true, "multiple": true}]

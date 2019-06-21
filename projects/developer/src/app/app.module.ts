@@ -14,7 +14,7 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 
 // Prime NG
 import {
-    AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, DataListModule,
+    AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, ColorPickerModule,  DataListModule,
     DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
     MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SelectButtonModule,
     SidebarModule, SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
@@ -145,6 +145,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         CheckboxModule,
         ChipsModule,
         CodemirrorModule,
+        ColorPickerModule,
         ConfirmDialogModule,
         DataListModule,
         DataViewModule,

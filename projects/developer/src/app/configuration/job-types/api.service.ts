@@ -143,10 +143,10 @@ export class JobTypesApiService {
     }
 
     updateJobType(jobType: JobType): Observable<any> {
-        const updatedJobType = {
-            is_paused: jobType.is_paused
-        };
-        return this.http.patch<any>(`${this.apiPrefix}/job-types/${jobType.name}/${jobType.version}/`, updatedJobType)
+        return this.http.patch<any>(
+            `${this.apiPrefix}/job-types/${jobType.name}/${jobType.version}/`,
+            JobType.cleanJobTypeForUpdate(jobType)
+        )
             .pipe(
                 catchError(DataService.handleError)
             );

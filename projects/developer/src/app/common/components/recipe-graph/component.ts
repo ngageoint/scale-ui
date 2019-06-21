@@ -149,7 +149,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
                     id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
-                    label = node.node_type.recipe_type_name;
+                    label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
                     id = _.camelCase(node.node_type.name); // id can't have dashes or anything
@@ -207,20 +207,28 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         _.forEach(this.selectedNode.input, i => {
             if (i.node) {
                 const dependency = this.recipeData.definition.nodes[i.node];
-                const dependencyJobType: any = _.find(this.recipeData.job_types, {
-                    name: dependency.node_type.job_type_name,
-                    version: dependency.node_type.job_type_version
-                });
-                const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
-                // use the key instead of the job type name to specify the connection name
-                const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
-                    return n.node_type.job_type_name === dependency.node_type.job_type_name &&
-                        n.node_type.job_type_version === dependency.node_type.job_type_version;
-                });
-                this.selectedNodeConnections.push({
-                    name: nodeKey,
-                    output: connection ? connection.name : null
-                });
+                if (dependency.node_type.node_type === 'job') {
+                    const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                        name: dependency.node_type.job_type_name,
+                        version: dependency.node_type.job_type_version
+                    });
+                    const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                    // use the key instead of the job type name to specify the connection name
+                    const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
+                        return n.node_type.job_type_name === dependency.node_type.job_type_name &&
+                            n.node_type.job_type_version === dependency.node_type.job_type_version;
+                    });
+                    this.selectedNodeConnections.push({
+                        name: nodeKey,
+                        output: connection ? connection.name : null
+                    });
+                } else if (dependency.node_type.node_type === 'condition') {
+                    // condition key and condition name are always the same
+                    this.selectedNodeConnections.push({
+                        name: dependency.node_type.name,
+                        output: i.output
+                    });
+                }
             } else {
                 const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
                 if (connection) {
@@ -233,31 +241,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         });
     }
 
-    private getInputConnectionOptions(input, output, dependency): any {
-        // only show the option if the interface media type is contained in the input media types
-        const inputMediaTypes = input.mediaTypes ? input.mediaTypes : input.media_types;
-        const outputMediaType = output.mediaType ? output.mediaType : output.media_types;
-        if (Array.isArray(outputMediaType)) {
-            // dependency is a condition
-            const outputArr = [];
-            _.forEach(outputMediaType, type => {
-                if (_.includes(inputMediaTypes, type)) {
-                    // disable the output if it currently exists as a connection
-                    const hasOutput = _.find(_.values(this.selectedNode.input), {node: dependency.name, output: output.name});
-                    output.disabled = !!hasOutput;
-                    outputArr.push(output);
-                }
-            });
-            return outputArr;
-        } else {
-            if (_.includes(inputMediaTypes, outputMediaType)) {
-                // disable the output if it currently exists as a connection
-                const hasOutput = _.find(_.values(this.selectedNode.input), {node: dependency.name, output: output.name});
-                output.disabled = !!hasOutput;
-                return output;
-            }
-            return false;
-        }
+    private getInputConnectionOptions(output, dependency): any {
+        // disable the output if it currently exists as a connection
+        const hasOutput = _.find(_.values(this.selectedNode.input), {node: dependency.name, output: output.name});
+        output.disabled = !!hasOutput;
+        return output;
     }
 
     select(e) {
@@ -393,9 +381,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
             if (this.selectedNode.node_type.node_type === 'condition' && dependency.manifest) {
                 // inspect the dependency's input interface and apply it to the condition interface
-                const files = [];
-                const json = [];
-                const input = {};
+                const files = this.selectedNode.node_type.interface.files || [];
+                const json = this.selectedNode.node_type.interface.json || [];
+                const input = this.selectedNode.input || {};
                 const outputs = dependency.manifest.job.interface.outputs;
                 // job type manifest files and json are slightly different, so just grab what we need
                 if (outputs.files) {
@@ -418,14 +406,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     });
                 }
                 _.forEach(dependency.manifest.job.interface.outputs.files, f => {
-                    input[f.name] = {
+                    const key = _.has(input, f.name) ? `${f.name}-${dependency.manifest.job.name}` : f.name;
+                    input[key] = {
                         node: dependencyName,
                         output: f.name,
                         type: 'dependency'
                     };
                 });
                 _.forEach(dependency.manifest.job.interface.outputs.json, j => {
-                    input[j.name] = {
+                    const key = _.has(input, j.name) ? `${j.name}-${dependency.manifest.job.name}` : j.name;
+                    input[key] = {
                         node: dependencyName,
                         output: j.name,
                         type: 'dependency'
@@ -485,13 +475,35 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                             });
                         });
                     }
+                    this.selectedCondition.interface = {
+                        files: files,
+                        json: json
+                    };
                     this.selectedNode.node_type.interface = {
                         files: files,
                         json: json
                     };
                 }
             }
+
+            // remove the dependency
             _.remove(this.selectedNode.dependencies, dependency);
+
+            // remove the dependency's input
+            const key: any = _.findKey(this.selectedNode.input, { node: dependency.name });
+            const input: any = _.find(this.selectedNode.input, { node: dependency.name });
+            if (key && input) {
+                if (this.selectedNode.node_type.node_type === 'condition') {
+                    this.selectedNode.input = _.omitBy(this.selectedNode.input, input);
+                } else {
+                    this.selectedNode.input[key] = {};
+                }
+
+                // remove the dependency's connection
+                _.remove(this.selectedNodeConnections, { name: input.node, output: input.output });
+            }
+
+            // redraw the recipe
             this.updateRecipe();
         } else {
             console.log('node not selected');
@@ -502,17 +514,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.nodeInputs = [];
         // inspect recipe type inputs and display possible connections
         _.forEach(this.recipeData.definition.input.files, file => {
-            const optionsArr = [];
-            _.forEach(file.media_types, type => {
-                if (_.includes(input.mediaTypes, type)) {
-                    optionsArr.push(file);
-                }
-            });
             this.nodeInputs.push({
                 title: null,
                 name: 'Start',
                 version: null,
-                options: optionsArr
+                options: file
             });
         });
         _.forEach(this.recipeData.definition.input.json, json => {
@@ -533,7 +539,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     options: []
                 };
                 _.forEach(jobType.manifest.job.interface.outputs.files, output => {
-                    const option = this.getInputConnectionOptions(input, output, jobType);
+                    const option = this.getInputConnectionOptions(output, jobType);
                     if (option) {
                         inputConnection.options.push(option);
                     }
@@ -546,8 +552,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     options: []
                 };
                 _.forEach(condition.interface.files, output => {
-                    const option = this.getInputConnectionOptions(input, output, condition);
-                    if (option && option.length > 0) {
+                    const option = this.getInputConnectionOptions(output, condition);
+                    if (option) {
                         inputConnection.options = inputConnection.options.concat(option);
                     }
                 });
@@ -585,30 +591,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     this.selectedNode.node_type.node_type === 'recipe' ?
                         currType.definition.input.files :
                         currType.interface.files;
-                const currInput: any = _.find(files, file => {
-                    // job manifest input has "mediaTypes", recipe definition has "media_types"
-                    const inputMediaTypes = this.selectedNode.node_type.node_type === 'job' ? file.mediaTypes : file.media_types;
-                    const outputMediaType = providerOutput.mediaType ? providerOutput.mediaType : providerOutput.media_types;
-                    if (Array.isArray(outputMediaType)) {
-                        return _.intersection(outputMediaType, inputMediaTypes).length > 0;
-                    } else {
-                        return _.includes(inputMediaTypes, outputMediaType);
-                    }
-                });
-                if (currInput) {
-                    // matching input exists, so add the connection
+                _.forEach(files, file => {
                     this.selectedNodeConnections.push({
                         name: providerName,
                         output: providerOutput.name
                     });
                     if (this.selectedNode.dependencies.length === 0) {
                         // no dependencies means this is coming from the recipe input
-                        this.selectedNode.input[currInput.name] = {
+                        this.selectedNode.input[file.name] = {
                             type: 'recipe',
                             input: providerOutput.name
                         };
                     } else {
-                        this.selectedNode.input[currInput.name] = {
+                        this.selectedNode.input[file.name] = {
                             type: 'dependency',
                             node: providerName,
                             output: providerOutput.name
@@ -617,9 +612,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     // TODO figure out a better way of preventing duplicate mappings
                     // set output as disabled to prevent duplicate mappings
                     // providerOutput.disabled = true;
-                } else {
-                    console.log('compatible media type not found');
-                }
+                });
             } else {
                 console.log('job or recipe type not found');
             }
@@ -705,12 +698,41 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             };
         }
         if (changes.recipeData) {
+            // if the node details dialog is open when a node is removed from the recipe type, make sure it clears out
             if (this.selectedNode && this.showRecipeDialog) {
-                if (!changes.recipeData.currentValue.definition.nodes[this.selectedNode.node_type.job_type_name]) {
-                    // selected node is no longer in recipe
-                    this.showRecipeDialog = false;
+                this.selectedNode = null;
+                this.showRecipeDialog = false;
+            }
+
+            // set selected type to null if it no longer exists in recipe type definition
+            let node = null;
+            if (this.selectedJobType) {
+                node = _.find(changes.recipeData.currentValue.definition.nodes, {
+                    node_type: {
+                        job_type_name: this.selectedJobType.name
+                    }
+                });
+                if (!node) {
                     this.selectedJobType = null;
-                    this.selectedNode = null;
+                }
+            } else if (this.selectedRecipeType) {
+                node = _.find(changes.recipeData.currentValue.definition.nodes, {
+                    node_type: {
+                        recipe_type_name: this.selectedRecipeType.name
+                    }
+                });
+                if (!node) {
+                    this.selectedRecipeType = null;
+                }
+            } else if (this.selectedCondition) {
+                node = _.find(changes.recipeData.currentValue.definition.nodes, {
+                    node_type: {
+                        name: this.selectedCondition.name
+                    }
+                });
+                if (!node) {
+                    this.selectedCondition.reset();
+                    this.selectedCondition = null;
                 }
             }
             this.updateRecipe();

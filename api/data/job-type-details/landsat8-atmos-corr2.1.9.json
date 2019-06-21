@@ -39,7 +39,7 @@
                 "outputs": {
                     "files": [
                         {
-                            "name": "ls8-corrected",
+                            "name": "ls8-atmos-corrected",
                             "required": true,
                             "mediaType": "image/nitf"
 
