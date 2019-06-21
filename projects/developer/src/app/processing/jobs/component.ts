@@ -15,6 +15,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
+import { JobType } from '../../configuration/job-types/api.model';
 
 @Component({
     selector: 'dev-jobs',
@@ -94,7 +95,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
     ];
     selectedDateRange: any;
-    displaySelected: any = [];
+    selectBtn: any = [];
     selectedButtonType: any = [];
 
     constructor(
@@ -193,13 +194,13 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onJobTypeChange(e) {
-        this.displaySelected = [];
+        this.selectBtn = [];
         const name = _.map(e.value, 'name');
         const version = _.map(e.value, 'version');
         this.datatableOptions.job_type_name = name.length > 0 ? name : null;
         this.datatableOptions.job_type_version = version.length > 0 ? version : null;
         _.forEach(this.selectedJobType, jobType => {
-            this.displaySelected.push({
+            this.selectBtn.push({
                 label: jobType.title,
                 version: jobType.version
             });
@@ -207,27 +208,22 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     changeJobTypeSelected(e) {
-        let selected = [];
-        const indexToRemoveFromButton = this.displaySelected.findIndex(x => x.label === e.option.label);
-        if (indexToRemoveFromButton !== -1) {
-            this.displaySelected.splice(indexToRemoveFromButton, 1);
-        }
-        selected = _.differenceBy(this.displaySelected, this.jobTypes, 'title');
-        this.selectedJobType = [];
-        _.forEach(this.jobTypes, jobType => {
-            _.forEach(selected, choice => {
-                if (choice.label === jobType.title) {
+        const removeFromButton = this.selectBtn.findIndex(x => x.label === e.option.label);
+        const removeFromDropdown = this.selectedJobType.findIndex(x => x.title === e.option.label);
+        if (removeFromButton !== -1) {
+            this.selectBtn.splice(removeFromButton, 1);
+            this.selectedJobType.splice(removeFromDropdown, 1);
+        } else {
+            _.forEach(this.jobTypes, jobType => {
+                if (jobType.title === e.option.label) {
                     this.selectedJobType.push(jobType);
                 }
             });
-        });
-        console.log(this.selectedJobType);
+        }
         const name = _.map(this.selectedJobType, 'name');
-        console.log(name);
         const version = _.map(this.selectedJobType, 'version');
         this.datatableOptions.job_type_name = name.length > 0 ? name : null;
         this.datatableOptions.job_type_version = version.length > 0 ? version : null;
-        console.log( this.datatableOptions.job_type_version);
         this.updateOptions();
     }
     onStatusChange(e) {
@@ -460,16 +456,10 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
-            console.log(this.selectedJobType);
             if (this.selectedJobType) {
-                this.displaySelected = [];
-                this.selectedButtonType = [];
+                this.selectBtn = [];
                 _.forEach(this.selectedJobType, jobType => {
-                    this.displaySelected.push({
-                        label: jobType.title,
-                        version: jobType.version
-                    });
-                    this.selectedButtonType.push({
+                    this.selectBtn.push({
                         label: jobType.title,
                         version: jobType.version
                     });

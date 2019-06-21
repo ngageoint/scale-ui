@@ -1,5 +1,5 @@
 <h2><i class="fa fa-cube"></i> Jobs <span *ngIf="count">({{ count }})</span></h2>
-<p-selectButton [options]="displaySelected" [(ngModel)]="selectedButtonType" (onOptionClick)="changeJobTypeSelected($event)"></p-selectButton>
+<p-selectButton [options]="selectBtn" [(ngModel)]="selectedButtonType" (onOptionClick)="changeJobTypeSelected($event)"></p-selectButton>
 <div class="jobs__header flexed space-between">
     <div class="jobs__date-filter flexed">
         <div class="noWrap">
@@ -56,11 +56,7 @@
                                 (onChange)="onJobTypeChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
                                 (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
                         <ng-template let-jobType p-template="item">
-                            <div *ngFor="let val of jobType" class="ui-multiselected-item-token ui-corner-all">
-                                <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
-                                    [innerHtml]="getUnicode(val.icon_code)"></i>
-                                <span>{{ val.label }}</span>
-                            </div>
+                            {{ jobType.label }}
                         </ng-template>
                     </p-multiSelect>
                 </div>
