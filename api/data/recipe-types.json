@@ -37,7 +37,6 @@
         {
             "id": 2,
             "name": "spectral",
-            "version": "1.5.0",
             "title": "Spectral Analysis",
             "description": "Perform spectral analysis on a NITF",
             "is_active": true,
@@ -69,7 +68,6 @@
         {
             "id": 3,
             "name": "worldview",
-            "version": "1.0.2",
             "title": "WorldView",
             "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
             "is_active": true,
@@ -101,7 +99,6 @@
         {
             "id": 4,
             "name": "oil-detection",
-            "version": "1.0",
             "title": "Oil Detection",
             "description": "Detect oil on the surface of water",
             "is_active": true,
@@ -125,7 +122,6 @@
         {
             "id": 5,
             "name": "caffe-aircraft-detection",
-            "version": "1.0",
             "title": "Caffe Aircraft Detection",
             "description": "Detect aircraft using BVL Caffe deep learning algorithms",
             "is_active": true,

@@ -28,8 +28,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     filtersApplied: any[] = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
-    recipeChoiceSelected: any[] = [];
-    recipeChoicesOptions: any[] = [];
+    recipeTypeOptions: SelectItem[] = [];
+    selectedRecipeTypes = [];
     recipeTypes: any[] = [];
     filteredChoices: any[] = [];
     filteredChoicesOptions: any[] = [];
@@ -81,6 +81,30 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
         return data;
     }
+    private getRecipeTypes() {
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.recipeTypes = data.results;
+            _.forEach(this.recipeTypes, recipeType => {
+                this.recipeTypeOptions.push({
+                    label: `${recipeType.title} rev. ${recipeType.revision_num}`,
+                    value: recipeType
+                });
+            });
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
+        });
+    }
+    colorGenerator(e) {
+        if (e.itemValue) {
+            // multiselect option was chosen
+            e.itemValue.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+            e.itemValue.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+        } else {
+            // normal dropdown option was chosen
+            e.value.color = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+        }
+    }
     getDataTypes() {
         this.dataTypesLoading = true;
         this.metricsApiService.getDataTypes().subscribe((data) => {
@@ -98,9 +122,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
-        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-            this.recipeTypes = data.results;
-        });
         this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
@@ -110,18 +131,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     return choice.is_active === true;
                 });
             }
-            const recipeChoicesOptions = [];
-            _.forEach(this.recipeTypes, (choice) => {
-                recipeChoicesOptions.push({
-                    label: choice.version ? choice.title + ' ' + choice.version : choice.title,
-                    value: _.forEach(choice.job_types, (jobType) => {
-                            if (JobType.name === result.choices.name ) {
-                                return result.choices;
-                            }
-                    })
-                });
-            });
-            this.recipeChoicesOptions = recipeChoicesOptions;
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :
@@ -132,7 +141,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             const filteredChoicesOptions = [];
             _.forEach(this.filteredChoices, (choice) => {
                 filteredChoicesOptions.push({
-                    label: choice.version ? choice.title + ' ' + choice.version : choice.title,
+                    label: choice.version ? `${choice.title} ${choice.version}` : choice.title,
                     value: choice
                 });
             });
@@ -167,6 +176,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.dataTypeFilterText = '';
         this.selectedMetric1 = null;
         this.selectedMetric2 = null;
+        this.selectedRecipeTypes = null;
         this.columns = [];
         this.metricOptions = [];
 
@@ -178,21 +188,19 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }
     }
     getRecipeJobTypes() {
-        if (this.recipeChoiceSelected != null) {
-            const filtersApplied = [];
-            _.forEach(this.recipeChoiceSelected, (outerRecipe) => {
-                _.forEach(outerRecipe, (selectedRecipe) => {
-                    _.forEach(this.filteredChoicesOptions, (jobTypeInfo) => {
-                        if (jobTypeInfo.value.name === selectedRecipe.name) {
-                            filtersApplied.push(jobTypeInfo.value);
-                        }
-                    });
-                });
-            });
-            this.filtersApplied = filtersApplied;
-        } else {
-            this.changeDataTypeSelection();
-        }
+        this.filtersApplied = [];
+        // populate filtersApplied with selected recipe type job types
+        _.forEach(this.selectedRecipeTypes, recipeType => {
+            this.filtersApplied = _.uniq(this.filtersApplied.concat(_.filter(this.filteredChoices, choice => {
+                return _.findIndex(recipeType.job_types, { name: choice.name, version: choice.version }) >= 0;
+            })));
+        });
+
+        // assign colors to each filter
+        _.forEach(this.filtersApplied, filter => {
+            filter.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+            filter.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+        });
     }
     updateChart() {
         if (_.isEqual(this.selectedMetric1, this.selectedMetric2)) {
@@ -335,6 +343,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 
     ngOnInit() {
         this.getDataTypes();
+        this.getRecipeTypes();
     }
 
     ngAfterViewInit() {

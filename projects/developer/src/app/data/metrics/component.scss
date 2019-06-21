@@ -33,4 +33,12 @@
     ::ng-deep .ui-sidebar {
         overflow-y: auto;
     }
+
+    ::ng-deep .ui-panel {
+        margin-top: 15px;
+
+        .ui-panel-content {
+            padding: 3px;
+        }
+    }
 }
