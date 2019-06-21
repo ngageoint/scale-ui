@@ -227,7 +227,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     onStatusChange(e) {
-        this.datatableOptions.status = e.length > 0 ? e.value : null;
+        this.datatableOptions.status = e.value.length > 0 ? e.value : null;
         this.updateOptions();
     }
     onErrorCategoryChange(e) {
@@ -399,7 +399,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
-        this.selectedJobType = [];
 
         this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
@@ -456,15 +455,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
-            if (this.selectedJobType) {
-                this.selectBtn = [];
-                _.forEach(this.selectedJobType, jobType => {
-                    this.selectBtn.push({
-                        label: jobType.title,
-                        version: jobType.version
-                    });
-                });
-            }
             this.getJobTypes();
         });
     }
