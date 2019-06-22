@@ -25,8 +25,6 @@ module.exports = function () {
                 name: 'warning-' + i,
                 title: 'Warning ' + i,
                 description: 'This is test warning number ' + i,
-                // started: '2019-06-19T10:38:47.247Z',
-                // last_updated: '2019-06-19T10:38:47.247Z'
                 started: moment.utc().subtract(getRandom(1, 15), 'm').toISOString(),
                 last_updated: moment.utc().subtract(getRandom(5, 50), 's').toISOString()
             });
