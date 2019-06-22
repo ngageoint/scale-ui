@@ -49,11 +49,37 @@ label {
         color: #999;
     }
 }
+.jobs__selected {
+    ul {
+        list-style-type: none;
+        margin: 0 0 10px 0;
+        padding: 0;
+        max-width: 25vw;
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+            cursor: pointer;
+            padding: 5px;
+            margin: 2px 2px 1px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            .jobs__selected-close {
+                margin: 0 0 0 10px;
+            }
+        }
+    }
+}
 .label-info {
     padding: .2em .6em .1em .6em;
 }
 ::ng-deep .jobs__error-tooltip.ui-tooltip {
     max-width: 50%;
+}
+::ng-deep .ui-multiselect-close {
+    display: none !important;
 }
 
 @media screen and (max-width: 858px) {

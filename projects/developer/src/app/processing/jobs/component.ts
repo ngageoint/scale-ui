@@ -154,6 +154,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 }
             });
             this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
+            this.selectedJobType = _.orderBy(this.selectedJobType, ['name', 'version'], ['asc', 'asc']);
             this.updateOptions();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
@@ -234,7 +235,6 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
-
     setDateFilterRange(unit: any, range: any) {
         this.started = moment.utc().subtract(range, unit).toISOString();
         this.ended = moment.utc().toISOString();
@@ -368,6 +368,10 @@ export class JobsComponent implements OnInit, OnDestroy {
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
             });
+    }
+    onSelectedJobTypeClick(jobType) {
+        _.remove(this.selectedJobType, jobType);
+        this.onJobTypeChange({ value: this.selectedJobType });
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
