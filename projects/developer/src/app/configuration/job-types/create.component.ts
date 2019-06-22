@@ -160,7 +160,11 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         const job: any = _.find(seedImage.job.JobVersions, { JobVersion: seedImage.selectedJobVersion });
         const image: any = job ? _.find(job.Images, { PackageVersion: seedImage.selectedPackageVersion }) : null;
         this.jobType.manifest = seedImage.manifest;
-        this.jobType.docker_image = job && image ? `${image.Registry}/${image.Org}/${image.Name}` : null;
+        if (job && image) {
+            this.jobType.docker_image = image.Org ? `${image.Registry}/${image.Org}/${image.Name}` : `${image.Registry}/${image.Name}`;
+        } else {
+            this.jobType.docker_image = null;
+        }
 
         // alert user if docker image cannot be determined from imported seed image
         if (!job || !image) {
