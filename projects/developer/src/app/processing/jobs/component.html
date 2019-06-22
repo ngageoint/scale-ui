@@ -54,6 +54,17 @@
                     <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
                                 (onChange)="onJobTypeChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
                                 (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
+                        <p-header>
+                            <div class="jobs__selected">
+                                <ul>
+                                    <li class="label label-primary" *ngFor="let jobType of selectedJobType"
+                                        (click)="onSelectedJobTypeClick(jobType)">
+                                        <div>{{ jobType.title }}</div>
+                                        <div class="jobs__selected-close"><span class="fa fa-close"></span></div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </p-header>
                         <ng-template let-jobType p-template="item">
                             {{ jobType.label }}
                         </ng-template>
