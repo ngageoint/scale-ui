@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.3](https://github.com-mil///compare/v0.4.2...v0.4.3) (2019-06-25)
+
+
+### Bug Fixes
+
+* **scans:** correct link to job details in scan details view ([644ae5c](https://github.com-mil///commit/644ae5c))
+* **strikes:** remove required restriction on S3 secret access key field for strikes ([77e6cea](https://github.com-mil///commit/77e6cea))
+
+
+
 ### [0.4.2](https://github.com-mil///compare/v0.4.1...v0.4.2) (2019-06-25)
 
 
