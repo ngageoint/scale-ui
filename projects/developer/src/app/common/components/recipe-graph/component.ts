@@ -518,7 +518,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 title: null,
                 name: 'Start',
                 version: null,
-                options: file
+                options: [file]
             });
         });
         _.forEach(this.recipeData.definition.input.json, json => {
