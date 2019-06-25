@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { StatusApiService } from '../../common/services/status/api.service';
+import { StatusApiService } from '../../system/status/api.service';
 
 @Component({
     selector: 'dev-status',

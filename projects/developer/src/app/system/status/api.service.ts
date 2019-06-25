@@ -5,8 +5,8 @@ import polling from 'rx-polling';
 import { Observable } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 
-import { NodeStatus } from '../../../system/nodes/api.status.model';
-import { DataService } from '../data.service';
+import { NodeStatus } from '../nodes/api.status.model';
+import { DataService } from '../../common/services/data.service';
 
 @Injectable({
     providedIn: 'root'

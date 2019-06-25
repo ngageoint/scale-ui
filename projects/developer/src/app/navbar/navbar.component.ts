@@ -18,15 +18,20 @@ import { ThemeService } from '../theme';
 export class NavbarComponent implements OnInit, OnChanges {
     @Input() isAuthenticated: boolean;
     @Input() theme: string;
-    @ViewChild('schedulerOp') schedulerOp: OverlayPanel;
+    @ViewChild('systemOp') systemOp: OverlayPanel;
     env = environment;
     selectedId = null;
     subscription: any;
     themeTooltip: string;
     themeIcon: string;
     scheduler: any;
-    schedulerClass: string;
-    schedulerIcon: string;
+    services = [
+        {
+            label: 'Scheduler',
+            styleClass: 'system-status__healthy fa fa-check'
+        }
+    ];
+    serviceAlerts = [];
     isMobile: boolean;
     itemsMobile: MenuItem[];
 
@@ -77,8 +82,8 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
-    onSchedulerClick(event) {
-        this.schedulerOp.toggle(event);
+    onSystemClick(event) {
+        this.systemOp.toggle(event);
     }
 
     createMobileMenu() {
@@ -218,17 +223,7 @@ export class NavbarComponent implements OnInit, OnChanges {
     onStatusChange(data) {
         if (data) {
             this.scheduler = data.scheduler;
-            this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
-            if (this.scheduler.state.name === 'READY') {
-                this.schedulerClass = 'label label-success';
-                this.schedulerIcon = 'fa fa-check-circle';
-            } else if (this.scheduler.state.name === 'PAUSED') {
-                this.schedulerClass = 'label label-paused';
-                this.schedulerIcon = 'fa fa-pause';
-            } else {
-                this.schedulerClass = 'label label-default';
-                this.schedulerIcon = 'fa fa-circle';
-            }
+            console.log(data);
         }
     }
 

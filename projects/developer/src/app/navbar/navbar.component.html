@@ -36,12 +36,12 @@
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler" pTooltip="Scheduler Status"
-                 tooltipPosition="bottom" (click)="onSchedulerClick($event)">
+            <div class="navbar__system" *ngIf="isAuthenticated" pTooltip="System Status"
+                 tooltipPosition="bottom" (click)="onSystemClick($event)">
                 <div class="navbar__icon">
-                    <span class="fa fa-heartbeat"></span>
-                    <span class="label label-danger" *ngIf="scheduler.warnings.length > 0">
-                        {{ scheduler.warnings.length }}
+                    <span class="fa fa-bell"></span>
+                    <span class="label label-danger" *ngIf="serviceAlerts.length > 0">
+                        <i class="fa fa-warning"></i>
                     </span>
                 </div>
             </div>
@@ -49,19 +49,17 @@
     </div>
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
-<p-overlayPanel styleClass="navbar__scheduler-overlaypanel" appendTo="body" [dismissable]="false" #schedulerOp>
-    <div class="navbar__scheduler-status" *ngIf="scheduler">
-        <h3>{{ scheduler.hostname }}</h3>
-        <div>
-            <span [ngClass]="schedulerClass"><i [ngClass]="schedulerIcon"></i> {{ scheduler.state.title }}</span>
-            {{ scheduler.state.description }}
-        </div>
-        <ul *ngFor="let warning of scheduler.warnings">
-            <li>
-                <strong>{{ warning.title }}</strong><br/>
-                <span *ngIf="warning.description">{{ warning.description }}<br/></span>
-                <span class="small-text">{{ warning.last_updated }}</span>
+<p-overlayPanel styleClass="navbar__system-overlaypanel" appendTo="body" [dismissable]="true" #systemOp>
+    <div class="navbar__system-status">
+        <h2>System Status</h2>
+        <ul>
+            <li *ngFor="let service of services">
+                <i [ngClass]="service.styleClass"></i> {{ service.label }}
             </li>
         </ul>
+        <hr/>
+        <div class="text-right">
+            <a routerLink="/system/status">View Details <i class="fa fa-caret-right"></i></a>
+        </div>
     </div>
 </p-overlayPanel>

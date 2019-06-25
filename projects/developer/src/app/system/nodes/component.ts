@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { NodesApiService } from './api.service';
-import { StatusApiService } from '../../common/services/status/api.service';
+import { StatusApiService } from '../status/api.service';
 
 @Component({
     selector: 'dev-nodes',

@@ -4,7 +4,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { DataService } from '../../common/services/data.service';
-import { StatusApiService } from '../../common/services/status/api.service';
+import { StatusApiService } from '../../system/status/api.service';
 import { StatusComponent } from './component';
 
 describe('StatusComponent', () => {
