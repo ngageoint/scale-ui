@@ -1,7 +1,30 @@
 <div class="footer">
+    <div *ngIf="!env.auth.enabled"></div>
+    <ul *ngIf="env.auth.enabled">
+        <li *ngIf="userProfile">
+            <strong>Authenticated User:</strong> {{ userProfile.first_name }} {{ userProfile.last_name }}
+        </li>
+        <li *ngIf="!userProfile">
+            <a (click)="onProfileClick($event)">Login</a>
+        </li>
+    </ul>
     <ul>
         <li>Scale UI v{{ uiVersion }}
         <li>Scale API v{{ apiVersion }}</li>
-        <li><a href="{{ documentation }}"><i class="fa fa-external-link"></i> View Documentation</a></li>
+        <li><a [href]="documentation"><i class="fa fa-external-link"></i> View Documentation</a></li>
     </ul>
 </div>
+<p-overlayPanel styleClass="footer__profile-overlaypanel" appendTo="body" [dismissable]="true"
+                (onShow)="handleOnProfileShow()" #profileOp>
+    <div class="footer__profile-login" *ngIf="!isAuthenticated && env.auth.scheme.type === 'form'">
+        <input pInputText type="text" placeholder="Username" [(ngModel)]="username" (keypress)="handleKeyPress($event)"
+               #user/>
+        <input pInputText type="password" placeholder="Password" [(ngModel)]="password"
+               (keypress)="handleKeyPress($event)"/>
+        <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login" (click)="login()"
+                [disabled]="!username || !password"></button>
+    </div>
+    <div *ngIf="!isAuthenticated && env.auth.scheme.type === 'external'">
+        <a [href]="env.auth.scheme.url"><i class="fa fa-external-link"></i> Continue to login</a>
+    </div>
+</p-overlayPanel>

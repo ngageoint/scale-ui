@@ -133,7 +133,7 @@ $navbar-item-width: 150px;
 }
 
 ::ng-deep .ui-overlaypanel {
-    &.navbar__scheduler-overlaypanel, &.navbar__profile-overlaypanel {
+    &.navbar__scheduler-overlaypanel {
         width: 350px;
         padding: 10px 0;
 
@@ -149,25 +149,10 @@ $navbar-item-width: 150px;
             padding: 0 0 0 17px;
         }
     }
-    &.navbar__scheduler-overlaypanel, &.navbar__profile-overlaypanel {
+    &.navbar__scheduler-overlaypanel {
         h3 {
             margin: 0;
             padding: 0;
-        }
-    }
-    &.navbar__profile-overlaypanel {
-        .navbar__profile-login {
-            text-align: right;
-
-            input {
-                width: 100%;
-                display: block;
-                margin-bottom: 5px;
-            }
-        }
-
-        .navbar__profile-data {
-            padding: 2px;
         }
     }
 }

@@ -2,11 +2,10 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@
 import { OverlayPanel } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {MenuItem} from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
-import { ProfileService } from '../common/services/profile.service';
 import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
 
@@ -17,29 +16,22 @@ import { ThemeService } from '../theme';
 })
 
 export class NavbarComponent implements OnInit, OnChanges {
-    @Input() theme: string;
     @Input() isAuthenticated: boolean;
-    @ViewChild('profileOp') profileOp: OverlayPanel;
+    @Input() theme: string;
     @ViewChild('schedulerOp') schedulerOp: OverlayPanel;
-    @ViewChild('profile') profile: any;
-    @ViewChild('user') usernameEl: any;
     env = environment;
     selectedId = null;
     subscription: any;
     themeTooltip: string;
     themeIcon: string;
-    username: string;
-    password: string;
     scheduler: any;
     schedulerClass: string;
     schedulerIcon: string;
-    userProfile: any;
     isMobile: boolean;
     itemsMobile: MenuItem[];
 
     constructor(
         private messageService: MessageService,
-        private profileService: ProfileService,
         private dataService: DataService,
         private themeService: ThemeService,
         public breakpointObserver: BreakpointObserver
@@ -85,37 +77,8 @@ export class NavbarComponent implements OnInit, OnChanges {
         }
     }
 
-    login() {
-        this.profileService.login({ username: this.username, password: this.password }).subscribe(data => {
-            console.log(data);
-        }, err => {
-            console.log(err);
-            this.messageService.add({ severity: 'error', summary: 'Authentication Error', detail: err.statusText, life: 10000 });
-        });
-    }
-
-    handleKeyPress(event) {
-        if (event.code === 'Enter' && this.username && this.password) {
-            this.login();
-        }
-    }
-
-    handleOnProfileShow() {
-        if (!this.isAuthenticated) {
-            setTimeout(() => {
-                this.usernameEl.nativeElement.focus();
-            }, 50);
-        }
-    }
-
     onSchedulerClick(event) {
-        this.profileOp.hide();
         this.schedulerOp.toggle(event);
-    }
-
-    onProfileClick(event) {
-        this.schedulerOp.hide();
-        this.profileOp.toggle(event);
     }
 
     createMobileMenu() {
@@ -275,7 +238,6 @@ export class NavbarComponent implements OnInit, OnChanges {
         });
 
         this.createMobileMenu();
-        this.userProfile = this.dataService.getUserProfile();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -286,14 +248,6 @@ export class NavbarComponent implements OnInit, OnChanges {
             if (themeLink) {
                 themeLink.href = `assets/themes/${changes.theme.currentValue}.css`;
             }
-        }
-        if (changes.isAuthenticated && changes.isAuthenticated.currentValue === false) {
-            const event = new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true
-            });
-            this.profileOp.show(event, this.profile.nativeElement);
         }
     }
 }

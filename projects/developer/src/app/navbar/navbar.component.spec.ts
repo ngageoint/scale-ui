@@ -4,7 +4,6 @@ import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../common/services/data.service';
-import { ProfileService } from '../common/services/profile.service';
 import { ThemeService } from '../theme';
 import { THEMES, ACTIVE_THEME } from '../theme/symbols';
 import { NavbarComponent } from './navbar.component';
@@ -16,7 +15,7 @@ describe('NavbarComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [MessageService, DataService, ProfileService, ThemeService, {
+            providers: [MessageService, DataService, ThemeService, {
                 provide: THEMES,
                 useValue: THEMES
             }, {
