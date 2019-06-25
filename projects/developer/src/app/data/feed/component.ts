@@ -24,7 +24,7 @@ export class FeedComponent implements OnInit, OnDestroy {
         datasets: []
     };
     strikes: SelectItem[] = [];
-    selectedStrikes: any;
+    selectedStrikes = [];
     started: any;
     ended: any;
     viewingLatest = true;
@@ -52,7 +52,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                 });
             });
             this.strikes = _.orderBy(this.strikes, ['label'], ['asc']);
-            if (!this.selectedStrikes) {
+            if (!this.selectedStrikes && this.strikes.length > 0) {
                 this.selectedStrikes = [this.strikes[0].value];
             }
 
@@ -234,9 +234,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             }
             this.selectedTimeValue = params.use_ingest_time === 'true' ? 'ingest' : 'data';
         });
-        if (this.selectedStrikes) {
-            this.getStrikes();
-        }
+        this.getStrikes();
     }
 
     ngOnDestroy() {
