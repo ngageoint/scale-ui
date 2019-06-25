@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.2](https://github.com-mil///compare/v0.4.1...v0.4.2) (2019-06-25)
+
+
+### Bug Fixes
+
+* **workspaces:** remove required restriction for S3 workspace secret access key field ([8e374d5](https://github.com-mil///commit/8e374d5))
+
+
+
 ### [0.4.1](https://github-mil///compare/v0.4.0...v0.4.1) (2019-06-25)
 
 
