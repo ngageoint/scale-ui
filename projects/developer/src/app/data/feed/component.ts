@@ -234,8 +234,9 @@ export class FeedComponent implements OnInit, OnDestroy {
             }
             this.selectedTimeValue = params.use_ingest_time === 'true' ? 'ingest' : 'data';
         });
-
-        this.getStrikes();
+        if (this.selectedStrikes) {
+            this.getStrikes();
+        }
     }
 
     ngOnDestroy() {
