@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.4.1](https://github-mil///compare/v0.4.0...v0.4.1) (2019-06-25)
+
+
+### Bug Fixes
+
+* **recipe types:** bugfix to enable recipe type inputs to be connected to nodes ([7b32ec2](https://github-mil///commit/7b32ec2))
+
+
+
 ## [0.4.0](https://github.com-mil///compare/v0.3.0...v0.4.0) (2019-06-25)
 
 
