@@ -84,7 +84,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                     bucket_name: [''],
                     credentials: this.fb.group({
                         access_key_id: [''],
-                        secret_access_key: ['', Validators.required]
+                        secret_access_key: ['']
                     }),
                     region_name: ['']
                 })
