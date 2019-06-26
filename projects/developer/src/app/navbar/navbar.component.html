@@ -31,7 +31,7 @@
         </div>
         <div class="flexed navbar__settings" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
-                <dev-status (statusChange)="onStatusChange($event)"></dev-status>
+                <dev-status></dev-status>
             </div>
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
@@ -53,8 +53,8 @@
     <div class="navbar__system-status">
         <h2>System Status</h2>
         <ul>
-            <li *ngFor="let status of statuses">
-                <i [ngClass]="status.styleClass"></i> {{ status.label }}
+            <li *ngFor="let status of statuses | keyvalue">
+                <i [ngClass]="status.value.styleClass"></i> {{ status.value.label }}
             </li>
         </ul>
         <hr/>

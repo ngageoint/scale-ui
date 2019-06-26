@@ -32,7 +32,7 @@ export class StatusApiService {
                     }),
                     catchError(DataService.handleError)
                 );
-            return polling(request, { interval: 30000, attempts: 0 });
+            return polling(request, { interval: 5000, attempts: 0 });
         }
         return this.http.get<any>(`${this.apiPrefix}/status/`)
             .pipe(

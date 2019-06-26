@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
+import { StatusService } from '../common/services/status.service';
 import { THEMES, ACTIVE_THEME } from '../theme/symbols';
 import { NavbarComponent } from './navbar.component';
 
@@ -15,7 +16,7 @@ describe('NavbarComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [MessageService, DataService, ThemeService, {
+            providers: [MessageService, DataService, ThemeService, StatusService, {
                 provide: THEMES,
                 useValue: THEMES
             }, {

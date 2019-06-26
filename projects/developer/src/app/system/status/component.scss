@@ -1,0 +1,14 @@
+.system-status {
+    h3 {
+        margin: 0;
+        padding: 0;
+    }
+
+    .system-status__healthy {
+        color: var(--status-good);
+    }
+
+    .system-status__unhealthy {
+        color: var(--status-error);
+    }
+}

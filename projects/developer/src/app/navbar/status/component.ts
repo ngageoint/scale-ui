@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 
+import { StatusService } from '../../common/services/status.service';
 import { StatusApiService } from '../../system/status/api.service';
 
 @Component({
@@ -9,7 +10,6 @@ import { StatusApiService } from '../../system/status/api.service';
     styleUrls: ['./component.scss']
 })
 export class StatusComponent implements OnInit, OnDestroy {
-    @Output() statusChange: EventEmitter<any> = new EventEmitter<any>();
     subscription: any;
     loading: boolean;
     status: any;
@@ -20,8 +20,9 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         private messageService: MessageService,
+        private statusService: StatusService,
         private statusApiService: StatusApiService
-    ) { }
+    ) {}
 
     private getUsage(metric) {
         if (metric) {
@@ -39,8 +40,8 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.unsubscribe();
         this.subscription = this.statusApiService.getStatus(true).subscribe(data => {
             this.loading = false;
+            this.statusService.setStatus(data);
             if (data) {
-                this.statusChange.emit(data);
                 this.status = data;
                 this.pctCpu = this.getUsage(this.status.resources.cpus);
                 this.pctMem = this.getUsage(this.status.resources.mem);

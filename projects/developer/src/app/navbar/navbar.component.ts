@@ -1,13 +1,13 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { OverlayPanel } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MenuItem } from 'primeng/api';
-import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
 import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
+import { StatusService } from '../common/services/status.service';
 
 @Component({
     selector: 'dev-navbar',
@@ -15,17 +15,17 @@ import { ThemeService } from '../theme';
     styleUrls: ['./navbar.component.scss']
 })
 
-export class NavbarComponent implements OnInit, OnChanges {
+export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() isAuthenticated: boolean;
     @Input() theme: string;
     @ViewChild('systemOp') systemOp: OverlayPanel;
-    env = environment;
+    statusSubscription: any;
     selectedId = null;
     subscription: any;
     themeTooltip: string;
     themeIcon: string;
     scheduler: any;
-    statuses = [];
+    statuses: any;
     statusAlerts = [];
     isMobile: boolean;
     itemsMobile: MenuItem[];
@@ -34,6 +34,7 @@ export class NavbarComponent implements OnInit, OnChanges {
         private messageService: MessageService,
         private dataService: DataService,
         private themeService: ThemeService,
+        private statusService: StatusService,
         public breakpointObserver: BreakpointObserver
     ) {}
 
@@ -215,27 +216,19 @@ export class NavbarComponent implements OnInit, OnChanges {
         ];
     }
 
-    onStatusChange(data) {
-        if (data) {
-            this.statuses.push({
-                label: 'Scheduler',
-                styleClass: 'system-status__healthy fa fa-check',
-                data: data.scheduler
-            }, {
-                label: 'System',
-                styleClass: 'system-status__healthy fa fa-check',
-                data: data.system
-            }, {
-                label: 'Vault',
-                styleClass: 'system-status__healthy fa fa-check',
-                data: data.vault
-            });
+    unsubscribe() {
+        if (this.statusSubscription) {
+            this.statusSubscription.unsubscribe();
         }
     }
 
     ngOnInit() {
         this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
+        });
+
+        this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
+            this.statuses = data.statuses;
         });
 
         this.createMobileMenu();
@@ -250,5 +243,9 @@ export class NavbarComponent implements OnInit, OnChanges {
                 themeLink.href = `assets/themes/${changes.theme.currentValue}.css`;
             }
         }
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }
