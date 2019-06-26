@@ -88,7 +88,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     sqs_name: ['', Validators.required],
                     credentials: this.fb.group({
                         access_key_id: [''],
-                        secret_access_key: ['', Validators.required]
+                        secret_access_key: ['']
                     }),
                     region_name: ['']
                 }),
