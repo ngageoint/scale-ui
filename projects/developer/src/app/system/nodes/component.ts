@@ -1,18 +1,19 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { NodesApiService } from './api.service';
-import { StatusApiService } from '../status/api.service';
+import { StatusService } from '../../common/services/status.service';
 
 @Component({
     selector: 'dev-nodes',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class NodesComponent implements OnInit {
+export class NodesComponent implements OnInit, OnDestroy {
     @ViewChild('menu') menu: any;
+    subscription: any;
     loading: boolean;
     collapsed = true;
     collapseIcon = 'fa fa-minus';
@@ -125,7 +126,7 @@ export class NodesComponent implements OnInit {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private nodesApiService: NodesApiService,
-        private statusApiService: StatusApiService
+        private statusService: StatusService
     ) {}
 
     private filterNodes() {
@@ -179,21 +180,27 @@ export class NodesComponent implements OnInit {
     }
 
     private getNodes() {
-        this.statusApiService.getStatus().subscribe(data => {
-            this.nodesStatus = data.nodes;
-            this.nodesApiService.getNodes().subscribe(nodeData => {
-                this.allNodes = nodeData.results;
-                this.loading = false;
-                this.formatNodes();
-            }, err => {
-                console.log(err);
-                this.messageService.add({severity: 'error', summary: 'Error retrieving nodes', detail: err.statusText});
-                this.loading = false;
-            });
+        console.log('getNodes');
+        this.nodesApiService.getNodes().subscribe(nodeData => {
+            this.allNodes = nodeData.results;
+            this.loading = false;
+            this.formatNodes();
         }, err => {
             console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving system status', detail: err.statusText});
+            this.messageService.add({severity: 'error', summary: 'Error retrieving nodes', detail: err.statusText});
             this.loading = false;
+        });
+    }
+
+    private getNodesStatus() {
+        if (!this.nodesStatus || this.nodesStatus.length === 0) {
+            const status = this.statusService.getStatus();
+            this.nodesStatus = status ? status.data.nodes : [];
+            this.getNodes();
+        }
+        this.subscription = this.statusService.statusUpdated.subscribe(status => {
+            this.nodesStatus = status.data.nodes;
+            this.formatNodes();
         });
     }
 
@@ -313,6 +320,12 @@ export class NodesComponent implements OnInit {
         this.updateQueryParams();
     }
 
+    unsubscribe() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
+    }
+
     ngOnInit() {
         this.loading = true;
         this.route.queryParams.subscribe(params => {
@@ -345,11 +358,15 @@ export class NodesComponent implements OnInit {
             this.schedulerStoppedBtnIcon = this.filters.scheduler_stopped ? 'fa fa-check' : 'fa fa-remove';
             this.collapseIcon = this.collapsed ? 'fa fa-plus' : 'fa fa-minus';
             this.collapseTooltip = this.collapsed ? 'Expand All Nodes' : 'Collapse All Nodes';
-            this.getNodes();
+            this.getNodesStatus();
 
             if (!params.active || !params.ready || !params.paused || !params.busy || !params.waiting || !params.collapsed) {
                 this.updateQueryParams();
             }
         });
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

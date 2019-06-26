@@ -7,7 +7,7 @@ import { Subject } from 'rxjs';
 
 import { NodesComponent } from './component';
 import { NodesApiService } from './api.service';
-import { StatusApiService } from '../status/api.service';
+import { StatusService } from '../../common/services/status.service';
 import { DataService } from '../../common/services/data.service';
 
 describe('NodesComponent', () => {
@@ -19,7 +19,7 @@ describe('NodesComponent', () => {
             declarations: [NodesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, NodesApiService, StatusApiService, DataService,
+                MessageService, NodesApiService, StatusService, DataService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {

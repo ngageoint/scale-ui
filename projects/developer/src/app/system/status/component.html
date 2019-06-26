@@ -1,6 +1,6 @@
 <div class="system-status">
     <h2><i class="fa fa-bell"></i> System Status</h2>
-    <p-accordion [multiple]="true">
+    <p-accordion [multiple]="true" *ngIf="statuses">
         <p-accordionTab>
             <p-header>
                 <i [ngClass]="statuses.scheduler.styleClass"></i> {{ statuses.scheduler.label }}
