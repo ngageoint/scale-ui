@@ -40,7 +40,7 @@
                  tooltipPosition="bottom" (click)="onSystemClick($event)">
                 <div class="navbar__icon">
                     <span class="fa fa-bell"></span>
-                    <span class="label label-danger" *ngIf="serviceAlerts.length > 0">
+                    <span class="label label-danger" *ngIf="statusAlerts.length > 0">
                         <i class="fa fa-warning"></i>
                     </span>
                 </div>
@@ -53,8 +53,8 @@
     <div class="navbar__system-status">
         <h2>System Status</h2>
         <ul>
-            <li *ngFor="let service of services">
-                <i [ngClass]="service.styleClass"></i> {{ service.label }}
+            <li *ngFor="let status of statuses">
+                <i [ngClass]="status.styleClass"></i> {{ status.label }}
             </li>
         </ul>
         <hr/>

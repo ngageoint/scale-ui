@@ -1,8 +1,11 @@
 <div class="system-status">
     <h2><i class="fa fa-bell"></i> System Status</h2>
     <p-accordion>
-        <p-accordionTab *ngFor="let service of services" [header]="service.label">
-            Information about {{ service.label }}
+        <p-accordionTab *ngFor="let status of statuses">
+            <p-header>
+                {{ status.label }} <i [ngClass]="status.styleClass"></i>
+            </p-header>
+            Information about {{ status.label }}
         </p-accordionTab>
     </p-accordion>
 </div>

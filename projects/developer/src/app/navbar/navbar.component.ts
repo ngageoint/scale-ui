@@ -25,13 +25,8 @@ export class NavbarComponent implements OnInit, OnChanges {
     themeTooltip: string;
     themeIcon: string;
     scheduler: any;
-    services = [
-        {
-            label: 'Scheduler',
-            styleClass: 'system-status__healthy fa fa-check'
-        }
-    ];
-    serviceAlerts = [];
+    statuses = [];
+    statusAlerts = [];
     isMobile: boolean;
     itemsMobile: MenuItem[];
 
@@ -222,8 +217,19 @@ export class NavbarComponent implements OnInit, OnChanges {
 
     onStatusChange(data) {
         if (data) {
-            this.scheduler = data.scheduler;
-            console.log(data);
+            this.statuses.push({
+                label: 'Scheduler',
+                styleClass: 'system-status__healthy fa fa-check',
+                data: data.scheduler
+            }, {
+                label: 'System',
+                styleClass: 'system-status__healthy fa fa-check',
+                data: data.system
+            }, {
+                label: 'Vault',
+                styleClass: 'system-status__healthy fa fa-check',
+                data: data.vault
+            });
         }
     }
 

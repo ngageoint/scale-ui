@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
     styleUrls: ['./component.scss']
 })
 export class SystemStatusComponent implements OnInit {
-    services = [
+    statuses = [
         {
             label: 'Scheduler',
             styleClass: 'system-status__healthy fa fa-check'
