@@ -45,6 +45,10 @@
                     </span>
                 </div>
             </div>
+            <div class="navbar__theme" [ngClass]="schedulerClass" (click)="toggleScheduler()"
+                 [pTooltip]="schedulerTooltip" tooltipPosition="bottom">
+                <span class="fa fa-power-off"></span>
+            </div>
         </div>
     </div>
 </div>

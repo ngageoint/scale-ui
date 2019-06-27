@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
 import { StatusService } from '../common/services/status.service';
+import { SchedulerApiService } from '../common/services/scheduler/api.service';
 
 @Component({
     selector: 'dev-navbar',
@@ -25,6 +26,8 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     themeTooltip: string;
     themeIcon: string;
     scheduler: any;
+    schedulerTooltip = 'Stop Scheduler';
+    schedulerClass = 'navbar__scheduler-pause';
     statuses: any;
     statusAlerts = [];
     isMobile: boolean;
@@ -35,6 +38,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         private dataService: DataService,
         private themeService: ThemeService,
         private statusService: StatusService,
+        private schedulerApiService: SchedulerApiService,
         public breakpointObserver: BreakpointObserver
     ) {}
 
@@ -222,6 +226,30 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
+    getScheduler() {
+        this.schedulerApiService.getScheduler(true).subscribe(data => {
+            this.scheduler = data;
+            this.schedulerTooltip = this.scheduler.is_paused ? 'Resume Scheduler' : 'Stop Scheduler';
+            this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving scheduler', detail: err.statusText});
+        });
+    }
+
+    toggleScheduler() {
+        this.scheduler.is_paused = !this.scheduler.is_paused;
+        this.schedulerApiService.updateScheduler(this.scheduler).subscribe(() => {
+            this.messageService.add({severity: 'success', summary: 'Scheduler successfully updated'});
+            this.schedulerTooltip = this.scheduler.is_paused ? 'Resume Scheduler' : 'Stop Scheduler';
+            this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
+        }, err => {
+            console.log(err);
+            this.scheduler.is_paused = !this.scheduler.is_paused;
+            this.messageService.add({severity: 'error', summary: 'Error updating scheduler', detail: err.statusText});
+        });
+    }
+
     ngOnInit() {
         this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
@@ -232,6 +260,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.createMobileMenu();
+        this.getScheduler();
     }
 
     ngOnChanges(changes: SimpleChanges) {

@@ -130,6 +130,14 @@ $navbar-item-width: 150px;
             }
         }
     }
+
+    .navbar__scheduler-pause {
+        color: var(--status-error);
+    }
+
+    .navbar__scheduler-resume {
+        color: var(--status-good);
+    }
 }
 
 .navbar__system-status {
