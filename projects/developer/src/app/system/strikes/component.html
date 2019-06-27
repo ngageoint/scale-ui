@@ -89,7 +89,7 @@
                 <div class="p-grid" formGroupName="configuration">
                     <div class="p-col-6">
                         <label>
-                            <span class="required">Recipe</span>
+                            <span class="required">Recipe Type </span>
                             <p-dropdown [options]="recipeOptions" formControlName="recipe"
                                         [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                             </p-dropdown>
@@ -98,7 +98,7 @@
                     <div class="p-col-6">
                         <div>
                             <label>
-                                <span class="required">Workspace</span>
+                                <span class="required">Input Workspace</span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
                                             (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
