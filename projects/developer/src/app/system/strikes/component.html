@@ -118,7 +118,7 @@
                         <div class="p-col-6" formGroupName="monitor">
                             <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
                                 <span class="required">Transfer Suffix</span>
-                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                                <input type="text" pInputText formControlName="transfer_suffix" pTooltip="File extention to be ignored when transfering files" required/>
                             </label>
                             <label *ngIf="createForm.get('configuration.monitor.sqs_name').enabled">
                                 <span class="required">SQS Name</span>
