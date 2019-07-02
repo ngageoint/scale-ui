@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { WorkspacesApiService } from '../workspaces/api.service';
 import { StrikesApiService } from './api.service';
+import { JobsApiService } from '../../processing/jobs/api.service';
 import { Strike } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
 
@@ -59,7 +60,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
         private workspacesApiService: WorkspacesApiService,
-        private strikesApiService: StrikesApiService
+        private strikesApiService: StrikesApiService,
+        private jobsApiService: JobsApiService
     ) {}
 
     private clampText() {
@@ -433,6 +435,22 @@ export class StrikesComponent implements OnInit, OnDestroy {
         } else {
             this.router.navigate([`/system/strikes/${strike.value.id}`]);
         }
+    }
+
+    requeueJob(jobId: number): void {
+        this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
+        this.jobsApiService.requeueJobs({job_ids: [jobId]})
+            .subscribe(() => {}, err => {
+                this.messageService.add({severity: 'error', summary: 'Error requeuing job', detail: err.statusText});
+            });
+    }
+
+    cancelJob(jobId: number): void {
+        this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
+        this.jobsApiService.cancelJobs({job_ids: [jobId]})
+            .subscribe(() => {}, err => {
+                this.messageService.add({severity: 'error', summary: 'Error canceling job', detail: err.statusText});
+            });
     }
 
     ngOnInit() {
