@@ -52,6 +52,12 @@
                         <i class="fa" [innerHtml]="strikeJobIcon"></i>
                         View Job Details ({{ selectedStrikeDetail.job.status }})
                     </a>
+                    <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
+                            (click)="cancelJob(selectedStrikeDetail.job.id)" pTooltip="Cancel Job"
+                            *ngIf="!selectedStrikeDetail.job.is_superseded && selectedStrikeDetail.job.status !== 'COMPLETED' && selectedStrikeDetail.job.status !== 'CANCELED'"></button>
+                    <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
+                            (click)="requeueJob(selectedStrikeDetail.job.id)" pTooltip="Requeue Job"
+                            *ngIf="!selectedStrikeDetail.job.is_superseded && (selectedStrikeDetail.job.status === 'FAILED' || selectedStrikeDetail.job.status === 'CANCELED')"></button>
                 </dd>
                 <dt>Created:</dt>
                 <dd>
