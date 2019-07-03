@@ -68,7 +68,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     autoUpdate = false;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
-        { label: 'Job Nodes', icon: 'fa fa-cube',
+        { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
                 this.addRemoveDisplayType = 'job';
                 this.showAddRemoveDisplay = true;
