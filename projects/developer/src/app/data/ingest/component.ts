@@ -39,8 +39,8 @@ export class IngestComponent implements OnInit, OnDestroy {
     strikeValues: SelectItem[];
     selectedStrike: any = [];
     statusValues: SelectItem[] = [{
-        label: 'Transfering',
-        value: 'TRANSFERING'
+        label: 'Transferring',
+        value: 'TRANSFERRING'
     }, {
         label: 'Transferred',
         value: 'TRANSFERRED'
