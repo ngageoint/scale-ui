@@ -47,5 +47,11 @@
         .seed-jobs .results .result-header {
             color: var(--black);
         }
+        .seed-jobs .results .result-header {
+            color: var(--black);
+        }
+        .seed-jobs .job-details .code pre {
+            color: var(--panel-background);
+        }
     }
 }
