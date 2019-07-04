@@ -6,6 +6,7 @@ export const lightTheme: Theme = {
         '--background': 'linear-gradient(to bottom, #ededed, #d9d9d9)',
         '--main-text': '#202223',
         '--main-hover': '#eee',
+        '--nova-blue': '#007ad9',
         '--teal': '#2AC992',
         '--aqua': '#0FA3BD',
         '--light-blue': '#1bbcd8',

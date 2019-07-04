@@ -50,8 +50,9 @@
 ::ng-deep .nodes__dataview {
     .ui-dataview-header {
         .ui-button-secondary {
-            background-color: var(--off-white) !important;
-            border: 1px solid var(--off-white) !important;
+            background-color: var(--nova-blue) !important;
+            border: 1px solid var(--nova-blue) !important;
+            color: var(--white) !important;
         }
     }
 

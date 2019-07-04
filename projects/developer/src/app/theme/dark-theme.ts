@@ -7,6 +7,7 @@ export const darkTheme: Theme = {
         '--main-text': '#e3e3e3',
         '--main-hover': '#475359',
         '--panel-background': '#22292E',
+        '--nova-blue': '#007ad9',
         '--checkbox': '#6e7179',
         '--teal': '#2AC992',
         '--aqua': '#0FA3BD',
