@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { SelectItem } from 'primeng/primeng';
+import { ConfirmationService, SelectItem } from 'primeng/primeng';
 import { MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
@@ -8,8 +8,6 @@ import * as _ from 'lodash';
 
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
-import { WorkspacesApiService } from '../../system/workspaces/api.service';
-import { ScansApiService } from '../../system/scans/api.service';
 import { DashboardJobsService } from '../../dashboard/jobs.service';
 
 @Component({
@@ -24,14 +22,17 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     private itemsWithPause: MenuItem[] = [
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
-        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } }
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
+        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateToggle(); } }
     ];
     private itemsWithResume: MenuItem[] = [
         { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
-        { label: 'Scan', icon: 'fa fa-barcode', command: () => { this.scanDisplay = true; } },
-        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } }
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
+        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateToggle(); } }
+    ];
+    private itemsWithActivate: MenuItem[] = [
+        { label: 'Activate', icon: 'fa fa-circle', command: () => { this.onDeprecateToggle(); } }
     ];
     isFavorite: any;
     rows = 16;
@@ -40,12 +41,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     selectedJobTypeDetail: any;
     options: any;
     items: MenuItem[];
-    scanDisplay: boolean;
     workspaces: SelectItem[] = [];
-    selectedWorkspace: any;
-    isScanning: boolean;
-    scanProgress = 0;
-    scanBtnIcon = 'fa fa-barcode';
     interfaceClass = 'p-col-6';
     errorClass = 'p-col-6';
     loadingJobTypes: boolean;
@@ -57,11 +53,10 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     activeLabel = 'Active Job Types';
 
     constructor(
+        private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
         private colorService: ColorService,
-        private workspacesApiService: WorkspacesApiService,
-        private scansApiService: ScansApiService,
         private dashboardJobsService: DashboardJobsService,
         private router: Router,
         private route: ActivatedRoute
@@ -143,24 +138,16 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type', detail: err.statusText});
         });
     }
-    private getWorkspaces() {
-        this.workspacesApiService.getWorkspaces().subscribe(data => {
-            _.forEach(data.results, (result) => {
-                this.workspaces.push({
-                    label: result.title,
-                    value: result
-                });
-            });
+    private updateIsActive() {
+        this.selectedJobTypeDetail.is_active = !this.selectedJobTypeDetail.is_active;
+        this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(() => {
+            this.items = this.selectedJobTypeDetail.is_active ? _.clone(this.itemsWithPause) : _.clone(this.itemsWithActivate);
+            this.messageService.add({ severity: 'success', summary: 'Job type updated' });
         }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+            console.log(err);
+            this.messageService.add({ severity: 'error', summary: 'Error deprecating job type', detail: err.statusText });
+            this.selectedJobTypeDetail.is_active = !this.selectedJobTypeDetail.is_active;
         });
-    }
-    private handleScanError(err) {
-        console.log(err);
-        this.isScanning = false;
-        this.scanBtnIcon = 'fa fa-barcode';
-        this.scanProgress = 0;
-        this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
     }
 
     getUnicode(code) {
@@ -198,8 +185,17 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     onEditClick() {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.name}/${this.selectedJobTypeDetail.version}`]);
     }
-    onScanHide() {
-        this.selectedWorkspace = null;
+    onDeprecateToggle() {
+        if (this.selectedJobTypeDetail.is_active) {
+            this.confirmationService.confirm({
+                message: `Deprecate ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`,
+                accept: () => {
+                    this.updateIsActive();
+                }
+            });
+        } else {
+            this.updateIsActive();
+        }
     }
     onFilterKeyup(e) {
         this.dv.filter(e.target.value);
@@ -214,66 +210,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     toggleShowActive() {
         this.activeLabel = this.showActive ? 'Active Job Types' : 'Deprecated Job Types';
         this.getJobTypes();
-    }
-    scanWorkspace() {
-        const scanObj = {
-            id: this.selectedJobTypeDetail.id,
-            trigger_rule: {
-                configuration: {
-                    condition: {
-                        data_types: [],
-                        media_type: ''
-                    },
-                    data: {
-                        input_data_name: 'input_file',
-                        workspace_name: this.selectedWorkspace.name
-                    }
-                },
-                is_active: true,
-                name: `${this.selectedJobTypeDetail.manifest.job.name}-${this.selectedJobTypeDetail.manifest.job.jobVersion}-trigger`,
-                type: 'INGEST'
-            }
-        };
-        this.isScanning = true;
-        this.scanProgress = 33;
-        this.scanBtnIcon = 'fa fa-spinner fa-spin';
-        this.jobTypesApiService.scanJobTypeWorkspace(scanObj).subscribe(() => {
-            const rand = Math.floor(Math.random() * 1000000000);
-            const scan = {
-                name: `my-scan-process-${rand}`,
-                title: 'My Scan Process',
-                description: 'This is my Scan',
-                configuration: {
-                    version: '1.0',
-                    workspace: this.selectedWorkspace.name,
-                    scanner: {
-                        type: 's3',
-                    },
-                    recursive: true,
-                    files_to_ingest: [{
-                        filename_regex: '.*'
-                    }]
-                }
-            };
-            this.scanProgress = 66;
-            this.scansApiService.createScan(scan).subscribe(scanResult => {
-                // then use the id that comes back from the above request and do a process scan
-                this.scansApiService.processScan(scanResult.id).subscribe(() => {
-                    this.scanProgress = 0;
-                    this.scanDisplay = false; // hide scan dialog
-                    this.isScanning = false; // done scanning
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Scan Process',
-                        detail: 'Scan process has been successfully launched'
-                    });
-                });
-            }, err => {
-                this.handleScanError(err);
-            });
-        }, err => {
-            this.handleScanError(err);
-        });
     }
     createNewJobType() {
         this.router.navigate(['/configuration/job-types/create']);
@@ -301,7 +237,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
                 datalabels: false
             }
         };
-        this.getWorkspaces();
 
         this.jobTypes = [];
         let name = null;

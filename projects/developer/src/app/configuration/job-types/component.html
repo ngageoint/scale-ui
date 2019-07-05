@@ -100,8 +100,8 @@
                                 <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
                                 <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.is_system">{{ selectedJobTypeDetail.is_system }}</dd>
-                                <dt *ngIf="selectedJobTypeDetail.is_active">Active:</dt>
-                                <dd *ngIf="selectedJobTypeDetail.is_active">{{ selectedJobTypeDetail.is_active }}</dd>
+                                <dt>Active:</dt>
+                                <dd>{{ selectedJobTypeDetail.is_active }}</dd>
                                 <dt *ngIf="selectedJobTypeDetail.is_paused">Paused:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.is_paused">{{ selectedJobTypeDetail.is_paused }}</dd>
                                 <dt *ngIf="selectedJobTypeDetail.paused">Paused Date:</dt>
@@ -208,17 +208,5 @@
             </div>
         </div>
     </div>
-    <p-dialog [(visible)]="scanDisplay" [modal]="true" [dismissableMask]="true" (onHide)="onScanHide()">
-        <p-header>
-            <strong>Scan</strong>
-        </p-header>
-        Select a workspace to scan<br />
-        <div class="job-type__scan">
-            <p-dropdown [options]="workspaces" [(ngModel)]="selectedWorkspace" appendTo="body" [style]="{'width':'300px'}"
-                        placeholder="Select..." [showClear]="false"></p-dropdown>
-            <button pButton type="button" label="Scan" [icon]="scanBtnIcon" [disabled]="!selectedWorkspace"
-                    (click)="scanWorkspace()"></button>
-        </div>
-        <p-progressBar [value]="scanProgress" *ngIf="scanProgress > 0"></p-progressBar>
-    </p-dialog>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
 </div>

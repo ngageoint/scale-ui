@@ -166,6 +166,16 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    private getWorkspaces() {
+        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
+            this.workspaces = data.results;
+            this.initCreateForm();
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+        });
+    }
+
     getUnicode(code) {
         return `&#x${code};`;
     }
@@ -346,11 +356,13 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     this.jobTypesApiService.getJobType(name, version).subscribe(data => {
                         this.jobType = JobType.cleanJobTypeForUpdate(data);
                         this.jobType.manifest = data.manifest;
+                        this.getWorkspaces();
                         this.initJobTypeConfiguration();
                     });
                 } else {
                     this.mode = 'Create';
                     this.jobType = JobType.transformer(null);
+                    this.getWorkspaces();
                 }
 
                 this.items = [
@@ -372,14 +384,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 this.currentStepIdx = this.mode === 'Create' ? 0 : 1;
             });
         }
-
-        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
-            this.workspaces = data.results;
-            this.initCreateForm();
-        }, err => {
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
-        });
     }
 
     ngOnDestroy() {
