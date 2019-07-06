@@ -23,16 +23,21 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
-        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateToggle(); } }
+        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateClick(); } }
     ];
     private itemsWithResume: MenuItem[] = [
         { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
-        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateToggle(); } }
+        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateClick(); } }
+    ];
+    private itemsWithoutPause: MenuItem[] = [
+        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
+        { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
+        { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateClick(); } }
     ];
     private itemsWithActivate: MenuItem[] = [
-        { label: 'Activate', icon: 'fa fa-circle', command: () => { this.onDeprecateToggle(); } }
+        { label: 'Activate', icon: 'fa fa-circle', command: () => { this.onDeprecateClick(); } }
     ];
     isFavorite: any;
     rows = 16;
@@ -101,7 +106,12 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             } else if (!data.manifest.job.interface && data.manifest.job.errors) {
                 this.errorClass = 'p-col-12';
             }
-            this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
+            // only system jobs can be paused
+            if (this.selectedJobTypeDetail.is_system) {
+                this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
+            } else {
+                this.items = _.clone(this.itemsWithoutPause);
+            }
             this.setFavoriteIcon();
         }, err => {
             console.log(err);
@@ -141,7 +151,11 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     private updateIsActive() {
         this.selectedJobTypeDetail.is_active = !this.selectedJobTypeDetail.is_active;
         this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(() => {
-            this.items = this.selectedJobTypeDetail.is_active ? _.clone(this.itemsWithPause) : _.clone(this.itemsWithActivate);
+            if (this.selectedJobTypeDetail.is_system) {
+                this.items = this.selectedJobTypeDetail.is_active ? _.clone(this.itemsWithPause) : _.clone(this.itemsWithActivate);
+            } else {
+                this.items = this.selectedJobTypeDetail.is_active ? _.clone(this.itemsWithoutPause) : _.clone(this.itemsWithActivate);
+            }
             this.messageService.add({ severity: 'success', summary: 'Job type updated' });
         }, err => {
             console.log(err);
@@ -161,31 +175,40 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         }
     }
     onPauseClick() {
-        this.jobTypesApiService.validateJobType(this.selectedJobTypeDetail).subscribe(result => {
-            if (!result.is_valid) {
-                _.forEach(result.warnings, warning => {
-                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
-                });
-                _.forEach(result.errors, error => {
-                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
-                });
-            } else {
-                this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
-                this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(() => {
-                    this.items = this.selectedJobTypeDetail.is_paused ? _.clone(this.itemsWithResume) : _.clone(this.itemsWithPause);
+        const action = this.selectedJobTypeDetail.is_paused ? 'Resume' : 'Pause';
+        this.confirmationService.confirm({
+            message: `${action} ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`,
+            accept: () => {
+                this.jobTypesApiService.validateJobType(this.selectedJobTypeDetail).subscribe(result => {
+                    if (!result.is_valid) {
+                        _.forEach(result.warnings, warning => {
+                            this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                        });
+                        _.forEach(result.errors, error => {
+                            this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                        });
+                    } else {
+                        this.selectedJobTypeDetail.is_paused = !this.selectedJobTypeDetail.is_paused;
+                        this.jobTypesApiService.updateJobType(this.selectedJobTypeDetail).subscribe(() => {
+                            this.items = this.selectedJobTypeDetail.is_paused ?
+                                _.clone(this.itemsWithResume) :
+                                _.clone(this.itemsWithPause);
+                            this.messageService.add({ severity: 'success', summary: 'Job type updated' });
+                        }, err => {
+                            this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
+                        });
+                    }
                 }, err => {
-                    this.messageService.add({severity: 'error', summary: 'Error updating job type', detail: err.statusText});
+                    console.log(err);
+                    this.messageService.add({ severity: 'error', summary: 'Error validating job type', detail: err.statusText });
                 });
             }
-        }, err => {
-            console.log(err);
-            this.messageService.add({ severity: 'error', summary: 'Error validating job type', detail: err.statusText });
         });
     }
     onEditClick() {
         this.router.navigate([`/configuration/job-types/edit/${this.selectedJobTypeDetail.name}/${this.selectedJobTypeDetail.version}`]);
     }
-    onDeprecateToggle() {
+    onDeprecateClick() {
         if (this.selectedJobTypeDetail.is_active) {
             this.confirmationService.confirm({
                 message: `Deprecate ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`,

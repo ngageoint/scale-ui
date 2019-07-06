@@ -59,7 +59,7 @@
                                 <i class="fa" [innerHtml]="getUnicode(selectedJobTypeDetail.icon_code)"></i>
                                 {{ selectedJobTypeDetail.manifest.job.title }} v{{selectedJobTypeDetail.manifest.job.jobVersion }}
                                 <span class="label label-paused" *ngIf="selectedJobTypeDetail.is_paused">Paused</span>
-                                <span class="warning-text" *ngIf="selectedJobTypeDetail.unmet_resources">
+                                <span class="warning-text margin-left-sm" *ngIf="selectedJobTypeDetail.unmet_resources">
                                     <span class="fa fa-warning"
                                           [pTooltip]="selectedJobTypeDetail.unmetResourcesTooltip"></span>
                                 </span>
@@ -98,12 +98,12 @@
                                 <dd *ngIf="selectedJobTypeDetail.configuration.priority">{{ selectedJobTypeDetail.configuration.priority }}</dd>
                                 <dt *ngIf="selectedJobTypeDetail.manifest.job.timeout">Timeout:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.manifest.job.timeout">{{ selectedJobTypeDetail.manifest.job.timeout }} seconds</dd>
-                                <dt *ngIf="selectedJobTypeDetail.is_system">System Type:</dt>
-                                <dd *ngIf="selectedJobTypeDetail.is_system">{{ selectedJobTypeDetail.is_system }}</dd>
+                                <dt>System Type:</dt>
+                                <dd>{{ selectedJobTypeDetail.is_system }}</dd>
                                 <dt>Active:</dt>
                                 <dd>{{ selectedJobTypeDetail.is_active }}</dd>
-                                <dt *ngIf="selectedJobTypeDetail.is_paused">Paused:</dt>
-                                <dd *ngIf="selectedJobTypeDetail.is_paused">{{ selectedJobTypeDetail.is_paused }}</dd>
+                                <dt>Paused:</dt>
+                                <dd>{{ selectedJobTypeDetail.is_paused }}</dd>
                                 <dt *ngIf="selectedJobTypeDetail.paused">Paused Date:</dt>
                                 <dd *ngIf="selectedJobTypeDetail.paused">{{ selectedJobTypeDetail.paused }}</dd>
                             </dl>
@@ -208,5 +208,7 @@
             </div>
         </div>
     </div>
-    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+    <p-confirmDialog header="Confirmation" icon="pi pi-exclamation-triangle"
+                     acceptButtonStyleClass="ui-button-accept" rejectButtonStyleClass="ui-button-reject">
+    </p-confirmDialog>
 </div>
