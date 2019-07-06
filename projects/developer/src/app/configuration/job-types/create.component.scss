@@ -39,4 +39,17 @@
 
         }
     }
+
+    ::ng-deep {
+        .CodeMirror {
+            color: var(--main-text);
+        }
+        .seed-jobs .results .result-header {
+            color: var(--black);
+        }
+        .seed-jobs .job-details .code pre {
+            color: var(--main-text);
+            background: var(--pre-background) !important;
+        }
+    }
 }
