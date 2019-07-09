@@ -44,8 +44,12 @@
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
+            </th>
+        </tr>
+        <tr>
+            <th *ngFor="let col of columns" [ngSwitch]="col.field">
                 <input *ngSwitchCase="'name'" pInputText type="text"
-                       (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)">
+                    (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)">
             </th>
         </tr>
     </ng-template>
