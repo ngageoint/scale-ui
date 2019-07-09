@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.5.0](https://github.com-mil///compare/v0.4.3...v0.5.0) (2019-07-09)
+
+
+### Bug Fixes
+
+* **build:** Allow other forward proxies to determine protocol for API ([d558ad2](https://github.com-mil///commit/d558ad2))
+* improve labeling and default options for some recipe type and strike form fields ([64ccfd0](https://github.com-mil///commit/64ccfd0))
+* **metrics:** show selected color in color picker when the dark theme is ([5ad4a7f](https://github.com-mil///commit/5ad4a7f))
+* reset page number when filtering datatables to prevent requesting a page that possibly does not exist ([088f151](https://github.com-mil///commit/088f151))
+* **scans:** use correct link for the scan's job details ([4991cda](https://github.com-mil///commit/4991cda))
+* **theme:** fix colors of seed image manifest and node toggle buttons for dark mode ([d2409f6](https://github.com-mil///commit/d2409f6))
+* **workspaces:** remove required restriction from optional workspace fields ([23c0afe](https://github.com-mil///commit/23c0afe))
+
+
+### Features
+
+* **job types:** add the ability to edit job types ([05ef9b7](https://github.com-mil///commit/05ef9b7))
+* **strikes:** add controls to cancel or requeue a strike ([03efd3f](https://github.com-mil///commit/03efd3f))
+
+
+
 ### [0.4.3](https://github.com-mil///compare/v0.4.2...v0.4.3) (2019-06-25)
 
 
