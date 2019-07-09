@@ -150,6 +150,9 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.updateOptions();
     }
     onRowSelect(e) {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedBatchRows(e);
         }
