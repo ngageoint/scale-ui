@@ -22,7 +22,7 @@
     background-color: #666 !important;
 }
 
-.ui-inputtext {
+.ui-inputtext:not(.ui-colorpicker-preview) {
     background: var(--checkbox) !important;
     border: 1px solid var(--checkbox) !important;
 }
