@@ -2,13 +2,12 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
-import { WorkspacesApiService } from '../../system/workspaces/api.service';
-import { ScansApiService } from '../../system/scans/api.service';
 import { DashboardJobsService } from '../../dashboard/jobs.service';
 import { JobTypesComponent } from './component';
 
@@ -22,7 +21,7 @@ describe('JobTypesComponent', () => {
             declarations: [JobTypesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, DataService, JobTypesApiService, ColorService, WorkspacesApiService, ScansApiService, DashboardJobsService,
+                MessageService, DataService, JobTypesApiService, ColorService, ConfirmationService, DashboardJobsService,
                 {provide: ActivatedRoute, useClass: class { navigate = jasmine.createSpy('navigate'); }},
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],

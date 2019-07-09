@@ -208,7 +208,7 @@
                         </ul>
                         <button class="ui-button-secondary" pButton icon="fa fa-check" label="Validate"
                                 (click)="onValidate()" *ngIf="!validated"></button>
-                        <button class="ui-button-primary" pButton icon="fa fa-arrow-right" [label]="mode"
+                        <button class="ui-button-primary" pButton icon="fa fa-arrow-right" label="Save"
                                 (click)="onSubmit()" *ngIf="validated && !submitted"></button>
                         <a class="ui-button-success" pButton icon="fa fa-arrow-circle-right" label="View Job Type"
                            routerLink="/configuration/job-types/{{ modifiedJobTypeName }}/{{ modifiedJobTypeVersion }}"

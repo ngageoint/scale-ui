@@ -34,17 +34,9 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         allowDropFileTypes: ['application/json'],
         viewportMargin: Infinity
     };
-    jsonConfigReadOnly = {
-        mode: {name: 'application/json', json: true},
-        indentUnit: 4,
-        lineNumbers: true,
-        readOnly: 'nocursor',
-        viewportMargin: Infinity
-    };
     workspaces = [];
     workspacesOptions: SelectItem[] = [];
     jobType: any;
-    cleanJobType: any;
     createForm: FormGroup = this.fb.group({
         icon_code: [''],
         configuration: this.fb.group({
@@ -119,6 +111,69 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
             _.merge(this.jobType, changes);
             this.validateForm();
         });
+        this.createForm.updateValueAndValidity();
+    }
+
+    private initJobTypeConfiguration() {
+        // set up output workspaces
+        if (this.jobType.manifest.job.interface.outputs.files) {
+            // iterate over job manifest output files and add appropriate properties and form controls
+            const outputsGroup: any = this.createForm.get('configuration.output_workspaces.outputs');
+            if (!this.jobType.configuration.output_workspaces.outputs) {
+                this.jobType.configuration.output_workspaces.outputs = {};
+            }
+            _.forEach(this.jobType.manifest.job.interface.outputs.files, file => {
+                this.jobType.configuration.output_workspaces.outputs[file.name] = null;
+                outputsGroup.addControl(file.name, new FormControl(null));
+            });
+        }
+
+        // set up settings
+        if (this.jobType.manifest.job.interface.settings) {
+            // iterate over job manifest settings and add appropriate job type settings
+            const settingsGroup: any = this.createForm.get('configuration.settings');
+            _.forEach(this.jobType.manifest.job.interface.settings, setting => {
+                if (this.mode === 'Create') {
+                    this.jobType.configuration.settings[setting.name] = null;
+                }
+                settingsGroup.addControl(setting.name, new FormControl(null));
+            });
+        }
+
+        // set up mounts
+        if (this.jobType.manifest.job.interface.mounts) {
+            // iterate over mounts in job manifest and add appropriate job type mounts
+            const mountsGroup: any = this.createForm.get('configuration.mounts');
+            _.forEach(this.jobType.manifest.job.interface.mounts, mount => {
+                if (this.mode === 'Create') {
+                    this.jobType.configuration.mounts[mount.name] = {
+                        type: null,
+                        host_path: null,
+                        driver: null,
+                        driver_opts: {}
+                    };
+                }
+                const mountObj = this.jobType.configuration.mounts[mount.name];
+                mountsGroup.addControl(mount.name, new FormGroup({}));
+                const mountGroup: any = this.createForm.get(`configuration.mounts.${mount.name}`);
+                mountGroup.addControl('type', new FormControl(mountObj.type, Validators.required));
+                if (mountObj.type === 'host' || this.mode === 'Create') {
+                    mountGroup.addControl('host_path', new FormControl(mountObj.host_path || null, Validators.required));
+                }
+                mountGroup.addControl('driver', new FormControl(mountObj.driver || null));
+                mountGroup.addControl('driver_opts', new FormControl(mountObj.driver_opts || {}));
+            });
+        }
+    }
+
+    private getWorkspaces() {
+        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
+            this.workspaces = data.results;
+            this.initCreateForm();
+        }, err => {
+            console.log(err);
+            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
+        });
     }
 
     getUnicode(code) {
@@ -175,45 +230,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
             });
         }
 
-        // set up output workspaces
-        if (this.jobType.manifest.job.interface.outputs.files) {
-            // iterate over job manifest output files and add appropriate properties and form controls
-            const outputsGroup: any = this.createForm.get('configuration.output_workspaces.outputs');
-            _.forEach(this.jobType.manifest.job.interface.outputs.files, file => {
-                this.jobType.configuration.output_workspaces.outputs[file.name] = null;
-                outputsGroup.addControl(file.name, new FormControl(null));
-            });
-        }
-
-        // set up mounts
-        if (this.jobType.manifest.job.interface.mounts) {
-            // iterate over mounts in job manifest and add appropriate job type mounts
-            const mountsGroup: any = this.createForm.get('configuration.mounts');
-            _.forEach(this.jobType.manifest.job.interface.mounts, mount => {
-                this.jobType.configuration.mounts[mount.name] = {
-                    type: null,
-                    host_path: null,
-                    driver: null,
-                    driver_opts: {}
-                };
-                mountsGroup.addControl(mount.name, new FormGroup({}));
-                const mountGroup: any = this.createForm.get(`configuration.mounts.${mount.name}`);
-                mountGroup.addControl('type', new FormControl('', Validators.required));
-                mountGroup.addControl('host_path', new FormControl(null, Validators.required));
-                mountGroup.addControl('driver', new FormControl(null));
-                mountGroup.addControl('driver_opts', new FormGroup({}));
-            });
-        }
-
-        // set up settings
-        if (this.jobType.manifest.job.interface.settings) {
-            // iterate over job manifest settings and add appropriate job type settings
-            const settingsGroup: any = this.createForm.get('configuration.settings');
-            _.forEach(this.jobType.manifest.job.interface.settings, setting => {
-                this.jobType.configuration.settings[setting.name] = null;
-                settingsGroup.addControl(setting.name, new FormControl(null));
-            });
-        }
+        this.initJobTypeConfiguration();
     }
 
     onImageRemove() {
@@ -337,16 +354,21 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 if (name && version) {
                     this.mode = 'Edit';
                     this.jobTypesApiService.getJobType(name, version).subscribe(data => {
-                        this.jobType = data;
+                        this.jobType = JobType.cleanJobTypeForUpdate(data);
+                        this.jobType.manifest = data.manifest;
+                        this.getWorkspaces();
+                        this.initJobTypeConfiguration();
                     });
                 } else {
                     this.mode = 'Create';
                     this.jobType = JobType.transformer(null);
+                    this.getWorkspaces();
                 }
 
                 this.items = [
                     {
-                        label: 'Seed Image'
+                        label: 'Seed Image',
+                        disabled: this.mode === 'Edit'
                     },
                     {
                         label: 'Configuration'
@@ -356,19 +378,12 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                     },
                     {
                         label: 'Validate and Create',
-                        disabled: !this.createForm.valid && this.mode === 'Create'
+                        disabled: !this.createForm.valid
                     }
                 ];
+                this.currentStepIdx = this.mode === 'Create' ? 0 : 1;
             });
         }
-
-        this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(data => {
-            this.workspaces = data.results;
-            this.initCreateForm();
-        }, err => {
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving workspaces', detail: err.statusText});
-        });
     }
 
     ngOnDestroy() {
