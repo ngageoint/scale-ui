@@ -36,7 +36,7 @@ export class Workspace {
             null,
             'untitled-workspace',
             'Untitled Workspace',
-            null,
+            '',
             null,
             true,
             null,
