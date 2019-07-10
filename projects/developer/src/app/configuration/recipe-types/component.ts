@@ -453,7 +453,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.initValidation();
             }
             _.forEach(result.warnings, warning => {
-                this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                if (!this.isEditing && warning.name === 'RECIPE_TYPE_NOT_FOUND') {
+                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                }
             });
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
