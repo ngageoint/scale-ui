@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ɵConsole } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
@@ -453,7 +453,11 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.initValidation();
             }
             _.forEach(result.warnings, warning => {
-                if (!this.isEditing && warning.name === 'RECIPE_TYPE_NOT_FOUND') {
+                if (this.recipeTypeName === 'create') {
+                    if (warning.name !== 'RECIPE_TYPE_NOT_FOUND') {
+                        this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                    }
+                } else {
                     this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
                 }
             });
