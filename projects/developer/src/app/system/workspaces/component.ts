@@ -228,7 +228,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
-        console.log(this.selectedWorkspaceDetail);
         this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
             this.validated = data.is_valid;
             if (data.is_valid) {
