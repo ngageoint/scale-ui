@@ -47,28 +47,30 @@ export class Workspace {
     }
 
     public static cleanWorkspaceForValidate(workspace) {
-        return {
+        const returnWorkspace = {
             name: workspace.name,
             title: workspace.title,
             description: workspace.description,
             base_url: workspace.base_url,
             is_active: workspace.is_active,
             configuration: {
-                broker: _.pickBy(workspace.configuration.broker, d => d !== null && typeof d !== 'undefined' && d !== '')
+                broker: workspace.configuration.broker
             }
         };
+        return DataService.removeEmpty(returnWorkspace);
     }
 
     public static cleanWorkspaceForSave(workspace) {
-        return {
+        const returnWorkspace = {
             title: workspace.title,
             description: workspace.description,
             base_url: workspace.base_url,
             is_active: workspace.is_active,
             configuration: {
-                broker: _.pickBy(workspace.configuration.broker, d => d !== null && typeof d !== 'undefined' && d !== '')
+                broker: workspace.configuration.broker
             }
         };
+        return DataService.removeEmpty(returnWorkspace);
     }
 
     constructor(
