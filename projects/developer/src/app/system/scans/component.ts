@@ -45,6 +45,14 @@ export class ScansComponent implements OnInit, OnDestroy {
     ];
     selectedDateRange: any;
     applyBtnClass = 'ui-button-secondary';
+    nameFilterText: string;
+    onNameFilter = _.debounce((e) => {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            name: e.target.value
+        });
+        this.updateOptions();
+    }, 1000);
 
     constructor(
         private dataService: DataService,
@@ -82,8 +90,6 @@ export class ScansComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     unsubscribe() {
         if (this.subscription) {
@@ -178,7 +184,8 @@ export class ScansComponent implements OnInit, OnDestroy {
             }
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
-            this.updateOptions();
+            this.nameFilterText = this.datatableOptions.name;
+            this.updateData();
         });
     }
     ngOnDestroy() {

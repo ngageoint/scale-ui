@@ -38,18 +38,16 @@
          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
          [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedScan"
          (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
-         [autoLayout]="true" class="scans__table" #datatable>
+         [autoLayout]="true" class="scans__table">
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
-            </th>
-        </tr>
-        <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field">
-                <input *ngSwitchCase="'name'" pInputText type="text"
-                    (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)">
+                <div class="scans__name-filter" *ngSwitchCase="'name'">
+                    <input pInputText type="text" (click)="$event.stopPropagation()" class="scans__name-filter"
+                           (input)="onNameFilter($event)" [(ngModel)]="nameFilterText">
+                </div>
             </th>
         </tr>
     </ng-template>
