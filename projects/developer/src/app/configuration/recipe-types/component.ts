@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ɵConsole } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
@@ -453,6 +453,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.initValidation();
             }
             _.forEach(result.warnings, warning => {
+
+                // TODO: Temporay fix to remove the Recipe Type not found error just for creation.
+                // This will eventually be fixed on the backend and can be removed once Scale issue #1700 is closed.
                 if (this.recipeTypeName === 'create') {
                     if (warning.name !== 'RECIPE_TYPE_NOT_FOUND') {
                         this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
