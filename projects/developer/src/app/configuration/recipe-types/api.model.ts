@@ -50,6 +50,20 @@ export class RecipeType {
                 delete d.connections;
                 delete d.type;
             });
+
+            if (_.has(node, 'node_type.data_filter.filters_display')) {
+                delete node.node_type.data_filter.filters_display;
+            }
+            if (_.has(node, 'node_type.name')) {
+                delete node.node_type.name;
+            }
+            if (_.has(node, 'node_type.data_filter.filters')) {
+                _.forEach(node.node_type.data_filter.filters, filter => {
+                    if (filter.fields.length < 1) {
+                        delete filter.fields;
+                    }
+                });
+            }
         });
         return {
             input: {
