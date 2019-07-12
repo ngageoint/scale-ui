@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.1](https://github.com-mil///compare/v0.5.0...v0.5.1) (2019-07-12)
+
+
+### Bug Fixes
+
+* **ingests:** add logic to properly handle null ingest fields so the ingest records table can display results without error ([5d683b6](https://github.com-mil///commit/5d683b6))
+* **recipe types:** prevent misleading warning from showing while validating a new recipe type ([30aaa7a](https://github.com-mil///commit/30aaa7a))
+* **scans:** bugfix so users can type in scan filter input; filter scans server side rather than client side ([3d0bcaa](https://github.com-mil///commit/3d0bcaa))
+* **strikes:** remove unnecessary css styles that cause display issues when using the dark theme ([7d1acb9](https://github.com-mil///commit/7d1acb9))
+* **strikes and scans:** modify duplicate methods for strikes and scans to retain necessary model information ([420d060](https://github.com-mil///commit/420d060))
+* **workspaces:** prevent null value from being used for workspace description; remove required designation from base URL field ([678d4bd](https://github.com-mil///commit/678d4bd))
+
+
+
 ## [0.5.0](https://github.com-mil///compare/v0.4.3...v0.5.0) (2019-07-09)
 
 

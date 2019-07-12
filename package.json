@@ -1,6 +1,6 @@
 {
   "name": "scale-ui",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "homepage": "http://ngageoint.github.io/scale-ui",
   "scripts": {
     "ng": "ng",
