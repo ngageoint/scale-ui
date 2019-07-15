@@ -197,14 +197,23 @@ export class JobsComponent implements OnInit, OnDestroy {
         const version = _.map(e.value, 'version');
         this.datatableOptions.job_type_name = name.length > 0 ? name : null;
         this.datatableOptions.job_type_version = version.length > 0 ? version : null;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         this.updateOptions();
     }
     onStatusChange(e) {
         this.datatableOptions.status = e.value.length > 0 ? e.value : null;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         this.updateOptions();
     }
     onErrorCategoryChange(e) {
         this.datatableOptions.error_category = e.value.length > 0 ? e.value : null;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         this.updateOptions();
     }
     onRowSelect(e) {

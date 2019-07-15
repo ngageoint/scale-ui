@@ -95,7 +95,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     region_name: ['']
                 }),
                 files_to_ingest: this.fb.array([], Validators.required),
-                recipe: ['']
+                recipe: ['', Validators.required]
             })
         });
         this.ingestFileForm = this.fb.group({
@@ -314,9 +314,9 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onDuplicateClick() {
+        this.selectedStrikeDetail = Strike.transformer(this.selectedStrikeDetail);
         delete this.selectedStrikeDetail.id;
-        this.selectedStrikeDetail = Strike.cleanStrikeForSave(this.selectedStrikeDetail);
-        this.selectedStrikeDetail.name += ' copy';
+        delete this.selectedStrikeDetail.name;
         this.selectedStrikeDetail.title += ' copy';
         this.isEditing = true;
         this.items = _.clone(this.editMenu);

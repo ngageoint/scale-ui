@@ -80,7 +80,9 @@ export class Strike {
         this.lastModifiedDisplay = DataService.formatDate(this.last_modified, true);
         this.lastModifiedTooltip = DataService.formatDate(this.last_modified);
         if (this.configuration) {
-            this.configurationDisplay = JSON.stringify(this.configuration, null, 4);
+            const config = _.clone(this.configuration);
+            delete config.files_to_ingest_display;
+            this.configurationDisplay = JSON.stringify(config, null, 4);
         }
     }
 }
