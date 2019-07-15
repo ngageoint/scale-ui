@@ -288,6 +288,14 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // edit scan
             this.scansApiService.editScan(this.scan.id, this.scan).subscribe(() => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully edited' });
+
+                this.scansApiService.processScan(this.scan.id).subscribe(() => {
+                    this.redirect(this.scan.id);
+                }, err => {
+                    console.log(err);
+                    this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
+                });
+
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error editing scan', detail: err.statusText});
