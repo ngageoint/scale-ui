@@ -296,17 +296,19 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // create scan
             this.scansApiService.createScan(this.scan).subscribe(data => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully created' });
+
+                this.scansApiService.processScan(data.id).subscribe(() => {
+                    this.redirect(this.scan.id);
+                }, err => {
+                    console.log(err);
+                    this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
+                });
+
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
             });
         }
-        this.scansApiService.processScan(this.scan.id).subscribe(() => {
-            this.redirect(this.scan.id);
-        }, err => {
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
-        });
     }
 
     onCancelClick() {
