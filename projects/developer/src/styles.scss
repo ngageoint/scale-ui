@@ -457,6 +457,11 @@ $transparent-running: transparentize(#529D39, 0.65);
     animation-play-state: running;
 }
 
+.ui-button-accept {
+    background-color: var(--green) !important;
+    border: 1px solid var(--green) !important;
+}
+
 .ui-button-degraded {
     background-color: var(--label-degraded) !important;
     border: 1px solid var(--label-degraded) !important;
@@ -490,6 +495,11 @@ $transparent-running: transparentize(#529D39, 0.65);
 .ui-button-ready {
     background-color: var(--label-ready) !important;
     border: 1px solid var(--label-ready) !important;
+}
+
+.ui-button-reject {
+    background-color: var(--red) !important;
+    border: 1px solid var(--red) !important;
 }
 
 .ui-button-scheduler-stopped {

@@ -158,7 +158,7 @@ module.exports = {
 
         server.route({
             method: 'PATCH',
-            path: '/mocks/' + apiVersion + '/job-types/{id}/',
+            path: '/mocks/' + apiVersion + '/job-types/{name}/{version}/',
             handler: jobTypeUpdate
         });
 

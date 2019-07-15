@@ -146,6 +146,9 @@ export class RecipesComponent implements OnInit, OnDestroy {
     onChange(e) {
         const name = _.map(e.value, 'name');
         this.datatableOptions.recipe_type_name = name.length > 0 ? name : null;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         this.updateOptions();
     }
     onRowSelect(e) {

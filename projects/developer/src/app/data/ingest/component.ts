@@ -39,8 +39,8 @@ export class IngestComponent implements OnInit, OnDestroy {
     strikeValues: SelectItem[];
     selectedStrike: any = [];
     statusValues: SelectItem[] = [{
-        label: 'Transfering',
-        value: 'TRANSFERING'
+        label: 'Transferring',
+        value: 'TRANSFERRING'
     }, {
         label: 'Transferred',
         value: 'TRANSFERRED'
@@ -175,10 +175,16 @@ export class IngestComponent implements OnInit, OnDestroy {
     onStrikeChange(e) {
         const strikeId = _.map(e.value, 'id');
         this.datatableOptions.strike_id = strikeId.length > 0 ? strikeId : null;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         this.updateOptions();
     }
     onStatusChange(e) {
         this.datatableOptions.status = e.value || null;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0
+        });
         this.updateOptions();
     }
     onRowSelect(e) {

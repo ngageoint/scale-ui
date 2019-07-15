@@ -52,6 +52,12 @@
                         <i class="fa" [innerHtml]="strikeJobIcon"></i>
                         View Job Details ({{ selectedStrikeDetail.job.status }})
                     </a>
+                    <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
+                            (click)="cancelJob(selectedStrikeDetail.job.id)" pTooltip="Cancel Job"
+                            *ngIf="!selectedStrikeDetail.job.is_superseded && selectedStrikeDetail.job.status !== 'COMPLETED' && selectedStrikeDetail.job.status !== 'CANCELED'"></button>
+                    <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
+                            (click)="requeueJob(selectedStrikeDetail.job.id)" pTooltip="Requeue Job"
+                            *ngIf="!selectedStrikeDetail.job.is_superseded && (selectedStrikeDetail.job.status === 'FAILED' || selectedStrikeDetail.job.status === 'CANCELED')"></button>
                 </dd>
                 <dt>Created:</dt>
                 <dd>
@@ -89,7 +95,7 @@
                 <div class="p-grid" formGroupName="configuration">
                     <div class="p-col-6">
                         <label>
-                            <span class="required">Recipe</span>
+                            <span class="required">Recipe Type </span>
                             <p-dropdown [options]="recipeOptions" formControlName="recipe"
                                         [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                             </p-dropdown>
@@ -98,7 +104,7 @@
                     <div class="p-col-6">
                         <div>
                             <label>
-                                <span class="required">Workspace</span>
+                                <span class="required">Input Workspace</span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
                                             (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
@@ -118,7 +124,7 @@
                         <div class="p-col-6" formGroupName="monitor">
                             <label *ngIf="createForm.get('configuration.monitor.transfer_suffix').enabled">
                                 <span class="required">Transfer Suffix</span>
-                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                                <input type="text" pInputText formControlName="transfer_suffix" pTooltip="File extention to be ignored when transfering files" required/>
                             </label>
                             <label *ngIf="createForm.get('configuration.monitor.sqs_name').enabled">
                                 <span class="required">SQS Name</span>

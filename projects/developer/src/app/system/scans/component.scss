@@ -52,6 +52,11 @@ label {
 ::ng-deep .scans__error-tooltip.ui-tooltip {
     max-width: 50%;
 }
+::ng-deep .scans__name-filter {
+    &.ui-inputtext {
+        width: 90%;
+    }
+}
 
 @media screen and (max-width: 858px) {
     .scans__date-filter-btn, .scans__date-filter-dropdown, .scans__date-filter-ranges {
