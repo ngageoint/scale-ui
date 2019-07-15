@@ -60,7 +60,7 @@
                     <div class="p-grid" formGroupName="configuration">
                         <div class="p-col-6">
                             <label>
-                                <span class="required">Workspace</span>
+                                <span class="required">Workspace Input</span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
                                             (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
@@ -75,8 +75,10 @@
                         </div>
                         <div class="p-col-3" formGroupName="scanner">
                             <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
-                                <span class="required">Transfer Suffix</span>
-                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                                <span>Transfer Suffix</span>
+                                <input type="text" pInputText formControlName="transfer_suffix"
+                                    pTooltip="Defines a suffix that is used on the file names to indicate that
+                                    files are still transferring and have not yet finished being copied into the scanned directory"/>
                             </label>
                         </div>
                     </div>
