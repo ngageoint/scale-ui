@@ -6,24 +6,16 @@
         {
             "id": 1,
             "file_name": "Vestibulum.gif",
-            "strike": {
-                "id": 2,
-                "name": "landsat",
-                "title": "Landsat",
-                "description": "Vestibulum ac est lacinia nisi venenatis tristique. Fusce congue, diam id ornare imperdiet, sapien urna pretium nisl, ut volutpat sapien arcu sed augue. Aliquam erat volutpat.",
-                "job": {
-                    "id": 6
-                }
-            },
+            "strike": null,
             "status": "ERRORED",
-            "bytes_transferred": 6589063,
-            "transfer_started": "2016-05-11T21:28:09Z",
-            "transfer_ended": "2016-05-11T21:30:09Z",
+            "bytes_transferred": null,
+            "transfer_started": null,
+            "transfer_ended": null,
             "media_type": "image/x-hdf5-image",
             "file_size": 6589063,
             "data_type_tags": "EXT",
-            "ingest_started": "2016-05-25T17:46:55Z",
-            "ingest_ended": "2016-05-25T17:48:55Z",
+            "ingest_started": null,
+            "ingest_ended": null,
             "source_file": {
                 "id": 5,
                 "workspace": {

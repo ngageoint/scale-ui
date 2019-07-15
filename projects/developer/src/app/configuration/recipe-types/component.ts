@@ -453,7 +453,16 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.initValidation();
             }
             _.forEach(result.warnings, warning => {
-                this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+
+                // TODO: Temporay fix to remove the Recipe Type not found error just for creation.
+                // This will eventually be fixed on the backend and can be removed once Scale issue #1700 is closed.
+                if (this.recipeTypeName === 'create') {
+                    if (warning.name !== 'RECIPE_TYPE_NOT_FOUND') {
+                        this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                    }
+                } else {
+                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
+                }
             });
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });

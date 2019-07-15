@@ -79,16 +79,18 @@ export class Ingest {
         public last_modified: any,
         public selected?: boolean
     ) {
-        this.transferStartedTooltip = DataService.formatDate(this.transfer_started);
-        this.transferEndedTooltip = DataService.formatDate(this.transfer_ended);
-        this.transferStartedDisplay = DataService.formatDate(this.transfer_started, true);
-        this.transferEndedDisplay = DataService.formatDate(this.transfer_ended, true);
-        this.ingestStartedTooltip = DataService.formatDate(this.ingest_started);
-        this.ingestEndedTooltip = DataService.formatDate(this.ingest_ended);
-        this.ingestStartedDisplay = DataService.formatDate(this.ingest_started, true);
-        this.ingestEndedDisplay = DataService.formatDate(this.ingest_ended, true);
-        this.bytesTransferredFormatted = DataService.calculateFileSizeFromBytes(this.bytes_transferred, 2);
-        this.fileSizeFormatted = DataService.calculateFileSizeFromBytes(this.file_size, 2);
+        this.transferStartedTooltip = this.transfer_started ? DataService.formatDate(this.transfer_started) : '';
+        this.transferEndedTooltip = this.transfer_ended ? DataService.formatDate(this.transfer_ended) : '';
+        this.transferStartedDisplay = this.transfer_started ? DataService.formatDate(this.transfer_started, true) : '';
+        this.transferEndedDisplay = this.transfer_ended ? DataService.formatDate(this.transfer_ended, true) : '';
+        this.ingestStartedTooltip = this.ingest_started ? DataService.formatDate(this.ingest_started) : '';
+        this.ingestEndedTooltip = this.ingest_ended ? DataService.formatDate(this.ingest_ended) : '';
+        this.ingestStartedDisplay = this.ingest_started ? DataService.formatDate(this.ingest_started, true) : '';
+        this.ingestEndedDisplay = this.ingest_ended ? DataService.formatDate(this.ingest_ended, true) : '';
+        this.bytesTransferredFormatted = this.bytes_transferred ?
+            DataService.calculateFileSizeFromBytes(this.bytes_transferred, 2) :
+            '';
+        this.fileSizeFormatted = this.file_size ? DataService.calculateFileSizeFromBytes(this.file_size, 2) : '';
         this.statusClass = this.status === 'RUNNING' ?
             `${this.status.toLowerCase()}-text throb-text` :
             `${this.status.toLowerCase()}-text`;
