@@ -160,7 +160,8 @@ export class JobTypesApiService {
                 page: page,
                 page_size: params.rows || 1000,
                 started: params.started,
-                ended: params.ended
+                ended: params.ended,
+                is_active: params.is_active || true
             };
         } else {
             apiParams = {

@@ -122,7 +122,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private refreshAllJobTypes() {
         this.loadingJobTypes = true;
         this.unsubscribe();
-        this.subscription = this.jobTypesApiService.getJobTypeStatus(true).subscribe(data => {
+        const params = {
+            is_active: true,
+        };
+        this.subscription = this.jobTypesApiService.getJobTypeStatus(true, params).subscribe(data => {
+            console.log(data);
             this.allJobTypes = _.orderBy(data.results, ['job_type.title', 'job_type.version'], ['asc', 'asc']);
             this.jobsService.setAllJobs(this.allJobTypes);
 
