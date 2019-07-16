@@ -165,7 +165,8 @@ export class JobTypesApiService {
             };
         } else {
             apiParams = {
-                page_size: 1000
+                page_size: 1000,
+                is_active: true
             };
         }
         apiParams = _.pickBy(apiParams, d => {
