@@ -879,6 +879,7 @@
                 "icon_code": "f072",
                 "is_published": true,
                 "is_active": true,
+                "is_paused": false,
                 "is_system": false,
                 "max_scheduled": 1,
                 "revision_num": 1,
