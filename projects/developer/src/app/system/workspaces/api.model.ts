@@ -54,10 +54,10 @@ export class Workspace {
             base_url: workspace.base_url,
             is_active: workspace.is_active,
             configuration: {
-                broker: workspace.configuration.broker
+                broker: _.pickBy(workspace.configuration.broker, d => d !== null && typeof d !== 'undefined' && d !== '')
             }
         };
-        return DataService.removeEmpty(returnWorkspace);
+        return returnWorkspace;
     }
 
     public static cleanWorkspaceForSave(workspace) {
@@ -67,10 +67,10 @@ export class Workspace {
             base_url: workspace.base_url,
             is_active: workspace.is_active,
             configuration: {
-                broker: workspace.configuration.broker
+                broker: _.pickBy(workspace.configuration.broker, d => d !== null && typeof d !== 'undefined' && d !== '')
             }
         };
-        return DataService.removeEmpty(returnWorkspace);
+        return returnWorkspace;
     }
 
     constructor(
