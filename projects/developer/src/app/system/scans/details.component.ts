@@ -291,7 +291,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         if (this.scan.id) {
             // edit scan
             this.scansApiService.editScan(this.scan.id, this.scan).subscribe(() => {
-<<<<<<< HEAD
                 // kick off scan process on successful edit
                 this.scansApiService.processScan(this.scan.id).subscribe(() => {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully edited' });
@@ -300,10 +299,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                     console.log(err);
                     this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
                 });
-=======
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully edited' });
-                this.redirect(this.scan.id);
->>>>>>> parent of 160fc18... add process scan call when saving
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error editing scan', detail: err.statusText});
@@ -311,7 +306,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         } else {
             // create scan
             this.scansApiService.createScan(this.scan).subscribe(data => {
-<<<<<<< HEAD
                 // kick off scan process on successful create
                 this.scansApiService.processScan(data.id).subscribe(() => {
                     this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully created' });
@@ -320,10 +314,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                     console.log(err);
                     this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
                 });
-=======
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully created' });
-                this.redirect(data.id);
->>>>>>> parent of 160fc18... add process scan call when saving
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});
