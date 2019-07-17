@@ -136,7 +136,7 @@ export class JobTypesApiService {
     }
 
     createJobType(jobType: JobType): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/job-types/`, jobType)
+        return this.http.post<any>(`${this.apiPrefix}/job-types/`, JobType.cleanJobTypeForCreate(jobType))
             .pipe(
                 catchError(DataService.handleError)
             );
