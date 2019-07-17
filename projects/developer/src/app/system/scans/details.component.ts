@@ -141,6 +141,10 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
+            // disable the name field if editing an existing scan
+            if (this.scan.id) {
+                this.createForm.get('name').disable();
+            }
 
             // determine what to show in scanner input, and which scanner fields to display
             this.initScanner();
