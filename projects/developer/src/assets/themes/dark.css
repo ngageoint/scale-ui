@@ -8,9 +8,10 @@
 .CodeMirror {
     border: none !important;
     background-color: var(--panel-background) !important;
-    caret-color: red;
 }
-
+.CodeMirror-cursor{
+    border-left: 1px solid var(--main-text) !important;
+}
 .CodeMirror-selected {
     background-color:  rgba(106, 158, 197, 0.527) !important;
 }
