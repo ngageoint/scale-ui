@@ -65,7 +65,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                 workspace: [''],
                 scanner: this.fb.group({
                     type: [{value: '', disabled: true}, Validators.required],
-                    transfer_suffix: ['', Validators.required]
+                    transfer_suffix: ['']
                 }),
                 recursive: [''],
                 files_to_ingest: this.fb.array([], Validators.required),
