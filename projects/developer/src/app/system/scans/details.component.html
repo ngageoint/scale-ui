@@ -19,7 +19,7 @@
                     <dd>{{ scan.description }}</dd>
                     <dt *ngIf="scan.job && scan.job.id">Job:</dt>
                     <dd *ngIf="scan.job && scan.job.id">
-                        <a routerLink="/jobs/{{ scan.job.id }}">
+                        <a routerLink="/processing/jobs/{{ scan.job.id }}">
                             <i class="fa" [innerHtml]="scanJobIcon"></i>
                             View Job Details ({{ scan.job.status }})
                         </a>
@@ -51,7 +51,7 @@
                         </div>
                         <div class="p-col-6">
                             <label>
-                                <span class="required">Description</span>
+                                <span>Description</span>
                                 <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
                                           [autoResize]="true"></textarea>
                             </label>
@@ -60,7 +60,7 @@
                     <div class="p-grid" formGroupName="configuration">
                         <div class="p-col-6">
                             <label>
-                                <span class="required">Workspace</span>
+                                <span class="required">Workspace Input</span>
                                 <p-dropdown [options]="workspacesOptions" formControlName="workspace"
                                             (onChange)="onWorkspaceChange()" [style]="{'width':'100%'}"
                                             placeholder="Select..." [showClear]="false">
@@ -75,8 +75,9 @@
                         </div>
                         <div class="p-col-3" formGroupName="scanner">
                             <label *ngIf="createForm.get('configuration.scanner.transfer_suffix').enabled">
-                                <span class="required">Transfer Suffix</span>
-                                <input type="text" pInputText formControlName="transfer_suffix" required/>
+                                <span>Transfer Suffix</span>
+                                <input type="text" pInputText formControlName="transfer_suffix"
+                                    pTooltip="File extention to be ignored when transfering files"/>
                             </label>
                         </div>
                     </div>

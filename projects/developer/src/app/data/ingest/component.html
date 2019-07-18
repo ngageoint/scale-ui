@@ -64,25 +64,25 @@
                     {{ rowData.fileSizeFormatted }}
                 </div>
                 <div *ngSwitchCase="'strike.id'">
-                    {{ rowData.strike.title }}
+                    <span *ngIf="rowData.strike">{{ rowData.strike.title }}</span>
                 </div>
                 <div *ngSwitchCase="'transfer_started'">
-                    <span [pTooltip]="rowData.transferStartedTooltip">
+                    <span [pTooltip]="rowData.transferStartedTooltip" *ngIf="rowData.transfer_started">
                         {{ rowData.transfer_started }}
                     </span>
                 </div>
                 <div *ngSwitchCase="'transfer_ended'">
-                    <span [pTooltip]="rowData.transferEndedTooltip">
+                    <span [pTooltip]="rowData.transferEndedTooltip" *ngIf="rowData.transfer_ended">
                         {{ rowData.transfer_ended }}
                     </span>
                 </div>
                 <div *ngSwitchCase="'ingest_started'">
-                    <span [pTooltip]="rowData.ingestStartedTooltip">
+                    <span [pTooltip]="rowData.ingestStartedTooltip" *ngIf="rowData.ingest_started">
                         {{ rowData.ingest_started }}
                     </span>
                 </div>
                 <div *ngSwitchCase="'ingest_ended'">
-                    <span [pTooltip]="rowData.ingestEndedTooltip">
+                    <span [pTooltip]="rowData.ingestEndedTooltip" *ngIf="rowData.ingest_ended">
                         {{ rowData.ingest_ended }}
                     </span>
                 </div>

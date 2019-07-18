@@ -51,6 +51,17 @@ export class JobType {
         return cleanJob;
     }
 
+    public static cleanJobTypeForCreate(data) {
+        const cleanJob = {
+            icon_code: data.icon_code || null,
+            docker_image: data.docker_image || null,
+            configuration: data.configuration || null,
+            manifest: data.manifest || null
+        };
+        DataService.removeEmpty(cleanJob);
+        return cleanJob;
+    }
+
     public static cleanJobTypeForUpdate(data) {
         const cleanJob = {
             icon_code: data.icon_code || null,

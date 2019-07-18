@@ -136,8 +136,7 @@
                         "mount_2": {"type": "volume", "driver": "docker-driver", "driver_opts": {"opt_1": "foo"}}
                     },
                     "output_workspaces": {
-                        "default": "workspace_1",
-                        "outputs": {"output_1": "workspace_2"}
+                        "default": "rs"
                     },
                     "priority": 100,
                     "settings": {"setting_1": "foo", "setting_2": "bar"}

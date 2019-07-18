@@ -136,7 +136,7 @@ export class JobTypesApiService {
     }
 
     createJobType(jobType: JobType): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/job-types/`, jobType)
+        return this.http.post<any>(`${this.apiPrefix}/job-types/`, JobType.cleanJobTypeForCreate(jobType))
             .pipe(
                 catchError(DataService.handleError)
             );
@@ -160,11 +160,13 @@ export class JobTypesApiService {
                 page: page,
                 page_size: params.rows || 1000,
                 started: params.started,
-                ended: params.ended
+                ended: params.ended,
+                is_active: params.is_active || true
             };
         } else {
             apiParams = {
-                page_size: 1000
+                page_size: 1000,
+                is_active: true
             };
         }
         apiParams = _.pickBy(apiParams, d => {
