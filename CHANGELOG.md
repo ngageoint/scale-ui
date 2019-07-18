@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.2](https://github-mil///compare/v0.5.1...v0.5.2) (2019-07-18)
+
+
+### Bug Fixes
+
+* **build:** resolve issue with silo proxy failing when the silo backend is served over https ([299049b](https://github-mil///commit/299049b))
+* **build:** update environment variables for consistency with Scale deployment ([61f30a9](https://github-mil///commit/61f30a9))
+* update form labels for scans and strikes ([6618864](https://github-mil///commit/6618864))
+* **dashboard:** remove deprecated job types from the dashboard ([ed301f7](https://github-mil///commit/ed301f7))
+* **job types:** remove empty or null properties before posting a new job type to the API ([ab90a3e](https://github-mil///commit/ab90a3e))
+* **recipe types:** adjust transform and text position of publisher job type nodes ([2547989](https://github-mil///commit/2547989))
+* **scans:** initialize scan process on successful scan create/edit ([ef7a649](https://github-mil///commit/ef7a649))
+* **strikes and scans:** remove required designation from optional fields ([a578a38](https://github-mil///commit/a578a38))
+
+
+
 ### [0.5.1](https://github.com-mil///compare/v0.5.0...v0.5.1) (2019-07-12)
 
 
