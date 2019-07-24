@@ -1,5 +1,6 @@
 import { RecipeTypeInput } from './api.input.model';
 import { JobType } from '../job-types/api.model';
+import { RecipeTypeCondition } from './api.condition.model';
 import * as _ from 'lodash';
 
 export class RecipeType {
@@ -116,5 +117,16 @@ export class RecipeType {
         public created: string,
         public deprecated: string,
         public last_modified: string
-    ) {}
+    ) {
+        _.forEach(_.keys(this.definition.nodes), key => {
+            if (this.definition.nodes[key].node_type.node_type === 'condition') {
+                const c = RecipeTypeCondition.transformer({
+                    name: key,
+                    condition_interface: this.definition.nodes[key].node_type.interface,
+                    data_filter: this.definition.nodes[key].node_type.data_filter
+                });
+                this.conditions.push(c);
+            }
+        });
+    }
 }
