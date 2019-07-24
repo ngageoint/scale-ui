@@ -127,7 +127,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                 icon: null,
                 dependencies: [],
                 visible: true,
-                fillColor: ColorService.RECIPE_NODE
+                fillColor: ColorService.RECIPE_NODE,
+                textPosition: 10
             }];
             this.links = [];
 
@@ -166,7 +167,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     visible: true,
                     fillColor: node.node_type.status ? ColorService[node.node_type.status] : ColorService.RECIPE_NODE,
                     class: node.node_type.status ? node.node_type.status === 'RUNNING' ? 'throb-svg' : null : null,
-                    transform: publisher ? 'skewX(-8)' : '',
+                    transform: publisher ? 'skewX(-32)' : '',
+                    textPosition: publisher ? -3 : 10,
                     node_type: node.node_type,
                     input: node.input
                 });

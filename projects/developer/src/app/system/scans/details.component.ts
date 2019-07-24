@@ -65,7 +65,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                 workspace: [''],
                 scanner: this.fb.group({
                     type: [{value: '', disabled: true}, Validators.required],
-                    transfer_suffix: ['', Validators.required]
+                    transfer_suffix: ['']
                 }),
                 recursive: [''],
                 files_to_ingest: this.fb.array([], Validators.required),
@@ -141,10 +141,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
             // remove currently selected workspace from new_workspace dropdown
             this.initNewWorkspacesOptions();
 
-            // disable the name field if editing an existing scan
-            if (this.scan.id) {
-                this.createForm.get('name').disable();
-            }
 
             // determine what to show in scanner input, and which scanner fields to display
             this.initScanner();
@@ -291,8 +287,14 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         if (this.scan.id) {
             // edit scan
             this.scansApiService.editScan(this.scan.id, this.scan).subscribe(() => {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully edited' });
-                this.redirect(this.scan.id);
+                // kick off scan process on successful edit
+                this.scansApiService.processScan(this.scan.id).subscribe(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully edited' });
+                    this.redirect(this.scan.id);
+                }, err => {
+                    console.log(err);
+                    this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
+                });
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error editing scan', detail: err.statusText});
@@ -300,8 +302,14 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         } else {
             // create scan
             this.scansApiService.createScan(this.scan).subscribe(data => {
-                this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully created' });
-                this.redirect(data.id);
+                // kick off scan process on successful create
+                this.scansApiService.processScan(data.id).subscribe(() => {
+                    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Scan successfully created' });
+                    this.redirect(this.scan.id);
+                }, err => {
+                    console.log(err);
+                    this.messageService.add({severity: 'error', summary: 'Error processing scan', detail: err.statusText});
+                });
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error creating scan', detail: err.statusText});

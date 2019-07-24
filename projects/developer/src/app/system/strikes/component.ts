@@ -86,7 +86,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 workspace: [''],
                 monitor: this.fb.group({
                     type: [{value: '', disabled: true}, Validators.required],
-                    transfer_suffix: ['', Validators.required],
+                    transfer_suffix: [''],
                     sqs_name: ['', Validators.required],
                     credentials: this.fb.group({
                         access_key_id: [''],
