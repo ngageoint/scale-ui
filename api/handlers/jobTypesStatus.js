@@ -12,6 +12,11 @@ module.exports = function (request) {
                 data.results = _.orderBy(data.results, [params.order], ['asc']);
             }
         }
+        if (typeof params.is_active !== 'undefined') {
+            data.results = _.filter(data.results, result => {
+                return result.job_type.is_active === true;
+            });
+        }
         data.count = data.results.length;
         if (params.page && params.page_size) {
             var pagedResults = _.chunk(data.results, params.page_size);
