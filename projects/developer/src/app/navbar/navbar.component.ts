@@ -1,8 +1,9 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { OverlayPanel } from 'primeng/primeng';
+import { OverlayPanel, ConfirmationService } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MenuItem } from 'primeng/api';
+import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
 import { DataService } from '../common/services/data.service';
@@ -26,14 +27,14 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     themeTooltip: string;
     themeIcon: string;
     scheduler: any;
-    schedulerTooltip = 'Stop Scheduler';
     schedulerClass = 'navbar__scheduler-pause';
-    statuses: any;
-    statusAlerts = [];
+    schedulerStatusClass = '';
+    schedulerStatusIcon: string;
     isMobile: boolean;
     itemsMobile: MenuItem[];
 
     constructor(
+        private confirmationService: ConfirmationService,
         private messageService: MessageService,
         private dataService: DataService,
         private themeService: ThemeService,
@@ -80,10 +81,6 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
             this.themeService.setTheme('light');
             localStorage.setItem(environment.themeKey, 'light');
         }
-    }
-
-    onSystemClick(event) {
-        this.systemOp.toggle(event);
     }
 
     createMobileMenu() {
@@ -226,27 +223,25 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         }
     }
 
-    getScheduler() {
-        this.schedulerApiService.getScheduler(true).subscribe(data => {
-            this.scheduler = data;
-            this.schedulerTooltip = this.scheduler.is_paused ? 'Resume Scheduler' : 'Stop Scheduler';
-            this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
-        }, err => {
-            console.log(err);
-            this.messageService.add({severity: 'error', summary: 'Error retrieving scheduler', detail: err.statusText});
-        });
+    onSystemClick(event) {
+        this.systemOp.toggle(event);
     }
 
-    toggleScheduler() {
-        this.scheduler.is_paused = !this.scheduler.is_paused;
-        this.schedulerApiService.updateScheduler(this.scheduler).subscribe(() => {
-            this.messageService.add({severity: 'success', summary: 'Scheduler successfully updated'});
-            this.schedulerTooltip = this.scheduler.is_paused ? 'Resume Scheduler' : 'Stop Scheduler';
-            this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
-        }, err => {
-            console.log(err);
-            this.scheduler.is_paused = !this.scheduler.is_paused;
-            this.messageService.add({severity: 'error', summary: 'Error updating scheduler', detail: err.statusText});
+    onSchedulerClick() {
+        const action = this.scheduler.is_paused ? 'resume' : 'pause';
+        this.confirmationService.confirm({
+            message: `Are you sure that you want to ${action} the Scheduler?`,
+            accept: () => {
+                this.scheduler.is_paused = !this.scheduler.is_paused;
+                this.schedulerApiService.updateScheduler(this.scheduler).subscribe(() => {
+                    this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
+                    this.messageService.add({severity: 'success', summary: 'Scheduler successfully updated'});
+                }, err => {
+                    console.log(err);
+                    this.scheduler.is_paused = !this.scheduler.is_paused;
+                    this.messageService.add({severity: 'error', summary: 'Error updating scheduler', detail: err.statusText});
+                });
+            }
         });
     }
 
@@ -256,11 +251,24 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         });
 
         this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
-            this.statuses = data.statuses;
+            if (data) {
+                // update scheduler
+                this.scheduler = data.scheduler;
+                this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
+                if (this.scheduler.state.name === 'READY') {
+                    this.schedulerStatusClass = 'label label-success';
+                    this.schedulerStatusIcon = 'fa fa-check-circle';
+                } else if (this.scheduler.state.name === 'PAUSED') {
+                    this.schedulerStatusClass = 'label label-paused';
+                    this.schedulerStatusIcon = 'fa fa-pause';
+                } else {
+                    this.schedulerStatusClass = 'label label-default';
+                    this.schedulerStatusIcon = 'fa fa-circle';
+                }
+            }
         });
 
         this.createMobileMenu();
-        this.getScheduler();
     }
 
     ngOnChanges(changes: SimpleChanges) {

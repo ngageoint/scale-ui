@@ -2,6 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { ConfirmationService } from 'primeng/api';
 
 import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
@@ -17,7 +18,7 @@ describe('NavbarComponent', () => {
     beforeEach(async(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
-            providers: [MessageService, DataService, ThemeService, StatusService, SchedulerApiService, {
+            providers: [ConfirmationService, MessageService, DataService, ThemeService, StatusService, SchedulerApiService, {
                 provide: THEMES,
                 useValue: THEMES
             }, {

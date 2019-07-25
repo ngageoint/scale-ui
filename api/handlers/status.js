@@ -18,7 +18,8 @@ module.exports = function () {
     }];
     var totalWarnings = getRandom(0, 5);
     var schedulerWarnings = [];
-    var stateValue = stateValues[Math.floor(Math.random() * (stateValues.length))];
+    // var stateValue = stateValues[Math.floor(Math.random() * (stateValues.length))];
+    var stateValue = stateValues[0];
     if (totalWarnings > 0) {
         for (var i = 0; i < totalWarnings; i++) {
             schedulerWarnings.push({

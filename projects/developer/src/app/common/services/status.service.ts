@@ -14,29 +14,7 @@ export class StatusService {
     }
 
     setStatus(data) {
-        this.status = {
-            data: data,
-            statuses: {}
-        };
-        if (data) {
-            this.status.statuses = {
-                scheduler: {
-                    label: 'Scheduler',
-                    styleClass: 'system-status__healthy fa fa-check-circle',
-                    data: data.scheduler ? data.scheduler : null
-                },
-                system: {
-                    label: 'System',
-                    styleClass: 'system-status__healthy fa fa-check-circle',
-                    data: data.system ? data.system : null
-                },
-                vault: {
-                    label: 'Vault',
-                    styleClass: 'system-status__healthy fa fa-check-circle',
-                    data: data.vault ? data.vault : null
-                }
-            };
-        }
+        this.status = data;
         this.statusUpdated.emit(this.status);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 import { StatusService } from '../../common/services/status.service';
@@ -9,7 +9,8 @@ import { StatusApiService } from '../../system/status/api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class StatusComponent implements OnInit, OnDestroy {
+export class StatusComponent implements OnInit, OnDestroy, OnChanges {
+    @Input() schedulerIsPaused: boolean;
     subscription: any;
     loading: boolean;
     status: any;
@@ -68,5 +69,11 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.schedulerIsPaused && changes.schedulerIsPaused.currentValue) {
+            this.getStatus();
+        }
     }
 }

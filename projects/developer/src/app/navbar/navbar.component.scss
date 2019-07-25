@@ -102,7 +102,7 @@ $navbar-item-width: 150px;
 }
 
 .navbar__settings {
-    .navbar__system, .navbar__theme {
+    .navbar__scheduler, .navbar__system, .navbar__theme {
         margin: 0 0 0 1px;
         color: var(--white);
         font-size: 25px;
@@ -132,27 +132,11 @@ $navbar-item-width: 150px;
     }
 
     .navbar__scheduler-pause {
-        color: var(--status-error);
+        color: #fff;
     }
 
     .navbar__scheduler-resume {
-        color: var(--status-good);
-    }
-}
-
-.navbar__system-status {
-    ul {
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-    }
-
-    .system-status__healthy {
-        color: var(--status-good);
-    }
-
-    .system-status__unhealthy {
-        color: var(--status-error);
+        color: #777;
     }
 }
 

@@ -31,22 +31,22 @@
         </div>
         <div class="flexed navbar__settings" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
-                <dev-status></dev-status>
+                <dev-status [schedulerIsPaused]="scheduler ? scheduler.is_paused : false"></dev-status>
             </div>
             <div class="navbar__theme" (click)="changeTheme()" [pTooltip]="themeTooltip" tooltipPosition="bottom">
                 <span [ngClass]="themeIcon"></span>
             </div>
-            <div class="navbar__system" *ngIf="isAuthenticated" pTooltip="System Status"
+            <div class="navbar__system" *ngIf="isAuthenticated && scheduler" pTooltip="System Status"
                  tooltipPosition="bottom" (click)="onSystemClick($event)">
                 <div class="navbar__icon">
                     <span class="fa fa-bell"></span>
-                    <span class="label label-danger" *ngIf="statusAlerts.length > 0">
-                        <i class="fa fa-warning"></i>
+                    <span class="label label-danger" *ngIf="scheduler.warnings && scheduler.warnings.length > 0">
+                        {{ scheduler.warnings.length }}
                     </span>
                 </div>
             </div>
-            <div class="navbar__theme" [ngClass]="schedulerClass" (click)="toggleScheduler()"
-                 [pTooltip]="schedulerTooltip" tooltipPosition="bottom">
+            <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler" [ngClass]="schedulerClass"
+                 (click)="onSchedulerClick()" pTooltip="Scheduler" tooltipPosition="bottom">
                 <span class="fa fa-power-off"></span>
             </div>
         </div>
@@ -54,16 +54,23 @@
 </div>
 <dev-subnav [sectionId]="selectedId" (navigateEvent)="onNavigate()"></dev-subnav>
 <p-overlayPanel styleClass="navbar__system-overlaypanel" appendTo="body" [dismissable]="true" #systemOp>
-    <div class="navbar__system-status">
-        <h2>System Status</h2>
-        <ul>
-            <li *ngFor="let status of statuses | keyvalue">
-                <i [ngClass]="status.value.styleClass"></i> {{ status.value.label }}
+    <div class="navbar__system-details" *ngIf="scheduler">
+        <h3>{{ scheduler.hostname }}</h3>
+        <div *ngIf="scheduler.state">
+            <span class="margin-right-sm" [ngClass]="schedulerStatusClass">
+                <i [ngClass]="schedulerStatusIcon"></i> {{ scheduler.state.title }}
+            </span>
+            {{ scheduler.state.description }}
+        </div>
+        <ul *ngFor="let warning of scheduler.warnings">
+            <li>
+                <strong>{{ warning.title }}</strong><br/>
+                <span *ngIf="warning.description">{{ warning.description }}<br/></span>
+                <span class="small-text">{{ warning.last_updated }}</span>
             </li>
         </ul>
-        <hr/>
-        <div class="text-right">
-            <a routerLink="/system/status">View Details <i class="fa fa-caret-right"></i></a>
-        </div>
     </div>
 </p-overlayPanel>
+<p-confirmDialog header="Scheduler" icon="pi pi-exclamation-triangle"
+                 acceptButtonStyleClass="ui-button-accept" rejectButtonStyleClass="ui-button-reject">
+</p-confirmDialog>
