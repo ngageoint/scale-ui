@@ -1,15 +1,16 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 
-import { StatusApiService } from '../../common/services/status/api.service';
+import { StatusService } from '../../common/services/status.service';
+import { StatusApiService } from '../../system/status/api.service';
 
 @Component({
     selector: 'dev-status',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class StatusComponent implements OnInit, OnDestroy {
-    @Output() statusChange: EventEmitter<any> = new EventEmitter<any>();
+export class StatusComponent implements OnInit, OnDestroy, OnChanges {
+    @Input() schedulerIsPaused: boolean;
     subscription: any;
     loading: boolean;
     status: any;
@@ -20,8 +21,9 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     constructor(
         private messageService: MessageService,
+        private statusService: StatusService,
         private statusApiService: StatusApiService
-    ) { }
+    ) {}
 
     private getUsage(metric) {
         if (metric) {
@@ -39,8 +41,8 @@ export class StatusComponent implements OnInit, OnDestroy {
         this.unsubscribe();
         this.subscription = this.statusApiService.getStatus(true).subscribe(data => {
             this.loading = false;
+            this.statusService.setStatus(data);
             if (data) {
-                this.statusChange.emit(data);
                 this.status = data;
                 this.pctCpu = this.getUsage(this.status.resources.cpus);
                 this.pctMem = this.getUsage(this.status.resources.mem);
@@ -67,5 +69,11 @@ export class StatusComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.schedulerIsPaused && changes.schedulerIsPaused.currentValue) {
+            this.getStatus();
+        }
     }
 }

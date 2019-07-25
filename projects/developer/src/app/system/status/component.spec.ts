@@ -5,21 +5,20 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Subject } from 'rxjs';
 
-import { NodesComponent } from './component';
-import { NodesApiService } from './api.service';
-import { StatusService } from '../../common/services/status.service';
+import { SystemStatusComponent } from './component';
+import { StatusApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
 
-describe('NodesComponent', () => {
-    let component: NodesComponent;
-    let fixture: ComponentFixture<NodesComponent>;
+describe('SystemStatusComponent', () => {
+    let component: SystemStatusComponent;
+    let fixture: ComponentFixture<SystemStatusComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [NodesComponent],
+            declarations: [SystemStatusComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, NodesApiService, StatusService, DataService,
+                MessageService, StatusApiService, DataService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
@@ -36,7 +35,7 @@ describe('NodesComponent', () => {
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(NodesComponent);
+        fixture = TestBed.createComponent(SystemStatusComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
