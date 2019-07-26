@@ -9,7 +9,7 @@ describe('CandyBarComponent', () => {
     let component: CandyBarComponent;
     let fixture: ComponentFixture<CandyBarComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [CandyBarComponent],
             imports: [HttpClientTestingModule],
@@ -18,7 +18,7 @@ describe('CandyBarComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(CandyBarComponent);

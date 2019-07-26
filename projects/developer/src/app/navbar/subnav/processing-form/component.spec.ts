@@ -13,7 +13,7 @@ describe('ProcessingformComponent', () => {
     let component: ProcessingFormComponent;
     let fixture: ComponentFixture<ProcessingFormComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [ProcessingFormComponent],
             imports: [HttpClientTestingModule],
@@ -25,7 +25,7 @@ describe('ProcessingformComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(ProcessingFormComponent);

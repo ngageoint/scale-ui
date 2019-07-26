@@ -9,7 +9,7 @@ describe('RecipeJsonComponent', () => {
     let component: RecipeTypeJsonComponent;
     let fixture: ComponentFixture<RecipeTypeJsonComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [RecipeTypeJsonComponent],
             imports: [HttpClientTestingModule],
@@ -20,7 +20,7 @@ describe('RecipeJsonComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(RecipeTypeJsonComponent);

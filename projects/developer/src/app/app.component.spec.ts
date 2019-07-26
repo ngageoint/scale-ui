@@ -9,7 +9,7 @@ import { AppModule } from './app.module';
 
 
 describe('AppComponent', () => {
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [],
             imports: [
@@ -23,7 +23,7 @@ describe('AppComponent', () => {
                 useValue: ACTIVE_THEME
             }]
         }).compileComponents();
-    }));
+    });
 
     it('should create the app', () => {
         const fixture = TestBed.createComponent(AppComponent);
