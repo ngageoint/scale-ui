@@ -14,7 +14,7 @@ describe('QueueLoadComponent', () => {
     let component: QueueLoadComponent;
     let fixture: ComponentFixture<QueueLoadComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [QueueLoadComponent],
             imports: [HttpClientTestingModule],
@@ -33,7 +33,7 @@ describe('QueueLoadComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(QueueLoadComponent);

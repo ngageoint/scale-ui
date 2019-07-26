@@ -7,12 +7,12 @@ describe('HealthbarComponent', () => {
     let component: HealthbarComponent;
     let fixture: ComponentFixture<HealthbarComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [HealthbarComponent]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(HealthbarComponent);

@@ -9,7 +9,7 @@ describe('RecipeTypeFilterComponent', () => {
     let component: RecipeTypeFilterComponent;
     let fixture: ComponentFixture<RecipeTypeFilterComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [RecipeTypeFilterComponent],
             imports: [HttpClientTestingModule],
@@ -20,7 +20,7 @@ describe('RecipeTypeFilterComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(RecipeTypeFilterComponent);

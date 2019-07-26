@@ -11,7 +11,7 @@ describe('RecipeGraphComponent', () => {
     let component: RecipeGraphComponent;
     let fixture: ComponentFixture<RecipeGraphComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [RecipeGraphComponent],
             imports: [HttpClientTestingModule],
@@ -20,7 +20,7 @@ describe('RecipeGraphComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(RecipeGraphComponent);

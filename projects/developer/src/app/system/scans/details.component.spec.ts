@@ -16,7 +16,7 @@ describe('ScanDetailsComponent', () => {
     let component: ScanDetailsComponent;
     let fixture: ComponentFixture<ScanDetailsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [ScanDetailsComponent],
             imports: [HttpClientTestingModule],
@@ -36,7 +36,7 @@ describe('ScanDetailsComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(ScanDetailsComponent);
