@@ -142,11 +142,10 @@ export class JobTypesApiService {
             );
     }
 
-    updateJobType(jobType: JobType): Observable<any> {
-        return this.http.patch<any>(
-            `${this.apiPrefix}/job-types/${jobType.name}/${jobType.version}/`,
-            JobType.cleanJobTypeForUpdate(jobType)
-        )
+    updateJobType(jobType: JobType, name?: string, version?: string): Observable<any> {
+        name = name || jobType.name;
+        version = version || jobType.version;
+        return this.http.patch<any>(`${this.apiPrefix}/job-types/${name}/${version}/`, JobType.cleanJobTypeForUpdate(jobType))
             .pipe(
                 catchError(DataService.handleError)
             );

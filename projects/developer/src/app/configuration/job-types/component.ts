@@ -162,7 +162,7 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onPauseClick() {
         const action = this.selectedJobTypeDetail.is_paused ? 'Resume' : 'Pause';
-        let message = `${action} ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`
+        let message = `${action} ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`;
         message = this.selectedJobTypeDetail.is_system && action === 'Pause' ?
             `${message}<br /><br />WARNING: This is a system job. Pausing could negatively affect Scale.` :
             message;
