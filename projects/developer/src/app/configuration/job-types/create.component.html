@@ -151,17 +151,46 @@
                 <div class="p-col-10" *ngIf="currentStepIdx === 2">
                     <div class="p-grid">
                         <div class="p-col-6">
-                            Select an icon which will be used to represent this job type in Scale.
-                            <p-listbox [options]="icons" formControlName="icon_code" filter="filter"
-                                       (onChange)="selectIcon()"
-                                       [style]="{'width':'100%','max-height':'300px','overflow':'auto','margin-top':'10px'}">
-                                <ng-template let-icon pTemplate="item">
-                                    <div class="ui-helper-clearfix" *ngIf="icon.label">
-                                        <span class="fa fa-fw {{ icon.label }}"></span>
-                                        {{ icon.label.replace('fa-','') }}
-                                    </div>
-                                </ng-template>
-                            </p-listbox>
+                            <p-panel header="Icon">
+                                Select an icon which will be used to represent this job type in Scale.
+                                <p-listbox [options]="icons" formControlName="icon_code" filter="filter"
+                                           (onChange)="selectIcon()"
+                                           [style]="{'width':'100%','max-height':'300px','overflow':'auto','margin-top':'10px'}">
+                                    <ng-template let-icon pTemplate="item">
+                                        <div class="ui-helper-clearfix" *ngIf="icon.label">
+                                            <span class="fa fa-fw {{ icon.label }}"></span>
+                                            {{ icon.label.replace('fa-','') }}
+                                        </div>
+                                    </ng-template>
+                                </p-listbox>
+                            </p-panel>
+                        </div>
+                        <div class="p-col-6">
+                            <label class="flexed">
+                                <p-inputSwitch formControlName="is_published" (onChange)="onInputSwitchChange($event)">
+                                </p-inputSwitch>
+                                <span class="margin-left-sm">Publish Output</span>
+                            </label>
+                            <div *ngIf="mode === 'Edit'">
+                                <label class="flexed">
+                                    <p-inputSwitch formControlName="is_active" (onChange)="onInputSwitchChange($event)">
+                                    </p-inputSwitch>
+                                    <span class="margin-left-sm">Active</span>
+                                </label>
+                                <label class="flexed">
+                                    <p-inputSwitch formControlName="is_paused" (onChange)="onInputSwitchChange($event)">
+                                    </p-inputSwitch>
+                                    <span class="margin-left-sm">Paused</span>
+                                </label>
+                                <label>
+                                    Docker Image
+                                    <input type="text" pInputText formControlName="docker_image">
+                                </label>
+                            </div>
+                            <label>
+                                Maximum Scheduled Jobs
+                                <input type="number" pInputText formControlName="max_scheduled">
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -174,6 +203,24 @@
                         </h2>
                         <h3>Docker Image</h3>
                         {{ jobType.docker_image }}
+                        <div *ngIf="jobType.max_scheduled !== null">
+                            <h3>Maximum Scheduled Jobs</h3>
+                            {{ jobType.max_scheduled }}
+                        </div>
+                        <div *ngIf="jobType.is_published !== null">
+                            <h3>Publish Output</h3>
+                            {{ jobType.is_published }}
+                        </div>
+                        <div *ngIf="mode === 'Edit'">
+                            <div *ngIf="jobType.is_active !== null">
+                                <h3>Active</h3>
+                                {{ jobType.is_active }}
+                            </div>
+                            <div *ngIf="jobType.is_paused !== null">
+                                <h3>Paused</h3>
+                                {{ jobType.is_paused }}
+                            </div>
+                        </div>
                         <h3>Configuration</h3>
                         <ul class="job-type__configuration">
                             <li>Priority: {{ jobType.configuration.priority }}</li>

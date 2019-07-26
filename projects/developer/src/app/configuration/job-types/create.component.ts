@@ -21,6 +21,9 @@ import { WorkspacesApiService } from '../../system/workspaces/api.service';
 })
 export class JobTypesCreateComponent implements OnInit, OnDestroy {
     private routeParams: any;
+    // keep track of name and version since they're stripped out while editing
+    private name: string;
+    private version: string;
     env = environment;
     mode: string;
     formSubscription: any;
@@ -39,6 +42,11 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
     jobType: any;
     createForm: FormGroup = this.fb.group({
         icon_code: [''],
+        is_published: [false],
+        is_active: [true],
+        is_paused: [false],
+        max_scheduled: [],
+        docker_image: [''],
         configuration: this.fb.group({
             priority: ['', Validators.required],
             output_workspaces: this.fb.group({
@@ -220,6 +228,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         } else {
             this.jobType.docker_image = null;
         }
+        this.createForm.patchValue({docker_image: this.jobType.docker_image});
 
         // alert user if docker image cannot be determined from imported seed image
         if (!job || !image) {
@@ -316,7 +325,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'error', summary: 'Error', detail: err.statusText });
             });
         } else {
-            this.jobTypesApiService.updateJobType(this.jobType).subscribe(result => {
+            this.jobTypesApiService.updateJobType(this.jobType, this.name, this.version).subscribe(result => {
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${this.mode} Successful` });
                 this.modifiedJobTypeName = result.name;
                 this.modifiedJobTypeVersion = result.version;
@@ -333,6 +342,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         }
     }
 
+    onInputSwitchChange(e) {
+        e.originalEvent.preventDefault();
+    }
+
     ngOnInit() {
         _.forEach(this.iconData, d => {
             this.icons.push({
@@ -344,16 +357,14 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         this.jsonModeBtnClass = 'ui-button-secondary';
         this.currentStepIdx = 0;
 
-        let name = null;
-        let version = null;
         if (this.route && this.route.paramMap) {
             this.routeParams = this.route.paramMap.subscribe(params => {
-                name = params.get('name');
-                version = params.get('version');
+                this.name = params.get('name');
+                this.version = params.get('version');
 
-                if (name && version) {
+                if (this.name && this.version) {
                     this.mode = 'Edit';
-                    this.jobTypesApiService.getJobType(name, version).subscribe(data => {
+                    this.jobTypesApiService.getJobType(this.name, this.version).subscribe(data => {
                         this.jobType = JobType.cleanJobTypeForUpdate(data);
                         this.jobType.manifest = data.manifest;
                         this.getWorkspaces();
@@ -374,7 +385,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
                         label: 'Configuration'
                     },
                     {
-                        label: 'Icon'
+                        label: 'General Information'
                     },
                     {
                         label: 'Validate and Create',
