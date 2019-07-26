@@ -23,6 +23,7 @@ import { NodesComponent } from './system/nodes/component';
 import { StrikesComponent } from './system/strikes/component';
 import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
+import { SystemStatusComponent } from './system/status/component';
 import { WorkspacesComponent } from './system/workspaces/component';
 
 const routes: Routes = [
@@ -54,6 +55,7 @@ const routes: Routes = [
     { path: 'system/strikes/:id', component: StrikesComponent },
     { path: 'system/scans', component: ScansComponent },
     { path: 'system/scans/:id', component: ScanDetailsComponent },
+    { path: 'system/status', component: SystemStatusComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
     { path: 'system/workspaces/:id', component: WorkspacesComponent }
 ];

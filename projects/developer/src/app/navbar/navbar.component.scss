@@ -102,7 +102,7 @@ $navbar-item-width: 150px;
 }
 
 .navbar__settings {
-    .navbar__scheduler, .navbar__theme, .navbar__profile {
+    .navbar__scheduler, .navbar__system, .navbar__theme {
         margin: 0 0 0 1px;
         color: var(--white);
         font-size: 25px;
@@ -130,10 +130,18 @@ $navbar-item-width: 150px;
             }
         }
     }
+
+    .navbar__scheduler-pause {
+        color: #fff;
+    }
+
+    .navbar__scheduler-resume {
+        color: #777;
+    }
 }
 
 ::ng-deep .ui-overlaypanel {
-    &.navbar__scheduler-overlaypanel, &.navbar__profile-overlaypanel {
+    &.navbar__system-overlaypanel {
         width: 350px;
         padding: 10px 0;
 
@@ -145,29 +153,13 @@ $navbar-item-width: 150px;
             margin-right: 15px;
         }
 
-        ul {
-            padding: 0 0 0 17px;
-        }
-    }
-    &.navbar__scheduler-overlaypanel, &.navbar__profile-overlaypanel {
         h3 {
             margin: 0;
             padding: 0;
         }
-    }
-    &.navbar__profile-overlaypanel {
-        .navbar__profile-login {
-            text-align: right;
 
-            input {
-                width: 100%;
-                display: block;
-                margin-bottom: 5px;
-            }
-        }
-
-        .navbar__profile-data {
-            padding: 2px;
+        ul {
+            padding: 0 0 0 17px;
         }
     }
 }
@@ -179,7 +171,7 @@ $navbar-item-width: 150px;
     padding: .5em;
 }
 
-.navbar__scheduler-overlaypanel {
+.navbar__system-overlaypanel {
     top: 72px;
 }
 

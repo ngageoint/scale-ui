@@ -57,6 +57,8 @@ var siloJobs = require('./handlers/siloJobs');
 var siloJobDetails = require('./handlers/siloJobDetails');
 var siloManifestDetails = require('./handlers/siloManifestDetails');
 var siloImageDetails = require('./handlers/siloImageDetails');
+var scheduler = require('./handlers/scheduler');
+var schedulerUpdate = require('./handlers/schedulerUpdate');
 
 var apiVersion = 'v6';
 
@@ -434,6 +436,18 @@ module.exports = {
             method: 'GET',
             path: '/mocks/silo/images/{id}',
             handler: siloImageDetails
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/scheduler/',
+            handler: scheduler
+        });
+
+        server.route({
+            method: 'PATCH',
+            path: '/mocks/' + apiVersion + '/scheduler/',
+            handler: schedulerUpdate
         });
     }
 };

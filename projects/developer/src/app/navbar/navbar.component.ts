@@ -1,14 +1,15 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { OverlayPanel } from 'primeng/primeng';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { OverlayPanel, ConfirmationService } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import {MenuItem} from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import * as _ from 'lodash';
 
 import { environment } from '../../environments/environment';
-import { ProfileService } from '../common/services/profile.service';
 import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
+import { StatusService } from '../common/services/status.service';
+import { SchedulerApiService } from '../common/services/scheduler/api.service';
 
 @Component({
     selector: 'dev-navbar',
@@ -16,32 +17,29 @@ import { ThemeService } from '../theme';
     styleUrls: ['./navbar.component.scss']
 })
 
-export class NavbarComponent implements OnInit, OnChanges {
-    @Input() theme: string;
+export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() isAuthenticated: boolean;
-    @ViewChild('profileOp') profileOp: OverlayPanel;
-    @ViewChild('schedulerOp') schedulerOp: OverlayPanel;
-    @ViewChild('profile') profile: any;
-    @ViewChild('user') usernameEl: any;
-    env = environment;
+    @Input() theme: string;
+    @ViewChild('systemOp') systemOp: OverlayPanel;
+    statusSubscription: any;
     selectedId = null;
     subscription: any;
     themeTooltip: string;
     themeIcon: string;
-    username: string;
-    password: string;
     scheduler: any;
-    schedulerClass: string;
-    schedulerIcon: string;
-    userProfile: any;
+    schedulerClass = 'navbar__scheduler-pause';
+    schedulerStatusClass = '';
+    schedulerStatusIcon: string;
     isMobile: boolean;
     itemsMobile: MenuItem[];
 
     constructor(
+        private confirmationService: ConfirmationService,
         private messageService: MessageService,
-        private profileService: ProfileService,
         private dataService: DataService,
         private themeService: ThemeService,
+        private statusService: StatusService,
+        private schedulerApiService: SchedulerApiService,
         public breakpointObserver: BreakpointObserver
     ) {}
 
@@ -83,39 +81,6 @@ export class NavbarComponent implements OnInit, OnChanges {
             this.themeService.setTheme('light');
             localStorage.setItem(environment.themeKey, 'light');
         }
-    }
-
-    login() {
-        this.profileService.login({ username: this.username, password: this.password }).subscribe(data => {
-            console.log(data);
-        }, err => {
-            console.log(err);
-            this.messageService.add({ severity: 'error', summary: 'Authentication Error', detail: err.statusText, life: 10000 });
-        });
-    }
-
-    handleKeyPress(event) {
-        if (event.code === 'Enter' && this.username && this.password) {
-            this.login();
-        }
-    }
-
-    handleOnProfileShow() {
-        if (!this.isAuthenticated) {
-            setTimeout(() => {
-                this.usernameEl.nativeElement.focus();
-            }, 50);
-        }
-    }
-
-    onSchedulerClick(event) {
-        this.profileOp.hide();
-        this.schedulerOp.toggle(event);
-    }
-
-    onProfileClick(event) {
-        this.schedulerOp.hide();
-        this.profileOp.toggle(event);
     }
 
     createMobileMenu() {
@@ -252,21 +217,32 @@ export class NavbarComponent implements OnInit, OnChanges {
         ];
     }
 
-    onStatusChange(data) {
-        if (data) {
-            this.scheduler = data.scheduler;
-            this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
-            if (this.scheduler.state.name === 'READY') {
-                this.schedulerClass = 'label label-success';
-                this.schedulerIcon = 'fa fa-check-circle';
-            } else if (this.scheduler.state.name === 'PAUSED') {
-                this.schedulerClass = 'label label-paused';
-                this.schedulerIcon = 'fa fa-pause';
-            } else {
-                this.schedulerClass = 'label label-default';
-                this.schedulerIcon = 'fa fa-circle';
-            }
+    unsubscribe() {
+        if (this.statusSubscription) {
+            this.statusSubscription.unsubscribe();
         }
+    }
+
+    onSystemClick(event) {
+        this.systemOp.toggle(event);
+    }
+
+    onSchedulerClick() {
+        const action = this.scheduler.is_paused ? 'resume' : 'pause';
+        this.confirmationService.confirm({
+            message: `Are you sure that you want to ${action} the Scheduler?`,
+            accept: () => {
+                this.scheduler.is_paused = !this.scheduler.is_paused;
+                this.schedulerApiService.updateScheduler(this.scheduler).subscribe(() => {
+                    this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
+                    this.messageService.add({severity: 'success', summary: 'Scheduler successfully updated'});
+                }, err => {
+                    console.log(err);
+                    this.scheduler.is_paused = !this.scheduler.is_paused;
+                    this.messageService.add({severity: 'error', summary: 'Error updating scheduler', detail: err.statusText});
+                });
+            }
+        });
     }
 
     ngOnInit() {
@@ -274,8 +250,25 @@ export class NavbarComponent implements OnInit, OnChanges {
             this.isMobile = !state.matches;
         });
 
+        this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
+            if (data) {
+                // update scheduler
+                this.scheduler = data.scheduler;
+                this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
+                if (this.scheduler.state.name === 'READY') {
+                    this.schedulerStatusClass = 'label label-success';
+                    this.schedulerStatusIcon = 'fa fa-check-circle';
+                } else if (this.scheduler.state.name === 'PAUSED') {
+                    this.schedulerStatusClass = 'label label-paused';
+                    this.schedulerStatusIcon = 'fa fa-pause';
+                } else {
+                    this.schedulerStatusClass = 'label label-default';
+                    this.schedulerStatusIcon = 'fa fa-circle';
+                }
+            }
+        });
+
         this.createMobileMenu();
-        this.userProfile = this.dataService.getUserProfile();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -287,13 +280,9 @@ export class NavbarComponent implements OnInit, OnChanges {
                 themeLink.href = `assets/themes/${changes.theme.currentValue}.css`;
             }
         }
-        if (changes.isAuthenticated && changes.isAuthenticated.currentValue === false) {
-            const event = new MouseEvent('click', {
-                view: window,
-                bubbles: true,
-                cancelable: true
-            });
-            this.profileOp.show(event, this.profile.nativeElement);
-        }
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 }

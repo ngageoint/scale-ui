@@ -2,5 +2,32 @@
     "/mocks": {
         "target": "http://localhost:8081",
         "secure": false
+    },
+    "/local": {
+        "target": "http://localhost:8000",
+        "secure": false,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/local": ""
+        }
+    },
+    "/alpha": {
+        "target": "https://scale.alpha.aisohio.net/api",
+        "secure": true,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/alpha": ""
+        }
+    },
+    "/omega": {
+        "target": "https://scale.omega.aisohio.net/api",
+        "secure": true,
+        "logLevel": "debug",
+        "changeOrigin": true,
+        "pathRewrite": {
+            "^/omega": ""
+        }
     }
 }
