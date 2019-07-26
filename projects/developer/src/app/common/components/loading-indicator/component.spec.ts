@@ -9,7 +9,7 @@ describe('LoadingIndicatorComponent', () => {
     let component: LoadingIndicatorComponent;
     let fixture: ComponentFixture<LoadingIndicatorComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [LoadingIndicatorComponent],
             imports: [HttpClientTestingModule],
@@ -18,7 +18,7 @@ describe('LoadingIndicatorComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(LoadingIndicatorComponent);

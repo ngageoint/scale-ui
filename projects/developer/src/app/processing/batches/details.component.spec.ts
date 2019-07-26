@@ -14,7 +14,7 @@ describe('BatchDetailsComponent', () => {
     let component: BatchDetailsComponent;
     let fixture: ComponentFixture<BatchDetailsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [BatchDetailsComponent],
             imports: [HttpClientTestingModule],
@@ -28,7 +28,7 @@ describe('BatchDetailsComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(BatchDetailsComponent);

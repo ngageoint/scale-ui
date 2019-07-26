@@ -12,7 +12,7 @@ describe('LogViewerComponent', () => {
     let component: LogViewerComponent;
     let fixture: ComponentFixture<LogViewerComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [LogViewerComponent],
             imports: [HttpClientTestingModule],
@@ -25,7 +25,7 @@ describe('LogViewerComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(LogViewerComponent);
