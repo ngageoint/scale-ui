@@ -16,7 +16,7 @@ describe('JobsComponent', () => {
     let component: TimelineComponent;
     let fixture: ComponentFixture<TimelineComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [TimelineComponent],
             imports: [HttpClientTestingModule],
@@ -36,7 +36,7 @@ describe('JobsComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(TimelineComponent);

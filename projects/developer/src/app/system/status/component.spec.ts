@@ -13,7 +13,7 @@ describe('SystemStatusComponent', () => {
     let component: SystemStatusComponent;
     let fixture: ComponentFixture<SystemStatusComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [SystemStatusComponent],
             imports: [HttpClientTestingModule],
@@ -32,7 +32,7 @@ describe('SystemStatusComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(SystemStatusComponent);

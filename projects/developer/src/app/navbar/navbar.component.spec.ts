@@ -15,7 +15,7 @@ describe('NavbarComponent', () => {
     let component: NavbarComponent;
     let fixture: ComponentFixture<NavbarComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [HttpClientTestingModule],
             providers: [ConfirmationService, MessageService, DataService, ThemeService, StatusService, SchedulerApiService, {
@@ -30,7 +30,7 @@ describe('NavbarComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(NavbarComponent);

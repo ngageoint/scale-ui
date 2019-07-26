@@ -15,7 +15,7 @@ describe('MetricsComponent', () => {
     let component: MetricsComponent;
     let fixture: ComponentFixture<MetricsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [MetricsComponent],
             imports: [HttpClientTestingModule],
@@ -28,7 +28,7 @@ describe('MetricsComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(MetricsComponent);
