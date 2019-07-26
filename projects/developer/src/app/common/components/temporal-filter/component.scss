@@ -1,0 +1,32 @@
+.temporal-filter {
+    align-items: flex-end;
+
+    div {
+        margin-right: 20px;
+    }
+
+    .temporal-filter__date-filter-btn, .temporal-filter__date-filter-dropdown {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .temporal-filter__date-filter-ranges, .temporal-filter__date-filter-dropdown {
+        margin-left: 20px;
+
+        button {
+            margin-left: 3px;
+        }
+    }
+}
+
+@media screen and (max-width: 858px) {
+    .temporal-filter__date-filter-btn, .temporal-filter__date-filter-dropdown, .temporal-filter__date-filter-ranges {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    .temporal-filter__date-filter-dropdown, .temporal-filter__date-filter-btn {
+        margin-top: 5px !important;
+        margin-right: 5px !important;
+    }
+}

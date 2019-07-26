@@ -8,6 +8,7 @@ export class JobsDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
+        public duration?: string,
         public status?: any,
         public job_id?: number,
         public job_type_name?: any,

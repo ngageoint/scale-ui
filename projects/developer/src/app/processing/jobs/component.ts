@@ -3,7 +3,6 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -84,16 +83,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized = false;
     subscription: any;
-    applyBtnClass = 'ui-button-secondary';
-    isMobile: boolean;
-    dateRangeOptions = [
-        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
-        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
-        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
-        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
-        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
-    ];
-    selectedDateRange: any;
 
     constructor(
         private dataService: DataService,
@@ -103,8 +92,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
-        private messageService: MessageService,
-        public breakpointObserver: BreakpointObserver
+        private messageService: MessageService
     ) {}
 
     private updateData() {
@@ -133,8 +121,6 @@ export class JobsComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions as Params,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     private getJobTypes() {
         this.selectedJobType = [];
@@ -155,7 +141,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             });
             this.jobTypeOptions = _.orderBy(selectItems, 'label', 'asc');
             this.selectedJobType = _.orderBy(this.selectedJobType, ['name', 'version'], ['asc', 'asc']);
-            this.updateOptions();
+            this.updateData();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
@@ -226,28 +212,28 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.router.navigate([`/processing/jobs/${e.data.id}`]);
         }
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onDateFilterApply() {
+    onDateFilterApply(data: any) {
         this.jobs = null;
+        this.started = data.started;
+        this.ended = data.ended;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, environment.dateFormat).toISOString(),
             ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
-        this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
-    setDateFilterRange(unit: any, range: any) {
-        this.started = moment.utc().subtract(range, unit).toISOString();
+    onDateRangeSelected(data: any) {
+        this.jobs = null;
+        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
-        this.onDateFilterApply();
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: this.started,
+            ended: this.ended,
+            duration: moment.duration(data.range, data.unit).toISOString()
+        });
+        this.updateOptions();
     }
     requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
@@ -385,16 +371,13 @@ export class JobsComponent implements OnInit, OnDestroy {
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
 
-        this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
-            this.isMobile = !state.matches;
-        });
-
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
         }
         this.jobs = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
+                // TODO: check for duration here and adjust start/end accordingly
                 this.datatableOptions = {
                     first: params.first ? parseInt(params.first, 10) : 0,
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
@@ -402,6 +385,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
                             params.status :
