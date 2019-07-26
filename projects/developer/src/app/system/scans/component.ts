@@ -123,7 +123,7 @@ export class ScansComponent implements OnInit, OnDestroy {
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedBatchRows(e);
         }
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
             window.open(`/system/scans/${e.data.id}`);
         } else {
             this.router.navigate([`/system/scans/${e.data.id}`]);

@@ -83,7 +83,7 @@ export class QueuedJobsComponent implements OnInit, OnDestroy {
             job_type_name: this.selectedJob.job_type.name,
             job_type_version: this.selectedJob.job_type.version
         }));
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
             window.open(`/processing/jobs/?first=0&status=QUEUED&job_type_name=${this.selectedJob.job_type.name}&job_type_version=${this.selectedJob.job_type.version}`); // tslint:disable-line:max-line-length
         } else {
             this.router.navigate(['/processing/jobs/']);

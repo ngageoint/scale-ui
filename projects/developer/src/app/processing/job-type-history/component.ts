@@ -220,7 +220,7 @@ export class JobTypeHistoryComponent implements OnInit {
         this.updateOptions();
     }
     onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
             window.open(`/processing/job-type-history/${e.data.job_type.name}`);
         } else {
             this.router.navigate([`/processing/job-type-history/${e.data.job_type.name}`]);

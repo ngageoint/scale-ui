@@ -192,7 +192,7 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.dataService.setSelectedIngestRows(e);
         }
         if (e.data.job) {
-            if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
                 window.open(`/processing/jobs/${e.data.job.id}`);
             } else {
                 this.router.navigate([`/processing/jobs/${e.data.job.id}`]);
