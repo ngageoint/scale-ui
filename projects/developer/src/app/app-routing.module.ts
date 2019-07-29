@@ -24,6 +24,7 @@ import { StrikesComponent } from './system/strikes/component';
 import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
 import { WorkspacesComponent } from './system/workspaces/component';
+import { PendingChangesGuard } from './pending-changes.guard';
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', component: DashboardComponent },
@@ -40,7 +41,7 @@ const routes: Routes = [
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:name/:version', component: JobTypesComponent },
     { path: 'configuration/job-types/edit/:name/:version', component: JobTypesCreateComponent },
-    { path: 'configuration/job-types/create', component: JobTypesCreateComponent },
+    { path: 'configuration/job-types/create', component: JobTypesCreateComponent, canDeactivate: [PendingChangesGuard] },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },

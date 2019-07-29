@@ -24,6 +24,7 @@ import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DataViewModule } from 'primeng/dataview';
 import { MenuModule } from 'primeng/menu';
+import { PendingChangesGuard } from './pending-changes.guard';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
@@ -196,6 +197,7 @@ const appInitializer = (appConfig: AppConfigService) => {
     ],
     providers: [
         ConfirmationService,
+        PendingChangesGuard,
         {
             provide: APP_INITIALIZER,
             useFactory: appInitializer,
