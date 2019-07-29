@@ -56,7 +56,7 @@ const routes: Routes = [
     { path: 'system/scans', component: ScansComponent },
     { path: 'system/scans/:id', component: ScanDetailsComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
-    { path: 'system/workspaces/:id', component: WorkspacesComponent }
+    { path: 'system/workspaces/:id', component: WorkspacesComponent, canDeactivate: [PendingChangesGuard] }
 ];
 
 @NgModule({
