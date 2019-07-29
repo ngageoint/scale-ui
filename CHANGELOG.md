@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.5.3](https://github.com-mil///compare/v0.5.2...v0.5.3) (2019-07-23)
+
+
+### Bug Fixes
+
+* **theme:** fix issues with displaying code while using the dark theme ([319ad04](https://github.com-mil///commit/319ad04))
+
+
+
 ### [0.5.2](https://github-mil///compare/v0.5.1...v0.5.2) (2019-07-18)
 
 

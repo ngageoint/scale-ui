@@ -1,0 +1,5 @@
+{
+    "is_paused": false,
+    "num_message_handlers": 2,
+    "system_logging_level": "INFO"
+}

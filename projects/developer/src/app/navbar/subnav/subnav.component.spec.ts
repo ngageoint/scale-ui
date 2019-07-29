@@ -8,14 +8,14 @@ describe('SubnavComponent', () => {
     let component: SubnavComponent;
     let fixture: ComponentFixture<SubnavComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [SubnavComponent],
             // Tells the compiler not to error on unknown elements and attributes
             schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(SubnavComponent);

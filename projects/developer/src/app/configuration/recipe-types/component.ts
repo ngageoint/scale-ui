@@ -34,6 +34,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         { separator: true },
         { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
     ];
+    private _isEditing = false;
     showActive = true;
     activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
@@ -69,7 +70,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
-    isEditing: boolean;
     autoUpdate = false;
     items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
@@ -92,6 +92,14 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             }
         }
     ];
+
+    get isEditing(): boolean {
+        return this._isEditing;
+    }
+    set isEditing(value: boolean) {
+        this._isEditing = value;
+        this.items = value ? _.clone(this.editMenu) : _.clone(this.viewMenu);
+    }
 
     constructor(
         private fb: FormBuilder,
@@ -444,7 +452,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
         this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
-        this.items = this.isEditing ? _.clone(this.editMenu) : _.clone(this.viewMenu);
         if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
@@ -607,7 +614,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
                 this.isEditing = this.recipeTypeName === 'create';
                 this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
-                this.items = this.recipeTypeName === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getRecipeTypes();
             });

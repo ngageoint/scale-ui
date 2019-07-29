@@ -29,6 +29,7 @@ export class JobType {
                 data.is_paused,
                 data.is_system,
                 data.max_scheduled,
+                data.max_tries,
                 data.revision_num,
                 data.docker_image,
                 data.unmet_resources,
@@ -54,6 +55,8 @@ export class JobType {
     public static cleanJobTypeForCreate(data) {
         const cleanJob = {
             icon_code: data.icon_code || null,
+            max_scheduled: data.max_scheduled || null,
+            is_published: data.is_published || false,
             docker_image: data.docker_image || null,
             configuration: data.configuration || null,
             manifest: data.manifest || null
@@ -65,11 +68,13 @@ export class JobType {
     public static cleanJobTypeForUpdate(data) {
         const cleanJob = {
             icon_code: data.icon_code || null,
-            is_published: data.is_published || null,
-            is_active: data.is_active || null,
-            is_paused: data.is_paused || null,
+            is_published: data.is_published,
+            is_active: data.is_active,
+            is_paused: data.is_paused,
             max_scheduled: data.max_scheduled || null,
-            configuration: data.configuration || null
+            docker_image: data.docker_image || null,
+            configuration: data.configuration || null,
+            manifest: data.manifest
         };
         DataService.removeEmpty(cleanJob);
         return cleanJob;
@@ -113,6 +118,7 @@ export class JobType {
         public is_paused?: boolean,
         public is_system?: boolean,
         public max_scheduled?: number,
+        public max_tried?: number,
         public revision_num?: number,
         public docker_image?: string,
         public unmet_resources?: any,

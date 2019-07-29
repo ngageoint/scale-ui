@@ -1,0 +1,34 @@
+<div class="system-status">
+    <h2><i class="fa fa-bell"></i> System Status</h2>
+    <p-accordion [multiple]="true" *ngIf="statuses">
+        <p-accordionTab>
+            <p-header>
+                <i [ngClass]="statuses.scheduler.styleClass"></i> {{ statuses.scheduler.label }}
+            </p-header>
+            <h3>{{ scheduler.hostname }}</h3>
+            <div>
+                <span [ngClass]="schedulerClass"><i [ngClass]="schedulerIcon"></i> {{ scheduler.state.title }}</span>
+                {{ scheduler.state.description }}
+            </div>
+            <ul *ngFor="let warning of scheduler.warnings">
+                <li>
+                    <strong>{{ warning.title }}</strong><br/>
+                    <span *ngIf="warning.description">{{ warning.description }}<br/></span>
+                    <span class="small-text">{{ warning.last_updated }}</span>
+                </li>
+            </ul>
+        </p-accordionTab>
+        <p-accordionTab>
+            <p-header>
+                <i [ngClass]="statuses.system.styleClass"></i> {{ statuses.system.label }}
+            </p-header>
+            Information about {{ statuses.system.label }}
+        </p-accordionTab>
+        <p-accordionTab>
+            <p-header>
+                <i [ngClass]="statuses.vault.styleClass"></i> {{ statuses.vault.label }}
+            </p-header>
+            Information about {{ statuses.vault.label }}
+        </p-accordionTab>
+    </p-accordion>
+</div>

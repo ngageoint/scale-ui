@@ -132,7 +132,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }];
             this.links = [];
 
-            _.forEach(this.recipeData.definition.nodes, node => {
+            _.forEach(this.recipeData.definition.nodes, (node, key) => {
                 let id = '';
                 let label = '';
                 let icon = '';
@@ -153,10 +153,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
-                    id = _.camelCase(node.node_type.name); // id can't have dashes or anything
-                    label = node.node_type.name;
+                    // if there was no name loaded (names aren't saved to the db yet), use the key from the recipe
+                    id = _.camelCase(node.node_type.name) || _.camelCase(key); // id can't have dashes or anything
+                    label = node.node_type.name || key;
                     icon = String.fromCharCode(parseInt('f042', 16)); // condition icon
                 }
+
                 this.nodes.push({
                     id: id,
                     label: label,
@@ -314,7 +316,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
                     this.selectedJobType = null;
                     this.selectedRecipeType = null;
                     this.selectedCondition = _.find(this.recipeData.conditions, {
-                        name: this.selectedNode.node_type.name
+                        name: this.selectedNode.label
                     });
                     this.getNodeConnections();
                 }

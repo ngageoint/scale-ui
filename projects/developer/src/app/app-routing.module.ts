@@ -23,6 +23,7 @@ import { NodesComponent } from './system/nodes/component';
 import { StrikesComponent } from './system/strikes/component';
 import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
+import { SystemStatusComponent } from './system/status/component';
 import { WorkspacesComponent } from './system/workspaces/component';
 import { PendingChangesGuard } from './pending-changes.guard';
 
@@ -55,6 +56,7 @@ const routes: Routes = [
     { path: 'system/strikes/:id', component: StrikesComponent, canDeactivate: [PendingChangesGuard]  },
     { path: 'system/scans', component: ScansComponent },
     { path: 'system/scans/:id', component: ScanDetailsComponent, canDeactivate: [PendingChangesGuard]  },
+    { path: 'system/status', component: SystemStatusComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
     { path: 'system/workspaces/:id', component: WorkspacesComponent, canDeactivate: [PendingChangesGuard] }
 ];
