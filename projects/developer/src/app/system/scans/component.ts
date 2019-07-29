@@ -64,6 +64,8 @@ export class ScansComponent implements OnInit, OnDestroy {
         public breakpointObserver: BreakpointObserver
     ) {}
 
+
+
     private updateData() {
         this.datatableLoading = true;
         this.unsubscribe();

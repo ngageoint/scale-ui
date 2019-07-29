@@ -52,9 +52,9 @@ const routes: Routes = [
     { path: 'data/timeline', component: TimelineComponent },
     { path: 'system/nodes', component: NodesComponent },
     { path: 'system/strikes', component: StrikesComponent },
-    { path: 'system/strikes/:id', component: StrikesComponent },
+    { path: 'system/strikes/:id', component: StrikesComponent, canDeactivate: [PendingChangesGuard]  },
     { path: 'system/scans', component: ScansComponent },
-    { path: 'system/scans/:id', component: ScanDetailsComponent },
+    { path: 'system/scans/:id', component: ScanDetailsComponent, canDeactivate: [PendingChangesGuard]  },
     { path: 'system/workspaces', component: WorkspacesComponent },
     { path: 'system/workspaces/:id', component: WorkspacesComponent, canDeactivate: [PendingChangesGuard] }
 ];
