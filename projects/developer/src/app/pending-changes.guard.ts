@@ -1,5 +1,4 @@
 import { CanDeactivate } from '@angular/router';
-import { ConfirmationService } from 'primeng/api';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 
@@ -10,7 +9,6 @@ export interface ComponentCanDeactivate {
 @Injectable()
 export class PendingChangesGuard implements CanDeactivate<ComponentCanDeactivate> {
     constructor(
-        private confirmationService: ConfirmationService
     ) {}
 
   canDeactivate(component: ComponentCanDeactivate): boolean | Observable<boolean> {

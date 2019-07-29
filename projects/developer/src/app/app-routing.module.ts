@@ -45,7 +45,7 @@ const routes: Routes = [
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
-    { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent },
+    { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent, canDeactivate: [PendingChangesGuard] },
     { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/metrics', component: MetricsComponent },

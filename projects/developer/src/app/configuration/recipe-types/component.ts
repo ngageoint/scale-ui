@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
@@ -13,6 +13,8 @@ import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
 import { RecipeTypeInput } from './api.input.model';
 import { RecipeTypeCondition } from './api.condition.model';
+import { Observable } from 'rxjs';
+import { JobType } from '../job-types/api.model';
 
 @Component({
     selector: 'dev-job-types',
@@ -106,6 +108,20 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.conditionColumns = [
             { field: 'name', header: 'Name', filterMatchMode: 'contains' }
         ];
+    }
+
+    @HostListener('window:beforeunload')
+    @HostListener('window:popstate')
+    canDeactivate(): Observable<boolean> | boolean {
+        if (this.createForm.dirty) {
+            return false;
+        } else {
+            if (JobType) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     }
 
     private clampText() {
