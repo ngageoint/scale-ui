@@ -14,7 +14,6 @@ import { RecipeType } from './api.model';
 import { RecipeTypeInput } from './api.input.model';
 import { RecipeTypeCondition } from './api.condition.model';
 import { Observable } from 'rxjs';
-import { JobType } from '../job-types/api.model';
 
 @Component({
     selector: 'dev-job-types',
@@ -60,6 +59,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
     recipeTypeOptions: SelectItem[]; // used for main recipe types dataview
     selectedRecipeTypeDetail: any;
+    selectedJobTypeDetail: any;
+    addedRecipeNode: any;
+    addedJobNode: any;
+    addedConditionalNode: any;
     condition: any = RecipeTypeCondition.transformer(null);
     conditions: any = [];
     selectedConditions = [];
@@ -116,7 +119,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (this.createForm.dirty) {
             return false;
         } else {
-            if (JobType) {
+            if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
                 return false;
             } else {
                 return true;
@@ -296,9 +299,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addJobTypeNode(event) {
-        const jobType = event.data;
+        this.addedJobNode = event.data;
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(jobType.name, jobType.version).subscribe(data => {
+        this.jobTypesApiService.getJobType(this.addedJobNode.name, this.addedJobNode.version).subscribe(data => {
             if (data && data.manifest.seedVersion) {
                 const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
                 if (!recipeData.job_types) {
@@ -340,6 +343,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addRecipeTypeNode(event) {
+        this.addedRecipeNode = event.data;
         // get recipe type detail in order to obtain the input
         this.recipeTypesApiService.getRecipeType(event.data.name).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
@@ -381,6 +385,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addConditionNode(event) {
+        this.addedConditionalNode = event.data;
+
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
         recipeData.definition.nodes[event.data.name] = {
             dependencies: [],
