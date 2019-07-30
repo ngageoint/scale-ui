@@ -14,6 +14,10 @@ import { MessageService } from 'primeng/components/common/messageservice';
     styleUrls: ['./component.scss']
 })
 export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
+    readonly minZoomLevel = 0.5;
+    readonly maxZoomLevel = 2.0;
+    readonly zoomStep = 0.1;
+
     @Input() recipeData: any;
     @Input() isEditing: boolean;
     @Input() jobMetrics: any;
@@ -43,6 +47,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     recipeDialogY: number;
     metricData: any;
     metricTotal = 0;
+    zoomLevel = 1;
     zoomToFit: Subject<boolean> = new Subject();
     center: Subject<boolean> = new Subject();
     update: Subject<boolean> = new Subject();
@@ -108,6 +113,38 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         }
         event.stopPropagation();
         return false;
+    }
+
+    /**
+     * Event when the zoom level has changed, fired by the graph component.
+     * @param  event new zoom level amount
+     */
+    onZoomChange(event: any): void {
+        this.zoomLevel = event;
+    }
+
+    /**
+     * Event for when the zoom slider changes, updates the graph.
+     * @param  event event containing originalEvent and value
+     */
+    onZoomSliderChange(event: any): void {
+        this.update.next(true);
+    }
+
+    /**
+     * Zooms out the graph by one zoom step level.
+     */
+    zoomOut(): void {
+        this.zoomLevel = Math.max(this.minZoomLevel, this.zoomLevel - this.zoomStep);
+        this.update.next(true);
+    }
+
+    /**
+     * Zooms in the graph by one zoom step level.
+     */
+    zoomIn(): void {
+        this.zoomLevel = Math.min(this.maxZoomLevel, this.zoomLevel + this.zoomStep);
+        this.update.next(true);
     }
 
     private verifyNode(node) {
