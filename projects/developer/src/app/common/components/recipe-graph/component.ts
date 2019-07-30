@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import * as shape from 'd3-shape';
@@ -13,7 +13,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class RecipeGraphComponent implements OnInit, OnChanges {
+export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
     @Input() jobMetrics: any;
@@ -779,5 +779,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+    }
+
+    ngAfterViewInit() {
+        // reset the viewport outside of lifecycle hooks
+        setTimeout(() => {
+            this.zoomToFit.next(true);
+            this.center.next(true);
+            this.update.next(true);
+        }, 0);
     }
 }
