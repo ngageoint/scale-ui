@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, ViewChild, HostListener } from '@angular/core';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
@@ -73,6 +73,22 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
+    }
+
+    /**
+     * Catches the MozMousePixelScroll event, which is not currently captured in ngx-graph.
+     * Although deprecated, latest Firefox is still throwing this event. Disable it to prevent
+     * page scrolling (event is thrown when zooming in the graph component).
+     * @param  event MozMousePixelScroll event
+     * @return       status of event
+     */
+    @HostListener('MozMousePixelScroll', ['$event'])
+    onMozMouseWheel(event: any): boolean {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        event.stopPropagation();
+        return false;
     }
 
     private verifyNode(node) {
