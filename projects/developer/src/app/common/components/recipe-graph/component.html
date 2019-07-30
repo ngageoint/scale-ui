@@ -1,5 +1,8 @@
 <div class="p-grid" xmlns:svg="http://www.w3.org/1999/html">
     <div class="p-col-12 p-col-nopad">
+        <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}">
+        </p-menubar>
+
         <div class="recipe-container" [style.minHeight]="minHeight">
             <ngx-graph
                 class="chart-container"
@@ -8,7 +11,10 @@
                 [nodes]="nodes"
                 [orientation]="orientation"
                 [curve]="curve"
-                (select)="select($event)">
+                (select)="select($event)"
+                [zoomToFit$]="zoomToFit"
+                [center$]="center"
+                [update$]="update">
 
                 <ng-template #defsTemplate>
                     <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
@@ -99,7 +105,7 @@
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
-        </span>  
+        </span>
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">

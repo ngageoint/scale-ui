@@ -1,4 +1,6 @@
 import { Component, Input, OnChanges, OnInit, ViewChild, HostListener } from '@angular/core';
+import { MenuItem } from 'primeng/api';
+import { Subject } from 'rxjs';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
@@ -41,6 +43,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
     recipeDialogY: number;
     metricData: any;
     metricTotal = 0;
+    zoomToFit: Subject<boolean> = new Subject();
+    center: Subject<boolean> = new Subject();
+    update: Subject<boolean> = new Subject();
     chartOptions: any = {
         legend: {
             display: false
@@ -63,6 +68,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges {
             }
         }
     };
+    menuBarItems: MenuItem[] = [
+        { label: 'Reset zoom', icon: 'fa fa-compress',
+            command: () => {
+                this.zoomToFit.next(true);
+            }
+        },
+        { label: 'Center graph', icon: 'fa fa-align-center',
+            command: () => {
+                this.center.next(true);
+                this.update.next(true);
+            }
+        },
+    ];
+
     constructor(
         private jobsApiService: JobsApiService,
         private messageService: MessageService,
