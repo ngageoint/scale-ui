@@ -124,10 +124,18 @@ export class ScansComponent implements OnInit, OnDestroy {
             this.dataService.setSelectedBatchRows(e);
         }
         if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
-            window.open(`/system/scans/${e.data.id}`);
+            window.open(this.getScanURL(e.data));
         } else {
-            this.router.navigate([`/system/scans/${e.data.id}`]);
+            this.router.navigate([this.getScanURL(e.data)]);
         }
+    }
+    /**
+     * Get the router link for the scans URL.
+     * @param  scan the scan data containing an id field
+     * @return      the URL to the scans page
+     */
+    getScanURL(scan: any): string {
+        return `/system/scans/${scan.id}`;
     }
     onStartSelect(e) {
         this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
