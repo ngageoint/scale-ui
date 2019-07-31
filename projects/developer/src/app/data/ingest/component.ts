@@ -193,9 +193,9 @@ export class IngestComponent implements OnInit, OnDestroy {
         }
         if (e.data.job) {
             if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
-                window.open(`/processing/jobs/${e.data.job.id}`);
+                window.open(this.getJobURL(e.data.job));
             } else {
-                this.router.navigate([`/processing/jobs/${e.data.job.id}`]);
+                this.router.navigate([this.getJobURL(e.data.job)]);
             }
         } else {
             this.messageService.add({severity: 'error', summary: 'Job not found', detail: 'There is no job associated with this ingest'});
@@ -203,6 +203,17 @@ export class IngestComponent implements OnInit, OnDestroy {
                 this.selectedIngest = null;
             });
         }
+    }
+    /**
+     * Get the router link for the job detail page.
+     * @param  job job data object containing an id
+     * @return     the link to the job page, if job is available
+     */
+    getJobURL(job: any): string {
+        if (job) {
+            return `/processing/jobs/${job.id}`;
+        }
+        return '';
     }
     onStartSelect(e) {
         this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
