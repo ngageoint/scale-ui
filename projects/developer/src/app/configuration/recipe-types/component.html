@@ -22,7 +22,11 @@
             <div class="p-col-12 p-md-3 recipe-type__container" (click)="onRecipeTypeClick($event, recipeType)">
                 <p-panel>
                     <p-header>
-                        <strong>{{ recipeType.label }}</strong>
+                        <strong>
+                            <a [routerLink]="getRecipeTypeURL(recipeType.value)">
+                                {{ recipeType.label }}
+                            </a>
+                        </strong>
                     </p-header>
                     <div class="clamp">
                         {{ recipeType.value.description }}

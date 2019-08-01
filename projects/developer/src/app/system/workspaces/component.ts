@@ -303,10 +303,19 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     onWorkspaceClick(e, workspace) {
         if (e.ctrlKey || e.metaKey) {
-            window.open(`/system/workspaces/${workspace.value.id}`);
+            window.open(this.getWorkspaceURL(workspace.value));
         } else {
-            this.router.navigate([`/system/workspaces/${workspace.value.id}`]);
+            this.router.navigate([this.getWorkspaceURL(workspace.value)]);
         }
+    }
+
+    /**
+     * Get the router link to the workspace detail page.
+     * @param  workspace workspace data containing an id field
+     * @return           URL to the workspace page
+     */
+    getWorkspaceURL(workspace: any): string {
+        return `/system/workspaces/${workspace.id}`;
     }
 
     onIsActiveClick(e) {
