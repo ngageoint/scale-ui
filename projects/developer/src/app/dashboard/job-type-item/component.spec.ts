@@ -10,14 +10,14 @@ describe('JobTypeItemComponent', () => {
     let component: JobTypeItemComponent;
     let fixture: ComponentFixture<JobTypeItemComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [RouterTestingModule, TooltipModule],
             declarations: [JobTypeItemComponent],
             providers: [DashboardJobsService]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(JobTypeItemComponent);

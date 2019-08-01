@@ -14,7 +14,7 @@ describe('RecipeDetailsComponent', () => {
     let component: RecipeDetailsComponent;
     let fixture: ComponentFixture<RecipeDetailsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [RecipeDetailsComponent],
             imports: [HttpClientTestingModule],
@@ -26,7 +26,7 @@ describe('RecipeDetailsComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
         .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(RecipeDetailsComponent);

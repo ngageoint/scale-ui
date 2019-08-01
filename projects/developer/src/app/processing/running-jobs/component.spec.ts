@@ -16,7 +16,7 @@ describe('RunningJobsComponent', () => {
     let component: RunningJobsComponent;
     let fixture: ComponentFixture<RunningJobsComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [RunningJobsComponent],
             imports: [HttpClientTestingModule],
@@ -36,7 +36,7 @@ describe('RunningJobsComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(RunningJobsComponent);

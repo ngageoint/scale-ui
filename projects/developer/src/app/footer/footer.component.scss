@@ -3,9 +3,12 @@
     box-shadow: 0 0 0.5em var(--black);
     margin-top: 2.0em;
     min-height: 35px;
-    text-align: right;
-    padding-top: 10px;
-    padding-bottom: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 5px;
+    padding-bottom: 5px;
     color: var(--grey-85);
     font-size: 0.9em;
 
@@ -26,6 +29,45 @@
                     text-decoration: none;
                 }
             }
+        }
+    }
+}
+::ng-deep .ui-overlaypanel {
+    &.footer__profile-overlaypanel {
+        width: 350px;
+        padding: 10px 0;
+
+        &:before {
+            margin-right: 13px;
+        }
+
+        &:after {
+            margin-right: 15px;
+        }
+
+        ul {
+            padding: 0 0 0 17px;
+        }
+    }
+    &.footer__profile-overlaypanel {
+        h3 {
+            margin: 0;
+            padding: 0;
+        }
+    }
+    &.footer__profile-overlaypanel {
+        .footer__profile-login {
+            text-align: right;
+
+            input {
+                width: 100%;
+                display: block;
+                margin-bottom: 5px;
+            }
+        }
+
+        .footer__profile-data {
+            padding: 2px;
         }
     }
 }

@@ -7,19 +7,19 @@ import { Subject } from 'rxjs';
 
 import { NodesComponent } from './component';
 import { NodesApiService } from './api.service';
-import { StatusApiService } from '../../common/services/status/api.service';
+import { StatusService } from '../../common/services/status.service';
 import { DataService } from '../../common/services/data.service';
 
 describe('NodesComponent', () => {
     let component: NodesComponent;
     let fixture: ComponentFixture<NodesComponent>;
 
-    beforeEach(async(() => {
+    beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [NodesComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, NodesApiService, StatusApiService, DataService,
+                MessageService, NodesApiService, StatusService, DataService,
                 {
                     provide: ActivatedRoute,
                     useClass: class {
@@ -33,7 +33,7 @@ describe('NodesComponent', () => {
             schemas: [NO_ERRORS_SCHEMA]
         })
             .compileComponents();
-    }));
+    });
 
     beforeEach(() => {
         fixture = TestBed.createComponent(NodesComponent);

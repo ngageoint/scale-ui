@@ -8,6 +8,14 @@ Scale UI provides a graphical interface to interact with the Scale framework via
 
 Run `npm run dev` to start a development server for the developer project. Navigate to `http://localhost:8080/`. The app will automatically reload if you change any of the source files.
 
+### Using real API servers
+
+Change `"apiPrefix"` in `src/assets/appConfig.json` to point to one of these proxies (defined in `proxy.conf.json`):
+
+- `/mocks`: built-in development server above with mock data
+- `/local`: a locally installed Scale server
+- `/alpha` and `/omega`: the live test clusters
+
 ## Code scaffolding
 
 Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.

@@ -1,25 +1,31 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MessageService } from 'primeng/components/common/messageservice';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/components/common/messageservice';
+import { Subject } from 'rxjs';
 
+import { SystemStatusComponent } from './component';
+import { StatusApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
-import { JobsDatatableService } from '../jobs/datatable.service';
-import { QueueApiService } from '../../common/services/queue/api.service';
-import { QueuedJobsComponent } from './component';
 
-
-describe('QueuedJobsComponent', () => {
-    let component: QueuedJobsComponent;
-    let fixture: ComponentFixture<QueuedJobsComponent>;
+describe('SystemStatusComponent', () => {
+    let component: SystemStatusComponent;
+    let fixture: ComponentFixture<SystemStatusComponent>;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
-            declarations: [QueuedJobsComponent],
+            declarations: [SystemStatusComponent],
             imports: [HttpClientTestingModule],
             providers: [
-                MessageService, DataService, JobsDatatableService, QueueApiService,
+                MessageService, StatusApiService, DataService,
+                {
+                    provide: ActivatedRoute,
+                    useClass: class {
+                        navigate = jasmine.createSpy('navigate');
+                        queryParams = new Subject<any>();
+                    }
+                },
                 {provide: Router, useClass: class { navigate = jasmine.createSpy('navigate'); }}
             ],
             // Tells the compiler not to error on unknown elements and attributes
@@ -29,7 +35,7 @@ describe('QueuedJobsComponent', () => {
     });
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(QueuedJobsComponent);
+        fixture = TestBed.createComponent(SystemStatusComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
