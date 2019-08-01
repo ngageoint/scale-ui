@@ -136,7 +136,7 @@ $navbar-item-width: 150px;
     }
 
     .navbar__scheduler-resume {
-        color: #777;
+        animation:blinkingText 1.5s infinite;
     }
 }
 
@@ -179,4 +179,10 @@ $navbar-item-width: 150px;
     .navbar__status {
         display: none;
     }
+}
+
+@keyframes blinkingText{
+    0%{     color: #777;    }
+    50%{    color: var(--red); }
+    100%{   color: #777;    }
 }
