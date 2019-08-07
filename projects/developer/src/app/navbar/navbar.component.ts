@@ -10,6 +10,7 @@ import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
 import { StatusService } from '../common/services/status.service';
 import { SchedulerApiService } from '../common/services/scheduler/api.service';
+import { interval } from 'rxjs';
 
 @Component({
     selector: 'dev-navbar',
@@ -27,11 +28,12 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     themeTooltip: string;
     themeIcon: string;
     scheduler: any;
-    schedulerClass = 'navbar__scheduler-pause';
+    schedulerClass = 'navbar__scheduler-resume';
     schedulerStatusClass = '';
     schedulerStatusIcon: string;
     isMobile: boolean;
     itemsMobile: MenuItem[];
+    is_paused: any;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -228,19 +230,23 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     onSchedulerClick() {
-        const action = this.scheduler.is_paused ? 'resume' : 'pause';
+        const action = this.is_paused ? 'resume' : 'pause';
         this.confirmationService.confirm({
             message: `Are you sure that you want to ${action} the Scheduler?`,
             accept: () => {
-                this.scheduler.is_paused = !this.scheduler.is_paused;
-                this.schedulerApiService.updateScheduler(this.scheduler).subscribe(() => {
-                    this.schedulerClass = this.scheduler.is_paused ? 'navbar__scheduler-resume' : 'navbar__scheduler-pause';
+                const params = {
+                    is_paused: this.is_paused = !this.is_paused,
+                    num_message_handlers: this.scheduler.num_message_handlers,
+                    system_logging_level: this.scheduler.system_logging_level
+                };
+                this.schedulerApiService.updateScheduler(params).subscribe(() => {
+                    this.schedulerClass = this.is_paused ? 'navbar__scheduler-pause' : 'navbar__scheduler-resume';
                     this.messageService.add({severity: 'success', summary: 'Scheduler successfully updated'});
                 }, err => {
                     console.log(err);
-                    this.scheduler.is_paused = !this.scheduler.is_paused;
                     this.messageService.add({severity: 'error', summary: 'Error updating scheduler', detail: err.statusText});
                 });
+
             }
         });
     }
@@ -249,23 +255,38 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
         });
-
-        this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
-            if (data) {
-                // update scheduler
-                this.scheduler = data.scheduler;
-                this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
-                if (this.scheduler.state.name === 'READY') {
-                    this.schedulerStatusClass = 'label label-success';
-                    this.schedulerStatusIcon = 'fa fa-check-circle';
-                } else if (this.scheduler.state.name === 'PAUSED') {
-                    this.schedulerStatusClass = 'label label-paused';
-                    this.schedulerStatusIcon = 'fa fa-pause';
-                } else {
-                    this.schedulerStatusClass = 'label label-default';
-                    this.schedulerStatusIcon = 'fa fa-circle';
+        this.subscription = this.schedulerApiService.getScheduler(true).subscribe(schedulerData => {
+            this.is_paused = schedulerData.is_paused;
+            this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
+                if (data) {
+                        this.scheduler = data.scheduler;
+                    this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
+                    if (this.scheduler.state.name === 'READY') {
+                        this.schedulerStatusClass = 'label label-success';
+                        this.schedulerStatusIcon = 'fa fa-check-circle';
+                        if (this.is_paused === true) {
+                            this.schedulerClass = 'navbar__scheduler-updating';
+                        } else {
+                            this.schedulerClass = 'navbar__scheduler-resume';
+                            this.is_paused = false;
+                        }
+                    } else if (this.scheduler.state.name === 'PAUSED') {
+                        this.schedulerStatusClass = 'label label-paused';
+                        this.schedulerStatusIcon = 'fa fa-pause';
+                        if (this.is_paused === false) {
+                            this.schedulerClass = 'navbar__scheduler-updating';
+                        } else {
+                            this.schedulerClass = 'navbar__scheduler-pause';
+                            this.is_paused = true;
+                        }
+                    } else {
+                        this.schedulerStatusClass = 'label label-default';
+                        this.schedulerStatusIcon = 'fa fa-circle';
+                    }
                 }
-            }
+            });
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText});
         });
 
         this.createMobileMenu();
