@@ -3,27 +3,12 @@ label {
     display: block;
 }
 .recipes__header {
-    .recipes__date-filter {
         align-items: flex-end;
         margin-bottom: 10px;
 
         div {
             margin-right: 20px;
         }
-
-        .recipes__date-filter-btn, .recipes__date-filter-dropdown {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-
-        .recipes__date-filter-ranges, .recipes__date-filter-dropdown {
-            margin-left: 20px;
-
-            button {
-                margin-left: 3px;
-            }
-        }
-    }
 }
 .recipes__table {
     min-height: 300px;
