@@ -568,10 +568,19 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     onRecipeTypeClick(e, recipeType) {
         if (e.ctrlKey || e.metaKey) {
-            window.open(`/configuration/recipe-types/${recipeType.value.name}`);
+            window.open(this.getRecipeTypeURL(recipeType.value));
         } else {
-            this.router.navigate([`/configuration/recipe-types/${recipeType.value.name}`]);
+            this.router.navigate([this.getRecipeTypeURL(recipeType.value)]);
         }
+    }
+
+    /**
+     * Get the router link to the recipe type URL.
+     * @param  recipeType the recipe type data with a name field
+     * @return            link to recipe type page
+     */
+    getRecipeTypeURL(recipeType: any): string {
+        return `/configuration/recipe-types/${recipeType.name}`;
     }
 
     ngOnInit() {

@@ -431,10 +431,19 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onStrikeClick(e, strike) {
         if (e.ctrlKey || e.metaKey) {
-            window.open(`/system/strikes/${strike.value.id}`);
+            window.open(this.getStrikeURL(strike.value));
         } else {
-            this.router.navigate([`/system/strikes/${strike.value.id}`]);
+            this.router.navigate([this.getStrikeURL(strike.value)]);
         }
+    }
+
+    /**
+     * Get the router link to the strike detail page.
+     * @param  strike strike data containing an id
+     * @return        the URL to the strike detail
+     */
+    getStrikeURL(strike: any): string {
+        return `/system/strikes/${strike.id}`;
     }
 
     requeueJob(jobId: number): void {

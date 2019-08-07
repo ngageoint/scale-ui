@@ -60,6 +60,14 @@
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'ingest__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <span class="ui-column-title">{{ col.header }}</span>
+                <div *ngSwitchCase="'file_name'">
+                    <a *ngIf="rowData.job" [routerLink]="getJobURL(rowData.job)">
+                        {{ rowData.file_name }}
+                    </a>
+                    <span *ngIf="!rowData.job">
+                        {{ rowData.file_name }}
+                    </span>
+                </div>
                 <div *ngSwitchCase="'file_size'">
                     {{ rowData.fileSizeFormatted }}
                 </div>

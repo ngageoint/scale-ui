@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.6.0](https://github.com/ngageoint/scale-ui/compare/v0.5.3...v0.6.0) (2019-08-02)
+
+
+### Bug Fixes
+
+* **build:** make all tests synchronous ([49117d9](https://github.com/ngageoint/scale-ui/commit/49117d9))
+* **build:** make app component test synchronous ([4d3a927](https://github.com/ngageoint/scale-ui/commit/4d3a927))
+* **nodes:** correct the object property for getting node status ([09ff21e](https://github.com/ngageoint/scale-ui/commit/09ff21e))
+* **recipe types:** fix conditional nodes and other issues in recipe editor ([516be69](https://github.com/ngageoint/scale-ui/commit/516be69))
+
+
+### Features
+
+* **recipe types:** add additional editor controls ([3b138ee](https://github.com/ngageoint/scale-ui/commit/3b138ee))
+* add ability to middle mouse click ui elements ([814dbe5](https://github.com/ngageoint/scale-ui/commit/814dbe5)), closes [#215](https://github.com/ngageoint/scale-ui/issues/215)
+* **build:** add additional proxy entries for local API and test clusters ([faf28e8](https://github.com/ngageoint/scale-ui/commit/faf28e8))
+* **job types:** add the ability to edit additional fields including docker_image and max_scheduled ([be1a939](https://github.com/ngageoint/scale-ui/commit/be1a939))
+* **status:** add the ability to pause and resume the scheduler ([fa92502](https://github.com/ngageoint/scale-ui/commit/fa92502))
+
+
+
 ### [0.5.3](https://github.com-mil///compare/v0.5.2...v0.5.3) (2019-07-23)
 
 
