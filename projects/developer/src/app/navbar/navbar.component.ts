@@ -10,7 +10,6 @@ import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
 import { StatusService } from '../common/services/status.service';
 import { SchedulerApiService } from '../common/services/scheduler/api.service';
-import { interval } from 'rxjs';
 
 @Component({
     selector: 'dev-navbar',
