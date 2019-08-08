@@ -10,6 +10,7 @@ import { DataService } from '../common/services/data.service';
 import { ThemeService } from '../theme';
 import { StatusService } from '../common/services/status.service';
 import { SchedulerApiService } from '../common/services/scheduler/api.service';
+import { ProfileService } from '../common/services/profile.service';
 
 @Component({
     selector: 'dev-navbar',
@@ -33,6 +34,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     isMobile: boolean;
     itemsMobile: MenuItem[];
     is_paused: any;
+    myComponentsIsAuthenticatedFlag: any;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -41,8 +43,13 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         private themeService: ThemeService,
         private statusService: StatusService,
         private schedulerApiService: SchedulerApiService,
-        public breakpointObserver: BreakpointObserver
-    ) {}
+        public breakpointObserver: BreakpointObserver,
+        private profileService: ProfileService
+    ) {
+        this.profileService.isAuthenticated.subscribe(value => {
+            this.myComponentsIsAuthenticatedFlag = value;
+        });
+    }
 
     selectNavItem(event, itemId) {
         event.stopPropagation();
@@ -254,7 +261,8 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         this.breakpointObserver.observe(['(min-width: 1150px)']).subscribe((state: BreakpointState) => {
             this.isMobile = !state.matches;
         });
-        this.subscription = this.schedulerApiService.getScheduler(true).subscribe(schedulerData => {
+        if (this.myComponentsIsAuthenticatedFlag) {
+             this.subscription = this.schedulerApiService.getScheduler(true).subscribe(schedulerData => {
             this.is_paused = schedulerData.is_paused;
             this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
                 if (data) {
@@ -287,6 +295,8 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText});
         });
+        }
+
 
         this.createMobileMenu();
     }
