@@ -50,6 +50,15 @@ export class TemporalFilterComponent implements OnInit {
         this.ended = moment.utc().toISOString();
         this.dateRangeSelected.emit({ unit: unit, range: range });
     }
+    // Starting to add share link option
+    // shareLink(event) {
+    //     document.addEventListener('copy', (e: ClipboardEvent) => {
+    //         e.clipboardData.setData('text/plain', (event));
+    //         e.preventDefault();
+    //         document.removeEventListener('copy', null);
+    //       });
+    //       document.execCommand('copy');
+    // }
 
     ngOnInit() {
         this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {

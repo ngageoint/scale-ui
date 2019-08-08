@@ -212,20 +212,27 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
         this.applyBtnClass = 'ui-button-primary';
     }
-    onDateFilterApply() {
+    onDateFilterApply(data: any) {
         this.ingests = null;
+        this.started = data.started;
+        this.ended = data.ended;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, environment.dateFormat).toISOString(),
             ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
-        this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
-    setDateFilterRange(unit: any, range: any) {
-        this.started = moment.utc().subtract(range, unit).toISOString();
+    onDateRangeSelected(data: any) {
+        this.ingests = null;
+        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
-        this.onDateFilterApply();
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: this.started,
+            ended: this.ended
+        });
+        this.updateOptions();
     }
     onFilterClick(e) {
         e.stopPropagation();

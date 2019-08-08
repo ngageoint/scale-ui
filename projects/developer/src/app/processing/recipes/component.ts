@@ -86,8 +86,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions as Params,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     private getRecipeTypes() {
         this.selectedRecipeType = [];
@@ -104,7 +102,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, 'label', 'asc');
-            this.updateOptions();
+            this.updateData();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
@@ -205,6 +203,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
                     sortOrder: +params.sortOrder || -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('h').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().startOf('h').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     recipe_type_id: +params.recipe_type_id || null,
                     recipe_type_name: params.recipe_type_name ?
                         Array.isArray(params.recipe_type_name) ?
