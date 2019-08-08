@@ -34,12 +34,7 @@ export class SchedulerApiService {
     }
 
     updateScheduler(params: any): Observable<any> {
-        const queryParams = new HttpParams({
-            fromObject: _.pickBy(params, d => {
-                return d !== null && typeof d !== 'undefined' && d !== '';
-            })
-        });
-        return this.http.patch(`${this.apiPrefix}/scheduler/`, {params: queryParams})
+        return this.http.patch<any>(`${this.apiPrefix}/scheduler/`, params)
             .pipe(
                 catchError(DataService.handleError)
             );
