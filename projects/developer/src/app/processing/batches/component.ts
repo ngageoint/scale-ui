@@ -85,8 +85,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     private getRecipeTypes() {
         this.selectedRecipeType = [];
@@ -103,7 +101,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
-            this.updateOptions();
+            this.updateData();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
@@ -209,6 +207,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     recipe_type_name: params.recipe_type_name ?
                         Array.isArray(params.recipe_type_name) ?
                             params.recipe_type_name :

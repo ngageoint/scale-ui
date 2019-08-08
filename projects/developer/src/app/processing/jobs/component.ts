@@ -14,6 +14,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'dev-jobs',
@@ -83,6 +84,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized = false;
     subscription: any;
+    isMobile: boolean;
 
     constructor(
         private dataService: DataService,
@@ -92,6 +94,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
+        public breakpointObserver: BreakpointObserver,
         private messageService: MessageService
     ) {}
 
@@ -370,6 +373,10 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedJobRows();
+
+        this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
+            this.isMobile = !state.matches;
+        });
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
