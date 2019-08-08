@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 
 import { WorkspacesApiService } from './api.service';
 import { Workspace } from './api.model';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'dev-workspaces',
@@ -56,6 +57,16 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService
     ) {}
+
+    @HostListener('window:beforeunload')
+    @HostListener('window:popstate')
+    canDeactivate(): Observable<boolean> | boolean {
+        if (this.createForm.dirty) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private clampText() {
         setTimeout(() => {
