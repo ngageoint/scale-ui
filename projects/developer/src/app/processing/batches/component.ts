@@ -153,14 +153,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.router.navigate([`/processing/batches/${e.data.id}`]);
         }
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
     onDateFilterApply(data: any) {
         this.batches = null;
         this.started = data.started;
@@ -183,9 +175,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
             duration: moment.duration(data.range, data.unit).toISOString()
         });
         this.updateOptions();
-    }
-    onFilterClick(e) {
-        e.stopPropagation();
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedBatchRows();
