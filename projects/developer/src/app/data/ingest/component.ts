@@ -72,14 +72,6 @@ export class IngestComponent implements OnInit, OnDestroy {
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
-    dateRangeOptions = [
-        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
-        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
-        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
-        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
-        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
-    ];
-    selectedDateRange: any;
 
     constructor(
         private dataService: DataService,
@@ -204,14 +196,6 @@ export class IngestComponent implements OnInit, OnDestroy {
             });
         }
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
     onDateFilterApply(data: any) {
         this.ingests = null;
         this.started = data.started;
@@ -230,7 +214,8 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: this.started,
-            ended: this.ended
+            ended: this.ended,
+            duration: moment.duration(data.range, data.unit).toISOString()
         });
         this.updateOptions();
     }
@@ -255,6 +240,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
                             params.status :
