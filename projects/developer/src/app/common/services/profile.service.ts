@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable, BehaviorSubject } from 'rxjs';
-import { catchError, share } from 'rxjs/internal/operators';
+import { catchError, shareReplay } from 'rxjs/internal/operators';
 
 import { environment } from '../../../environments/environment';
 import { DataService } from './data.service';
@@ -12,7 +12,7 @@ import { DataService } from './data.service';
 })
 export class ProfileService {
     apiPrefix: string;
-    isAuthenticated = new BehaviorSubject(!environment.auth.enabled);
+    isAuthenticated = new BehaviorSubject(false);
 
     constructor(
         private http: HttpClient
@@ -21,23 +21,12 @@ export class ProfileService {
     }
 
     getProfile(): Observable<any> {
-        const obv = this.http.get(`${this.apiPrefix}/accounts/profile/`)
-            .pipe(share())
+        const obv = this.http.get<any>(`${this.apiPrefix}/accounts/profile/`)
             .pipe(
                 catchError(DataService.handleError)
             );
+            return obv;
 
-        obv.subscribe(data => {
-            if (data) {
-                this.isAuthenticated.next(true);
-            } else {
-                this.isAuthenticated.next(false);
-            }
-        }, err => {
-            this.isAuthenticated.next(false);
-        });
-
-        return obv;
     }
 
     getLogin(): Observable<any> {

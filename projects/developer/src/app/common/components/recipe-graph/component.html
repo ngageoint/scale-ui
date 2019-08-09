@@ -1,36 +1,5 @@
 <div class="p-grid" xmlns:svg="http://www.w3.org/1999/html">
     <div class="p-col-12 p-col-nopad">
-        <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}">
-            <div class="ui-inputgroup">
-                <button
-                    pButton
-                    icon="fa fa-search-minus"
-                    class="ui-button-secondary ui-inputgroup-addon"
-                    [disabled]="zoomLevel <= minZoomLevel"
-                    (click)="zoomOut()"
-                    type="button">
-                </button>
-                <div style="min-width: 16em; padding: 1.5em 0.5em;">
-                    <p-slider
-                        [(ngModel)]="zoomLevel"
-                        [min]="minZoomLevel"
-                        [max]="maxZoomLevel"
-                        [step]="zoomStep"
-                        [animate]="true"
-                        (onChange)="onZoomSliderChange($event)">
-                    </p-slider>
-                </div>
-                <button
-                    pButton
-                    icon="fa fa-search-plus"
-                    class="ui-button-secondary ui-inputgroup-addon"
-                    [disabled]="zoomLevel >= maxZoomLevel"
-                    (click)="zoomIn()"
-                    type="button">
-                </button>
-            </div>
-        </p-menubar>
-
         <div class="recipe-container" [style.minHeight]="minHeight">
             <ngx-graph
                 class="chart-container"
@@ -39,15 +8,7 @@
                 [nodes]="nodes"
                 [orientation]="orientation"
                 [curve]="curve"
-                (select)="select($event)"
-                (zoomChange)="onZoomChange($event)"
-                [(zoomLevel)]="zoomLevel"
-                [minZoomLevel]="minZoomLevel"
-                [maxZoomLevel]="maxZoomLevel"
-                [zoomSpeed]="zoomStep"
-                [zoomToFit$]="zoomToFit"
-                [center$]="center"
-                [update$]="update">
+                (select)="select($event)">
 
                 <ng-template #defsTemplate>
                     <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
@@ -138,7 +99,7 @@
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
-        </span>
+        </span>  
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">

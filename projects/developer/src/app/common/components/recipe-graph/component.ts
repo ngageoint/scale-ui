@@ -1,6 +1,4 @@
-import { Component, Input, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { Subject } from 'rxjs';
+import { Component, Input, OnChanges, OnInit, ViewChild } from '@angular/core';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
@@ -13,11 +11,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
-    readonly minZoomLevel = 0.5;
-    readonly maxZoomLevel = 2.0;
-    readonly zoomStep = 0.1;
-
+export class RecipeGraphComponent implements OnInit, OnChanges {
     @Input() recipeData: any;
     @Input() isEditing: boolean;
     @Input() jobMetrics: any;
@@ -47,10 +41,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     recipeDialogY: number;
     metricData: any;
     metricTotal = 0;
-    zoomLevel = 1;
-    zoomToFit: Subject<boolean> = new Subject();
-    center: Subject<boolean> = new Subject();
-    update: Subject<boolean> = new Subject();
     chartOptions: any = {
         legend: {
             display: false
@@ -73,20 +63,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             }
         }
     };
-    menuBarItems: MenuItem[] = [
-        { label: 'Reset zoom', icon: 'fa fa-compress',
-            command: () => {
-                this.zoomToFit.next(true);
-            }
-        },
-        { label: 'Center graph', icon: 'fa fa-align-center',
-            command: () => {
-                this.center.next(true);
-                this.update.next(true);
-            }
-        },
-    ];
-
     constructor(
         private jobsApiService: JobsApiService,
         private messageService: MessageService,
@@ -97,54 +73,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
-    }
-
-    /**
-     * Catches the MozMousePixelScroll event, which is not currently captured in ngx-graph.
-     * Although deprecated, latest Firefox is still throwing this event. Disable it to prevent
-     * page scrolling (event is thrown when zooming in the graph component).
-     * @param  event MozMousePixelScroll event
-     * @return       status of event
-     */
-    @HostListener('MozMousePixelScroll', ['$event'])
-    onMozMouseWheel(event: any): boolean {
-        if (event.preventDefault) {
-            event.preventDefault();
-        }
-        event.stopPropagation();
-        return false;
-    }
-
-    /**
-     * Event when the zoom level has changed, fired by the graph component.
-     * @param  event new zoom level amount
-     */
-    onZoomChange(event: any): void {
-        this.zoomLevel = event;
-    }
-
-    /**
-     * Event for when the zoom slider changes, updates the graph.
-     * @param  event event containing originalEvent and value
-     */
-    onZoomSliderChange(event: any): void {
-        this.update.next(true);
-    }
-
-    /**
-     * Zooms out the graph by one zoom step level.
-     */
-    zoomOut(): void {
-        this.zoomLevel = Math.max(this.minZoomLevel, this.zoomLevel - this.zoomStep);
-        this.update.next(true);
-    }
-
-    /**
-     * Zooms in the graph by one zoom step level.
-     */
-    zoomIn(): void {
-        this.zoomLevel = Math.min(this.maxZoomLevel, this.zoomLevel + this.zoomStep);
-        this.update.next(true);
     }
 
     private verifyNode(node) {
@@ -816,14 +744,5 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnInit() {
-    }
-
-    ngAfterViewInit() {
-        // reset the viewport outside of lifecycle hooks
-        setTimeout(() => {
-            this.zoomToFit.next(true);
-            this.center.next(true);
-            this.update.next(true);
-        }, 0);
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -11,7 +11,6 @@ import { ScansApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { Scan } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
-import { Observable } from 'rxjs';
 
 @Component({
     selector: 'dev-scan-details',
@@ -57,16 +56,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         private scansApiService: ScansApiService,
         private recipeTypesApiService: RecipeTypesApiService
     ) {}
-
-    @HostListener('window:beforeunload')
-    @HostListener('window:popstate')
-    canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty || this.ingestFileForm.dirty ) {
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     private initFormGroups() {
         this.createForm = this.fb.group({

@@ -155,18 +155,10 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     }
     onJobTypeClick(e, jobType) {
         if (e.ctrlKey || e.metaKey) {
-            window.open(this.getJobTypeURL(jobType.value));
+            window.open(`/configuration/job-types/${jobType.value.name}/${jobType.value.version}`);
         } else {
-            this.router.navigate([this.getJobTypeURL(jobType.value)]);
+            this.router.navigate([`/configuration/job-types/${jobType.value.name}/${jobType.value.version}`]);
         }
-    }
-    /**
-     * Get the router link to the job types page.
-     * @param  jobType a job type object containing a name and version
-     * @return         the link to the job types page
-     */
-    getJobTypeURL(jobType: any): string {
-        return `/configuration/job-types/${jobType.name}/${jobType.version}`;
     }
     onPauseClick() {
         const action = this.selectedJobTypeDetail.is_paused ? 'Resume' : 'Pause';

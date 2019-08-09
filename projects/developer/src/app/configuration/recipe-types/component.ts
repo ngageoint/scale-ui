@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
 import { MenuItem, SelectItem } from 'primeng/api';
@@ -13,7 +13,6 @@ import { DataService } from '../../common/services/data.service';
 import { RecipeType } from './api.model';
 import { RecipeTypeInput } from './api.input.model';
 import { RecipeTypeCondition } from './api.condition.model';
-import { Observable } from 'rxjs';
 
 @Component({
     selector: 'dev-job-types',
@@ -60,10 +59,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
     recipeTypeOptions: SelectItem[]; // used for main recipe types dataview
     selectedRecipeTypeDetail: any;
-    selectedJobTypeDetail: any;
-    addedRecipeNode: any;
-    addedJobNode: any;
-    addedConditionalNode: any;
     condition: any = RecipeTypeCondition.transformer(null);
     conditions: any = [];
     selectedConditions = [];
@@ -119,20 +114,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.conditionColumns = [
             { field: 'name', header: 'Name', filterMatchMode: 'contains' }
         ];
-    }
-
-    @HostListener('window:beforeunload')
-    @HostListener('window:popstate')
-    canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty) {
-            return false;
-        } else {
-            if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
-                return false;
-            } else {
-                return true;
-            }
-        }
     }
 
     private clampText() {
@@ -307,9 +288,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addJobTypeNode(event) {
-        this.addedJobNode = event.data;
+        const jobType = event.data;
         // get job type detail in order to obtain the interface
-        this.jobTypesApiService.getJobType(this.addedJobNode.name, this.addedJobNode.version).subscribe(data => {
+        this.jobTypesApiService.getJobType(jobType.name, jobType.version).subscribe(data => {
             if (data && data.manifest.seedVersion) {
                 const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
                 if (!recipeData.job_types) {
@@ -351,7 +332,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addRecipeTypeNode(event) {
-        this.addedRecipeNode = event.data;
         // get recipe type detail in order to obtain the input
         this.recipeTypesApiService.getRecipeType(event.data.name).subscribe(data => {
             const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
@@ -393,8 +373,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     addConditionNode(event) {
-        this.addedConditionalNode = event.data;
-
         const recipeData = _.cloneDeep(this.selectedRecipeTypeDetail);
         recipeData.definition.nodes[event.data.name] = {
             dependencies: [],
@@ -590,19 +568,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     onRecipeTypeClick(e, recipeType) {
         if (e.ctrlKey || e.metaKey) {
-            window.open(this.getRecipeTypeURL(recipeType.value));
+            window.open(`/configuration/recipe-types/${recipeType.value.name}`);
         } else {
-            this.router.navigate([this.getRecipeTypeURL(recipeType.value)]);
+            this.router.navigate([`/configuration/recipe-types/${recipeType.value.name}`]);
         }
-    }
-
-    /**
-     * Get the router link to the recipe type URL.
-     * @param  recipeType the recipe type data with a name field
-     * @return            link to recipe type page
-     */
-    getRecipeTypeURL(recipeType: any): string {
-        return `/configuration/recipe-types/${recipeType.name}`;
     }
 
     ngOnInit() {

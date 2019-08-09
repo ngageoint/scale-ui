@@ -24,11 +24,7 @@
             <div class="p-col-12 p-md-3 workspaces__container" (click)="onWorkspaceClick($event, workspace)">
                 <p-panel>
                     <p-header>
-                        <strong>
-                            <a [routerLink]="getWorkspaceURL(workspace.value)">
-                                {{ workspace.label }}
-                            </a>
-                        </strong>
+                        <strong>{{ workspace.label }}</strong>
                     </p-header>
                     <div class="clamp">
                         {{ workspace.value.description }}

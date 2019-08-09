@@ -64,8 +64,6 @@ export class ScansComponent implements OnInit, OnDestroy {
         public breakpointObserver: BreakpointObserver
     ) {}
 
-
-
     private updateData() {
         this.datatableLoading = true;
         this.unsubscribe();
@@ -125,19 +123,11 @@ export class ScansComponent implements OnInit, OnDestroy {
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedBatchRows(e);
         }
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
-            window.open(this.getScanURL(e.data));
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/system/scans/${e.data.id}`);
         } else {
-            this.router.navigate([this.getScanURL(e.data)]);
+            this.router.navigate([`/system/scans/${e.data.id}`]);
         }
-    }
-    /**
-     * Get the router link for the scans URL.
-     * @param  scan the scan data containing an id field
-     * @return      the URL to the scans page
-     */
-    getScanURL(scan: any): string {
-        return `/system/scans/${scan.id}`;
     }
     onStartSelect(e) {
         this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);

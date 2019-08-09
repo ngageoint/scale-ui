@@ -16,15 +16,14 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 import {
     AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, ColorPickerModule, ConfirmationService,
     DataListModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
-    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SliderModule,
-    SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
+    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SpinnerModule,
+    StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
 } from 'primeng/primeng';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DataViewModule } from 'primeng/dataview';
 import { MenuModule } from 'primeng/menu';
-import { PendingChangesGuard } from './pending-changes.guard';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { TableModule } from 'primeng/table';
@@ -181,7 +180,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         SeedImagesModule,
         SidebarModule,
         SlideMenuModule,
-        SliderModule,
         SpinnerModule,
         StepsModule,
         TableModule,
@@ -202,7 +200,6 @@ const appInitializer = (appConfig: AppConfigService) => {
     ],
     providers: [
         ConfirmationService,
-        PendingChangesGuard,
         {
             provide: APP_INITIALIZER,
             useFactory: appInitializer,

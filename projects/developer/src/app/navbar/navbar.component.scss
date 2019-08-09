@@ -131,15 +131,12 @@ $navbar-item-width: 150px;
         }
     }
 
-    .navbar__scheduler-resume {
+    .navbar__scheduler-pause {
         color: #fff;
     }
 
-    .navbar__scheduler-pause {
-        animation:redBlinkingText 1.5s infinite;
-    }
-    .navbar__scheduler-updating {
-        animation:yellowBlinkingText 1.5s infinite;
+    .navbar__scheduler-resume {
+        color: #777;
     }
 }
 
@@ -182,16 +179,4 @@ $navbar-item-width: 150px;
     .navbar__status {
         display: none;
     }
-}
-
-@keyframes redBlinkingText{
-    0%{     color: #777;    }
-    50%{    color: var(--red); }
-    100%{   color: #777;    }
-}
-
-@keyframes yellowBlinkingText{
-    0%{     color: #777;    }
-    50%{    color: var(--yellow); }
-    100%{   color: #777;    }
 }

@@ -30,9 +30,7 @@
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <span class="ui-column-title"> {{ col.header }} </span>
                 <div *ngSwitchCase="'recipe_type.name'">
-                    <a routerLink="/processing/recipes/{{ rowData.id }}">
-                        {{ rowData.recipe_type.title }} {{ rowData.recipe_type.version }}
-                    </a>
+                    {{ rowData.recipe_type.title }} {{ rowData.recipe_type.version }}
                 </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">

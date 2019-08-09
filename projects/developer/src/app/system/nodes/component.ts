@@ -199,7 +199,7 @@ export class NodesComponent implements OnInit, OnDestroy {
             this.getNodes();
         }
         this.subscription = this.statusService.statusUpdated.subscribe(status => {
-            this.nodesStatus = status.nodes;
+            this.nodesStatus = status.data.nodes;
             this.formatNodes();
         });
     }

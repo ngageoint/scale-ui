@@ -29,12 +29,7 @@
                     <p-header>
                         <div class="flexed space-between">
                             <div>
-                                <strong>
-                                    <span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span>
-                                    <a [routerLink]="getJobTypeURL(jobType.value)">
-                                        {{ jobType.label }}
-                                    </a>
-                                </strong>
+                                <strong><span class="fa" [innerHTML]="getUnicode(jobType.value.icon_code)"></span> {{ jobType.label }}</strong>
                             </div>
                             <div>
                                 <button pButton type="button" class="ui-button-secondary"

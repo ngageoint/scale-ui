@@ -19,11 +19,7 @@
             <div class="p-col-12 p-md-3 strikes__container" (click)="onStrikeClick($event, strike)">
                 <p-panel>
                     <p-header>
-                        <strong>
-                            <a [routerLink]="getStrikeURL(strike.value)">
-                                {{ strike.label }}
-                            </a>
-                        </strong>
+                        <strong>{{ strike.label }}</strong>
                     </p-header>
                     <div class="clamp">
                         {{ strike.value.description }}

@@ -25,7 +25,6 @@ import { ScansComponent } from './system/scans/component';
 import { ScanDetailsComponent } from './system/scans/details.component';
 import { SystemStatusComponent } from './system/status/component';
 import { WorkspacesComponent } from './system/workspaces/component';
-import { PendingChangesGuard } from './pending-changes.guard';
 
 const routes: Routes = [
     { path: '', pathMatch: 'full', component: DashboardComponent },
@@ -42,23 +41,23 @@ const routes: Routes = [
     { path: 'configuration/job-types', component: JobTypesComponent },
     { path: 'configuration/job-types/:name/:version', component: JobTypesComponent },
     { path: 'configuration/job-types/edit/:name/:version', component: JobTypesCreateComponent },
-    { path: 'configuration/job-types/create', component: JobTypesCreateComponent, canDeactivate: [PendingChangesGuard] },
+    { path: 'configuration/job-types/create', component: JobTypesCreateComponent },
     { path: 'processing/recipes', component: RecipesComponent },
     { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
     { path: 'configuration/recipe-types', component: RecipeTypesComponent },
-    { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent, canDeactivate: [PendingChangesGuard] },
+    { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent },
     { path: 'data/feed', component: FeedComponent },
     { path: 'data/ingest', component: IngestComponent },
     { path: 'data/metrics', component: MetricsComponent },
     { path: 'data/timeline', component: TimelineComponent },
     { path: 'system/nodes', component: NodesComponent },
     { path: 'system/strikes', component: StrikesComponent },
-    { path: 'system/strikes/:id', component: StrikesComponent, canDeactivate: [PendingChangesGuard]  },
+    { path: 'system/strikes/:id', component: StrikesComponent },
     { path: 'system/scans', component: ScansComponent },
-    { path: 'system/scans/:id', component: ScanDetailsComponent, canDeactivate: [PendingChangesGuard]  },
+    { path: 'system/scans/:id', component: ScanDetailsComponent },
     { path: 'system/status', component: SystemStatusComponent },
     { path: 'system/workspaces', component: WorkspacesComponent },
-    { path: 'system/workspaces/:id', component: WorkspacesComponent, canDeactivate: [PendingChangesGuard] }
+    { path: 'system/workspaces/:id', component: WorkspacesComponent }
 ];
 
 @NgModule({

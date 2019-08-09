@@ -146,7 +146,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedRecipeRows(e);
         }
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
             window.open(`/processing/recipes/${e.data.id}`);
         } else {
             this.router.navigate([`/processing/recipes/${e.data.id}`]);

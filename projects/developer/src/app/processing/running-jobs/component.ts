@@ -17,8 +17,6 @@ import { JobsDatatableService } from '../jobs/datatable.service';
 })
 
 export class RunningJobsComponent implements OnInit, OnDestroy {
-    readonly jobsURL = '/processing/jobs';
-
     datatableOptions: RunningJobsDatatable;
     datatableLoading: boolean;
     columns: any[];
@@ -107,28 +105,11 @@ export class RunningJobsComponent implements OnInit, OnDestroy {
             job_type_name: e.data.job_type.name,
             job_type_version: e.data.job_type.version
         }));
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
-            // ctrl-click the row, build the raw url from the query params
-            const params = this.getJobsQueryParams(e.data.job_type);
-            const queryString = Object.keys(params).map(k => `${k}=${params[k]}`).join('&');
-            const url = `${this.jobsURL}?${queryString}`;
-            window.open(url);
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/processing/jobs/?first=0&status=RUNNING&job_type_name=${e.data.job_type.name}&job_type_version=${e.data.job_type.version}`); // tslint:disable-line:max-line-length
         } else {
             this.router.navigate(['/processing/jobs/']);
         }
-    }
-    /**
-     * Get the query params needed for building links to the jobs page.
-     * @param  jobType the job_type data
-     * @return         object of parameters for building the query string
-     */
-    getJobsQueryParams(jobType: any): object {
-        return {
-            first: 0,
-            status: 'RUNNING',
-            job_type_name: jobType.name,
-            job_type_version: jobType.version
-        };
     }
     ngOnInit() {
         this.datatableLoading = true;

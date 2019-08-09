@@ -220,14 +220,11 @@ export class JobTypeHistoryComponent implements OnInit {
         this.updateOptions();
     }
     onRowSelect(e) {
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
-            window.open(this.getJobsHistoryURL(e.data.job_type));
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+            window.open(`/processing/job-type-history/${e.data.job_type.name}`);
         } else {
-            this.router.navigate([this.getJobsHistoryURL(e.data.job_type)]);
+            this.router.navigate([`/processing/job-type-history/${e.data.job_type.name}`]);
         }
-    }
-    getJobsHistoryURL(jobType: any): string {
-        return `/processing/job-type-history/${jobType.name}`;
     }
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
