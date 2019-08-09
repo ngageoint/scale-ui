@@ -17,7 +17,7 @@
          [autoLayout]="true" class="jobs__table" #datatable>
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field" 
+            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field"
                 [pSortableColumnDisabled]="col.sortableColumnDisabled || false">
                 {{ col.header }}
                 <p-sortIcon *ngIf="!col.sortableColumnDisabled" [field]="col.field"></p-sortIcon>
@@ -63,7 +63,9 @@
                     <div>
                         <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
                            [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
-                        {{ rowData.job_type.title }} {{ rowData.job_type.version }}
+                        <a routerLink="/processing/jobs/{{ rowData.id }}">
+                            {{ rowData.job_type.title }} {{ rowData.job_type.version }}
+                        </a>
                     </div>
                     <div class="warning-text" *ngIf="rowData.job_type.unmet_resources">
                         <span class="fa fa-warning" [pTooltip]="rowData.job_type.unmetResourcesTooltip"></span>
