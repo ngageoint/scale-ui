@@ -56,6 +56,8 @@ export class ScansComponent implements OnInit, OnDestroy {
         public breakpointObserver: BreakpointObserver
     ) {}
 
+
+
     private updateData() {
         this.datatableLoading = true;
         this.unsubscribe();
@@ -115,13 +117,33 @@ export class ScansComponent implements OnInit, OnDestroy {
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedBatchRows(e);
         }
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
-            window.open(`/system/scans/${e.data.id}`);
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
+            window.open(this.getScanURL(e.data));
         } else {
-            this.router.navigate([`/system/scans/${e.data.id}`]);
+            this.router.navigate([this.getScanURL(e.data)]);
         }
     }
+<<<<<<< HEAD
     onDateFilterApply(data: any) {
+=======
+    /**
+     * Get the router link for the scans URL.
+     * @param  scan the scan data containing an id field
+     * @return      the URL to the scans page
+     */
+    getScanURL(scan: any): string {
+        return `/system/scans/${scan.id}`;
+    }
+    onStartSelect(e) {
+        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
+        this.applyBtnClass = 'ui-button-primary';
+    }
+    onEndSelect(e) {
+        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
+        this.applyBtnClass = 'ui-button-primary';
+    }
+    onDateFilterApply() {
+>>>>>>> parent of 5eb704b... Revert "Merge branch 'master' into issue-162"
         this.scans = null;
         this.started = data.started;
         this.ended = data.ended;

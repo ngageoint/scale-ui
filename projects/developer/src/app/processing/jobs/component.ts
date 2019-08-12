@@ -209,7 +209,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         if (!_.find(this.selectedRows, { data: { id: e.data.id } })) {
             this.dataService.setSelectedJobRows(e);
         }
-        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+        if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
             window.open(`/processing/jobs/${e.data.id}`);
         } else {
             this.router.navigate([`/processing/jobs/${e.data.id}`]);
