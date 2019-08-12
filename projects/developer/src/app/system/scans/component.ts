@@ -123,27 +123,10 @@ export class ScansComponent implements OnInit, OnDestroy {
             this.router.navigate([this.getScanURL(e.data)]);
         }
     }
-<<<<<<< HEAD
-    onDateFilterApply(data: any) {
-=======
-    /**
-     * Get the router link for the scans URL.
-     * @param  scan the scan data containing an id field
-     * @return      the URL to the scans page
-     */
     getScanURL(scan: any): string {
         return `/system/scans/${scan.id}`;
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onDateFilterApply() {
->>>>>>> parent of 5eb704b... Revert "Merge branch 'master' into issue-162"
+    onDateFilterApply(data: any) {
         this.scans = null;
         this.started = data.started;
         this.ended = data.ended;
