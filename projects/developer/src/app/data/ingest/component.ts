@@ -110,8 +110,6 @@ export class IngestComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     private getStrikes() {
         this.selectedStrike = [];
@@ -127,7 +125,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                 }
             });
             this.strikeValues = _.orderBy(selectItems, ['title'], ['asc']);
-            this.updateOptions();
+            this.updateData();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
         });

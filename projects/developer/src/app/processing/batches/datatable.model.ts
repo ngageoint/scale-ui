@@ -23,5 +23,4 @@ export const initialBatchesDatatable: BatchesDatatable = {
     sortOrder: -1,
     started: moment.utc().subtract(1, 'd').startOf('d').toISOString(),
     ended: moment.utc().endOf('d').toISOString(),
-    duration: 'PT24H'
 };
