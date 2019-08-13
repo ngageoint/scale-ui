@@ -94,6 +94,14 @@
     ::ng-deep .ui-menubar .ui-menubar-custom {
         padding: 0;
     }
+
+    .recipe__footer {
+        align-items: flex-end;
+
+        button {
+            margin-right: 6px;
+        }
+    }
 }
 
 .recipe-type__condition-btn {

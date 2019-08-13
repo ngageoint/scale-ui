@@ -496,6 +496,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
             });
+            console.log(this.validated);
         }, err => {
             console.log(err);
             this.messageService.add({ severity: 'error', summary: 'Error validating recipe type', detail: err.statusText });
