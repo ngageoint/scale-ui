@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -13,6 +13,7 @@ import { StrikesApiService } from './api.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
 import { Strike } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'dev-strikes',
@@ -63,6 +64,16 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private strikesApiService: StrikesApiService,
         private jobsApiService: JobsApiService
     ) {}
+
+    @HostListener('window:beforeunload')
+    @HostListener('window:popstate')
+    canDeactivate(): Observable<boolean> | boolean {
+        if (this.createForm.dirty || this.ingestFileForm.dirty ) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private clampText() {
         setTimeout(() => {
@@ -431,10 +442,19 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onStrikeClick(e, strike) {
         if (e.ctrlKey || e.metaKey) {
-            window.open(`/system/strikes/${strike.value.id}`);
+            window.open(this.getStrikeURL(strike.value));
         } else {
-            this.router.navigate([`/system/strikes/${strike.value.id}`]);
+            this.router.navigate([this.getStrikeURL(strike.value)]);
         }
+    }
+
+    /**
+     * Get the router link to the strike detail page.
+     * @param  strike strike data containing an id
+     * @return        the URL to the strike detail
+     */
+    getStrikeURL(strike: any): string {
+        return `/system/strikes/${strike.id}`;
     }
 
     requeueJob(jobId: number): void {

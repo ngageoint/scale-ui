@@ -57,7 +57,9 @@
                 <span class="ui-column-title">{{ col.header }}</span>
                 <div *ngSwitchCase="'name'">
                     <span [pTooltip]="rowData.description">
-                        {{ rowData.name }}
+                        <a [routerLink]="getScanURL(rowData)">
+                            {{ rowData.name }}
+                        </a>
                     </span>
                 </div>
                 <div *ngSwitchCase="'job'">
