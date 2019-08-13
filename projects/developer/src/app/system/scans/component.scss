@@ -9,32 +9,8 @@ label {
 }
 .scans__header {
     margin-bottom: 10px;
-
-    .scans__date-filter {
-        align-items: flex-end;
-        margin-bottom: 10px;
-
-        div {
-            margin-right: 20px;
-        }
-
-        .scans__date-filter-btn, .scans__date-filter-dropdown {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-
-        .scans__date-filter-ranges, .scans__date-filter-dropdown {
-            margin-left: 20px;
-
-            button {
-                margin-left: 3px;
-            }
-        }
-    }
-    .scans__controls {
-        display: flex;
-        flex-direction: column-reverse;
-    }
+    align-items: flex-end;
+    margin-bottom: 10px;
 }
 .scans__table {
     .ui-button {
