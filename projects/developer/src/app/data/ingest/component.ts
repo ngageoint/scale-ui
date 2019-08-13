@@ -200,6 +200,17 @@ export class IngestComponent implements OnInit, OnDestroy {
         }
         return '';
     }
+    onDateFilterApply(data: any) {
+        this.ingests = null;
+        this.started = data.started;
+        this.ended = data.ended;
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
+        });
+        this.updateOptions();
+    }
     onDateRangeSelected(data: any) {
         this.ingests = null;
         this.started = moment.utc().subtract(data.range, data.unit).toISOString();
