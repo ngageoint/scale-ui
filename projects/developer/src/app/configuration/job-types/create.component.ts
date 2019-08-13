@@ -5,6 +5,9 @@ import { MenuItem, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as beautify from 'js-beautify';
 import * as _ from 'lodash';
+import { ComponentCanDeactivate } from '../../pending-changes.guard';
+import { HostListener } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
 
 import { environment } from '../../../environments/environment';
 
@@ -19,7 +22,7 @@ import { WorkspacesApiService } from '../../system/workspaces/api.service';
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.scss']
 })
-export class JobTypesCreateComponent implements OnInit, OnDestroy {
+export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanDeactivate {
     private routeParams: any;
     // keep track of name and version since they're stripped out while editing
     private name: string;
@@ -85,9 +88,18 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy {
         private jobTypesApiService: JobTypesApiService,
         private workspacesApiService: WorkspacesApiService,
         private fb: FormBuilder,
-        private router: Router,
         private route: ActivatedRoute
     ) {}
+
+    @HostListener('window:beforeunload')
+    @HostListener('window:popstate')
+    canDeactivate(): Observable<boolean> | boolean {
+        if (this.createForm.dirty) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private validateForm() {
         // only enable 'Validate and Create' when the form is valid

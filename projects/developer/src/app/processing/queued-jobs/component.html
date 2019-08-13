@@ -15,7 +15,9 @@
                 <div class="flexed space-between" *ngSwitchCase="'job_type.name'">
                     <div>
                         <i class="fa fa-fw" [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
-                        {{ rowData.job_type.title }}
+                        <a [routerLink]="jobsURL" [queryParams]="getJobsQueryParams(rowData.job_type)">
+                            {{ rowData.job_type.title }}
+                        </a>
                     </div>
                     <div class="warning-text" *ngIf="rowData.job_type.unmet_resources">
                         <span class="fa fa-warning" [pTooltip]="rowData.job_type.unmetResourcesTooltip"></span>
