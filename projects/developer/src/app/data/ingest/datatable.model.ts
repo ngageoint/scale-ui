@@ -8,6 +8,7 @@ export class IngestDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
+        public duration?: string,
         public status?: any,
         public scan_id?: any,
         public strike_id?: any,

@@ -8,6 +8,7 @@ export class BatchesDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
+        public duration?: string,
         public recipe_type_name?: any,
         public is_creation_done?: any,
         public is_superseded?: any,
@@ -21,5 +22,5 @@ export const initialBatchesDatatable: BatchesDatatable = {
     sortField: 'last_modified',
     sortOrder: -1,
     started: moment.utc().subtract(1, 'd').startOf('d').toISOString(),
-    ended: moment.utc().endOf('d').toISOString()
+    ended: moment.utc().endOf('d').toISOString(),
 };

@@ -1,0 +1,34 @@
+<div class="temporal-filter flexed">
+    <div class="noWrap">
+        <label>From:</label>
+        <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
+                        (dateChange)="onStartSelect($event)"></utc-datepicker>
+    </div>
+    <div class="noWrap">
+        <label>To:</label>
+        <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
+                        (dateChange)="onEndSelect($event)"></utc-datepicker>
+    </div>
+    <button pButton class="temporal-filter__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
+            (click)="onDateFilterApply()"></button>
+    <!-- <button pButton type="button" class="ui-button-primary share_btn"  label="Share" icon="fa fa-share" iconPos="right" pTooltip="Share a link to view the selcted timestamp."
+            (click)="shareLink()"></button> -->
+    <div class="temporal-filter__date-filter-ranges" *ngIf="!isMobile">
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 6 Hours"
+                (click)="setDateFilterRange('h', 6)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 12 Hours"
+                (click)="setDateFilterRange('h', 12)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 24 Hours"
+                (click)="setDateFilterRange('h', 24)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 3 Days"
+                (click)="setDateFilterRange('d', 3)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 7 Days"
+                (click)="setDateFilterRange('d', 7)"></button>
+    </div>
+    <div class="temporal-filter__date-filter-dropdown">
+        <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                    (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                    [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+        </p-dropdown>
+    </div>
+</div>

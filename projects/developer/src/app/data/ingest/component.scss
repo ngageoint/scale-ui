@@ -9,28 +9,8 @@ label {
 }
 .ingest__header {
     margin-bottom: 10px;
-
-    .ingest__date-filter {
-        align-items: flex-end;
-        margin-bottom: 10px;
-
-        div {
-            margin-right: 20px;
-        }
-
-        .ingest__date-filter-btn, .ingest__date-filter-dropdown {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-
-        .ingest__date-filter-ranges, .ingest__date-filter-dropdown {
-            margin-left: 20px;
-
-            button {
-                margin-left: 3px;
-            }
-        }
-    }
+    align-items: flex-end;
+    margin-bottom: 10px;
 }
 .ingest__table {
     .ui-button {

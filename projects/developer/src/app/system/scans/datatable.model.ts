@@ -8,6 +8,7 @@ export class ScansDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
+        public duration?: string,
         public name?: any
     ) {}
 }
