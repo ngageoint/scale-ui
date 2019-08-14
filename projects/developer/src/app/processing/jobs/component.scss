@@ -11,27 +11,6 @@ label {
     margin-bottom: 10px;
     align-items: flex-end;
 
-    .jobs__date-filter {
-        align-items: flex-end;
-
-        div {
-            margin-right: 20px;
-        }
-
-        .jobs__date-filter-btn, .jobs__date-filter-dropdown {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-
-        .jobs__date-filter-ranges, .jobs__date-filter-dropdown {
-            margin-left: 20px;
-
-            button {
-                margin-left: 3px;
-            }
-        }
-    }
-
     .jobs__controls {
         button {
             margin-left: 5px;
@@ -83,16 +62,6 @@ label {
 }
 
 @media screen and (max-width: 858px) {
-    .jobs__date-filter-btn, .jobs__date-filter-dropdown, .jobs__date-filter-ranges {
-        margin-left: 0 !important;
-        padding: 0 !important;
-    }
-
-    .jobs__date-filter-dropdown, .jobs__date-filter-btn {
-        margin-top: 5px !important;
-        margin-right: 5px !important;
-    }
-
     .jobs__controls {
         button {
             margin-left: 0 !important;

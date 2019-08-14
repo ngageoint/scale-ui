@@ -46,13 +46,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
-    dateRangeOptions = [
-        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
-        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
-        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
-        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
-        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
-    ];
     selectedDateRange: any;
 
     constructor(
@@ -92,8 +85,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     private getRecipeTypes() {
         this.selectedRecipeType = [];
@@ -110,7 +101,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                 }
             });
             this.recipeTypeOptions = _.orderBy(selectItems, ['label'], ['asc']);
-            this.updateOptions();
+            this.updateData();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
@@ -162,31 +153,28 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.router.navigate([`/processing/batches/${e.data.id}`]);
         }
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onDateFilterApply() {
+    onDateFilterApply(data: any) {
         this.batches = null;
+        this.started = data.started;
+        this.ended = data.ended;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, environment.dateFormat).toISOString(),
             ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
-        this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
-    setDateFilterRange(unit: any, range: any) {
-        this.started = moment.utc().subtract(range, unit).toISOString();
+    onDateRangeSelected(data: any) {
+        this.batches = null;
+        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
-        this.onDateFilterApply();
-    }
-    onFilterClick(e) {
-        e.stopPropagation();
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: this.started,
+            ended: this.ended,
+            duration: moment.duration(data.range, data.unit).toISOString()
+        });
+        this.updateOptions();
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedBatchRows();
@@ -208,6 +196,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     recipe_type_name: params.recipe_type_name ?
                         Array.isArray(params.recipe_type_name) ?
                             params.recipe_type_name :

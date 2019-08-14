@@ -10,30 +10,8 @@ label {
 .batches__header {
     margin-bottom: 10px;
     align-items: flex-end;
-
-    .batches__date-filter {
-        align-items: flex-end;
-
-        div {
-            margin-right: 20px;
-        }
-
-        .batches__date-filter-btn, .batches__date-filter-dropdown {
-            padding-top: 0;
-            padding-bottom: 0;
-        }
-
-        .batches__date-filter-ranges, .batches__date-filter-dropdown {
-            margin-left: 20px;
-
-            button {
-                margin-left: 3px;
-            }
-        }
-    }
-    .batches__controls {
-        margin-left: 5px;
-        margin-top: 5px;
+    div {
+        margin-right: 20px;
     }
 }
 .batches__table {
