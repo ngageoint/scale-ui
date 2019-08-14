@@ -165,8 +165,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (this.selectedRecipeTypeDetail) {
             // add the values from the object
             this.createForm.patchValue(this.selectedRecipeTypeDetail);
-
-            // modify form actions based on status
         }
 
         // listen for changes to createForm fields
