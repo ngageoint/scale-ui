@@ -96,7 +96,8 @@
     }
 
     .recipe__footer {
-        align-items: flex-end;
+        position: absolute;
+        right: 0;
 
         button {
             margin-right: 6px;

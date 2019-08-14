@@ -108,15 +108,14 @@
                     </div>
                 </div>
             </div>
-                <p-footer>
-                    <div *ngIf="isEditing" class="recipe__footer">
+            <p-footer>
+                <div *ngIf="isEditing" class="recipe__footer">
                     <button pButton class="ui-button-primary recipe__footer-btn" label="Validate"
                                 (click)="validateRecipeType()"></button>
-                    <button pButton *ngIf="validated" class="ui-button-primary recipe__footer-btn" label="Save"
+                    <button pButton [disabled]="!validated" class="ui-button-primary recipe__footer-btn" label="Save"
                             (click)="saveRecipeType()"></button>
-                    </div>
-                </p-footer>
-
+                </div>
+            </p-footer>
         </p-panel>
     </div>
 </div>
