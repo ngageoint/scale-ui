@@ -9,6 +9,18 @@
                 {{ batch.title }}
             </div>
             <div *ngIf="!batch.title">Untitled Batch</div>
+            <div *ngIf="!isEditing" class="recipe-type__menu">
+                    <div *ngIf="!isEditing" class="recipe-type__menu">
+                            <button pButton class="ui-button-primary batches__controls-btn" icon='fa fa-edit' label="Edit"
+                            (click)="onEditClick()"></button>
+                    </div>
+            </div>
+            <div *ngIf="isEditing" class="batches__controls">
+                    <button pButton class="ui-button-primary batches__controls-btn" label="Validate"
+                                (click)="onValidateClick()"></button>
+                    <button pButton [disabled]="!validated" class="ui-button-primary batches__controls-btn" label="Save"
+                            (click)="onSaveClick()"></button>
+            </div>
         </p-header>
         <div *ngIf="!isEditing && batch.id">
             <div class="margin-bottom-md">{{ batch.description }}</div>
@@ -141,10 +153,7 @@
             </div>
         </div>
         <p-footer>
-            <button pButton disabled="createForm.isDirty" class="ui-button-primary batches__footer-btn" label="Validate"
-                        (click)="onValidateClick()"></button>
-            <button pButton disabled="Validate" class="ui-button-primary batches__footer-btn" label="Save"
-                    (click)="onSaveClick()"></button>
+
         </p-footer>
     </p-panel>
 
