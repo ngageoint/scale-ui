@@ -70,18 +70,6 @@ export class BatchDetailsComponent implements OnInit {
         }
     }
 
-    // private initValidation() {
-    //     // enable/disable validate and save actions based on form status
-    //     const validateItem = _.find(this.items, { label: 'Validate' });
-    //     if (validateItem) {
-    //         validateItem.disabled = this.createForm.status === 'INVALID';
-    //     }
-    //     const saveItem = _.find(this.items, { label: 'Save' });
-    //     if (saveItem) {
-    //         saveItem.disabled = !this.validated;
-    //     }
-    // }
-
     private initBatchForm() {
         if (this.batch) {
             this.initFormGroups();

@@ -62,7 +62,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
     autoUpdate = false;
-    // items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
         { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
@@ -89,7 +88,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
     set isEditing(value: boolean) {
         this._isEditing = value;
-        // this.items = value ? _.clone(this.editMenu) : _.clone(this.viewMenu);
     }
 
     constructor(
