@@ -8,9 +8,16 @@
                     {{ scan.title }}
                 </div>
                 <div>
-                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                            (click)="menu.toggle($event)"></button>
+                    <div *ngIf="!isEditing" class="scans-type__menu">
+                        <button pButton class="ui-button-primary scans__controls-btn" icon='fa fa-edit' label="Edit"
+                        (click)="onEditClick()"></button>
+                    </div>
+                    <div *ngIf="isEditing">
+                            <button pButton class="ui-button-primary scans__controls-btn" label="Validate"
+                                        (click)="onValidateClick()"></button>
+                            <button pButton [disabled]="!validated" class="ui-button-primary scans__controls-btn" label="Save"
+                                    (click)="onSaveClick()"></button>
+                    </div>
                 </div>
             </p-header>
             <div *ngIf="!isEditing && scan.id">

@@ -456,7 +456,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     summary: 'Validation Successful',
                     detail: 'Recipe Type is valid and can be created.'
                 });
-               // this.initValidation();
             }
             _.forEach(result.warnings, warning => {
                 this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
