@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, HostListener } from '@angular/
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
@@ -19,15 +19,6 @@ import { Observable } from 'rxjs';
 export class WorkspacesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
-        { label: 'Save', icon: 'fa fa-save', disabled: false, command: () => { this.onSaveClick(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
-    ];
     loading: boolean;
     isEditing: boolean;
     validated: boolean;
@@ -36,7 +27,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     selectedWorkspaceDetail: any;
     createForm: any;
     createFormSubscription: any;
-    items: MenuItem[] = _.clone(this.viewMenu);
     showActive = true;
     activeLabel = 'Active Workspaces';
     typeOptions: SelectItem[] = [
@@ -128,18 +118,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         }
     }
 
-    private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
-        }
-    }
-
     private initWorkspaceForm() {
         if (this.selectedWorkspaceDetail) {
             // determine which broker fields to display
@@ -147,16 +125,12 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
             // add the values from the object
             this.createForm.patchValue(this.selectedWorkspaceDetail);
-
-            // modify form actions based on status
-            this.initValidation();
         }
 
         // listen for changes to createForm fields
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedWorkspaceDetail, changes);
-            this.initValidation();
         });
     }
 
@@ -219,7 +193,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     private redirect(id: any) {
         if (id && id === this.selectedWorkspaceDetail.id) {
             this.isEditing = false;
-            this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForm();
             this.createForm.reset();
         } else {
@@ -234,7 +207,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
 
     onEditClick() {
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initWorkspaceForm();
     }
 
@@ -247,7 +219,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                     summary: 'Validation Successful',
                     detail: 'Workspace is valid and can be created.'
                 });
-                this.initValidation();
             }
             _.forEach(data.warnings, warning => {
                 this.messageService.add({severity: 'warn', summary: warning.name, detail: warning.description});
@@ -351,7 +322,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
                 id = id !== null && id !== 'create' ? +id : id;
 
                 this.isEditing = id === 'create';
-                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getWorkspaces(id);
             });

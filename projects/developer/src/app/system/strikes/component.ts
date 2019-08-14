@@ -23,16 +23,6 @@ import { Observable } from 'rxjs';
 export class StrikesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } },
-        { label: 'Duplicate', icon: 'fa fa-copy', disabled: false, command: () => { this.onDuplicateClick(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
-        { label: 'Save', icon: 'fa fa-save', disabled: false, command: () => { this.onSaveClick(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
-    ];
     loading: boolean;
     isEditing: boolean;
     validated: boolean;
@@ -52,7 +42,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ingestFileForm: any;
     ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
-    items: MenuItem[] = _.clone(this.viewMenu);
 
     constructor(
         private fb: FormBuilder,
@@ -152,16 +141,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
-        }
-
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
         const status = this.createForm.status === 'INVALID' && this.selectedStrikeDetail.configuration.files_to_ingest.length === 0;
         this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
@@ -304,7 +283,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private redirect(id: any) {
         if (id && id === this.selectedStrikeDetail.id) {
             this.isEditing = false;
-            this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForms();
             this.createForm.reset();
             this.ingestFileForm.reset();
@@ -320,7 +298,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onEditClick() {
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -330,7 +307,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
         delete this.selectedStrikeDetail.name;
         this.selectedStrikeDetail.title += ' copy';
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -487,7 +463,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 id = id !== null && id !== 'create' ? +id : id;
 
                 this.isEditing = id === 'create';
-                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getStrikes(id);
             });

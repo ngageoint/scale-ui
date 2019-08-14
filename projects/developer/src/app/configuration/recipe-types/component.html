@@ -58,15 +58,15 @@
                     <strong>{{ selectedRecipeTypeDetail.title }}</strong>
                 </div>
                 <div *ngIf="!isEditing" class="recipe-type__menu">
-                        <button pButton class="ui-button-primary recipe__controls-btn" icon='fa fa-edit' label="Edit"
-                        (click)="onEditClick()"></button>
+                    <button pButton class="ui-button-primary recipe-type__controls-btn" icon='fa fa-edit' label="Edit"
+                    (click)="onEditClick()"></button>
                 </div>
-                <div *ngIf="isEditing" class="recipe__controls">
-                        <button pButton class="ui-button-primary recipe__controls-btn" label="Validate"
-                                    (click)="validateRecipeType()"></button>
-                        <button pButton [disabled]="!validated" class="ui-button-primary recipe__controls-btn" label="Save"
-                                (click)="saveRecipeType()"></button>
-                    </div>
+                <div *ngIf="isEditing">
+                    <button pButton class="ui-button-primary recipe-type__controls-btn" label="Validate"
+                                (click)="onValidateClick()"></button>
+                    <button pButton [disabled]="!validated" class="ui-button-primary recipe-type__controls-btn" label="Save"
+                            (click)="onSaveClick()"></button>
+                </div>
             </p-header>
             <div class="margin-bottom-md" *ngIf="!isEditing">
                 {{ selectedRecipeTypeDetail.description }}
