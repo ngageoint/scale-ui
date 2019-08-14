@@ -72,14 +72,6 @@ export class IngestComponent implements OnInit, OnDestroy {
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
-    dateRangeOptions = [
-        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
-        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
-        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
-        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
-        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
-    ];
-    selectedDateRange: any;
 
     constructor(
         private dataService: DataService,
@@ -118,8 +110,6 @@ export class IngestComponent implements OnInit, OnDestroy {
             queryParams: this.datatableOptions,
             replaceUrl: true
         });
-
-        this.updateData();
     }
     private getStrikes() {
         this.selectedStrike = [];
@@ -135,7 +125,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                 }
             });
             this.strikeValues = _.orderBy(selectItems, ['title'], ['asc']);
-            this.updateOptions();
+            this.updateData();
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
         });
@@ -192,10 +182,10 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.dataService.setSelectedIngestRows(e);
         }
         if (e.data.job) {
-            if (e.originalEvent.ctrlKey || e.originalEvent.metaKey || e.originalEvent.which === 2) {
-                window.open(this.getJobURL(e.data.job));
+            if (e.originalEvent.ctrlKey || e.originalEvent.metaKey) {
+                window.open(`/processing/jobs/${e.data.job.id}`);
             } else {
-                this.router.navigate([this.getJobURL(e.data.job)]);
+                this.router.navigate([`/processing/jobs/${e.data.job.id}`]);
             }
         } else {
             this.messageService.add({severity: 'error', summary: 'Job not found', detail: 'There is no job associated with this ingest'});
@@ -204,39 +194,34 @@ export class IngestComponent implements OnInit, OnDestroy {
             });
         }
     }
-    /**
-     * Get the router link for the job detail page.
-     * @param  job job data object containing an id
-     * @return     the link to the job page, if job is available
-     */
     getJobURL(job: any): string {
         if (job) {
             return `/processing/jobs/${job.id}`;
         }
         return '';
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onDateFilterApply() {
+    onDateFilterApply(data: any) {
         this.ingests = null;
+        this.started = data.started;
+        this.ended = data.ended;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, environment.dateFormat).toISOString(),
             ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
-        this.applyBtnClass = 'ui-button-secondary';
         this.updateOptions();
     }
-    setDateFilterRange(unit: any, range: any) {
-        this.started = moment.utc().subtract(range, unit).toISOString();
+    onDateRangeSelected(data: any) {
+        this.ingests = null;
+        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
-        this.onDateFilterApply();
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: this.started,
+            ended: this.ended,
+            duration: moment.duration(data.range, data.unit).toISOString()
+        });
+        this.updateOptions();
     }
     onFilterClick(e) {
         e.stopPropagation();
@@ -259,6 +244,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
                             params.status :

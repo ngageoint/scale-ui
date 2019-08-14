@@ -36,14 +36,6 @@ export class ScansComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    dateRangeOptions = [
-        { label: 'Last 6 Hours', value: { unit: 'h', range: 6 } },
-        { label: 'Last 12 Hours', value: { unit: 'h', range: 12 } },
-        { label: 'Last 24 Hours', value: { unit: 'h', range: 24 } },
-        { label: 'Last 3 Days', value: { unit: 'd', range: 3 } },
-        { label: 'Last 7 Days', value: { unit: 'd', range: 7 } }
-    ];
-    selectedDateRange: any;
     applyBtnClass = 'ui-button-secondary';
     nameFilterText: string;
     onNameFilter = _.debounce((e) => {
@@ -131,25 +123,13 @@ export class ScansComponent implements OnInit, OnDestroy {
             this.router.navigate([this.getScanURL(e.data)]);
         }
     }
-    /**
-     * Get the router link for the scans URL.
-     * @param  scan the scan data containing an id field
-     * @return      the URL to the scans page
-     */
     getScanURL(scan: any): string {
         return `/system/scans/${scan.id}`;
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onDateFilterApply() {
+    onDateFilterApply(data: any) {
         this.scans = null;
-        this.applyBtnClass = 'ui-button-secondary';
+        this.started = data.started;
+        this.ended = data.ended;
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: moment.utc(this.started, environment.dateFormat).toISOString(),
@@ -157,10 +137,17 @@ export class ScansComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
-    setDateFilterRange(unit: any, range: any) {
-        this.started = moment.utc().subtract(range, unit).toISOString();
+    onDateRangeSelected(data: any) {
+        this.scans = null;
+        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
-        this.onDateFilterApply();
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            started: this.started,
+            ended: this.ended,
+            duration: moment.duration(data.range, data.unit).toISOString()
+        });
+        this.updateOptions();
     }
     onCreateClick(e) {
         if (e.ctrlKey || e.metaKey) {
@@ -189,6 +176,7 @@ export class ScansComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    duration: params.duration ? params.duration : null,
                     name: params.name || null
                 };
             }

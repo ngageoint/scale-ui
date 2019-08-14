@@ -1,37 +1,8 @@
 <h2><i class="fa fa-files-o"></i> Batches <span *ngIf="count">({{ count }})</span></h2>
 <div class="batches__header flexed space-between">
-    <div class="batches__date-filter flexed">
-        <div class="noWrap">
-            <label>From:</label>
-            <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
-                            (dateChange)="onStartSelect($event)"></utc-datepicker>
-        </div>
-        <div class="noWrap">
-            <label>To:</label>
-            <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
-                            (dateChange)="onEndSelect($event)"></utc-datepicker>
-        </div>
-        <button pButton class="batches__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
-                (click)="onDateFilterApply()"></button>
-        <div class="batches__date-filter-ranges"  *ngIf="!isMobile">
-            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 6 Hours"
-                    (click)="setDateFilterRange('h', 6)"></button>
-            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 12 Hours"
-                    (click)="setDateFilterRange('h', 12)"></button>
-            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 24 Hours"
-                    (click)="setDateFilterRange('h', 24)"></button>
-            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 3 Days"
-                    (click)="setDateFilterRange('d', 3)"></button>
-            <button pButton class="ui-button-secondary batches__date-filter-btn" label="Last 7 Days"
-                    (click)="setDateFilterRange('d', 7)"></button>
-        </div>
-        <div class="batches__date-filter-dropdown">
-            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
-                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
-                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
-            </p-dropdown>
-        </div>
-    </div>
+    <dev-temporal-filter [started]="started" [ended]="ended" (dateFilterApply)="onDateFilterApply($event)"
+    (dateRangeSelected)="onDateRangeSelected($event)">
+    </dev-temporal-filter>
     <div class="batches__controls">
         <a pButton routerLink="/processing/batches/create" class="ui-button-primary" icon="fa fa-plus"
            pTooltip="Create Batch"></a>

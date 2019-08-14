@@ -75,6 +75,7 @@ import { StatusComponent } from './navbar/status/component';
 import { StrikesComponent } from './system/strikes/component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { SystemStatusComponent } from './system/status/component';
+import { TemporalFilterComponent } from './common/components/temporal-filter/component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { TimelineComponent } from './data/timeline/component';
 import { WorkspacesComponent } from './system/workspaces/component';
@@ -133,7 +134,8 @@ const appInitializer = (appConfig: AppConfigService) => {
         SubnavComponent,
         SystemStatusComponent,
         TimelineComponent,
-        WorkspacesComponent
+        WorkspacesComponent,
+        TemporalFilterComponent
     ],
     imports: [
         AccordionModule,

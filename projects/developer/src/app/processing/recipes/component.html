@@ -1,37 +1,8 @@
 <h2><i class="fa fa-cubes"></i> Recipes</h2>
 <div class="recipes__header flexed space-between">
-    <div class="recipes__date-filter flexed">
-        <div class="noWrap">
-            <label>From:</label>
-            <utc-datepicker [date]="started" [button]="true" (dateChange)="onStartSelect($event)"
-                            [format]="dateFormat"></utc-datepicker>
-        </div>
-        <div class="noWrap">
-            <label>To:</label>
-            <utc-datepicker [date]="ended" [button]="true" (dateChange)="onEndSelect($event)"
-                            [format]="dateFormat"></utc-datepicker>
-        </div>
-        <button pButton class="recipes__date-filter-btn p-grid" [ngClass]="applyBtnClass" label="Apply"
-                (click)="onDateFilterApply()"></button>
-        <div class="recipes__date-filter-ranges"  *ngIf="!isMobile">
-            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 6 Hours"
-                    (click)="setDateFilterRange('h', 6)"></button>
-            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 12 Hours"
-                    (click)="setDateFilterRange('h', 12)"></button>
-            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 24 Hours"
-                    (click)="setDateFilterRange('h', 24)"></button>
-            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 3 Days"
-                    (click)="setDateFilterRange('d', 3)"></button>
-            <button pButton class="ui-button-secondary recipes__date-filter-btn" label="Last 7 Days"
-                    (click)="setDateFilterRange('d', 7)"></button>
-        </div>
-        <div class="recipes__date-filter-dropdown" *ngIf="isMobile">
-            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
-                        (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
-                        [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false">
-            </p-dropdown>
-        </div>
-    </div>
+    <dev-temporal-filter [started]="started" [ended]="ended" (dateFilterApply)="onDateFilterApply($event)"
+    (dateRangeSelected)="onDateRangeSelected($event)">
+    </dev-temporal-filter>
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)" [responsive]="true"
