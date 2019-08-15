@@ -63,9 +63,9 @@
                 </div>
                 <div *ngIf="isEditing">
                     <button pButton class="ui-button-primary recipe-type__controls-btn" label="Validate"
-                                (click)="onValidateClick()"></button>
+                                (click)="validateRecipeType()"></button>
                     <button pButton [disabled]="!validated" class="ui-button-primary recipe-type__controls-btn" label="Save"
-                            (click)="onSaveClick()"></button>
+                            (click)="saveRecipeType()"></button>
                 </div>
             </p-header>
             <div class="margin-bottom-md" *ngIf="!isEditing">
