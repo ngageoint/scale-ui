@@ -50,7 +50,7 @@ export class FooterComponent implements OnInit, OnChanges {
     }
 
     handleOnProfileShow() {
-        if (!this.isAuthenticated && environment.auth.scheme.type === 'form') {
+        if (!this.isAuthenticated && environment.authSchemeType === 'form') {
             setTimeout(() => {
                 this.usernameEl.nativeElement.focus();
             }, 50);

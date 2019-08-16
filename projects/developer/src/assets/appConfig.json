@@ -2,13 +2,9 @@
     "apiDefaultVersion": "v6",
     "apiPrefix": "/mocks",
     "apiVersions": [],
-    "auth": {
-        "enabled": false,
-        "scheme": {
-            "type": "external",
-            "url": ""
-        }
-    },
+    "authEnabled": false,
+    "authSchemeType": "external",
+    "authSchemeUrl": "/api/login/",
     "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
     "defaultTheme": "light",
     "documentation": "http://ngageoint.github.io/scale/docs/index.html",
