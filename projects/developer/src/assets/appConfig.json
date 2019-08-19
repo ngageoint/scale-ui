@@ -12,5 +12,7 @@
     "themeKey": "scale.theme",
     "primaryColor": "#017cce",
     "secondaryLightColor": "#5c97bf",
-    "secondaryDarkColor": "#24567f"
+    "secondaryDarkColor": "#24567f",
+    "logoImageCss": "",
+    "logoImage": ""
 }
