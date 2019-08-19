@@ -31,15 +31,14 @@ export class AppConfigService {
                     // set the camelcased version of the key in environments
                     environment[_.camelCase(key)] = value;
                 });
-
                 // update themes with values from config
                 const themes = this.themeService.getThemes();
                 _.forEach(themes, theme => {
                     if (theme) {
                         this.themeService.updateTheme(theme.name, {
-                            '--scale-primary': data.primaryColor,
-                            '--scale-secondary-light': data.secondaryLightColor,
-                            '--scale-secondary-dark': data.secondaryDarkColor
+                            '--scale-primary': environment.primaryColor,
+                            '--scale-secondary-light': environment.secondaryLightColor,
+                            '--scale-secondary-dark': environment.secondaryDarkColor
                         });
                     }
                 });
