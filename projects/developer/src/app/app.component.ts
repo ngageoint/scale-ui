@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
         this.theme = localStorage.getItem(environment.themeKey) || environment.defaultTheme;
         this.themeService.setTheme(this.theme);
 
-        if (environment.auth.enabled) {
+        if (environment.authEnabled) {
             this.loading = true;
             this.profileService.getProfile().subscribe(data => {
                 this.loading = false;
@@ -40,12 +40,12 @@ export class AppComponent implements OnInit {
                     this.isAuthenticated = true;
                 } else {
                     // attempt to authenticate
-                    if (environment.auth.scheme.type === 'geoaxis') {
+                    if (environment.authSchemeType === 'geoaxis') {
                         // redirect to geoaxis login
                         this.header = 'Authentication is Required';
                         this.message = 'Redirecting to GEOAxIS...';
-                        window.location.href = `${environment.auth.scheme.url}http://127.0.0.1:8080`;
-                    } else if (environment.auth.scheme.type === 'form') {
+                        window.location.href = `${environment.authSchemeUrl}http://127.0.0.1:8080`;
+                    } else if (environment.authSchemeType === 'form') {
                         // show login form
                         this.header = 'Authentication is Required';
                         this.message = 'Enter your username and password to continue.';
@@ -55,18 +55,18 @@ export class AppComponent implements OnInit {
                         this.header = 'Authentication is Required';
                         this.message = 'Redirecting to login form...';
                         setTimeout(() => {
-                            window.location.href = `${environment.auth.scheme.url}?next=${window.location.href}`;
+                            window.location.href = `${environment.authSchemeUrl}?next=${window.location.href}`;
                         }, 3000);
                     }
                 }
             }, err => {
                 this.loading = false;
                 console.log(err);
-                if (environment.auth.scheme.type === 'geoaxis') {
+                if (environment.authSchemeType === 'geoaxis') {
                     this.header = 'Authentication is Required';
                     this.message = 'Redirecting to GEOAxIS...';
-                    window.location.href = `${environment.auth.scheme.url}${window.location.href}`;
-                } else if (environment.auth.scheme.type === 'form') {
+                    window.location.href = `${environment.authSchemeUrl}${window.location.href}`;
+                } else if (environment.authSchemeType === 'form') {
                     // GET call to retrieve CSRF cookie
                     this.profileService.getLogin().subscribe(data => {
                         console.log(data);
@@ -86,7 +86,7 @@ export class AppComponent implements OnInit {
                     this.header = 'Authentication is Required';
                     this.message = 'Redirecting to login form...';
                     setTimeout(() => {
-                        window.location.href = `${environment.auth.scheme.url}?next=${window.location.href}`;
+                        window.location.href = `${environment.authSchemeUrl}?next=${window.location.href}`;
                     }, 3000);
                 }
             });
