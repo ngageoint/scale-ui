@@ -148,8 +148,11 @@
                         </div>
                         <div class="p-col-6">
                             <label *ngIf="createForm.get('configuration.broker.host_path').enabled">
-                                <span class="required">Host Path</span>
-                                <input type="text" pInputText formControlName="host_path" required/>
+                                <span [ngClass]="{'required' : createForm.get('configuration.broker.type').value !== 's3'}">Host Path</span>
+                                <input type="text"
+                                       pInputText
+                                       formControlName="host_path"
+                                       [attr.required]="createForm.get('configuration.broker.type').value !== 's3' ? true : null" />
                             </label>
                             <label *ngIf="createForm.get('configuration.broker.bucket_name').enabled">
                                 <span class="required">Bucket Name</span>
