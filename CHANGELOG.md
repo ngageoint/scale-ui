@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.7.0](https://github.com/ngageoint/scale-ui/compare/v0.6.0...v0.7.0) (2019-08-20)
+
+
+### Bug Fixes
+
+* **nodes:** removed call to undefined object ([9fe0fa9](https://github.com/ngageoint/scale-ui/commit/9fe0fa9))
+* **workspaces:** made host_path conditional on broker selection ([bbf363c](https://github.com/ngageoint/scale-ui/commit/bbf363c))
+* corrected navbar responsiveness ([04c2728](https://github.com/ngageoint/scale-ui/commit/04c2728))
+* improve datetime filtering across entire UI ([0bef666](https://github.com/ngageoint/scale-ui/commit/0bef666)), closes [#162](https://github.com/ngageoint/scale-ui/issues/162)
+* **scheduler:**  correct scheduler pause payload and behavior ([a542078](https://github.com/ngageoint/scale-ui/commit/a542078))
+
+
+### Features
+
+* added page titles ([e0b6307](https://github.com/ngageoint/scale-ui/commit/e0b6307))
+
+
+
 ## [0.6.0](https://github.com/ngageoint/scale-ui/compare/v0.5.3...v0.6.0) (2019-08-02)
 
 
