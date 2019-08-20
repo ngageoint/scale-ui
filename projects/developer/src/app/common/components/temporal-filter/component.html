@@ -15,15 +15,15 @@
             (click)="shareLink()"></button> -->
     <div class="temporal-filter__date-filter-ranges" *ngIf="!isMobile">
         <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 6 Hours"
-                (click)="setDateFilterRange('h', 6)"></button>
+                (click)="setDateFilterRange('h', 6)" *ngIf="show6hButton"></button>
         <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 12 Hours"
-                (click)="setDateFilterRange('h', 12)"></button>
+                (click)="setDateFilterRange('h', 12)" *ngIf="show12hButton"></button>
         <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 24 Hours"
-                (click)="setDateFilterRange('h', 24)"></button>
+                (click)="setDateFilterRange('h', 24)" *ngIf="show24hButton"></button>
         <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 3 Days"
-                (click)="setDateFilterRange('d', 3)"></button>
+                (click)="setDateFilterRange('d', 3)" *ngIf="show3dButton"></button>
         <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 7 Days"
-                (click)="setDateFilterRange('d', 7)"></button>
+                (click)="setDateFilterRange('d', 7)" *ngIf="show7dButton"></button>
     </div>
     <div class="temporal-filter__date-filter-dropdown">
         <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
