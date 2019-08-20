@@ -16,5 +16,7 @@ export const environment = {
     themeKey: '',
     primaryColor: '',
     secondaryLightColor: '',
-    secondaryDarkColor: ''
+    secondaryDarkColor: '',
+    logoImage: '',
+    logoImageCss: ''
 };
