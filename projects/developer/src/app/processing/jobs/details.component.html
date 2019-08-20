@@ -4,6 +4,12 @@
         {{ job.job_type.title }} v{{ job.job_type.version }}
         <i class="fa fa-fw fa-square" [ngClass]="job.statusClass" (mouseenter)="showStatus(status, $event)"
            (mouseleave)="hideStatus(status)"></i>
+           <div class="pull-right">
+           <button pButton type="button" icon="fa fa-ban" class="ui-button-primary job-details__control-btn"
+                   (click)="cancelJob(exe)" pTooltip="Cancel Job Execution" *ngIf="hasActiveJobExe"></button>
+           <button pButton type="button" icon="fa fa-repeat" class="ui-button-primary"
+                   (click)="requeueJob(exe)" pTooltip="Requeue Job"></button>
+       </div>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
     <div class="p-grid">
