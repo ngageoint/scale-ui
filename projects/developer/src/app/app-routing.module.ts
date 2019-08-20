@@ -28,37 +28,166 @@ import { WorkspacesComponent } from './system/workspaces/component';
 import { PendingChangesGuard } from './pending-changes.guard';
 
 const routes: Routes = [
-    { path: '', pathMatch: 'full', component: DashboardComponent },
-    { path: 'dashboard', redirectTo: '' },
-    { path: 'processing/jobs', component: JobsComponent },
-    { path: 'processing/jobs/:id', component: JobDetailsComponent },
-    { path: 'processing/running-jobs', component: RunningJobsComponent },
-    { path: 'processing/queued-jobs', component: QueuedJobsComponent },
-    { path: 'processing/job-type-history', component: JobTypeHistoryComponent },
-    { path: 'processing/job-type-history/:name', component: JobTypeHistoryDetailsComponent },
-    { path: 'processing/batches', component: BatchesComponent },
-    { path: 'processing/batches/:id', component: BatchDetailsComponent },
-    { path: 'processing/batches/create', component: BatchDetailsComponent },
-    { path: 'configuration/job-types', component: JobTypesComponent },
-    { path: 'configuration/job-types/:name/:version', component: JobTypesComponent },
-    { path: 'configuration/job-types/edit/:name/:version', component: JobTypesCreateComponent },
-    { path: 'configuration/job-types/create', component: JobTypesCreateComponent, canDeactivate: [PendingChangesGuard] },
-    { path: 'processing/recipes', component: RecipesComponent },
-    { path: 'processing/recipes/:id', component: RecipeDetailsComponent },
-    { path: 'configuration/recipe-types', component: RecipeTypesComponent },
-    { path: 'configuration/recipe-types/:name', component: RecipeTypesComponent, canDeactivate: [PendingChangesGuard] },
-    { path: 'data/feed', component: FeedComponent },
-    { path: 'data/ingest', component: IngestComponent },
-    { path: 'data/metrics', component: MetricsComponent },
-    { path: 'data/timeline', component: TimelineComponent },
-    { path: 'system/nodes', component: NodesComponent },
-    { path: 'system/strikes', component: StrikesComponent },
-    { path: 'system/strikes/:id', component: StrikesComponent, canDeactivate: [PendingChangesGuard]  },
-    { path: 'system/scans', component: ScansComponent },
-    { path: 'system/scans/:id', component: ScanDetailsComponent, canDeactivate: [PendingChangesGuard]  },
-    { path: 'system/status', component: SystemStatusComponent },
-    { path: 'system/workspaces', component: WorkspacesComponent },
-    { path: 'system/workspaces/:id', component: WorkspacesComponent, canDeactivate: [PendingChangesGuard] }
+    {
+        path: '',
+        pathMatch: 'full',
+        component: DashboardComponent,
+        data: {title: 'Dashboard | Scale'}
+    },
+    {
+        path: 'dashboard',
+        redirectTo: ''
+    },
+    {
+        path: 'processing/jobs',
+        component: JobsComponent,
+        data: {title: 'Jobs | Scale'}
+    },
+    {
+        path: 'processing/jobs/:id',
+        component: JobDetailsComponent,
+        data: {title: 'Job Details | Scale'}
+    },
+    {
+        path: 'processing/running-jobs',
+        component: RunningJobsComponent,
+        data: {title: 'Running Jobs | Scale'}
+    },
+    {
+        path: 'processing/queued-jobs',
+        component: QueuedJobsComponent,
+        data: {title: 'Queued Jobs | Scale'}
+    },
+    {
+        path: 'processing/job-type-history',
+        component: JobTypeHistoryComponent,
+        data: {title: 'Job Type History | Scale'}
+    },
+    {
+        path: 'processing/job-type-history/:name',
+        component: JobTypeHistoryDetailsComponent,
+        data: {title: 'Job Type History Details | Scale'}
+    },
+    {
+        path: 'processing/batches',
+        component: BatchesComponent,
+        data: {title: 'Batches | Scale'}
+    },
+    {
+        path: 'processing/batches/:id',
+        component: BatchDetailsComponent,
+        data: {title: 'Batch Details | Scale'}
+    },
+    {
+        path: 'processing/batches/create',
+        component: BatchDetailsComponent,
+        data: {title: 'Create Batch | Scale'}
+    },
+    {
+        path: 'configuration/job-types',
+        component: JobTypesComponent,
+        data: {title: 'Job Types | Scale'}
+    },
+    {
+        path: 'configuration/job-types/:name/:version',
+        component: JobTypesComponent,
+        data: {title: 'Job Type Details | Scale'}
+    },
+    {
+        path: 'configuration/job-types/edit/:name/:version',
+        component: JobTypesCreateComponent,
+        data: {title: 'Edit Job Types | Scale'}
+    },
+    {
+        path: 'configuration/job-types/create',
+        component: JobTypesCreateComponent,
+        canDeactivate: [PendingChangesGuard],
+        data: {title: 'Create Job Types | Scale'}
+    },
+    {
+        path: 'processing/recipes',
+        component: RecipesComponent,
+        data: {title: 'Recipes | Scale'}
+    },
+    {
+        path: 'processing/recipes/:id',
+        component: RecipeDetailsComponent,
+        data: {title: 'Recipe Details | Scale'}
+    },
+    {
+        path: 'configuration/recipe-types',
+        component: RecipeTypesComponent,
+        data: {title: 'Recipe Types | Scale'}
+    },
+    {
+        path: 'configuration/recipe-types/:name',
+        component: RecipeTypesComponent,
+        canDeactivate: [PendingChangesGuard],
+        data: {title: 'Recipe Type Details | Scale'}
+    },
+    {
+        path: 'data/feed',
+        component: FeedComponent,
+        data: {title: 'Data Feed | Scale'}
+    },
+    {
+        path: 'data/ingest',
+        component: IngestComponent,
+        data: {title: 'Injest Records | Scale'}
+    },
+    {
+        path: 'data/metrics',
+        component: MetricsComponent,
+        data: {title: 'Metrics | Scale'}
+    },
+    {
+        path: 'data/timeline',
+        component: TimelineComponent,
+        data: {title: 'Timeline | Scale'}
+    },
+    {
+        path: 'system/nodes',
+        component: NodesComponent,
+        data: {title: 'Nodes | Scale'}
+    },
+    {
+        path: 'system/strikes',
+        component: StrikesComponent,
+        data: {title: 'Strikes | Scale'}
+    },
+    {
+        path: 'system/strikes/:id',
+        component: StrikesComponent,
+        canDeactivate: [PendingChangesGuard],
+        data: {title: 'Strike Details | Scale'}
+    },
+    {
+        path: 'system/scans',
+        component: ScansComponent,
+        data: {title: 'Scans | Scale'}
+    },
+    {
+        path: 'system/scans/:id',
+        component: ScanDetailsComponent,
+        canDeactivate: [PendingChangesGuard],
+        data: {title: 'Scan Details | Scale'}
+    },
+    {
+        path: 'system/status',
+        component: SystemStatusComponent,
+        data: {title: 'System Status | Scale'}
+    },
+    {
+        path: 'system/workspaces',
+        component: WorkspacesComponent,
+        data: {title: 'Workspaces | Scale'}
+    },
+    {
+        path: 'system/workspaces/:id',
+        component: WorkspacesComponent,
+        canDeactivate: [PendingChangesGuard],
+        data: {title: 'Workspace Details | Scale'}
+    }
 ];
 
 @NgModule({
