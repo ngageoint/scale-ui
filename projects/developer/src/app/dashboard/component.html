@@ -33,14 +33,56 @@
                 </p-scrollPanel>
             </p-panel>
         </div>
-        <div class="p-col-12 p-md-12 p-lg-7 p-xl-7">
+        <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
+            <div>
+                <dev-temporal-filter [started]="started" [ended]="ended" (dateFilterApply)="onDateFilterApply($event)"
+                    (dateRangeSelected)="onDateRangeSelected($event)" [show6hButton]="false" [show12hButton]="false">
+                </dev-temporal-filter>
+            </div>
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="dataFeedChartTitle">
-                    <dev-data-feed></dev-data-feed>
+                <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
+                    <dev-job-activity></dev-job-activity>
                 </p-panel>
             </div>
         </div>
-        <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
+        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__all-container">
+            <p-panel [header]="'Job Types (' + allJobTypes.length + ')'">
+                <p-scrollPanel>
+                    <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th *ngFor="let col of columns">
+                                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                            class="column-filter">
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td>
+                                    <dev-job-type-item [item]="rowData"></dev-job-type-item>
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-scrollPanel>
+            </p-panel>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
+            <div class="charts" *ngIf="allJobTypes.length > 0">
+                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
+                    <dev-job-history></dev-job-history>
+                </p-panel>
+                <div>
+                    <div class="charts" *ngIf="allJobTypes.length > 0">
+                        <p-panel [header]="dataFeedChartTitle">
+                            <dev-data-feed></dev-data-feed>
+                        </p-panel>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
             <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
                 <div class="dashboard__error-chart" *ngIf="dataFavs">
                     <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
@@ -62,41 +104,6 @@
                     <span *ngIf="allJobTypes.length === 0">No job types found.</span>
                 </div>
             </p-panel>
-        </div>
-    </div>
-    <div class="p-grid">
-        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__all-container">
-            <p-panel [header]="'Job Types (' + allJobTypes.length + ')'">
-                <p-scrollPanel>
-                    <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th *ngFor="let col of columns">
-                                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                                           class="column-filter">
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr [pSelectableRow]="rowData">
-                                <td>
-                                    <dev-job-type-item [item]="rowData"></dev-job-type-item>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-scrollPanel>
-            </p-panel>
-        </div>
-        <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
-            <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
-                    <dev-job-history></dev-job-history>
-                </p-panel>
-                <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
-                    <dev-job-activity></dev-job-activity>
-                </p-panel>
-            </div>
-        </div>
+        </div> -->
     </div>
 </div>

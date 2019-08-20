@@ -6,6 +6,8 @@ import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { ColorService } from '../common/services/color.service';
 import { JobType } from '../configuration/job-types/api.model';
+import { TemporalFilterComponent } from '../common/components/temporal-filter/component';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 @Component({
     selector: 'dev-dashboard',
@@ -168,5 +170,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});
         });
+    }
+
+    onDateFilterApply(data: any) {
+        // this.jobs = null;
+        // this.started = data.started;
+        // this.ended = data.ended;
+        // this.datatableOptions = Object.assign(this.datatableOptions, {
+        //     first: 0,
+        //     started: moment.utc(this.started, environment.dateFormat).toISOString(),
+        //     ended: moment.utc(this.ended, environment.dateFormat).toISOString()
+        // });
+        // this.updateOptions();
+        console.log('asdf')
+    }
+
+    onDateRangeSelected(data: any) {
+        // this.jobs = null;
+        // this.started = moment.utc().subtract(data.range, data.unit).toISOString();
+        // this.ended = moment.utc().toISOString();
+        // this.datatableOptions = Object.assign(this.datatableOptions, {
+        //     first: 0,
+        //     started: this.started,
+        //     ended: this.ended,
+        //     duration: moment.duration(data.range, data.unit).toISOString()
+        // });
+        // this.updateOptions();
+        console.log('asdf')
     }
 }
