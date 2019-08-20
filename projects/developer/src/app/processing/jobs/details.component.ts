@@ -31,6 +31,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     options: any;
     data: any;
     hasActiveJobExe: boolean;
+    canRequeue: boolean;
     selectedJobExe: any;
     logDisplay: boolean;
     inputClass = 'p-col-12';
@@ -161,11 +162,17 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                 .subscribe(exeData => {
                     this.loadingExecutions = false;
                     this.jobExecutions = JobExecution.transformer(exeData.results);
+                    // Order the job-exes by created so index [0] will be the latest.
+                    this.jobExecutions.sort(function(a,b) {
+                        return a.created-b.created
+                    });
+                    // If a job_exe is currently in these states we will let the user cancel them
                     for (let i of this.jobExecutions) {
-                        if (i.status === 'RUNNING' || i.status === 'QUEUED') {
+                        if (['RUNNING', 'QUEUED', 'PENDING'].includes(i.status))  {
                             this.hasActiveJobExe = true;
-                            console.log('asdfasdfasdf')
                         }
+                    // If the most recent job_exe is able to be requeued
+                    if (['FAILED', 'CANCELED'].includes(this.jobExecutions[0].status)) this.canRequeue = true;
                     }
                 }, err => {
                     this.loadingExecutions = false;
@@ -185,56 +192,21 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         return `&#x${code};`;
     }
 
-    requeueJob(id: number) {
-        // this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
-        // let errorCategories = null;
-        // if (this.datatableOptions.error_category) {
-        //     if (Array.isArray(this.datatableOptions.error_category)) {
-        //         errorCategories = this.datatableOptions.error_category;
-        //     } else {
-        //         errorCategories = [this.datatableOptions.error_category];
-        //     }
-        // }
-        // let jobTypeNames = null;
-        // if (this.datatableOptions.job_type_name) {
-        //     if (Array.isArray(this.datatableOptions.job_type_name)) {
-        //         jobTypeNames = this.datatableOptions.job_type_name;
-        //     } else {
-        //         jobTypeNames = [this.datatableOptions.job_type_name];
-        //     }
-        // }
-        // let status = null;
-        // if (this.datatableOptions.status) {
-        //     if (Array.isArray(this.datatableOptions.status)) {
-        //         _.forEach(this.datatableOptions.status, s => {
-        //             if (s === 'FAILED' || s === 'CANCELED') {
-        //                 status = s;
-        //             }
-        //         });
-        //     } else {
-        //         status = this.datatableOptions.status;
-        //     }
-        // }
-        // if (!jobsParams) {
-        //     jobsParams = {
-        //         started: this.datatableOptions.started,
-        //         ended: this.datatableOptions.ended,
-        //         error_categories: errorCategories,
-        //         status: status,
-        //         job_type_names: jobTypeNames
-        //     };
-        //     // remove null properties
-        //     jobsParams = _.pickBy(jobsParams, d => {
-        //         return d !== null && typeof d !== 'undefined' && d !== '';
-        //     });
-        // }
-        // this.jobsApiService.requeueJobs(jobsParams)
-        //     .subscribe(() => {
-        //         this.updateData();
-        //     }, err => {
-        //         this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
-        //     });
-        console.log(id);
+    requeueJob(e) {
+        this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
+
+        var jobsParams = {
+            job_type_names: [this.job.job_type.name],
+            job_ids: [this.job.id],
+            status: this.jobExecutions[0].status
+        };
+
+        this.jobsApiService.requeueJobs(jobsParams)
+            .subscribe(() => {
+                this.getJobDetail(this.job.id);
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
+            });
     }
 
     cancelJob(e) {

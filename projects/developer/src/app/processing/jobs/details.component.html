@@ -6,9 +6,9 @@
            (mouseleave)="hideStatus(status)"></i>
            <div class="pull-right">
            <button pButton type="button" icon="fa fa-ban" class="ui-button-primary job-details__control-btn"
-                   (click)="cancelJob(exe)" pTooltip="Cancel Job Execution" *ngIf="hasActiveJobExe"></button>
+                   (click)="cancelJob()" pTooltip="Cancel Job Execution" *ngIf="hasActiveJobExe"></button>
            <button pButton type="button" icon="fa fa-repeat" class="ui-button-primary"
-                   (click)="requeueJob(exe)" pTooltip="Requeue Job"></button>
+                   (click)="requeueJob()" pTooltip="Requeue Job" *ngIf="canRequeue"></button>
        </div>
     </h2>
     <a routerLink="/processing/jobs"><i class="fa fa-caret-left"></i> Jobs List</a>
