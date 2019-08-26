@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 
 import { environment } from '../../../../environments/environment';
@@ -27,7 +28,8 @@ export class TemporalFilterComponent implements OnInit {
     isMobile: boolean;
 
     constructor(
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private messageService: MessageService,
     ) {}
 
     onStartSelect(e) {
@@ -50,15 +52,20 @@ export class TemporalFilterComponent implements OnInit {
         this.ended = moment.utc().toISOString();
         this.dateRangeSelected.emit({ unit: unit, range: range });
     }
-    // Starting to add share link option
-    // shareLink(event) {
-    //     document.addEventListener('copy', (e: ClipboardEvent) => {
-    //         e.clipboardData.setData('text/plain', (event));
-    //         e.preventDefault();
-    //         document.removeEventListener('copy', null);
-    //       });
-    //       document.execCommand('copy');
-    // }
+
+    shareLink(event) {
+        document.addEventListener('copy', (e: ClipboardEvent) => {
+            e.clipboardData.setData('text/plain', (location.href));
+            e.preventDefault();
+            document.removeEventListener('copy', null);
+          });
+          document.execCommand('copy');
+          this.messageService.add({
+            severity: 'info',
+            summary: 'Copy Successful',
+            detail: 'Link to specific URL has been copied.'
+        });
+    }
 
     ngOnInit() {
         this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
