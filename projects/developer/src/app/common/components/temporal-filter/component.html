@@ -11,8 +11,8 @@
     </div>
     <button pButton class="temporal-filter__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
             (click)="onDateFilterApply()"></button>
-    <button pButton type="button" class="ui-button-primary share_btn"  label="Share" icon="fa fa-share"
-            pTooltip="Share a link to view the selected timefilter." (click)="shareLink($event)"></button>
+    <!-- <button pButton type="button" class="ui-button-primary share_btn"  label="Share" icon="fa fa-share" iconPos="right" pTooltip="Share a link to view the selcted timestamp."
+            (click)="shareLink()"></button> -->
     <div class="temporal-filter__date-filter-ranges" *ngIf="!isMobile">
         <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 6 Hours"
                 (click)="setDateFilterRange('h', 6)"></button>
