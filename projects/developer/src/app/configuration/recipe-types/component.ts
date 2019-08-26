@@ -141,7 +141,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators],
             definition: this.fb.group({
                 input: this.fb.group({
                     files: this.fb.array([]),
@@ -444,6 +444,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     validateRecipeType() {
         const cleanRecipeType = RecipeType.cleanRecipeTypeForValidate(this.selectedRecipeTypeDetail);
+        console.log(cleanRecipeType);
         this.recipeTypesApiService.validateRecipeType(cleanRecipeType).subscribe(result => {
             this.validated = result.is_valid;
             if (result.is_valid) {
