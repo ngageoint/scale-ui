@@ -14,31 +14,31 @@ export class AppConfigService {
         private themeService: ThemeService
     ) {}
 
-    loadAppConfig(path: string) {
+    loadAppConfig(path: string): Promise<any> {
         return this.http.get(path)
             .toPromise()
             .then((data: any) => {
-                environment.apiDefaultVersion = data.apiDefaultVersion;
-                environment.apiPrefix = data.apiPrefix;
-                environment.apiVersions = data.apiVersions;
-                environment.auth = data.auth;
-                environment.dateFormat = data.dateFormat;
-                environment.defaultTheme = data.defaultTheme;
-                environment.documentation = data.documentation;
-                environment.siloUrl = data.siloUrl;
-                environment.themeKey = data.themeKey;
-                environment.primaryColor = data.primaryColor;
-                environment.secondaryLightColor = data.secondaryLightColor;
-                environment.secondaryDarkColor = data.secondaryDarkColor;
+                // loop over all keys in the appconfig.json file
+                Object.keys(data).forEach(key => {
+                    // try to parse the values as json
+                    let value = data[key];
+                    try {
+                        value = JSON.parse(value);
+                    } catch (e) {
+                        // ignore, not valid json value so default to original
+                    }
 
+                    // set the camelcased version of the key in environments
+                    environment[_.camelCase(key)] = value;
+                });
                 // update themes with values from config
                 const themes = this.themeService.getThemes();
                 _.forEach(themes, theme => {
                     if (theme) {
                         this.themeService.updateTheme(theme.name, {
-                            '--scale-primary': data.primaryColor,
-                            '--scale-secondary-light': data.secondaryLightColor,
-                            '--scale-secondary-dark': data.secondaryDarkColor
+                            '--scale-primary': environment.primaryColor,
+                            '--scale-secondary-light': environment.secondaryLightColor,
+                            '--scale-secondary-dark': environment.secondaryDarkColor
                         });
                     }
                 });

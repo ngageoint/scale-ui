@@ -10,13 +10,9 @@ export const environment = {
     apiDefaultVersion: '',
     apiPrefix: '',
     apiVersions: [],
-    auth: {
-        enabled: false,
-        scheme: {
-            type: '',
-            url: ''
-        }
-    },
+    authEnabled: false,
+    authSchemeType: '',
+    authSchemeUrl: '',
     dateFormat: '',
     defaultTheme: '',
     documentation: '',
@@ -24,7 +20,9 @@ export const environment = {
     themeKey: '',
     primaryColor: '',
     secondaryLightColor: '',
-    secondaryDarkColor: ''
+    secondaryDarkColor: '',
+    logoImage: '',
+    logoImageCss: ''
 };
 
 /*
