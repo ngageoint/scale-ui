@@ -12,7 +12,7 @@ import { DataService } from './data.service';
 })
 export class ProfileService {
     apiPrefix: string;
-    isAuthenticated = new BehaviorSubject(!environment.auth.enabled);
+    isAuthenticated = new BehaviorSubject(!environment.authEnabled);
 
     constructor(
         private http: HttpClient
@@ -41,14 +41,14 @@ export class ProfileService {
     }
 
     getLogin(): Observable<any> {
-        return this.http.get<any>(`${environment.auth.scheme.url}`)
+        return this.http.get<any>(`${environment.authSchemeUrl}`)
             .pipe(
                 catchError(DataService.handleError)
             );
     }
 
     login(data): Observable<any> {
-        return this.http.post<any>(`${environment.auth.scheme.url}`, data)
+        return this.http.post<any>(`${environment.authSchemeUrl}`, data)
             .pipe(
                 catchError(DataService.handleError)
             );

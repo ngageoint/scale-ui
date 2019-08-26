@@ -2,13 +2,9 @@
     "apiDefaultVersion": "v6",
     "apiPrefix": "/mocks",
     "apiVersions": [],
-    "auth": {
-        "enabled": false,
-        "scheme": {
-            "type": "external",
-            "url": ""
-        }
-    },
+    "authEnabled": false,
+    "authSchemeType": "external",
+    "authSchemeUrl": "/api/login/",
     "dateFormat": "YYYY-MM-DD HH:mm:ss[Z]",
     "defaultTheme": "light",
     "documentation": "http://ngageoint.github.io/scale/docs/index.html",
@@ -16,5 +12,7 @@
     "themeKey": "scale.theme",
     "primaryColor": "#017cce",
     "secondaryLightColor": "#5c97bf",
-    "secondaryDarkColor": "#24567f"
+    "secondaryDarkColor": "#24567f",
+    "logoImageCss": "",
+    "logoImage": ""
 }

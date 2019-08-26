@@ -195,7 +195,7 @@ export class NodesComponent implements OnInit, OnDestroy {
     private getNodesStatus() {
         if (!this.nodesStatus || this.nodesStatus.length === 0) {
             const status = this.statusService.getStatus();
-            this.nodesStatus = status ? status.data.nodes : [];
+            this.nodesStatus = status ? status.nodes : [];
             this.getNodes();
         }
         this.subscription = this.statusService.statusUpdated.subscribe(status => {

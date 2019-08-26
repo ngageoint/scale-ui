@@ -1,6 +1,6 @@
 <div class="footer">
-    <div *ngIf="!env.auth.enabled"></div>
-    <ul *ngIf="env.auth.enabled">
+    <div *ngIf="!env.authEnabled"></div>
+    <ul *ngIf="env.authEnabled">
         <li *ngIf="userProfile">
             <strong>Authenticated User:</strong> {{ userProfile.first_name }} {{ userProfile.last_name }}
         </li>
@@ -16,7 +16,7 @@
 </div>
 <p-overlayPanel styleClass="footer__profile-overlaypanel" appendTo="body" [dismissable]="true"
                 (onShow)="handleOnProfileShow()" #profileOp>
-    <div class="footer__profile-login" *ngIf="!isAuthenticated && env.auth.scheme.type === 'form'">
+    <div class="footer__profile-login" *ngIf="!isAuthenticated && env.authSchemeType === 'form'">
         <input pInputText type="text" placeholder="Username" [(ngModel)]="username" (keypress)="handleKeyPress($event)"
                #user/>
         <input pInputText type="password" placeholder="Password" [(ngModel)]="password"
@@ -24,7 +24,7 @@
         <button pButton type="button" class="ui-button-secondary" icon="fa fa-sign-in" label="Login" (click)="login()"
                 [disabled]="!username || !password"></button>
     </div>
-    <div *ngIf="!isAuthenticated && env.auth.scheme.type === 'external'">
-        <a [href]="env.auth.scheme.url"><i class="fa fa-external-link"></i> Continue to login</a>
+    <div *ngIf="!isAuthenticated && env.authSchemeType === 'external'">
+        <a [href]="env.authSchemeUrl"><i class="fa fa-external-link"></i> Continue to login</a>
     </div>
 </p-overlayPanel>
