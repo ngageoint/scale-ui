@@ -115,6 +115,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
         if (this.createForm.dirty && !this.isSaving) {
+            console.log(this.isSaving);
             return false;
         } else {
             if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
@@ -445,7 +446,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
     validateRecipeType() {
         const cleanRecipeType = RecipeType.cleanRecipeTypeForValidate(this.selectedRecipeTypeDetail);
-        console.log(cleanRecipeType);
         this.recipeTypesApiService.validateRecipeType(cleanRecipeType).subscribe(result => {
             this.validated = result.is_valid;
             if (result.is_valid) {
@@ -461,7 +461,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
             });
-            console.log(this.validated);
         }, err => {
             console.log(err);
             this.messageService.add({ severity: 'error', summary: 'Error validating recipe type', detail: err.statusText });
@@ -469,7 +468,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     saveRecipeType() {
+        console.log(this.isSaving);
         this.isSaving = true;
+        console.log(this.isSaving);
         const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
         if (this.recipeTypeName === 'create') {
             this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
