@@ -25,6 +25,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private routeParams: any;
     loading: boolean;
     isEditing: boolean;
+    isSaving = false;
     validated: boolean;
     strikes: SelectItem[] = [];
     selectedStrikeDetail: any;
@@ -57,7 +58,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty || this.ingestFileForm.dirty ) {
+        if (this.createForm.dirty || this.ingestFileForm.dirty && !this.isSaving) {
             return false;
         } else {
             return true;
@@ -147,6 +148,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private initStrikeForm() {
+        this.isSaving = false;
         if (this.selectedStrikeDetail) {
             this.workspacesOptions = [];
             this.recipeOptions = [];
@@ -200,6 +202,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private initEdit() {
+        this.isSaving = false;
         if (this.workspaces.length === 0) {
             this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
                 // set up workspaces
@@ -334,6 +337,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
+        this.isSaving = true;
         if (this.selectedStrikeDetail.id) {
             // edit strike
             this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(() => {

@@ -26,6 +26,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @ViewChild('addRemoveDialog') addRemoveDialog: Dialog;
     private routeParams: any;
     private _isEditing = false;
+    isSaving = false;
     showActive = true;
     activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
@@ -113,7 +114,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty) {
+        if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
             if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
@@ -468,6 +469,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     saveRecipeType() {
+        this.isSaving = true;
         const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
         if (this.recipeTypeName === 'create') {
             this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
@@ -571,6 +573,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.isSaving = false;
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = _.orderBy(data.results, ['title', 'version'], ['asc', 'asc']);
         });

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
@@ -10,6 +10,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 import { BatchesApiService } from './api.service';
 import { Batch } from './api.model';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'dev-batch-details',
@@ -22,6 +23,7 @@ export class BatchDetailsComponent implements OnInit {
     createFormSubscription: any;
     loading: boolean;
     isEditing: boolean;
+    isSaving = false;
     batch: any;
     recipeType: RecipeType;
     recipeTypeOptions: SelectItem[] = [];
@@ -38,6 +40,17 @@ export class BatchDetailsComponent implements OnInit {
         private recipeTypesApiService: RecipeTypesApiService,
         private batchesApiService: BatchesApiService
     ) {}
+
+    @HostListener('window:beforeunload')
+    @HostListener('window:popstate')
+    canDeactivate(): Observable<boolean> | boolean {
+
+        if (this.createForm.dirty && !this.isSaving) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private initFormGroups() {
         if (this.batch.id === 'create') {
@@ -211,6 +224,7 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     onSaveClick() {
+        this.isSaving = true;
         if (this.batch.id) {
             // edit batch
             this.batchesApiService.editBatch(this.batch).subscribe(() => {
@@ -252,6 +266,7 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isSaving = false;
         this.getRecipeTypes();
         let id = null;
         if (this.route && this.route.paramMap) {
