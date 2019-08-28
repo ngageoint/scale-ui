@@ -50,16 +50,42 @@ export class Strike {
     }
 
     public static cleanStrikeForSave(strike) {
-        const returnStrike = {
-            title: strike.title,
-            description: strike.description,
-            configuration: {
-                workspace: strike.configuration.workspace,
-                monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
-                files_to_ingest: strike.configuration.files_to_ingest,
-                recipe: strike.configuration.recipe
-            }
-        };
+        let returnStrike;
+        if (!strike.configuration.monitor.credentials.secret_access_key) {
+            returnStrike = {
+                title: strike.title,
+                description: strike.description,
+                configuration: {
+                    workspace: strike.configuration.workspace,
+                    monitor: {
+                        type: strike.configuration.monitor.type,
+                        sqs_name: strike.configuration.monitor.sqs_name,
+                        region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                    },
+                    files_to_ingest: strike.configuration.files_to_ingest,
+                    recipe: strike.configuration.recipe
+                }
+            };
+        } else {
+            returnStrike = {
+                title: strike.title,
+                description: strike.description,
+                configuration: {
+                    workspace: strike.configuration.workspace,
+                    monitor: {
+                        type: strike.configuration.monitor.type,
+                        sqs_name: strike.configuration.monitor.sqs_name,
+                        credentials: _.pickBy(strike.configuration.monitor.credentials,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                    },
+                    files_to_ingest: strike.configuration.files_to_ingest,
+                    recipe: strike.configuration.recipe
+                }
+            };
+        }
         return _.pickBy(returnStrike, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
