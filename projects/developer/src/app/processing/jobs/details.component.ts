@@ -162,18 +162,19 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                     this.loadingExecutions = false;
                     this.jobExecutions = JobExecution.transformer(exeData.results);
                     // Order the job-exes by created so index [0] will be the latest.
-                    this.jobExecutions.sort(function(a,b) {
-                        return a.created-b.created
+                    this.jobExecutions.sort(function(a, b) {
+                        return a.created - b.created;
                     });
                     // If a job_exe is currently in these states we will let the user cancel them
-                    for (let i of this.jobExecutions) {
-                        if (['RUNNING', 'QUEUED', 'PENDING'].includes(i.status))  {
+                    for (const i of this.jobExecutions) {
+                        if (['RUNNING', 'QUEUED', 'PENDING'].includes(i.status)) {
                             this.hasActiveJobExe = true;
                         }
-                    // If the most recent job_exe is able to be requeued
-                    if (['FAILED', 'CANCELED'].includes(this.jobExecutions[0].status)) {
-                        this.canRequeue = true;
-                    }
+
+                        // If the most recent job_exe is able to be requeued
+                        if (['FAILED', 'CANCELED'].includes(this.jobExecutions[0].status)) {
+                            this.canRequeue = true;
+                        }
                     }
                 }, err => {
                     this.loadingExecutions = false;
@@ -196,7 +197,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     requeueJob(e) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
 
-        var jobsParams = {
+        const jobsParams = {
             job_type_names: [this.job.job_type.name],
             job_ids: [this.job.id],
             status: this.jobExecutions[0].status
@@ -213,7 +214,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     cancelJob(e) {
         this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
 
-        var jobsParams = {
+        const jobsParams = {
             job_type_names: [this.job.job_type.name],
             job_ids: [this.job.id]
         };
