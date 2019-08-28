@@ -9,7 +9,6 @@ import { Job } from './api.model';
 import { JobExecution } from './execution.model';
 import { JobsApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
-import { ConstantPool } from '@angular/compiler';
 
 @Component({
     selector: 'dev-job-details',
@@ -172,7 +171,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                             this.hasActiveJobExe = true;
                         }
                     // If the most recent job_exe is able to be requeued
-                    if (['FAILED', 'CANCELED'].includes(this.jobExecutions[0].status)) this.canRequeue = true;
+                    if (['FAILED', 'CANCELED'].includes(this.jobExecutions[0].status)) {
+                        this.canRequeue = true;
+                    }
                     }
                 }, err => {
                     this.loadingExecutions = false;
