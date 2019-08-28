@@ -12,6 +12,9 @@ RUN apk -U --no-cache add jq bash && chmod 777 /usr/share/nginx/html
 
 ENV CONFIG_JSON=/usr/share/nginx/html/assets/appConfig.json
 ENV NGINX_CONF=/etc/nginx/conf.d/default.conf
+
+ENV SCALEUI_API_PREFIX=/api
+ENV SCALEUI_SILO_URL=/silo
 ENV API_URL=http://scale-webserver.marathon.l4lb.thisdcos.directory:80/
 ENV SILO_URL=http://scale-silo.marathon.l4lb.thisdcos.directory:9000/
 
