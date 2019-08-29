@@ -21,6 +21,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     private routeParams: any;
     loading: boolean;
     isEditing: boolean;
+    isSaving = false;
     validated: boolean;
     totalRecords: number;
     workspaces: SelectItem[] = [];
@@ -51,7 +52,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty ) {
+        if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
             return true;
@@ -119,6 +120,7 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     private initWorkspaceForm() {
+        this.isSaving = false;
         if (this.selectedWorkspaceDetail) {
             // determine which broker fields to display
             this.initBroker();
@@ -233,10 +235,10 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
+        this.isSaving = true;
         if (this.selectedWorkspaceDetail.id) {
             // edit workspace
             this.workspacesApiService.editWorkspace(this.selectedWorkspaceDetail.id, this.selectedWorkspaceDetail).subscribe(() => {
-                this.createForm.dirty = false;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace successfully edited' });
                 this.redirect(this.selectedWorkspaceDetail.id);
             }, err => {
@@ -246,7 +248,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         } else {
             // create workspace
             this.workspacesApiService.createWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
-                this.createForm.dirty = false;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Workspace successfully created' });
                 this.redirect(data.id);
             }, err => {
