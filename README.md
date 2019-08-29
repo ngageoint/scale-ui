@@ -53,16 +53,16 @@ These are the keys in `appConfig.json` / their environment variable equivalents 
 - `authEnabled`/`SCALEUI_AUTH_ENABLED` (`false`) - boolean for whether or not the auth is enabled for the backend (turned off for local dev against mock API)
 - `authSchemeType`/`SCALEUI_AUTH_SCHEME_TYPE` (`"external"`) - how authentication is handled, either `external`, `form`, or `geoaxis`
 - `authSchemeUrl`/`SCALEUI_AUTH_SCHEME_URL` (`"/api/login/"`) - the URL endpoint for the login route of the authentication backend
-- `dateFormat`/`SCALEUI_` (`"YYYY-MM-DD HH:mm:ss[Z]"`) - the Moment.JS format string for formatting all dates
-- `defaultTheme`/`SCALEUI_` (`"light"`) - the theme to default new users to, either `light` or `dark`
-- `documentation`/`SCALEUI_` (`"http://ngageoint.github.io/scale/docs/index.html"`) - the full external link to documentation (used in the footer)
-- `siloUrl`/`SCALEUI_` (`"/mocks/silo"`) - the full endpoint to Silo
-- `themeKey`/`SCALEUI_` (`"scale.theme"`) - the key for retrieving user-specified themes from their localStorage
-- `primaryColor`/`SCALEUI_` (`"#017cce"`) - primary color in the theme (links, menus, etc), any rgba or hex value
-- `secondaryLightColor`/`SCALEUI_` (`"#5c97bf"`)
-- `secondaryDarkColor`/`SCALEUI_` (`"#24567f"`)
-- `logoImageCss`/`SCALEUI_` (`""`) - any styles applied directly to the logo element
-- `logoImage`/`SCALEUI_` (`""`) - any URL or data URL for the logo at the top, defaults to the standard Scale logo
+- `dateFormat`/`SCALEUI_DATE_FORMAT` (`"YYYY-MM-DD HH:mm:ss[Z]"`) - the Moment.JS format string for formatting all dates
+- `defaultTheme`/`SCALEUI_DEFAULT_THEME` (`"light"`) - the theme to default new users to, either `light` or `dark`
+- `documentation`/`SCALEUI_DOCUMENTATION` (`"http://ngageoint.github.io/scale/docs/index.html"`) - the full external link to documentation (used in the footer)
+- `siloUrl`/`SCALEUI_SILO_URL` (`"/mocks/silo"`) - the full endpoint to Silo
+- `themeKey`/`SCALEUI_THEME_KEY` (`"scale.theme"`) - the key for retrieving user-specified themes from their localStorage
+- `primaryColor`/`SCALEUI_PRIMARY_COLOR` (`"#017cce"`) - primary color in the theme (links, menus, etc), any rgba or hex value
+- `secondaryLightColor`/`SCALEUI_SECONDARY_LIGHT_COLOR` (`"#5c97bf"`)
+- `secondaryDarkColor`/`SCALEUI_SECONDARY_DARK_COLOR` (`"#24567f"`)
+- `logoImageCss`/`SCALEUI_LOGO_IMAGE_CSS` (`""`) - any styles applied directly to the logo element
+- `logoImage`/`SCALEUI_LOGO_IMAGE` (`""`) - any URL or data URL for the logo at the top, defaults to the standard Scale logo
 
 #### Customizing the logo
 
