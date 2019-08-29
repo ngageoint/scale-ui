@@ -15,6 +15,8 @@ import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
 
 @Component({
     selector: 'dev-jobs',
@@ -85,6 +87,8 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    sub: any;
+    subExpireTime: any;
 
     constructor(
         private dataService: DataService,
@@ -99,7 +103,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        this.datatableLoading = true;
+        if (!this.sub) this.datatableLoading = true;
         this.unsubscribe();
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
@@ -216,6 +220,10 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onDateFilterApply(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
         this.jobs = null;
         this.started = data.started;
         this.ended = data.ended;
@@ -226,8 +234,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
-    onDateRangeSelected(data: any) {
-        this.jobs = null;
+    getDateRangeSelected(data: any) {
         this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -237,6 +244,23 @@ export class JobsComponent implements OnInit, OnDestroy {
             duration: moment.duration(data.range, data.unit).toISOString()
         });
         this.updateOptions();
+    }
+    onDateRangeSelected(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
+        // set when the subscription expires and subscribe
+        this.subExpireTime = moment().add(10, 'minute') // expire 10 min after first request
+        this.sub = Observable.timer(0, 10000)
+            .subscribe(() => { 
+                this.getDateRangeSelected(data);
+                // expire subscription
+                if (moment().isSameOrAfter(this.subExpireTime)) {
+                    this.sub.unsubscribe();
+                    this.sub = null;
+                }
+            })
     }
     requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
@@ -435,6 +459,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        if (this.sub) this.sub.unsubscribe();
         this.unsubscribe();
     }
 }
