@@ -47,6 +47,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         if (this.selectedJobExe && this.job.execution.id === this.selectedJobExe.id) {
             this.selectedJobExe = _.clone(this.job.execution);
         }
+
+        if (data.notRetriedTooltip) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Job not retriable',
+                detail: data.notRetriedTooltip,
+                closable: true,
+            });
+        }
+
         const now = moment.utc();
         const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
         this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
