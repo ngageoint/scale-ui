@@ -2,33 +2,23 @@
     <div class="noWrap">
         <label>From:</label>
         <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
-                        (dateChange)="onStartSelect($event)"></utc-datepicker>
+                        (dateChange)="onStartSelect($event)" [ngClass]="applyTxtClass"></utc-datepicker>
     </div>
     <div class="noWrap">
         <label>To:</label>
         <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
-                        (dateChange)="onEndSelect($event)"></utc-datepicker>
+                        (dateChange)="onEndSelect($event)" [ngClass]="applyTxtClass"></utc-datepicker>
     </div>
-    <button pButton class="temporal-filter__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
+    <button pButton class="temporal-filter__date-filter-btn apply-" [ngClass]="applyBtnClass" label="Apply"
             (click)="onDateFilterApply()"></button>
-    <!-- <button pButton type="button" class="ui-button-primary share_btn"  label="Share" icon="fa fa-share" iconPos="right" pTooltip="Share a link to view the selcted timestamp."
-            (click)="shareLink()"></button> -->
-    <div class="temporal-filter__date-filter-ranges" *ngIf="!isMobile">
-        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 6 Hours"
-                (click)="setDateFilterRange('h', 6)"></button>
-        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 12 Hours"
-                (click)="setDateFilterRange('h', 12)"></button>
-        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 24 Hours"
-                (click)="setDateFilterRange('h', 24)"></button>
-        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 3 Days"
-                (click)="setDateFilterRange('d', 3)"></button>
-        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 7 Days"
-                (click)="setDateFilterRange('d', 7)"></button>
-    </div>
+
     <div class="temporal-filter__date-filter-dropdown">
+        <i class="fa fa-circle live-range-icon" [ngClass]="applyStatusClass"
+           [pTooltip]="liveRangeTooltip" tooltipPosition="bottom" placeholder="Bottom"></i>
+        <label>Live Range:</label>
         <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
                     (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
-                    [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+                    [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" [ngClass]="applyStatusClass">
         </p-dropdown>
     </div>
 </div>
