@@ -58,8 +58,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty || this.ingestFileForm.dirty && !this.isSaving) {
-            return false;
+        if (!this.isSaving) {
+            if (this.createForm.dirty || this.ingestFileForm.dirty) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -337,10 +341,10 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     onSaveClick() {
-        this.isSaving = true;
         if (this.selectedStrikeDetail.id) {
             // edit strike
             this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(() => {
+                this.isSaving = true;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully edited' });
                 this.redirect(this.selectedStrikeDetail.id);
             }, err => {
@@ -350,6 +354,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         } else {
             // create strike
             this.strikesApiService.createStrike(this.selectedStrikeDetail).subscribe(data => {
+                this.isSaving = true;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully created' });
                 this.redirect(data.id);
             }, err => {
