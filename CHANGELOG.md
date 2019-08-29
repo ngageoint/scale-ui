@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.8.0](https://github.com/ngageoint/scale-ui/compare/v0.7.0...v0.8.0) (2019-08-29)
+
+
+### Bug Fixes
+
+* **jobs:** corrected linting errors to allow for building ([52ff45c](https://github.com/ngageoint/scale-ui/commit/52ff45c))
+* **strike:** corrected strike configuration payload ([adf998a](https://github.com/ngageoint/scale-ui/commit/adf998a))
+* provide default values for environment variables ([02eb150](https://github.com/ngageoint/scale-ui/commit/02eb150))
+
+
+### Features
+
+* **jobs:** added requeue and cancel buttons to jobs page ([a6f86ef](https://github.com/ngageoint/scale-ui/commit/a6f86ef))
+
+
+
 ## [0.7.0](https://github.com/ngageoint/scale-ui/compare/v0.6.0...v0.7.0) (2019-08-20)
 
 
