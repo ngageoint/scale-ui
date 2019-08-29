@@ -114,8 +114,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty && !this.isSaving) {
-            console.log(this.isSaving);
+        if (this.createForm.dirty) {
             return false;
         } else {
             if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
@@ -468,9 +467,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     saveRecipeType() {
-        console.log(this.isSaving);
-        this.isSaving = true;
-        console.log(this.isSaving);
         const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
         if (this.recipeTypeName === 'create') {
             this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
@@ -481,6 +477,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.showConditions = false;
                 this.selectedRecipeTypeDetail = RecipeType.transformer(result);
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${result.title} successfully created` });
+                this.createForm.dirty = false;
                 // modify url without reloading view
                 window.history.pushState({}, '', `/configuration/recipe-types/${result.name}`);
             }, err => {
@@ -500,6 +497,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     summary: 'Success',
                     detail: `${this.selectedRecipeTypeDetail.title} successfully edited`
                 });
+                this.createForm.dirty = false;
             }, err => {
                 console.log(err);
                 this.messageService.add({ severity: 'error', summary: 'Error editing recipe type', detail: err.statusText });
