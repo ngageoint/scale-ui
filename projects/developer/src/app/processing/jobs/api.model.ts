@@ -22,7 +22,7 @@ export class Job {
     exeEndedTooltip: any;
     inputJson: any;
     outputJson: any;
-    notRetriedTooltip = ''
+    notRetriedTooltip = '';
 
     private static build(data) {
         if (data) {
@@ -129,7 +129,7 @@ export class Job {
         this.outputJson = this.output ? _.keys(this.output.json).length > 0 ? JSON.stringify(this.output.json, null, 2) : null : null;
 
         if (this.num_exes === this.max_tries) {
-            this.notRetriedTooltip = "Max number of execution attempts has been reached, won't be retried";
+            this.notRetriedTooltip = 'Max number of execution attempts has been reached, won\'t be retried';
         }
     }
 }
