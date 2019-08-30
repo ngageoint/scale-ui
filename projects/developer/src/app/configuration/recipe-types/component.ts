@@ -115,7 +115,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
         if (this.createForm.dirty && !this.isSaving) {
-            console.log(this.isSaving);
             return false;
         } else {
             if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
@@ -468,9 +467,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     saveRecipeType() {
-        console.log(this.isSaving);
         this.isSaving = true;
-        console.log(this.isSaving);
         const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
         if (this.recipeTypeName === 'create') {
             this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
