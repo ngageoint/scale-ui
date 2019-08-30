@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.1](https://github.com/ngageoint/scale-ui/compare/v0.8.0...v0.8.1) (2019-08-30)
+
+
+### Bug Fixes
+
+* **jobs:** added UI indication if job won't be retried ([5d7a43e](https://github.com/ngageoint/scale-ui/commit/5d7a43e))
+* moved all save+validate functions to buttons ([596cb90](https://github.com/ngageoint/scale-ui/commit/596cb90))
+
+
+
 ## [0.8.0](https://github.com/ngageoint/scale-ui/compare/v0.7.0...v0.8.0) (2019-08-29)
 
 
