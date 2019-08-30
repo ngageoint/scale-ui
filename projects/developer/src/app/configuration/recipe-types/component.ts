@@ -25,16 +25,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     @ViewChild('addRemoveDialog') addRemoveDialog: Dialog;
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.toggleEdit(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', command: () => { this.validateRecipeType(); } },
-        { label: 'Save', icon: 'fa fa-save', command: () => { this.saveRecipeType(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
-    ];
     private _isEditing = false;
+    isSaving = false;
     showActive = true;
     activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
@@ -71,7 +63,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
     autoUpdate = false;
-    items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
         { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
@@ -98,7 +89,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
     set isEditing(value: boolean) {
         this._isEditing = value;
-        this.items = value ? _.clone(this.editMenu) : _.clone(this.viewMenu);
     }
 
     constructor(
@@ -124,7 +114,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty) {
+        if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
             if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
@@ -152,7 +142,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators],
             definition: this.fb.group({
                 input: this.fb.group({
                     files: this.fb.array([]),
@@ -170,32 +160,16 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
-    private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
-        }
-    }
-
     private initRecipeTypeForm() {
         if (this.selectedRecipeTypeDetail) {
             // add the values from the object
             this.createForm.patchValue(this.selectedRecipeTypeDetail);
-
-            // modify form actions based on status
-            this.initValidation();
         }
 
         // listen for changes to createForm fields
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
-            this.initValidation();
         });
 
         this.conditionFormSubscription = this.conditionForm.valueChanges.subscribe(changes => {
@@ -448,7 +422,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    toggleEdit() {
+    onEditClick() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
         this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
@@ -479,19 +453,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     summary: 'Validation Successful',
                     detail: 'Recipe Type is valid and can be created.'
                 });
-                this.initValidation();
             }
             _.forEach(result.warnings, warning => {
-
-                // TODO: Temporay fix to remove the Recipe Type not found error just for creation.
-                // This will eventually be fixed on the backend and can be removed once Scale issue #1700 is closed.
-                if (this.recipeTypeName === 'create') {
-                    if (warning.name !== 'RECIPE_TYPE_NOT_FOUND') {
-                        this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
-                    }
-                } else {
-                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
-                }
+                this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
             });
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
@@ -503,6 +467,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     saveRecipeType() {
+        this.isSaving = true;
         const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
         if (this.recipeTypeName === 'create') {
             this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
@@ -606,6 +571,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.isSaving = false;
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = _.orderBy(data.results, ['title', 'version'], ['asc', 'asc']);
         });
