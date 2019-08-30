@@ -55,7 +55,8 @@ module.exports = function (request) {
                 category: 'none',
                 description: 'This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. This is just a test error to see what it looks like in the jobs table. '
             },
-            num_exes: 94,
+            max_tries: 3,
+            num_exes: Math.floor(Math.random() * (10 - 1 + 1) + 1),
             input_file_size: 79.8,
             source_started: '2015-08-28T17:55:41.005Z',
             source_ended: '2015-08-28T17:56:41.005Z',
