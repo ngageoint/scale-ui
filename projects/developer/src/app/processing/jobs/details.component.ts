@@ -51,7 +51,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         if (data.notRetriedTooltip) {
             this.messageService.add({
                 severity: 'warn',
-                summary: 'Job not retriable',
+                summary: 'Job max tries met',
                 detail: data.notRetriedTooltip,
                 closable: true,
             });
