@@ -3,6 +3,8 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 
@@ -44,9 +46,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized = false;
     subscription: any;
-    applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
-    selectedDateRange: any;
+    sub: any;
 
     constructor(
         private dataService: DataService,
@@ -60,7 +61,9 @@ export class RecipesComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        this.datatableLoading = true;
+        if (!this.sub) {
+            this.datatableLoading = true;
+        }
         this.unsubscribe();
         this.subscription = this.recipesApiService.getRecipes(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
@@ -152,15 +155,11 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.router.navigate([`/processing/recipes/${e.data.id}`]);
         }
     }
-    onStartSelect(e) {
-        this.started = moment.utc(e, environment.dateFormat).startOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
-    onEndSelect(e) {
-        this.ended = moment.utc(e, environment.dateFormat).endOf('d').format(environment.dateFormat);
-        this.applyBtnClass = 'ui-button-primary';
-    }
     onDateFilterApply(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
         this.recipes = null;
         this.started = data.started;
         this.ended = data.ended;
@@ -171,8 +170,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
-    onDateRangeSelected(data: any) {
-        this.recipes = null;
+    getDateRangeSelected(data: any) {
         this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -182,6 +180,16 @@ export class RecipesComponent implements OnInit, OnDestroy {
             duration: moment.duration(data.range, data.unit).toISOString()
         });
         this.updateOptions();
+    }
+    onDateRangeSelected(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
+        this.sub = Observable.timer(0, 10000)
+            .subscribe(() => {
+                this.getDateRangeSelected(data);
+            });
     }
     onClick(e) {
         e.stopPropagation();
@@ -222,6 +230,9 @@ export class RecipesComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
         this.unsubscribe();
     }
 }

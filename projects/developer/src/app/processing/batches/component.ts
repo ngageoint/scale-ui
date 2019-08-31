@@ -3,6 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -44,9 +46,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized = false;
     subscription: any;
-    applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
-    selectedDateRange: any;
+    sub: any;
 
     constructor(
         private dataService: DataService,
@@ -60,7 +61,9 @@ export class BatchesComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        this.datatableLoading = true;
+        if (!this.sub) {
+            this.datatableLoading = true;
+        }
         this.unsubscribe();
         this.subscription = this.batchesApiService.getBatches(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
@@ -154,6 +157,10 @@ export class BatchesComponent implements OnInit, OnDestroy {
         }
     }
     onDateFilterApply(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
         this.batches = null;
         this.started = data.started;
         this.ended = data.ended;
@@ -164,8 +171,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
-    onDateRangeSelected(data: any) {
-        this.batches = null;
+    getDateRangeSelected(data: any) {
         this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -175,6 +181,16 @@ export class BatchesComponent implements OnInit, OnDestroy {
             duration: moment.duration(data.range, data.unit).toISOString()
         });
         this.updateOptions();
+    }
+    onDateRangeSelected(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
+        this.sub = Observable.timer(0, 10000)
+            .subscribe(() => {
+                this.getDateRangeSelected(data);
+            });
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedBatchRows();
@@ -213,6 +229,9 @@ export class BatchesComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
         this.unsubscribe();
     }
 }

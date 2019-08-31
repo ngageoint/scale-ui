@@ -3,6 +3,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -14,9 +17,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/timer';
+
 
 @Component({
     selector: 'dev-jobs',
@@ -88,7 +89,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     subscription: any;
     isMobile: boolean;
     sub: any;
-    subExpireTime: any;
 
     constructor(
         private dataService: DataService,
@@ -103,7 +103,9 @@ export class JobsComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        if (!this.sub) this.datatableLoading = true;
+        if (!this.sub) {
+            this.datatableLoading = true;
+        }
         this.unsubscribe();
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
@@ -124,6 +126,13 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
 
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
+        // tried to remove fields from URL - this breaks the range selection updates every 10 seconds.
+        // if (this.sub) {
+        //     delete this.datatableOptions.started;
+        //     delete this.datatableOptions.ended;
+        // } else {
+        //     delete this.datatableOptions.duration;
+        // }
         this.router.navigate(['/processing/jobs'], {
             queryParams: this.datatableOptions as Params,
             replaceUrl: true
@@ -250,17 +259,10 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.sub.unsubscribe();
             this.sub = null;
         }
-        // set when the subscription expires and subscribe
-        this.subExpireTime = moment().add(10, 'minute') // expire 10 min after first request
         this.sub = Observable.timer(0, 10000)
-            .subscribe(() => { 
+            .subscribe(() => {
                 this.getDateRangeSelected(data);
-                // expire subscription
-                if (moment().isSameOrAfter(this.subExpireTime)) {
-                    this.sub.unsubscribe();
-                    this.sub = null;
-                }
-            })
+            });
     }
     requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
@@ -456,10 +458,23 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
             this.getJobTypes();
+            // tried to handle a URL with stary/stop or duration - this breaks all table loading
+            // if (this.datatableOptions.duration) {
+            //     var dur = this.datatableOptions.duration;
+            //     var query = {
+            //         'range': dur.replace(/\D/g, ""),
+            //         'unit': dur[dur.length -1]
+            //     }
+            //     this.onDateRangeSelected(query);
+            // } else {
+            //     this.onDateFilterApply(this.datatableOptions);
+            // }
         });
     }
     ngOnDestroy() {
-        if (this.sub) this.sub.unsubscribe();
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
         this.unsubscribe();
     }
 }
