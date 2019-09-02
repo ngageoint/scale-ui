@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -10,6 +10,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 import { BatchesApiService } from './api.service';
 import { Batch } from './api.model';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'dev-batch-details',
@@ -18,22 +19,13 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 })
 export class BatchDetailsComponent implements OnInit {
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
-        { label: 'Save', icon: 'fa fa-save', disabled: false, command: () => { this.onSaveClick(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
-    ];
     createForm: any;
     createFormSubscription: any;
     loading: boolean;
     isEditing: boolean;
+    isSaving = false;
     batch: any;
     recipeType: RecipeType;
-    items: MenuItem[] = _.clone(this.viewMenu);
     recipeTypeOptions: SelectItem[] = [];
     nodeOptions: SelectItem[] = [];
     previousBatchOptions: SelectItem[] = [];
@@ -48,6 +40,17 @@ export class BatchDetailsComponent implements OnInit {
         private recipeTypesApiService: RecipeTypesApiService,
         private batchesApiService: BatchesApiService
     ) {}
+
+    @HostListener('window:beforeunload')
+    @HostListener('window:popstate')
+    canDeactivate(): Observable<boolean> | boolean {
+
+        if (this.createForm.dirty && !this.isSaving) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
     private initFormGroups() {
         if (this.batch.id === 'create') {
@@ -80,18 +83,6 @@ export class BatchDetailsComponent implements OnInit {
         }
     }
 
-    private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = !this.validated;
-        }
-    }
-
     private initBatchForm() {
         if (this.batch) {
             this.initFormGroups();
@@ -99,14 +90,12 @@ export class BatchDetailsComponent implements OnInit {
             this.createForm.patchValue(this.batch);
 
             // modify form actions based on status
-            this.initValidation();
         }
 
         // listen for changes to createForm fields
         this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.batch, changes);
-            this.initValidation();
         });
     }
 
@@ -149,10 +138,7 @@ export class BatchDetailsComponent implements OnInit {
     private redirect(id: any) {
         if (id === this.batch.id) {
             this.isEditing = false;
-            this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForms();
-            // this.createForm.reset();
-            // this.ingestFileForm.reset();
         } else {
             const url = id ? id === 'create' ? '/processing/batches' : `/processing/batches/${id}` : '/processing/batches';
             this.router.navigate([url]);
@@ -208,7 +194,6 @@ export class BatchDetailsComponent implements OnInit {
 
     onEditClick() {
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -231,10 +216,6 @@ export class BatchDetailsComponent implements OnInit {
                     detail: `Batch is valid and can be ${action}. Estimated recipes: ${result.recipes_estimated}`,
                     life: 10000
                 });
-                const saveItem = _.find(this.items, { label: 'Save' });
-                if (saveItem) {
-                    saveItem.disabled = !this.validated;
-                }
             }
         }, err => {
             console.log(err);
@@ -243,6 +224,7 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     onSaveClick() {
+        this.isSaving = true;
         if (this.batch.id) {
             // edit batch
             this.batchesApiService.editBatch(this.batch).subscribe(() => {
@@ -284,6 +266,7 @@ export class BatchDetailsComponent implements OnInit {
     }
 
     ngOnInit() {
+        this.isSaving = false;
         this.getRecipeTypes();
         let id = null;
         if (this.route && this.route.paramMap) {
@@ -299,7 +282,6 @@ export class BatchDetailsComponent implements OnInit {
 
                 this.layoutClass = id === 'create' ? 'p-col-6' : 'p-col-12';
                 this.isEditing = id === 'create';
-                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getBatchDetail(id);
             });
