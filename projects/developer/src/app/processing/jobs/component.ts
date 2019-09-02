@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, AfterViewInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
@@ -26,7 +26,7 @@ import { JobExecution } from './execution.model';
     providers: [ConfirmationService]
 })
 
-export class JobsComponent implements OnInit, OnDestroy {
+export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() jobs: any;
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
@@ -88,6 +88,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    loading = true;
     sub: any;
 
     constructor(
@@ -127,12 +128,9 @@ export class JobsComponent implements OnInit, OnDestroy {
 
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
         // tried to remove fields from URL - this breaks the range selection updates every 10 seconds.
-        // if (this.sub) {
-        //     delete this.datatableOptions.started;
-        //     delete this.datatableOptions.ended;
-        // } else {
-        //     delete this.datatableOptions.duration;
-        // }
+        if (!this.sub) {
+            delete this.datatableOptions.duration;
+        }
         this.router.navigate(['/processing/jobs'], {
             queryParams: this.datatableOptions as Params,
             replaceUrl: true
@@ -249,9 +247,11 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: this.started,
-            ended: this.ended,
-            duration: moment.duration(data.range, data.unit).toISOString()
+            ended: this.ended
         });
+        if (this.loading) {
+            this.datatableOptions.duration = moment.duration(data.range, data.unit).toISOString();
+        }
         this.updateOptions();
     }
     onDateRangeSelected(data: any) {
@@ -457,19 +457,27 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
-            this.getJobTypes();
-            // tried to handle a URL with stary/stop or duration - this breaks all table loading
-            // if (this.datatableOptions.duration) {
-            //     var dur = this.datatableOptions.duration;
-            //     var query = {
-            //         'range': dur.replace(/\D/g, ""),
-            //         'unit': dur[dur.length -1]
-            //     }
-            //     this.onDateRangeSelected(query);
-            // } else {
-            //     this.onDateFilterApply(this.datatableOptions);
-            // }
+            // If this page is loading for the first time parse the request to determine if a range or
+            // duration was requested. If it was a duration then a subscription is created for auto-updates
+            if (this.loading) {
+                if (this.datatableOptions.duration) {
+                    // Deconstruct the requested time-frame and submit for a subscription
+                    var dur = this.datatableOptions.duration;
+                    var query = {
+                        'range': dur.replace(/\D/g, ""),
+                        'unit': dur[dur.length -1]
+                    }
+                    this.onDateRangeSelected(query);
+                } else {
+                    this.onDateFilterApply(this.datatableOptions);
+                }
+            } else {
+                this.getJobTypes();
+            }
         });
+    }
+    ngAfterViewInit() {
+        this.loading = false;
     }
     ngOnDestroy() {
         if (this.sub) {
