@@ -213,6 +213,10 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     }
 
     onValidateClick() {
+        if (!this.selectedWorkspaceDetail.configuration.broker.credentials.access_key_id ||
+            !this.selectedWorkspaceDetail.configuration.broker.credentials.secret_access_key) {
+            delete this.selectedWorkspaceDetail.configuration.broker.credentials;
+        }
         this.workspacesApiService.validateWorkspace(this.selectedWorkspaceDetail).subscribe(data => {
             this.validated = data.is_valid;
             if (data.is_valid) {
