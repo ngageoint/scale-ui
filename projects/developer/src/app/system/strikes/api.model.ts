@@ -51,7 +51,8 @@ export class Strike {
 
     public static cleanStrikeForSave(strike) {
         let returnStrike;
-        if (!strike.configuration.monitor.credentials.secret_access_key) {
+
+        if (!strike.configuration.monitor.credentials) {
             returnStrike = {
                 title: strike.title,
                 description: strike.description,
@@ -86,6 +87,8 @@ export class Strike {
                 }
             };
         }
+
+
         return _.pickBy(returnStrike, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });

@@ -57,10 +57,15 @@
                 <div>
                     <strong>{{ selectedRecipeTypeDetail.title }}</strong>
                 </div>
-                <div class="recipe-type__menu">
-                    <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                    <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                            (click)="menu.toggle($event)"></button>
+                <div *ngIf="!isEditing" class="recipe-type__menu">
+                    <button pButton class="ui-button-primary recipe-type__controls-btn" icon='fa fa-edit' label="Edit"
+                    (click)="onEditClick()"></button>
+                </div>
+                <div *ngIf="isEditing">
+                    <button pButton class="ui-button-primary recipe-type__controls-btn" label="Validate"
+                                (click)="validateRecipeType()"></button>
+                    <button pButton [disabled]="!validated" class="ui-button-primary recipe-type__controls-btn" label="Save"
+                            (click)="saveRecipeType()"></button>
                 </div>
             </p-header>
             <div class="margin-bottom-md" *ngIf="!isEditing">
@@ -74,7 +79,7 @@
                             <input pInputText type="text" formControlName="title"/>
                         </label>
                         <label style="margin-bottom: 0">
-                            <span class="required">Description</span>
+                            <span>Description</span>
                             <textarea pInputTextarea formControlName="description" rows="5"></textarea>
                         </label>
                     </div>
