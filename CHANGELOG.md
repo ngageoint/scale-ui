@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.4](https://github.com/ngageoint/scale-ui/compare/v0.8.3...v0.8.4) (2019-09-03)
+
+
+### Bug Fixes
+
+* **metrics:** added logic to get metrics colors right ([ae8e93c](https://github.com/ngageoint/scale-ui/commit/ae8e93c))
+* **recipe_types:** added check for job interface ([1bb27ef](https://github.com/ngageoint/scale-ui/commit/1bb27ef))
+
+
+
+### [0.8.3](https://github.com/ngageoint/scale-ui/compare/v0.8.2...v0.8.3) (2019-09-03)
+
+
+### Bug Fixes
+
+* **dashboard:** removed ability to select more than one data feed ([9fc1573](https://github.com/ngageoint/scale-ui/commit/9fc1573))
+* **job_types:** fixed rendering of job_types with no outputs ([d361783](https://github.com/ngageoint/scale-ui/commit/d361783))
+
+
+
 ### [0.8.2](https://github.com/ngageoint/scale-ui/compare/v0.8.1...v0.8.2) (2019-09-03)
 
 

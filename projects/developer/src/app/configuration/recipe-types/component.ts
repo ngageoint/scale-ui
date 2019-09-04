@@ -290,11 +290,13 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     recipeData.job_types = [];
                 }
                 const input = {};
-                _.forEach(data.manifest.job.interface.inputs, inputType => {
-                    _.forEach(inputType, it => {
-                        input[it.name] = {};
+                if (data.manifest.job.interface) {
+                    _.forEach(data.manifest.job.interface.inputs, inputType => {
+                        _.forEach(inputType, it => {
+                            input[it.name] = {};
+                        });
                     });
-                });
+                }
                 recipeData.definition.nodes[data.manifest.job.name] = {
                     dependencies: [],
                     input: input,
