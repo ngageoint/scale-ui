@@ -63,6 +63,8 @@ export class Strike {
                         sqs_name: strike.configuration.monitor.sqs_name,
                         region_name: _.pickBy(strike.configuration.monitor.type,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
                     },
                     files_to_ingest: strike.configuration.files_to_ingest,
                     recipe: strike.configuration.recipe
@@ -76,10 +78,13 @@ export class Strike {
                     workspace: strike.configuration.workspace,
                     monitor: {
                         type: strike.configuration.monitor.type,
-                        sqs_name: strike.configuration.monitor.sqs_name,
+                        sqs_name:  _.pickBy(strike.configuration.monitor.sqs_name,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
                         credentials: _.pickBy(strike.configuration.monitor.credentials,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
                         region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
                     },
                     files_to_ingest: strike.configuration.files_to_ingest,
