@@ -20,7 +20,8 @@ export class Strike {
                 data.job,
                 data.created,
                 data.last_modified,
-                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration
+                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration,
+                data.transfer_suffix,
             );
         }
     }
@@ -32,7 +33,8 @@ export class Strike {
             }
             return Strike.build(data);
         }
-        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null));
+        return new Strike(null, 'untitled-strike',
+        'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null), '_.tmp');
     }
 
     public static cleanStrikeForValidate(strike) {
@@ -44,7 +46,7 @@ export class Strike {
                 workspace: strike.configuration.workspace,
                 monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
                 files_to_ingest: strike.configuration.files_to_ingest,
-                recipe: strike.configuration.recipe
+                recipe: strike.configuration.recipe,
             }
         };
     }
@@ -60,7 +62,8 @@ export class Strike {
                     workspace: strike.configuration.workspace,
                     monitor: {
                         type: strike.configuration.monitor.type,
-                        sqs_name: strike.configuration.monitor.sqs_name,
+                        sqs_name: _.pickBy(strike.configuration.monitor.sqs_name,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
                         region_name: _.pickBy(strike.configuration.monitor.type,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
                         transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
@@ -107,7 +110,8 @@ export class Strike {
         public job: Job,
         public created: string,
         public last_modified: string,
-        public configuration: any
+        public configuration: any,
+        public transfer_suffix: any
     ) {
         this.createdDisplay = DataService.formatDate(this.created, true);
         this.createdTooltip = DataService.formatDate(this.created);
