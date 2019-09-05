@@ -103,11 +103,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 recipe: ['', Validators.required]
             })
         });
-        const hi = 'hi';
-        console.log(this.createForm);
-        console.log(this.createForm.controls.configuration.controls.monitor.controls['transfer_suffix']);
-        this.createForm.get('description').patchValue(hi);
-        console.log(this.createForm);
         this.ingestFileForm = this.fb.group({
             filename_regex: ['', Validators.required],
             data_types: [''],

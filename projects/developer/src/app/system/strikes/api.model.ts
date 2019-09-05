@@ -21,7 +21,6 @@ export class Strike {
                 data.created,
                 data.last_modified,
                 data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration,
-                data.transfer_suffix,
             );
         }
     }
@@ -33,8 +32,13 @@ export class Strike {
             }
             return Strike.build(data);
         }
-        return new Strike(null, 'untitled-strike',
-        'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null), '_.tmp');
+        const config = StrikeConfiguration.transformer(null);
+        if (config && config.monitor) {
+            config.monitor = {
+                transfer_suffix: '_.tmp'
+            };
+        }
+        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, config);
     }
 
     public static cleanStrikeForValidate(strike) {
@@ -110,8 +114,7 @@ export class Strike {
         public job: Job,
         public created: string,
         public last_modified: string,
-        public configuration: any,
-        public transfer_suffix: any
+        public configuration: any
     ) {
         this.createdDisplay = DataService.formatDate(this.created, true);
         this.createdTooltip = DataService.formatDate(this.created);
