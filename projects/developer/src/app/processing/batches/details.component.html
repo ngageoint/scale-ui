@@ -9,10 +9,10 @@
                 {{ batch.title }}
             </div>
             <div *ngIf="!batch.title">Untitled Batch</div>
-            <div *ngIf="!isEditing" class="batches__menu">
+            <!-- <div *ngIf="!isEditing" class="batches__menu">
                 <button pButton class="ui-button-primary batches__controls-btn" icon='fa fa-edit' label="Edit"
                 (click)="onEditClick()"></button>
-            </div>
+            </div> -->
             <div *ngIf="isEditing">
                 <button pButton class="ui-button-primary batches__controls-btn" label="Validate"
                             (click)="onValidateClick()"></button>

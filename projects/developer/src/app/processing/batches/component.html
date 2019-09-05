@@ -3,10 +3,10 @@
     <dev-temporal-filter [started]="started" [ended]="ended" (dateFilterApply)="onDateFilterApply($event)"
     (dateRangeSelected)="onDateRangeSelected($event)">
     </dev-temporal-filter>
-    <div class="batches__controls">
+    <!-- <div class="batches__controls">
         <a pButton routerLink="/processing/batches/create" class="ui-button-primary" icon="fa fa-plus"
            pTooltip="Create Batch"></a>
-    </div>
+    </div> -->
 </div>
 <p-table [value]="batches" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
          [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"

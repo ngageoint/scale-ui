@@ -45,7 +45,7 @@ export class BatchDetailsComponent implements OnInit {
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
 
-        if (this.createForm.dirty && !this.isSaving) {
+        if (this.createForm && this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
             return true;
