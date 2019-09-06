@@ -642,6 +642,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     addInputConnection(providerName, providerVersion, providerOutput) {
+        console.log(providerName);
+        console.log(providerOutput);
         if (providerOutput.disabled) {
             return;
         }
@@ -668,19 +670,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.selectedNode.node_type.node_type === 'recipe' ?
                         currType.definition.input.files :
                         currType.interface.files;
-                _.forEach(files, file => {
+                // _.forEach(files, file => {
                     this.selectedNodeConnections.push({
                         name: providerName,
                         output: providerOutput.name
                     });
                     if (this.selectedNode.dependencies.length === 0) {
                         // no dependencies means this is coming from the recipe input
-                        this.selectedNode.input[file.name] = {
+                        this.selectedNode.input[files.name] = {
                             type: 'recipe',
                             input: providerOutput.name
                         };
                     } else {
-                        this.selectedNode.input[file.name] = {
+                        this.selectedNode.input[files.name] = {
                             type: 'dependency',
                             node: providerName,
                             output: providerOutput.name
@@ -689,7 +691,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     // TODO figure out a better way of preventing duplicate mappings
                     // set output as disabled to prevent duplicate mappings
                     // providerOutput.disabled = true;
-                });
+                // });
             } else {
                 console.log('job or recipe type not found');
             }
