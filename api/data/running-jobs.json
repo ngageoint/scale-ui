@@ -1802,6 +1802,24 @@
                 "icon_code": "f06e"
             },
             "longest_running": "2015-09-09T07:31:37Z"
+        },
+        {
+            "count": 15,
+            "job_type": {
+                "id": 13,
+                "name": "no-interface",
+                "version": "1.0.0",
+                "title": "No Interface",
+                "description": "No Interface Job",
+                "category": "no-interface",
+                "is_system": false,
+                "is_long_running": true,
+                "is_active": true,
+                "is_operational": true,
+                "is_paused": false,
+                "icon_code": "f06e"
+            },
+            "longest_running": "2015-09-09T07:31:37Z"
         }
     ]
 }

@@ -918,6 +918,50 @@
                 "most_recent": "2015-08-31T21:51:12.674Z",
                 "category": null
             }]
+        },
+        {
+            "job_type": {
+                "id": 13,
+                "name": "no-interface",
+                "version": "1.0.0",
+                "title": "No Interface",
+                "description": "No Interface Job",
+                "icon_code": "f072",
+                "is_published": true,
+                "is_active": true,
+                "is_paused": false,
+                "is_system": false,
+                "max_scheduled": 1,
+                "revision_num": 1,
+                "docker_image": "10.4.4.10:5000/no-interface-1.0.0-seed:1.0",
+                "unmet_resources": null,
+                "manifest": {
+                    "job": {
+                        "name": "no-interface",
+                        "jobVersion": "1.0.0",
+                        "packageVersion": "1.0.0",
+                        "title": "No Interface",
+                        "description": "No Interface Job",
+                        "maintainer": {
+                            "name": "Yangqing Jia",
+                            "email": ""
+                        },
+                        "timeout": 0
+                    },
+                    "seedVersion": "1.0"
+                },
+                "configuration": {},
+                "created": "2015-06-01T14:22:38.384Z",
+                "deprecated": null,
+                "paused": null,
+                "last_modified": "2015-06-01T14:22:38.384Z"
+            },
+            "job_counts": [{
+                "status": "COMPLETED",
+                "count": 12,
+                "most_recent": "2015-08-31T21:51:12.674Z",
+                "category": null
+            }]
         }
     ]
 }
