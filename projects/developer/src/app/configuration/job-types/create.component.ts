@@ -135,12 +135,13 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     }
 
     private hasInterface() {
-        return this.jobType.manifest && this.jobType.manifest.job && this.jobType.manifest.job.interface
+        return this.jobType.manifest && this.jobType.manifest.job && this.jobType.manifest.job.interface;
     }
 
     private initJobTypeConfiguration() {
         // set up output workspaces
-        if (this.jobType.manifest.job.interface && this.jobType.manifest.job.interface.outputs && this.jobType.manifest.job.interface.outputs.files) {
+        if (this.jobType.manifest.job.interface && this.jobType.manifest.job.interface.outputs
+            && this.jobType.manifest.job.interface.outputs.files) {
             // iterate over job manifest output files and add appropriate properties and form controls
             const outputsGroup: any = this.createForm.get('configuration.output_workspaces.outputs');
             if (!this.jobType.configuration.output_workspaces.outputs) {
