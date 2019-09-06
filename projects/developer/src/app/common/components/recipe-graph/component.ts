@@ -642,8 +642,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     addInputConnection(providerName, providerVersion, providerOutput) {
-        console.log(providerName);
-        console.log(providerOutput);
         if (providerOutput.disabled) {
             return;
         }
