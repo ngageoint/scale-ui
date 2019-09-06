@@ -645,6 +645,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (providerOutput.disabled) {
             return;
         }
+        console.log(this.selectedNode);
         if (this.selectedNode) {
             // look for the current job input that matches the dependency's output
             let currType: any = null;
@@ -701,7 +702,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     removeInputConnection(conn) {
         // const currJob: any = this.getCurrJob();
         if (this.selectedNode) {
-            const currInput = _.findKey(this.selectedNode.input, { node: conn.name, output: conn.output });
+            const currInput = _.findKey(this.selectedNode.input, function(node) { return node.input === conn.output; });
             if (currInput) {
                 // remove input
                 _.remove(this.selectedNodeConnections, { name: conn.name, output: conn.output });
