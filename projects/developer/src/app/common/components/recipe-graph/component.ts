@@ -645,7 +645,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (providerOutput.disabled) {
             return;
         }
-        console.log(this.selectedNode);
         if (this.selectedNode) {
             // look for the current job input that matches the dependency's output
             let currType: any = null;
