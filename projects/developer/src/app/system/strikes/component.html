@@ -97,7 +97,7 @@
                         <label>
                             <span>Description</span>
                             <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
-                                      [autoResize]="true"></textarea>
+                                maxLength="500" pTooltip="Description has a 500 character limit."[autoResize]="true"></textarea>
                         </label>
                     </div>
                 </div>
