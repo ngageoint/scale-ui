@@ -265,7 +265,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             if (this.selectedNode) {
                 this.verifyNode(this.selectedNode);
             }
-            console.log(this.recipeData);
         }
     }
 
@@ -281,8 +280,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     private getNodeConnections() {
         this.selectedNodeConnections = [];
         _.forEach(this.selectedNode.input, i => {
+            console.log(i.node);
             if (i.node) {
+
+                console.log(this.recipeData.definition);
                 const dependency = this.recipeData.definition.nodes[i.node];
+                console.log(dependency);
                 if (dependency.node_type.node_type === 'job') {
                     const dependencyJobType: any = _.find(this.recipeData.job_types, {
                         name: dependency.node_type.job_type_name,
@@ -701,7 +704,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     removeInputConnection(conn) {
         // const currJob: any = this.getCurrJob();
         if (this.selectedNode) {
+            console.log(this.selectedNode.input);
+            console.log(conn);
             const currInput = _.findKey(this.selectedNode.input, function(node) { return node.input === conn.output; });
+            console.log(currInput);
             if (currInput) {
                 // remove input
                 _.remove(this.selectedNodeConnections, { name: conn.name, output: conn.output });
