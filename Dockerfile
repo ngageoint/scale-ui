@@ -15,6 +15,7 @@ ENV NGINX_CONF=/etc/nginx/conf.d/default.conf
 
 ENV SCALEUI_API_PREFIX=/api
 ENV SCALEUI_SILO_URL=/silo
+ENV SCALEUI_AUTH_ENABLED=true
 ENV API_URL=http://scale-webserver.marathon.l4lb.thisdcos.directory:80/
 ENV SILO_URL=http://scale-silo.marathon.l4lb.thisdcos.directory:9000/
 
