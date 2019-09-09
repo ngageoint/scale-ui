@@ -20,7 +20,7 @@ export class Strike {
                 data.job,
                 data.created,
                 data.last_modified,
-                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration
+                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration,
             );
         }
     }
@@ -32,7 +32,13 @@ export class Strike {
             }
             return Strike.build(data);
         }
-        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null));
+        const config = StrikeConfiguration.transformer(null);
+        if (config && config.monitor) {
+            config.monitor = {
+                transfer_suffix: '_.tmp'
+            };
+        }
+        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, config);
     }
 
     public static cleanStrikeForValidate(strike) {
@@ -44,7 +50,7 @@ export class Strike {
                 workspace: strike.configuration.workspace,
                 monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
                 files_to_ingest: strike.configuration.files_to_ingest,
-                recipe: strike.configuration.recipe
+                recipe: strike.configuration.recipe,
             }
         };
     }
@@ -60,8 +66,11 @@ export class Strike {
                     workspace: strike.configuration.workspace,
                     monitor: {
                         type: strike.configuration.monitor.type,
-                        sqs_name: strike.configuration.monitor.sqs_name,
+                        sqs_name: _.pickBy(strike.configuration.monitor.sqs_name,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
                         region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
                     },
                     files_to_ingest: strike.configuration.files_to_ingest,
@@ -76,10 +85,13 @@ export class Strike {
                     workspace: strike.configuration.workspace,
                     monitor: {
                         type: strike.configuration.monitor.type,
-                        sqs_name: strike.configuration.monitor.sqs_name,
+                        sqs_name:  _.pickBy(strike.configuration.monitor.sqs_name,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
                         credentials: _.pickBy(strike.configuration.monitor.credentials,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
                         region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
                             d => d !== null && typeof d !== 'undefined' && d !== ''),
                     },
                     files_to_ingest: strike.configuration.files_to_ingest,

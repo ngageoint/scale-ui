@@ -1,0 +1,140 @@
+{
+    "id": 13,
+    "job_type": {
+        "id": 13,
+        "name": "no-interface",
+        "version": "1.0.0",
+        "title": "No Interface",
+        "description": "No Interface Job",
+        "icon_code": "f090"
+    },
+    "job_type_rev": {
+        "id": 23,
+        "job_type": {
+            "name": "no-interface",
+            "version": "1.0.0",
+            "title": "No Interface",
+            "description": "No Interface Job",
+            "icon_code": "f090",
+            "num_versions": 1,
+            "latest_version": "1.0.0"
+        },
+        "revision_num": 1,
+        "docker_image": "10.4.4.10:5000/no-interface-1.0.0-seed:dev",
+        "created": "2015-08-28T17:55:41.005Z",
+        "manifest": {
+            "job": {
+                "name": "no-interface",
+                "jobVersion": "1.0.0",
+                "packageVersion": "1.0.0",
+                "title": "No Interface",
+                "description": "No Interface Job",
+                "maintainer": {
+                    "name": "USGS",
+                    "email": "usgs@usgs.com"
+                },
+                "timeout": 0
+            },
+            "seedVersion": "1.0"
+        }
+    },
+    "event": {
+        "id": 10278,
+        "type": "PARSE",
+        "rule": {
+            "id": 8,
+            "type": "PARSE",
+            "is_active": true,
+            "created": "2016-05-15T18:31:29.282Z",
+            "archived": null,
+            "last_modified": "2016-05-15T18:31:29.282Z"
+        },
+        "occurred": "2016-05-15T17:27:31.467Z"
+    },
+    "recipe": {
+        "id": 1,
+        "recipe_type": {
+            "id": 1,
+            "name": "no-interface",
+            "title": "No Interface Recipe",
+            "description": "No Interface Recipe",
+            "revision_num": 1
+        },
+        "recipe_type_rev": {
+            "id": 1
+        },
+        "event": {
+            "id": 1
+        }
+    },
+    "is_superseded": false,
+    "superseded_job": null,
+    "superseded_by_job": null,
+    "status": "COMPLETED",
+    "node": {
+        "id": 1,
+        "hostname": "my-host.example.domain"
+    },
+    "resources": {
+        "resources": {
+            "mem": 128.0,
+            "disk": 11.0,
+            "cpus": 1.0
+        }
+    },
+    "error": null,
+    "num_exes": 1,
+    "execution": {
+        "id": 3,
+        "status": "COMPLETED",
+        "exe_num": 1,
+        "cluster_id": "scale_job_123_263x0",
+        "created": "2015-08-28T17:57:41.033Z",
+        "queued": "2015-08-28T17:57:41.010Z",
+        "started": "2015-08-28T17:57:44.494Z",
+        "ended": "2015-08-28T17:57:45.906Z",
+        "job": {
+            "id": 3
+        },
+        "node": {
+            "id": 1,
+            "hostname": "machine.com"
+        },
+        "error": null,
+        "job_type": {
+            "id": 1,
+            "name": "no-interface",
+            "version": "1.0.0",
+            "title": "No Interface",
+            "description": "No Interface Job",
+            "icon_code": "f090",
+            "revision_num": 1
+        },
+        "timeout": 1800,
+        "input_file_size": 64.0,
+        "task_results": null,
+        "resources": {
+            "resources": {
+                "mem": 128.0,
+                "disk": 11.0,
+                "cpus": 1.0
+            }
+        },
+        "configuration": {
+            "tasks": []
+        }
+    },
+    "source_started": "2015-08-28T17:55:41.005Z",
+    "source_ended": "2015-08-28T17:56:41.005Z",
+    "source_sensor_class": "classA",
+    "source_sensor": "1",
+    "source_collection": "12345",
+    "source_task": "my-task",
+    "created": "2015-08-28T17:55:41.005Z",
+    "queued": "2015-08-28T17:56:41.005Z",
+    "started": "2015-08-28T17:57:41.005Z",
+    "ended": "2015-08-28T17:58:41.005Z",
+    "last_status_change": "2015-08-28T17:58:45.906Z",
+    "superseded": null,
+    "last_modified": "2015-08-28T17:58:46.001Z"
+}

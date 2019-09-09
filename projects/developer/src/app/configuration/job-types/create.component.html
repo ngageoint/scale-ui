@@ -61,7 +61,7 @@
                                             [style]="{'width':'100%'}" placeholder="Select..." [showClear]="false">
                                 </p-dropdown>
                             </label>
-                            <div *ngIf="jobType.manifest && jobType.manifest.job.interface.outputs" formGroupName="outputs">
+                            <div *ngIf="hasInterface() && jobType.manifest.job.interface.outputs" formGroupName="outputs">
                                 <label *ngFor="let file of jobType.manifest.job.interface.outputs.files">
                                     <span>{{ file.name }}</span>
                                     <p-dropdown [options]="workspacesOptions" [formControlName]="file.name"
@@ -80,7 +80,7 @@
                                 </label>
                             </div>
                             <div formGroupName="settings"
-                                 *ngIf="jobType.manifest && jobType.manifest.job.interface.settings">
+                                 *ngIf="hasInterface() && jobType.manifest.job.interface.settings">
                                 <h2>Settings</h2>
                                 Provide values for settings in job type manifest
                                 <div *ngFor="let setting of jobType.manifest.job.interface.settings">
@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    <div *ngIf="jobType.manifest && jobType.manifest.job.interface.mounts">
+                    <div *ngIf="hasInterface() && jobType.manifest.job.interface.mounts">
                         <h2>Mounts</h2>
                         Configure how the job type should handle provided mounts
                         <div class="p-grid">

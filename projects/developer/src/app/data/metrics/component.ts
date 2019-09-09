@@ -118,10 +118,17 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.metricsApiService.getDataTypes().subscribe((data) => {
             this.dataTypesLoading = false;
             _.forEach(data.results, (result) => {
-                this.availableDataTypes.push({
+                if (result.title === 'Job Types') {
+                    this.availableDataTypes.push({
+                        label: 'Job/Recipe Types',
+                        value: result
+                        });
+                } else {
+                    this.availableDataTypes.push({
                     label: result.title,
                     value: result
-                });
+                    });
+                }
             });
         }, err => {
             this.dataTypesLoading = false;
