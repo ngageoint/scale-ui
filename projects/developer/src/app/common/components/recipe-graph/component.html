@@ -249,8 +249,8 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedRecipeType.definition.input.files" [scrollable]="true"
-                        scrollHeight="300px" class="recipe-io-container">
+            <p-dataList *ngIf="selectedRecipeType.definition" [value]="selectedRecipeType.definition.input.files"
+                        [scrollable]="true" scrollHeight="300px" class="recipe-io-container">
                 <p-header>
                     <strong>Inputs</strong>
                 </p-header>
