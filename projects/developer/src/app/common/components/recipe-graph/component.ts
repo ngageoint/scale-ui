@@ -209,6 +209,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 let label = '';
                 let icon = '';
                 let publisher = false;
+
                 if (node.node_type.node_type === 'job') {
                     const jobType: any = _.find(this.recipeData.job_types, {
                         name: node.node_type.job_type_name,
@@ -221,7 +222,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     icon = jobType ? String.fromCharCode(parseInt(jobType.icon_code, 16)) : String.fromCharCode(parseInt('f1b2', 16));
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
-                    id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
+                    id = key || _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
                     label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
@@ -351,8 +352,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.selectedCondition = null;
                     this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
                         name: this.selectedNode.node_type.recipe_type_name,
-                        revision_num: this.selectedNode.node_type.recipe_type_revision
+                        // TODO commented out the following line
+                        //   sub_recipe_types is a live pointer to objects but the original definition
+                        //   has the original revisions used instead
+                        // revision_num: this.selectedNode.node_type.recipe_type_revision
                     });
+                    // TODO added, see note above
+                    this.selectedRecipeType.revision_num = this.selectedNode.node_type.recipe_type_revision;
+
                     this.getNodeConnections();
 
                     if (this.jobMetrics) {

@@ -124,8 +124,8 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
                     // add recipe detail data to nodes
                     _.forEach(recipe.recipe_type_rev.definition.nodes, node => {
                         const recipeDetail = _.find(this.recipe.details.nodes, rd => {
-                            return node.node_type.job_type_name === rd.node_type.job_type_name &&
-                                node.node_type.job_type_version === rd.node_type.job_type_version;
+                            return node.node_type.recipe_type_name === rd.node_type.recipe_type_name &&
+                                node.node_type.recipe_type_revision === rd.node_type.recipe_type_revision;
                         });
                         if (recipeDetail) {
                             _.merge(node.node_type, recipeDetail.node_type);
