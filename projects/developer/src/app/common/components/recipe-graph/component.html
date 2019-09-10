@@ -135,9 +135,13 @@
         </span>
         <span *ngIf="selectedRecipeType">
             <strong>
-                <a *ngIf="selectedNode" routerLink="/processing/recipes/{{ selectedNode.node_type.recipe_id }}">
+                <a *ngIf="selectedNode && selectedNode.node_type.recipe_id; else recipeHeaderWithoutLink"
+                   routerLink="/processing/recipes/{{ selectedNode.node_type.recipe_id }}">
                     {{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}
                 </a>
+                <ng-template #recipeHeaderWithoutLink>
+                    {{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}
+                </ng-template>
             </strong>
         </span>
         <span *ngIf="selectedCondition">
