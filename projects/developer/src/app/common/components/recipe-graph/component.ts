@@ -704,10 +704,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     removeInputConnection(conn) {
         // const currJob: any = this.getCurrJob();
         if (this.selectedNode) {
-            console.log(this.selectedNode.input);
-            console.log(conn);
-            const currInput = _.findKey(this.selectedNode.input, function(node) { return node.input === conn.output; });
-            console.log(currInput);
+            let currInput;
+            if (this.selectedNode.input.undefined.type === 'dependency') {
+                currInput = _.findKey(this.selectedNode.input, function(node) { return node.output === conn.output; });
+            } else {
+                currInput = _.findKey(this.selectedNode.input, function(node) { return node.input === conn.output; });
+            }
             if (currInput) {
                 // remove input
                 _.remove(this.selectedNodeConnections, { name: conn.name, output: conn.output });
