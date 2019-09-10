@@ -282,31 +282,39 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         _.forEach(this.selectedNode.input, i => {
             console.log(i.node);
             if (i.node) {
-
-                console.log(this.recipeData.definition);
                 const dependency = this.recipeData.definition.nodes[i.node];
-                console.log(dependency);
-                if (dependency.node_type.node_type === 'job') {
-                    const dependencyJobType: any = _.find(this.recipeData.job_types, {
-                        name: dependency.node_type.job_type_name,
-                        version: dependency.node_type.job_type_version
-                    });
-                    const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
-                    // use the key instead of the job type name to specify the connection name
-                    const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
-                        return n.node_type.job_type_name === dependency.node_type.job_type_name &&
-                            n.node_type.job_type_version === dependency.node_type.job_type_version;
-                    });
-                    this.selectedNodeConnections.push({
-                        name: nodeKey,
-                        output: connection ? connection.name : null
-                    });
                 } else if (dependency.node_type.node_type === 'condition') {
-                    // condition key and condition name are always the same
-                    this.selectedNodeConnections.push({
-                        name: dependency.node_type.name,
-                        output: i.output
-                    });
+                if (dependency) {
+                    if (dependency.node_type.node_type === 'job') {
+                        const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                            name: dependency.node_type.job_type_name,
+                            version: dependency.node_type.job_type_version
+                        });
+                        const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                        // use the key instead of the job type name to specify the connection name
+                        const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
+                            return n.node_type.job_type_name === dependency.node_type.job_type_name &&
+                                n.node_type.job_type_version === dependency.node_type.job_type_version;
+                        });
+                        this.selectedNodeConnections.push({
+                            name: nodeKey,
+                            output: connection ? connection.name : null
+                        });
+                    } else if (dependency.node_type.node_type === 'condition') {
+                        // condition key and condition name are always the same
+                        this.selectedNodeConnections.push({
+                            name: dependency.node_type.name,
+                            output: i.output
+                        });
+                    }
+                } else {
+                    const connection: any = _.find(this.recipeData.definition.input.files, {name: i.output});
+                    if (connection) {
+                        this.selectedNodeConnections.push({
+                            name: 'Start',
+                            output: connection.name
+                        });
+                    }
                 }
             } else {
                 const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
