@@ -134,7 +134,11 @@
             <strong>{{ selectedJobType.title }} v{{ selectedJobType.version }}</strong>
         </span>
         <span *ngIf="selectedRecipeType">
-            <strong>{{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}</strong>
+            <strong>
+                <a *ngIf="selectedNode" routerLink="/processing/recipes/{{ selectedNode.node_type.recipe_id }}">
+                    {{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}
+                </a>
+            </strong>
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
