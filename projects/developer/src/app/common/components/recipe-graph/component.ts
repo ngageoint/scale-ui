@@ -346,6 +346,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         version: this.selectedNode.node_type.job_type_version
                     });
                     this.getNodeConnections();
+                } else if (this.selectedNode.node_type.node_type === 'recipe') {
+                    this.selectedJobType = null;
+                    this.selectedCondition = null;
+                    this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
+                        name: this.selectedNode.node_type.recipe_type_name,
+                        revision_num: this.selectedNode.node_type.recipe_type_revision
+                    });
+                    this.getNodeConnections();
 
                     if (this.jobMetrics) {
                         const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
@@ -376,14 +384,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                             ]
                         };
                     }
-                } else if (this.selectedNode.node_type.node_type === 'recipe') {
-                    this.selectedJobType = null;
-                    this.selectedCondition = null;
-                    this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
-                        name: this.selectedNode.node_type.recipe_type_name,
-                        revision_num: this.selectedNode.node_type.recipe_type_revision
-                    });
-                    this.getNodeConnections();
                 } else if (this.selectedNode.node_type.node_type === 'condition') {
                     this.selectedJobType = null;
                     this.selectedRecipeType = null;
