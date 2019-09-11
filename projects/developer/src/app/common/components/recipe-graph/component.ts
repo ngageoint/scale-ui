@@ -40,6 +40,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     selectedRecipeType: any;
     selectedCondition: any;
     selectedNode: any;
+    selectedNodeInput: any;
     selectedNodeConnections = [];
     showMetrics: boolean;
     showRecipeDialog: boolean;
@@ -280,10 +281,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     private getNodeConnections() {
         this.selectedNodeConnections = [];
         _.forEach(this.selectedNode.input, i => {
-            console.log(i.node);
             if (i.node) {
                 const dependency = this.recipeData.definition.nodes[i.node];
-                } else if (dependency.node_type.node_type === 'condition') {
                 if (dependency) {
                     if (dependency.node_type.node_type === 'job') {
                         const dependencyJobType: any = _.find(this.recipeData.job_types, {
@@ -304,7 +303,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         // condition key and condition name are always the same
                         this.selectedNodeConnections.push({
                             name: dependency.node_type.name,
-                            output: i.output
+                            output:  i.output
                         });
                     }
                 } else {
@@ -598,6 +597,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     showInputConnections(event, input) {
+        this.selectedNodeInput = input;
         this.nodeInputs = [];
         // inspect recipe type inputs and display possible connections
         _.forEach(this.recipeData.definition.input.files, file => {
@@ -652,7 +652,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.inputPanel.toggle(event);
     }
 
-    addInputConnection(providerName, providerVersion, providerOutput) {
+    addInputConnection(providerName, providerOutput) {
         if (providerOutput.disabled) {
             return;
         }
@@ -678,45 +678,48 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.selectedNode.node_type.node_type === 'recipe' ?
                         currType.definition.input.files :
                         currType.interface.files;
-                // _.forEach(files, file => {
                     this.selectedNodeConnections.push({
                         name: providerName,
                         output: providerOutput.name
                     });
-                    if (this.selectedNode.dependencies.length === 0) {
-                        // no dependencies means this is coming from the recipe input
-                        this.selectedNode.input[files.name] = {
-                            type: 'recipe',
-                            input: providerOutput.name
-                        };
-                    } else {
-                        this.selectedNode.input[files.name] = {
-                            type: 'dependency',
-                            node: providerName,
-                            output: providerOutput.name
-                        };
-                    }
-                    // TODO figure out a better way of preventing duplicate mappings
-                    // set output as disabled to prevent duplicate mappings
-                    // providerOutput.disabled = true;
-                // });
+                    _.forEach(files, file => {
+                        if (file.mediaTypes === this.selectedNodeInput.mediaTypes) {
+                            if (this.selectedNode.dependencies.length === 0) {
+                                // no dependencies means this is coming from the recipe input
+                                this.selectedNode.input[this.selectedNodeInput.name] = {
+                                    type: 'recipe',
+                                    input: providerOutput.name
+                                };
+                            } else {
+                                this.selectedNode.input[this.selectedNodeInput.name] = {
+                                    type: 'dependency',
+                                    node: providerName,
+                                    output: providerOutput.name
+                                };
+                            }
+                        }
+                    });
+
             } else {
                 console.log('job or recipe type not found');
             }
         } else {
             console.log('node not selected');
         }
+        this.selectedNodeInput = [];
         this.inputPanel.hide();
     }
 
-    removeInputConnection(conn) {
+    removeInputConnection(conn, input) {
         // const currJob: any = this.getCurrJob();
+        console.log(input);
         if (this.selectedNode) {
             let currInput;
-            if (this.selectedNode.input.undefined.type === 'dependency') {
-                currInput = _.findKey(this.selectedNode.input, function(node) { return node.output === conn.output; });
+            _.forEach(this.selectedNode.input, node => {
+            if (node.type === 'dependency') {
+                currInput = _.findKey(this.selectedNode.input, function(dependentInput) { return dependentInput.output === conn.output; });
             } else {
-                currInput = _.findKey(this.selectedNode.input, function(node) { return node.input === conn.output; });
+                currInput = _.findKey(this.selectedNode.input, function(standardInput) { return standardInput.input === conn.output; });
             }
             if (currInput) {
                 // remove input
@@ -725,6 +728,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             } else {
                 console.log('input not found');
             }
+        });
         } else {
             console.log('node not selected');
         }

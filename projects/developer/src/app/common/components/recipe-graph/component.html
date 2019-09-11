@@ -269,7 +269,7 @@
                                         <li *ngFor="let connection of selectedNodeConnections" class="connection">
                                             <div>
                                                 <button pButton class="ui-button-danger margin-right-sm"
-                                                        icon="fa fa-remove" (click)="removeInputConnection(connection)"
+                                                        icon="fa fa-remove" (click)="removeInputConnection(connection, input)"
                                                         *ngIf="isEditing">
                                                 </button>
                                             </div>
@@ -389,7 +389,7 @@
     <div *ngFor="let input of nodeInputs">
         <strong>{{ input.title }}</strong>
         <ul class="recipe__option-list">
-            <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, input.version, option)"
+            <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, option)"
                 [ngClass]="option.disabled ? 'disabled' : ''">
                 <span>{{ option.name }}</span>
             </li>
