@@ -280,6 +280,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     private getNodeConnections() {
         this.selectedNodeConnections = [];
+        console.log(this.selectedNode);
         _.forEach(this.selectedNode.input, i => {
             if (i.node) {
                 const dependency = this.recipeData.definition.nodes[i.node];
@@ -320,7 +321,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 if (connection) {
                     this.selectedNodeConnections.push({
                         name: 'Start',
-                        output: connection.name
+                        output: connection.name,
+                        mediaType: this.selectedNodeInput
                     });
                 }
             }
@@ -673,6 +675,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 currType = _.clone(this.selectedNode.node_type);
             }
             if (currType) {
+                const media = this.selectedNodeInput.mediaTypes[0];
                 const files = this.selectedNode.node_type.node_type === 'job' ?
                     currType.manifest.job.interface.inputs.files :
                     this.selectedNode.node_type.node_type === 'recipe' ?
@@ -680,7 +683,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         currType.interface.files;
                     this.selectedNodeConnections.push({
                         name: providerName,
-                        output: providerOutput.name
+                        output: providerOutput.name,
+                        mediaType: media
                     });
                     _.forEach(files, file => {
                         if (file.mediaTypes === this.selectedNodeInput.mediaTypes) {
@@ -710,9 +714,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.inputPanel.hide();
     }
 
-    removeInputConnection(conn, input) {
+    removeInputConnection(conn) {
         // const currJob: any = this.getCurrJob();
-        console.log(input);
         if (this.selectedNode) {
             let currInput;
             _.forEach(this.selectedNode.input, node => {

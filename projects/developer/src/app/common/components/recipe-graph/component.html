@@ -196,12 +196,10 @@
                                         <h5>Connections</h5>
                                         <ul class="list-unstyled">
                                             <li *ngFor="let connection of selectedNodeConnections" class="connection">
-                                                <div>
+                                                <div *ngIf="file.mediaTypes == connection.mediaType">
                                                     <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
-                                                    </button>
-                                                </div>
-                                                <div>
+                                                </button>
                                                     <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
                                                 </div>
                                             </li>
@@ -269,7 +267,7 @@
                                         <li *ngFor="let connection of selectedNodeConnections" class="connection">
                                             <div>
                                                 <button pButton class="ui-button-danger margin-right-sm"
-                                                        icon="fa fa-remove" (click)="removeInputConnection(connection, input)"
+                                                        icon="fa fa-remove" (click)="removeInputConnection(connection)"
                                                         *ngIf="isEditing">
                                                 </button>
                                             </div>
@@ -338,7 +336,7 @@
                                     <ul class="list-unstyled">
                                         <li *ngFor="let connection of selectedNodeConnections">
                                             <div class="connection" *ngIf="connection.output === file.name">
-                                                <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                <strong> {{ connection.name }}</strong>.<em>{{ connection.output }}</em>.<em>{{ file.name }}</em>
                                             </div>
                                         </li>
                                     </ul>
