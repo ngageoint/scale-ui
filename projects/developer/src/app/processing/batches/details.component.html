@@ -9,10 +9,10 @@
                 {{ batch.title }}
             </div>
             <div *ngIf="!batch.title">Untitled Batch</div>
-            <div *ngIf="!isEditing" class="batches__menu">
+            <!-- <div *ngIf="!isEditing" class="batches__menu">
                 <button pButton class="ui-button-primary batches__controls-btn" icon='fa fa-edit' label="Edit"
                 (click)="onEditClick()"></button>
-            </div>
+            </div> -->
             <div *ngIf="isEditing">
                 <button pButton class="ui-button-primary batches__controls-btn" label="Validate"
                             (click)="onValidateClick()"></button>
@@ -92,7 +92,7 @@
                         <label>
                             <span class="required">Description</span>
                             <textarea pInputTextarea type="text" id="description" rows="8" formControlName="description"
-                                      class="full-width"></textarea>
+                                maxLength="500" pTooltip="Description has a 500 character limit."class="full-width"></textarea>
                         </label>
                     </div>
                     <div formGroupName="configuration">
