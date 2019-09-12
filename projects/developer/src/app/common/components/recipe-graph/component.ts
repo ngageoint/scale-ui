@@ -280,10 +280,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     private getNodeConnections() {
         this.selectedNodeConnections = [];
-        console.log(this.selectedNode);
+        const files = this.selectedNode.node_type.interface.files || [];
         _.forEach(this.selectedNode.input, i => {
             if (i.node) {
                 const dependency = this.recipeData.definition.nodes[i.node];
+                console.log(dependency);
                 if (dependency) {
                     if (dependency.node_type.node_type === 'job') {
                         const dependencyJobType: any = _.find(this.recipeData.job_types, {
@@ -321,8 +322,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 if (connection) {
                     this.selectedNodeConnections.push({
                         name: 'Start',
-                        output: connection.name,
-                        mediaType: this.selectedNodeInput
+                        output: connection.name
                     });
                 }
             }
