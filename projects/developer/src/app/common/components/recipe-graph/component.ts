@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { FilesApiService } from '../../services/files/api.service';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -280,11 +281,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     private getNodeConnections() {
         this.selectedNodeConnections = [];
-        const files = this.selectedNode.node_type.interface.files || [];
+        console.log(this.selectedNode);
         _.forEach(this.selectedNode.input, i => {
             if (i.node) {
                 const dependency = this.recipeData.definition.nodes[i.node];
-                console.log(dependency);
                 if (dependency) {
                     if (dependency.node_type.node_type === 'job') {
                         const dependencyJobType: any = _.find(this.recipeData.job_types, {
@@ -299,13 +299,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         });
                         this.selectedNodeConnections.push({
                             name: nodeKey,
-                            output: connection ? connection.name : null
+                            output: connection ? connection.name : null,
+                            mediaType: connection.mediaType
                         });
                     } else if (dependency.node_type.node_type === 'condition') {
                         // condition key and condition name are always the same
                         this.selectedNodeConnections.push({
                             name: dependency.node_type.name,
-                            output:  i.output
+                            output:  i.output,
+                            mediaType: i.mediaType
                         });
                     }
                 } else {
@@ -313,18 +315,25 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     if (connection) {
                         this.selectedNodeConnections.push({
                             name: 'Start',
-                            output: connection.name
+                            output: connection.name,
+                            mediaType: connection.mediaType
                         });
                     }
                 }
             } else {
                 const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
-                if (connection) {
-                    this.selectedNodeConnections.push({
-                        name: 'Start',
-                        output: connection.name
-                    });
-                }
+                console.log(i)
+                _.forEach(this.recipeData.job_types, j => {
+                    if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
+                        _.forEach(j.manifest.job.interface.inputs.files, file => {
+                            this.selectedNodeConnections.push({
+                                name: 'Start',
+                                output: connection.name,
+                                mediaType: file.mediaTypes[0]
+                            });
+                        });
+                    }
+                });
             }
         });
     }
