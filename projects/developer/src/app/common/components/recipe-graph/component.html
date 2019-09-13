@@ -53,6 +53,12 @@
                     <svg:marker id="arrow" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto">
                         <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
                     </svg:marker>
+                    <svg:marker id="arrow-red" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto" stroke="red" fill="red">
+                        <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+                    </svg:marker>
+                    <svg:marker id="arrow-green" viewBox="0 -5 10 10" refX="8" refY="0" markerWidth="4" markerHeight="4" orient="auto" stroke="lightgreen" fill="lightgreen">
+                        <svg:path d="M0,-5L10,0L0,5" class="arrow-head" />
+                    </svg:marker>
                 </ng-template>
 
                 <ng-template #nodeTemplate let-node>
@@ -109,7 +115,8 @@
                         <svg:path
                             class="line"
                             stroke-width="2"
-                            marker-end="url(#arrow)">
+                            [attr.stroke]="(!link.label) ? 'black' : ((link.label == 'true') ? 'lightgreen' : 'red')"
+                            [attr.marker-end]="(!link.label) ? 'url(#arrow)' : ((link.label == 'true') ? 'url(#arrow-green)' : 'url(#arrow-red)')">
                         </svg:path>
                         <svg:text class="edge-label" text-anchor="middle">
                             <textPath
@@ -373,11 +380,10 @@
                     <i class="fa fa-fw fa-adjust"></i>
                     {{ option.name }}
                 </span>
-                <p-toggleButton [(ngModel)]="option.acceptance" onIcon="fa fa-check" offIcon="fa fa-remove"
-                                onLabel="" offLabel="" class="margin-left-md" [style]="{fontSize: '12px'}"
-                                [disabled]="option.disabled"
-                                [pTooltip]="option.acceptance ? 'Depend on true condition' : 'Depend on false condition'">
-                </p-toggleButton>
+                <p-inputSwitch  [(ngModel)]="option.acceptance" [disabled]="option.disabled"
+                                onLabel="True" offLabel="False" class="margin-left-md" [style]="{fontSize: '12px'}"
+                                [pTooltip]="option.acceptance ? 'Will run if condition evaluates to true' : 'Will run if condition evaluates to false'">
+                </p-inputSwitch>
             </div>
         </li>
     </ul>

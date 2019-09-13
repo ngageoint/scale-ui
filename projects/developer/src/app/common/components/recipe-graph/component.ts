@@ -427,7 +427,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         // only show conditions that are not yet dependencies
                         const currDependency: any = _.find(this.selectedNode.dependencies, { name: condition.name });
                         condition.disabled = !!currDependency;
-                        condition.acceptance = currDependency ? currDependency.acceptance : false;
+                        condition.acceptance = true;
                         this.dependencyOptions.push(condition);
                     }
                 }
