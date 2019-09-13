@@ -463,9 +463,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 const outputs = dependency.manifest.job.interface ?
                                 dependency.manifest.job.interface.outputs || []
                                 : [];
-                if (!outputs.length) {
-                    
-                }
                 // job type manifest files and json are slightly different, so just grab what we need
                 if (outputs.files) {
                     _.forEach(outputs.files, f => {
