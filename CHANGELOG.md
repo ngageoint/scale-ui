@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.6](https://github.com/ngageoint/scale-ui/compare/v0.8.5...v0.8.6) (2019-09-13)
+
+
+### Bug Fixes
+
+* corrected if logic ([854b14a](https://github.com/ngageoint/scale-ui/commit/854b14a))
+* **recipe:** fixed condition logic visibility ([b98c614](https://github.com/ngageoint/scale-ui/commit/b98c614))
+* **recipes:** fixed recipe editor handling of no interface job ([cd8436f](https://github.com/ngageoint/scale-ui/commit/cd8436f))
+* **strikes:** fixed payload construction ([f9a14eb](https://github.com/ngageoint/scale-ui/commit/f9a14eb))
+
+
+
 ### [0.8.5](https://github.com/ngageoint/scale-ui/compare/v0.8.4...v0.8.5) (2019-09-13)
 
 
