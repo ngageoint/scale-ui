@@ -135,7 +135,7 @@ const routes: Routes = [
     {
         path: 'data/ingest',
         component: IngestComponent,
-        data: {title: 'Injest Records | Scale'}
+        data: {title: 'Ingest Records | Scale'}
     },
     {
         path: 'data/metrics',
