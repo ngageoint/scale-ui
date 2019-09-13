@@ -1820,6 +1820,24 @@
                 "icon_code": "f06e"
             },
             "longest_running": "2015-09-09T07:31:37Z"
+        },
+        {
+            "count": 17,
+            "job_type": {
+                "id": 14,
+                "name": "optional-json",
+                "version": "1.0.0",
+                "title": "Optonal JSON Input",
+                "description": "Job has optional JSON input",
+                "category": "optional-json",
+                "is_system": false,
+                "is_long_running": true,
+                "is_active": true,
+                "is_operational": true,
+                "is_paused": false,
+                "icon_code": "f090"
+            },
+            "longest_running": "2015-09-09T07:31:37Z"
         }
     ]
 }

@@ -597,9 +597,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 options: [file]
             });
         });
-        _.forEach(this.recipeData.definition.input.json, json => {
-            console.log(json);
-        });
         // inspect dependencies and display possible connections
         _.forEach(this.selectedNode.dependencies, dep => {
             const jobType = this.getJobTypeFromNodeKey(dep.name);
@@ -628,6 +625,58 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     options: []
                 };
                 _.forEach(condition.interface.files, output => {
+                    const option = this.getInputConnectionOptions(output, condition);
+                    if (option) {
+                        inputConnection.options = inputConnection.options.concat(option);
+                    }
+                });
+            }
+            if (inputConnection.options.length > 0) {
+                this.nodeInputs.push(inputConnection);
+            }
+        });
+        this.inputPanel.toggle(event);
+    }
+
+    showJsonInputConnections(event, input) {
+        this.nodeInputs = [];
+        // inspect recipe type inputs and display possible connections
+        _.forEach(this.recipeData.definition.input.json, json => {
+            this.nodeInputs.push({
+                title: null,
+                name: 'Start',
+                version: null,
+                options: [json]
+            });
+        });
+        // inspect dependencies and display possible connections
+        _.forEach(this.selectedNode.dependencies, dep => {
+            const jobType = this.getJobTypeFromNodeKey(dep.name);
+            const condition: any = _.find(this.recipeData.conditions, {
+                name: dep.name
+            });
+            let inputConnection = null;
+            if (jobType) {
+                inputConnection = {
+                    title: jobType.title,
+                    name: jobType.name,
+                    version: jobType.version,
+                    options: []
+                };
+                _.forEach(jobType.manifest.job.interface.outputs.json, output => {
+                    const option = this.getInputConnectionOptions(output, jobType);
+                    if (option) {
+                        inputConnection.options.push(option);
+                    }
+                });
+            } else {
+                inputConnection = {
+                    title: null,
+                    name: condition.name,
+                    version: null,
+                    options: []
+                };
+                _.forEach(condition.interface.json, output => {
                     const option = this.getInputConnectionOptions(output, condition);
                     if (option) {
                         inputConnection.options = inputConnection.options.concat(option);

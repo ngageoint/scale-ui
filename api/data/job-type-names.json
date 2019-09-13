@@ -1,5 +1,5 @@
 {
-    "count": 12,
+    "count": 14,
     "next": null,
     "previous": null,
     "results":[
@@ -91,6 +91,13 @@
             "title": "No Interface",
             "description": "No Interface Job",
             "icon_code": "f072",
+            "versions": ["1.0.0"],
+            "latest_version": "1.0.0"
+        },{
+            "name": "optional-json",
+            "title": "Optional JSON Input",
+            "description": "Job has optional JSON Input",
+            "icon_code": "f090",
             "versions": ["1.0.0"],
             "latest_version": "1.0.0"
         }
