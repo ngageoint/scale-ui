@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.8.5](https://github.com/ngageoint/scale-ui/compare/v0.8.4...v0.8.5) (2019-09-13)
+
+
+### Bug Fixes
+
+* typo in page title ([7dbb670](https://github.com/ngageoint/scale-ui/commit/7dbb670))
+* **batches:** fixed batches details error and temp removed create button ([a6f6107](https://github.com/ngageoint/scale-ui/commit/a6f6107))
+* **jobs:** added handler for job with no interface ([cd2e8a8](https://github.com/ngageoint/scale-ui/commit/cd2e8a8))
+* **metrics:** modified name of category ([f916be9](https://github.com/ngageoint/scale-ui/commit/f916be9))
+* **recipes:** added max length for recipe description  ([3c58a9e](https://github.com/ngageoint/scale-ui/commit/3c58a9e))
+* default value of true for auth enabled ([a874703](https://github.com/ngageoint/scale-ui/commit/a874703)), closes [#321](https://github.com/ngageoint/scale-ui/issues/321)
+* **strikes:** added default value for transfer_suffix ([db6caa9](https://github.com/ngageoint/scale-ui/commit/db6caa9))
+
+
+
 ### [0.8.4](https://github.com/ngageoint/scale-ui/compare/v0.8.3...v0.8.4) (2019-09-03)
 
 
