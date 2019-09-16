@@ -329,12 +329,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 }
             } else if (this.selectedNode.node_type.job_type_name) {
                 const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
-                console.log(connection);
-                console.log(i);
                 _.forEach(this.recipeData.job_types, j => {
                     if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
                         _.forEach(j.manifest.job.interface.inputs.files, file => {
-                            console.log(file)
                             if (!_.isEmpty(this.selectedNode.input[file.name]) && (i.input_name === file.name)) {
                                 this.selectedNodeConnections.push({
                                     name: 'Start',
