@@ -8,6 +8,7 @@ import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { FilesApiService } from '../../services/files/api.service';
+import { Console } from '@angular/core/src/console';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -281,8 +282,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     private getNodeConnections() {
         this.selectedNodeConnections = [];
-        console.log(this.selectedNode);
+        const fileTypes = this.selectedNode.input;
         _.forEach(this.selectedNode.input, i => {
+            let inputFile;
+            _.forEach(fileTypes, (file, key) => {
+                if (file.output === i.output) {
+                    inputFile = key;
+                }
+            });
             if (i.node) {
                 const dependency = this.recipeData.definition.nodes[i.node];
                 if (dependency) {
@@ -300,14 +307,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         this.selectedNodeConnections.push({
                             name: nodeKey,
                             output: connection ? connection.name : null,
-                            mediaType: connection.mediaType
+                            input_name: inputFile
                         });
                     } else if (dependency.node_type.node_type === 'condition') {
                         // condition key and condition name are always the same
                         this.selectedNodeConnections.push({
                             name: dependency.node_type.name,
                             output:  i.output,
-                            mediaType: i.mediaType
+                            input_name: inputFile
                         });
                     }
                 } else {
@@ -316,24 +323,37 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         this.selectedNodeConnections.push({
                             name: 'Start',
                             output: connection.name,
-                            mediaType: connection.mediaType
+                            input_name: inputFile
                         });
                     }
                 }
-            } else {
+            } else if (this.selectedNode.node_type.job_type_name) {
                 const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
-                console.log(i)
+                console.log(connection);
+                console.log(i);
                 _.forEach(this.recipeData.job_types, j => {
                     if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
                         _.forEach(j.manifest.job.interface.inputs.files, file => {
-                            this.selectedNodeConnections.push({
-                                name: 'Start',
-                                output: connection.name,
-                                mediaType: file.mediaTypes[0]
-                            });
+                            console.log(file)
+                            if (!_.isEmpty(this.selectedNode.input[file.name]) && (i.input_name === file.name)) {
+                                this.selectedNodeConnections.push({
+                                    name: 'Start',
+                                    output: connection.name,
+                                    input_name: file.name
+                                });
+                            }
                         });
                     }
                 });
+            } else {
+                const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
+                    if (connection) {
+                        this.selectedNodeConnections.push({
+                            name: 'Start',
+                            output: connection.name,
+                            input_name: inputFile
+                        });
+                    }
             }
         });
     }
@@ -684,7 +704,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 currType = _.clone(this.selectedNode.node_type);
             }
             if (currType) {
-                const media = this.selectedNodeInput.mediaTypes[0];
                 const files = this.selectedNode.node_type.node_type === 'job' ?
                     currType.manifest.job.interface.inputs.files :
                     this.selectedNode.node_type.node_type === 'recipe' ?
@@ -693,7 +712,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.selectedNodeConnections.push({
                         name: providerName,
                         output: providerOutput.name,
-                        mediaType: media
+                        input_name: this.selectedNodeInput.name
                     });
                     _.forEach(files, file => {
                         if (file.mediaTypes === this.selectedNodeInput.mediaTypes) {
@@ -701,13 +720,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                 // no dependencies means this is coming from the recipe input
                                 this.selectedNode.input[this.selectedNodeInput.name] = {
                                     type: 'recipe',
-                                    input: providerOutput.name
+                                    input: providerOutput.name,
+                                    input_name: this.selectedNodeInput.name
                                 };
                             } else {
                                 this.selectedNode.input[this.selectedNodeInput.name] = {
                                     type: 'dependency',
                                     node: providerName,
-                                    output: providerOutput.name
+                                    output: providerOutput.name,
+                                    input_name: this.selectedNodeInput.name
                                 };
                             }
                         }

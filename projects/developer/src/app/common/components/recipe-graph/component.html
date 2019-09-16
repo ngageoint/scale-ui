@@ -197,8 +197,7 @@
 
                                         <ul class="list-unstyled">
                                             <li *ngFor="let connection of selectedNodeConnections" class="connection">
-                                                    {{ connection | json}}
-                                                <div *ngIf="file.mediaTypes == connection.mediaType">
+                                                <div *ngIf="file.name == connection.input_name">
                                                     <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
                                                 </button>
