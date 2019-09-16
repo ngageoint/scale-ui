@@ -1029,7 +1029,7 @@
                 "version": "1.0.0",
                 "title": "Output JSON",
                 "description": "Job has output JSON",
-                "icon_code": "f090",
+                "icon_code": "f08b",
                 "is_published": true,
                 "is_active": true,
                 "is_paused": false,

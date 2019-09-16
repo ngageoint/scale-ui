@@ -6,7 +6,7 @@
         "version": "1.0.0",
         "title": "Output JSON",
         "description": "Job has output JSON",
-        "icon_code": "f090"
+        "icon_code": "f08b"
     },
     "job_type_rev": {
         "id": 24,
@@ -15,7 +15,7 @@
             "version": "1.0.0",
             "title": "Output JSON",
             "description": "Job has output JSON",
-            "icon_code": "f090",
+            "icon_code": "f08b",
             "num_versions": 1,
             "latest_version": "1.0.0"
         },
@@ -130,7 +130,7 @@
             "version": "1.0.0",
             "title": "Output JSON",
             "description": "Job has output JSON",
-            "icon_code": "f090",
+            "icon_code": "f08b",
             "revision_num": 1
         },
         "timeout": 1800,
