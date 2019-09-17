@@ -465,7 +465,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         // only show conditions that are not yet dependencies
                         const currDependency: any = _.find(this.selectedNode.dependencies, { name: condition.name });
                         condition.disabled = !!currDependency;
-                        condition.acceptance = currDependency ? currDependency.acceptance : false;
+                        condition.acceptance = true;
                         this.dependencyOptions.push(condition);
                     }
                 }
@@ -498,7 +498,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 const files = this.selectedNode.node_type.interface.files || [];
                 const json = this.selectedNode.node_type.interface.json || [];
                 const input = this.selectedNode.input || {};
-                const outputs = dependency.manifest.job.interface.outputs;
+                const outputs = dependency.manifest.job.interface ?
+                                dependency.manifest.job.interface.outputs || []
+                                : [];
                 // job type manifest files and json are slightly different, so just grab what we need
                 if (outputs.files) {
                     _.forEach(outputs.files, f => {
@@ -519,7 +521,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         });
                     });
                 }
-                _.forEach(dependency.manifest.job.interface.outputs.files, f => {
+                _.forEach(outputs.files, f => {
                     const key = _.has(input, f.name) ? `${f.name}-${dependency.manifest.job.name}` : f.name;
                     input[key] = {
                         node: dependencyName,
@@ -527,7 +529,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         type: 'dependency'
                     };
                 });
-                _.forEach(dependency.manifest.job.interface.outputs.json, j => {
+                _.forEach(outputs.json, j => {
                     const key = _.has(input, j.name) ? `${j.name}-${dependency.manifest.job.name}` : j.name;
                     input[key] = {
                         node: dependencyName,
@@ -574,7 +576,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     jobType.disabled = false;
                     let files = this.selectedNode.node_type.interface.files;
                     let json = this.selectedNode.node_type.interface.json;
-                    const outputs = jobType.manifest.job.interface.outputs;
+                    const outputs = jobType.manifest.job.interface ?
+                                jobType.manifest.job.interface.outputs || []
+                                : [];
                     if (outputs.files && files) {
                         _.forEach(outputs.files, outputFile => {
                             files = _.filter(files, f => {

@@ -231,6 +231,25 @@
             "deprecated": null,
             "paused": null,
             "last_modified": "2015-06-01T14:22:38.384Z"
+        },{
+            "id": 13,
+            "name": "no-input",
+            "version": "1.0.0",
+            "title": "No Interface",
+            "description": "No Interface Job",
+            "icon_code": "f072",
+            "is_published": true,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
+            "docker_image": "",
+            "unmet_resources": null,
+            "created": "2015-06-01T14:22:38.384Z",
+            "deprecated": null,
+            "paused": null,
+            "last_modified": "2015-06-01T14:22:38.384Z"
         }
     ]
 }
