@@ -1,0 +1,34 @@
+{
+    "ID": 6,
+    "Name": "optional-json",
+    "LatestJobVersion": "1.0.0",
+    "LatestPackageVersion": "1.0.0",
+    "Title": "Optional JSON Job",
+    "Maintainer": "John Doe",
+    "Email": "jdoe@example.com",
+    "MaintOrg": "",
+    "Description": "Job with optional JSON input",
+    "ImageIDs": [7],
+    "JobVersions": [{
+        "ID": 6,
+        "JobName": "landsat-job",
+        "JobId": 6,
+        "JobVersion": "1.0.0",
+        "LatestPackageVersion": "1.0.0",
+        "Images": [{
+            "ID": 6,
+            "RegistryId": 5,
+            "Name": "optional-json-1.0.0-seed:1.0.0",
+            "Registry": "docker.io",
+            "Org": "geointseed",
+            "JobName": "optional-json",
+            "Title": "Optional JSON Job",
+            "Maintainer": "John Doe",
+            "Email": "jdoe@example.com",
+            "MaintOrg": "",
+            "Description": "Job with optional JSON input",
+            "JobVersion": "1.0.0",
+            "PackageVersion": "1.0.0"
+        }]
+    }]
+}
