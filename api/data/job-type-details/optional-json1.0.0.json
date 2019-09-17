@@ -1,0 +1,51 @@
+{
+    "id": 14,
+    "name": "optional-json",
+    "version": "1.0.0",
+    "title": "Optional JSON Input",
+    "description": "Job has optional JSON input",
+    "icon_code": "f090",
+    "is_published": true,
+    "is_active": true,
+    "is_paused": false,
+    "is_system": false,
+    "max_scheduled": 1,
+    "revision_num": 1,
+    "docker_image": "10.4.4.10:5000/optional-json-1.0.0-seed:1.0.0",
+    "unmet_resources": null,
+    "manifest": {
+        "job": {
+            "name": "optional-json",
+            "jobVersion": "1.0.0",
+            "packageVersion": "1.0.0",
+            "title": "Optional JSON Input",
+            "description": "Job has optional JSON input",
+            "maintainer": {
+                "name": "Yangqing Jia",
+                "email": ""
+            },
+            "timeout": 1800,
+            "interface": {
+                "command": "./optional.py ${INPUT_FILE}",
+                "inputs": {
+                    "files": [{
+                        "name": "input_file",
+                        "mediaTypes": ["application/octet-stream"],
+                        "required": true
+                    }],
+                    "json": [{
+                        "name": "INPUT_JSON",
+                        "type": "string", 
+                        "required": false
+                    }]
+                }
+            }
+        },
+        "seedVersion": "1.0"
+    },
+    "configuration": {},
+    "created": "2015-06-01T14:22:38.384Z",
+    "deprecated": null,
+    "paused": null,
+    "last_modified": "2015-06-01T14:22:38.384Z"
+}

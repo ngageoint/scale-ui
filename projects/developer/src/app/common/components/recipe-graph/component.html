@@ -224,6 +224,45 @@
                         </div>
                     </ng-template>
                 </p-dataList>
+                <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.json" [scrollable]="true"
+                            scrollHeight="300px" class="recipe-io-container"
+                            *ngIf="selectedJobType.manifest.job.interface && selectedJobType.manifest.job.interface.inputs">
+                    <p-header>
+                        <strong>JSON Inputs</strong>
+                    </p-header>
+                    <ng-template let-json pTemplate="item">
+                        <div class="recipe-io">
+                            <div class="p-grid">
+                                <div class="p-col-10 p-col-nopad">
+                                    <span [ngClass]="json.required ? 'required' : ''">{{ json.name }}</span>
+                                    <div><span class="media-type-list">{{ json.type }}</span></div>
+                                    <div class="connections"
+                                         *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
+                                        <h5>Connections</h5>
+                                        <ul class="list-unstyled">
+                                            <li *ngFor="let connection of selectedNodeConnections" class="connection">
+                                                <div>
+                                                    <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
+                                                            (click)="removeInputConnection(connection)" *ngIf="isEditing">
+                                                    </button>
+                                                </div>
+                                                <div>
+                                                    <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="p-col-2 p-col-nopad text-right">
+                                    <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
+                                            (click)="showJsonInputConnections($event, json)"
+                                            pTooltip="Add JSON Input Connection"
+                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.json.length > selectedNodeConnections.length"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dataList>
             </div>
         </div>
     </div>
