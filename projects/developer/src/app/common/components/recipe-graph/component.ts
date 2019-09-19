@@ -42,7 +42,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     selectedCondition: any;
     selectedNode: any;
     filledInputs: any;
-    totalInputs: any;
+    totalInputs = 0;
     selectedNodeInput: any;
     selectedNodeConnections = [];
     showMetrics: boolean;
@@ -282,6 +282,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     private getNodeConnections() {
+        this.getTotalConnections();
         this.selectedNodeConnections = [];
         const fileTypes = this.selectedNode.input;
         _.forEach(this.selectedNode.input, i => {
@@ -289,7 +290,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             _.forEach(fileTypes, (file, key) => {
                 if (file.output === i.output) {
                 inputFile = key;
-                if (inputFile === 'INPUT_JSON') {
+                if (inputFile === 'INPUT_JSON' || inputFile === 'input_json') {
                     if (i.node) {
                         const dependency = this.recipeData.definition.nodes[i.node];
                         if (dependency) {
@@ -352,7 +353,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                 });
                             }
                     }
-                } else if (inputFile === 'input_file') {
+                } else if (inputFile === 'input_file' || inputFile === 'INPUT_FILE') {
                     if (i.node) {
                         const dependency = this.recipeData.definition.nodes[i.node];
                         if (dependency) {
@@ -420,6 +421,17 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             });
         });
     }
+    private getTotalConnections() {
+        this.totalInputs = 0;
+        const inputs = this.selectedJobType.manifest.job.interface.inputs;
+        if (inputs.json  && inputs.files) {
+            this.totalInputs = inputs.json.length + inputs.files.length;
+        } else if (inputs.json) {
+            this.totalInputs = inputs.json.length;
+        } else if (inputs.files) {
+            this.totalInputs = inputs.files.length;
+        }
+    }
 
     private getInputConnectionOptions(output, dependency): any {
         // disable the output if it currently exists as a connection
@@ -435,6 +447,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         const shouldDeselect = _.isEqual(this.selectedNode, e);
         this.showRecipeDialog = !shouldDeselect;
         if (this.selectedNode) {
+            this.getTotalConnections();
             this.selectedNode.options.stroke = '';
             this.selectedNode = null;
         }
