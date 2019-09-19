@@ -218,7 +218,7 @@
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showInputConnections($event, file)"
                                             pTooltip="Add Input Connection"
-                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.files.length > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && (selectedJobType.manifest.job.interface.inputs.json.length + selectedJobType.manifest.job.interface.inputs.files.length) > selectedNodeConnections.length"></button>
                                 </div>
                             </div>
                         </div>
@@ -241,12 +241,10 @@
                                         <h5>Connections</h5>
                                         <ul class="list-unstyled">
                                             <li *ngFor="let connection of selectedNodeConnections" class="connection">
-                                                <div>
+                                                <div  *ngIf="json.name == connection.input_name">
                                                     <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
                                                     </button>
-                                                </div>
-                                                <div>
                                                     <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
                                                 </div>
                                             </li>
@@ -257,7 +255,7 @@
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showJsonInputConnections($event, json)"
                                             pTooltip="Add JSON Input Connection"
-                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.json.length > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && (selectedJobType.manifest.job.interface.inputs.json.length + selectedJobType.manifest.job.interface.inputs.files.length) > selectedNodeConnections.length"></button>
                                 </div>
                             </div>
                         </div>
@@ -426,7 +424,7 @@
         </li>
     </ul>
 </p-overlayPanel>
-<p-overlayPanel appendTo="body" #inputPanel>
+<p-overlayPanel appendTo="body" #inputFilePanel>
     <div *ngIf="nodeInputs.length === 0">
         <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
     </div>
@@ -434,6 +432,20 @@
         <strong>{{ input.title }}</strong>
         <ul class="recipe__option-list">
             <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, option)"
+                [ngClass]="option.disabled ? 'disabled' : ''">
+                <span>{{ option.name }}</span>
+            </li>
+        </ul>
+    </div>
+</p-overlayPanel>
+<p-overlayPanel appendTo="body" #inputJSONPanel>
+    <div *ngIf="nodeInputs.length === 0">
+        <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
+    </div>
+    <div *ngFor="let input of nodeInputs">
+        <strong>{{ input.title }}</strong>
+        <ul class="recipe__option-list">
+            <li *ngFor="let option of input.options" (click)="addJSONConnection(input.name, option)"
                 [ngClass]="option.disabled ? 'disabled' : ''">
                 <span>{{ option.name }}</span>
             </li>

@@ -51,7 +51,13 @@ export class RecipeType {
                 delete d.connections;
                 delete d.type;
             });
-
+            if (_.has(node, 'input')) {
+                _.forEach(node.input, (input, i) => {
+                    if (_.isEmpty(input)) {
+                        delete node.input[i];
+                    }
+                });
+            }
             if (_.has(node, 'node_type.data_filter.filters_display')) {
                 delete node.node_type.data_filter.filters_display;
             }

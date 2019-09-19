@@ -7,8 +7,6 @@ import * as _ from 'lodash';
 import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { FilesApiService } from '../../services/files/api.service';
-import { Console } from '@angular/core/src/console';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -27,7 +25,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() hideDetails: boolean;
     @Input() minHeight = '70vh';
     @ViewChild('dependencyPanel') dependencyPanel: any;
-    @ViewChild('inputPanel') inputPanel: any;
+    @ViewChild('inputFilePanel') inputFilePanel: any;
+    @ViewChild('inputJSONPanel') inputJSONPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
     columns: any[];
     dependencyOptions = [];
@@ -42,6 +41,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     selectedRecipeType: any;
     selectedCondition: any;
     selectedNode: any;
+    filledInputs: any;
+    totalInputs: any;
     selectedNodeInput: any;
     selectedNodeConnections = [];
     showMetrics: boolean;
@@ -287,71 +288,136 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             let inputFile;
             _.forEach(fileTypes, (file, key) => {
                 if (file.output === i.output) {
-                    inputFile = key;
-                }
-            });
-            if (i.node) {
-                const dependency = this.recipeData.definition.nodes[i.node];
-                if (dependency) {
-                    if (dependency.node_type.node_type === 'job') {
-                        const dependencyJobType: any = _.find(this.recipeData.job_types, {
-                            name: dependency.node_type.job_type_name,
-                            version: dependency.node_type.job_type_version
-                        });
-                        const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
-                        // use the key instead of the job type name to specify the connection name
-                        const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
-                            return n.node_type.job_type_name === dependency.node_type.job_type_name &&
-                                n.node_type.job_type_version === dependency.node_type.job_type_version;
-                        });
-                        this.selectedNodeConnections.push({
-                            name: nodeKey,
-                            output: connection ? connection.name : null,
-                            input_name: inputFile
-                        });
-                    } else if (dependency.node_type.node_type === 'condition') {
-                        // condition key and condition name are always the same
-                        this.selectedNodeConnections.push({
-                            name: dependency.node_type.name,
-                            output:  i.output,
-                            input_name: inputFile
-                        });
-                    }
-                } else {
-                    const connection: any = _.find(this.recipeData.definition.input.files, {name: i.output});
-                    if (connection) {
-                        this.selectedNodeConnections.push({
-                            name: 'Start',
-                            output: connection.name,
-                            input_name: inputFile
-                        });
-                    }
-                }
-            } else if (this.selectedNode.node_type.job_type_name) {
-                const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
-                _.forEach(this.recipeData.job_types, j => {
-                    if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
-                        _.forEach(j.manifest.job.interface.inputs.files, file => {
-                            if (!_.isEmpty(this.selectedNode.input[file.name]) && (i.input_name === file.name)) {
+                inputFile = key;
+                if (inputFile === 'INPUT_JSON') {
+                    if (i.node) {
+                        const dependency = this.recipeData.definition.nodes[i.node];
+                        if (dependency) {
+                            if (dependency.node_type.node_type === 'job') {
+                                const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                                    name: dependency.node_type.job_type_name,
+                                    version: dependency.node_type.job_type_version
+                                });
+                                const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.json, {name: i.output});
+                                // use the key instead of the job type name to specify the connection name
+                                const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
+                                    return n.node_type.job_type_name === dependency.node_type.job_type_name &&
+                                        n.node_type.job_type_version === dependency.node_type.job_type_version;
+                                });
+                                this.selectedNodeConnections.push({
+                                    name: nodeKey,
+                                    output: connection ? connection.name : null,
+                                    input_name: inputFile
+                                });
+                            } else if (dependency.node_type.node_type === 'condition') {
+                                // condition key and condition name are always the same
+                                this.selectedNodeConnections.push({
+                                    name: dependency.node_type.name,
+                                    output:  i.output,
+                                    input_name: inputFile
+                                });
+                            }
+                        } else {
+                            const connection: any = _.find(this.recipeData.definition.input.json, {name: i.output});
+                            if (connection) {
                                 this.selectedNodeConnections.push({
                                     name: 'Start',
                                     output: connection.name,
-                                    input_name: file.name
+                                    input_name: inputFile
+                                });
+                            }
+                        }
+                    } else if (this.selectedNode.node_type.job_type_name) {
+                        const connection: any = _.find(this.recipeData.definition.input.json, {name: i.input});
+                        _.forEach(this.recipeData.job_types, j => {
+                            if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
+                                _.forEach(j.manifest.job.interface.inputs.json, json => {
+                                    if (!_.isEmpty(this.selectedNode.input[json.name]) && (i.input_name === json.name)) {
+                                        this.selectedNodeConnections.push({
+                                            name: 'Start',
+                                            output: connection.name,
+                                            input_name: json.name
+                                        });
+                                    }
                                 });
                             }
                         });
+                    } else {
+                        const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
+                            if (connection) {
+                                this.selectedNodeConnections.push({
+                                    name: 'Start',
+                                    output: connection.name,
+                                    input_name: inputFile
+                                });
+                            }
                     }
-                });
-            } else {
-                const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
-                    if (connection) {
-                        this.selectedNodeConnections.push({
-                            name: 'Start',
-                            output: connection.name,
-                            input_name: inputFile
+                } else if (inputFile === 'input_file') {
+                    if (i.node) {
+                        const dependency = this.recipeData.definition.nodes[i.node];
+                        if (dependency) {
+                            if (dependency.node_type.node_type === 'job') {
+                                const dependencyJobType: any = _.find(this.recipeData.job_types, {
+                                    name: dependency.node_type.job_type_name,
+                                    version: dependency.node_type.job_type_version
+                                });
+                                const connection: any = _.find(dependencyJobType.manifest.job.interface.outputs.files, {name: i.output});
+                                // use the key instead of the job type name to specify the connection name
+                                const nodeKey = _.findKey(this.recipeData.definition.nodes, n => {
+                                    return n.node_type.job_type_name === dependency.node_type.job_type_name &&
+                                        n.node_type.job_type_version === dependency.node_type.job_type_version;
+                                });
+                                this.selectedNodeConnections.push({
+                                    name: nodeKey,
+                                    output: connection ? connection.name : null,
+                                    input_name: inputFile
+                                });
+                            } else if (dependency.node_type.node_type === 'condition') {
+                                // condition key and condition name are always the same
+                                this.selectedNodeConnections.push({
+                                    name: dependency.node_type.name,
+                                    output:  i.output,
+                                    input_name: inputFile
+                                });
+                            }
+                        } else {
+                            const connection: any = _.find(this.recipeData.definition.input.files, {name: i.output});
+                            if (connection) {
+                                this.selectedNodeConnections.push({
+                                    name: 'Start',
+                                    output: connection.name,
+                                    input_name: inputFile
+                                });
+                            }
+                        }
+                    } else if (this.selectedNode.node_type.job_type_name) {
+                        const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
+                        _.forEach(this.recipeData.job_types, j => {
+                            if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
+                                _.forEach(j.manifest.job.interface.inputs.files, fileInput => {
+                                    if (!_.isEmpty(this.selectedNode.input[fileInput.name]) && (i.input_name === fileInput.name)) {
+                                        this.selectedNodeConnections.push({
+                                            name: 'Start',
+                                            output: connection.name,
+                                            input_name: fileInput.name
+                                        });
+                                    }
+                                });
+                            }
                         });
+                    } else {
+                        const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
+                            if (connection) {
+                                this.selectedNodeConnections.push({
+                                    name: 'Start',
+                                    output: connection.name,
+                                    input_name: inputFile
+                                });
+                            }
                     }
+                }
             }
+            });
         });
     }
 
@@ -678,7 +744,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 this.nodeInputs.push(inputConnection);
             }
         });
-        this.inputPanel.toggle(event);
+        this.inputFilePanel.toggle(event);
     }
 
 
@@ -731,7 +797,76 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 this.nodeInputs.push(inputConnection);
             }
         });
-        this.inputPanel.toggle(event);
+        this.inputJSONPanel.toggle(event);
+    }
+
+    addJSONConnection(providerName, providerOutput) {
+        const fileTypes = this.selectedNode.input;
+        let inputFile;
+        _.forEach(fileTypes, (file, key) => {
+            if (file.output === this.selectedNode.input.output) {
+                inputFile = key;
+            }
+        if (providerOutput.disabled) {
+            return;
+        }
+        if (this.selectedNode) {
+            // look for the current job input that matches the dependency's output
+            let currType: any = null;
+            if (this.selectedNode.node_type.node_type === 'job') {
+                currType = _.find(this.recipeData.job_types, {
+                    name: this.selectedNode.node_type.job_type_name,
+                    version: this.selectedNode.node_type.job_type_version
+                });
+            } else if (this.selectedNode.node_type.node_type === 'recipe') {
+                currType = _.find(this.recipeData.sub_recipe_types, {
+                    name: this.selectedNode.node_type.recipe_type_name,
+                    revision_num: this.selectedNode.node_type.recipe_type_revision
+                });
+            } else if (this.selectedNode.node_type.node_type === 'condition') {
+                currType = _.clone(this.selectedNode.node_type);
+            }
+            if (currType) {
+                    const jsons = this.selectedNode.node_type.node_type === 'job' ?
+                    currType.manifest.job.interface.inputs.json :
+                    this.selectedNode.node_type.node_type === 'recipe' ?
+                        currType.definition.input.json :
+                        currType.interface.json;
+
+                    _.forEach(jsons, json => {
+                        if (json.name === inputFile) {
+                            this.selectedNodeConnections.push({
+                                name: providerName,
+                                output: providerOutput.name,
+                                input_name: json.name
+                            });
+                            if (this.selectedNode.dependencies.length === 0) {
+                                // no dependencies means this is coming from the recipe input
+                                this.selectedNode.input[json.name] = {
+                                    type: 'recipe',
+                                    input: providerOutput.name,
+                                    input_name: json.name
+                                };
+                            } else {
+                                this.selectedNode.input[json.name] = {
+                                    type: 'dependency',
+                                    node: providerName,
+                                    output: providerOutput.name,
+                                    input_name: json.name
+                                };
+                            }
+                        }
+                    });
+
+            } else {
+                console.log('job or recipe type not found');
+            }
+        } else {
+            console.log('node not selected');
+        }
+        });
+        this.selectedNodeInput = [];
+        this.inputFilePanel.hide();
     }
 
     addInputConnection(providerName, providerOutput) {
@@ -766,7 +901,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         input_name: this.selectedNodeInput.name
                     });
                     _.forEach(files, file => {
-                        if (file.mediaTypes === this.selectedNodeInput.mediaTypes) {
+                        if (file.name === this.selectedNodeInput.name) {
                             if (this.selectedNode.dependencies.length === 0) {
                                 // no dependencies means this is coming from the recipe input
                                 this.selectedNode.input[this.selectedNodeInput.name] = {
@@ -791,8 +926,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         } else {
             console.log('node not selected');
         }
+        console.log(this.selectedNode.input);
         this.selectedNodeInput = [];
-        this.inputPanel.hide();
+        this.inputFilePanel.hide();
     }
 
     removeInputConnection(conn) {
@@ -800,19 +936,23 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (this.selectedNode) {
             let currInput;
             _.forEach(this.selectedNode.input, node => {
-            if (node.type === 'dependency') {
-                currInput = _.findKey(this.selectedNode.input, function(dependentInput) { return dependentInput.output === conn.output; });
-            } else {
-                currInput = _.findKey(this.selectedNode.input, function(standardInput) { return standardInput.input === conn.output; });
-            }
-            if (currInput) {
-                // remove input
-                _.remove(this.selectedNodeConnections, { name: conn.name, output: conn.output });
-                this.selectedNode.input[currInput] = {};
-            } else {
-                console.log('input not found');
-            }
-        });
+                console.log(this.selectedNode.input);
+                if (node.type === 'dependency') {
+                    currInput = _.findKey(this.selectedNode.input, function(dependentInput) {
+                        return dependentInput.output === conn.output; });
+                } else {
+                    currInput = _.findKey(this.selectedNode.input, function(standardInput) {
+                        return standardInput.input === conn.output; });
+                }
+                console.log(currInput);
+                if (currInput) {
+                    // remove input
+                    _.remove(this.selectedNodeConnections, { name: conn.name, output: conn.output });
+                    this.selectedNode.input[currInput] = {};
+                } else {
+                    console.log('input not found');
+                }
+            });
         } else {
             console.log('node not selected');
         }
