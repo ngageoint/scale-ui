@@ -37,8 +37,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
-    conditionForm: any;
-    conditionFormSubscription: any;
     showFileInputs: boolean;
     showJsonInputs: boolean;
     showConditions: boolean;
@@ -150,14 +148,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 })
             })
         });
-
-        this.conditionForm = this.fb.group({
-            name: [this.condition.name, Validators.required],
-            data_filter: this.fb.group({
-                filters: this.fb.array(this.condition.data_filter.filters, Validators.required),
-                all: [true]
-            })
-        });
     }
 
     private initRecipeTypeForm() {
@@ -170,10 +160,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
-        });
-
-        this.conditionFormSubscription = this.conditionForm.valueChanges.subscribe(changes => {
-            _.merge(this.condition, changes);
         });
     }
 
@@ -255,10 +241,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private unsubscribeFromForms() {
         if (this.createFormSubscription) {
             this.createFormSubscription.unsubscribe();
-        }
-
-        if (this.conditionFormSubscription) {
-            this.conditionFormSubscription.unsubscribe();
         }
     }
 
@@ -526,18 +508,13 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         e.originalEvent.preventDefault();
     }
 
-    onAddConditionClick() {
-        if (this.selectedRecipeTypeDetail.definition.nodes[this.condition.name]) {
-            this.messageService.add({
-                severity: 'error',
-                summary: `Node ${this.condition.name} already exists`,
-                detail: 'Node names must be unique.'
-            });
-        } else {
-            this.conditions.push(RecipeTypeCondition.transformer(this.condition));
-            this.conditionForm.reset();
-            this.condition = RecipeTypeCondition.transformer(null);
-        }
+    onConditionSave(e) {
+        console.log('parent got click even', e);
+        this.conditions.push(e);
+    }
+
+    onConditionCancel(e) {
+        this.showConditions = false;
     }
 
     onRemoveConditionClick(condition) {

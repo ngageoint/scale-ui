@@ -225,44 +225,9 @@
     <dev-recipe-type-json [input]="selectedRecipeTypeDetail.definition.input" [form]="createForm"
                           jsonControl="definition.input.json"></dev-recipe-type-json>
 </p-sidebar>
+
 <p-sidebar [(visible)]="showConditions" [blockScroll]="true" position="right" [style]="{width:'30%'}"
            *ngIf="isEditing && selectedRecipeTypeDetail">
-    <div class="recipe-type__details">
-        <h2>Conditions</h2>
-        <div [formGroup]="conditionForm">
-            <label>
-                <span>Name</span>
-                <input pInputText type="text" formControlName="name"/>
-            </label>
-            <dev-recipe-type-filter [condition]="condition" [form]="conditionForm">
-            </dev-recipe-type-filter>
-            <label formGroupName="data_filter">
-                <p-toggleButton formControlName="all" onLabel="Filters are Required"
-                                offLabel="Filters are Optional" onIcon="fa fa-check" offIcon="fa fa-circle"
-                                [style]="{'width':'100%', 'display':'block'}"
-                                (onChange)="onToggleClick($event)"></p-toggleButton>
-            </label>
-        </div>
-        <div class="text-center margin-top-lg margin-bottom-md">
-            <button pButton type="button" icon="fa fa-plus" (click)="onAddConditionClick()" label="Add Condition"
-                    [disabled]="conditionForm.status === 'INVALID'"></button>
-        </div>
-        <h3>Current Conditions</h3>
-        <div *ngIf="conditions">
-            <span *ngIf="conditions.length === 0">No conditions.</span>
-            <div *ngFor="let condition of conditions">
-                <div class="relative">
-                    <pre>{{ condition.display.label }}</pre>
-                    <div class="inset">
-                        <button pButton type="button" class="ui-button-danger" icon="fa fa-remove"
-                                pTooltip="Remove Condition" (click)="onRemoveConditionClick(condition)">
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div *ngIf="!conditions">
-            No conditions.
-        </div>
-    </div>
+    <dev-recipe-type-condition *ngIf="showConditions" (save)="onConditionSave($event)"
+        (cancel)="onConditionCancel($event)"></dev-recipe-type-condition>
 </p-sidebar>

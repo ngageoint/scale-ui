@@ -1,0 +1,27 @@
+::ng-deep .ui-selectbutton {
+    display: flex;
+    margin-bottom: 1rem;
+
+    .ui-button {
+        width: 50%;
+    }
+}
+
+hr {
+    border: 0;
+    border-bottom: 1px solid var(--grey-80);
+}
+
+.add-filter {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.remove-filter {
+    float: right;
+    color: var(--gray-50);
+
+    &:hover {
+        color: var(--gray-20);
+    }
+}

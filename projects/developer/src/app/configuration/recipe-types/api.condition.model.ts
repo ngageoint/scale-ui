@@ -10,7 +10,6 @@ export class RecipeTypeCondition {
     private static build(data) {
         if (data) {
             return new RecipeTypeCondition(
-                data.name,
                 {
                     files: RecipeTypeInputFile.transformer(data.condition_interface.files),
                     json: RecipeTypeInputJson.transformer(data.condition_interface.json)
@@ -22,7 +21,6 @@ export class RecipeTypeCondition {
     public static transformer(data) {
         if (!data) {
             data = {
-                name: '',
                 condition_interface: {
                     files: [],
                     json: []
@@ -44,8 +42,18 @@ export class RecipeTypeCondition {
             json: []
         };
     }
+
+    get name() {
+        if (this.data_filter.filters) {
+            const names = this.data_filter.filters.map(f => f.name);
+            if (names.length) {
+                return names.join(', ');
+            }
+        }
+        return 'Unknown conditional';
+    }
+
     constructor(
-        public name: string,
         public condition_interface: any,
         public data_filter: any
     ) {
