@@ -103,7 +103,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                     dataset.backgroundColor = bgColor;
                     dataset.data = returnArr;
                 } else {
-                    this.data.datasets.push({
+                    this.data.datasets = [{
                         borderColor: '#d0eaff',
                         backgroundColor: bgColor,
                         borderWidth: 1,
@@ -113,7 +113,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                         // lineTension: 0,
                         id: feed.strike.id,
                         data: returnArr
-                    });
+                    }];
                 }
             });
             this.feedChart.chart.update();
