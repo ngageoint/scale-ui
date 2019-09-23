@@ -24,7 +24,7 @@ export class FeedComponent implements OnInit, OnDestroy {
         datasets: []
     };
     strikes: SelectItem[] = [];
-    selectedStrikes = [];
+    selectedStrikes: any;
     started: any;
     ended: any;
     viewingLatest = true;
@@ -53,7 +53,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             });
             this.strikes = _.orderBy(this.strikes, ['label'], ['asc']);
             if (!this.selectedStrikes && this.strikes.length > 0) {
-                this.selectedStrikes = [this.strikes[0].value];
+                this.selectedStrikes = this.strikes[0].value;
             }
 
             this.getLatestData();
@@ -86,7 +86,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             this.chartLoading = false;
             const allFeeds = _.orderBy(data.results, ['strike_name'], ['asc']);
             const selectedFeeds = _.filter(allFeeds, feed => {
-                return _.includes(this.selectedStrikes, feed.strike.id);
+                return _.includes([this.selectedStrikes], feed.strike.id);
             });
             _.forEach(selectedFeeds, (feed, idx) => {
                 const returnArr = [];
@@ -117,7 +117,6 @@ export class FeedComponent implements OnInit, OnDestroy {
                 }
             });
             this.feedChart.chart.update();
-
             const urlParams = {
                 use_ingest_time: params.use_ingest_time,
                 strike_id: this.selectedStrikes
@@ -165,7 +164,7 @@ export class FeedComponent implements OnInit, OnDestroy {
     }
 
     onStrikesChange(e) {
-        if (!_.includes(this.selectedStrikes, e.itemValue)) {
+        if (!_.includes([this.selectedStrikes], e.value)) {
             const idx = _.findIndex(this.data.datasets, d => {
                 return d.id === e.itemValue;
             });
@@ -222,14 +221,7 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 if (params.strike_id) {
-                    if (Array.isArray(params.strike_id)) {
-                        this.selectedStrikes = [];
-                        _.forEach(params.strike_id, id => {
-                            this.selectedStrikes.push(+id);
-                        });
-                    } else {
-                        this.selectedStrikes = [+params.strike_id];
-                    }
+                    this.selectedStrikes = +params.strike_id;
                 }
             }
             this.selectedTimeValue = params.use_ingest_time === 'true' ? 'ingest' : 'data';
