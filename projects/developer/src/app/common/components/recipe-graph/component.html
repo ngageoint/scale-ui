@@ -208,7 +208,7 @@
                                                     <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
                                                 </button>
-                                                    <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                                 </div>
                                             </li>
                                         </ul>
@@ -245,7 +245,7 @@
                                                     <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
                                                     </button>
-                                                    <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                    <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                                 </div>
                                             </li>
                                         </ul>
@@ -314,7 +314,7 @@
                                                 <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                         (click)="removeInputConnection(connection)" *ngIf="isEditing">
                                                 </button>
-                                                <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                             </div>
                                         </li>
                                     </ul>
@@ -378,7 +378,7 @@
                                     <ul class="list-unstyled">
                                         <li *ngFor="let connection of selectedNodeConnections">
                                             <div class="connection" *ngIf="connection.output === file.name">
-                                                <strong> {{ connection.name }}</strong>.<em>{{ connection.output }}</em>.<em>{{ file.name }}</em>
+                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                             </div>
                                         </li>
                                     </ul>
