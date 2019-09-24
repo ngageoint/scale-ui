@@ -1,37 +1,50 @@
 <div class="recipe-type__details" [formGroup]="form">
     <h2>Add condition</h2>
 
-    <p-accordion formArrayName="filters" [activeIndex]="accordionIndex">
-        <p-accordionTab *ngFor="let filter of filters.controls; let i = index">
-            <p-header>
-                <i *ngIf="!filter.valid" class="fa fa-warning" style="color: var(--red)"
-                    pTooltip="This filter is invalid" tooltipPosition="bottom"></i>
-                Filter {{ i + 1 }}
-                <ng-container *ngIf="filter.get('name').value">
-                    - {{ filter.get('name').value }}
-                </ng-container>
-            </p-header>
-            <a *ngIf="filters.length > 1" class="remove-filter" (click)="removeFilter(i)"
-                pTooltip="Remove filter" tooltipPosition="left">
-                <span class="pi pi-times"></span>
-            </a>
-            <dev-recipe-type-filter [form]="filter"></dev-recipe-type-filter>
-        </p-accordionTab>
-    </p-accordion>
+    <label>
+        <span class="required">Name</span>
+        <input type="text" pInputText formControlName="name">
+        <div class="help-block" *ngIf="!form.get('name').valid && form.get('name').dirty">
+            <p-message severity="error" *ngIf="form.get('name').errors.required" text="This field is required"></p-message>
+        </div>
+        <div class="help-block">
+            The unique name for identifying this conditional node
+        </div>
+    </label>
 
-    <div class="text-center margin-bottom-md">
-        <button pButton type="button" icon="fa fa-plus" label="Add filter" (click)="addFilter()"
-            class="add-filter"></button>
+    <div formGroupName="data_filter">
+        <p-accordion formArrayName="filters" [activeIndex]="accordionIndex">
+            <p-accordionTab *ngFor="let filter of filters.controls; let i = index">
+                <p-header>
+                    <i *ngIf="!filter.valid" class="fa fa-warning" style="color: var(--red)"
+                        pTooltip="This filter is invalid" tooltipPosition="bottom"></i>
+                    Filter {{ i + 1 }}
+                    <ng-container *ngIf="filter.get('name').value">
+                        - {{ filter.get('name').value }}
+                    </ng-container>
+                </p-header>
+                <a *ngIf="filters.length > 1" class="remove-filter" (click)="removeFilter(i)"
+                    pTooltip="Remove filter" tooltipPosition="left">
+                    <span class="pi pi-times"></span>
+                </a>
+                <dev-recipe-type-filter [form]="filter"></dev-recipe-type-filter>
+            </p-accordionTab>
+        </p-accordion>
+
+        <div class="text-center margin-bottom-md">
+            <button pButton type="button" icon="fa fa-plus" label="Add filter" (click)="addFilter()"
+                class="add-filter"></button>
+        </div>
+
+        <p-selectButton [options]="allOptions" formControlName="all">
+            <ng-template let-item>
+                <div style="padding: 0 1em">
+                    <strong>{{ item.label }}</strong><br>
+                    <small>{{ item.description }}</small>
+                </div>
+            </ng-template>
+        </p-selectButton>
     </div>
-
-    <p-selectButton [options]="allOptions" formControlName="all">
-        <ng-template let-item>
-            <div style="padding: 0 1em">
-                <strong>{{ item.label }}</strong><br>
-                <small>{{ item.description }}</small>
-            </div>
-        </ng-template>
-    </p-selectButton>
 
     <hr>
 

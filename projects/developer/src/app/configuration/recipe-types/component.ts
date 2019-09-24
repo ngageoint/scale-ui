@@ -509,7 +509,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     onConditionSave(e) {
-        console.log('parent got click even', e);
         this.conditions.push(e);
     }
 

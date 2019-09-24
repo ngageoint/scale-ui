@@ -12,9 +12,6 @@ import { RecipeTypeCondition } from './api.condition.model';
     styleUrls: ['./condition.component.scss']
 })
 export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
-    // @Input() condition: RecipeTypeCondition;
-    // @Output() conditionChange: EventEmitter<any> = new EventEmitter<any>();
-    // @Output() formChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() save: EventEmitter<any> = new EventEmitter<any>();
     @Output() cancel: EventEmitter<any> = new EventEmitter<any>();
     private condition = RecipeTypeCondition.transformer(null);
@@ -22,10 +19,13 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
 
     // main form that will be saved
     form = this.fb.group({
-        all: [true, Validators.required],
-        filters: this.fb.array([
-            this.getFilterForm()
-        ])
+        name: ['', Validators.required],
+        data_filter: this.fb.group({
+            filters: this.fb.array([
+                this.getFilterForm()
+            ], Validators.required),
+            all: [true, Validators.required],
+        })
     });
 
     // opened filter in the accordion group
@@ -39,13 +39,12 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
 
     /** Alias to get the filters array from the form */
     get filters(): FormArray {
-        return this.form.get('filters') as FormArray;
+        return this.form.get('data_filter').get('filters') as FormArray;
     }
 
     constructor(
         private fb: FormBuilder
     ) {
-
     }
 
     /**
@@ -91,10 +90,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (this.form) {
             this.subscriptions.push(this.form.valueChanges.subscribe(changes => {
-                if ('data_filter' in this.condition) {
-                    _.merge(this.condition.data_filter, changes);
-                }
-                console.log('merged', this.condition);
+                _.merge(this.condition, changes);
             }));
         }
     }
