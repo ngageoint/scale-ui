@@ -290,14 +290,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 if (file.output === i.output) {
                 inputFile = key;
                 let connection;
+                let files;
+                let json;
                     if (i.node) {
                         if (this.recipeData.definition.input.json && !this.recipeData.definition.input.files) {
                             connection = _.find(this.recipeData.definition.input.json, {name: i.name});
                         } else if (this.recipeData.definition.input.files && !this.recipeData.definition.input.json) {
                             connection = _.find(this.recipeData.definition.input.files, {name: i.name});
                         } else if (this.recipeData.definition.input.files && this.recipeData.definition.input.json) {
-                            const files: any = _.find(this.recipeData.definition.input.files, {name: i.name});
-                            const json: any = _.find(this.recipeData.definition.input.json, {name: i.name});
+                            files = _.find(this.recipeData.definition.input.files, {name: i.name});
+                            json = _.find(this.recipeData.definition.input.json, {name: i.name});
                         }
                         console.log(connection);
                         const dependency = this.recipeData.definition.nodes[i.node];
@@ -336,9 +338,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                             }
                         }
                     } else if (this.selectedNode.node_type.job_type_name) {
+                        const connection: any = _.find(this.recipeData.definition.input.files, {name: i.input});
+                        console.log(i.input)
                         _.forEach(this.recipeData.job_types, j => {
+                            console.log(j)
                             if ((this.selectedNode.node_type.job_type_name === j.name) && connection) {
-                                _.forEach(j.manifest.job.interface.inputs.json, json => {
+                                _.forEach(j.manifest.job.interface.inputs.files, json => {
+                                    console.log(json)
                                     if (!_.isEmpty(this.selectedNode.input[json.name]) && (i.input_name === json.name)) {
                                         this.selectedNodeConnections.push({
                                             name: connection.name,
