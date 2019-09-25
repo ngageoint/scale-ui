@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 import { RecipesApiService } from './api.service';
@@ -20,7 +21,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     nodeOptions: SelectItem[] = [];
     selectedNodes = [];
     recipe: any;
-    subscription: any;
+    subscriptions: Subscription[] = [];
     showReprocess = false;
     loading = false;
 
@@ -107,17 +108,15 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         this.allNodes = event;
     }
 
-    unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
+    /**
+     * Load recipe details from the server.
+     * @param id the id from the route param of the recipe to load
+     */
+    loadRecipeDetails(id: number): void {
+        this.loading = true;
 
-    ngOnInit() {
-        if (this.route.snapshot) {
-            const id = +this.route.snapshot.paramMap.get('id');
-            this.loading = true;
-            this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(recipe => {
+        this.subscriptions.push(
+            this.recipesApiService.getRecipe(id, true).subscribe(recipe => {
                 this.recipe = recipe;
                 // get full recipe type to retrieve job types with manifests
                 this.recipeTypesApiService.getRecipeType(recipe.recipe_type.name).subscribe(recipeType => {
@@ -156,11 +155,19 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving recipe', detail: err.statusText});
                 this.loading = false;
-            });
-        }
+            })
+        );
+    }
+
+    ngOnInit() {
+        // watch for route changes and reload the recipe
+        this.route.params.subscribe(params => {
+            this.loadRecipeDetails(params.id);
+        });
     }
 
     ngOnDestroy() {
-        this.unsubscribe();
+        this.subscriptions.forEach(s => s.unsubscribe());
+        this.subscriptions = [];
     }
 }
