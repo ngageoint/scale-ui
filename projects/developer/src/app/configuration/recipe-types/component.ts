@@ -55,6 +55,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addedJobNode: any;
     addedConditionalNode: any;
     condition: any = RecipeTypeCondition.transformer(null);
+    editCondition: RecipeTypeCondition;
     conditions: any = [];
     selectedConditions = [];
     conditionColumns: any[];
@@ -512,8 +513,14 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
      * Callback for when the condition editor panel has been saved with a valid condition.
      * @param condition the edited conditional node
      */
-    onConditionSave(condition: RecipeTypeCondition): void {
-        this.conditions.push(condition);
+    onConditionSave(event: {condition: RecipeTypeCondition, previousCondition: RecipeTypeCondition}): void {
+        if (event.previousCondition.name) {
+            const idx = _.findIndex(this.conditions, {name: event.condition.name});
+            this.conditions[idx] = event.condition;
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name] = event.condition;
+        } else {
+            this.conditions.push(event.condition);
+        }
     }
 
     /**
@@ -536,6 +543,23 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 data: condition
             });
         }
+    }
+
+    /**
+     * Callback for when the recipe graph outputs the click event to edit a condition node.
+     * @param condition the condition node to edit
+     */
+    onEditCondition(condition: RecipeTypeCondition): void {
+        // this will be cleared when the sidebar is hidden
+        this.editCondition = condition;
+        this.showConditions = true;
+    }
+
+    /**
+     * Callback for when the condition side bar is hidden.
+     */
+    onConditionSidebarHide(): void {
+        this.editCondition = null;
     }
 
     onFilterKeyup(e) {

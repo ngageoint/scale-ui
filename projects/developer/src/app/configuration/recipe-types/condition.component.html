@@ -1,7 +1,12 @@
 <div class="recipe-type__details" [formGroup]="form">
-    <h2>Add condition</h2>
+    <h2 *ngIf="isEditing">
+        Edit "{{ form.get('name').value }}" condition
+    </h2>
+    <h2 *ngElse>
+        Add condition
+    </h2>
 
-    <label>
+    <label *ngIf="!isEditing">
         <span class="required">Name</span>
         <input type="text" pInputText formControlName="name">
         <div class="help-block" *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)">

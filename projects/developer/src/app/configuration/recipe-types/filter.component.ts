@@ -40,7 +40,6 @@ enum FilterType {
 })
 export class RecipeTypeFilterComponent implements OnInit, OnDestroy {
     @Input() form: FormGroup;
-    @Output() formChange: EventEmitter<any> = new EventEmitter<any>();
     private filter = RecipeTypeFilter.transformer(null);
     private subscriptions: Subscription[] = [];
 
