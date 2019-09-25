@@ -177,6 +177,18 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 }
             });
             this.selectedJobTypes = jtArray;
+
+            // load in condition nodes if available
+            if (this.selectedRecipeTypeDetail.conditions) {
+                this.selectedRecipeTypeDetail.conditions.forEach(c => {
+                    // parse the condition node data
+                    const condition = RecipeTypeCondition.transformer(c);
+
+                    // add the condition both to the list to display, as well as the list with selected values
+                    this.conditions.push(condition);
+                    this.selectedConditions.push(condition);
+                });
+            }
         }, err => {
             console.log(err);
             this.loadingRecipeType = false;
