@@ -21,7 +21,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription[] = [];
 
     // whether or not in edit mode, based on if editCondition is provided
-    isEditing: false;
+    isEditing = false;
 
     // main form that will be saved
     form: FormGroup;
