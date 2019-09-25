@@ -508,15 +508,27 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         e.originalEvent.preventDefault();
     }
 
-    onConditionSave(e) {
-        this.conditions.push(e);
+    /**
+     * Callback for when the condition editor panel has been saved with a valid condition.
+     * @param condition the edited conditional node
+     */
+    onConditionSave(condition: RecipeTypeCondition): void {
+        this.conditions.push(condition);
     }
 
-    onConditionCancel(e) {
+    /**
+     * Callback for when the conditional editor is closed from within.
+     * @param  e whether or not the editor should be visible
+     */
+    onConditionCancel(e: boolean): void {
         this.showConditions = false;
     }
 
-    onRemoveConditionClick(condition) {
+    /**
+     * Callback for when the recipe graph outputs the click event to delete a condition node.
+     * @param condition the condition node to delete.
+     */
+    onDeleteCondition(condition: RecipeTypeCondition): void {
         _.remove(this.conditions, { name: condition.name });
         const nodeToRemove = this.selectedRecipeTypeDetail.definition.nodes[condition.name];
         if (nodeToRemove) {

@@ -145,6 +145,13 @@
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
+
+            <ng-container *ngIf="isEditing">
+                <span class="ui-inputgroup conditions-edit">
+                    <button type="button" pButton icon="fa fa-edit" class="ui-button-info" pTooltip="Edit" (click)="editConditionClick()"></button>
+                    <button type="button" pButton icon="fa fa-trash" class="ui-button-danger" pTooltip="Delete" (click)="deleteConditionClick()"></button>
+                </span>
+            </ng-container>
         </span>
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
