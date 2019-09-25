@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray, ValidatorFn, AbstractControl } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
@@ -12,6 +12,7 @@ import { RecipeTypeCondition } from './api.condition.model';
     styleUrls: ['./condition.component.scss']
 })
 export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
+    @Input() conditions: RecipeTypeCondition[];
     @Output() save: EventEmitter<any> = new EventEmitter<any>();
     @Output() cancel: EventEmitter<any> = new EventEmitter<any>();
     private condition = RecipeTypeCondition.transformer(null);
@@ -19,7 +20,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
 
     // main form that will be saved
     form = this.fb.group({
-        name: ['', Validators.required],
+        name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z_-]+$/), this.existingConditionsValidator()]],
         data_filter: this.fb.group({
             filters: this.fb.array([
                 this.getFilterForm()
@@ -76,6 +77,22 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
      */
     removeFilter(idx: number): void {
         this.filters.removeAt(idx);
+    }
+
+    /**
+     * Form validator function to check that the condition name is not already in use.
+     * @return validator function
+     */
+    private existingConditionsValidator(): ValidatorFn {
+        return (control: AbstractControl): {[key: string]: any} | null => {
+            if (this.conditions) {
+                const existingNames = this.conditions.map(c => c.name);
+                if (existingNames.indexOf(control.value) !== -1) {
+                    return {'forbiddenName': {value: control.value}};
+                }
+            }
+            return null;
+        };
     }
 
     saveClick(): void {

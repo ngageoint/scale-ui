@@ -229,5 +229,5 @@
 <p-sidebar [(visible)]="showConditions" [blockScroll]="true" position="right" [style]="{width:'30%'}"
            *ngIf="isEditing && selectedRecipeTypeDetail">
     <dev-recipe-type-condition *ngIf="showConditions" (save)="onConditionSave($event)"
-        (cancel)="onConditionCancel($event)"></dev-recipe-type-condition>
+        (cancel)="onConditionCancel($event)" [conditions]="conditions"></dev-recipe-type-condition>
 </p-sidebar>

@@ -2,7 +2,7 @@
     <label>
         <span class="required">Input name</span>
         <input type="text" pInputText formControlName="name">
-        <div class="help-block" *ngIf="!form.get('name').valid && form.get('name').dirty">
+        <div class="help-block" *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)">
             <p-message severity="error" *ngIf="form.get('name').errors.required" text="This field is required"></p-message>
         </div>
         <div class="help-block">
@@ -15,7 +15,7 @@
         <p-dropdown [options]="typeOptions" formControlName="type" [style]="{'width':'100%'}"
                     placeholder="Select..." [showClear]="false">
         </p-dropdown>
-        <div class="help-block" *ngIf="!form.get('type').valid && form.get('type').dirty">
+        <div class="help-block" *ngIf="form.get('type').invalid && (form.get('type').dirty || form.get('type').touched)">
             <p-message severity="error" *ngIf="form.get('type').errors.required" text="This field is required"></p-message>
         </div>
         <div class="help-block">
@@ -28,7 +28,7 @@
         <p-dropdown [options]="conditionOptions" formControlName="condition" [style]="{'width':'100%'}"
                     placeholder="Select..." [showClear]="false">
         </p-dropdown>
-        <div class="help-block" *ngIf="!form.get('condition').valid && form.get('condition').dirty">
+        <div class="help-block" *ngIf="form.get('condition').invalid && (form.get('condition').dirty || form.get('condition').touched)">
             <p-message severity="error" *ngIf="form.get('condition').errors.required" text="This field is required"></p-message>
         </div>
         <div class="help-block">
@@ -55,7 +55,7 @@
                         *ngIf="numValues === -1 && values.controls.length > 1"></button>
             </div>
 
-            <div class="help-block" *ngIf="!value.valid && value.dirty">
+            <div class="help-block" *ngIf="value.invalid && (value.dirty || value.touched)">
                 <p-message severity="error" *ngIf="value.errors.pattern" text="Input a valid number"></p-message>
                 <p-message severity="error" *ngIf="value.errors.required" text="This field is required"></p-message>
             </div>

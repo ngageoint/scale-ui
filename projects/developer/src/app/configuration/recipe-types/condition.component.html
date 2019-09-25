@@ -4,8 +4,10 @@
     <label>
         <span class="required">Name</span>
         <input type="text" pInputText formControlName="name">
-        <div class="help-block" *ngIf="!form.get('name').valid && form.get('name').dirty">
+        <div class="help-block" *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)">
             <p-message severity="error" *ngIf="form.get('name').errors.required" text="This field is required"></p-message>
+            <p-message severity="error" *ngIf="form.get('name').errors.pattern" text="Only alpha characters, underscores, and hyphens may be used"></p-message>
+            <p-message severity="error" *ngIf="form.get('name').errors.forbiddenName" text="This condition name is already being used"></p-message>
         </div>
         <div class="help-block">
             The unique name for identifying this conditional node
