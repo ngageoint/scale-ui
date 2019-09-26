@@ -49,7 +49,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
      * Helper to add a new filter form group and expand the accordion to that position.
      * @param data any data available to initialize the form group
      */
-    addFilter(data?: any): void {
+    addFilter(data: any = {}): void {
         const values = data.values || [];
 
         const group = this.fb.group({
