@@ -161,9 +161,11 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         // watch for route changes and reload the recipe
-        this.route.params.subscribe(params => {
-            this.loadRecipeDetails(params.id);
-        });
+        if (this.route && this.route.params) {
+            this.route.params.subscribe(params => {
+                this.loadRecipeDetails(params.id);
+            });
+        }
     }
 
     ngOnDestroy() {
