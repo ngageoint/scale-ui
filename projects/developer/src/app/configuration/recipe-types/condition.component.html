@@ -1,0 +1,64 @@
+<div class="recipe-type__details" [formGroup]="form">
+    <h2 *ngIf="isEditing">
+        Edit "{{ form.get('name').value }}" condition
+    </h2>
+    <h2 *ngElse>
+        Add condition
+    </h2>
+
+    <label *ngIf="!isEditing">
+        <span class="required">Name</span>
+        <input type="text" pInputText formControlName="name">
+        <div class="help-block" *ngIf="form.get('name').invalid && (form.get('name').dirty || form.get('name').touched)">
+            <p-message severity="error" *ngIf="form.get('name').errors.required" text="This field is required"></p-message>
+            <p-message severity="error" *ngIf="form.get('name').errors.pattern" text="Only alpha characters, underscores, and hyphens may be used"></p-message>
+            <p-message severity="error" *ngIf="form.get('name').errors.forbiddenName" text="This condition name is already being used"></p-message>
+        </div>
+        <div class="help-block">
+            The unique name for identifying this conditional node
+        </div>
+    </label>
+
+    <div formGroupName="data_filter">
+        <p-accordion formArrayName="filters" [activeIndex]="accordionIndex">
+            <p-accordionTab *ngFor="let filter of filters.controls; let i = index">
+                <p-header>
+                    <i *ngIf="!filter.valid" class="fa fa-warning" style="color: var(--red)"
+                        pTooltip="This filter is invalid" tooltipPosition="bottom"></i>
+                    Filter {{ i + 1 }}
+                    <ng-container *ngIf="filter.get('name').value">
+                        - {{ filter.get('name').value }}
+                    </ng-container>
+                </p-header>
+                <a *ngIf="filters.length > 1" class="remove-filter" (click)="removeFilter(i)"
+                    pTooltip="Remove filter" tooltipPosition="left">
+                    <span class="pi pi-times"></span>
+                </a>
+                <dev-recipe-type-filter [form]="filter"></dev-recipe-type-filter>
+            </p-accordionTab>
+        </p-accordion>
+
+        <div class="text-center margin-bottom-md">
+            <button pButton type="button" icon="fa fa-plus" label="Add filter" (click)="addFilter()"
+                class="add-filter"></button>
+        </div>
+
+        <p-selectButton [options]="allOptions" formControlName="all">
+            <ng-template let-item>
+                <div style="padding: 0 1em">
+                    <strong>{{ item.label }}</strong><br>
+                    <small>{{ item.description }}</small>
+                </div>
+            </ng-template>
+        </p-selectButton>
+    </div>
+
+    <hr>
+
+    <div class="ui-inputgroup margin-bottom-lg margin-top-lg">
+        <button pButton type="button" class="ui-button-success" icon="fa fa-save" label="Save"
+            [disabled]="!form.valid" style="width: 50%" (click)="saveClick()"></button>
+        <button pButton type="button" class="ui-button-secondary" label="Cancel"
+            style="width: 50%" (click)="cancelClick()"></button>
+    </div>
+</div>

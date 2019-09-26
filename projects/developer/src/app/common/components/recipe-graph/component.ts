@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, Output, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import * as shape from 'd3-shape';
@@ -24,6 +24,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
     @Input() minHeight = '70vh';
+    @Output() editCondition: EventEmitter<any> = new EventEmitter<any>();
+    @Output() deleteCondition: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
@@ -766,6 +768,21 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
         });
     }
+
+    /**
+     * Click handler for edit button in header of condition dialog.
+     */
+    editConditionClick(): void {
+        this.editCondition.next(this.selectedCondition);
+    }
+
+    /**
+     * Click event handler for delete button in header of condition dialog.
+     */
+    deleteConditionClick(): void {
+        this.deleteCondition.next(this.selectedCondition);
+    }
+
     ngOnChanges(changes) {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);

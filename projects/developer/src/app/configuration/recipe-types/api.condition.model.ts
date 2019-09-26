@@ -44,6 +44,7 @@ export class RecipeTypeCondition {
             json: []
         };
     }
+
     constructor(
         public name: string,
         public condition_interface: any,
