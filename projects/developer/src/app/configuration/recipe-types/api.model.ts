@@ -56,6 +56,10 @@ export class RecipeType {
                     if (_.isEmpty(input)) {
                         delete node.input[i];
                     }
+                    if (input.input_name) {
+                        delete input.input_name;
+                        console.log(input);
+                    }
                 });
             }
             if (_.has(node, 'node_type.data_filter.filters_display')) {
