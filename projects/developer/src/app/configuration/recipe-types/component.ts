@@ -37,8 +37,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
-    conditionForm: any;
-    conditionFormSubscription: any;
     showFileInputs: boolean;
     showJsonInputs: boolean;
     showConditions: boolean;
@@ -57,6 +55,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addedJobNode: any;
     addedConditionalNode: any;
     condition: any = RecipeTypeCondition.transformer(null);
+    editCondition: RecipeTypeCondition;
     conditions: any = [];
     selectedConditions = [];
     conditionColumns: any[];
@@ -150,14 +149,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 })
             })
         });
-
-        this.conditionForm = this.fb.group({
-            name: [this.condition.name, Validators.required],
-            data_filter: this.fb.group({
-                filters: this.fb.array(this.condition.data_filter.filters, Validators.required),
-                all: [true]
-            })
-        });
     }
 
     private initRecipeTypeForm() {
@@ -170,10 +161,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
-        });
-
-        this.conditionFormSubscription = this.conditionForm.valueChanges.subscribe(changes => {
-            _.merge(this.condition, changes);
         });
     }
 
@@ -190,6 +177,18 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 }
             });
             this.selectedJobTypes = jtArray;
+
+            // load in condition nodes if available
+            if (this.selectedRecipeTypeDetail.conditions) {
+                this.selectedRecipeTypeDetail.conditions.forEach(c => {
+                    // parse the condition node data
+                    const condition = RecipeTypeCondition.transformer(c);
+
+                    // add the condition both to the list to display, as well as the list with selected values
+                    this.conditions.push(condition);
+                    this.selectedConditions.push(condition);
+                });
+            }
         }, err => {
             console.log(err);
             this.loadingRecipeType = false;
@@ -255,10 +254,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private unsubscribeFromForms() {
         if (this.createFormSubscription) {
             this.createFormSubscription.unsubscribe();
-        }
-
-        if (this.conditionFormSubscription) {
-            this.conditionFormSubscription.unsubscribe();
         }
     }
 
@@ -526,21 +521,33 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         e.originalEvent.preventDefault();
     }
 
-    onAddConditionClick() {
-        if (this.selectedRecipeTypeDetail.definition.nodes[this.condition.name]) {
-            this.messageService.add({
-                severity: 'error',
-                summary: `Node ${this.condition.name} already exists`,
-                detail: 'Node names must be unique.'
-            });
+    /**
+     * Callback for when the condition editor panel has been saved with a valid condition.
+     * @param condition the edited conditional node
+     */
+    onConditionSave(event: {condition: RecipeTypeCondition, previousCondition: RecipeTypeCondition}): void {
+        if (event.previousCondition.name) {
+            const idx = _.findIndex(this.conditions, {name: event.condition.name});
+            this.conditions[idx] = event.condition;
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name] = event.condition;
         } else {
-            this.conditions.push(RecipeTypeCondition.transformer(this.condition));
-            this.conditionForm.reset();
-            this.condition = RecipeTypeCondition.transformer(null);
+            this.conditions.push(event.condition);
         }
     }
 
-    onRemoveConditionClick(condition) {
+    /**
+     * Callback for when the conditional editor is closed from within.
+     * @param  e whether or not the editor should be visible
+     */
+    onConditionCancel(e: boolean): void {
+        this.showConditions = false;
+    }
+
+    /**
+     * Callback for when the recipe graph outputs the click event to delete a condition node.
+     * @param condition the condition node to delete.
+     */
+    onDeleteCondition(condition: RecipeTypeCondition): void {
         _.remove(this.conditions, { name: condition.name });
         const nodeToRemove = this.selectedRecipeTypeDetail.definition.nodes[condition.name];
         if (nodeToRemove) {
@@ -548,6 +555,23 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 data: condition
             });
         }
+    }
+
+    /**
+     * Callback for when the recipe graph outputs the click event to edit a condition node.
+     * @param condition the condition node to edit
+     */
+    onEditCondition(condition: RecipeTypeCondition): void {
+        // this will be cleared when the sidebar is hidden
+        this.editCondition = condition;
+        this.showConditions = true;
+    }
+
+    /**
+     * Callback for when the condition side bar is hidden.
+     */
+    onConditionSidebarHide(): void {
+        this.editCondition = null;
     }
 
     onFilterKeyup(e) {

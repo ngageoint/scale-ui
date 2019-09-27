@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener } from '@angular/core';
+import { Component, Input, Output, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import * as shape from 'd3-shape';
@@ -24,6 +24,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
     @Input() minHeight = '70vh';
+    @Output() editCondition: EventEmitter<any> = new EventEmitter<any>();
+    @Output() deleteCondition: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('dependencyPanel') dependencyPanel: any;
     @ViewChild('inputPanel') inputPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
@@ -209,6 +211,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 let label = '';
                 let icon = '';
                 let publisher = false;
+
                 if (node.node_type.node_type === 'job') {
                     const jobType: any = _.find(this.recipeData.job_types, {
                         name: node.node_type.job_type_name,
@@ -221,7 +224,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     icon = jobType ? String.fromCharCode(parseInt(jobType.icon_code, 16)) : String.fromCharCode(parseInt('f1b2', 16));
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
-                    id = _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
+                    id = key || _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
                     label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
@@ -346,6 +349,20 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         version: this.selectedNode.node_type.job_type_version
                     });
                     this.getNodeConnections();
+                } else if (this.selectedNode.node_type.node_type === 'recipe') {
+                    this.selectedJobType = null;
+                    this.selectedCondition = null;
+                    this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
+                        name: this.selectedNode.node_type.recipe_type_name,
+                        // TODO commented out the following line
+                        //   sub_recipe_types is a live pointer to objects but the original definition
+                        //   has the original revisions used instead
+                        // revision_num: this.selectedNode.node_type.recipe_type_revision
+                    });
+                    // TODO added, see note above
+                    this.selectedRecipeType.revision_num = this.selectedNode.node_type.recipe_type_revision;
+
+                    this.getNodeConnections();
 
                     if (this.jobMetrics) {
                         const rawData = this.jobMetrics[this.selectedNode.node_type.job_type_name];
@@ -376,14 +393,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                             ]
                         };
                     }
-                } else if (this.selectedNode.node_type.node_type === 'recipe') {
-                    this.selectedJobType = null;
-                    this.selectedCondition = null;
-                    this.selectedRecipeType = _.find(this.recipeData.sub_recipe_types, {
-                        name: this.selectedNode.node_type.recipe_type_name,
-                        revision_num: this.selectedNode.node_type.recipe_type_revision
-                    });
-                    this.getNodeConnections();
                 } else if (this.selectedNode.node_type.node_type === 'condition') {
                     this.selectedJobType = null;
                     this.selectedRecipeType = null;
@@ -427,7 +436,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         // only show conditions that are not yet dependencies
                         const currDependency: any = _.find(this.selectedNode.dependencies, { name: condition.name });
                         condition.disabled = !!currDependency;
-                        condition.acceptance = currDependency ? currDependency.acceptance : false;
+                        condition.acceptance = true;
                         this.dependencyOptions.push(condition);
                     }
                 }
@@ -460,7 +469,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 const files = this.selectedNode.node_type.interface.files || [];
                 const json = this.selectedNode.node_type.interface.json || [];
                 const input = this.selectedNode.input || {};
-                const outputs = dependency.manifest.job.interface.outputs;
+                const outputs = dependency.manifest.job.interface ?
+                                dependency.manifest.job.interface.outputs || []
+                                : [];
                 // job type manifest files and json are slightly different, so just grab what we need
                 if (outputs.files) {
                     _.forEach(outputs.files, f => {
@@ -481,7 +492,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         });
                     });
                 }
-                _.forEach(dependency.manifest.job.interface.outputs.files, f => {
+                _.forEach(outputs.files, f => {
                     const key = _.has(input, f.name) ? `${f.name}-${dependency.manifest.job.name}` : f.name;
                     input[key] = {
                         node: dependencyName,
@@ -489,7 +500,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                         type: 'dependency'
                     };
                 });
-                _.forEach(dependency.manifest.job.interface.outputs.json, j => {
+                _.forEach(outputs.json, j => {
                     const key = _.has(input, j.name) ? `${j.name}-${dependency.manifest.job.name}` : j.name;
                     input[key] = {
                         node: dependencyName,
@@ -536,7 +547,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     jobType.disabled = false;
                     let files = this.selectedNode.node_type.interface.files;
                     let json = this.selectedNode.node_type.interface.json;
-                    const outputs = jobType.manifest.job.interface.outputs;
+                    const outputs = jobType.manifest.job.interface ?
+                                jobType.manifest.job.interface.outputs || []
+                                : [];
                     if (outputs.files && files) {
                         _.forEach(outputs.files, outputFile => {
                             files = _.filter(files, f => {
@@ -762,6 +775,21 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
         });
     }
+
+    /**
+     * Click handler for edit button in header of condition dialog.
+     */
+    editConditionClick(): void {
+        this.editCondition.next(this.selectedCondition);
+    }
+
+    /**
+     * Click event handler for delete button in header of condition dialog.
+     */
+    deleteConditionClick(): void {
+        this.deleteCondition.next(this.selectedCondition);
+    }
+
     ngOnChanges(changes) {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);

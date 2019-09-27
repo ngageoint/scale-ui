@@ -2,7 +2,7 @@
     "id": 13,
     "job_type": {
         "id": 13,
-        "name": "no-interface",
+        "name": "no-input",
         "version": "1.0.0",
         "title": "No Interface",
         "description": "No Interface Job",
@@ -11,7 +11,7 @@
     "job_type_rev": {
         "id": 23,
         "job_type": {
-            "name": "no-interface",
+            "name": "no-input",
             "version": "1.0.0",
             "title": "No Interface",
             "description": "No Interface Job",
@@ -20,11 +20,11 @@
             "latest_version": "1.0.0"
         },
         "revision_num": 1,
-        "docker_image": "10.4.4.10:5000/no-interface-1.0.0-seed:dev",
+        "docker_image": "10.4.4.10:5000/no-input-1.0.0-seed:dev",
         "created": "2015-08-28T17:55:41.005Z",
         "manifest": {
             "job": {
-                "name": "no-interface",
+                "name": "no-input",
                 "jobVersion": "1.0.0",
                 "packageVersion": "1.0.0",
                 "title": "No Interface",
@@ -55,7 +55,7 @@
         "id": 1,
         "recipe_type": {
             "id": 1,
-            "name": "no-interface",
+            "name": "no-input",
             "title": "No Interface Recipe",
             "description": "No Interface Recipe",
             "revision_num": 1
@@ -103,7 +103,7 @@
         "error": null,
         "job_type": {
             "id": 1,
-            "name": "no-interface",
+            "name": "no-input",
             "version": "1.0.0",
             "title": "No Interface",
             "description": "No Interface Job",
