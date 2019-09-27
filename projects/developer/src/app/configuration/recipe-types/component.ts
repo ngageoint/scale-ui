@@ -481,7 +481,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'error', summary: 'Error creating recipe type', detail: err.statusText });
             });
         } else {
-            cleanRecipeType.auto_update = true; //should always auto update
             this.recipeTypesApiService.editRecipeType(this.selectedRecipeTypeDetail.name, cleanRecipeType).subscribe(() => {
                 this.isEditing = false;
                 this.showAddRemoveDisplay = false;
