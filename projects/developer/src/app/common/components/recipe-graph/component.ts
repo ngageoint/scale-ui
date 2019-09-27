@@ -789,7 +789,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.selectedNode.node_type.node_type === 'recipe' ?
                         currType.definition.input.json :
                         currType.interface.json;
-                    _.forEach(jsonInputs, json=> {
+                    _.forEach(jsonInputs, json => {
                         if (json.name === this.selectedNodeInput.name) {
                             let isRecipe = false;
                             this.nodeInputs.forEach(nodeInput => {
