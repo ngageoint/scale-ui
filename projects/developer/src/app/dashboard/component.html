@@ -6,13 +6,13 @@
                     <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
                              #datatable>
                         <ng-template pTemplate="header" let-columns>
-                            <tr *ngIf="favoriteJobTypes.length > 0">
+                            <!-- <tr *ngIf="favoriteJobTypes.length > 0">
                                 <th *ngFor="let col of columns">
                                     <input pInputText type="text"
                                            (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
                                            class="column-filter">
                                 </th>
-                            </tr>
+                            </tr> -->
                         </ng-template>
                         <ng-template pTemplate="body" let-rowData let-columns="columns">
                             <tr [pSelectableRow]="rowData">
