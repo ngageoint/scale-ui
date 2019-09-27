@@ -333,9 +333,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                 _.forEach(j.manifest.job.interface.inputs, (fileInput, typeKey) => {
                                     let connectionTemp;
                                     if (typeKey === 'files') {
-                                        connectionTemp = _.find(this.recipeData.definition.input.files, {name: i.name});
+                                        connectionTemp = _.find(this.recipeData.definition.input.files, {name: i.input});
                                     } else if (typeKey === 'json') {
-                                        connectionTemp = _.find(this.recipeData.definition.input.json, {name: i.name});
+                                        connectionTemp = _.find(this.recipeData.definition.input.json, {name: i.input});
                                     }
                                     if (connectionTemp) {
                                         if (!_.isEmpty(this.selectedNode.input[inputFile])
@@ -804,7 +804,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                 // no dependencies means this is coming from the recipe input
                                 this.selectedNode.input[this.selectedNodeInput.name] = {
                                     type: 'recipe',
-                                    name: providerOutput.name,
+                                    input: providerOutput.name,
                                     input_name: this.selectedNodeInput.name
                                 };
                             } else {
@@ -878,7 +878,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                 // no dependencies means this is coming from the recipe input
                                 this.selectedNode.input[this.selectedNodeInput.name] = {
                                     type: 'recipe',
-                                    name: providerOutput.name,
+                                    input: providerOutput.name,
                                     input_name: this.selectedNodeInput.name
                                 };
                             } else {
@@ -918,7 +918,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     });
                 } else {
                     currInput = _.findKey(this.selectedNode.input, function(standardInput) {
-                        return standardInput.name === conn.name; });
+                        return standardInput.input === conn.name; });
                 }
                 if (currInput) {
                     // remove input
