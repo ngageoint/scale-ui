@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { Subscription } from 'rxjs';
 import * as _ from 'lodash';
 
 import { RecipesApiService } from './api.service';
@@ -20,7 +21,7 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     nodeOptions: SelectItem[] = [];
     selectedNodes = [];
     recipe: any;
-    subscription: any;
+    subscriptions: Subscription[] = [];
     showReprocess = false;
     loading = false;
 
@@ -107,25 +108,23 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
         this.allNodes = event;
     }
 
-    unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
-        }
-    }
+    /**
+     * Load recipe details from the server.
+     * @param id the id from the route param of the recipe to load
+     */
+    loadRecipeDetails(id: number): void {
+        this.loading = true;
 
-    ngOnInit() {
-        if (this.route.snapshot) {
-            const id = +this.route.snapshot.paramMap.get('id');
-            this.loading = true;
-            this.subscription = this.recipesApiService.getRecipe(id, true).subscribe(recipe => {
+        this.subscriptions.push(
+            this.recipesApiService.getRecipe(id, true).subscribe(recipe => {
                 this.recipe = recipe;
                 // get full recipe type to retrieve job types with manifests
                 this.recipeTypesApiService.getRecipeType(recipe.recipe_type.name).subscribe(recipeType => {
                     // add recipe detail data to nodes
                     _.forEach(recipe.recipe_type_rev.definition.nodes, node => {
                         const recipeDetail = _.find(this.recipe.details.nodes, rd => {
-                            return node.node_type.job_type_name === rd.node_type.job_type_name &&
-                                node.node_type.job_type_version === rd.node_type.job_type_version;
+                            return node.node_type.recipe_type_name === rd.node_type.recipe_type_name &&
+                                node.node_type.recipe_type_revision === rd.node_type.recipe_type_revision;
                         });
                         if (recipeDetail) {
                             _.merge(node.node_type, recipeDetail.node_type);
@@ -156,11 +155,21 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
             }, err => {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving recipe', detail: err.statusText});
                 this.loading = false;
+            })
+        );
+    }
+
+    ngOnInit() {
+        // watch for route changes and reload the recipe
+        if (this.route && this.route.params) {
+            this.route.params.subscribe(params => {
+                this.loadRecipeDetails(params.id);
             });
         }
     }
 
     ngOnDestroy() {
-        this.unsubscribe();
+        this.subscriptions.forEach(s => s.unsubscribe());
+        this.subscriptions = [];
     }
 }
