@@ -58,7 +58,6 @@ export class RecipeType {
                     }
                     if (input.input_name) {
                         delete input.input_name;
-                        console.log(input);
                     }
                 });
             }

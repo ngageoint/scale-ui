@@ -318,9 +318,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                     });
                                 }
                             } else {
-                                console.log(i);
                                 connection = _.find(this.recipeData.definition.input.files, {name: i.output});
-                                console.log(connection);
                                 if (connection) {
                                     this.selectedNodeConnections.push({
                                         name: connection.name,
@@ -356,7 +354,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                             }
                         });
                     } else {
-                        console.log(connection);
                             if (connection) {
                                 this.selectedNodeConnections.push({
                                     name: connection.name,
@@ -368,7 +365,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             }
             });
         });
-        console.log(this.selectedNodeConnections);
     }
     private getTotalConnections() {
         this.totalInputs = 0;
@@ -833,7 +829,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         } else {
             console.log('node not selected');
         }
-        console.log(this.selectedNode.input);
         this.selectedNodeInput = [];
         this.inputFilePanel.hide();
     }
@@ -908,20 +903,17 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         } else {
             console.log('node not selected');
         }
-        console.log(this.selectedNode.input);
         this.selectedNodeInput = [];
         this.inputFilePanel.hide();
     }
 
     removeInputConnection(conn) {
         // const currJob: any = this.getCurrJob();
-        console.log(conn);
         if (this.selectedNode) {
             let currInput;
             _.forEach(this.selectedNode.input, node => {
                 if (node.type === 'dependency') {
                     currInput = _.findKey(this.selectedNode.input, function(dependentInput) {
-                        console.log(dependentInput);
                         return dependentInput.input_name === conn.input_name;
                     });
                 } else {
@@ -939,7 +931,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         } else {
             console.log('node not selected');
         }
-        console.log(this.selectedNode.input);
     }
 
     showDialog() {
