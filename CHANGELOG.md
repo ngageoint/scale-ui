@@ -2,37 +2,6 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## [0.9.0](https://github.com/ngageoint/scale-ui/compare/v0.8.6...v0.9.0) (2019-09-26)
-
-
-### Bug Fixes
-
-* **recipes:** fixed the sub-recipe behavior in graph components ([d7cdb47](https://github.com/ngageoint/scale-ui/commit/d7cdb47))
-* fixed data feed chart ([a86205a](https://github.com/ngageoint/scale-ui/commit/a86205a))
-* fixed popups ([d8b5569](https://github.com/ngageoint/scale-ui/commit/d8b5569))
-* **data feed:** fixed data feed rendering ([748549f](https://github.com/ngageoint/scale-ui/commit/748549f))
-* removed revision_num from strike and scan config ([6f49d90](https://github.com/ngageoint/scale-ui/commit/6f49d90))
-* **job types:** fixed job type error history rendering ([787d930](https://github.com/ngageoint/scale-ui/commit/787d930))
-
-
-### Features
-
-* **recipes:** added a new condition editor ([83a61d4](https://github.com/ngageoint/scale-ui/commit/83a61d4))
-
-
-
-### [0.8.6](https://github.com/ngageoint/scale-ui/compare/v0.8.5...v0.8.6) (2019-09-13)
-
-
-### Bug Fixes
-
-* corrected if logic ([854b14a](https://github.com/ngageoint/scale-ui/commit/854b14a))
-* **recipe:** fixed condition logic visibility ([b98c614](https://github.com/ngageoint/scale-ui/commit/b98c614))
-* **recipes:** fixed recipe editor handling of no interface job ([cd8436f](https://github.com/ngageoint/scale-ui/commit/cd8436f))
-* **strikes:** fixed payload construction ([f9a14eb](https://github.com/ngageoint/scale-ui/commit/f9a14eb))
-
-
-
 ### [0.8.5](https://github.com/ngageoint/scale-ui/compare/v0.8.4...v0.8.5) (2019-09-13)
 
 

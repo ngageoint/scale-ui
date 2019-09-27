@@ -233,7 +233,7 @@
             "last_modified": "2015-06-01T14:22:38.384Z"
         },{
             "id": 13,
-            "name": "no-input",
+            "name": "no-interface",
             "version": "1.0.0",
             "title": "No Interface",
             "description": "No Interface Job",

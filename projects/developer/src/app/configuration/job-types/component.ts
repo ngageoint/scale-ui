@@ -175,7 +175,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
             `${message}<br /><br />WARNING: This is a system job. Pausing could negatively affect Scale.` :
             message;
         this.confirmationService.confirm({
-            key: 'jobTypeConfirm',
             message: message,
             accept: () => {
                 this.jobTypesApiService.validateJobType(this.selectedJobTypeDetail).subscribe(result => {
@@ -210,7 +209,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     onDeprecateClick() {
         if (this.selectedJobTypeDetail.is_active) {
             this.confirmationService.confirm({
-                key: 'jobTypeConfirm',
                 message: `Deprecate ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`,
                 accept: () => {
                     this.updateIsActive();

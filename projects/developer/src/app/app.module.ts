@@ -16,9 +16,8 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 import {
     AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, ColorPickerModule, ConfirmationService,
     DataListModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
-    MessageModule, MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule,
-    SelectButtonModule, SidebarModule, SliderModule, SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule, TooltipModule,
-    TreeTableModule, SlideMenuModule
+    MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule, SidebarModule, SliderModule,
+    SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule, TooltipModule, TreeTableModule, SlideMenuModule
 } from 'primeng/primeng';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
@@ -65,7 +64,6 @@ import { QueueLoadComponent } from './common/components/queue-load/component';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
 import { RecipeGraphComponent } from './common/components/recipe-graph/component';
 import { RecipesComponent } from './processing/recipes/component';
-import { RecipeTypeConditionComponent } from './configuration/recipe-types/condition.component';
 import { RecipeTypeFileComponent } from './configuration/recipe-types/file.component';
 import { RecipeTypeFilterComponent } from './configuration/recipe-types/filter.component';
 import { RecipeTypeJsonComponent } from './configuration/recipe-types/json.component';
@@ -124,7 +122,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         RecipeDetailsComponent,
         RecipeGraphComponent,
         RecipesComponent,
-        RecipeTypeConditionComponent,
         RecipeTypeFileComponent,
         RecipeTypeFilterComponent,
         RecipeTypeJsonComponent,
@@ -171,7 +168,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         ListboxModule,
         MenubarModule,
         MenuModule,
-        MessageModule,
         MessagesModule,
         MultiSelectModule,
         NgxGraphModule,
@@ -183,7 +179,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         ReactiveFormsModule,
         ScrollPanelModule,
         SeedImagesModule,
-        SelectButtonModule,
         SidebarModule,
         SlideMenuModule,
         SliderModule,

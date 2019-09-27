@@ -238,7 +238,6 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     onSchedulerClick() {
         const action = this.is_paused ? 'resume' : 'pause';
         this.confirmationService.confirm({
-            key: 'schedulerConfirm',
             message: `Are you sure that you want to ${action} the Scheduler?`,
             accept: () => {
                 const params = {

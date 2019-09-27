@@ -81,9 +81,7 @@ export class JobTypeHistoryComponent implements OnInit {
         let choiceIds = null;
         if (this.selectedJobType) {
             choiceIds = Array.isArray(this.selectedJobType) ?
-                this.selectedJobType.length > 0 ?
-                    _.map(this.selectedJobType, 'id') :
-                    choiceIds = _.map(this.jobTypes, 'id') :
+                _.map(this.selectedJobType, 'id') :
                 [this.selectedJobType.id];
         } else {
             choiceIds = _.map(this.jobTypes, 'id');

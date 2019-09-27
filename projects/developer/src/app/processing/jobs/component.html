@@ -134,7 +134,7 @@
 </p-table>
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
              [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
-<p-confirmDialog key="jobsConfirm"></p-confirmDialog>
+<p-confirmDialog></p-confirmDialog>
 <div *ngIf="selectedJobExe">
     <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay" (close)="hideExeLog()"></dev-log-viewer>
 </div>

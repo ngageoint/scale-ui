@@ -1,6 +1,6 @@
 {
     "id": 13,
-    "name": "no-input",
+    "name": "no-interface",
     "version": "1.0.0",
     "title": "No Interface",
     "description": "No Interface Job",
@@ -11,11 +11,11 @@
     "is_system": false,
     "max_scheduled": 1,
     "revision_num": 1,
-    "docker_image": "10.4.4.10:5000/no-input-1.0.0-seed:1.0",
+    "docker_image": "10.4.4.10:5000/no-interface-1.0.0-seed:1.0",
     "unmet_resources": null,
     "manifest": {
         "job": {
-            "name": "no-input",
+            "name": "no-interface",
             "jobVersion": "1.0.0",
             "packageVersion": "1.0.0",
             "title": "No Interface",

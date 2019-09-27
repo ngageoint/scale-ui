@@ -35,7 +35,7 @@ export class Strike {
         const config = StrikeConfiguration.transformer(null);
         if (config && config.monitor) {
             config.monitor = {
-                transfer_suffix: '_tmp'
+                transfer_suffix: '_.tmp'
             };
         }
         return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, config);
@@ -57,71 +57,26 @@ export class Strike {
 
     public static cleanStrikeForSave(strike) {
         let returnStrike;
-        if (strike.configuration.monitor.credentials) {
-            if (strike.configuration.monitor.credentials.access_key_id && !strike.configuration.monitor.region_name) {
-                returnStrike = {
-                    title: strike.title,
-                    description: strike.description,
-                    configuration: {
-                        workspace: strike.configuration.workspace,
-                        monitor: {
-                            type: strike.configuration.monitor.type,
-                            sqs_name: strike.configuration.monitor.sqs_name,
-                            credentials: _.pickBy(strike.configuration.monitor.credentials,
-                                d => d !== null && typeof d !== 'undefined' && d !== ''),
-                        },
-                        files_to_ingest: strike.configuration.files_to_ingest,
-                        recipe: strike.configuration.recipe
-                    }
-                };
-            } else if ((!strike.configuration.monitor.credentials.access_key_id && !strike.configuration.monitor.region_name)
-                        && strike.configuration.monitor.sqs_name) {
-                returnStrike = {
-                    title: strike.title,
-                    description: strike.description,
-                    configuration: {
-                        workspace: strike.configuration.workspace,
-                        monitor: {
-                            type: strike.configuration.monitor.type,
-                            sqs_name:  strike.configuration.monitor.sqs_name,
-                        },
-                        files_to_ingest: strike.configuration.files_to_ingest,
-                        recipe: strike.configuration.recipe
-                    }
-                };
-            } else if (strike.configuration.monitor.region_name && !strike.configuration.monitor.credentials.access_key_id) {
-                returnStrike = {
-                    title: strike.title,
-                    description: strike.description,
-                    configuration: {
-                        workspace: strike.configuration.workspace,
-                        monitor: {
-                            type: strike.configuration.monitor.type,
-                            sqs_name:  strike.configuration.monitor.sqs_name,
-                            region_name: strike.configuration.monitor.region_name
-                        },
-                        files_to_ingest: strike.configuration.files_to_ingest,
-                        recipe: strike.configuration.recipe
-                    }
-                };
-            } else {
-                returnStrike = {
-                    title: strike.title,
-                    description: strike.description,
-                    configuration: {
-                        workspace: strike.configuration.workspace,
-                        monitor: {
-                            type: strike.configuration.monitor.type,
-                            sqs_name:  strike.configuration.monitor.sqs_name,
-                            credentials: _.pickBy(strike.configuration.monitor.credentials,
-                                d => d !== null && typeof d !== 'undefined' && d !== ''),
-                            region_name: strike.configuration.monitor.region_name ? strike.configuration.monitor.region_name : ''
-                        },
-                        files_to_ingest: strike.configuration.files_to_ingest,
-                        recipe: strike.configuration.recipe
-                    }
-                };
-            }
+
+        if (!strike.configuration.monitor.credentials) {
+            returnStrike = {
+                title: strike.title,
+                description: strike.description,
+                configuration: {
+                    workspace: strike.configuration.workspace,
+                    monitor: {
+                        type: strike.configuration.monitor.type,
+                        sqs_name: _.pickBy(strike.configuration.monitor.sqs_name,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                    },
+                    files_to_ingest: strike.configuration.files_to_ingest,
+                    recipe: strike.configuration.recipe
+                }
+            };
         } else {
             returnStrike = {
                 title: strike.title,
@@ -130,13 +85,21 @@ export class Strike {
                     workspace: strike.configuration.workspace,
                     monitor: {
                         type: strike.configuration.monitor.type,
-                        transfer_suffix: strike.configuration.monitor.transfer_suffix ? strike.configuration.monitor.transfer_suffix : '',
+                        sqs_name:  _.pickBy(strike.configuration.monitor.sqs_name,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        credentials: _.pickBy(strike.configuration.monitor.credentials,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        region_name: _.pickBy(strike.configuration.monitor.type,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        transfer_suffix: _.pickBy(strike.configuration.monitor.transfer_suffix,
+                            d => d !== null && typeof d !== 'undefined' && d !== ''),
                     },
                     files_to_ingest: strike.configuration.files_to_ingest,
                     recipe: strike.configuration.recipe
                 }
             };
         }
+
 
         return _.pickBy(returnStrike, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';

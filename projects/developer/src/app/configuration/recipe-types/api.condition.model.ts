@@ -12,8 +12,8 @@ export class RecipeTypeCondition {
             return new RecipeTypeCondition(
                 data.name,
                 {
-                    files: data.condition_interface ? RecipeTypeInputFile.transformer(data.condition_interface.files) : [],
-                    json: data.condition_interface ? RecipeTypeInputJson.transformer(data.condition_interface.json) : []
+                    files: RecipeTypeInputFile.transformer(data.condition_interface.files),
+                    json: RecipeTypeInputJson.transformer(data.condition_interface.json)
                 },
                 RecipeTypeFilterInterface.transformer(data.data_filter)
             );
@@ -44,7 +44,6 @@ export class RecipeTypeCondition {
             json: []
         };
     }
-
     constructor(
         public name: string,
         public condition_interface: any,

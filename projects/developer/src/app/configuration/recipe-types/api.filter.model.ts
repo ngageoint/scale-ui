@@ -26,7 +26,15 @@ export class RecipeTypeFilter {
 
     public static transformer(data) {
         if (!data) {
-            data = {};
+            data = {
+                name: 'Untitled filter',
+                type: 'boolean',
+                condition: '==',
+                values: [false],
+                fields: [],
+                all_fields: true,
+                all_files: false
+            };
         }
         if (Array.isArray(data)) {
             return data.map(item => RecipeTypeFilter.build(item));

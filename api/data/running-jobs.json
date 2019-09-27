@@ -1807,11 +1807,11 @@
             "count": 15,
             "job_type": {
                 "id": 13,
-                "name": "no-input",
+                "name": "no-interface",
                 "version": "1.0.0",
                 "title": "No Interface",
                 "description": "No Interface Job",
-                "category": "no-input",
+                "category": "no-interface",
                 "is_system": false,
                 "is_long_running": true,
                 "is_active": true,

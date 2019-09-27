@@ -123,6 +123,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                     label: recipe.title,
                     value: {
                         name: recipe.name,
+                        revision_num: recipe.revision_num
                     }
                 });
             });
