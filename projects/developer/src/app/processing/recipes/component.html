@@ -10,9 +10,10 @@
          [autoLayout]="true" (onRowSelect)="onRowSelect($event)" class="recipes__table">
     <ng-template pTemplate="header" let-columns>
         <tr>
-            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
+            <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field"
+            [pSortableColumnDisabled]="col.sortableColumnDisabled || false">
                 {{ col.header }}
-                <p-sortIcon [field]="col.field"></p-sortIcon>
+                <p-sortIcon *ngIf="!col.sortableColumnDisabled" [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'recipe_type.name'">
                     <p-multiSelect [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeType"
                                    (onChange)="onChange($event)" [maxSelectedLabels]="1"
