@@ -72,6 +72,15 @@ export class IngestComponent implements OnInit, OnDestroy {
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
+    onNameFilter = _.debounce((e) => {
+        console.log(this.datatableOptions);
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            file_name: e.target.value
+        });
+        console.log(this.datatableOptions);
+        this.updateOptions();
+    }, 1000);
 
     constructor(
         private dataService: DataService,
