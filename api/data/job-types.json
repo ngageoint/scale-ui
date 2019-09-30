@@ -250,6 +250,44 @@
             "deprecated": null,
             "paused": null,
             "last_modified": "2015-06-01T14:22:38.384Z"
+        },{
+            "id": 14,
+            "name": "optional-json",
+            "version": "1.0.0",
+            "title": "Optonal JSON Input",
+            "description": "Job has optional JSON input",
+            "icon_code": "f090",
+            "is_published": true,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
+            "docker_image": "",
+            "unmet_resources": null,
+            "created": "2015-06-01T14:22:38.384Z",
+            "deprecated": null,
+            "paused": null,
+            "last_modified": "2015-06-01T14:22:38.384Z"
+        },{
+            "id": 15,
+            "name": "output-json",
+            "version": "1.0.0",
+            "title": "Output JSON",
+            "description": "Job has output JSON",
+            "icon_code": "f08b",
+            "is_published": true,
+            "is_active": true,
+            "is_paused": false,
+            "is_system": false,
+            "max_scheduled": 1,
+            "revision_num": 1,
+            "docker_image": "",
+            "unmet_resources": null,
+            "created": "2015-06-01T14:22:38.384Z",
+            "deprecated": null,
+            "paused": null,
+            "last_modified": "2015-06-01T14:22:38.384Z"
         }
     ]
 }

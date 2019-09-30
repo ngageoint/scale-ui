@@ -115,7 +115,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
-            if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
+            if ( (this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode) && !this.isSaving ) {
                 return false;
             } else {
                 return true;
