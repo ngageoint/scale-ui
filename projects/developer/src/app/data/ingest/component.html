@@ -15,7 +15,7 @@
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div class="ingest__name-filter" *ngSwitchCase="'file_name'">
-                    <input pInputText type="text" (click)="$event.stopPropagation()" class="ingest__name-filter"
+                    <input pInputText type="search" placeholder="Search" (click)="$event.stopPropagation()" class="ingest__name-filter"
                            (input)="onNameFilter($event)" [(ngModel)]="nameFilterText">
                 </div>
                 <div *ngSwitchCase="'status'">

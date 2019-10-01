@@ -72,6 +72,7 @@ export class IngestComponent implements OnInit, OnDestroy {
     subscription: any;
     applyBtnClass = 'ui-button-secondary';
     isMobile: boolean;
+    nameFilterText: string;
     onNameFilter = _.debounce((e) => {
         console.log(this.datatableOptions);
         this.datatableOptions = Object.assign(this.datatableOptions, {
@@ -269,6 +270,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                         : null,
                     file_name: params.file_name || null
                 };
+                this.nameFilterText = this.datatableOptions.file_name;
             }
             this.selectedStatus = [];
             _.forEach(this.statusValues, status => {
