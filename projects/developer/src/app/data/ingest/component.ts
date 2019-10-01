@@ -74,12 +74,10 @@ export class IngestComponent implements OnInit, OnDestroy {
     isMobile: boolean;
     nameFilterText: string;
     onNameFilter = _.debounce((e) => {
-        console.log(this.datatableOptions);
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             file_name: e.target.value
         });
-        console.log(this.datatableOptions);
         this.updateOptions();
     }, 1000);
 
@@ -114,7 +112,6 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-
         this.ingestDatatableService.setIngestDatatableOptions(this.datatableOptions);
         this.router.navigate(['/data/ingest'], {
             queryParams: this.datatableOptions,
