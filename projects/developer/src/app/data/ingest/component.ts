@@ -268,6 +268,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                     file_name: params.file_name || null
                 };
                 this.nameFilterText = this.datatableOptions.file_name;
+                this.updateData();
             }
             this.selectedStatus = [];
             _.forEach(this.statusValues, status => {
