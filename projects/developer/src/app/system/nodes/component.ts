@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ import { StatusService } from '../../common/services/status.service';
 })
 export class NodesComponent implements OnInit, OnDestroy {
     @ViewChild('menu') menu: any;
-   
+
     subscription: any;
     loading: boolean;
     collapsed = true;
@@ -57,7 +57,7 @@ export class NodesComponent implements OnInit, OnDestroy {
     nodesStatus: any = [];
     nodes: any = [];
     filteredNodes: any = [];
-    selectedNode: any; //used by the context menu to determine the correct node
+    selectedNode: any; // used by the context menu to determine the correct node
     count = '';
     showActive: boolean;
     activeLabel: string;
@@ -144,26 +144,26 @@ export class NodesComponent implements OnInit, OnDestroy {
             this.filteredNodes = _.clone(this.nodes);
         }
     }
-    
+
     private formatNodes() {
         this.nodes = _.filter(this.allNodes, node => {
             if (node.is_active === this.showActive) {
                 node.status = _.find(this.nodesStatus, { id: node.id });
                 node.menuItems = [
-                    { label: node.pauseLabel, icon: node.pauseIcon, command: () => { 
-                        if(this.selectedNode) {
-                            this.onPauseClick(this.selectedNode); 
+                    { label: node.pauseLabel, icon: node.pauseIcon, command: () => {
+                        if (this.selectedNode) {
+                            this.onPauseClick(this.selectedNode);
                         }
                     } },
-                    { label: node.deprecateLabel, icon: node.deprecateIcon, command: () => { 
-                        if(this.selectedNode) {
-                            this.onDeprecateClick(this.selectedNode); 
+                    { label: node.deprecateLabel, icon: node.deprecateIcon, command: () => {
+                        if (this.selectedNode) {
+                            this.onDeprecateClick(this.selectedNode);
                         }
                     } }
                 ];
                 return node;
             }
-        });        
+        });
         this.totalActive = this.showActive ? this.nodes.length : this.allNodes.length - this.nodes.length;
         this.totalDeprecated = !this.showActive ? this.nodes.length : this.allNodes.length - this.nodes.length;
         this.count = this.showActive ?
