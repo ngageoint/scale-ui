@@ -61,7 +61,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
-    autoUpdate = false;
     menuBarItems: MenuItem[] = [
         { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
@@ -116,7 +115,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
-            if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
+            if ( (this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode) && !this.isSaving ) {
                 return false;
             } else {
                 return true;
@@ -482,7 +481,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'error', summary: 'Error creating recipe type', detail: err.statusText });
             });
         } else {
-            cleanRecipeType.auto_update = this.autoUpdate;
             this.recipeTypesApiService.editRecipeType(this.selectedRecipeTypeDetail.name, cleanRecipeType).subscribe(() => {
                 this.isEditing = false;
                 this.showAddRemoveDisplay = false;

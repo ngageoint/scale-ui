@@ -216,15 +216,14 @@
                                     <div class="connections"
                                          *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
                                         <h5>Connections</h5>
+
                                         <ul class="list-unstyled">
                                             <li *ngFor="let connection of selectedNodeConnections" class="connection">
-                                                <div>
+                                                <div *ngIf="file.name == connection.input_name">
                                                     <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
-                                                    </button>
-                                                </div>
-                                                <div>
-                                                    <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                </button>
+                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                                 </div>
                                             </li>
                                         </ul>
@@ -234,7 +233,44 @@
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showInputConnections($event, file)"
                                             pTooltip="Add Input Connection"
-                                            *ngIf="isEditing && selectedJobType.manifest.job.interface.inputs.files.length > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && totalInputs > selectedNodeConnections.length"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-dataList>
+                <p-dataList [value]="selectedJobType.manifest.job.interface.inputs.json" [scrollable]="true"
+                            scrollHeight="300px" class="recipe-io-container"
+                            *ngIf="selectedJobType.manifest.job.interface && selectedJobType.manifest.job.interface.inputs">
+                    <p-header>
+                        <strong>JSON Inputs</strong>
+                    </p-header>
+                    <ng-template let-json pTemplate="item">
+                        <div class="recipe-io">
+                            <div class="p-grid">
+                                <div class="p-col-10 p-col-nopad">
+                                    <span [ngClass]="json.required ? 'required' : ''">{{ json.name }}</span>
+                                    <div><span class="media-type-list">{{ json.type }}</span></div>
+                                    <div class="connections"
+                                         *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
+                                        <h5>Connections</h5>
+                                        <ul class="list-unstyled">
+                                            <li *ngFor="let connection of selectedNodeConnections" class="connection">
+                                                <div  *ngIf="json.name == connection.input_name">
+                                                    <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
+                                                            (click)="removeInputConnection(connection)" *ngIf="isEditing">
+                                                    </button>
+                                                    <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="p-col-2 p-col-nopad text-right">
+                                    <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
+                                            (click)="showJsonInputConnections($event, json)"
+                                            pTooltip="Add JSON Input Connection"
+                                            *ngIf="isEditing && totalInputs > selectedNodeConnections.length"></button>
                                 </div>
                             </div>
                         </div>
@@ -289,14 +325,11 @@
                                     <h5>Connections</h5>
                                     <ul class="list-unstyled">
                                         <li *ngFor="let connection of selectedNodeConnections" class="connection">
-                                            <div>
-                                                <button pButton class="ui-button-danger margin-right-sm"
-                                                        icon="fa fa-remove" (click)="removeInputConnection(connection)"
-                                                        *ngIf="isEditing">
+                                            <div  *ngIf="file.name == connection.input_name">
+                                                <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
+                                                        (click)="removeInputConnection(connection)" *ngIf="isEditing">
                                                 </button>
-                                            </div>
-                                            <div>
-                                                <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                             </div>
                                         </li>
                                     </ul>
@@ -360,7 +393,7 @@
                                     <ul class="list-unstyled">
                                         <li *ngFor="let connection of selectedNodeConnections">
                                             <div class="connection" *ngIf="connection.output === file.name">
-                                                <strong>{{ connection.name }}</strong>.<em>{{ connection.output }}</em>
+                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
                                             </div>
                                         </li>
                                     </ul>
@@ -403,14 +436,28 @@
         </li>
     </ul>
 </p-overlayPanel>
-<p-overlayPanel appendTo="body" #inputPanel>
+<p-overlayPanel appendTo="body" #inputFilePanel>
     <div *ngIf="nodeInputs.length === 0">
         <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
     </div>
     <div *ngFor="let input of nodeInputs">
         <strong>{{ input.title }}</strong>
         <ul class="recipe__option-list">
-            <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, input.version, option)"
+            <li *ngFor="let option of input.options" (click)="addInputConnection(input.name, option)"
+                [ngClass]="option.disabled ? 'disabled' : ''">
+                <span>{{ option.name }}</span>
+            </li>
+        </ul>
+    </div>
+</p-overlayPanel>
+<p-overlayPanel appendTo="body" #inputJSONPanel>
+    <div *ngIf="nodeInputs.length === 0">
+        <div class="margin-top-sm margin-bottom-sm">No compatible connections found</div>
+    </div>
+    <div *ngFor="let input of nodeInputs">
+        <strong>{{ input.title }}</strong>
+        <ul class="recipe__option-list">
+            <li *ngFor="let option of input.options" (click)="addJSONConnection(input.name, option)"
                 [ngClass]="option.disabled ? 'disabled' : ''">
                 <span>{{ option.name }}</span>
             </li>
