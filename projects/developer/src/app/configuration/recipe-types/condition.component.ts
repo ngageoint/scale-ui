@@ -57,7 +57,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
             type: [data.type || '', Validators.required],
             condition: [data.condition || '', Validators.required],
             values: this.fb.array(
-                values.map(v => this.fb.control(v, [Validators.required]))
+                values.map(v => this.fb.control(v))
             )
         });
 
