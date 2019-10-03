@@ -260,6 +260,7 @@ export class NodesComponent implements OnInit, OnDestroy {
                     node.deprecateIcon = data.is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
                     node.menuItems[1].label = node.deprecateLabel;
                     node.menuItems[1].icon = node.deprecateIcon;
+                    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
                     this.formatNodes();
                 } else {
                     console.log('updateNode response', data);
