@@ -76,7 +76,7 @@
             </p-table>
             <div *ngIf="recipeType" class="margin-top-md">
                 <dev-recipe-graph [recipeData]="recipeType" [jobMetrics]="batch.job_metrics" jobMetricsTitle="Node Jobs"
-                                  [hideDetails]="true" [isEditing]="false"></dev-recipe-graph>
+                                  [hideDetails]="false" [isEditing]="false"></dev-recipe-graph>
             </div>
         </div>
         <div *ngIf="isEditing && batch">
