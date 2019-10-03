@@ -13,6 +13,7 @@ import { StatusService } from '../../common/services/status.service';
 })
 export class NodesComponent implements OnInit, OnDestroy {
     @ViewChild('menu') menu: any;
+
     subscription: any;
     loading: boolean;
     collapsed = true;
@@ -56,6 +57,7 @@ export class NodesComponent implements OnInit, OnDestroy {
     nodesStatus: any = [];
     nodes: any = [];
     filteredNodes: any = [];
+    selectedNode: any; // used by the context menu to determine the correct node
     count = '';
     showActive: boolean;
     activeLabel: string;
@@ -120,7 +122,6 @@ export class NodesComponent implements OnInit, OnDestroy {
             }
         }
     };
-
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -149,8 +150,16 @@ export class NodesComponent implements OnInit, OnDestroy {
             if (node.is_active === this.showActive) {
                 node.status = _.find(this.nodesStatus, { id: node.id });
                 node.menuItems = [
-                    { label: node.pauseLabel, icon: node.pauseIcon, command: () => { this.onPauseClick(node); } },
-                    { label: node.deprecateLabel, icon: node.deprecateIcon, command: () => { this.onDeprecateClick(node); } }
+                    { label: node.pauseLabel, icon: node.pauseIcon, command: () => {
+                        if (this.selectedNode) {
+                            this.onPauseClick(this.selectedNode);
+                        }
+                    } },
+                    { label: node.deprecateLabel, icon: node.deprecateIcon, command: () => {
+                        if (this.selectedNode) {
+                            this.onDeprecateClick(this.selectedNode);
+                        }
+                    } }
                 ];
                 return node;
             }
@@ -309,8 +318,9 @@ export class NodesComponent implements OnInit, OnDestroy {
         this.updateQueryParams();
     }
 
-    onMenuClick(event) {
+    onMenuClick(event, node) {
         this.menu.toggle(event);
+        this.selectedNode = node;
         event.stopPropagation();
     }
 
