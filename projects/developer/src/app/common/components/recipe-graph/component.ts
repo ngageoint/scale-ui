@@ -6,6 +6,9 @@ import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
+import { BatchesApiService } from '../../../processing/batches/api.service';
+import { Batch } from '../../../processing/batches/api.model';
+import { BatchesDatatable } from '../../../processing/batches/datatable.model';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
@@ -20,6 +23,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     @Input() recipeData: any;
     @Input() isEditing: boolean;
+    @Input() isBatches: boolean;
     @Input() jobMetrics: any;
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
@@ -30,7 +34,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @ViewChild('inputFilePanel') inputFilePanel: any;
     @ViewChild('inputJSONPanel') inputJSONPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
+    datatableOptions: BatchesDatatable;
     columns: any[];
+    batchesColumns: any[];
     dependencyOptions = [];
     nodeInputs = [];
     nodes = [];
@@ -92,9 +98,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             }
         },
     ];
+    subscription: any;
+    datatableLoading: boolean;
+    selectedRows;
+    batches: any;
+    tempData: any;
+    tableData = [];
 
     constructor(
         private jobsApiService: JobsApiService,
+        private batchesApiService: BatchesApiService,
         private messageService: MessageService,
     ) {
         this.columns = [
@@ -103,6 +116,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
+
+        this.batchesColumns = [
+            { field: 'job_status', header: 'Job Status' },
+            { field: 'job_count', header: 'Job Count' }
+        ];
     }
 
     /**
@@ -464,6 +482,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.getNodeConnections();
                 }
             }
+        }
+        if (this.isBatches) {
+            console.log(this.selectedJobType);
+            this.getTableData();
         }
     }
 
@@ -990,6 +1012,63 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
         });
     }
+    getTableData() {
+        this.tempData = [];
+        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
+            return d !== null && typeof d !== 'undefined' && d !== '';
+        });
+        this.subscription = this.batchesApiService.getBatches(this.datatableOptions, true).subscribe(data => {
+
+            this.datatableLoading = false;
+                _.forEach(data.results, result => {
+                    // _.find(result, function(jobType) {
+                    //     debugger;
+                    //     return jobType = this.selectedJobType.name;
+                    // });
+                    _.forEach(result.job_metrics, (jobType, key) => {
+                        console.log(result.job_metrics);
+
+                        if (key === this.selectedJobType.name) {
+                            this.tempData.push({
+                                job_status: 'Pending',
+                                job_count: jobType.jobs_pending
+                            });
+                            this.tempData.push({
+                                job_status: 'Blocked',
+                                job_count: jobType.jobs_blocked
+                            });
+                            this.tempData.push({
+                                job_status: 'Queued',
+                                job_count: jobType.jobs_queued
+                            });
+                            this.tempData.push({
+                                job_status: 'Running',
+                                job_count: jobType.jobs_running
+                            });
+                            this.tempData.push({
+                                job_status: 'Completed',
+                                job_count: jobType.jobs_completed
+                            });
+                            this.tempData.push({
+                                job_status: 'Canceled',
+                                job_count: jobType.jobs_canceled
+                            });
+                            this.tempData.push({
+                                job_status: 'Total',
+                                job_count: jobType.jobs_total
+                            });
+
+                        }
+                });
+            });
+            this.batches = Batch.transformer(data.results);
+            this.tableData = this.tempData;
+        }, err => {
+            this.datatableLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving batches', detail: err.statusText});
+        });
+
+    }
 
     /**
      * Click handler for edit button in header of condition dialog.
@@ -1009,6 +1088,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);
             this.showMetrics = this.jobMetrics && typeof this.metricTotal === 'number';
+            console.log(this.metricTotal);
         }
         if (changes.jobMetricsTitle) {
             this.chartOptions.title = {
@@ -1059,6 +1139,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnInit() {
+        const location = window.location.href;
+        if (location.includes('batches')) {
+            this.isBatches = true;
+        }
     }
 
     ngAfterViewInit() {
