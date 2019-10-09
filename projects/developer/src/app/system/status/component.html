@@ -1,6 +1,6 @@
 <div class="system-status">
     <h2><i class="fa fa-bell"></i> System Status</h2>
-    <p-accordion [multiple]="true" *ngIf="statuses">
+    <!-- <p-accordion [multiple]="true" *ngIf="statuses">
         <p-accordionTab>
             <p-header>
                 <i [ngClass]="statuses.scheduler.styleClass"></i> {{ statuses.scheduler.label }}
@@ -30,5 +30,21 @@
             </p-header>
             Information about {{ statuses.vault.label }}
         </p-accordionTab>
-    </p-accordion>
+    </p-accordion> -->
+    <div *ngIf="scheduler">
+            <h3>{{ scheduler.hostname }}</h3>
+            <div *ngIf="scheduler.state">
+                <span class="margin-right-sm" [ngClass]="schedulerClass">
+                    <i [ngClass]="schedulerIcon"></i> {{ scheduler.state.title }}
+                </span>
+                {{ scheduler.state.description }}
+            </div>
+            <ul>
+                <li *ngFor="let warning of scheduler.warnings">
+                    <strong>{{ warning.title }}</strong><br/>
+                    <span *ngIf="warning.description">{{ warning.description }}<br/></span>
+                    <span class="small-text">{{ warning.last_updated }}</span>
+                </li>                           
+            </ul>
+        </div>
 </div>

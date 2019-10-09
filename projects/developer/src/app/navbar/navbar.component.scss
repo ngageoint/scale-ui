@@ -10,6 +10,11 @@ $navbar-item-width: 150px;
     height: $navbar-height;
 }
 
+.view-details {
+    list-style-type: none;
+    float: right;
+}
+
 .navbar {
     align-items: center;
     background: var(--navbar-dark);

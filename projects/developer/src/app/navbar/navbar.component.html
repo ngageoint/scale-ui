@@ -62,12 +62,15 @@
             </span>
             {{ scheduler.state.description }}
         </div>
-        <ul *ngFor="let warning of scheduler.warnings">
-            <li>
+        <ul>
+            <li *ngFor="let warning of scheduler.warnings">
                 <strong>{{ warning.title }}</strong><br/>
                 <span *ngIf="warning.description">{{ warning.description }}<br/></span>
                 <span class="small-text">{{ warning.last_updated }}</span>
-            </li>
+            </li>     
+            <li class="view-details">
+                <a [routerLink]="['/system/status']">View Details</a>
+            </li>       
         </ul>
     </div>
 </p-overlayPanel>

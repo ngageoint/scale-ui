@@ -14,14 +14,10 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
     scheduler: any;
     schedulerClass: string;
     schedulerIcon: string;
+
     constructor(
         private statusService: StatusService
-    ) {
-        const status = this.statusService.getStatus();
-        this.statuses = status && status.statuses ? status.statuses : null;
-        this.scheduler = status && status.data ? status.data.scheduler : null;
-        this.formatScheduler();
-    }
+    ) {}
 
     private formatScheduler() {
         if (this.scheduler) {
@@ -46,9 +42,15 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        const status = this.statusService.getStatus();
+        // this.statuses = status && status.statuses ? status.statuses : null;
+        this.scheduler = status && status.data ? status.data.scheduler : null;
+        this.formatScheduler();
+
         this.subscription = this.statusService.statusUpdated.subscribe(data => {
-            this.statuses = data.statuses;
-            this.scheduler = data.data.scheduler;
+            // this.statuses = data.statuses;
+            console.log(data);
+            this.scheduler = data.scheduler;
             this.formatScheduler();
         });
     }
