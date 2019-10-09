@@ -371,7 +371,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
     private getTotalConnections() {
         this.totalInputs = 0;
-        const inputs = this.selectedJobType.manifest.job.interface.inputs;
+
+        let inputs;
+        if (this.selectedJobType) {
+            inputs = this.selectedJobType.manifest.job.interface.inputs;
+        } else if (this.selectedRecipeType) {
+            inputs = this.selectedRecipeType.manifest.job.interface.inputs;
+        } else if (this.selectedCondition) {
+            inputs = this.selectedCondition.interface;
+        }
+
         if (inputs.json  && inputs.files) {
             this.totalInputs = inputs.json.length + inputs.files.length;
         } else if (inputs.json) {
