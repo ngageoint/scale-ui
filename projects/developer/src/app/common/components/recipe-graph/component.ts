@@ -376,7 +376,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (this.selectedJobType) {
             inputs = this.selectedJobType.manifest.job.interface.inputs;
         } else if (this.selectedRecipeType) {
-            inputs = this.selectedRecipeType.manifest.job.interface.inputs;
+            inputs = this.selectedRecipeType.definition.input;
         } else if (this.selectedCondition) {
             inputs = this.selectedCondition.interface;
         }
