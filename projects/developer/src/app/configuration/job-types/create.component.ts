@@ -239,8 +239,10 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         // use the information from seed-images to select the proper version and package
         const job: any = _.find(seedImage.job.JobVersions, { JobVersion: seedImage.selectedJobVersion });
         const image: any = job ? _.find(job.Images, { PackageVersion: seedImage.selectedPackageVersion }) : null;
-        if (job.URL) {
-            this.jobType.docker_image = job.URL;
+        console.log(seedImage);
+        console.log(job);
+        if (seedImage.job.URL) {
+            this.jobType.docker_image = seedImage.job.URL;
         } else {
             this.jobType.manifest = seedImage.manifest;
             if (job && image) {
