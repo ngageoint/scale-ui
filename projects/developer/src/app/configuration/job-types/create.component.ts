@@ -253,11 +253,21 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
 
         // alert user if docker image cannot be determined from imported seed image
         if (!job || !image) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Missing Seed Image Job/Package Version',
-                detail: 'Unable to determine seed image job or package version. Docker Image for this job type must be manually specified.'
-            });
+            if (seedImage.job.URL) {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Imported Docker Image',
+                    detail: 'Successfully imported Docker Image from URL.'
+                });
+
+            } else {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Missing Seed Image Job/Package Version',
+                    detail: 'Unable to determine seed image job or package version.' +
+                    'Docker Image for this job type must be manually specified.'
+                });
+            }
         }
 
         this.initJobTypeConfiguration();
