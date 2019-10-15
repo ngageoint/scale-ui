@@ -43,7 +43,7 @@
                 class="add-filter"></button>
         </div>
 
-        <p-selectButton [options]="allOptions" formControlName="all">
+        <p-selectButton [options]="allOptions" formControlName="all" *ngIf="filters.length > 1">
             <ng-template let-item>
                 <div style="padding: 0 1em">
                     <strong>{{ item.label }}</strong><br>
