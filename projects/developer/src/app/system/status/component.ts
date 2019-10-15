@@ -46,10 +46,11 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        console.log(status);
         this.subscription = this.statusService.statusUpdated.subscribe(data => {
             this.statuses = data.statuses;
-            this.scheduler = data.data.scheduler;
-            this.formatScheduler();
+            // this.scheduler = data.data.scheduler;
+            // this.formatScheduler();
         });
     }
 
