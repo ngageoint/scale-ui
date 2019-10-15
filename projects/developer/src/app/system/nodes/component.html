@@ -72,7 +72,7 @@
                         <div>
                             <p-menu #menu [popup]="true" [model]="node.menuItems" appendTo="body"></p-menu>
                             <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                                    (click)="onMenuClick($event)"></button>
+                                    (click)="onMenuClick($event, node)"></button>       
                         </div>
                     </div>
                 </p-header>
