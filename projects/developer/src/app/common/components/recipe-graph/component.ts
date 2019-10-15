@@ -23,7 +23,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     @Input() recipeData: any;
     @Input() isEditing: boolean;
-    @Input() isBatches: boolean;
+    @Input() batchesID: any;
     @Input() jobMetrics: any;
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
@@ -102,6 +102,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     datatableLoading: boolean;
     selectedRows;
     batches: any;
+    isBatches: boolean;
     tempData: any;
     tableData = [];
 
@@ -1014,52 +1015,44 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
     getTableData() {
         this.tempData = [];
-        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
-            return d !== null && typeof d !== 'undefined' && d !== '';
-        });
-        this.subscription = this.batchesApiService.getBatches(this.datatableOptions, true).subscribe(data => {
-
+        this.subscription = this.batchesApiService.getBatch(this.batchesID).subscribe(data => {
             this.datatableLoading = false;
-                _.forEach(data.results, result => {
-                    // _.find(result, function(jobType) {
-                    //     debugger;
-                    //     return jobType = this.selectedJobType.name;
-                    // });
-                    _.forEach(result.job_metrics, (jobType, key) => {
-                        console.log(result.job_metrics);
+                _.forEach(data.job_metrics, (jobType, key) => {
+                    if (key === this.selectedJobType.name) {
+                        this.tempData.push({
+                            job_status: 'Pending',
+                            job_count: jobType.jobs_pending
+                        });
+                        this.tempData.push({
+                            job_status: 'Blocked',
+                            job_count: jobType.jobs_blocked
+                        });
+                        this.tempData.push({
+                            job_status: 'Queued',
+                            job_count: jobType.jobs_queued
+                        });
+                        this.tempData.push({
+                            job_status: 'Running',
+                            job_count: jobType.jobs_running
+                        });
+                        this.tempData.push({
+                            job_status: 'Completed',
+                            job_count: jobType.jobs_completed
+                        });
+                        this.tempData.push({
+                            job_status: 'Canceled',
+                            job_count: jobType.jobs_canceled
+                        });
+                        this.tempData.push({
+                            job_status: 'Failed',
+                            job_count: jobType.jobs_failed
+                        });
+                        this.tempData.push({
+                            job_status: 'Total',
+                            job_count: jobType.jobs_total
+                        });
 
-                        if (key === this.selectedJobType.name) {
-                            this.tempData.push({
-                                job_status: 'Pending',
-                                job_count: jobType.jobs_pending
-                            });
-                            this.tempData.push({
-                                job_status: 'Blocked',
-                                job_count: jobType.jobs_blocked
-                            });
-                            this.tempData.push({
-                                job_status: 'Queued',
-                                job_count: jobType.jobs_queued
-                            });
-                            this.tempData.push({
-                                job_status: 'Running',
-                                job_count: jobType.jobs_running
-                            });
-                            this.tempData.push({
-                                job_status: 'Completed',
-                                job_count: jobType.jobs_completed
-                            });
-                            this.tempData.push({
-                                job_status: 'Canceled',
-                                job_count: jobType.jobs_canceled
-                            });
-                            this.tempData.push({
-                                job_status: 'Total',
-                                job_count: jobType.jobs_total
-                            });
-
-                        }
-                });
+                    }
             });
             this.batches = Batch.transformer(data.results);
             this.tableData = this.tempData;
@@ -1088,7 +1081,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (changes.jobMetrics) {
             this.metricTotal = this.calculateMetricTotal(changes.jobMetrics.currentValue);
             this.showMetrics = this.jobMetrics && typeof this.metricTotal === 'number';
-            console.log(this.metricTotal);
         }
         if (changes.jobMetricsTitle) {
             this.chartOptions.title = {

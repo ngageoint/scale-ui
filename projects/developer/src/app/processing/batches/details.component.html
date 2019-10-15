@@ -75,7 +75,7 @@
                 </ng-template>
             </p-table>
             <div *ngIf="recipeType" class="margin-top-md">
-                <dev-recipe-graph [recipeData]="recipeType" [jobMetrics]="batch.job_metrics" jobMetricsTitle="Node Jobs"
+                <dev-recipe-graph [batchesID]="batchID" [recipeData]="recipeType" [jobMetrics]="batch.job_metrics" jobMetricsTitle="Node Jobs"
                                   [hideDetails]="false" [isEditing]="false"></dev-recipe-graph>
             </div>
         </div>
