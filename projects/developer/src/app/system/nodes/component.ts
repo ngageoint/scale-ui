@@ -189,7 +189,6 @@ export class NodesComponent implements OnInit, OnDestroy {
     }
 
     private getNodes() {
-        console.log('getNodes');
         this.nodesApiService.getNodes().subscribe(nodeData => {
             this.allNodes = nodeData.results;
             this.loading = false;
@@ -243,7 +242,6 @@ export class NodesComponent implements OnInit, OnDestroy {
                     node.headerClass = data.is_paused ? 'node__paused' : '';
                     this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
                 } else {
-                    console.log('updateNode response', data);
                     this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
                     this.getNodesStatus();
                 }
@@ -263,7 +261,6 @@ export class NodesComponent implements OnInit, OnDestroy {
                     this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
                     this.formatNodes();
                 } else {
-                    console.log('updateNode response', data);
                     this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
                     this.getNodesStatus();
                 }
@@ -332,6 +329,7 @@ export class NodesComponent implements OnInit, OnDestroy {
     }
 
     onMenuClick(event, node) {
+        this.menu.model = node.menuItems;
         this.menu.toggle(event);
         this.selectedNode = node;
         event.stopPropagation();
