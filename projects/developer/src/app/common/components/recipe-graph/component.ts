@@ -185,12 +185,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 _.remove(node.input, input);
             }
         });
+
         if (this.selectedNodeConnections) {
-            _.forEach(this.selectedNodeConnections, connection => {
-                if (!this.recipeData.definition.nodes[connection.name]) {
-                    // connection node no longer exists, so remove it
-                    _.remove(this.selectedNodeConnections, connection);
-                }
+            // connection node no longer exists, so remove it
+            this.selectedNodeConnections = _.filter(this.selectedNodeConnections, (c) => {
+                return c.name in this.recipeData.definition.nodes;
             });
         }
     }
