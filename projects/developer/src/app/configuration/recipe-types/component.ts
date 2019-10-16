@@ -32,7 +32,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     loadingRecipeTypes: boolean;
     validated: boolean;
     totalRecords: number;
-    recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;
     addRemoveDialogY: number;
     createForm: any;
@@ -421,7 +420,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     onEditClick() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
-        this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
         if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
@@ -612,7 +610,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.recipeTypeName = routeParams.get('name');
 
                 this.isEditing = this.recipeTypeName === 'create';
-                this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
 
                 this.getRecipeTypes();
             });

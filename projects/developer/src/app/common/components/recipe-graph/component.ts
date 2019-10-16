@@ -23,7 +23,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() jobMetrics: any;
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
-    @Input() minHeight = '70vh';
+    @Input() height = '70vh';
     @Output() editCondition: EventEmitter<any> = new EventEmitter<any>();
     @Output() deleteCondition: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('dependencyPanel') dependencyPanel: any;
@@ -35,7 +35,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     nodeInputs = [];
     nodes = [];
     links = [];
-    height: number;
     showLegend = false;
     orientation: string; // LR, RL, TB, BT
     curve: any;
