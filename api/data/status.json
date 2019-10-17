@@ -9,7 +9,7 @@
             "logging_health_address": "http://www.logging.com/health"
           },
           "errors": [],
-          "warnings": []
+          "warnings": [{"BUFFER_SIZE":"Log buffer size is high"}]
         },
         "msg_queue": {
           "OK":true,
@@ -45,11 +45,11 @@
              "warnings":[]
         },
         "nodes":{
-           "OK": true,
+           "OK": false,
            "detail": {
-              "msg": "Enough nodes are online to function."
+              "msg": "An unhealthy mock status."
            },
-           "errors":[ {"NODES_OFFLINE":"No nodes reported."} ],
+           "errors":[{"NODES_OFFLINE":"node 1 is unhealthy"}],
            "warnings":[]
         },
         "idam":{

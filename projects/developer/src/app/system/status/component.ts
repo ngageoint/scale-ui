@@ -47,15 +47,49 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
 
     ngOnInit() {
         this.subscription = this.statusService.statusUpdated.subscribe(data => {
-            this.statuses = data.dependencies;
-            _.forEach(data.dependencies, (dependent,key) => {
-                this.statuses = {
-                    title: key,
-                    description: dependent.detail.msg
-                };
+            this.statuses = [];
+            _.forEach(data.dependencies, (dependent, key) => {
+                const warningTypes = [];
+                _.forEach(dependent.warnings, (warning) => {
+                    _.forEach(warning, (warningMessage, warningType) => {
+                        warningTypes.push({
+                            warningType: warningType,
+                            warningMessage: warningMessage
+                        });
+                    });
+                });
+                if (dependent.OK === true) {
+                    this.statuses.push({
+                        title: key,
+                        description: dependent.detail.msg,
+                        ok: dependent.OK,
+                        details: dependent.detail,
+                        warnings: warningTypes,
+                        styleClass: 'system-status__healthy',
+                        icon: 'fa fa-check'
+                    });
+                } else {
+                    const errorTypes = [];
+                    _.forEach(dependent.errors, (error) => {
+                        _.forEach(error, (errorMessage, errorType) => {
+                            errorTypes.push({
+                                errorType: errorType,
+                                errorMessage: errorMessage
+                            });
+                        });
+                    });
+                    this.statuses.push({
+                        title: key,
+                        description: dependent.detail.msg,
+                        ok: dependent.OK,
+                        details: dependent.detail,
+                        errors: errorTypes,
+                        warnings: warningTypes ? warningTypes : [],
+                        styleClass: 'system-status__unhealthy',
+                        icon: 'fa fa-warning'
+                    });
+                }
             });
-            // this.scheduler = data.data.scheduler;
-            // this.formatScheduler();
         });
     }
 

@@ -35,6 +35,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     itemsMobile: MenuItem[];
     is_paused: any;
     myComponentsIsAuthenticatedFlag: any;
+    dependencyErrors: any;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -267,7 +268,30 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
             this.is_paused = schedulerData.is_paused;
             this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
                 if (data) {
-                        this.scheduler = data.scheduler;
+                    this.scheduler = data.scheduler;
+                    this.dependencyErrors = [];
+                    _.forEach(data.dependencies, (dependent, key) => {
+                        const errorTypes = [];
+                        _.forEach(dependent.errors, (error) => {
+                            _.forEach(error, (message, type) => {
+                                errorTypes.push({
+                                    errorType: type,
+                                    errorMessage: message
+                                });
+                            });
+                        });
+                        if (errorTypes.length > 0) {
+                                this.dependencyErrors.push({
+                                    title: key,
+                                    errors: errorTypes,
+                                    description: dependent.detail.msg,
+                                    ok: dependent.OK,
+                                    details: dependent.detail,
+                                    styleClass: 'system-status__unhealthy',
+                                    icon: 'fa fa-warning'
+                                });
+                        }
+                    });
                     this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
                     if (this.scheduler.state.name === 'READY') {
                         this.schedulerStatusClass = 'label label-success';

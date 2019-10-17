@@ -41,7 +41,7 @@
                 <div class="navbar__icon">
                     <span class="fa fa-bell"></span>
                     <span class="label label-danger" *ngIf="scheduler.warnings && scheduler.warnings.length > 0">
-                        {{ scheduler.warnings.length }}
+                        {{ scheduler.warnings.length + dependencyErrors.length }}
                     </span>
                 </div>
             </div>
@@ -69,7 +69,24 @@
                 <span class="small-text">{{ warning.last_updated }}</span>
             </li>
         </ul>
+        <div *ngFor="let dependency of dependencyErrors">
+            <h3>{{ dependency.title }}</h3>
+            <div *ngIf="dependency">
+                <span class="margin-right-sm label label-warning">
+                    <i [ngClass]="dependency.icon"></i> Error
+                </span>
+                {{ dependency.description }}
+            </div>
+                <ul *ngFor="let error of dependency.errors">
+                        <li>
+                            <strong>{{ error.errorType }}</strong><br/>
+                            <span *ngIf="error.errorMessage">{{ error.errorMessage}}<br/></span>
+                        </li>
+                    </ul>
+
+        </div>
     </div>
+    <a routerLink="/system/status" (click)="navigate()"> View All Statuses</a>
 </p-overlayPanel>
 <p-confirmDialog key="schedulerConfirm" header="Scheduler" icon="pi pi-exclamation-triangle"
                  acceptButtonStyleClass="ui-button-accept" rejectButtonStyleClass="ui-button-reject">
