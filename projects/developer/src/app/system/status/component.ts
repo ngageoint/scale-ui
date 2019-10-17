@@ -95,13 +95,11 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
     ngOnInit() {
         if (_.isEmpty(this.statuses)) {
             this.subscription = this.statusApiService.getStatus().subscribe(data => {
-                console.log(data)
                 this.statuses = [];
                 this.getStatus(data);
             });
         }
             this.subscription = this.statusService.statusUpdated.subscribe(data => {
-            console.log(data)
             this.statuses = [];
             this.getStatus(data);
             });
