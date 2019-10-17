@@ -86,7 +86,9 @@
 
         </div>
     </div>
-    <a routerLink="/system/status" (click)="navigate()"> View All Statuses</a>
+    <div class="navbar__link">
+        <a routerLink="/system/status" (click)="navigate()"> View All Statuses</a>
+    </div>
 </p-overlayPanel>
 <p-confirmDialog key="schedulerConfirm" header="Scheduler" icon="pi pi-exclamation-triangle"
                  acceptButtonStyleClass="ui-button-accept" rejectButtonStyleClass="ui-button-reject">
