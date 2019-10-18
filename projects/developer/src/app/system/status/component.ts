@@ -47,7 +47,7 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
         }
     }
 
-    getStatus(data){
+    getStatus(data) {
         _.forEach(data.dependencies, (dependent, key) => {
             const warningTypes = [];
             _.forEach(dependent.warnings, (warning) => {
@@ -99,10 +99,10 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
                 this.getStatus(data);
             });
         }
-            this.subscription = this.statusService.statusUpdated.subscribe(data => {
+        this.subscription = this.statusService.statusUpdated.subscribe(data => {
             this.statuses = [];
             this.getStatus(data);
-            });
+        });
     }
 
     ngOnDestroy() {
