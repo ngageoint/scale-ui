@@ -127,7 +127,6 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
         // since nodes are keyed off of this value, links in the graph would have to be updated
         if (this.editCondition) {
             this.isEditing = true;
-            this.form.get('name').disable();
         }
 
         // if filters array is provided in the edit condition, add each one
