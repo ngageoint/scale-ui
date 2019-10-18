@@ -79,7 +79,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
      */
     private existingConditionsValidator(): ValidatorFn {
         return (control: AbstractControl): {[key: string]: any} | null => {
-            if (this.conditions) {
+            if (this.conditions && !this.isEditing) {
                 const existingNames = this.conditions.map(c => c.name);
                 if (existingNames.indexOf(control.value) !== -1) {
                     return {'forbiddenName': {value: control.value}};
@@ -93,6 +93,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
      * On save, emit to the output this condition, then close the dialog.
      */
     saveClick(): void {
+        _.merge(this.condition, this.form.value);
         this.save.next({condition: this.condition, previousCondition: this.oldCondition});
         this.cancelClick();
     }
