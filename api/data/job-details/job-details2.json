@@ -114,5 +114,8 @@
             "id": 1
         },
         "error": null
+    },
+    "configuration": {
+        "priority": 8
     }
 }
