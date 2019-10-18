@@ -225,6 +225,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.updateOptions();
+        this.updateData();
     }
     onDateRangeSelected(data: any) {
         this.jobs = null;
