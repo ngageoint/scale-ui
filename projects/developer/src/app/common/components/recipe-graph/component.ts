@@ -924,6 +924,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     currInput = _.findKey(this.selectedNode.input, function(dependentInput) {
                         return dependentInput.input_name === conn.input_name;
                     });
+                    currInput = _.findKey(this.selectedNode.input, function(dependentInput) {
+                        return dependentInput.output === conn.name;
+                    });
+
                 } else {
                     currInput = _.findKey(this.selectedNode.input, function(standardInput) {
                         return standardInput.input === conn.name; });
