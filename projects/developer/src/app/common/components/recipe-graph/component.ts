@@ -930,7 +930,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             _.forEach(this.selectedNode.input, node => {
                 if (node.type === 'dependency') {
                     currInput = _.findKey(this.selectedNode.input, function(dependentInput) {
-                        return dependentInput.input_name === conn.input_name;
+                        return dependentInput.input_name === conn.input_name || dependentInput.output === conn.name;
                     });
                 } else {
                     currInput = _.findKey(this.selectedNode.input, function(standardInput) {
