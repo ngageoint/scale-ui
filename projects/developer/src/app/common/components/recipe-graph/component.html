@@ -1,4 +1,4 @@
-<div class="p-grid" xmlns:svg="http://www.w3.org/1999/html">
+<div class="p-grid recipe-wrapper" xmlns:svg="http://www.w3.org/1999/html">
     <div class="p-col-12 p-col-nopad">
         <p-menubar [model]="menuBarItems" [style]="{'margin-bottom':'0'}">
             <div class="ui-inputgroup">
@@ -141,10 +141,25 @@
             <strong>{{ selectedJobType.title }} v{{ selectedJobType.version }}</strong>
         </span>
         <span *ngIf="selectedRecipeType">
-            <strong>{{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}</strong>
+            <strong>
+                <a *ngIf="selectedNode && selectedNode.node_type.recipe_id; else recipeHeaderWithoutLink"
+                   routerLink="/processing/recipes/{{ selectedNode.node_type.recipe_id }}">
+                    {{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}
+                </a>
+                <ng-template #recipeHeaderWithoutLink>
+                    {{ selectedRecipeType.title }} rev. {{ selectedRecipeType.revision_num }}
+                </ng-template>
+            </strong>
         </span>
         <span *ngIf="selectedCondition">
             <strong>{{ selectedCondition.name }}</strong>
+
+            <ng-container *ngIf="isEditing">
+                <span class="ui-inputgroup conditions-edit">
+                    <button type="button" pButton icon="fa fa-edit" class="ui-button-info" pTooltip="Edit" (click)="editConditionClick()"></button>
+                    <button type="button" pButton icon="fa fa-trash" class="ui-button-danger" pTooltip="Delete" (click)="deleteConditionClick()"></button>
+                </span>
+            </ng-container>
         </span>
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
@@ -292,8 +307,8 @@
                     </div>
                 </ng-template>
             </p-dataList>
-            <p-dataList [value]="selectedRecipeType.definition.input.files" [scrollable]="true"
-                        scrollHeight="300px" class="recipe-io-container">
+            <p-dataList *ngIf="selectedRecipeType.definition" [value]="selectedRecipeType.definition.input.files"
+                        [scrollable]="true" scrollHeight="300px" class="recipe-io-container">
                 <p-header>
                     <strong>Inputs</strong>
                 </p-header>

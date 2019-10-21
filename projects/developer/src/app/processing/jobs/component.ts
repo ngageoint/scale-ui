@@ -225,6 +225,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             ended: moment.utc(this.ended, environment.dateFormat).toISOString()
         });
         this.updateOptions();
+        this.updateData();
     }
     onDateRangeSelected(data: any) {
         this.jobs = null;
@@ -332,6 +333,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.jobsApiService.getJobs(requeueParams)
             .subscribe(data => {
                 this.confirmationService.confirm({
+                    key: 'jobsConfirm',
                     message: `This will requeue <span class="label label-danger"><strong>${data.count}</strong></span> canceled and failed
                               jobs. Are you sure that you want to proceed?`,
                     header: 'Requeue All Jobs',
@@ -353,6 +355,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.jobsApiService.getJobs(cancelParams)
             .subscribe(data => {
                 this.confirmationService.confirm({
+                    key: 'jobsConfirm',
                     message: `This will cancel <span class="label label-danger"><strong>${data.count}</strong></span> running and queued
                               jobs. Are you sure that you want to proceed?`,
                     header: 'Cancel All Jobs',
