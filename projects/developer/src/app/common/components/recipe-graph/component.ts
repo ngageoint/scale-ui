@@ -23,7 +23,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() jobMetrics: any;
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
-    @Input() minHeight = '70vh';
+    @Input() height = '70vh';
     @Output() editCondition: EventEmitter<any> = new EventEmitter<any>();
     @Output() deleteCondition: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild('dependencyPanel') dependencyPanel: any;
@@ -35,7 +35,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     nodeInputs = [];
     nodes = [];
     links = [];
-    height: number;
     showLegend = false;
     orientation: string; // LR, RL, TB, BT
     curve: any;
@@ -185,12 +184,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 _.remove(node.input, input);
             }
         });
+
         if (this.selectedNodeConnections) {
-            _.forEach(this.selectedNodeConnections, connection => {
-                if (!this.recipeData.definition.nodes[connection.name]) {
-                    // connection node no longer exists, so remove it
-                    _.remove(this.selectedNodeConnections, connection);
-                }
+            // connection node no longer exists, so remove it
+            this.selectedNodeConnections = _.filter(this.selectedNodeConnections, (c) => {
+                return c.name in this.recipeData.definition.nodes;
             });
         }
     }
@@ -371,7 +369,16 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
     private getTotalConnections() {
         this.totalInputs = 0;
-        const inputs = this.selectedJobType.manifest.job.interface.inputs;
+
+        let inputs;
+        if (this.selectedJobType) {
+            inputs = this.selectedJobType.manifest.job.interface.inputs;
+        } else if (this.selectedRecipeType) {
+            inputs = this.selectedRecipeType.definition.input;
+        } else if (this.selectedCondition) {
+            inputs = this.selectedCondition.interface;
+        }
+
         if (inputs.json  && inputs.files) {
             this.totalInputs = inputs.json.length + inputs.files.length;
         } else if (inputs.json) {
@@ -923,7 +930,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             _.forEach(this.selectedNode.input, node => {
                 if (node.type === 'dependency') {
                     currInput = _.findKey(this.selectedNode.input, function(dependentInput) {
-                        return dependentInput.input_name === conn.input_name;
+                        return dependentInput.input_name === conn.input_name || dependentInput.output === conn.name;
                     });
                 } else {
                     currInput = _.findKey(this.selectedNode.input, function(standardInput) {

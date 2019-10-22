@@ -210,7 +210,7 @@ export class RecipeTypeFilterComponent implements OnInit, OnDestroy {
      */
     addValue(): void {
         this.values.push(
-            this.fb.control('', [Validators.required])
+            this.fb.control('')
         );
     }
 
