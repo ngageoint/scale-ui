@@ -90,6 +90,19 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Form validator function to check that the condition name cannot be "start".
+     * @return validator function
+     */
+    private startNameValidator(): ValidatorFn {
+        return (control: AbstractControl): {[key: string]: any} | null => {
+            if (control.value && control.value.toLowerCase() === 'start') {
+                return {'startName': {value: control.value}};
+            }
+            return null;
+        };
+    }
+
+    /**
      * On save, emit to the output this condition, then close the dialog.
      */
     saveClick(): void {
@@ -115,7 +128,8 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
             name: [this.oldCondition.name || '', [
                 Validators.required,
                 Validators.pattern(/^[a-zA-Z_-]+$/),
-                this.existingConditionsValidator()
+                this.existingConditionsValidator(),
+                this.startNameValidator()
             ]],
             data_filter: this.fb.group({
                 filters: this.fb.array([], Validators.required),
