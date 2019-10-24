@@ -30,7 +30,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
         { field: 'recipe_type.name', header: 'Recipe Type' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
-        { field: 'duration', header: 'Duration' },
+        { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
         { field: 'completed', header: 'Completed (Z)' }
     ];
     dateFormat = environment.dateFormat;

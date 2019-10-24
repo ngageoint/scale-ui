@@ -45,11 +45,16 @@
             <div>
                 <strong>{{ selectedWorkspaceDetail.title }}</strong>
             </div>
-            <div>
-                <p-menu #menu [popup]="true" [model]="items" appendTo="body"></p-menu>
-                <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
-                        (click)="menu.toggle($event)"></button>
-            </div>
+            <div *ngIf="!isEditing" class="workspaces__menu">
+                    <button pButton class="ui-button-primary workspaces__controls-btn" icon='fa fa-edit' label="Edit"
+                    (click)="onEditClick()"></button>
+                </div>
+                <div *ngIf="isEditing">
+                    <button pButton class="ui-button-primary workspaces__controls-btn" label="Validate"
+                                (click)="onValidateClick()"></button>
+                    <button pButton [disabled]="!validated" class="ui-button-primary workspaces__controls-btn" label="Save"
+                            (click)="onSaveClick()"></button>
+                </div>
         </p-header>
         <div *ngIf="!isEditing && selectedWorkspaceDetail.id">
             <dl>
@@ -114,7 +119,7 @@
                         <label>
                             <span>Description</span>
                             <textarea pInputTextarea formControlName="description" [rows]="5" [cols]="30"
-                                      [autoResize]="true"></textarea>
+                                maxLength="500" pTooltip="Description has a 500 character limit." [autoResize]="true"></textarea>
                         </label>
                     </div>
                 </div>

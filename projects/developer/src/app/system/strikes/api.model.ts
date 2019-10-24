@@ -20,7 +20,7 @@ export class Strike {
                 data.job,
                 data.created,
                 data.last_modified,
-                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration
+                data.configuration ? StrikeConfiguration.transformer(data.configuration) : data.configuration,
             );
         }
     }
@@ -32,7 +32,13 @@ export class Strike {
             }
             return Strike.build(data);
         }
-        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, StrikeConfiguration.transformer(null));
+        const config = StrikeConfiguration.transformer(null);
+        if (config && config.monitor) {
+            config.monitor = {
+                transfer_suffix: '_tmp'
+            };
+        }
+        return new Strike(null, 'untitled-strike', 'Untitled Strike', null, null, null, null, config);
     }
 
     public static cleanStrikeForValidate(strike) {
@@ -44,22 +50,94 @@ export class Strike {
                 workspace: strike.configuration.workspace,
                 monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
                 files_to_ingest: strike.configuration.files_to_ingest,
-                recipe: strike.configuration.recipe
+                recipe: strike.configuration.recipe,
             }
         };
     }
 
     public static cleanStrikeForSave(strike) {
-        const returnStrike = {
-            title: strike.title,
-            description: strike.description,
-            configuration: {
-                workspace: strike.configuration.workspace,
-                monitor: _.pickBy(strike.configuration.monitor, d => d !== null && typeof d !== 'undefined' && d !== ''),
-                files_to_ingest: strike.configuration.files_to_ingest,
-                recipe: strike.configuration.recipe
+        let returnStrike;
+        if (strike.configuration.monitor.credentials) {
+            if (strike.configuration.monitor.credentials.access_key_id && !strike.configuration.monitor.region_name) {
+                returnStrike = {
+                    title: strike.title,
+                    description: strike.description,
+                    configuration: {
+                        workspace: strike.configuration.workspace,
+                        monitor: {
+                            type: strike.configuration.monitor.type,
+                            sqs_name: strike.configuration.monitor.sqs_name,
+                            credentials: _.pickBy(strike.configuration.monitor.credentials,
+                                d => d !== null && typeof d !== 'undefined' && d !== ''),
+                        },
+                        files_to_ingest: strike.configuration.files_to_ingest,
+                        recipe: strike.configuration.recipe
+                    }
+                };
+            } else if ((!strike.configuration.monitor.credentials.access_key_id && !strike.configuration.monitor.region_name)
+                        && strike.configuration.monitor.sqs_name) {
+                returnStrike = {
+                    title: strike.title,
+                    description: strike.description,
+                    configuration: {
+                        workspace: strike.configuration.workspace,
+                        monitor: {
+                            type: strike.configuration.monitor.type,
+                            sqs_name:  strike.configuration.monitor.sqs_name,
+                        },
+                        files_to_ingest: strike.configuration.files_to_ingest,
+                        recipe: strike.configuration.recipe
+                    }
+                };
+            } else if (strike.configuration.monitor.region_name && !strike.configuration.monitor.credentials.access_key_id) {
+                returnStrike = {
+                    title: strike.title,
+                    description: strike.description,
+                    configuration: {
+                        workspace: strike.configuration.workspace,
+                        monitor: {
+                            type: strike.configuration.monitor.type,
+                            sqs_name:  strike.configuration.monitor.sqs_name,
+                            region_name: strike.configuration.monitor.region_name
+                        },
+                        files_to_ingest: strike.configuration.files_to_ingest,
+                        recipe: strike.configuration.recipe
+                    }
+                };
+            } else {
+                returnStrike = {
+                    title: strike.title,
+                    description: strike.description,
+                    configuration: {
+                        workspace: strike.configuration.workspace,
+                        monitor: {
+                            type: strike.configuration.monitor.type,
+                            sqs_name:  strike.configuration.monitor.sqs_name,
+                            credentials: _.pickBy(strike.configuration.monitor.credentials,
+                                d => d !== null && typeof d !== 'undefined' && d !== ''),
+                            region_name: strike.configuration.monitor.region_name ? strike.configuration.monitor.region_name : ''
+                        },
+                        files_to_ingest: strike.configuration.files_to_ingest,
+                        recipe: strike.configuration.recipe
+                    }
+                };
             }
-        };
+        } else {
+            returnStrike = {
+                title: strike.title,
+                description: strike.description,
+                configuration: {
+                    workspace: strike.configuration.workspace,
+                    monitor: {
+                        type: strike.configuration.monitor.type,
+                        transfer_suffix: strike.configuration.monitor.transfer_suffix ? strike.configuration.monitor.transfer_suffix : '',
+                    },
+                    files_to_ingest: strike.configuration.files_to_ingest,
+                    recipe: strike.configuration.recipe
+                }
+            };
+        }
+
         return _.pickBy(returnStrike, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });

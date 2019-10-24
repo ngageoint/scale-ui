@@ -29,6 +29,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     exeStatus: string;
     options: any;
     data: any;
+    hasActiveJobExe: boolean;
+    canRequeue: boolean;
     selectedJobExe: any;
     logDisplay: boolean;
     inputClass = 'p-col-12';
@@ -45,6 +47,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         if (this.selectedJobExe && this.job.execution.id === this.selectedJobExe.id) {
             this.selectedJobExe = _.clone(this.job.execution);
         }
+
+        if (data.notRetriedTooltip) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Job max tries met',
+                detail: data.notRetriedTooltip,
+                closable: true,
+            });
+        }
+
         const now = moment.utc();
         const lastStatus = this.job.last_status_change ? moment.utc(this.job.last_status_change) : null;
         this.jobStatus = lastStatus ? `${_.capitalize(this.job.status)} ${lastStatus.from(now)}` : _.capitalize(this.job.status);
@@ -154,10 +166,26 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
             // get job executions
             this.loadingExecutions = true;
+            this.hasActiveJobExe = false;
             this.jobsApiService.getJobExecutions(id)
                 .subscribe(exeData => {
                     this.loadingExecutions = false;
                     this.jobExecutions = JobExecution.transformer(exeData.results);
+                    // Order the job-exes by created so index [0] will be the latest.
+                    this.jobExecutions.sort(function(a, b) {
+                        return a.created - b.created;
+                    });
+                    // If a job_exe is currently in these states we will let the user cancel them
+                    for (const i of this.jobExecutions) {
+                        if (['RUNNING', 'QUEUED', 'PENDING'].includes(i.status)) {
+                            this.hasActiveJobExe = true;
+                        }
+
+                        // If the most recent job_exe is able to be requeued
+                        if (['FAILED', 'CANCELED'].includes(this.jobExecutions[0].status)) {
+                            this.canRequeue = true;
+                        }
+                    }
                 }, err => {
                     this.loadingExecutions = false;
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job executions', detail: err.statusText});
@@ -175,6 +203,39 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     getUnicode(code) {
         return `&#x${code};`;
     }
+
+    requeueJob(e) {
+        this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
+
+        const jobsParams = {
+            job_type_names: [this.job.job_type.name],
+            job_ids: [this.job.id],
+            status: this.jobExecutions[0].status
+        };
+
+        this.jobsApiService.requeueJobs(jobsParams)
+            .subscribe(() => {
+                this.getJobDetail(this.job.id);
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error requeuing jobs', detail: err.statusText});
+            });
+    }
+
+    cancelJob(e) {
+        this.messageService.add({severity: 'success', summary: 'Job cancellation has been requested'});
+
+        const jobsParams = {
+            job_type_names: [this.job.job_type.name],
+            job_ids: [this.job.id]
+        };
+
+        this.jobsApiService.cancelJobs(jobsParams)
+            .subscribe(() => {
+                this.getJobDetail(this.job.id);
+            }, err => {
+                this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
+            });
+        }
 
     showExeLog(event, exe) {
         this.selectedJobExe = exe;

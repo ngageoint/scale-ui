@@ -14,7 +14,7 @@
     },
     "/alpha": {
         "target": "https://scale.alpha.aisohio.net/api",
-        "secure": true,
+        "secure": false,
         "logLevel": "debug",
         "changeOrigin": true,
         "pathRewrite": {

@@ -25,28 +25,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     @ViewChild('addRemoveDialog') addRemoveDialog: Dialog;
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', command: () => { this.toggleEdit(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', command: () => { this.validateRecipeType(); } },
-        { label: 'Save', icon: 'fa fa-save', command: () => { this.saveRecipeType(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', command: () => { this.toggleEdit(); } }
-    ];
     private _isEditing = false;
+    isSaving = false;
     showActive = true;
     activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
     validated: boolean;
     totalRecords: number;
-    recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;
     addRemoveDialogY: number;
     createForm: any;
     createFormSubscription: any;
-    conditionForm: any;
-    conditionFormSubscription: any;
     showFileInputs: boolean;
     showJsonInputs: boolean;
     showConditions: boolean;
@@ -65,13 +54,12 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     addedJobNode: any;
     addedConditionalNode: any;
     condition: any = RecipeTypeCondition.transformer(null);
+    editCondition: RecipeTypeCondition;
     conditions: any = [];
     selectedConditions = [];
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
-    autoUpdate = false;
-    items: MenuItem[] = _.clone(this.viewMenu);
     menuBarItems: MenuItem[] = [
         { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
@@ -98,7 +86,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
     set isEditing(value: boolean) {
         this._isEditing = value;
-        this.items = value ? _.clone(this.editMenu) : _.clone(this.viewMenu);
     }
 
     constructor(
@@ -124,10 +111,10 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty) {
+        if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
-            if ( this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode ) {
+            if ( (this.addedJobNode || this.addedRecipeNode || this.addedConditionalNode) && !this.isSaving ) {
                 return false;
             } else {
                 return true;
@@ -152,7 +139,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
-            description: ['', Validators.required],
+            description: ['', Validators],
             definition: this.fb.group({
                 input: this.fb.group({
                     files: this.fb.array([]),
@@ -160,46 +147,18 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 })
             })
         });
-
-        this.conditionForm = this.fb.group({
-            name: [this.condition.name, Validators.required],
-            data_filter: this.fb.group({
-                filters: this.fb.array(this.condition.data_filter.filters, Validators.required),
-                all: [true]
-            })
-        });
-    }
-
-    private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
-        }
     }
 
     private initRecipeTypeForm() {
         if (this.selectedRecipeTypeDetail) {
             // add the values from the object
             this.createForm.patchValue(this.selectedRecipeTypeDetail);
-
-            // modify form actions based on status
-            this.initValidation();
         }
 
         // listen for changes to createForm fields
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             _.merge(this.selectedRecipeTypeDetail, changes);
-            this.initValidation();
-        });
-
-        this.conditionFormSubscription = this.conditionForm.valueChanges.subscribe(changes => {
-            _.merge(this.condition, changes);
         });
     }
 
@@ -216,6 +175,18 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 }
             });
             this.selectedJobTypes = jtArray;
+
+            // load in condition nodes if available
+            if (this.selectedRecipeTypeDetail.conditions) {
+                this.selectedRecipeTypeDetail.conditions.forEach(c => {
+                    // parse the condition node data
+                    const condition = RecipeTypeCondition.transformer(c);
+
+                    // add the condition both to the list to display, as well as the list with selected values
+                    this.conditions.push(condition);
+                    this.selectedConditions.push(condition);
+                });
+            }
         }, err => {
             console.log(err);
             this.loadingRecipeType = false;
@@ -282,10 +253,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         if (this.createFormSubscription) {
             this.createFormSubscription.unsubscribe();
         }
-
-        if (this.conditionFormSubscription) {
-            this.conditionFormSubscription.unsubscribe();
-        }
     }
 
     createNewRecipe() {
@@ -316,11 +283,13 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     recipeData.job_types = [];
                 }
                 const input = {};
-                _.forEach(data.manifest.job.interface.inputs, inputType => {
-                    _.forEach(inputType, it => {
-                        input[it.name] = {};
+                if (data.manifest.job.interface) {
+                    _.forEach(data.manifest.job.interface.inputs, inputType => {
+                        _.forEach(inputType, it => {
+                            input[it.name] = {};
+                        });
                     });
-                });
+                }
                 recipeData.definition.nodes[data.manifest.job.name] = {
                     dependencies: [],
                     input: input,
@@ -448,10 +417,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }
     }
 
-    toggleEdit() {
+    onEditClick() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
-        this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
         if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
@@ -479,19 +447,9 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     summary: 'Validation Successful',
                     detail: 'Recipe Type is valid and can be created.'
                 });
-                this.initValidation();
             }
             _.forEach(result.warnings, warning => {
-
-                // TODO: Temporay fix to remove the Recipe Type not found error just for creation.
-                // This will eventually be fixed on the backend and can be removed once Scale issue #1700 is closed.
-                if (this.recipeTypeName === 'create') {
-                    if (warning.name !== 'RECIPE_TYPE_NOT_FOUND') {
-                        this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
-                    }
-                } else {
-                    this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
-                }
+                this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
             });
             _.forEach(result.errors, error => {
                 this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
@@ -503,6 +461,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     saveRecipeType() {
+        this.isSaving = true;
         const cleanRecipeType: any = RecipeType.cleanRecipeTypeForSave(this.selectedRecipeTypeDetail);
         if (this.recipeTypeName === 'create') {
             this.recipeTypesApiService.createRecipeType(cleanRecipeType).subscribe(result => {
@@ -520,7 +479,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'error', summary: 'Error creating recipe type', detail: err.statusText });
             });
         } else {
-            cleanRecipeType.auto_update = this.autoUpdate;
             this.recipeTypesApiService.editRecipeType(this.selectedRecipeTypeDetail.name, cleanRecipeType).subscribe(() => {
                 this.isEditing = false;
                 this.showAddRemoveDisplay = false;
@@ -559,21 +517,44 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         e.originalEvent.preventDefault();
     }
 
-    onAddConditionClick() {
-        if (this.selectedRecipeTypeDetail.definition.nodes[this.condition.name]) {
-            this.messageService.add({
-                severity: 'error',
-                summary: `Node ${this.condition.name} already exists`,
-                detail: 'Node names must be unique.'
-            });
+    /**
+     * Callback for when the condition editor panel has been saved with a valid condition.
+     * @param condition the edited conditional node
+     */
+    onConditionSave(event: {condition: RecipeTypeCondition, previousCondition: RecipeTypeCondition}): void {
+        if (event.previousCondition.name) {
+            // update local conditions model
+            const idx = _.findIndex(this.conditions, {name: event.condition.name});
+            this.conditions[idx] = event.condition;
+
+            // update the fields of the existing node in the recipe data
+            // this is same idea as addConditionNode()
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name].node_type.name = event.condition.name;
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name].node_type.interface = event.condition.interface;
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name].node_type.data_filter = event.condition.data_filter;
+
+            // update condition node in recipe details
+            // same idea as RecipeType.addCondition(), but update it here as well
+            const cidx = _.findIndex(this.selectedRecipeTypeDetail.conditions);
+            this.selectedRecipeTypeDetail.conditions[cidx] = event.condition;
         } else {
-            this.conditions.push(RecipeTypeCondition.transformer(this.condition));
-            this.conditionForm.reset();
-            this.condition = RecipeTypeCondition.transformer(null);
+            this.conditions.push(event.condition);
         }
     }
 
-    onRemoveConditionClick(condition) {
+    /**
+     * Callback for when the conditional editor is closed from within.
+     * @param  e whether or not the editor should be visible
+     */
+    onConditionCancel(e: boolean): void {
+        this.showConditions = false;
+    }
+
+    /**
+     * Callback for when the recipe graph outputs the click event to delete a condition node.
+     * @param condition the condition node to delete.
+     */
+    onDeleteCondition(condition: RecipeTypeCondition): void {
         _.remove(this.conditions, { name: condition.name });
         const nodeToRemove = this.selectedRecipeTypeDetail.definition.nodes[condition.name];
         if (nodeToRemove) {
@@ -581,6 +562,23 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 data: condition
             });
         }
+    }
+
+    /**
+     * Callback for when the recipe graph outputs the click event to edit a condition node.
+     * @param condition the condition node to edit
+     */
+    onEditCondition(condition: RecipeTypeCondition): void {
+        // this will be cleared when the sidebar is hidden
+        this.editCondition = condition;
+        this.showConditions = true;
+    }
+
+    /**
+     * Callback for when the condition side bar is hidden.
+     */
+    onConditionSidebarHide(): void {
+        this.editCondition = null;
     }
 
     onFilterKeyup(e) {
@@ -606,6 +604,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.isSaving = false;
         this.jobTypesApiService.getJobTypes().subscribe(data => {
             this.jobTypes = _.orderBy(data.results, ['title', 'version'], ['asc', 'asc']);
         });
@@ -622,7 +621,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.recipeTypeName = routeParams.get('name');
 
                 this.isEditing = this.recipeTypeName === 'create';
-                this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
 
                 this.getRecipeTypes();
             });

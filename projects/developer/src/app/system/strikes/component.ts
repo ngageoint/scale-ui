@@ -23,18 +23,9 @@ import { Observable } from 'rxjs';
 export class StrikesComponent implements OnInit, OnDestroy {
     @ViewChild('dv') dv: any;
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } },
-        { label: 'Duplicate', icon: 'fa fa-copy', disabled: false, command: () => { this.onDuplicateClick(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
-        { label: 'Save', icon: 'fa fa-save', disabled: false, command: () => { this.onSaveClick(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
-    ];
     loading: boolean;
     isEditing: boolean;
+    isSaving = false;
     validated: boolean;
     strikes: SelectItem[] = [];
     selectedStrikeDetail: any;
@@ -52,7 +43,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ingestFileForm: any;
     ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
-    items: MenuItem[] = _.clone(this.viewMenu);
 
     constructor(
         private fb: FormBuilder,
@@ -68,8 +58,12 @@ export class StrikesComponent implements OnInit, OnDestroy {
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty || this.ingestFileForm.dirty ) {
-            return false;
+        if (!this.isSaving) {
+            if (this.createForm.dirty || this.ingestFileForm.dirty) {
+                return false;
+            } else {
+                return true;
+            }
         } else {
             return true;
         }
@@ -152,22 +146,13 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
-        }
-
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
         const status = this.createForm.status === 'INVALID' && this.selectedStrikeDetail.configuration.files_to_ingest.length === 0;
         this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
     }
 
     private initStrikeForm() {
+        this.isSaving = false;
         if (this.selectedStrikeDetail) {
             this.workspacesOptions = [];
             this.recipeOptions = [];
@@ -177,7 +162,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
                     label: recipe.title,
                     value: {
                         name: recipe.name,
-                        revision_num: recipe.revision_num
                     }
                 });
             });
@@ -221,6 +205,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
     }
 
     private initEdit() {
+        this.isSaving = false;
         if (this.workspaces.length === 0) {
             this.workspacesApiService.getWorkspaces({ sortField: 'title' }).subscribe(workspaces => {
                 // set up workspaces
@@ -304,7 +289,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     private redirect(id: any) {
         if (id && id === this.selectedStrikeDetail.id) {
             this.isEditing = false;
-            this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForms();
             this.createForm.reset();
             this.ingestFileForm.reset();
@@ -320,7 +304,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
 
     onEditClick() {
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -330,7 +313,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
         delete this.selectedStrikeDetail.name;
         this.selectedStrikeDetail.title += ' copy';
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -361,6 +343,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         if (this.selectedStrikeDetail.id) {
             // edit strike
             this.strikesApiService.editStrike(this.selectedStrikeDetail.id, this.selectedStrikeDetail).subscribe(() => {
+                this.isSaving = true;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully edited' });
                 this.redirect(this.selectedStrikeDetail.id);
             }, err => {
@@ -370,6 +353,7 @@ export class StrikesComponent implements OnInit, OnDestroy {
         } else {
             // create strike
             this.strikesApiService.createStrike(this.selectedStrikeDetail).subscribe(data => {
+                this.isSaving = true;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Strike successfully created' });
                 this.redirect(data.id);
             }, err => {
@@ -487,7 +471,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
                 id = id !== null && id !== 'create' ? +id : id;
 
                 this.isEditing = id === 'create';
-                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getStrikes(id);
             });

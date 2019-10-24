@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { Validators } from '@angular/forms';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -20,16 +20,6 @@ import { Observable } from 'rxjs';
 })
 export class ScanDetailsComponent implements OnInit, OnDestroy {
     private routeParams: any;
-    private viewMenu: MenuItem[] = [
-        { label: 'Edit', icon: 'fa fa-edit', disabled: false, command: () => { this.onEditClick(); } },
-        { label: 'Duplicate', icon: 'fa fa-copy', disabled: false, command: () => { this.onDuplicateClick(); } }
-    ];
-    private editMenu: MenuItem[] = [
-        { label: 'Validate', icon: 'fa fa-check', disabled: false, command: () => { this.onValidateClick(); } },
-        { label: 'Save', icon: 'fa fa-save', disabled: false, command: () => { this.onSaveClick(); } },
-        { separator: true },
-        { label: 'Cancel', icon: 'fa fa-remove', disabled: false, command: () => { this.onCancelClick(); } }
-    ];
     loading: boolean;
     isEditing: boolean;
     validated: boolean;
@@ -44,7 +34,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     ingestFileForm: any;
     ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
-    items: MenuItem[] = _.clone(this.viewMenu);
     recipes: any;
     recipeOptions: SelectItem[] = [];
 
@@ -114,16 +103,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     private initValidation() {
-        // enable/disable validate and save actions based on form status
-        const validateItem = _.find(this.items, { label: 'Validate' });
-        if (validateItem) {
-            validateItem.disabled = this.createForm.status === 'INVALID';
-        }
-        const saveItem = _.find(this.items, { label: 'Save' });
-        if (saveItem) {
-            saveItem.disabled = this.createForm.status === 'INVALID' || !this.validated;
-        }
-
         // change ingest file panel based on createForm, because that's where files_to_ingest lives
         const status = this.createForm.status === 'INVALID' && this.scan.configuration.files_to_ingest.length === 0;
         this.ingestFilePanelClass = status ? 'ui-panel-danger' : 'ui-panel-primary';
@@ -144,7 +123,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                     label: recipe.title,
                     value: {
                         name: recipe.name,
-                        revision_num: recipe.revision_num
                     }
                 });
             });
@@ -241,7 +219,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     private redirect(id: any) {
         if (id === this.scan.id) {
             this.isEditing = false;
-            this.items = _.clone(this.viewMenu);
             this.unsubscribeFromForms();
             // this.createForm.reset();
             // this.ingestFileForm.reset();
@@ -257,7 +234,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
 
     onEditClick() {
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -267,7 +243,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         delete this.scan.name;
         this.scan.title += ' copy';
         this.isEditing = true;
-        this.items = _.clone(this.editMenu);
         this.initEdit();
     }
 
@@ -391,7 +366,6 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
                 id = id !== null && id !== 'create' ? +id : id;
 
                 this.isEditing = id === 'create';
-                this.items = id === 'create' ? _.clone(this.editMenu) : _.clone(this.viewMenu);
 
                 this.getScanDetail(id);
             });

@@ -76,13 +76,15 @@ const routes: Routes = [
     {
         path: 'processing/batches/:id',
         component: BatchDetailsComponent,
+        canDeactivate: [PendingChangesGuard],
         data: {title: 'Batch Details | Scale'}
     },
-    {
-        path: 'processing/batches/create',
-        component: BatchDetailsComponent,
-        data: {title: 'Create Batch | Scale'}
-    },
+    // {
+    //     path: 'processing/batches/create',
+    //     component: BatchDetailsComponent,
+    //   //  canDeactivate: [PendingChangesGuard],
+    //     data: {title: 'Create Batch | Scale'}
+    // },
     {
         path: 'configuration/job-types',
         component: JobTypesComponent,
@@ -133,7 +135,7 @@ const routes: Routes = [
     {
         path: 'data/ingest',
         component: IngestComponent,
-        data: {title: 'Injest Records | Scale'}
+        data: {title: 'Ingest Records | Scale'}
     },
     {
         path: 'data/metrics',

@@ -13,6 +13,7 @@ import { StatusService } from '../../common/services/status.service';
 })
 export class NodesComponent implements OnInit, OnDestroy {
     @ViewChild('menu') menu: any;
+
     subscription: any;
     loading: boolean;
     collapsed = true;
@@ -56,6 +57,7 @@ export class NodesComponent implements OnInit, OnDestroy {
     nodesStatus: any = [];
     nodes: any = [];
     filteredNodes: any = [];
+    selectedNode: any; // used by the context menu to determine the correct node
     count = '';
     showActive: boolean;
     activeLabel: string;
@@ -120,7 +122,6 @@ export class NodesComponent implements OnInit, OnDestroy {
             }
         }
     };
-
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -149,8 +150,16 @@ export class NodesComponent implements OnInit, OnDestroy {
             if (node.is_active === this.showActive) {
                 node.status = _.find(this.nodesStatus, { id: node.id });
                 node.menuItems = [
-                    { label: node.pauseLabel, icon: node.pauseIcon, command: () => { this.onPauseClick(node); } },
-                    { label: node.deprecateLabel, icon: node.deprecateIcon, command: () => { this.onDeprecateClick(node); } }
+                    { label: node.pauseLabel, icon: node.pauseIcon, command: () => {
+                        if (this.selectedNode) {
+                            this.onPauseClick(this.selectedNode);
+                        }
+                    } },
+                    { label: node.deprecateLabel, icon: node.deprecateIcon, command: () => {
+                        if (this.selectedNode) {
+                            this.onDeprecateClick(this.selectedNode);
+                        }
+                    } }
                 ];
                 return node;
             }
@@ -180,7 +189,6 @@ export class NodesComponent implements OnInit, OnDestroy {
     }
 
     private getNodes() {
-        console.log('getNodes');
         this.nodesApiService.getNodes().subscribe(nodeData => {
             this.allNodes = nodeData.results;
             this.loading = false;
@@ -193,13 +201,11 @@ export class NodesComponent implements OnInit, OnDestroy {
     }
 
     private getNodesStatus() {
-        if (!this.nodesStatus || this.nodesStatus.length === 0) {
-            const status = this.statusService.getStatus();
-            this.nodesStatus = status ? status.nodes : [];
-            this.getNodes();
-        }
-        this.subscription = this.statusService.statusUpdated.subscribe(status => {
-            this.nodesStatus = status.nodes;
+        const status = this.statusService.getStatus();
+        this.nodesStatus = status ? status.nodes : [];
+        this.getNodes();
+        this.subscription = this.statusService.statusUpdated.subscribe(result => {
+            this.nodesStatus = result.nodes;
             this.formatNodes();
         });
     }
@@ -227,12 +233,18 @@ export class NodesComponent implements OnInit, OnDestroy {
             // handle pause update
             this.pauseDisplay = false;
             this.nodesApiService.updateNode(node).subscribe(data => {
-                node.pauseLabel = data.is_paused ? 'Resume' : 'Pause';
-                node.pauseIcon = data.is_paused ? 'fa fa-play' : 'fa fa-pause';
-                node.menuItems[0].label = node.pauseLabel;
-                node.menuItems[0].icon = node.pauseIcon;
-                node.headerClass = data.is_paused ? 'node__paused' : '';
-                this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
+                // api bug where 204 is not returning back the data - so data is undefined
+                if (data) {
+                    node.pauseLabel = data.is_paused ? 'Resume' : 'Pause';
+                    node.pauseIcon = data.is_paused ? 'fa fa-play' : 'fa fa-pause';
+                    node.menuItems[0].label = node.pauseLabel;
+                    node.menuItems[0].icon = node.pauseIcon;
+                    node.headerClass = data.is_paused ? 'node__paused' : '';
+                    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
+                } else {
+                    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
+                    this.getNodesStatus();
+                }
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error updating node', detail: err.statusText});
@@ -240,11 +252,18 @@ export class NodesComponent implements OnInit, OnDestroy {
         } else {
             // handle deprecate update
             this.nodesApiService.updateNode(node).subscribe(data => {
-                node.deprecateLabel = data.is_active ? 'Deprecate' : 'Activate';
-                node.deprecateIcon = data.is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
-                node.menuItems[1].label = node.deprecateLabel;
-                node.menuItems[1].icon = node.deprecateIcon;
-                this.formatNodes();
+                // api bug where 204 is not returning back the data - so data is undefined
+                if (data) {
+                    node.deprecateLabel = data.is_active ? 'Deprecate' : 'Activate';
+                    node.deprecateIcon = data.is_active ? 'fa fa-toggle-on' : 'fa fa-toggle-off';
+                    node.menuItems[1].label = node.deprecateLabel;
+                    node.menuItems[1].icon = node.deprecateIcon;
+                    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
+                    this.formatNodes();
+                } else {
+                    this.messageService.add({severity: 'success', summary: 'Success', detail: 'Node has been successfully updated'});
+                    this.getNodesStatus();
+                }
             }, err => {
                 console.log(err);
                 this.messageService.add({severity: 'error', summary: 'Error updating node', detail: err.statusText});
@@ -309,8 +328,10 @@ export class NodesComponent implements OnInit, OnDestroy {
         this.updateQueryParams();
     }
 
-    onMenuClick(event) {
+    onMenuClick(event, node) {
+        this.menu.model = node.menuItems;
         this.menu.toggle(event);
+        this.selectedNode = node;
         event.stopPropagation();
     }
 

@@ -101,8 +101,16 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             e.itemValue.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
             e.itemValue.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
         } else {
-            // normal dropdown option was chosen
-            e.value.color = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+            // normal dropdown option was chose
+            if (e.value.units) {
+                // if there wasnt anything specific selected
+                e.value.color = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+            } else {
+                _.forEach(e.value, (value) => {
+                    value.primaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+                    value.secondaryColor = `#${(Math.random().toString(16) + '0000000').slice(2, 8)}`;
+                });
+            }
         }
     }
     getDataTypes() {
@@ -110,10 +118,17 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.metricsApiService.getDataTypes().subscribe((data) => {
             this.dataTypesLoading = false;
             _.forEach(data.results, (result) => {
-                this.availableDataTypes.push({
+                if (result.title === 'Job Types') {
+                    this.availableDataTypes.push({
+                        label: 'Job/Recipe Types',
+                        value: result
+                        });
+                } else {
+                    this.availableDataTypes.push({
                     label: result.title,
                     value: result
-                });
+                    });
+                }
             });
         }, err => {
             this.dataTypesLoading = false;

@@ -2,6 +2,109 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.9.0](https://github.com/ngageoint/scale-ui/compare/v0.8.6...v0.9.0) (2019-09-26)
+
+
+### Bug Fixes
+
+* **recipes:** fixed the sub-recipe behavior in graph components ([d7cdb47](https://github.com/ngageoint/scale-ui/commit/d7cdb47))
+* fixed data feed chart ([a86205a](https://github.com/ngageoint/scale-ui/commit/a86205a))
+* fixed popups ([d8b5569](https://github.com/ngageoint/scale-ui/commit/d8b5569))
+* **data feed:** fixed data feed rendering ([748549f](https://github.com/ngageoint/scale-ui/commit/748549f))
+* removed revision_num from strike and scan config ([6f49d90](https://github.com/ngageoint/scale-ui/commit/6f49d90))
+* **job types:** fixed job type error history rendering ([787d930](https://github.com/ngageoint/scale-ui/commit/787d930))
+
+
+### Features
+
+* **recipes:** added a new condition editor ([83a61d4](https://github.com/ngageoint/scale-ui/commit/83a61d4))
+
+
+
+### [0.8.6](https://github.com/ngageoint/scale-ui/compare/v0.8.5...v0.8.6) (2019-09-13)
+
+
+### Bug Fixes
+
+* corrected if logic ([854b14a](https://github.com/ngageoint/scale-ui/commit/854b14a))
+* **recipe:** fixed condition logic visibility ([b98c614](https://github.com/ngageoint/scale-ui/commit/b98c614))
+* **recipes:** fixed recipe editor handling of no interface job ([cd8436f](https://github.com/ngageoint/scale-ui/commit/cd8436f))
+* **strikes:** fixed payload construction ([f9a14eb](https://github.com/ngageoint/scale-ui/commit/f9a14eb))
+
+
+
+### [0.8.5](https://github.com/ngageoint/scale-ui/compare/v0.8.4...v0.8.5) (2019-09-13)
+
+
+### Bug Fixes
+
+* typo in page title ([7dbb670](https://github.com/ngageoint/scale-ui/commit/7dbb670))
+* **batches:** fixed batches details error and temp removed create button ([a6f6107](https://github.com/ngageoint/scale-ui/commit/a6f6107))
+* **jobs:** added handler for job with no interface ([cd2e8a8](https://github.com/ngageoint/scale-ui/commit/cd2e8a8))
+* **metrics:** modified name of category ([f916be9](https://github.com/ngageoint/scale-ui/commit/f916be9))
+* **recipes:** added max length for recipe description  ([3c58a9e](https://github.com/ngageoint/scale-ui/commit/3c58a9e))
+* default value of true for auth enabled ([a874703](https://github.com/ngageoint/scale-ui/commit/a874703)), closes [#321](https://github.com/ngageoint/scale-ui/issues/321)
+* **strikes:** added default value for transfer_suffix ([db6caa9](https://github.com/ngageoint/scale-ui/commit/db6caa9))
+
+
+
+### [0.8.4](https://github.com/ngageoint/scale-ui/compare/v0.8.3...v0.8.4) (2019-09-03)
+
+
+### Bug Fixes
+
+* **metrics:** added logic to get metrics colors right ([ae8e93c](https://github.com/ngageoint/scale-ui/commit/ae8e93c))
+* **recipe_types:** added check for job interface ([1bb27ef](https://github.com/ngageoint/scale-ui/commit/1bb27ef))
+
+
+
+### [0.8.3](https://github.com/ngageoint/scale-ui/compare/v0.8.2...v0.8.3) (2019-09-03)
+
+
+### Bug Fixes
+
+* **dashboard:** removed ability to select more than one data feed ([9fc1573](https://github.com/ngageoint/scale-ui/commit/9fc1573))
+* **job_types:** fixed rendering of job_types with no outputs ([d361783](https://github.com/ngageoint/scale-ui/commit/d361783))
+
+
+
+### [0.8.2](https://github.com/ngageoint/scale-ui/compare/v0.8.1...v0.8.2) (2019-09-03)
+
+
+### Bug Fixes
+
+* **jobs:** fixed linting error ([b0f098d](https://github.com/ngageoint/scale-ui/commit/b0f098d))
+* **stikes:** fixed action of saving strike ([65f9b35](https://github.com/ngageoint/scale-ui/commit/65f9b35))
+* **workspaces:** removeed broker creds when no input provided ([a4ac5e8](https://github.com/ngageoint/scale-ui/commit/a4ac5e8))
+
+
+
+### [0.8.1](https://github.com/ngageoint/scale-ui/compare/v0.8.0...v0.8.1) (2019-08-30)
+
+
+### Bug Fixes
+
+* **jobs:** added UI indication if job won't be retried ([5d7a43e](https://github.com/ngageoint/scale-ui/commit/5d7a43e))
+* moved all save+validate functions to buttons ([596cb90](https://github.com/ngageoint/scale-ui/commit/596cb90))
+
+
+
+## [0.8.0](https://github.com/ngageoint/scale-ui/compare/v0.7.0...v0.8.0) (2019-08-29)
+
+
+### Bug Fixes
+
+* **jobs:** corrected linting errors to allow for building ([52ff45c](https://github.com/ngageoint/scale-ui/commit/52ff45c))
+* **strike:** corrected strike configuration payload ([adf998a](https://github.com/ngageoint/scale-ui/commit/adf998a))
+* provide default values for environment variables ([02eb150](https://github.com/ngageoint/scale-ui/commit/02eb150))
+
+
+### Features
+
+* **jobs:** added requeue and cancel buttons to jobs page ([a6f86ef](https://github.com/ngageoint/scale-ui/commit/a6f86ef))
+
+
+
 ## [0.7.0](https://github.com/ngageoint/scale-ui/compare/v0.6.0...v0.7.0) (2019-08-20)
 
 

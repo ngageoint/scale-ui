@@ -134,9 +134,14 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         this.createForm.updateValueAndValidity();
     }
 
+    private hasInterface() {
+        return this.jobType.manifest && this.jobType.manifest.job && this.jobType.manifest.job.interface;
+    }
+
     private initJobTypeConfiguration() {
         // set up output workspaces
-        if (this.jobType.manifest.job.interface.outputs.files) {
+        if (this.jobType.manifest.job.interface && this.jobType.manifest.job.interface.outputs
+            && this.jobType.manifest.job.interface.outputs.files) {
             // iterate over job manifest output files and add appropriate properties and form controls
             const outputsGroup: any = this.createForm.get('configuration.output_workspaces.outputs');
             if (!this.jobType.configuration.output_workspaces.outputs) {
@@ -149,7 +154,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         }
 
         // set up settings
-        if (this.jobType.manifest.job.interface.settings) {
+        if (this.jobType.manifest.job.interface && this.jobType.manifest.job.interface.settings) {
             // iterate over job manifest settings and add appropriate job type settings
             const settingsGroup: any = this.createForm.get('configuration.settings');
             _.forEach(this.jobType.manifest.job.interface.settings, setting => {
@@ -161,7 +166,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         }
 
         // set up mounts
-        if (this.jobType.manifest.job.interface.mounts) {
+        if (this.jobType.manifest.job.interface && this.jobType.manifest.job.interface.mounts) {
             // iterate over mounts in job manifest and add appropriate job type mounts
             const mountsGroup: any = this.createForm.get('configuration.mounts');
             _.forEach(this.jobType.manifest.job.interface.mounts, mount => {

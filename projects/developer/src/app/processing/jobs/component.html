@@ -70,6 +70,9 @@
                     <div class="warning-text" *ngIf="rowData.job_type.unmet_resources">
                         <span class="fa fa-warning" [pTooltip]="rowData.job_type.unmetResourcesTooltip"></span>
                     </div>
+                    <div class="warning-text" *ngIf="rowData.notRetriedTooltip">
+                        <span class="fa fa-warning" [pTooltip]="rowData.notRetriedTooltip"></span>
+                    </div>
                 </div>
                 <div *ngSwitchCase="'recipe'">
                     <div *ngIf="rowData.recipe">
@@ -131,7 +134,7 @@
 </p-table>
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
              [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
-<p-confirmDialog></p-confirmDialog>
+<p-confirmDialog key="jobsConfirm"></p-confirmDialog>
 <div *ngIf="selectedJobExe">
     <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay" (close)="hideExeLog()"></dev-log-viewer>
 </div>
