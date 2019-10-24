@@ -39,12 +39,10 @@ export class ScansComponent implements OnInit, OnDestroy {
     applyBtnClass = 'ui-button-secondary';
     nameFilterText: string;
     onNameFilter = _.debounce((e) => {
-        console.log(this.datatableOptions);
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             name: e.target.value
         });
-        console.log(this.datatableOptions);
         this.updateOptions();
     }, 1000);
 
