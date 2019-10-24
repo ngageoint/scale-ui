@@ -15,7 +15,7 @@
     <div class="temporal-filter__date-filter-dropdown">
         <i class="fa fa-circle live-range-icon" [ngClass]="applyStatusClass"
            [pTooltip]="liveRangeTooltip" tooltipPosition="bottom" placeholder="Bottom"></i>
-        <label>Live Range:</label>
+        <label class="margin-right-sm">Live Range:</label>
         <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
                     (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
                     [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" [ngClass]="applyStatusClass">

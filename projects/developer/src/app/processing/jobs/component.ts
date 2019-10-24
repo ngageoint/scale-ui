@@ -460,13 +460,14 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
             // If this page is loading for the first time parse the request to determine if a range or
             // duration was requested. If it was a duration then a subscription is created for auto-updates
             if (this.loading) {
+                console.log(this.datatableOptions.duration);
                 if (this.datatableOptions.duration) {
                     // Deconstruct the requested time-frame and submit for a subscription
-                    var dur = this.datatableOptions.duration;
-                    var query = {
-                        'range': dur.replace(/\D/g, ""),
-                        'unit': dur[dur.length -1]
-                    }
+                    const dur = this.datatableOptions.duration;
+                    const query = {
+                        'range': dur.replace(/\D/g, ''),
+                        'unit': dur[dur.length - 1]
+                    };
                     this.onDateRangeSelected(query);
                 } else {
                     this.onDateFilterApply(this.datatableOptions);

@@ -65,5 +65,8 @@ export class TemporalFilterComponent implements OnInit {
         this.dateRangeSelected.emit({ unit: unit, range: range });
     }
 
-    ngOnInit() {}
+    ngOnInit() {
+        this.selectedDateRange = { unit: 'h', range: 24 } ;
+        this.setDateFilterRange('h', 24);
+    }
 }
