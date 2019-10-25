@@ -9,6 +9,7 @@ export class BatchesDatatable {
         public started?: string,
         public ended?: string,
         public duration?: string,
+        public recipe_type_id?: any,
         public recipe_type_name?: any,
         public is_creation_done?: any,
         public is_superseded?: any,
