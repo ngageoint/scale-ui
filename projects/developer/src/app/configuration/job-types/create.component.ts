@@ -75,6 +75,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         }
     ];
     validated: boolean;
+    isSaving = false;
     submitted: boolean;
     iconData = iconData;
     icons: SelectItem[] = [];
@@ -94,7 +95,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty) {
+        if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
             return true;
@@ -323,6 +324,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     }
 
     onSubmit() {
+        this.isSaving = true;
         this.submitted = true;
         if (this.mode === 'Create') {
             // remove falsey values
@@ -364,6 +366,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     }
 
     ngOnInit() {
+        this.isSaving = false;
         _.forEach(this.iconData, d => {
             this.icons.push({
                 label: d.label,
