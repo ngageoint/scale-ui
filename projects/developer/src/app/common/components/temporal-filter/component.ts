@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 
 import { environment } from '../../../../environments/environment';
@@ -24,10 +25,13 @@ export class TemporalFilterComponent implements OnInit {
     ];
     selectedDateRange: any;
     applyBtnClass = 'ui-button-secondary';
-    isMobile: boolean;
+    applyStatusClass = 'live-range-inactive';
+    applyTxtClass = '';
+    liveRangeTooltip = 'No Live Range Selected';
 
     constructor(
-        public breakpointObserver: BreakpointObserver
+        public breakpointObserver: BreakpointObserver,
+        private messageService: MessageService
     ) {}
 
     onStartSelect(e) {
@@ -42,27 +46,27 @@ export class TemporalFilterComponent implements OnInit {
 
     onDateFilterApply() {
         this.applyBtnClass = 'ui-button-secondary';
+        this.applyTxtClass = 'txt-field-active';
+        this.applyStatusClass = 'live-range-inactive';
+        this.liveRangeTooltip = 'No Live Range Selected';
         this.dateFilterApply.emit({ started: this.started, ended: this.ended });
+        if (this.started > this.ended) {
+            this.applyTxtClass = 'txt-field-error';
+            this.messageService.add({severity: 'error', summary: 'Error querying range', detail: 'Provided FROM date is before TO date'});
+        }
     }
 
     setDateFilterRange(unit: any, range: any) {
+        this.applyTxtClass = 'txt-field-inactive';
+        this.applyStatusClass = 'live-range-active';
+        this.liveRangeTooltip = 'Refreshing every 10 seconds';
         this.started = moment.utc().subtract(range, unit).toISOString();
         this.ended = moment.utc().toISOString();
         this.dateRangeSelected.emit({ unit: unit, range: range });
     }
-    // Starting to add share link option
-    // shareLink(event) {
-    //     document.addEventListener('copy', (e: ClipboardEvent) => {
-    //         e.clipboardData.setData('text/plain', (event));
-    //         e.preventDefault();
-    //         document.removeEventListener('copy', null);
-    //       });
-    //       document.execCommand('copy');
-    // }
 
     ngOnInit() {
-        this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
-            this.isMobile = !state.matches;
-        });
+        this.selectedDateRange = { unit: 'h', range: 24 } ;
+        this.setDateFilterRange('h', 24);
     }
 }

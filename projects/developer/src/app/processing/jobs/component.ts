@@ -1,8 +1,11 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, AfterViewInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -14,7 +17,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+
 
 @Component({
     selector: 'dev-jobs',
@@ -23,7 +26,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
     providers: [ConfirmationService]
 })
 
-export class JobsComponent implements OnInit, OnDestroy {
+export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() jobs: any;
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
@@ -85,6 +88,8 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    loading = true;
+    sub: any;
 
     constructor(
         private dataService: DataService,
@@ -99,7 +104,9 @@ export class JobsComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        this.datatableLoading = true;
+        if (!this.sub) {
+            this.datatableLoading = true;
+        }
         this.unsubscribe();
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
@@ -120,6 +127,10 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
 
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
+        // tried to remove fields from URL - this breaks the range selection updates every 10 seconds.
+        if (!this.sub) {
+            delete this.datatableOptions.duration;
+        }
         this.router.navigate(['/processing/jobs'], {
             queryParams: this.datatableOptions as Params,
             replaceUrl: true
@@ -216,6 +227,10 @@ export class JobsComponent implements OnInit, OnDestroy {
         }
     }
     onDateFilterApply(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
         this.jobs = null;
         this.started = data.started;
         this.ended = data.ended;
@@ -227,17 +242,28 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.updateOptions();
         this.updateData();
     }
-    onDateRangeSelected(data: any) {
-        this.jobs = null;
+    getDateRangeSelected(data: any) {
         this.started = moment.utc().subtract(data.range, data.unit).toISOString();
         this.ended = moment.utc().toISOString();
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
             started: this.started,
-            ended: this.ended,
-            duration: moment.duration(data.range, data.unit).toISOString()
+            ended: this.ended
         });
+        if (this.loading) {
+            this.datatableOptions.duration = moment.duration(data.range, data.unit).toISOString();
+        }
         this.updateOptions();
+    }
+    onDateRangeSelected(data: any) {
+        if (this.sub) {
+            this.sub.unsubscribe();
+            this.sub = null;
+        }
+        this.sub = Observable.timer(0, 10000)
+            .subscribe(() => {
+                this.getDateRangeSelected(data);
+            });
     }
     requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
@@ -434,10 +460,33 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
             this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
-            this.getJobTypes();
+            // If this page is loading for the first time parse the request to determine if a range or
+            // duration was requested. If it was a duration then a subscription is created for auto-updates
+            if (this.loading) {
+                console.log(this.datatableOptions.duration);
+                if (this.datatableOptions.duration) {
+                    // Deconstruct the requested time-frame and submit for a subscription
+                    const dur = this.datatableOptions.duration;
+                    const query = {
+                        'range': dur.replace(/\D/g, ''),
+                        'unit': dur[dur.length - 1]
+                    };
+                    this.onDateRangeSelected(query);
+                } else {
+                    this.onDateFilterApply(this.datatableOptions);
+                }
+            } else {
+                this.getJobTypes();
+            }
         });
     }
+    ngAfterViewInit() {
+        this.loading = false;
+    }
     ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
         this.unsubscribe();
     }
 }
