@@ -56,7 +56,8 @@ export class Job {
                 data.recipe,
                 data.input,
                 data.output,
-                data.selected
+                data.selected,
+                data.configuration
             );
         }
     }
@@ -100,7 +101,8 @@ export class Job {
         public recipe: any,
         public input: any,
         public output: any,
-        public selected: boolean
+        public selected: boolean,
+        public configuration: any
     ) {
         this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
         this.last_modified_formatted = moment.utc(this.last_modified).format(environment.dateFormat);

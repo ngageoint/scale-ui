@@ -721,7 +721,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.inputFilePanel.toggle(event);
     }
 
-
     showJsonInputConnections(event, input) {
         this.selectedNodeInput = input;
         this.nodeInputs = [];
