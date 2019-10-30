@@ -85,7 +85,7 @@ export class ChartService {
                             // add result values to valueArr
                             _.forEach(dataLabels, (xDate) => {
                                 const valueObj = _.find(queryDates, (qDate) => {
-                                    return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                                    return moment.utc(qDate.datetime, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
                                 });
                                 // push 0 if data for xDate is not present in queryDates
                                 valueArr.push(valueObj ? valueObj.value : 0);
@@ -184,7 +184,7 @@ export class ChartService {
                     // add result values to valueArr
                     _.forEach(dataLabels, (xDate) => {
                         const valueObj = _.find(result.values, (qDate) => {
-                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                            return moment.utc(qDate.datetime, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
                         });
                         // push 0 if data for xDate is not present in result.values
                         valueArr.push(valueObj ? valueObj.value : 0);

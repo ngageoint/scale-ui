@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -12,6 +12,8 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
     styleUrls: ['./component.scss']
 })
 export class JobActivityComponent implements OnInit, OnDestroy {
+    @Input() started: any;
+    @Input() ended: any;
     chartLoading: boolean;
     jobTypes: any;
     params: any;
@@ -41,8 +43,8 @@ export class JobActivityComponent implements OnInit, OnDestroy {
             });
         }
         this.params = {
-            started: moment.utc().subtract(1, 'd').toISOString(),
-            ended: moment.utc().toISOString(),
+            started: this.started,
+            ended: this.ended,
             job_type_id: this.favorites.length > 0 ? _.map(activeJobTypes, 'id') : _.map(activeJobTypes, 'job_type.id')
         };
         this.chartLoading = false;
@@ -59,6 +61,7 @@ export class JobActivityComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        console.log(this.started);
         this.chartLoading = true;
         this.jobTypesApiService.getJobTypes().subscribe((data: any) => {
             this.jobTypes = data.results;

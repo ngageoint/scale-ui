@@ -1,11 +1,12 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { ColorService } from '../common/services/color.service';
-import { JobType } from '../configuration/job-types/api.model';
+import * as moment from 'moment';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'dev-dashboard',
@@ -13,6 +14,8 @@ import { JobType } from '../configuration/job-types/api.model';
     styleUrls: ['./component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+    @Output() started: any;
+    @Output() ended: any;
     loadingJobTypes: boolean;
     columnsFavs: any[];
     columnsAll: any[];
@@ -31,6 +34,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     dataFeedChartTitle: string;
     historyChartTitle: string;
     activityChartTitle: string;
+    options: any;
 
     constructor(
         private messageService: MessageService,
@@ -47,10 +51,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.favoriteJobTypes = [];
         this.pieChartOptions = {
             rotation: 0.5 * Math.PI, // start from bottom
-            cutoutPercentage: 40,
+            cutoutPercentage: 20,
             maintainAspectRatio: false,
             legend: {
-                display: false
+                display: false,
             },
             plugins: {
                 datalabels: false
@@ -59,6 +63,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 arc: {
                     borderWidth: 0
                 }
+            },
+            tooltips: {
+                callbacks: {
+                  label: function(tooltipItem, data) {
+                    const dataset = data.datasets[tooltipItem.datasetIndex];
+                  const index = tooltipItem.index;
+                  return dataset.labels[index] + ': ' + dataset.data[index];
+                }
+              }
             }
         };
     }
@@ -69,6 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
+        console.log(this.started);
         this.refreshAllJobTypes();
         this.jobsService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
@@ -99,19 +113,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const failed = sysErrors + algErrors + dataErrors;
         const chartData = {
             datasets: [{
-                data: [sysErrors, algErrors, dataErrors, running, completed],
+                data: [sysErrors, algErrors, dataErrors],
                 borderColor: '#fff',
                 borderWidth: 1,
                 backgroundColor: [
                     ColorService.ERROR_SYSTEM,   // system
                     ColorService.ERROR_ALGORITHM,  // algorithm
                     ColorService.ERROR_DATA,  // data,
+                ],
+                labels: ['SYSTEM', 'ALGORITHM', 'DATA']
+            },
+            {
+                data: [running, completed],
+                borderColor: '#fff',
+                borderWidth: 1,
+                backgroundColor: [
                     ColorService.RUNNING,
                     ColorService.COMPLETED
-                ]
-            }],
-            labels: ['SYSTEM', 'ALGORITHM', 'DATA', 'RUNNING', 'COMPLETED']
-        };
+                ],
+                labels: ['RUNNING', 'COMPLETED']
+            }]
+            };
         return {
             total: total,
             failed: failed,
@@ -168,5 +190,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});
         });
+    }
+
+    onDateFilterApply(data: any) {
+        // if (this.sub) {
+        //     this.sub.unsubscribe();
+        //     this.sub = null;
+        // }
+        // this.jobs = null;
+        this.started = data.started;
+        this.ended = data.ended;
+        this.options = Object.assign(this.options, {
+            first: 0,
+            started: moment.utc(this.started, environment.dateFormat).toISOString(),
+            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
+        });
+    }
+    getDateRangeSelected(data: any) {
+        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
+        this.ended = moment.utc().toISOString();
+        // this.datatableOptions = Object.assign(this.datatableOptions, {
+        //     first: 0,
+        //     started: this.started,
+        //     ended: this.ended
+        // });
+        // if (this.loading) {
+        //     this.datatableOptions.duration = moment.duration(data.range, data.unit).toISOString();
+        // }
+        // this.updateOptions();
+    }
+    onDateRangeSelected(data: any) {
+        // if (this.sub) {
+        //     this.sub.unsubscribe();
+        //     this.sub = null;
+        // }
+        // this.sub = Observable.timer(0, 10000)
+        //     .subscribe(() => {
+        //         this.getDateRangeSelected(data);
+        //     });
     }
 }
