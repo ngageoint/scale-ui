@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
 import { StatusService } from '../../common/services/status.service';
+import { StatusApiService } from './api.service';
 
 @Component({
     selector: 'dev-system-status',
@@ -15,7 +16,8 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
     schedulerClass: string;
     schedulerIcon: string;
     constructor(
-        private statusService: StatusService
+        private statusService: StatusService,
+        private statusApiService: StatusApiService
     ) {
         const status = this.statusService.getStatus();
         this.statuses = status && status.statuses ? status.statuses : null;
@@ -45,11 +47,61 @@ export class SystemStatusComponent implements OnInit, OnDestroy {
         }
     }
 
+    getStatus(data) {
+        _.forEach(data.dependencies, (dependent, key) => {
+            const warningTypes = [];
+            _.forEach(dependent.warnings, (warning) => {
+                _.forEach(warning, (warningMessage, warningType) => {
+                    warningTypes.push({
+                        warningType: warningType,
+                        warningMessage: warningMessage
+                    });
+                });
+            });
+            if (dependent.OK === true) {
+                this.statuses.push({
+                    title: key,
+                    description: dependent.detail.msg,
+                    ok: dependent.OK,
+                    details: dependent.detail,
+                    warnings: warningTypes,
+                    styleClass: 'system-status__healthy',
+                    icon: 'fa fa-check'
+                });
+            } else {
+                const errorTypes = [];
+                _.forEach(dependent.errors, (error) => {
+                    _.forEach(error, (errorMessage, errorType) => {
+                        errorTypes.push({
+                            errorType: errorType,
+                            errorMessage: errorMessage
+                        });
+                    });
+                });
+                this.statuses.push({
+                    title: key,
+                    description: dependent.detail.msg,
+                    ok: dependent.OK,
+                    details: dependent.detail,
+                    errors: errorTypes,
+                    warnings: warningTypes ? warningTypes : [],
+                    styleClass: 'system-status__unhealthy',
+                    icon: 'fa fa-warning'
+                });
+            }
+        });
+    }
+
     ngOnInit() {
+        if (_.isEmpty(this.statuses)) {
+            this.subscription = this.statusApiService.getStatus().subscribe(data => {
+                this.statuses = [];
+                this.getStatus(data);
+            });
+        }
         this.subscription = this.statusService.statusUpdated.subscribe(data => {
-            this.statuses = data.statuses;
-            this.scheduler = data.data.scheduler;
-            this.formatScheduler();
+            this.statuses = [];
+            this.getStatus(data);
         });
     }
 
