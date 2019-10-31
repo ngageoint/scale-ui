@@ -31,6 +31,7 @@ export class BatchDetailsComponent implements OnInit {
     previousBatchOptions: SelectItem[] = [];
     layoutClass: string;
     validated = false;
+    batchID: any;
 
     constructor(
         private fb: FormBuilder,
@@ -282,7 +283,7 @@ export class BatchDetailsComponent implements OnInit {
 
                 this.layoutClass = id === 'create' ? 'p-col-6' : 'p-col-12';
                 this.isEditing = id === 'create';
-
+                this.batchID = id;
                 this.getBatchDetail(id);
             });
         }
