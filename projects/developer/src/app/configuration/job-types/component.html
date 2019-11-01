@@ -80,6 +80,10 @@
                         <div class="p-col-8">
                             <div class="margin-bottom-md">
                                 <strong>Author: </strong> {{ selectedJobTypeDetail.manifest.job.maintainer.name }}<br />
+                                <a *ngIf="selectedJobTypeDetail.manifest.job.maintainer.url" target="_blank" [href]="selectedJobTypeDetail.manifest.job.maintainer.url">
+                                    {{ selectedJobTypeDetail.manifest.job.maintainer.url }} </a>
+                            </div>
+                            <div class="margin-top-md">
                                 {{ selectedJobTypeDetail.manifest.job.description }}
                             </div>
                         </div>

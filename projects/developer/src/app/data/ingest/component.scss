@@ -28,6 +28,11 @@ label {
 ::ng-deep .ingest__error-tooltip.ui-tooltip {
     max-width: 50%;
 }
+::ng-deep .ingest__name-filter {
+    &.ui-inputtext {
+        width: 90%;
+    }
+}
 
 @media screen and (max-width: 858px) {
     .ingest__date-filter-btn, .ingest__date-filter-dropdown, .ingest__date-filter-ranges {

@@ -101,6 +101,10 @@ $navbar-item-width: 150px;
     width: $navbar-status-width;
 }
 
+.navbar__link {
+    text-align: right;
+}
+
 .navbar__settings {
     .navbar__scheduler, .navbar__system, .navbar__theme {
         margin: 0 0 0 1px;
