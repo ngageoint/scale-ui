@@ -73,7 +73,14 @@ export class IngestComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    sub: any;
+    nameFilterText: string;
+    onNameFilter = _.debounce((e) => {
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            first: 0,
+            file_name: e.target.value
+        });
+        this.updateOptions();
+    }, 1000);
 
     constructor(
         private dataService: DataService,
@@ -108,7 +115,6 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-
         this.ingestDatatableService.setIngestDatatableOptions(this.datatableOptions);
         this.router.navigate(['/data/ingest'], {
             queryParams: this.datatableOptions,
@@ -277,6 +283,8 @@ export class IngestComponent implements OnInit, OnDestroy {
                         : null,
                     file_name: params.file_name || null
                 };
+                this.nameFilterText = this.datatableOptions.file_name;
+                this.updateData();
             }
             this.selectedStatus = [];
             _.forEach(this.statusValues, status => {

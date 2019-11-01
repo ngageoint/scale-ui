@@ -82,7 +82,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
-
         this.batchesDatatableService.setBatchesDatatableOptions(this.datatableOptions);
         this.router.navigate(['/processing/batches'], {
             queryParams: this.datatableOptions,
@@ -99,7 +98,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     label: recipeType.title,
                     value: recipeType
                 });
-                if (_.indexOf(this.datatableOptions.recipe_type_name, recipeType.name) >= 0) {
+                if (_.indexOf(this.datatableOptions.recipe_type_id, _.toString(recipeType.id)) >= 0) {
                     this.selectedRecipeType.push(recipeType);
                 }
             });
@@ -139,8 +138,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
         }
     }
     onRecipeTypeChange(e) {
-        const name = _.map(e.value, 'name');
-        this.datatableOptions.recipe_type_name = name.length > 0 ? name : null;
+        const id = _.map(e.value, 'id');
+        this.datatableOptions.recipe_type_id = id.length > 0 ? id : null;
         this.updateOptions();
     }
     onRowSelect(e) {
@@ -182,15 +181,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
-    onDateRangeSelected(data: any) {
-        if (this.sub) {
-            this.sub.unsubscribe();
-            this.sub = null;
-        }
-        this.sub = Observable.timer(0, 10000)
-            .subscribe(() => {
-                this.getDateRangeSelected(data);
-            });
+    onFilterClick(e) {
+        e.stopPropagation();
     }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedBatchRows();
@@ -213,10 +205,10 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
                     ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
                     duration: params.duration ? params.duration : null,
-                    recipe_type_name: params.recipe_type_name ?
-                        Array.isArray(params.recipe_type_name) ?
-                            params.recipe_type_name :
-                            [params.recipe_type_name]
+                    recipe_type_id: params.recipe_type_id ?
+                        Array.isArray(params.recipe_type_id) ?
+                            params.recipe_type_id :
+                            [params.recipe_type_id]
                         : null,
                     is_creation_done: params.is_creation_done ? params.is_creation_done === 'true' : null,
                     is_superseded: params.is_superseded ? params.is_superseded === 'true' : null,

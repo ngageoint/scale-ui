@@ -9,7 +9,7 @@ import { HttpClientXsrfModule } from '@angular/common/http';
 // vendor
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
-import { SeedImagesModule } from 'seed-images';
+import { SeedImagesModule } from '@ngageoint/seed-images';
 import { UtcDatepickerModule } from 'angular-utc-datepicker';
 
 // Prime NG
