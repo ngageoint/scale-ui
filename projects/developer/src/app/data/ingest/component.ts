@@ -74,6 +74,7 @@ export class IngestComponent implements OnInit, OnDestroy {
     subscription: any;
     isMobile: boolean;
     nameFilterText: string;
+    sub: any;
     onNameFilter = _.debounce((e) => {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
