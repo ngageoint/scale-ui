@@ -18,10 +18,16 @@
                     </div>
                     <hr />
                     <div class="dashboard__error-chart">
-                        <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">All Job Types</span></h3>
+                            <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">All Job Types</span></h3>
+                            <div class="scale-chart-container">
+                                    <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
+                                    <p-chart type="pie" [data]="totalDataAll" [options]="pieChartOptions"
+                                             *ngIf="allJobTypes.length > 0"></p-chart>
+                            </div>
+                        <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">Failed Errors</span></h3>
                         <div class="scale-chart-container">
                             <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                            <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"
+                            <p-chart type="pie" [data]="errorDataAll" [options]="pieChartOptions"
                                      *ngIf="allJobTypes.length > 0"></p-chart>
                         </div>
                         <span *ngIf="allJobTypes.length === 0">No job types found.</span>
@@ -37,13 +43,6 @@
         </div>
         <!-- <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__favs-container">
 
-        </div> -->
-        <!-- <div class="p-col-12 p-md-12 p-lg-7 p-xl-7">
-            <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="dataFeedChartTitle">
-                    <dev-data-feed></dev-data-feed>
-                </p-panel>
-            </div>
         </div> -->
         <!-- <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
             <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
@@ -126,6 +125,11 @@
                 <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
                     <dev-job-history></dev-job-history>
                 </p-panel>
+                    <div class="charts" *ngIf="allJobTypes.length > 0">
+                        <p-panel [header]="dataFeedChartTitle">
+                            <dev-data-feed></dev-data-feed>
+                        </p-panel>
+                    </div>
                 <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity></dev-job-activity>
                 </p-panel> -->

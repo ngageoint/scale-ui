@@ -27,7 +27,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     pieChartOptions: any;
     totalAll: number;
     failedAll: number;
-    dataAll: any;
+    errorDataAll: any;
+    totalDataAll: any;
     totalFavs: number;
     failedFavs: number;
     dataFavs: any;
@@ -51,7 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.favoriteJobTypes = [];
         this.pieChartOptions = {
             rotation: 0.5 * Math.PI, // start from bottom
-            cutoutPercentage: 20,
+            cutoutPercentage: 0,
             maintainAspectRatio: false,
             legend: {
                 display: false,
@@ -64,15 +65,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     borderWidth: 0
                 }
             },
-            tooltips: {
-                callbacks: {
-                  label: function(tooltipItem, data) {
-                    const dataset = data.datasets[tooltipItem.datasetIndex];
-                  const index = tooltipItem.index;
-                  return dataset.labels[index] + ': ' + dataset.data[index];
-                }
-              }
-            }
+            // tooltips: {
+            //     callbacks: {
+            //       label: function(tooltipItem, data) {
+            //         const dataset = data.datasets[tooltipItem.datasetIndex];
+            //       const index = tooltipItem.index;
+            //       return dataset.labels[index] + ': ' + dataset.data[index];
+            //     }
+            //   }
+            // }
         };
     }
 
@@ -111,7 +112,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }), 'count'));
         const total = _.sum(_.map(allJobCounts, 'count'));
         const failed = sysErrors + algErrors + dataErrors;
-        const chartData = {
+        const errorChartData = {
+            labels: ['SYSTEM', 'ALGORITHM', 'DATA'],
             datasets: [{
                 data: [sysErrors, algErrors, dataErrors],
                 borderColor: '#fff',
@@ -120,24 +122,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     ColorService.ERROR_SYSTEM,   // system
                     ColorService.ERROR_ALGORITHM,  // algorithm
                     ColorService.ERROR_DATA,  // data,
-                ],
-                labels: ['SYSTEM', 'ALGORITHM', 'DATA']
-            },
-            {
-                data: [running, completed],
-                borderColor: '#fff',
-                borderWidth: 1,
-                backgroundColor: [
-                    ColorService.RUNNING,
-                    ColorService.COMPLETED
-                ],
-                labels: ['RUNNING', 'COMPLETED']
+                ]
             }]
+            };
+            const totalChartData = {
+                labels: ['RUNNING', 'COMPLETED', 'Failed'],
+                datasets: [{
+                        data: [running, completed, failed],
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        backgroundColor: [
+                            ColorService.RUNNING,
+                            ColorService.COMPLETED,
+                            ColorService.FAILED
+                        ]
+                }]
             };
         return {
             total: total,
             failed: failed,
-            chartData: chartData
+            errorChartData: errorChartData,
+            totalChartData: totalChartData
         };
     }
 
@@ -163,7 +168,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             const totalJobStats = this.generateStats(data.results);
             this.totalAll = totalJobStats.total;
             this.failedAll = totalJobStats.failed;
-            this.dataAll = totalJobStats.chartData;
+            this.errorDataAll = totalJobStats.errorChartData;
+            this.totalDataAll = totalJobStats.totalChartData;
 
             const favoriteJobStats = this.generateStats(this.favoriteJobTypes);
             this.totalFavs = favoriteJobStats.total;
