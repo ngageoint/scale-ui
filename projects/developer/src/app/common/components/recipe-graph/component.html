@@ -31,7 +31,7 @@
             </div>
         </p-menubar>
 
-        <div class="recipe-container" [style.minHeight]="minHeight">
+        <div class="recipe-container" [style.height]="height">
             <ngx-graph
                 class="chart-container"
                 [legend]="showLegend"
@@ -168,9 +168,10 @@
         </div>
     </div>
     <!-- Job node information -->
-    <div *ngIf="!hideDetails && selectedJobType">
+    <div *ngIf="!hideDetails && selectedJobType && !isBatches">
         <div class="dialog-content" *ngIf="selectedNode && selectedJobType">
             <div *ngIf="!selectedJobType.manifest.seedVersion">
+
                 This job type is not seed compliant.
             </div>
             <div *ngIf="selectedJobType.manifest.seedVersion">
@@ -403,6 +404,45 @@
                     </div>
                 </ng-template>
             </p-dataList>
+        </div>
+    </div>
+    <div *ngIf="!hideDetails && selectedJobType && isBatches">
+        <div class="dialog-content" *ngIf="selectedNode && selectedJobType">
+            <div *ngIf="!selectedJobType.manifest.seedVersion">
+                This job type is not seed compliant.
+            </div>
+            <div *ngIf="selectedJobType.manifest.seedVersion">
+                <p-table [value]="tableData" [columns]="batchesColumns" [rows]="10" [loading]="datatableLoading" [autoLayout]="true"
+                         [responsive]="true" resizableColumns="true">
+                    <ng-template pTemplate="header" let-columns>
+                        <tr>
+                            <th *ngFor="let col of columns" [ngSwitch]="col.field">
+                                {{ col.header }}
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr [pSelectableRow]="rowData">
+                                <td *ngFor="let col of columns" [ngSwitch]="col.field">
+                                    <div *ngSwitchCase="'job_status'">
+                                        <div class="p-grid">
+                                            <span>
+                                                {{ rowData.job_status }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div *ngSwitchCase="'job_count'">
+                                        <div class="p-grid">
+                                            <span>
+                                                {{ rowData.job_count }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                    </ng-template>
+                </p-table>
+            </div>
         </div>
     </div>
     <p-footer *ngIf="selectedNode && selectedNode.node_type.job_id">

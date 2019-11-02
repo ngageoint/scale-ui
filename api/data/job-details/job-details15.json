@@ -44,14 +44,14 @@
                         }],
                         "json": [{
                             "name": "INPUT_JSON",
-                            "type": "string", 
+                            "type": "string",
                             "required": false
                         }]
                     },
                     "outputs": {
                         "json": [{
-                            "name": "OUTPUT_JSON", 
-                            "type": "string", 
+                            "name": "OUTPUT_JSON",
+                            "type": "string",
                             "key": "output_json",
                             "required": true
                         }]
@@ -159,5 +159,8 @@
     "ended": "2015-08-28T17:58:41.005Z",
     "last_status_change": "2015-08-28T17:58:45.906Z",
     "superseded": null,
-    "last_modified": "2015-08-28T17:58:46.001Z"
+    "last_modified": "2015-08-28T17:58:46.001Z",
+    "configuration": {
+        "priority": 36
+    }
 }

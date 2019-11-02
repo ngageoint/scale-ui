@@ -75,6 +75,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         }
     ];
     validated: boolean;
+    isSaving = false;
     submitted: boolean;
     iconData = iconData;
     icons: SelectItem[] = [];
@@ -94,7 +95,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
     canDeactivate(): Observable<boolean> | boolean {
-        if (this.createForm.dirty) {
+        if (this.createForm.dirty && !this.isSaving) {
             return false;
         } else {
             return true;
@@ -240,20 +241,34 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
         const job: any = _.find(seedImage.job.JobVersions, { JobVersion: seedImage.selectedJobVersion });
         const image: any = job ? _.find(job.Images, { PackageVersion: seedImage.selectedPackageVersion }) : null;
         this.jobType.manifest = seedImage.manifest;
-        if (job && image) {
-            this.jobType.docker_image = image.Org ? `${image.Registry}/${image.Org}/${image.Name}` : `${image.Registry}/${image.Name}`;
+        if (seedImage.job.URL) {
+            this.jobType.docker_image = seedImage.job.URL;
         } else {
-            this.jobType.docker_image = null;
+            if (job && image) {
+                this.jobType.docker_image = image.Org ? `${image.Registry}/${image.Org}/${image.Name}` : `${image.Registry}/${image.Name}`;
+            } else {
+                this.jobType.docker_image = null;
+            }
         }
         this.createForm.patchValue({docker_image: this.jobType.docker_image});
 
         // alert user if docker image cannot be determined from imported seed image
         if (!job || !image) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Missing Seed Image Job/Package Version',
-                detail: 'Unable to determine seed image job or package version. Docker Image for this job type must be manually specified.'
-            });
+            if (seedImage.job.URL) {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Imported Docker Image',
+                    detail: 'Successfully imported Docker Image from URL.'
+                });
+
+            } else {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Missing Seed Image Job/Package Version',
+                    detail: 'Unable to determine seed image job or package version.' +
+                    'Docker Image for this job type must be manually specified.'
+                });
+            }
         }
 
         this.initJobTypeConfiguration();
@@ -323,6 +338,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     }
 
     onSubmit() {
+        this.isSaving = true;
         this.submitted = true;
         if (this.mode === 'Create') {
             // remove falsey values
@@ -364,6 +380,7 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
     }
 
     ngOnInit() {
+        this.isSaving = false;
         _.forEach(this.iconData, d => {
             this.icons.push({
                 label: d.label,

@@ -32,7 +32,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     loadingRecipeTypes: boolean;
     validated: boolean;
     totalRecords: number;
-    recipeGraphMinHeight = '70vh';
     addRemoveDialogX: number;
     addRemoveDialogY: number;
     createForm: any;
@@ -422,7 +421,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     onEditClick() {
         // todo add warning that changes will be discarded
         this.isEditing = !this.isEditing;
-        this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
         if (!this.recipeTypeName || this.recipeTypeName === 'create') {
             this.router.navigate(['/configuration/recipe-types']);
         } else {
@@ -526,9 +524,20 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
      */
     onConditionSave(event: {condition: RecipeTypeCondition, previousCondition: RecipeTypeCondition}): void {
         if (event.previousCondition.name) {
+            // update local conditions model
             const idx = _.findIndex(this.conditions, {name: event.condition.name});
             this.conditions[idx] = event.condition;
-            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name] = event.condition;
+
+            // update the fields of the existing node in the recipe data
+            // this is same idea as addConditionNode()
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name].node_type.name = event.condition.name;
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name].node_type.interface = event.condition.interface;
+            this.selectedRecipeTypeDetail.definition.nodes[event.condition.name].node_type.data_filter = event.condition.data_filter;
+
+            // update condition node in recipe details
+            // same idea as RecipeType.addCondition(), but update it here as well
+            const cidx = _.findIndex(this.selectedRecipeTypeDetail.conditions);
+            this.selectedRecipeTypeDetail.conditions[cidx] = event.condition;
         } else {
             this.conditions.push(event.condition);
         }
@@ -613,7 +622,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.recipeTypeName = routeParams.get('name');
 
                 this.isEditing = this.recipeTypeName === 'create';
-                this.recipeGraphMinHeight = this.isEditing ? '35vh' : '70vh';
 
                 this.getRecipeTypes();
             });

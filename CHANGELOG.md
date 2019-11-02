@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.9.1](https://github.com/ngageoint/scale-ui/compare/v0.9.0...v0.9.1) (2019-10-25)
+
+
+### Bug Fixes
+
+* **nodes:** Apply refresh node update fix ([#360](https://github.com/ngageoint/scale-ui/issues/360)) ([9283b7a](https://github.com/ngageoint/scale-ui/commit/9283b7a))
+* **nodes:** fixing nodes menu issue  ([f7beafe](https://github.com/ngageoint/scale-ui/commit/f7beafe))
+* **recipe:** Recipe instance display issues ([#357](https://github.com/ngageoint/scale-ui/issues/357)) ([af01de2](https://github.com/ngageoint/scale-ui/commit/af01de2))
+* **recipe types:** multiples fixes for recipe editor condition nodes  ([669f8a3](https://github.com/ngageoint/scale-ui/commit/669f8a3))
+* **recipes:** Connecting Input Connections  ([#347](https://github.com/ngageoint/scale-ui/issues/347)) ([c1210e9](https://github.com/ngageoint/scale-ui/commit/c1210e9))
+* Remove Duration Sort for Recipe ([#348](https://github.com/ngageoint/scale-ui/issues/348)) ([fbc48a5](https://github.com/ngageoint/scale-ui/commit/fbc48a5))
+* **recipes:** fixed broken add filter button on conditional edit panel ([02311a2](https://github.com/ngageoint/scale-ui/commit/02311a2))
+* **recipes:** fixed recipe editor changing widths ([8092a17](https://github.com/ngageoint/scale-ui/commit/8092a17))
+
+
+
 ## [0.9.0](https://github.com/ngageoint/scale-ui/compare/v0.8.6...v0.9.0) (2019-09-26)
 
 

@@ -57,7 +57,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
             type: [data.type || '', Validators.required],
             condition: [data.condition || '', Validators.required],
             values: this.fb.array(
-                values.map(v => this.fb.control(v, [Validators.required]))
+                values.map(v => this.fb.control(v))
             )
         });
 
@@ -79,7 +79,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
      */
     private existingConditionsValidator(): ValidatorFn {
         return (control: AbstractControl): {[key: string]: any} | null => {
-            if (this.conditions) {
+            if (this.conditions && !this.isEditing) {
                 const existingNames = this.conditions.map(c => c.name);
                 if (existingNames.indexOf(control.value) !== -1) {
                     return {'forbiddenName': {value: control.value}};
@@ -90,9 +90,23 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Form validator function to check that the condition name cannot be "start".
+     * @return validator function
+     */
+    private startNameValidator(): ValidatorFn {
+        return (control: AbstractControl): {[key: string]: any} | null => {
+            if (control.value && control.value.toLowerCase() === 'start') {
+                return {'startName': {value: control.value}};
+            }
+            return null;
+        };
+    }
+
+    /**
      * On save, emit to the output this condition, then close the dialog.
      */
     saveClick(): void {
+        _.merge(this.condition, this.form.value);
         this.save.next({condition: this.condition, previousCondition: this.oldCondition});
         this.cancelClick();
     }
@@ -114,7 +128,8 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
             name: [this.oldCondition.name || '', [
                 Validators.required,
                 Validators.pattern(/^[a-zA-Z_-]+$/),
-                this.existingConditionsValidator()
+                this.existingConditionsValidator(),
+                this.startNameValidator()
             ]],
             data_filter: this.fb.group({
                 filters: this.fb.array([], Validators.required),
@@ -126,7 +141,6 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
         // since nodes are keyed off of this value, links in the graph would have to be updated
         if (this.editCondition) {
             this.isEditing = true;
-            this.form.get('name').disable();
         }
 
         // if filters array is provided in the edit condition, add each one
