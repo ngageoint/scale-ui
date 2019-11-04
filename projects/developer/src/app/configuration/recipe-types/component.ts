@@ -158,10 +158,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         // listen for changes to createForm fields
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
-            this.selectedRecipeTypeDetail.title = changes.title ?
-            changes.title : this.selectedRecipeTypeDetail.title;
-            this.selectedRecipeTypeDetail.description = changes.description ?
-                changes.definition : this.selectedRecipeTypeDetail.description;
+            this.selectedRecipeTypeDetail.title = changes.title;
+            this.selectedRecipeTypeDetail.description = changes.description;
         });
     }
 
