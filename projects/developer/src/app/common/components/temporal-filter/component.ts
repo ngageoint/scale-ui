@@ -11,9 +11,13 @@ import { environment } from '../../../../environments/environment';
     styleUrls: ['./component.scss']
 })
 export class TemporalFilterComponent implements OnInit {
+    private readonly storageKeyPrefix = 'scale.temporal-filter';
     @Input() started: string;
+    private readonly startedKey = `${this.storageKeyPrefix}.started`;
     @Input() ended: string;
+    private readonly endedKey = `${this.storageKeyPrefix}.ended`;
     @Input() liveRange: number;
+    private readonly rangeKey = `${this.storageKeyPrefix}.range`;
     @Output() dateFilterApply: EventEmitter<any> = new EventEmitter();
     @Output() dateRangeSelected: EventEmitter<any> = new EventEmitter();
     dateFormat = environment.dateFormat;
@@ -29,7 +33,6 @@ export class TemporalFilterComponent implements OnInit {
 
     startDate: Date;
     endDate: Date;
-
 
     get utcStartDate(): Date {
         return this.localDateToUTC(this.startDate);
@@ -76,12 +79,16 @@ export class TemporalFilterComponent implements OnInit {
     onDateFilterApply(): void {
         // normal date filter was applied, turn off live mode
         this.liveRange = null;
+        localStorage.removeItem(this.rangeKey);
 
         // send out the converted date strings
         this.dateFilterApply.emit({
             started: this.utcStartDate.toISOString(),
             ended: this.utcEndDate.toISOString()
         });
+
+        localStorage.setItem(this.startedKey, this.utcStartDate.toISOString());
+        localStorage.setItem(this.endedKey, this.utcEndDate.toISOString());
 
         if (this.started > this.ended) {
             // TODO validate
@@ -99,15 +106,61 @@ export class TemporalFilterComponent implements OnInit {
             this.endDate = null;
             // emit out the date range was selected
             this.dateRangeSelected.emit({ unit: 'h', range: this.liveRange });
+            localStorage.setItem(this.rangeKey, this.liveRange.toString());
         } else {
             // live range not provided, reset the normal start/end filters
-            // TODO logic to pull these better?
             this.startDate = this.utcDateToLocal(this.started);
             this.endDate = this.utcDateToLocal(this.ended);
+            localStorage.removeItem(this.rangeKey);
+
+            // emit back out that the date ranges should be used
+            this.dateFilterApply.emit({
+                started: this.utcStartDate.toISOString(),
+                ended: this.utcEndDate.toISOString()
+            });
         }
     }
 
     ngOnInit() {
+        // check if started was provided by the component, then sync to local storage
+        // if not provided by component, try pulling it from local storage
+        let storageHasStarted = false;
+        if (this.started) {
+            localStorage.setItem(this.startedKey, this.started);
+        } else {
+            this.started = localStorage.getItem(this.startedKey);
+            storageHasStarted = true;
+        }
+
+        // same process for ended date
+        let storageHasEnded = false;
+        if (this.ended) {
+            localStorage.setItem(this.endedKey, this.ended);
+        } else {
+            this.ended = localStorage.getItem(this.endedKey);
+            storageHasEnded = true;
+        }
+
+        // if local storage had both, emit the values back out
+        // TODO check if local storage actually got these values before emitting
+        if (storageHasStarted && storageHasEnded) {
+            this.dateFilterApply.emit({
+                started: this.started,
+                ended: this.ended
+            });
+        }
+
+        // same for live range value
+        if (this.liveRange) {
+            localStorage.setItem(this.rangeKey, this.liveRange.toString());
+        } else {
+            const storageRange = localStorage.getItem(this.rangeKey);
+            if (storageRange) {
+                this.liveRange = parseInt(storageRange, 10);
+                this.dateRangeSelected.emit({ unit: 'h', range: this.liveRange });
+            }
+        }
+
         // if not in live mode (no range value set), provide a start/end range for normal filters
         if (!this.isLiveMode) {
             // convert from the string value (utc) to local time (remove the timezone)
