@@ -76,7 +76,13 @@
                                 The priority to use for scheduling the job off of the queue
                                 <label>
                                     <span class="required">Priority</span>
-                                    <input type="number" pInputText formControlName="priority"/>
+                                    <input type="number"
+                                    pTooltip= "0-10 reserved for system jobs.
+                                            11-100 very high priority
+                                            101-200 high priority
+                                             201-500 normal
+                                            501-1000 background"
+                                    pInputText formControlName="priority"/>
                                 </label>
                             </div>
                             <div formGroupName="settings"
