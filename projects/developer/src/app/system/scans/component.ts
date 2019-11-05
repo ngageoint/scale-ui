@@ -156,6 +156,10 @@ export class ScansComponent implements OnInit, OnDestroy {
             this.router.navigate([`/system/scans/create`]);
         }
     }
+    cancelScan(id, scan) {
+       this.scansApiService.cancelScan(id, scan);
+       this.messageService.add({severity: 'Success', summary: 'Scan Successfully Cancelled '});
+    }
     ngOnInit() {
         this.selectedRows = this.dataService.getSelectedScanRows();
 

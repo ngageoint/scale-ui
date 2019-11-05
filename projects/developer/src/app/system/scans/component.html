@@ -33,6 +33,9 @@
                         <a [routerLink]="getScanURL(rowData)">
                             {{ rowData.name }}
                         </a>
+                        <div *ngIf="rowData.job.status === 'RUNNING'" class="pull-right">
+                            <button pButton icon="fa fa-ban" pTooltip="Cancel Scan" (click)="cancelScan(rowData.id, rowData)"></button>
+                        </div>
                     </span>
                 </div>
                 <div *ngSwitchCase="'job'">

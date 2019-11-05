@@ -8,8 +8,11 @@
                     {{ scan.title }}
                 </div>
                 <div *ngIf="!isEditing" class="scans__menu">
+                    <span *ngIf="scan.job.status === 'RUNNING'" class="margin-right-md">
+                        <button  pButton icon="fa fa-ban" pTooltip="Cancel Scan" (click)="cancelScan(scan.id, scan)"></button>
+                    </span>
                     <button pButton class="ui-button-primary scans__controls-btn" icon='fa fa-edit' label="Edit"
-                    (click)="onEditClick()"></button>
+                        (click)="onEditClick()"></button>
                 </div>
                 <div *ngIf="isEditing">
                     <button pButton class="ui-button-primary scans__controls-btn" label="Validate"
