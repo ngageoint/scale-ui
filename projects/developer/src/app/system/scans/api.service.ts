@@ -95,7 +95,7 @@ export class ScansApiService {
 
     cancelScan(id: number, scan: any): Observable<any> {
         const cleanScan = Scan.cleanScan(scan);
-            return this.http.post<any>(`${this.apiPrefix}/scans/${id}/`, cleanScan)
+        return this.http.post<any>(`${this.apiPrefix}/scans/cancel/${id}/`, cleanScan)
             .pipe(
                 catchError(DataService.handleError)
             );
