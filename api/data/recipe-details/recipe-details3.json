@@ -28,6 +28,20 @@
                 "files": [{"name": "input_file"}]
             },
             "nodes": {
+                "oildetector":{
+                    "dependencies": [],
+                    "input": {
+                        "input_file": {
+                            "type": "recipe",
+                            "input": "input_file"
+                        }
+                    },
+                    "node_type": {
+                        "node_type": "recipe",
+                        "recipe_type_name": "oil-detection",
+                        "recipe_type_revision": 1
+                    }                
+                },
                 "wv2-parse": {
                     "dependencies": [],
                     "input": {
@@ -246,5 +260,18 @@
             "icon_code": "f06e"
         }
     ],
-    "sub_recipe_types": []
+    "sub_recipe_types": [
+        {
+            "id": 6,
+            "name": "oil-detection",
+            "title": "Oil Detection",
+            "description": "Detect oil on the surface of water",
+            "revision_num": 1,
+            "is_active": true,
+            "is_system": false,
+            "created": "2019-09-13T18:29:21.809620Z",
+            "deprecated": null,
+            "last_modified": "2019-10-30T18:51:17.608199Z"
+        }
+    ]
 }
