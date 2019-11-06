@@ -1,26 +1,30 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { Subscription, Observable } from 'rxjs';
 import * as moment from 'moment';
-
-import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'dev-temporal-filter',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class TemporalFilterComponent implements OnInit {
+export class TemporalFilterComponent implements OnInit, OnDestroy {
     private readonly storageKeyPrefix = 'scale.temporal-filter';
     @Input() started: string;
     private readonly startedKey = `${this.storageKeyPrefix}.started`;
     @Input() ended: string;
     private readonly endedKey = `${this.storageKeyPrefix}.ended`;
     @Input() liveRange: number;
-    private readonly rangeKey = `${this.storageKeyPrefix}.range`;
-    @Output() dateFilterApply: EventEmitter<any> = new EventEmitter();
-    @Output() dateRangeSelected: EventEmitter<any> = new EventEmitter();
-    dateFormat = environment.dateFormat;
+    private readonly liveRangeKey = `${this.storageKeyPrefix}.range`;
+
+    // when the start/end dates are applied
+    @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
+    // when the live range dropdown value is selected or cleared
+    @Output() liveRangeSelected: EventEmitter<{hours: number}> = new EventEmitter();
+    // when the parent component should make an api call to update the data
+    // driven by the timer for the live range update, as well as normal start/end date filter apply
+    @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
+
     dateRangeOptions = [
         { label: '---', value: null },
         { label: 'Last 1 hour', value: 1 },
@@ -34,6 +38,8 @@ export class TemporalFilterComponent implements OnInit {
     startDate: Date;
     endDate: Date;
 
+    private liveRangeSubscription: Subscription;
+
     get utcStartDate(): Date {
         return this.localDateToUTC(this.startDate);
     }
@@ -46,32 +52,50 @@ export class TemporalFilterComponent implements OnInit {
         return !!this.liveRange;
     }
 
+    get startedStorage(): string {
+        return localStorage.getItem(this.startedKey);
+    }
+    set startedStorage(value: string) {
+        this.setStorage(this.startedKey, value);
+    }
+
+    get endedStorage(): string {
+        return localStorage.getItem(this.endedKey);
+    }
+    set endedStorage(value: string) {
+        this.setStorage(this.endedKey, value);
+    }
+
+    get liveRangeStorage(): number {
+        return parseInt(localStorage.getItem(this.liveRangeKey), 10);
+    }
+    set liveRangeStorage(value: number) {
+        this.setStorage(this.liveRangeKey, value.toString());
+    }
+
     constructor(
-        public breakpointObserver: BreakpointObserver,
         private messageService: MessageService
     ) {
         /*
 
         TODO:
         - styles for input groups
-        - verify emit back for live range
-        - save settings to localstorage for switching across pages
         - remove custom utc calendar?
-        - hook up @input for liveRange
-
-        DESIGN:
-        either in three states when this component initializes:
-        - in normal range mode:
-            - live range is null
-            - start and end are set
-        - in live mode:
-            - live range is set (ignores start and end)
-        - nothing is set:
-            - live range should be kept as null
-            - start/end should use one day range from now
          */
     }
 
+    /**
+     * Sets or removes the key from local storage based on the value
+     * @param key   the key to set or remove
+     * @param value a string value to set, empty to remove the item
+     */
+    private setStorage(key: string, value: string): void {
+        if (value) {
+            localStorage.setItem(key, value);
+        } else {
+            localStorage.removeItem(key);
+        }
+    }
 
     /**
      * Callback for when a normal start/end value is applied
@@ -79,20 +103,51 @@ export class TemporalFilterComponent implements OnInit {
     onDateFilterApply(): void {
         // normal date filter was applied, turn off live mode
         this.liveRange = null;
-        localStorage.removeItem(this.rangeKey);
+        this.liveRangeStorage = null;
 
         // send out the converted date strings
-        this.dateFilterApply.emit({
-            started: this.utcStartDate.toISOString(),
-            ended: this.utcEndDate.toISOString()
+        this.dateFilterSelected.emit({
+            start: this.utcStartDate.toISOString(),
+            end: this.utcEndDate.toISOString()
         });
+        // ensure the live range will be cleared
+        this.liveRangeSelected.emit({ hours: null });
 
-        localStorage.setItem(this.startedKey, this.utcStartDate.toISOString());
-        localStorage.setItem(this.endedKey, this.utcEndDate.toISOString());
+        // keep values in sync to local storage
+        this.startedStorage = this.utcStartDate.toISOString();
+        this.endedStorage = this.utcEndDate.toISOString();
+
+        // make call to emit out the update hook
+        this.update();
 
         if (this.started > this.ended) {
             // TODO validate
             this.messageService.add({severity: 'error', summary: 'Error querying range', detail: 'Provided FROM date is before TO date'});
+        }
+    }
+
+    private unsubscribe(): void {
+        if (this.liveRangeSubscription) {
+            this.liveRangeSubscription.unsubscribe();
+            this.liveRangeSubscription = null;
+        }
+    }
+
+    /**
+     * Update hook to emit out the start/end dates the parent component should filter on.
+     * @param now optional param for now for live range, otherwise will use start/end
+     */
+    private update(now?: moment.Moment): void {
+        if (now) {
+            this.updated.emit({
+                start: now.clone().subtract(this.liveRange, 'h').toISOString(),
+                end: now.toISOString()
+            });
+        } else {
+            this.updated.emit({
+                start: this.utcStartDate.toISOString(),
+                end: this.utcEndDate.toISOString()
+            });
         }
     }
 
@@ -104,20 +159,30 @@ export class TemporalFilterComponent implements OnInit {
             // ensure start/end filters are set to empty
             this.startDate = null;
             this.endDate = null;
-            // emit out the date range was selected
-            this.dateRangeSelected.emit({ unit: 'h', range: this.liveRange });
-            localStorage.setItem(this.rangeKey, this.liveRange.toString());
+
+            // emit out the live range selection
+            this.liveRangeSelected.emit({ hours: this.liveRange });
+
+            // save to local storage
+            this.liveRangeStorage = this.liveRange;
+
+            // ensure any timers are cancelled, then start a new one
+            this.unsubscribe();
+            this.liveRangeSubscription = Observable.timer(0, 10 * 1000)
+                .subscribe(() => {
+                    // update using now for the base
+                    this.update(moment.utc());
+                });
         } else {
+            // live range was cleared, make sure timers are cleared
+            this.unsubscribe();
+
             // live range not provided, reset the normal start/end filters
             this.startDate = this.utcDateToLocal(this.started);
             this.endDate = this.utcDateToLocal(this.ended);
-            localStorage.removeItem(this.rangeKey);
 
-            // emit back out that the date ranges should be used
-            this.dateFilterApply.emit({
-                started: this.utcStartDate.toISOString(),
-                ended: this.utcEndDate.toISOString()
-            });
+            // perform the normal date filter
+            this.onDateFilterApply();
         }
     }
 
@@ -126,38 +191,34 @@ export class TemporalFilterComponent implements OnInit {
         // if not provided by component, try pulling it from local storage
         let storageHasStarted = false;
         if (this.started) {
-            localStorage.setItem(this.startedKey, this.started);
+            this.startedStorage = this.started;
         } else {
-            this.started = localStorage.getItem(this.startedKey);
+            this.started = this.startedStorage;
             storageHasStarted = true;
         }
 
         // same process for ended date
         let storageHasEnded = false;
         if (this.ended) {
-            localStorage.setItem(this.endedKey, this.ended);
+            this.endedStorage = this.ended;
         } else {
-            this.ended = localStorage.getItem(this.endedKey);
+            this.ended = this.endedStorage;
             storageHasEnded = true;
         }
 
         // if local storage had both, emit the values back out
         // TODO check if local storage actually got these values before emitting
         if (storageHasStarted && storageHasEnded) {
-            this.dateFilterApply.emit({
-                started: this.started,
-                ended: this.ended
-            });
+            this.onDateFilterApply();
         }
 
         // same for live range value
         if (this.liveRange) {
-            localStorage.setItem(this.rangeKey, this.liveRange.toString());
+            this.liveRangeStorage = this.liveRange;
         } else {
-            const storageRange = localStorage.getItem(this.rangeKey);
-            if (storageRange) {
-                this.liveRange = parseInt(storageRange, 10);
-                this.dateRangeSelected.emit({ unit: 'h', range: this.liveRange });
+            this.liveRange = this.liveRangeStorage;
+            if (this.liveRange) {
+                this.onLiveRangeChange();
             }
         }
 
@@ -174,6 +235,10 @@ export class TemporalFilterComponent implements OnInit {
                 this.startDate = now.clone().subtract(1, 'day').toDate();
             }
         }
+    }
+
+    ngOnDestroy() {
+        this.unsubscribe();
     }
 
     /**
