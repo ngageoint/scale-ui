@@ -59,6 +59,12 @@ export class BatchesComponent implements OnInit, OnDestroy {
 
     private updateData() {
         this.unsubscribe();
+
+        // don't show loading state when in live mode
+        if (!this.liveRange) {
+            this.datatableLoading = true;
+        }
+
         this.subscription = this.batchesApiService.getBatches(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
