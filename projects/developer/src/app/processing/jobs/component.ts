@@ -433,8 +433,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
-                    ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    started: params.started,
+                    ended: params.ended,
                     liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
@@ -472,8 +472,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     this.datatableOptions.error_category :
                     [this.datatableOptions.error_category]
                 : null;
-            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
+            this.started = this.datatableOptions.started;
+            this.ended = this.datatableOptions.ended;
             this.liveRange = this.datatableOptions.liveRange;
 
             this.getJobTypes();

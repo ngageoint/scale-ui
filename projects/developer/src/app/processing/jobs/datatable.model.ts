@@ -25,7 +25,7 @@ export const initialJobsDatatable: JobsDatatable = {
     rows: 20,
     sortField: 'last_modified',
     sortOrder: -1,
-    started: moment.utc().subtract(24, 'h').toISOString(),
-    ended: moment.utc().toISOString(),
+    started: null,
+    ended: null,
     job_type_name: []
 };
