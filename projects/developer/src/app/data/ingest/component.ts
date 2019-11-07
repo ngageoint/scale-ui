@@ -259,42 +259,6 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.updateData();
     }
 
-    // onDateFilterApply(data: any) {
-    //     if (this.sub) {
-    //         this.sub.unsubscribe();
-    //         this.sub = null;
-    //     }
-    //     this.ingests = null;
-    //     this.started = data.started;
-    //     this.ended = data.ended;
-    //     this.datatableOptions = Object.assign(this.datatableOptions, {
-    //         first: 0,
-    //         started: moment.utc(this.started, environment.dateFormat).toISOString(),
-    //         ended: moment.utc(this.ended, environment.dateFormat).toISOString()
-    //     });
-    //     this.updateOptions();
-    // }
-    // getDateRangeSelected(data: any) {
-    //     this.started = moment.utc().subtract(data.range, data.unit).toISOString();
-    //     this.ended = moment.utc().toISOString();
-    //     this.datatableOptions = Object.assign(this.datatableOptions, {
-    //         first: 0,
-    //         started: this.started,
-    //         ended: this.ended,
-    //         duration: moment.duration(data.range, data.unit).toISOString()
-    //     });
-    //     this.updateOptions();
-    // }
-    // onDateRangeSelected(data: any) {
-    //     if (this.sub) {
-    //         this.sub.unsubscribe();
-    //         this.sub = null;
-    //     }
-    //     this.sub = Observable.timer(0, 10000)
-    //         .subscribe(() => {
-    //             this.getDateRangeSelected(data);
-    //         });
-    // }
     onFilterClick(e) {
         e.stopPropagation();
     }
