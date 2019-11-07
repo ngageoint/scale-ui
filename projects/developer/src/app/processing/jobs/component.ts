@@ -103,7 +103,11 @@ export class JobsComponent implements OnInit, OnDestroy {
     private updateData() {
         this.unsubscribe();
 
-        this.datatableLoading = true;
+        // don't show loading state when in live mode
+        if (!this.liveRange) {
+            this.datatableLoading = true;
+        }
+
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
