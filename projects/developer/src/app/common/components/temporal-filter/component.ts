@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, OnDestroy, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { Subscription, Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 
 @Component({
