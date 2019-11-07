@@ -40,6 +40,13 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
 
     private liveRangeSubscription: Subscription;
 
+    get yearRange(): string {
+        const now = moment();
+        const start = now.clone().subtract(20, 'y').year();
+        const end = now.clone().add(5, 'y').year();
+        return `${start}:${end}`;
+    }
+
     get utcStartDate(): Date {
         return this.localDateToUTC(this.startDate);
     }
