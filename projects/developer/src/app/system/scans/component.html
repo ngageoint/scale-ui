@@ -1,7 +1,9 @@
 <h2><i class="fa fa-barcode"></i> Scans <span *ngIf="count">({{ count }})</span></h2>
 <div class="scans__header flexed space-between">
-    <dev-temporal-filter [started]="started" [ended]="ended" (dateFilterApply)="onDateFilterApply($event)"
-    (dateRangeSelected)="onDateRangeSelected($event)">
+    <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
+                         (dateFilterSelected)="onDateFilterSelected($event)"
+                         (liveRangeSelected)="onLiveRangeSelected($event)"
+                         (updated)="onTemporalFilterUpdate($event)">
     </dev-temporal-filter>
     <div class="scans__controls">
         <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>
