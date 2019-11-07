@@ -1,15 +1,15 @@
 <div class="temporal-filter flexed">
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
-        <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true"
+        <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true" panelStyleClass="temporalDateFilter"
                     dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
                     showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
     </div>
 
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
-        <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true"
-                    dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true"
+        <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true" panelStyleClass="temporalDateFilter"
+                    dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
                     showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
     </div>
 
