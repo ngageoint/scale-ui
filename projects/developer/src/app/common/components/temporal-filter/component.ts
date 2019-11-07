@@ -77,7 +77,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         return parseInt(localStorage.getItem(this.liveRangeKey), 10);
     }
     set liveRangeStorage(value: number) {
-        this.setStorage(this.liveRangeKey, value.toString());
+        this.setStorage(this.liveRangeKey, value ? value.toString() : null);
     }
 
     constructor(
