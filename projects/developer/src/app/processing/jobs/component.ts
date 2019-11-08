@@ -436,8 +436,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started,
-                    ended: params.ended,
+                    started: params.started || this.datatableOptions.started,
+                    ended: params.ended || this.datatableOptions.ended,
                     liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     status: params.status ?
                         Array.isArray(params.status) ?

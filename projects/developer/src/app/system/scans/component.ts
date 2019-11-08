@@ -5,7 +5,6 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as _ from 'lodash';
 
-import { environment } from '../../../environments/environment';
 import { DataService } from '../../common/services/data.service';
 import { ScansApiService } from './api.service';
 import { ScansDatatable } from './datatable.model';
@@ -217,8 +216,8 @@ export class ScansComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started,
-                    ended: params.ended,
+                    started: params.started || this.datatableOptions.started,
+                    ended: params.ended || this.datatableOptions.ended,
                     liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     duration: params.duration ? params.duration : null,
                     name: params.name || null
