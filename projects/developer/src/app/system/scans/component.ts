@@ -207,6 +207,9 @@ export class ScansComponent implements OnInit, OnDestroy {
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.scansDatatableService.getScansDatatableOptions();
+            // let temporal filter set the start/end
+            this.datatableOptions.started = null;
+            this.datatableOptions.ended = null;
         }
         this.scans = [];
         this.route.queryParams.subscribe(params => {

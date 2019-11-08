@@ -225,7 +225,11 @@ export class BatchesComponent implements OnInit, OnDestroy {
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.batchesDatatableService.getBatchesDatatableOptions();
+            // let temporal filter set the start/end
+            this.datatableOptions.started = null;
+            this.datatableOptions.ended = null;
         }
+
         this.batches = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {

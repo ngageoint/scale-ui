@@ -275,7 +275,11 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.selectedRows = this.dataService.getSelectedIngestRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.ingestDatatableService.getIngestDatatableOptions();
+            // let temporal filter set the start/end
+            this.datatableOptions.started = null;
+            this.datatableOptions.ended = null;
         }
+
         this.ingests = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {

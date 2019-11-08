@@ -226,6 +226,10 @@ export class RecipesComponent implements OnInit, OnDestroy {
         });
 
         this.datatableOptions = this.recipesDatatableService.getRecipesDatatableOptions();
+        // let temporal filter set the start/end
+        this.datatableOptions.started = null;
+        this.datatableOptions.ended = null;
+
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 this.datatableOptions = {

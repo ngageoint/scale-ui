@@ -427,6 +427,9 @@ export class JobsComponent implements OnInit, OnDestroy {
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
+            // let temporal filter set the start/end
+            this.datatableOptions.started = null;
+            this.datatableOptions.ended = null;
         }
         this.jobs = [];
         this.route.queryParams.subscribe(params => {
