@@ -6,6 +6,9 @@ import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
+import { BatchesApiService } from '../../../processing/batches/api.service';
+import { Batch } from '../../../processing/batches/api.model';
+import { BatchesDatatable } from '../../../processing/batches/datatable.model';
 import { MessageService } from 'primeng/components/common/messageservice';
 
 @Component({
@@ -20,6 +23,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
 
     @Input() recipeData: any;
     @Input() isEditing: boolean;
+    @Input() batchesID: any;
     @Input() jobMetrics: any;
     @Input() jobMetricsTitle: any;
     @Input() hideDetails: boolean;
@@ -30,7 +34,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @ViewChild('inputFilePanel') inputFilePanel: any;
     @ViewChild('inputJSONPanel') inputJSONPanel: any;
     @ViewChild('recipeDialog') recipeDialog: any;
+    datatableOptions: BatchesDatatable;
     columns: any[];
+    batchesColumns: any[];
     dependencyOptions = [];
     nodeInputs = [];
     nodes = [];
@@ -91,9 +97,17 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             }
         },
     ];
+    subscription: any;
+    datatableLoading: boolean;
+    selectedRows;
+    batches: any;
+    isBatches: boolean;
+    tempData: any;
+    tableData = [];
 
     constructor(
         private jobsApiService: JobsApiService,
+        private batchesApiService: BatchesApiService,
         private messageService: MessageService,
     ) {
         this.columns = [
@@ -102,6 +116,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.orientation = 'TB';
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
+
+        this.batchesColumns = [
+            { field: 'job_status', header: 'Job Status' },
+            { field: 'job_count', header: 'Job Count' }
+        ];
     }
 
     /**
@@ -227,7 +246,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
                     id = key || _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
-                    label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
+                    const current_sub_recipe: any = _.find(this.recipeData.sub_recipe_types, {'name' : node.node_type.recipe_type_name});
+                    label = `${current_sub_recipe.title}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
                     // if there was no name loaded (names aren't saved to the db yet), use the key from the recipe
@@ -471,6 +491,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     this.getNodeConnections();
                 }
             }
+        }
+        if (this.isBatches) {
+            console.log(this.selectedJobType);
+            this.getTableData();
         }
     }
 
@@ -996,6 +1020,55 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error canceling jobs', detail: err.statusText});
         });
     }
+    getTableData() {
+        this.tempData = [];
+        this.subscription = this.batchesApiService.getBatch(this.batchesID).subscribe(data => {
+            this.datatableLoading = false;
+                _.forEach(data.job_metrics, (jobType, key) => {
+                    if (key === this.selectedJobType.name) {
+                        this.tempData.push({
+                            job_status: 'Pending',
+                            job_count: jobType.jobs_pending
+                        });
+                        this.tempData.push({
+                            job_status: 'Blocked',
+                            job_count: jobType.jobs_blocked
+                        });
+                        this.tempData.push({
+                            job_status: 'Queued',
+                            job_count: jobType.jobs_queued
+                        });
+                        this.tempData.push({
+                            job_status: 'Running',
+                            job_count: jobType.jobs_running
+                        });
+                        this.tempData.push({
+                            job_status: 'Completed',
+                            job_count: jobType.jobs_completed
+                        });
+                        this.tempData.push({
+                            job_status: 'Canceled',
+                            job_count: jobType.jobs_canceled
+                        });
+                        this.tempData.push({
+                            job_status: 'Failed',
+                            job_count: jobType.jobs_failed
+                        });
+                        this.tempData.push({
+                            job_status: 'Total',
+                            job_count: jobType.jobs_total
+                        });
+
+                    }
+            });
+            this.batches = Batch.transformer(data.results);
+            this.tableData = this.tempData;
+        }, err => {
+            this.datatableLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving batches', detail: err.statusText});
+        });
+
+    }
 
     /**
      * Click handler for edit button in header of condition dialog.
@@ -1065,6 +1138,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngOnInit() {
+        const location = window.location.href;
+        if (location.includes('batches')) {
+            this.isBatches = true;
+        }
     }
 
     ngAfterViewInit() {

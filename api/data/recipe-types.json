@@ -91,7 +91,9 @@
                     "version": "2.0"
                 }
             ],
-            "sub_recipe_types": [],
+            "sub_recipe_types": [
+                "oil-detection"
+            ],
             "created": "2016-04-30T19:03:26.346Z",
             "last_modified": "2016-04-30T19:03:26.346Z",
             "deprecated": null

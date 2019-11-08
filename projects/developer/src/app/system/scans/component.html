@@ -20,8 +20,8 @@
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
                 <div class="scans__name-filter" *ngSwitchCase="'name'">
-                    <input pInputText type="text" (click)="$event.stopPropagation()" class="scans__name-filter"
-                           (input)="onNameFilter($event)" [(ngModel)]="nameFilterText">
+                    <input pInputText type="search" placeholder="Search" (click)="$event.stopPropagation()" class="ingest__name-filter"
+                        (input)="onNameFilter($event)" [(ngModel)]="nameFilterText">
                 </div>
             </th>
         </tr>

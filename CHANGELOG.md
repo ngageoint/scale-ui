@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.10.0](https://github.com/ngageoint/scale-ui/compare/v0.9.1...v0.10.0) (2019-11-06)
+
+
+### Bug Fixes
+
+* **batches:** Batch Details Recipe Graph Zoom ([#359](https://github.com/ngageoint/scale-ui/issues/359)) ([fa713b8](https://github.com/ngageoint/scale-ui/commit/fa713b8))
+* **charts:** update charts to use datetime instead of date fields ([#377](https://github.com/ngageoint/scale-ui/issues/377)) ([b9d1fce](https://github.com/ngageoint/scale-ui/commit/b9d1fce)), closes [#322](https://github.com/ngageoint/scale-ui/issues/322)
+* **job types:** Job Type Priority Required ([#379](https://github.com/ngageoint/scale-ui/issues/379)) ([68b4cfe](https://github.com/ngageoint/scale-ui/commit/68b4cfe)), closes [#378](https://github.com/ngageoint/scale-ui/issues/378)
+* **recipes:** use title field for labels of subrecipe nodes in recipe editor ([#376](https://github.com/ngageoint/scale-ui/issues/376)) ([e19b0c3](https://github.com/ngageoint/scale-ui/commit/e19b0c3)), closes [#382](https://github.com/ngageoint/scale-ui/issues/382)
+* cannot remove input after validation ([3f47797](https://github.com/ngageoint/scale-ui/commit/3f47797)), closes [#367](https://github.com/ngageoint/scale-ui/issues/367)
+
+
+### Features
+
+* **ingests:** Filename search ([#370](https://github.com/ngageoint/scale-ui/issues/370)) ([e3e55b1](https://github.com/ngageoint/scale-ui/commit/e3e55b1))
+* **job types:** Add Maintainer URL to Job Type Details Page ([#373](https://github.com/ngageoint/scale-ui/issues/373)) ([6bd83cf](https://github.com/ngageoint/scale-ui/commit/6bd83cf))
+* System Status ([#364](https://github.com/ngageoint/scale-ui/issues/364)) ([93c2dcd](https://github.com/ngageoint/scale-ui/commit/93c2dcd))
+
+
+
 ### [0.9.1](https://github.com/ngageoint/scale-ui/compare/v0.9.0...v0.9.1) (2019-10-25)
 
 

@@ -16,6 +16,10 @@
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field"></p-sortIcon>
+                <div class="ingest__name-filter" *ngSwitchCase="'file_name'">
+                    <input pInputText type="search" placeholder="Search" (click)="$event.stopPropagation()" class="ingest__name-filter"
+                           (input)="onNameFilter($event)" [(ngModel)]="nameFilterText">
+                </div>
                 <div *ngSwitchCase="'status'">
                     <p-multiSelect [options]="statusValues" [(ngModel)]="selectedStatus" [maxSelectedLabels]="1"
                                    (onChange)="onStatusChange($event)" styleClass="column-filter"
