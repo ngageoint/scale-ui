@@ -76,12 +76,6 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     constructor(
         private messageService: MessageService
     ) {
-        /*
-
-        TODO:
-        - styles for input groups
-        - remove custom utc calendar?
-         */
     }
 
     /**
