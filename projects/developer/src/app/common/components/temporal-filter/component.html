@@ -1,14 +1,16 @@
 <div class="temporal-filter flexed">
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
-        <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true" panelStyleClass="temporalDateFilter"
+        <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true"
+                    panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
                     dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
                     showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
     </div>
 
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
-        <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true" panelStyleClass="temporalDateFilter"
+        <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true"
+                    panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
                     dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
                     showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
     </div>
@@ -16,7 +18,8 @@
     <button pButton class="temporal-filter__date-filter-btn apply-"
             [ngClass]="{'ui-button-primary': !isLiveMode, 'ui-button-secondary': isLiveMode}" label="Apply filter"
             (click)="onDateFilterApply()"
-            [disabled]="!startDate || !endDate"></button>
+            [disabled]="!startDate || !endDate || !isValid"
+            pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
 
     <div class="temporal-filter__date-filter-dropdown">
         <div class="ui-inputgroup">

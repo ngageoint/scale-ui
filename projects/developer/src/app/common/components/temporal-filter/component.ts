@@ -73,6 +73,14 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     get liveRangeStorage(): number { return parseInt(localStorage.getItem(this.liveRangeKey), 10); }
     set liveRangeStorage(value: number) { this.setStorage(this.liveRangeKey, value ? value.toString() : null); }
 
+    // determines if the form inputs are valid
+    get isValid(): boolean {
+        if (!this.isLiveMode) {
+            return this.startDate < this.endDate;
+        }
+        return true;
+    }
+
     constructor(
         private messageService: MessageService
     ) {
@@ -190,9 +198,10 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
      */
     private utcDateToLocal(date: string | Date): Date {
         const v = moment(date).utc();
+        // drop milliseconds since it isn't exposed to the user
         return new Date(
             v.year(), v.month(), v.date(),
-            v.hours(), v.minutes(), v.seconds(), v.milliseconds()
+            v.hours(), v.minutes(), v.seconds()
         );
     }
 
@@ -203,9 +212,10 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
      */
     private localDateToUTC(date: Date): Date {
         const v = moment(date);
+        // drop milliseconds since it isn't exposed to the user
         const utc = moment.utc([
             v.year(), v.month(), v.date(),
-            v.hours(), v.minutes(), v.seconds(), v.milliseconds()
+            v.hours(), v.minutes(), v.seconds()
         ]);
         return utc.toDate();
     }
