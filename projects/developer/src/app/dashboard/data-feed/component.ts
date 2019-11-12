@@ -61,9 +61,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.selectedDataFeed) {
             this.ingestDataset = {
                 label: this.selectedDataFeed.strike.title + ' Ingests',
-                fill: true,
+                fill: false,
                 borderColor: ColorService.INGEST,
-                backgroundColor: ColorService.getRgba(ColorService.INGEST, .25),
+                backgroundColor: ColorService.INGEST,
                 borderWidth: 2,
                 pointRadius: 2,
                 pointBackgroundColor: ColorService.INGEST,
@@ -77,9 +77,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             });
             this.feedDataset = {
                 label: this.selectedDataFeed.strike.title + ' Data',
-                fill: true,
+                fill: false,
                 borderColor: ColorService.COMPLETED,
-                backgroundColor: ColorService.getRgba(ColorService.COMPLETED, .5),
+                backgroundColor: ColorService.COMPLETED,
                 borderWidth: 2,
                 pointRadius: 2,
                 pointBackgroundColor: ColorService.COMPLETED,
