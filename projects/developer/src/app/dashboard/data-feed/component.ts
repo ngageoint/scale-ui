@@ -57,10 +57,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     private updateFeedData() {
-        console.log(this.selectedDataFeed);
         if (this.selectedDataFeed) {
             this.ingestDataset = {
-                label: this.selectedDataFeed.strike.title + ' Ingests',
+                label: this.selectedDataFeed.ingest.strike.title + ' Ingests',
                 fill: true,
                 borderColor: ColorService.INGEST,
                 backgroundColor: ColorService.getRgba(ColorService.INGEST, .25),
@@ -76,7 +75,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             });
             this.feedDataset = {
-                label: this.selectedDataFeed.strike.title + ' Data',
+                label: this.selectedDataFeed.data.strike.title + ' Data',
                 fill: true,
                 borderColor: ColorService.COMPLETED,
                 backgroundColor: ColorService.getRgba(ColorService.COMPLETED, .5),
@@ -120,9 +119,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.dataFeeds = _.sortBy(this.dataFeeds, ['asc'], ['label']);
             }
             if (this.dataFeeds.length > 0) {
-                if (this.selectedDataFeed) {
+                if (this.selectedDataFeed.data.length > 0) {
                     // use value from dataFeeds array to ensure object equality for primeng dropdown
-                    const dataFeed: any = _.find(this.dataFeeds, { label: this.selectedDataFeed.strike.title });
+                    const dataFeed: any = _.find(this.dataFeeds, { label: this.selectedDataFeed.data.strike.title });
                     this.selectedDataFeed.data = dataFeed ? dataFeed.value : this.dataFeeds[0].value;
                 } else {
                     this.selectedDataFeed.data = this.dataFeeds[0].value;
@@ -145,6 +144,10 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             ended: moment.utc().toISOString(),
             use_ingest_time: true
         };
+        this.selectedDataFeed = {
+            ingest: {},
+            data: {}
+        };
         this.feedSubscription = this.ingestApiService.getIngestStatus(this.feedParams, true).subscribe(data => {
           this.dataFeeds = [];
             if (initDataFeeds) {
@@ -157,12 +160,13 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.ingestFeeds = _.sortBy(this.ingestFeeds, ['asc'], ['label']);
             }
             if (this.ingestFeeds.length > 0) {
-                if (this.selectedDataFeed) {
+                if (this.selectedDataFeed.ingest.length > 0) {
                     // use value from dataFeeds array to ensure object equality for primeng dropdown
-                    const ingestFeed: any = _.find(this.ingestFeeds, { label: this.selectedDataFeed.strike.title });
+                    const ingestFeed: any = _.find(this.ingestFeeds, { label: this.selectedDataFeed.ingest.strike.title });
                     this.selectedDataFeed.ingest = ingestFeed ? ingestFeed.value : this.ingestFeeds[0].value;
                 } else {
-                    this.selectedDataFeed.ingest = this.dataFeeds[0].value;
+                    this.selectedDataFeed.ingest = this.ingestFeeds[0].value;
+                    console.log(this.selectedDataFeed);
                 }
             }
             this.fetchDataFeed(initDataFeeds);
