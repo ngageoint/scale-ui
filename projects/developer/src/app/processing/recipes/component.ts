@@ -23,6 +23,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 export class RecipesComponent implements OnInit, OnDestroy {
     datatableOptions: RecipesDatatable;
     datatableLoading: boolean;
+    apiLoading: boolean;
     columns = [
         { field: 'recipe_type.name', header: 'Recipe Type' },
         { field: 'created', header: 'Created (Z)' },
@@ -65,8 +66,10 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.datatableLoading = true;
         }
 
+        this.apiLoading = true;
         this.subscription = this.recipesApiService.getRecipes(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.count = data.count;
             _.forEach(data.results, result => {
                 const recipe = _.find(this.selectedRows, { data: { id: result.id } });
@@ -75,6 +78,7 @@ export class RecipesComponent implements OnInit, OnDestroy {
             this.recipes = Recipe.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipes', detail: err.statusText});
         });
     }

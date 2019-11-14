@@ -25,6 +25,7 @@ export class IngestComponent implements OnInit, OnDestroy {
     selectedRows: any;
     datatableOptions: IngestDatatable;
     datatableLoading: boolean;
+    apiLoading: boolean;
     columns = [
         { field: 'file_name', header: 'File Name' },
         { field: 'file_size', header: 'File Size' },
@@ -99,8 +100,10 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.datatableLoading = true;
         }
 
+        this.apiLoading = true;
         this.subscription = this.ingestApiService.getIngests(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.count = data.count;
             _.forEach(data.results, result => {
                 const ingest = _.find(this.selectedRows, { data: { id: result.id } });
@@ -109,6 +112,7 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.ingests = Ingest.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText});
         });
     }
