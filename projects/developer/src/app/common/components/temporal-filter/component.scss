@@ -1,8 +1,27 @@
+::ng-deep .temporalDateFilter table td {
+    padding: 0 !important;
+}
+
+
 .temporal-filter {
     align-items: flex-end;
 
     div {
         margin-right: 20px;
+    }
+
+    .ui-inputgroup {
+        .ui-inputgroup-addon {
+            line-height:  normal;
+        }
+
+        ::ng-deep input,
+        ::ng-deep .ui-dropdown {
+            line-height:  normal;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            flex: 1 1 auto;
+        }
     }
 
     .temporal-filter__date-filter-btn, .temporal-filter__date-filter-dropdown {

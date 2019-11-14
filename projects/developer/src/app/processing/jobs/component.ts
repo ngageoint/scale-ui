@@ -26,7 +26,7 @@ import { JobExecution } from './execution.model';
     providers: [ConfirmationService]
 })
 
-export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class JobsComponent implements OnInit, OnDestroy {
     @Input() jobs: any;
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
@@ -90,6 +90,7 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
     isMobile: boolean;
     loading = true;
     sub: any;
+    liveRange: number;
 
     constructor(
         private dataService: DataService,
@@ -104,10 +105,13 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {}
 
     private updateData() {
-        if (!this.sub) {
+        this.unsubscribe();
+
+        // don't show loading state when in live mode
+        if (!this.liveRange) {
             this.datatableLoading = true;
         }
-        this.unsubscribe();
+
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
@@ -127,12 +131,21 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
         });
 
         this.jobsDatatableService.setJobsDatatableOptions(this.datatableOptions);
-        // tried to remove fields from URL - this breaks the range selection updates every 10 seconds.
-        if (!this.sub) {
-            delete this.datatableOptions.duration;
+
+        // update router params
+        const params = this.datatableOptions as Params;
+        if (params.liveRange) {
+            // if live range was set on the table options, remove started/ended
+            delete params.started;
+            delete params.ended;
+        } else {
+            // live range not provided, default back to started/ended set on table options
+            params.started = params.started || this.started;
+            params.ended = params.ended || this.ended;
         }
+
         this.router.navigate(['/processing/jobs'], {
-            queryParams: this.datatableOptions as Params,
+            queryParams: params,
             replaceUrl: true
         });
     }
@@ -226,45 +239,54 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.router.navigate([`/processing/jobs/${e.data.id}`]);
         }
     }
-    onDateFilterApply(data: any) {
-        if (this.sub) {
-            this.sub.unsubscribe();
-            this.sub = null;
-        }
-        this.jobs = null;
-        this.started = data.started;
-        this.ended = data.ended;
+
+    /**
+     * Callback for temporal filter updating the start/end range filter.
+     * @param data start and end strings of iso formatted datetimes
+     */
+    onDateFilterSelected(data: {start: string, end: string}): void {
+        // keep local model in sync
+        this.started = data.start;
+        this.ended = data.end;
+        // patch in the values to the datatable
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            started: moment.utc(this.started, environment.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
+            started: data.start,
+            ended: data.end
         });
+        // update router
         this.updateOptions();
+    }
+
+    /**
+     * Callback for temporal filter updating the live range selection.
+     * @param data hours that should be used, or null to clear
+     */
+    onLiveRangeSelected(data: {hours: number}): void {
+        // keep model in sync
+        this.liveRange = data.hours;
+        // patch in the values for datatable
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+            liveRange: data.hours
+        });
+        // update router
+        this.updateOptions();
+    }
+
+    /**
+     * Callback for when temporal filter tells this component to update visible date range. This is
+     * the signal that either a date range or a live range is being triggered.
+     * @param data start and end iso strings for what dates should be filtered
+     */
+    onTemporalFilterUpdate(data: {start: string, end: string}): void {
+        // update the datatable options then call the api
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+                first: 0,
+                started: data.start,
+                ended: data.end
+            });
         this.updateData();
     }
-    getDateRangeSelected(data: any) {
-        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
-        this.ended = moment.utc().toISOString();
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            started: this.started,
-            ended: this.ended
-        });
-        if (this.loading) {
-            this.datatableOptions.duration = moment.duration(data.range, data.unit).toISOString();
-        }
-        this.updateOptions();
-    }
-    onDateRangeSelected(data: any) {
-        if (this.sub) {
-            this.sub.unsubscribe();
-            this.sub = null;
-        }
-        this.sub = Observable.timer(0, 10000)
-            .subscribe(() => {
-                this.getDateRangeSelected(data);
-            });
-    }
+
     requeueJobs(jobsParams?) {
         this.messageService.add({severity: 'success', summary: 'Job requeue has been requested'});
         let errorCategories = null;
@@ -409,19 +431,21 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
+            // let temporal filter set the start/end
+            this.datatableOptions.started = null;
+            this.datatableOptions.ended = null;
         }
         this.jobs = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
-                // TODO: check for duration here and adjust start/end accordingly
                 this.datatableOptions = {
                     first: params.first ? parseInt(params.first, 10) : 0,
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
-                    ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
-                    duration: params.duration ? params.duration : null,
+                    started: params.started || this.datatableOptions.started,
+                    ended: params.ended || this.datatableOptions.ended,
+                    liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
                             params.status :
@@ -458,31 +482,14 @@ export class JobsComponent implements OnInit, AfterViewInit, OnDestroy {
                     this.datatableOptions.error_category :
                     [this.datatableOptions.error_category]
                 : null;
-            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
-            // If this page is loading for the first time parse the request to determine if a range or
-            // duration was requested. If it was a duration then a subscription is created for auto-updates
-            if (this.loading) {
-                console.log(this.datatableOptions.duration);
-                if (this.datatableOptions.duration) {
-                    // Deconstruct the requested time-frame and submit for a subscription
-                    const dur = this.datatableOptions.duration;
-                    const query = {
-                        'range': dur.replace(/\D/g, ''),
-                        'unit': dur[dur.length - 1]
-                    };
-                    this.onDateRangeSelected(query);
-                } else {
-                    this.onDateFilterApply(this.datatableOptions);
-                }
-            } else {
-                this.getJobTypes();
-            }
+            this.started = this.datatableOptions.started;
+            this.ended = this.datatableOptions.ended;
+            this.liveRange = this.datatableOptions.liveRange;
+
+            this.getJobTypes();
         });
     }
-    ngAfterViewInit() {
-        this.loading = false;
-    }
+
     ngOnDestroy() {
         if (this.sub) {
             this.sub.unsubscribe();

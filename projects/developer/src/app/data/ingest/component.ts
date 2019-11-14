@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -82,6 +82,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }, 1000);
+    liveRange: number;
 
     constructor(
         private dataService: DataService,
@@ -99,6 +100,12 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.datatableLoading = true;
         }
         this.unsubscribe();
+
+        // don't show loading state when in live mode
+        if (!this.liveRange) {
+            this.datatableLoading = true;
+        }
+
         this.subscription = this.ingestApiService.getIngests(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.count = data.count;
@@ -117,8 +124,21 @@ export class IngestComponent implements OnInit, OnDestroy {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
         this.ingestDatatableService.setIngestDatatableOptions(this.datatableOptions);
+
+        // update router params
+        const params = this.datatableOptions as Params;
+        if (params.liveRange) {
+            // if live range was set on the table options, remove started/ended
+            delete params.started;
+            delete params.ended;
+        } else {
+            // live range not provided, default back to started/ended set on table options
+            params.started = params.started || this.started;
+            params.ended = params.ended || this.ended;
+        }
+
         this.router.navigate(['/data/ingest'], {
-            queryParams: this.datatableOptions,
+            queryParams: params,
             replaceUrl: true
         });
     }
@@ -211,42 +231,54 @@ export class IngestComponent implements OnInit, OnDestroy {
         }
         return '';
     }
-    onDateFilterApply(data: any) {
-        if (this.sub) {
-            this.sub.unsubscribe();
-            this.sub = null;
-        }
-        this.ingests = null;
-        this.started = data.started;
-        this.ended = data.ended;
+
+    /**
+     * Callback for temporal filter updating the start/end range filter.
+     * @param data start and end strings of iso formatted datetimes
+     */
+    onDateFilterSelected(data: {start: string, end: string}): void {
+        // keep local model in sync
+        this.started = data.start;
+        this.ended = data.end;
+        // patch in the values to the datatable
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            started: moment.utc(this.started, environment.dateFormat).toISOString(),
-            ended: moment.utc(this.ended, environment.dateFormat).toISOString()
+            started: data.start,
+            ended: data.end
         });
+        // update router
         this.updateOptions();
     }
-    getDateRangeSelected(data: any) {
-        this.started = moment.utc().subtract(data.range, data.unit).toISOString();
-        this.ended = moment.utc().toISOString();
+
+    /**
+     * Callback for temporal filter updating the live range selection.
+     * @param data hours that should be used, or null to clear
+     */
+    onLiveRangeSelected(data: {hours: number}): void {
+        // keep model in sync
+        this.liveRange = data.hours;
+        // patch in the values for datatable
         this.datatableOptions = Object.assign(this.datatableOptions, {
-            first: 0,
-            started: this.started,
-            ended: this.ended,
-            duration: moment.duration(data.range, data.unit).toISOString()
+            liveRange: data.hours
         });
+        // update router
         this.updateOptions();
     }
-    onDateRangeSelected(data: any) {
-        if (this.sub) {
-            this.sub.unsubscribe();
-            this.sub = null;
-        }
-        this.sub = Observable.timer(0, 10000)
-            .subscribe(() => {
-                this.getDateRangeSelected(data);
+
+    /**
+     * Callback for when temporal filter tells this component to update visible date range. This is
+     * the signal that either a date range or a live range is being triggered.
+     * @param data start and end iso strings for what dates should be filtered
+     */
+    onTemporalFilterUpdate(data: {start: string, end: string}): void {
+        // update the datatable options then call the api
+        this.datatableOptions = Object.assign(this.datatableOptions, {
+                first: 0,
+                started: data.start,
+                ended: data.end
             });
+        this.updateData();
     }
+
     onFilterClick(e) {
         e.stopPropagation();
     }
@@ -257,7 +289,11 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.selectedRows = this.dataService.getSelectedIngestRows();
         if (!this.datatableOptions) {
             this.datatableOptions = this.ingestDatatableService.getIngestDatatableOptions();
+            // let temporal filter set the start/end
+            this.datatableOptions.started = null;
+            this.datatableOptions.ended = null;
         }
+
         this.ingests = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
@@ -266,8 +302,9 @@ export class IngestComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started ? params.started : moment.utc().subtract(1, 'd').startOf('d').toISOString(),
-                    ended: params.ended ? params.ended : moment.utc().endOf('d').toISOString(),
+                    started: params.started || this.datatableOptions.started,
+                    ended: params.ended || this.datatableOptions.ended,
+                    liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     duration: params.duration ? params.duration : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
@@ -293,8 +330,9 @@ export class IngestComponent implements OnInit, OnDestroy {
                     this.selectedStatus.push(status.value);
                 }
             });
-            this.started = moment.utc(this.datatableOptions.started).format(environment.dateFormat);
-            this.ended = moment.utc(this.datatableOptions.ended).format(environment.dateFormat);
+            this.started = this.datatableOptions.started;
+            this.ended = this.datatableOptions.ended;
+            this.liveRange = this.datatableOptions.liveRange;
             this.getStrikes();
         });
     }

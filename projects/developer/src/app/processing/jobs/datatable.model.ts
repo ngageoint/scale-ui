@@ -1,5 +1,3 @@
-import * as moment from 'moment';
-
 export class JobsDatatable {
     constructor(
         public first?: number,
@@ -8,7 +6,7 @@ export class JobsDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
-        public duration?: string,
+        public liveRange?: number,
         public status?: any,
         public job_id?: number,
         public job_type_name?: any,
@@ -25,7 +23,7 @@ export const initialJobsDatatable: JobsDatatable = {
     rows: 20,
     sortField: 'last_modified',
     sortOrder: -1,
-    started: moment.utc().subtract(24, 'h').toISOString(),
-    ended: moment.utc().toISOString(),
+    started: null,
+    ended: null,
     job_type_name: []
 };
