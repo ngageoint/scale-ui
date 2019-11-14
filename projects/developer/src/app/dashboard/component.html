@@ -5,7 +5,7 @@
                     (dateRangeSelected)="onDateRangeSelected($event)">
             </dev-temporal-filter>
         </div>
-        <!-- <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
+        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
                 <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
                     <div class="dashboard__error-chart" *ngIf="dataFavs">
                         <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
@@ -34,13 +34,16 @@
                     </div>
                 </p-panel>
             </div>
-             <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
+        <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
+                <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
+                </p-panel> -->
+                <p-panel [header]="dataFeedChartTitle">
+                    <dev-data-feed></dev-data-feed>
                 </p-panel>
             </div>
-        </div> -->
+        </div>
         <!-- <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__favs-container">
 
         </div> -->
@@ -127,9 +130,6 @@
                 </p-panel>
                 <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
-                </p-panel>
-                <p-panel [header]="dataFeedChartTitle">
-                    <dev-data-feed></dev-data-feed>
                 </p-panel>
                 <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity></dev-job-activity>

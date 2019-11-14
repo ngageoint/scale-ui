@@ -65,15 +65,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     borderWidth: 0
                 }
             },
-            // tooltips: {
-            //     callbacks: {
-            //       label: function(tooltipItem, data) {
-            //         const dataset = data.datasets[tooltipItem.datasetIndex];
-            //       const index = tooltipItem.index;
-            //       return dataset.labels[index] + ': ' + dataset.data[index];
-            //     }
-            //   }
-            // }
+            tooltips: {
+                callbacks: {
+                  label: function(tooltipItem, data) {
+                    const dataset = data.datasets[tooltipItem.datasetIndex];
+                  const index = tooltipItem.index;
+                  return dataset.labels[index] + ': ' + dataset.data[index];
+                }
+              }
+            }
         };
     }
 
@@ -83,7 +83,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
-        console.log(this.started);
         this.refreshAllJobTypes();
         this.jobsService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
@@ -94,55 +93,83 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private generateStats(jobData: any[]): any {
-        const allJobCounts = _.flatten(_.map(jobData, 'job_counts'));
-        const sysErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+        const systemJobs = _.filter(jobData, (systJob) => {
+            return systJob.job_type.is_system === true;
+        });
+
+        const systemJobCounts = _.flatten(_.map(systemJobs, 'job_counts'));
+        const systemSysErrors = _.sum(_.map(_.filter(systemJobCounts, (jobCount) => {
             return jobCount.status === 'FAILED' && jobCount.category === 'SYSTEM';
         }), 'count'));
-        const algErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+        const systemAlgErrors = _.sum(_.map(_.filter(systemJobCounts, (jobCount) => {
             return jobCount.status === 'FAILED' && jobCount.category === 'ALGORITHM';
         }), 'count'));
-        const dataErrors = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
+        const systemDataErrors = _.sum(_.map(_.filter(systemJobCounts, (jobCount) => {
             return jobCount.status === 'FAILED' && jobCount.category === 'DATA';
         }), 'count'));
-        const running = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-            return jobCount.status === 'RUNNING';
+        const systemJobCountsChart = _.sum(_.map(systemJobCounts, 'count'));
+        const userJobs = _.filter(jobData, (systJob) => {
+            return systJob.job_type.is_system === false ;
+        });
+        const userJobCounts = _.flatten(_.map(userJobs, 'job_counts'));
+        const sysErrors = _.sum(_.map(_.filter(userJobCounts, (jobCount) => {
+            return jobCount.status === 'FAILED' && jobCount.category === 'SYSTEM';
         }), 'count'));
-        const completed = _.sum(_.map(_.filter(allJobCounts, (jobCount) => {
-            return jobCount.status === 'COMPLETED';
+        const algErrors = _.sum(_.map(_.filter(userJobCounts, (jobCount) => {
+            return jobCount.status === 'FAILED' && jobCount.category === 'ALGORITHM';
         }), 'count'));
+        const dataErrors = _.sum(_.map(_.filter(userJobCounts, (jobCount) => {
+            return jobCount.status === 'FAILED' && jobCount.category === 'DATA';
+        }), 'count'));
+        const userJobCountsChart = _.sum(_.map(userJobCounts, 'count'));
+        const allJobCounts = _.flatten(_.map(jobData, 'job_counts'));
         const total = _.sum(_.map(allJobCounts, 'count'));
         const failed = sysErrors + algErrors + dataErrors;
-        const errorChartData = {
-            labels: ['SYSTEM', 'ALGORITHM', 'DATA'],
-            datasets: [{
-                data: [sysErrors, algErrors, dataErrors],
-                borderColor: '#fff',
-                borderWidth: 1,
-                backgroundColor: [
-                    ColorService.ERROR_SYSTEM,   // system
-                    ColorService.ERROR_ALGORITHM,  // algorithm
-                    ColorService.ERROR_DATA,  // data,
-                ]
-            }]
-            };
-            const totalChartData = {
-                labels: ['RUNNING', 'COMPLETED', 'Failed'],
+        const totalChartData = {
+            data: {
+                labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
                 datasets: [{
-                        data: [running, completed, failed],
+                    data: [systemSysErrors, systemAlgErrors, systemDataErrors, sysErrors, algErrors, dataErrors],
+                    borderColor: '#fff',
+                    borderWidth: 1,
+                    backgroundColor: [
+                        ColorService.ERROR_SYSTEM,   // system
+                        ColorService.ERROR_ALGORITHM,  // algorithm
+                        ColorService.ERROR_DATA,  // data,
+                        ColorService.ERROR_SYSTEM,   // system
+                        ColorService.ERROR_ALGORITHM,  // algorithm
+                        ColorService.ERROR_DATA,  // data,
+                    ],
+                    labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
+                }, {
+                        data: [systemJobCountsChart, userJobCountsChart],
                         borderColor: '#fff',
                         borderWidth: 1,
                         backgroundColor: [
                             ColorService.RUNNING,
-                            ColorService.COMPLETED,
-                            ColorService.FAILED
-                        ]
+                            ColorService.COMPLETED
+                        ],
+                        labels: ['System', 'User'],
                 }]
-            };
+                }
+        };
+            // const totalChartData = {
+            //     labels: ['RUNNING', 'COMPLETED'],
+            //     datasets: [{
+            //             data: [systemJobs, runningJobs],
+            //             borderColor: '#fff',
+            //             borderWidth: 1,
+            //             backgroundColor: [
+            //                 ColorService.RUNNING,
+            //                 ColorService.COMPLETED
+            //             ]
+            //     }]
+            // };
         return {
             total: total,
             failed: failed,
-            errorChartData: errorChartData,
-            totalChartData: totalChartData
+            // errorChartData: errorChartData,
+            totalChartData: totalChartData.data
         };
     }
 
