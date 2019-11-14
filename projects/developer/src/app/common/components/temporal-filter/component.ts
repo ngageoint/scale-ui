@@ -13,6 +13,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     @Input() started: string;
     @Input() ended: string;
     @Input() liveRange: number;
+    @Input() loading = false;
 
     // when the start/end dates are applied
     @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
@@ -46,6 +47,18 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         const start = now.clone().subtract(20, 'y').year();
         const end = now.clone().add(5, 'y').year();
         return `${start}:${end}`;
+    }
+
+    // dynamic css class to use for live range icon
+    get liveRangeIconClass(): string {
+        if (this.isLiveMode) {
+            if (this.loading) {
+                return 'fa-circle-o-notch fa-spin';
+            } else {
+                return 'fa-circle live-range-active';
+            }
+        }
+        return 'fa-circle live-range-inactive';
     }
 
     // utc versions of internal start and end dates
