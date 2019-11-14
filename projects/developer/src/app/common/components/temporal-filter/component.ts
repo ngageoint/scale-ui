@@ -4,6 +4,8 @@ import { Subscription, Observable } from 'rxjs';
 import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 
+import { LocalStorageItem } from '../../utils/localstorage';
+
 @Component({
     selector: 'dev-temporal-filter',
     templateUrl: './component.html',
@@ -68,23 +70,14 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     // helper for if a live range is selected
     get isLiveMode(): boolean { return !!this.liveRange; }
 
-    // prefix for local storage keys
-    private readonly storageKeyPrefix = 'scale.temporal-filter';
-
     // used for saving started value into local storage
-    private readonly startedKey = `${this.storageKeyPrefix}.started`;
-    get startedStorage(): string { return localStorage.getItem(this.startedKey); }
-    set startedStorage(value: string) { this.setStorage(this.startedKey, value); }
+    private startedStorage = new LocalStorageItem('started', 'temporal-filter');
 
     // used for saving ended value into local storage
-    private readonly endedKey = `${this.storageKeyPrefix}.ended`;
-    get endedStorage(): string { return localStorage.getItem(this.endedKey); }
-    set endedStorage(value: string) { this.setStorage(this.endedKey, value); }
+    private endedStorage = new LocalStorageItem('ended', 'temporal-filter');
 
     // used for saving live range value into local storage
-    private readonly liveRangeKey = `${this.storageKeyPrefix}.range`;
-    get liveRangeStorage(): number { return parseInt(localStorage.getItem(this.liveRangeKey), 10); }
-    set liveRangeStorage(value: number) { this.setStorage(this.liveRangeKey, value ? value.toString() : null); }
+    private liveRangeStorage = new LocalStorageItem('range', 'temporal-filter');
 
     // determines if the form inputs are valid
     get isValid(): boolean {
@@ -100,25 +93,12 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Sets or removes the key from local storage based on the value
-     * @param key   the key to set or remove
-     * @param value a string value to set, empty to remove the item
-     */
-    private setStorage(key: string, value: string): void {
-        if (value) {
-            localStorage.setItem(key, value);
-        } else {
-            localStorage.removeItem(key);
-        }
-    }
-
-    /**
      * Callback for when a normal start/end value is applied
      */
     onDateFilterApply(): void {
         // normal date filter was applied, turn off live mode
         this.liveRange = null;
-        this.liveRangeStorage = null;
+        this.liveRangeStorage.remove();
 
         // send out the converted date strings
         this.dateFilterSelected.emit({
@@ -129,8 +109,8 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         this.liveRangeSelected.emit({ hours: null });
 
         // keep values in sync to local storage
-        this.startedStorage = this.utcStartDate.toISOString();
-        this.endedStorage = this.utcEndDate.toISOString();
+        this.startedStorage.set(this.utcStartDate.toISOString());
+        this.endedStorage.set(this.utcEndDate.toISOString());
 
         // make call to emit out the update hook
         this.update();
@@ -179,7 +159,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
             this.liveRangeSelected.emit({ hours: this.liveRange });
 
             // save to local storage
-            this.liveRangeStorage = this.liveRange;
+            this.liveRangeStorage.set(this.liveRange);
 
             // ensure any timers are cancelled, then start a new one
             this.unsubscribe();
@@ -194,8 +174,8 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
 
             // default back to either the supplied start/end date, or from local storage, then from default
             const now = moment();
-            const start = this.started || this.startedStorage || now.clone().subtract(1, 'day').toDate();
-            const end = this.ended || this.endedStorage || now.toDate();
+            const start = this.started || this.startedStorage.get() || now.clone().subtract(1, 'day').toDate();
+            const end = this.ended || this.endedStorage.get() || now.toDate();
             this.startDate = this.utcDateToLocal(start);
             this.endDate = this.utcDateToLocal(end);
 
@@ -238,7 +218,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         setTimeout(() => {
             if (this.liveRange) {
                 // live range was set from parent (router)
-                this.liveRangeStorage = this.liveRange;
+                this.liveRangeStorage.set(this.liveRange);
                 this.onLiveRangeChange();
             } else if (this.started && this.ended) {
                 // start/end dates were set from parent (router)
@@ -248,12 +228,12 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
             } else if (this.liveRangeStorage) {
                 // live range and start/end not provided by parent
                 // live range available in localstorage
-                this.liveRange = this.liveRangeStorage;
+                this.liveRange = this.liveRangeStorage.get();
                 this.onLiveRangeChange();
             } else if (this.startedStorage && this.endedStorage) {
                 // start/end provided from localstorage
-                this.startDate = this.utcDateToLocal(this.startedStorage);
-                this.endDate = this.utcDateToLocal(this.endedStorage);
+                this.startDate = this.utcDateToLocal(this.startedStorage.get());
+                this.endDate = this.utcDateToLocal(this.endedStorage.get());
                 this.onDateFilterApply();
             } else {
                 // nothing provided by parent component or found in storage
