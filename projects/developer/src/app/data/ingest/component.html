@@ -1,6 +1,7 @@
 <h2><i class="fa fa-clone"></i> Ingest Records <span *ngIf="count">({{ count }})</span></h2>
 <div class="ingest__header flexed space-between">
     <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
+                         [loading]="apiLoading"
                          (dateFilterSelected)="onDateFilterSelected($event)"
                          (liveRangeSelected)="onLiveRangeSelected($event)"
                          (updated)="onTemporalFilterUpdate($event)">

@@ -20,6 +20,7 @@ export class ScansComponent implements OnInit, OnDestroy {
     selectedScan: any;
     selectedRows: any;
     datatableLoading: boolean;
+    apiLoading: boolean;
     datatableOptions: ScansDatatable;
     columns = [
         { field: 'name', header: 'Name' },
@@ -65,8 +66,10 @@ export class ScansComponent implements OnInit, OnDestroy {
             this.datatableLoading = true;
         }
 
+        this.apiLoading = true;
         this.subscription = this.scansApiService.getScans(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.count = data.count;
             _.forEach(data.results, result => {
                 const scan = _.find(this.selectedRows, { data: { id: result.id } });
@@ -75,6 +78,7 @@ export class ScansComponent implements OnInit, OnDestroy {
             this.scans = data.results;
         }, err => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving scans', detail: err.statusText});
         });
     }
