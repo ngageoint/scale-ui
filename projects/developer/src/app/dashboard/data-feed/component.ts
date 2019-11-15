@@ -125,7 +125,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.dataFeeds = _.sortBy(this.dataFeeds, ['asc'], ['label']);
             }
             if (this.dataFeeds.length > 0) {
-                if (this.selectedDataFeed.value) {
+                if (this.selectedDataFeed) {
                     // use value from dataFeeds array to ensure object equality for primeng dropdown
                     const dataFeed: any = _.find(this.dataFeeds, { label: this.selectedDataFeed.value.strike.title });
                     this.selectedDataFeed = dataFeed ? dataFeed : this.dataFeeds[0];
@@ -163,7 +163,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 });
             }
             if (this.ingestFeeds.length > 0) {
-                if (this.selectedDataFeed.value) {
+                if (this.selectedDataFeed) {
                     // use value from dataFeeds array to ensure object equality for primeng dropdown
                     const ingestFeed: any = _.find(this.ingestFeeds, { label: this.selectedDataFeed.value.strike.title });
                     // this.selectedDataFeed = ingestFeed ? ingestFeed : this.ingestFeeds[0];
