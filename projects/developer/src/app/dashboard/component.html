@@ -1,11 +1,11 @@
 <div class="dashboard">
     <div class="p-grid">
         <div class="p-col-12">
-            <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
+            <!-- <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
                          (dateFilterSelected)="onDateFilterSelected($event)"
                          (liveRangeSelected)="onLiveRangeSelected($event)"
                          (updated)="onTemporalFilterUpdate($event)">
-            </dev-temporal-filter>
+            </dev-temporal-filter> -->
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
                 <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
@@ -26,12 +26,11 @@
                                     <p-chart type="pie" [data]="totalDataAll" [options]="pieChartOptions"
                                              *ngIf="allJobTypes.length > 0"></p-chart>
                             </div>
-                        <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">Failed Errors</span></h3>
-                        <div class="scale-chart-container">
+                        <!-- <div class="scale-chart-container">
                             <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
                             <p-chart type="pie" [data]="errorDataAll" [options]="pieChartOptions"
                                      *ngIf="allJobTypes.length > 0"></p-chart>
-                        </div>
+                        </div> -->
                         <span *ngIf="allJobTypes.length === 0">No job types found.</span>
                     </div>
                 </p-panel>
@@ -75,42 +74,12 @@
     </div>
     <div class="p-grid">
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__all-container">
-            <p-panel>
-                <p-tabView>
-                    <p-tabPanel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
-                            <p-scrollPanel>
-                                <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
-                                        #datatable>
-                                    <ng-template pTemplate="header" let-columns>
-                                    </ng-template>
-                                    <ng-template pTemplate="body" let-rowData let-columns="columns">
-                                        <tr [pSelectableRow]="rowData">
-                                            <td>
-                                                <dev-job-type-item [item]="rowData"></dev-job-type-item>
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                    <ng-template pTemplate="emptymessage" let-columns>
-                                        <tr>
-                                            <td [attr.colspan]="columns.length">
-                                                You haven't saved any favorites yet. Use the star button on an algorithm in the next tab to save it to this list
-                                                for quick access.
-                                            </td>
-                                        </tr>
-                                    </ng-template>
-                                </p-table>
-                            </p-scrollPanel>
-                        </p-tabPanel>
-                    <p-tabPanel [header]="'Job Types (' + allJobTypes.length + ')'">
+            <p-tabView>
+                <p-tabPanel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
                         <p-scrollPanel>
-                            <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
+                            <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
+                                    #datatable>
                                 <ng-template pTemplate="header" let-columns>
-                                    <tr>
-                                        <th *ngFor="let col of columns">
-                                            <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                                                class="column-filter">
-                                        </th>
-                                    </tr>
                                 </ng-template>
                                 <ng-template pTemplate="body" let-rowData let-columns="columns">
                                     <tr [pSelectableRow]="rowData">
@@ -119,19 +88,55 @@
                                         </td>
                                     </tr>
                                 </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="columns.length">
+                                            You haven't saved any favorites yet. Use the star button on an algorithm in the next tab to save it to this list
+                                            for quick access.
+                                        </td>
+                                    </tr>
+                                </ng-template>
                             </p-table>
                         </p-scrollPanel>
                     </p-tabPanel>
-                </p-tabView>
-            </p-panel>
+                <p-tabPanel [header]="'Job Types (' + allJobTypes.length + ')'">
+                    <p-scrollPanel>
+                        <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns">
+                                        <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                            class="column-filter">
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td>
+                                        <dev-job-type-item [item]="rowData"></dev-job-type-item>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-scrollPanel>
+                </p-tabPanel>
+            </p-tabView>
         </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
-                    <dev-job-history></dev-job-history>
+                <p-panel [header]="historyChartTitle" [style]="{height: '600px'}">
+                    <!-- <dev-job-history></dev-job-history> -->
+                    <p-tabView>
+                            <p-tabPanel [header]="'fav'">
+                                    <dev-job-history></dev-job-history>
+                            </p-tabPanel>
+                            <p-tabPanel [header]="'testing'">
+                                    <dev-job-history></dev-job-history>
+                            </p-tabPanel>
+                    </p-tabView>
                 </p-panel>
                 <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
-                    <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
+                        <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
                 </p-panel>
                 <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity></dev-job-activity>
