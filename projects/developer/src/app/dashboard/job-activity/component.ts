@@ -12,8 +12,8 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
     styleUrls: ['./component.scss']
 })
 export class JobActivityComponent implements OnInit, OnDestroy {
-    @Input() started: any;
-    @Input() ended: any;
+    started: any;
+    ended: any;
     chartLoading: boolean;
     jobTypes: any;
     params: any;
@@ -61,7 +61,6 @@ export class JobActivityComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        console.log(this.started);
         this.chartLoading = true;
         this.jobTypesApiService.getJobTypes().subscribe((data: any) => {
             this.jobTypes = data.results;

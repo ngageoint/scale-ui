@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
+import { QueueApiService } from '../common/services/queue/api.service';
 import { ColorService } from '../common/services/color.service';
 import * as moment from 'moment';
 import { environment } from '../../environments/environment';
@@ -32,6 +33,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     totalFavs: number;
     failedFavs: number;
     dataFavs: any;
+    running: any;
+    pending: any;
+    queued: any;
     dataFeedChartTitle: string;
     historyChartTitle: string;
     activityChartTitle: string;
@@ -40,7 +44,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     constructor(
         private messageService: MessageService,
         private jobTypesApiService: JobTypesApiService,
-        private jobsService: DashboardJobsService
+        private jobsService: DashboardJobsService,
+        private queueApiService: QueueApiService
     ) {
         this.columnsFavs = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -93,6 +98,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private generateStats(jobData: any[]): any {
+        this.getQueueData();
         const systemJobs = _.filter(jobData, (systJob) => {
             return systJob.job_type.is_system === true;
         });
@@ -129,18 +135,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
             data: {
                 labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
                 datasets: [{
-                    data: [systemSysErrors, systemAlgErrors, systemDataErrors, sysErrors, algErrors, dataErrors],
+                    data: [this.running, this.queued, this.pending],
                     borderColor: '#fff',
                     borderWidth: 1,
                     backgroundColor: [
-                        ColorService.ERROR_SYSTEM,   // system
-                        ColorService.ERROR_ALGORITHM,  // algorithm
-                        ColorService.ERROR_DATA,  // data,
-                        ColorService.ERROR_SYSTEM,   // system
-                        ColorService.ERROR_ALGORITHM,  // algorithm
-                        ColorService.ERROR_DATA,  // data,
+                        ColorService.RUNNING,   // system
+                        ColorService.QUEUED,  // algorithm
+                        ColorService.PENDING,  // data,
+                        // ColorService.RUNNING,   // system
+                        // ColorService.QUEUED,  // algorithm
+                        // ColorService.PENDING,  // data,
                     ],
-                    labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
+                    labels: ['User Running', 'User Queued', 'User Pending'],
                 }, {
                         data: [systemJobCountsChart, userJobCountsChart],
                         borderColor: '#fff',
@@ -261,5 +267,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         //     .subscribe(() => {
         //         this.getDateRangeSelected(data);
         //     });
+    }
+
+    getQueueData() {
+        const params = {
+            started: moment.utc().subtract(1, 'd').toISOString(),
+            ended: moment.utc().toISOString(),
+        };
+        this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
+            this.running = 0;
+            this.queued = 0;
+            this.pending = 0;
+            _.forEach(data, dataset => {
+                _.forEach(data.results, result => {
+                    this.running += result.running_count;
+                    this.queued += result.queued_count;
+                    this.pending += result.pennding_count;
+                });
+            });
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
+        });
     }
 }
