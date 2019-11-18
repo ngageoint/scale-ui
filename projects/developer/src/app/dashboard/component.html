@@ -123,25 +123,33 @@
             </p-tabView>
         </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
-            <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="historyChartTitle" [style]="{height: '600px'}">
-                    <!-- <dev-job-history></dev-job-history> -->
-                    <p-tabView>
-                            <p-tabPanel [header]="'fav'">
-                                    <dev-job-history></dev-job-history>
-                            </p-tabPanel>
-                            <p-tabPanel [header]="'testing'">
-                                    <dev-job-history></dev-job-history>
-                            </p-tabPanel>
-                    </p-tabView>
+            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
+                    <div *ngIf="favoriteJobTypes.length == 0">
+                        <dev-job-history></dev-job-history>
+                    </div>
                 </p-panel>
+            </div>
+            <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                    <p-panel [header]="historyChartTitle" [style]="{height: '500px'}">
+                        <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                                <p-tabPanel [header]="'All Jobs'">
+                                        <dev-job-history></dev-job-history>
+                                </p-tabPanel>
+                                <p-tabPanel *ngFor="let favJob of favoriteJobTypes" [header]="favJob.job_type.title">
+                                        <dev-job-history></dev-job-history>
+                                </p-tabPanel>
+                        </p-tabView>
+                    </p-panel>
+                </div>
+            <div class="charts" *ngIf="allJobTypes.length > 0">
                 <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                         <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
                 </p-panel>
+            </div>
                 <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity></dev-job-activity>
                 </p-panel> -->
-            </div>
         </div>
     </div>
 </div>

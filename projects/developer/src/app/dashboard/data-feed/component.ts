@@ -171,7 +171,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                 } else {
                     // this.selectedDataFeed = this.ingestFeeds[0];
                     this.chartData.ingest = this.ingestFeeds[0].value;
-                    console.log(this.selectedDataFeed);
                 }
             }
             this.fetchDataFeed(initDataFeeds);
@@ -188,8 +187,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         // };
 
         localStorage.setItem(this.FEED_DATA, JSON.stringify(this.selectedDataFeed));
-        console.log(this.selectedDataFeed);
-        console.log(this.dataFeeds);
         // this.selectedDataFeed = temp;
         this.fetchChartData(true);
     }
@@ -293,10 +290,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         };
         const storedDataFeed = localStorage.getItem(this.FEED_DATA);
         if (storedDataFeed) {
-            console.log(storedDataFeed);
-            this.selectedDataFeed = storedDataFeed;
+            this.selectedDataFeed =  JSON.parse(storedDataFeed);
         }
-        console.log(this.selectedDataFeed);
         this.fetchChartData(true);
         this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
             // don't duplicate data feeds in dropdown
