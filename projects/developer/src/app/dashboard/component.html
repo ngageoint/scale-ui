@@ -133,10 +133,12 @@
             <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                     <p-panel [header]="historyChartTitle" [style]="{height: '500px'}">
                         <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+
                                 <p-tabPanel [header]="'All Jobs'">
                                         <dev-job-history></dev-job-history>
                                 </p-tabPanel>
-                                <p-tabPanel *ngFor="let favJob of favoriteJobTypes" [header]="favJob.job_type.title">
+                                <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
+                                    {{ getUnicode(favJob.job_type.icon_code) | json }}
                                         <dev-job-history></dev-job-history>
                                 </p-tabPanel>
                         </p-tabView>

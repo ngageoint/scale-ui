@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     historyChartTitle: string;
     activityChartTitle: string;
     options: any;
+    totalChartData: any;
 
     constructor(
         private messageService: MessageService,
@@ -78,10 +79,45 @@ export class DashboardComponent implements OnInit, OnDestroy {
                   return dataset.labels[index] + ': ' + dataset.data[index];
                 }
               }
-            }
-        };
+            },
+            onClick: function(e) {
+                console.log(e);
+                this.totalChartData = {
+                    data: {
+                        labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
+                        datasets: [{
+                            data: [this.running, this.queued, this.pending],
+                            borderColor: '#fff',
+                            borderWidth: 1,
+                            backgroundColor: [
+                                ColorService.RUNNING,   // system
+                                ColorService.QUEUED,  // algorithm
+                                ColorService.PENDING,  // data,
+                                // ColorService.RUNNING,   // system
+                                // ColorService.QUEUED,  // algorithm
+                                // ColorService.PENDING,  // data,
+                            ],
+                            labels: ['User Running', 'User Queued', 'User Pending'],
+                        }
+                        , {
+                                data: [this.running, this.running],
+                                borderColor: '#fff',
+                                borderWidth: 1,
+                                backgroundColor: [
+                                    ColorService.RUNNING,
+                                    ColorService.COMPLETED
+                                ],
+                                labels: ['System', 'User'],
+                        }
+                    ]
+                    }
+                };
+        }
+    };
     }
-
+    getUnicode(code) {
+        return `&#x${code};`;
+    }
     unsubscribe() {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -131,7 +167,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const allJobCounts = _.flatten(_.map(jobData, 'job_counts'));
         const total = _.sum(_.map(allJobCounts, 'count'));
         const failed = sysErrors + algErrors + dataErrors;
-        const totalChartData = {
+       this.totalChartData = {
             data: {
                 labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
                 datasets: [{
@@ -147,16 +183,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         // ColorService.PENDING,  // data,
                     ],
                     labels: ['User Running', 'User Queued', 'User Pending'],
-                }, {
-                        data: [systemJobCountsChart, userJobCountsChart],
-                        borderColor: '#fff',
-                        borderWidth: 1,
-                        backgroundColor: [
-                            ColorService.RUNNING,
-                            ColorService.COMPLETED
-                        ],
-                        labels: ['System', 'User'],
-                }]
+                }
+                // , {
+                //         data: [systemJobCountsChart, userJobCountsChart],
+                //         borderColor: '#fff',
+                //         borderWidth: 1,
+                //         backgroundColor: [
+                //             ColorService.RUNNING,
+                //             ColorService.COMPLETED
+                //         ],
+                //         labels: ['System', 'User'],
+                // }
+            ]
                 }
         };
             // const totalChartData = {
@@ -175,10 +213,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
             total: total,
             failed: failed,
             // errorChartData: errorChartData,
-            totalChartData: totalChartData.data
+            totalChartData: this.totalChartData.data
         };
     }
 
+    addSecondDataset() {
+        console.log('trying');
+        this.totalChartData.data.dataset.push( {
+                        data: [this.running, this.queued],
+                        borderColor: '#fff',
+                        borderWidth: 1,
+                        backgroundColor: [
+                            ColorService.RUNNING,
+                            ColorService.COMPLETED
+                        ],
+                        labels: ['System', 'User'],
+        });
+        }
     private refreshAllJobTypes() {
         this.loadingJobTypes = true;
         this.unsubscribe();
@@ -282,7 +333,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 _.forEach(data.results, result => {
                     this.running += result.running_count;
                     this.queued += result.queued_count;
-                    this.pending += result.pennding_count;
+                    this.pending += result.pending_count;
                 });
             });
         }, err => {
