@@ -138,7 +138,7 @@
                                         <dev-job-history></dev-job-history>
                                 </p-tabPanel>
                                 <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
-                                    {{ getUnicode(favJob.job_type.icon_code) | json }}
+                                    <!-- {{ getUnicode(favJob.job_type.icon_code) | json }} -->
                                         <dev-job-history></dev-job-history>
                                 </p-tabPanel>
                         </p-tabView>
