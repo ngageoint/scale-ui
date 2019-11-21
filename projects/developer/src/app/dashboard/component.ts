@@ -80,39 +80,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
               }
             },
-            onClick: function(e) {
-                console.log(e);
-                this.totalChartData = {
-                    data: {
-                        labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
-                        datasets: [{
-                            data: [this.running, this.queued, this.pending],
-                            borderColor: '#fff',
-                            borderWidth: 1,
-                            backgroundColor: [
-                                ColorService.RUNNING,   // system
-                                ColorService.QUEUED,  // algorithm
-                                ColorService.PENDING,  // data,
-                                // ColorService.RUNNING,   // system
-                                // ColorService.QUEUED,  // algorithm
-                                // ColorService.PENDING,  // data,
-                            ],
-                            labels: ['User Running', 'User Queued', 'User Pending'],
-                        }
-                        , {
-                                data: [this.running, this.running],
-                                borderColor: '#fff',
-                                borderWidth: 1,
-                                backgroundColor: [
-                                    ColorService.RUNNING,
-                                    ColorService.COMPLETED
-                                ],
-                                labels: ['System', 'User'],
-                        }
-                    ]
-                    }
-                };
-        }
+        //     onClick: function(e) {
+        //         console.log(e);
+        //         this.totalChartData = {
+        //             data: {
+        //                 labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
+        //                 datasets: [{
+        //                     data: [this.running, this.queued, this.pending],
+        //                     borderColor: '#fff',
+        //                     borderWidth: 1,
+        //                     backgroundColor: [
+        //                         ColorService.RUNNING,   // system
+        //                         ColorService.QUEUED,  // algorithm
+        //                         ColorService.PENDING,  // data,
+        //                         // ColorService.RUNNING,   // system
+        //                         // ColorService.QUEUED,  // algorithm
+        //                         // ColorService.PENDING,  // data,
+        //                     ],
+        //                     labels: ['User Running', 'User Queued', 'User Pending'],
+        //                 }
+        //                 , {
+        //                         data: [this.running, this.running],
+        //                         borderColor: '#fff',
+        //                         borderWidth: 1,
+        //                         backgroundColor: [
+        //                             ColorService.RUNNING,
+        //                             ColorService.COMPLETED
+        //                         ],
+        //                         labels: ['System', 'User'],
+        //                 }
+        //             ]
+        //             }
+        //         };
+        // }
     };
     }
     getUnicode(code) {
@@ -264,18 +264,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
             this.favoriteJobTypesTooltip = this.favoriteJobTypes.length > 0 ?
                 `${this.totalFavs} Total` : null;
 
-            this.dataFeedChartTitle = 'Data Feed';
-            this.dataFeedChartTitle = favs.length > 0 ?
-                `${this.dataFeedChartTitle} (Favorites)` :
-                `${this.dataFeedChartTitle} (All Job Types)`;
-            this.historyChartTitle = 'Completed vs. Failed counts';
-            this.historyChartTitle = favs.length > 0 ?
-                `${this.historyChartTitle} (Favorites)` :
-                `${this.historyChartTitle} (All Job Types)`;
-            this.activityChartTitle = 'Job Activity';
-            this.activityChartTitle = favs.length > 0 ?
-                `${this.activityChartTitle} (Favorites)` :
-                `${this.activityChartTitle} (All Job Types)`;
+            // this.dataFeedChartTitle = 'Data Feed';
+            // this.dataFeedChartTitle = favs.length > 0 ?
+            //     `${this.dataFeedChartTitle} (Favorites)` :
+            //     `${this.dataFeedChartTitle} (All Job Types)`;
+            // this.historyChartTitle = 'Completed vs. Failed counts';
+            // this.historyChartTitle = favs.length > 0 ?
+            //     `${this.historyChartTitle} (Favorites)` :
+            //     `${this.historyChartTitle} (All Job Types)`;
+            // this.activityChartTitle = 'Job Activity';
+            // this.activityChartTitle = favs.length > 0 ?
+            //     `${this.activityChartTitle} (Favorites)` :
+            //     `${this.activityChartTitle} (All Job Types)`;
         }, err => {
             this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});

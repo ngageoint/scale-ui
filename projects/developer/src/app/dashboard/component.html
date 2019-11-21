@@ -1,11 +1,11 @@
 <div class="dashboard">
     <div class="p-grid">
         <div class="p-col-12">
-            <!-- <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
+            <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
                          (dateFilterSelected)="onDateFilterSelected($event)"
                          (liveRangeSelected)="onLiveRangeSelected($event)"
                          (updated)="onTemporalFilterUpdate($event)">
-            </dev-temporal-filter> -->
+            </dev-temporal-filter>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
                 <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
@@ -40,7 +40,7 @@
                 <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
                     <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
                 </p-panel> -->
-                <p-panel [header]="dataFeedChartTitle">
+                <p-panel header="Data Feed">
                     <dev-data-feed></dev-data-feed>
                 </p-panel>
             </div>
@@ -124,29 +124,40 @@
         </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
-                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '444px'}">
                     <div *ngIf="favoriteJobTypes.length == 0">
                         <dev-job-history></dev-job-history>
                     </div>
                 </p-panel>
             </div>
             <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
-                    <p-panel [header]="historyChartTitle" [style]="{height: '500px'}">
-                        <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-
-                                <p-tabPanel [header]="'All Jobs'">
-                                        <dev-job-history></dev-job-history>
-                                </p-tabPanel>
-                                <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
-                                    <!-- {{ getUnicode(favJob.job_type.icon_code) | json }} -->
-                                        <dev-job-history></dev-job-history>
-                                </p-tabPanel>
-                        </p-tabView>
-                    </p-panel>
-                </div>
-            <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
+                    <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                            <p-tabPanel [header]="'All Jobs'">
+                                    <dev-job-history></dev-job-history>
+                            </p-tabPanel>
+                            <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
+                                    <dev-job-history></dev-job-history>
+                            </p-tabPanel>
+                    </p-tabView>
+                </p-panel>
+            </div>
+            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <p-panel header="Job Activity" [style]="{height: '444px'}">
                         <dev-job-activity></dev-job-activity>
+                </p-panel>
+            </div>
+            <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                <p-panel header="Job Activity" [style]="{height: '500px'}">
+                    <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+
+                            <p-tabPanel [header]="'All Jobs'">
+                                <dev-job-activity></dev-job-activity>
+                            </p-tabPanel>
+                            <p-tabPanel header="Favorites">
+                                <dev-job-activity></dev-job-activity>
+                            </p-tabPanel>
+                    </p-tabView>
                 </p-panel>
             </div>
                 <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
