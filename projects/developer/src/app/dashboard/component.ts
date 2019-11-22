@@ -41,6 +41,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
     activityChartTitle: string;
     options: any;
     totalChartData: any;
+    graph = {
+        data: [{
+            type: 'sunburst',
+            labels: ['Running', 'Pending', 'Queued', 'Jobtype A', 'Jobtype B', 'Jobtype C', 'Jobtype D' ],
+            parents: ['', '', '', 'Running', 'Pending', 'Queued', 'Running'],
+            outsidetextfont: {size: 20, color: '#377eb8'},
+            leaf: {opacity: 0.5},
+            marker: {line: {width: 2}}
+          }]
+    };
+    layout = {
+        margin: {l: 0, r: 0, b: 0, t: 0},
+        width: 300,
+        height: 300,
+        sunburstcolorway: [
+            ColorService.RUNNING,   // system
+            ColorService.QUEUED,  // algorithm
+            ColorService.PENDING
+          ]
+    };
 
     constructor(
         private messageService: MessageService,
@@ -80,39 +100,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 }
               }
             },
-        //     onClick: function(e) {
-        //         console.log(e);
-        //         this.totalChartData = {
-        //             data: {
-        //                 labels: ['System System Errors', 'System Algroitm', 'System Data', 'User System', 'User Algorithm', 'User Data'],
-        //                 datasets: [{
-        //                     data: [this.running, this.queued, this.pending],
-        //                     borderColor: '#fff',
-        //                     borderWidth: 1,
-        //                     backgroundColor: [
-        //                         ColorService.RUNNING,   // system
-        //                         ColorService.QUEUED,  // algorithm
-        //                         ColorService.PENDING,  // data,
-        //                         // ColorService.RUNNING,   // system
-        //                         // ColorService.QUEUED,  // algorithm
-        //                         // ColorService.PENDING,  // data,
-        //                     ],
-        //                     labels: ['User Running', 'User Queued', 'User Pending'],
-        //                 }
-        //                 , {
-        //                         data: [this.running, this.running],
-        //                         borderColor: '#fff',
-        //                         borderWidth: 1,
-        //                         backgroundColor: [
-        //                             ColorService.RUNNING,
-        //                             ColorService.COMPLETED
-        //                         ],
-        //                         labels: ['System', 'User'],
-        //                 }
-        //             ]
-        //             }
-        //         };
-        // }
     };
     }
     getUnicode(code) {
@@ -134,7 +121,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private generateStats(jobData: any[]): any {
-        this.getQueueData();
         const systemJobs = _.filter(jobData, (systJob) => {
             return systJob.job_type.is_system === true;
         });
@@ -216,20 +202,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             totalChartData: this.totalChartData.data
         };
     }
-
-    addSecondDataset() {
-        console.log('trying');
-        this.totalChartData.data.dataset.push( {
-                        data: [this.running, this.queued],
-                        borderColor: '#fff',
-                        borderWidth: 1,
-                        backgroundColor: [
-                            ColorService.RUNNING,
-                            ColorService.COMPLETED
-                        ],
-                        labels: ['System', 'User'],
-        });
-        }
     private refreshAllJobTypes() {
         this.loadingJobTypes = true;
         this.unsubscribe();

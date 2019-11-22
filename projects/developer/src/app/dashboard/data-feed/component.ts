@@ -33,11 +33,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     dataFeeds: SelectItem[] = [];
     ingestFeeds: SelectItem[] = [];
     selectedDataFeed: any;
-    favorites = [];
     allJobs = [];
     feedSubscription: any;
     jobSubscription: any;
-    favoritesSubscription: any;
     jobParams: any;
     chartData: any;
 
@@ -293,10 +291,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
             this.selectedDataFeed =  JSON.parse(storedDataFeed);
         }
         this.fetchChartData(true);
-        this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
-            // don't duplicate data feeds in dropdown
-            this.fetchChartData(false);
-        });
     }
 
     ngAfterViewInit() {
@@ -307,8 +301,5 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
-        if (this.favoritesSubscription) {
-            this.favoritesSubscription.unsubscribe();
-        }
     }
 }

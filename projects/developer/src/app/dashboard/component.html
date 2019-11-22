@@ -8,69 +8,31 @@
             </dev-temporal-filter>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
-                <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
-                    <div class="dashboard__error-chart" *ngIf="dataFavs">
-                        <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
-                        <div class="scale-chart-container">
-                            <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                            <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
-                                     *ngIf="favoriteJobTypes.length > 0"></p-chart>
-                        </div>
-                        <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
+                <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                        <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
+                            <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                        </p-panel>
                     </div>
-                    <hr />
-                    <div class="dashboard__error-chart">
-                            <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">All Job Types</span></h3>
-                            <div class="scale-chart-container">
-                                    <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                                    <p-chart type="pie" [data]="totalDataAll" [options]="pieChartOptions"
-                                             *ngIf="allJobTypes.length > 0"></p-chart>
-                            </div>
-                        <!-- <div class="scale-chart-container">
-                            <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                            <p-chart type="pie" [data]="errorDataAll" [options]="pieChartOptions"
-                                     *ngIf="allJobTypes.length > 0"></p-chart>
-                        </div> -->
-                        <span *ngIf="allJobTypes.length === 0">No job types found.</span>
+                    <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                        <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
+                            <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                                <p-tabPanel [header]="'All Jobs'">
+                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                                </p-tabPanel>
+                                <p-tabPanel header="Favorites">
+                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </p-panel>
                     </div>
-                </p-panel>
             </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
-                    <dev-job-activity [started]="started" [ended]="ended"></dev-job-activity>
-                </p-panel> -->
                 <p-panel header="Data Feed">
                     <dev-data-feed></dev-data-feed>
                 </p-panel>
             </div>
         </div>
-        <!-- <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__favs-container">
-
-        </div> -->
-        <!-- <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
-            <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
-                <div class="dashboard__error-chart" *ngIf="dataFavs">
-                    <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
-                    <div class="scale-chart-container">
-                        <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                        <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
-                                 *ngIf="favoriteJobTypes.length > 0"></p-chart>
-                    </div>
-                    <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
-                </div>
-                <hr />
-                <div class="dashboard__error-chart">
-                    <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">All Job Types</span></h3>
-                    <div class="scale-chart-container">
-                        <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                        <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"
-                                 *ngIf="allJobTypes.length > 0"></p-chart>
-                    </div>
-                    <span *ngIf="allJobTypes.length === 0">No job types found.</span>
-                </div>
-            </p-panel>
-        </div> -->
     </div>
     <div class="p-grid">
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__all-container">
@@ -133,12 +95,12 @@
             <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                 <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
                     <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-                            <p-tabPanel [header]="'All Jobs'">
-                                    <dev-job-history></dev-job-history>
-                            </p-tabPanel>
-                            <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
-                                    <dev-job-history></dev-job-history>
-                            </p-tabPanel>
+                        <p-tabPanel [header]="'All Jobs'">
+                            <dev-job-history></dev-job-history>
+                        </p-tabPanel>
+                        <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
+                            <dev-job-history></dev-job-history>
+                        </p-tabPanel>
                     </p-tabView>
                 </p-panel>
             </div>
@@ -150,19 +112,15 @@
             <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                 <p-panel header="Job Activity" [style]="{height: '500px'}">
                     <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-
-                            <p-tabPanel [header]="'All Jobs'">
-                                <dev-job-activity></dev-job-activity>
-                            </p-tabPanel>
-                            <p-tabPanel header="Favorites">
-                                <dev-job-activity></dev-job-activity>
-                            </p-tabPanel>
+                        <p-tabPanel [header]="'All Jobs'">
+                            <dev-job-activity></dev-job-activity>
+                        </p-tabPanel>
+                        <p-tabPanel header="Favorites">
+                            <dev-job-activity></dev-job-activity>
+                        </p-tabPanel>
                     </p-tabView>
                 </p-panel>
             </div>
-                <!-- <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
-                    <dev-job-activity></dev-job-activity>
-                </p-panel> -->
         </div>
     </div>
 </div>

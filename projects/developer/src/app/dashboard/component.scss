@@ -49,6 +49,11 @@
         }
     }
 }
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
 .dashboard__item {
     background: var(--white);
