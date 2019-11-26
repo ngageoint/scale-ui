@@ -2,12 +2,14 @@ import { Component, OnDestroy, OnInit, Input, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
+import { JobsApiService } from '../processing/jobs/api.service';
 import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { QueueApiService } from '../common/services/queue/api.service';
 import { ColorService } from '../common/services/color.service';
 import * as moment from 'moment';
 import { environment } from '../../environments/environment';
+import value from '*.json';
 
 @Component({
     selector: 'dev-dashboard',
@@ -41,16 +43,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     activityChartTitle: string;
     options: any;
     totalChartData: any;
-    graph = {
-        data: [{
-            type: 'sunburst',
-            labels: ['Running', 'Pending', 'Queued', 'Jobtype A', 'Jobtype B', 'Jobtype C', 'Jobtype D' ],
-            parents: ['', '', '', 'Running', 'Pending', 'Queued', 'Running'],
-            outsidetextfont: {size: 20, color: '#377eb8'},
-            leaf: {opacity: 0.5},
-            marker: {line: {width: 2}}
-          }]
-    };
+    graph: any;
     layout = {
         margin: {l: 0, r: 0, b: 0, t: 0},
         width: 300,
@@ -64,6 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     constructor(
         private messageService: MessageService,
+        private jobsApiService: JobsApiService,
         private jobTypesApiService: JobTypesApiService,
         private jobsService: DashboardJobsService,
         private queueApiService: QueueApiService
@@ -124,6 +118,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const systemJobs = _.filter(jobData, (systJob) => {
             return systJob.job_type.is_system === true;
         });
+        this.getQueueData();
 
         const systemJobCounts = _.flatten(_.map(systemJobs, 'job_counts'));
         const systemSysErrors = _.sum(_.map(_.filter(systemJobCounts, (jobCount) => {
@@ -207,6 +202,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.unsubscribe();
         const params = {
             is_active: true,
+            status: ['RUNNING', 'PENDING', 'QUEUED']
         };
         this.subscription = this.jobTypesApiService.getJobTypeStatus(true, params).subscribe(data => {
             this.allJobTypes = _.orderBy(data.results, ['job_type.title', 'job_type.version'], ['asc', 'asc']);
@@ -220,7 +216,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             });
             this.favoriteJobTypes = favs;
             this.loadingJobTypes = false;
-
             const totalJobStats = this.generateStats(data.results);
             this.totalAll = totalJobStats.total;
             this.failedAll = totalJobStats.failed;
@@ -235,22 +230,78 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 `${this.totalAll} Total` : null;
             this.favoriteJobTypesTooltip = this.favoriteJobTypes.length > 0 ?
                 `${this.totalFavs} Total` : null;
-
-            // this.dataFeedChartTitle = 'Data Feed';
-            // this.dataFeedChartTitle = favs.length > 0 ?
-            //     `${this.dataFeedChartTitle} (Favorites)` :
-            //     `${this.dataFeedChartTitle} (All Job Types)`;
-            // this.historyChartTitle = 'Completed vs. Failed counts';
-            // this.historyChartTitle = favs.length > 0 ?
-            //     `${this.historyChartTitle} (Favorites)` :
-            //     `${this.historyChartTitle} (All Job Types)`;
-            // this.activityChartTitle = 'Job Activity';
-            // this.activityChartTitle = favs.length > 0 ?
-            //     `${this.activityChartTitle} (Favorites)` :
-            //     `${this.activityChartTitle} (All Job Types)`;
         }, err => {
             this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});
+        });
+
+        this.subscription = this.jobsApiService.getJobs(params).subscribe(data => {
+
+            const runningJobs = _.filter(data.results, function (r) {
+               return r.status === 'RUNNING';
+            });
+            const pendingJobs = _.filter(data.results, function (r) {
+                return r.status === 'PENDING';
+             });
+             const queuedJobs = _.filter(data.results, function (r) {
+                return r.status === 'QUEUED';
+             });
+
+            this.getQueueData();
+            const labels = [];
+            const parents = [];
+            const values = [];
+            labels.push('Running');
+            labels.push('Queued');
+            labels.push('Pending');
+            parents.push('');
+            parents.push('');
+            parents.push('');
+            values.push(this.running);
+            values.push(this.queued);
+            values.push(this.pending);
+            _.forEach(queuedJobs, job => {
+                const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
+                if ( index > 0) {
+                    values[index] = values[index]++;
+                } else {
+                    labels.push(job.job_type.title);
+                    parents.push('Queued');
+                    values.push(1);
+                }
+            });
+            _.forEach(runningJobs, job => {
+                const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
+                if ( index > 0) {
+                    values[index] = values[index]++;
+                } else {
+                    labels.push(job.job_type.title);
+                    parents.push('running');
+                    values.push(1);
+                }
+            });
+            _.forEach(pendingJobs, job => {
+                const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
+                if ( index > 0) {
+                    values[index] = values[index]++;
+                } else {
+                    labels.push(job.job_type.title);
+                    parents.push('Pending');
+                    values.push(1);
+                }
+            });
+
+            this.graph = {
+                data: [{
+                    type: 'sunburst',
+                    labels: labels,
+                    parents: parents,
+                    // values: values,
+                    outsidetextfont: {size: 20, color: '#377eb8'},
+                    leaf: {opacity: 0.5},
+                    marker: {line: {width: 2}}
+                  }]
+            };
         });
     }
 
@@ -294,19 +345,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     getQueueData() {
         const params = {
-            started: moment.utc().subtract(1, 'd').toISOString(),
+            started: moment.utc().subtract(1, 'h').toISOString(),
             ended: moment.utc().toISOString(),
         };
         this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
             this.running = 0;
             this.queued = 0;
             this.pending = 0;
-            _.forEach(data, dataset => {
-                _.forEach(data.results, result => {
-                    this.running += result.running_count;
-                    this.queued += result.queued_count;
-                    this.pending += result.pending_count;
-                });
+
+            _.forEach(data.results, result => {
+                this.running = result.running_count;
+                this.queued = result.queued_count;
+                this.pending = result.pending_count;
             });
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
