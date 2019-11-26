@@ -20,7 +20,7 @@
                                     <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
                                 </p-tabPanel>
                                 <p-tabPanel header="Favorites">
-                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                                    <!-- <plotly-plot class="centered" [data]="graphFav.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot> -->
                                 </p-tabPanel>
                             </p-tabView>
                         </p-panel>
@@ -99,7 +99,7 @@
                             <dev-job-history></dev-job-history>
                         </p-tabPanel>
                         <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
-                            <dev-job-history></dev-job-history>
+                            <dev-job-history [favorite]="favJob"></dev-job-history>
                         </p-tabPanel>
                     </p-tabView>
                 </p-panel>

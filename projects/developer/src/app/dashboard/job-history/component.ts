@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -8,6 +8,7 @@ import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
 import { UIChart } from 'primeng/primeng';
+import { identifierModuleUrl } from '@angular/compiler';
 
 @Component({
     selector: 'dev-job-history',
@@ -15,6 +16,7 @@ import { UIChart } from 'primeng/primeng';
     styleUrls: ['./component.scss']
 })
 export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
+    @Input() favorite: any;
     @ViewChild('chart') chart: UIChart;
     chartLoading: boolean;
     data: any;
@@ -31,28 +33,41 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         private metricsApiService: MetricsApiService
     ) {}
 
-    private updateChart() {
+    private updateChart(favorite?: any) {
+        console.log(this.favorite)
         this.chartLoading = true;
-        this.favorites = this.jobsService.getFavorites();
         this.allJobs = this.jobsService.getAllJobs();
-        const choiceIds = this.favorites.length > 0 ?
-            _.map(this.favorites, 'id') :
-            [];
+        if (favorite) {
+            this.params = {
+                column: ['completed_count', 'failed_count'],
+                colors: [
+                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
+                    { column: 'failed_count', color: ColorService.ERROR }
+                ],
+                dataType: 'job-types',
+                started: moment.utc().subtract(10, 'd').toISOString(),
+                ended: moment.utc().toISOString(),
+                group: ['overview', 'overview'],
+                page: 1,
+                page_size: null,
+                id: favorite.job_type.id
+            };
+        } else {
+            this.params = {
+                column: ['completed_count', 'failed_count'],
+                colors: [
+                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
+                    { column: 'failed_count', color: ColorService.ERROR }
+                ],
+                dataType: 'job-types',
+                started: moment.utc().subtract(10, 'd').toISOString(),
+                ended: moment.utc().toISOString(),
+                group: ['overview', 'overview'],
+                page: 1,
+                page_size: null
+            };
 
-        this.params = {
-            choice_id: choiceIds,
-            column: ['completed_count', 'failed_count'],
-            colors: [
-                { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
-                { column: 'failed_count', color: ColorService.ERROR }
-            ],
-            dataType: 'job-types',
-            started: moment.utc().subtract(10, 'd').toISOString(),
-            ended: moment.utc().toISOString(),
-            group: ['overview', 'overview'],
-            page: 1,
-            page_size: null
-        };
+        }
         const yAxes = [{
             id: 'yAxis1',
             position: 'left',
@@ -64,9 +79,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         }];
         this.metricsApiService.getPlotData(this.params).subscribe(data => {
             this.chartLoading = false;
-            const filters = this.favorites.length > 0 ?
-                this.favorites :
-                [];
+            const filters = [];
             const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', false);
             chartData.labels = _.map(chartData.labels, label => {
                 return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
@@ -120,10 +133,11 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnInit() {
         this.chartLoading = true;
-        this.updateChart();
-        this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
+        if (this.favorite) {
+            this.updateChart(this.favorite);
+        } else {
             this.updateChart();
-        });
+        }
     }
 
     ngAfterViewInit() {

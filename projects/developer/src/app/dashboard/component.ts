@@ -70,31 +70,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
         ];
         this.allJobTypes = [];
         this.favoriteJobTypes = [];
-        this.pieChartOptions = {
-            rotation: 0.5 * Math.PI, // start from bottom
-            cutoutPercentage: 0,
-            maintainAspectRatio: false,
-            legend: {
-                display: false,
-            },
-            plugins: {
-                datalabels: false
-            },
-            elements: {
-                arc: {
-                    borderWidth: 0
-                }
-            },
-            tooltips: {
-                callbacks: {
-                  label: function(tooltipItem, data) {
-                    const dataset = data.datasets[tooltipItem.datasetIndex];
-                  const index = tooltipItem.index;
-                  return dataset.labels[index] + ': ' + dataset.data[index];
-                }
-              }
-            },
-    };
+    //     this.pieChartOptions = {
+    //         rotation: 0.5 * Math.PI, // start from bottom
+    //         cutoutPercentage: 0,
+    //         maintainAspectRatio: false,
+    //         legend: {
+    //             display: false,
+    //         },
+    //         plugins: {
+    //             datalabels: false
+    //         },
+    //         elements: {
+    //             arc: {
+    //                 borderWidth: 0
+    //             }
+    //         },
+    //         tooltips: {
+    //             callbacks: {
+    //               label: function(tooltipItem, data) {
+    //                 const dataset = data.datasets[tooltipItem.datasetIndex];
+    //               const index = tooltipItem.index;
+    //               return dataset.labels[index] + ': ' + dataset.data[index];
+    //             }
+    //           }
+    //         },
+    // };
     }
     getUnicode(code) {
         return `&#x${code};`;
@@ -260,6 +260,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
             values.push(this.running);
             values.push(this.queued);
             values.push(this.pending);
+            _.forEach(runningJobs, job => {
+                const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
+                if ( index > 0) {
+                    values[index] = values[index]++;
+                } else {
+                    labels.push(job.job_type.title);
+                    parents.push('Running');
+                    values.push(1);
+                }
+            });
             _.forEach(queuedJobs, job => {
                 const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
                 if ( index > 0) {
@@ -267,16 +277,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 } else {
                     labels.push(job.job_type.title);
                     parents.push('Queued');
-                    values.push(1);
-                }
-            });
-            _.forEach(runningJobs, job => {
-                const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-                if ( index > 0) {
-                    values[index] = values[index]++;
-                } else {
-                    labels.push(job.job_type.title);
-                    parents.push('running');
                     values.push(1);
                 }
             });
