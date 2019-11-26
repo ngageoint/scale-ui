@@ -28,6 +28,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     @Input() datatableOptions: JobsDatatable;
     @Output() datatableChange: EventEmitter<JobsDatatable> = new EventEmitter<JobsDatatable>();
     datatableLoading: boolean;
+    apiLoading: boolean;
     columns = [
         { field: 'job_type', header: 'Job Type' },
         { field: 'recipe', header: 'Recipe' },
@@ -85,7 +86,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    loading = true;
     liveRange: number;
 
     constructor(
@@ -108,8 +108,10 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.datatableLoading = true;
         }
 
+        this.apiLoading = true;
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.count = data.count;
             _.forEach(data.results, result => {
                 const job = _.find(this.selectedRows, { data: { id: result.id } });
@@ -118,6 +120,7 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.jobs = Job.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
         });
     }
