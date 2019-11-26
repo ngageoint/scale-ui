@@ -24,7 +24,8 @@
     <div class="temporal-filter__date-filter-dropdown">
         <div class="ui-inputgroup">
             <label class="ui-inputgroup-addon" for="date-range-live">
-                <i class="fa fa-circle live-range-icon" [ngClass]="{'live-range-active': isLiveMode, 'live-range-inactive': !isLiveMode}"
+                <i class="fa live-range-icon"
+                   [ngClass]="liveRangeIconClass"
                    [pTooltip]="isLiveMode ? 'Refreshing every 10 seconds' : 'No live filter applied'" tooltipPosition="bottom"></i>
                 Live range
             </label>

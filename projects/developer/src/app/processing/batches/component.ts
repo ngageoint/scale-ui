@@ -29,6 +29,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
     selectedBatch: any;
     selectedRows: any;
     datatableLoading: boolean;
+    apiLoading: boolean;
     datatableOptions: BatchesDatatable;
     columns = [
         { field: 'title', header: 'Title' },
@@ -69,8 +70,10 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.datatableLoading = true;
         }
 
+        this.apiLoading = true;
         this.subscription = this.batchesApiService.getBatches(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.count = data.count;
             _.forEach(data.results, result => {
                 const batch = _.find(this.selectedRows, { data: { id: result.id } });
@@ -79,6 +82,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.batches = Batch.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
+            this.apiLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving batches', detail: err.statusText});
         });
     }
