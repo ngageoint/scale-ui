@@ -99,6 +99,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         // normal date filter was applied, turn off live mode
         this.liveRange = null;
         this.liveRangeStorage.remove();
+        this.unsubscribe();
 
         // send out the converted date strings
         this.dateFilterSelected.emit({
@@ -112,12 +113,11 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         this.startedStorage.set(this.utcStartDate.toISOString());
         this.endedStorage.set(this.utcEndDate.toISOString());
 
-        // make call to emit out the update hook
-        this.update();
-
-        if (this.started > this.ended) {
-            // TODO validate
+        if (this.startDate >= this.endDate) {
             this.messageService.add({severity: 'error', summary: 'Error querying range', detail: 'Provided FROM date is before TO date'});
+        } else {
+            // make call to emit out the update hook
+            this.update();
         }
     }
 
