@@ -179,13 +179,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     onDataFeedSelect() {
-        // this.selectedDataFeed = {
-        //     label: this.selectedDataFeed.strike.title,
-        //     value: this.selectedDataFeed
-        // };
-
         localStorage.setItem(this.FEED_DATA, JSON.stringify(this.selectedDataFeed));
-        // this.selectedDataFeed = temp;
         this.fetchChartData(true);
     }
 
@@ -213,7 +207,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                         }
                     },
                     ticks: {
-                        callback: (value, index, values) => {
+                        callback: (index, values) => {
                             if (!values[index]) {
                                 return;
                             }

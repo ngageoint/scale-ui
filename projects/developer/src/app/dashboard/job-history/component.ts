@@ -34,7 +34,6 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     ) {}
 
     private updateChart(favorite?: any) {
-        console.log(this.favorite)
         this.chartLoading = true;
         this.allJobs = this.jobsService.getAllJobs();
         if (favorite) {
@@ -79,8 +78,14 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         }];
         this.metricsApiService.getPlotData(this.params).subscribe(data => {
             this.chartLoading = false;
-            const filters = [];
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', false);
+            const filters = '';
+            let title = '';
+            if (favorite) {
+                title = 'for ' + favorite.job_type.title;
+            } else {
+                title = '';
+            }
+            const chartData = this.chartService.formatPlotResults(data, this.params, filters, title, false);
             chartData.labels = _.map(chartData.labels, label => {
                 return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
             });
