@@ -224,28 +224,25 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
                     },
                     ticks: {
                         suggestedMin: 0,
-                        // beginAtZero: true,
+                        beginAtZero: true,
                         // callback: (label, index, labels) => {
                         //     return DataService.calculateFileSizeFromBytes(label, 0);
                         // }
                     }
+                }],
+                tooltips: {
+                    enabled: true,
+                    mode: 'single',
+                    callbacks: {
+                        label: function(tooltipItems, data) {
+                           const multistringText = [tooltipItems.yLabel];
+                               multistringText.push('Another Item');
+                               multistringText.push(tooltipItems.index + 1);
+                               multistringText.push('One more Item');
+                            return multistringText;
+                        }
+                    }
                 }
-                // , {
-                //     id: 'yAxis1',
-                //     position: 'right',
-                //     gridLines: {
-                //         drawOnChartArea: false
-                //     },
-                //     stacked: true,
-                //     ticks: {
-                //         suggestedMin: 0
-                //     },
-                //     scaleLabel: {
-                //         display: true,
-                //         labelString: 'File Size'
-                //     }
-                // }
-            ]
             },
             plugins: {
                 datalabels: false
