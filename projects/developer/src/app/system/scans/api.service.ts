@@ -93,6 +93,8 @@ export class ScansApiService {
             );
     }
 
+    // I think this might need to change to returning a Promise instead of observable
+    // in order for it to not try and navigate to /scans/cancel/{id}
     cancelScan(id: number, scan: any): Observable<any> {
         const cleanScan = Scan.cleanScan(scan);
         return this.http.post<any>(`${this.apiPrefix}/scans/cancel/${id}/`, cleanScan)

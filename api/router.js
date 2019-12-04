@@ -47,6 +47,7 @@ var scans = require('./handlers/scans');
 var scanDetails = require('./handlers/scanDetails');
 var scanCreate = require('./handlers/scanCreate');
 var scanEdit = require('./handlers/scanEdit');
+var scanCancel = require('./handlers/scanCancel');
 var scanValidate = require('./handlers/scanValidate');
 var errors = require('./handlers/errors');
 var recipeTypesValidate = require('./handlers/recipeTypesValidate');
@@ -394,6 +395,12 @@ module.exports = {
             method: 'PATCH',
             path: '/mocks/' + apiVersion + '/scans/${id}/',
             handler: scanEdit
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/scans/cancel/${id}',
+            handler: scanCancel
         });
 
         server.route({
