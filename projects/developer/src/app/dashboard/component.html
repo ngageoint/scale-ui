@@ -1,11 +1,11 @@
 <div class="dashboard">
     <div class="p-grid">
         <div class="p-col-12">
-            <!-- <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
-                         (dateFilterSelected)="onDateFilterSelected($event)"
-                         (liveRangeSelected)="onLiveRangeSelected($event)"
-                         (updated)="onTemporalFilterUpdate($event)">
-            </dev-temporal-filter> -->
+            <dev-temporal-filter
+                localStorageKey="dashboard-filter"
+                [liveRangeOnly]="true"
+                (updated)="onTemporalFilterUpdate($event)">
+            </dev-temporal-filter>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
                 <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">

@@ -50,8 +50,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         width: 275,
         height: 275,
         sunburstcolorway: [
-            ColorService.RUNNING,   // system
-            ColorService.QUEUED,  // algorithm
+            ColorService.RUNNING,
+            ColorService.QUEUED,
             ColorService.PENDING
           ]
     };
@@ -111,19 +111,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 };
                 this.subscription = this.jobsApiService.getJobs(chartParams).subscribe(chartData => {
                     if (this.favoriteJobTypes) {
-                        console.log(this.favoriteJobTypes)
-                        const favJobs = []
+                        console.log(this.favoriteJobTypes);
+                        let favJobs = [];
                         _.forEach(this.favoriteJobTypes, favoriteJob => {
                             _.forEach(chartData.results, job => {
-                                if (favoriteJob.job_type.id === job.id) {
+                                if (favoriteJob.job_type.id === job.job_type.id) {
                                     favJobs.push(job);
                                 }
                             });
                         });
-                        console.log(favJobs)
+                        favJobs = _.uniqBy(favJobs, function (e) {
+                            return e.id;
+                          });
+                        console.log(favJobs);
                         this.graphFav = this.createSunburstChart(favJobs);
                     }
-                    this.graph = this.createSunburstChart(chartData);
+                    this.graph = this.createSunburstChart(chartData.results);
                 });
         },  err => {
             this.loadingJobTypes = false;
@@ -132,13 +135,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     createSunburstChart(data) {
-        const runningJobs = _.filter(data.results, function (r) {
+        console.log(data);
+        const runningJobs = _.filter(data, function (r) {
             return r.status === 'RUNNING';
          });
-         const pendingJobs = _.filter(data.results, function (r) {
+         const pendingJobs = _.filter(data, function (r) {
              return r.status === 'PENDING';
           });
-          const queuedJobs = _.filter(data.results, function (r) {
+          const queuedJobs = _.filter(data, function (r) {
              return r.status === 'QUEUED';
           });
 
@@ -217,5 +221,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
         });
+    }
+    onTemporalFilterUpdate(data: {start: string, end: string}): void {
+        // this will be fired every 10 seconds with a start/end datetime
     }
 }
