@@ -96,7 +96,7 @@
                 <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
                     <p-tabView *ngIf="favoriteJobTypes.length > 0" >
                         <p-tabPanel [header]="'All Jobs'">
-                            <dev-job-history></dev-job-history>
+                            <dev-job-history [favorite]="''"></dev-job-history>
                         </p-tabPanel>
                         <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
                             <dev-job-history [favorite]="favJob"></dev-job-history>

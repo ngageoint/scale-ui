@@ -8,7 +8,6 @@ import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
 import { UIChart } from 'primeng/primeng';
-import { identifierModuleUrl } from '@angular/compiler';
 
 @Component({
     selector: 'dev-job-history',
@@ -36,23 +35,11 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     private updateChart(favorite?: any) {
         this.chartLoading = true;
         this.allJobs = this.jobsService.getAllJobs();
-        if (favorite) {
+        const choiceIds = this.favorite ?
+            this.favorite.job_type.id :
+            [];
             this.params = {
-                column: ['completed_count', 'failed_count'],
-                colors: [
-                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
-                    { column: 'failed_count', color: ColorService.ERROR }
-                ],
-                dataType: 'job-types',
-                started: moment.utc().subtract(10, 'd').toISOString(),
-                ended: moment.utc().toISOString(),
-                group: ['overview', 'overview'],
-                page: 1,
-                page_size: null,
-                id: favorite.job_type.id
-            };
-        } else {
-            this.params = {
+                choice_id: choiceIds,
                 column: ['completed_count', 'failed_count'],
                 colors: [
                     { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
@@ -66,7 +53,6 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
                 page_size: null
             };
 
-        }
         const yAxes = [{
             id: 'yAxis1',
             position: 'left',
@@ -78,10 +64,11 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         }];
         this.metricsApiService.getPlotData(this.params).subscribe(data => {
             this.chartLoading = false;
-            const filters = '';
+            const filters = [];
             let title = '';
             if (favorite) {
                 title = 'for ' + favorite.job_type.title;
+                filters[0] = favorite.job_type;
             } else {
                 title = '';
             }

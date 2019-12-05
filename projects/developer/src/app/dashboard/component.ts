@@ -111,7 +111,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 };
                 this.subscription = this.jobsApiService.getJobs(chartParams).subscribe(chartData => {
                     if (this.favoriteJobTypes) {
-                        console.log(this.favoriteJobTypes);
                         let favJobs = [];
                         _.forEach(this.favoriteJobTypes, favoriteJob => {
                             _.forEach(chartData.results, job => {
@@ -123,7 +122,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         favJobs = _.uniqBy(favJobs, function (e) {
                             return e.id;
                           });
-                        console.log(favJobs);
                         this.graphFav = this.createSunburstChart(favJobs);
                     }
                     this.graph = this.createSunburstChart(chartData.results);
@@ -135,7 +133,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     createSunburstChart(data) {
-        console.log(data);
         const runningJobs = _.filter(data, function (r) {
             return r.status === 'RUNNING';
          });
