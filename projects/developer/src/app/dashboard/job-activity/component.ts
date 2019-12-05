@@ -12,13 +12,13 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
     styleUrls: ['./component.scss']
 })
 export class JobActivityComponent implements OnInit, OnDestroy {
+    @Input() favorites = [];
     started: any;
     ended: any;
     chartLoading: boolean;
     jobTypes: any;
     params: any;
     subscription: any;
-    favorites = [];
     allJobs = [];
     constructor(
         private messageService: MessageService,
@@ -27,13 +27,12 @@ export class JobActivityComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        this.favorites = this.jobsService.getFavorites();
         this.allJobs = this.jobsService.getAllJobs();
         // only show active job types in the load chart
         let activeJobTypes = [];
         if (this.favorites.length > 0) {
             activeJobTypes = _.filter(this.favorites, d => {
-                const jobType = _.find(this.jobTypes, { name: d.name, version: d.version });
+                const jobType = _.find(this.jobTypes, { name: d.job_type.name, version: d.job_type.version });
                 return typeof jobType !== 'undefined';
             });
         } else {
@@ -45,7 +44,7 @@ export class JobActivityComponent implements OnInit, OnDestroy {
         this.params = {
             started: this.started,
             ended: this.ended,
-            job_type_id: this.favorites.length > 0 ? _.map(activeJobTypes, 'id') : _.map(activeJobTypes, 'job_type.id')
+            job_type_id: _.map(activeJobTypes, 'job_type.id')
         };
         this.chartLoading = false;
     }
