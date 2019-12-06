@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -11,7 +11,7 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobActivityComponent implements OnInit, OnDestroy {
+export class JobActivityComponent implements OnInit, OnDestroy, OnChanges {
     @Input() favorites = [];
     @Input() started;
     @Input() ended;
@@ -77,5 +77,9 @@ export class JobActivityComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.updateData();
     }
 }

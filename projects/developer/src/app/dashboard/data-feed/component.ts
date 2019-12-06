@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { UIChart } from 'primeng/primeng';
@@ -6,20 +6,15 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { IngestApiService } from '../../data/ingest/api.service';
-import { DashboardJobsService } from '../jobs.service';
-import { ChartService } from '../../data/metrics/chart.service';
-import { MetricsApiService } from '../../data/metrics/api.service';
-import { DataService } from '../../common/services/data.service';
 import { ColorService } from '../../common/services/color.service';
-import { JobsApiService } from '../../processing/jobs/api.service';
-import { FilesApiService } from '../../common/services/files/api.service';
+
 
 @Component({
     selector: 'dev-data-feed',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
+export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     @Input() started;
     @Input() ended;
     @ViewChild('chart') chart: UIChart;
@@ -274,5 +269,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        this.fetchChartData(true);
     }
 }

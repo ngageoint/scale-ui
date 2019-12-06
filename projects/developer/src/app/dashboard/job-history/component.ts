@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges, SimpleChanges, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -14,7 +14,7 @@ import { UIChart } from 'primeng/primeng';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
+export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     @Input() favorite: any;
     @Input() started;
     @Input() ended;
@@ -142,5 +142,13 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (this.favorite) {
+            this.updateChart(this.favorite);
+        } else {
+            this.updateChart();
+        }
     }
 }

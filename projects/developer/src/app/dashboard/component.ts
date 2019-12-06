@@ -220,6 +220,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
         this.started = data.start;
         this.ended = data.end;
-        console.log(this.started);
+        this.refreshAllJobTypes();
     }
 }
