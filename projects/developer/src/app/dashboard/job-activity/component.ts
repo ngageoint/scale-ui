@@ -13,8 +13,8 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
 })
 export class JobActivityComponent implements OnInit, OnDestroy {
     @Input() favorites = [];
-    started: any;
-    ended: any;
+    @Input() started;
+    @Input() ended;
     chartLoading: boolean;
     jobTypes: any;
     params: any;
@@ -41,6 +41,7 @@ export class JobActivityComponent implements OnInit, OnDestroy {
                 return typeof jobType !== 'undefined';
             });
         }
+        console.log(this.started);
         this.params = {
             started: this.started,
             ended: this.ended,

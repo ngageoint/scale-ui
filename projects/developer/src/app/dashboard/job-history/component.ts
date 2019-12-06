@@ -16,6 +16,8 @@ import { UIChart } from 'primeng/primeng';
 })
 export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
     @Input() favorite: any;
+    @Input() started;
+    @Input() ended;
     @ViewChild('chart') chart: UIChart;
     chartLoading: boolean;
     data: any;
@@ -46,8 +48,8 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
                     { column: 'failed_count', color: ColorService.ERROR }
                 ],
                 dataType: 'job-types',
-                started: moment.utc().subtract(10, 'd').toISOString(),
-                ended: moment.utc().toISOString(),
+                started: this.started,
+                ended: this.ended,
                 group: ['overview', 'overview'],
                 page: 1,
                 page_size: null

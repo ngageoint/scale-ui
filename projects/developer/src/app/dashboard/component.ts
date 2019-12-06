@@ -8,8 +8,6 @@ import { DashboardJobsService } from './jobs.service';
 import { QueueApiService } from '../common/services/queue/api.service';
 import { ColorService } from '../common/services/color.service';
 import * as moment from 'moment';
-import { environment } from '../../environments/environment';
-import value from '*.json';
 
 @Component({
     selector: 'dev-dashboard',
@@ -17,8 +15,8 @@ import value from '*.json';
     styleUrls: ['./component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-    @Output() started: any;
-    @Output() ended: any;
+    started: any;
+    ended: any;
     loadingJobTypes: boolean;
     columnsFavs: any[];
     columnsAll: any[];
@@ -220,6 +218,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
-        // this will be fired every 10 seconds with a start/end datetime
+        this.started = data.start;
+        this.ended = data.end;
+        console.log(this.started);
     }
 }
