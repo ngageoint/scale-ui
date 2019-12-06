@@ -29,7 +29,7 @@
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
                 <p-panel header="Data Feed">
-                    <dev-data-feed></dev-data-feed>
+                    <dev-data-feed [started]="started" [ended]="ended" ></dev-data-feed>
                 </p-panel>
             </div>
         </div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { UIChart } from 'primeng/primeng';
@@ -20,6 +20,8 @@ import { FilesApiService } from '../../common/services/files/api.service';
     styleUrls: ['./component.scss']
 })
 export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
+    @Input() started;
+    @Input() ended;
     @ViewChild('chart') chart: UIChart;
     chartLoading: boolean;
     feedParams: any;
@@ -43,12 +45,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
 
     constructor(
         private messageService: MessageService,
-        private ingestApiService: IngestApiService,
-        private jobsService: DashboardJobsService,
-        private chartService: ChartService,
-        private metricsApiService: MetricsApiService,
-        private jobsApiService: JobsApiService,
-        private filesApiService: FilesApiService
+        private ingestApiService: IngestApiService
     ) {
         this.feedDataset = {
             data: []
@@ -108,8 +105,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chartLoading = true;
         this.unsubscribe();
         this.feedParams = {
-            started: moment.utc().subtract(3, 'd').toISOString(),
-            ended: moment.utc().toISOString()
+            started: this.started,
+            ended: this.ended
         };
         this.feedSubscription = this.ingestApiService.getIngestStatus(this.feedParams, true).subscribe(data => {
             this.dataFeeds = [];
@@ -146,8 +143,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy {
         this.chartLoading = true;
         this.unsubscribe();
         this.feedParams = {
-            started: moment.utc().subtract(3, 'd').toISOString(),
-            ended: moment.utc().toISOString(),
+            started: this.started,
+            ended:  this.ended,
             use_ingest_time: true
         };
         this.feedSubscription = this.ingestApiService.getIngestStatus(this.feedParams, true).subscribe(data => {
