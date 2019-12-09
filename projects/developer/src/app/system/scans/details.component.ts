@@ -229,8 +229,11 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     }
 
     cancelScan(id, scan) {
-        this.scansApiService.cancelScan(id, scan);
-        this.messageService.add({severity: 'Success', summary: 'Scan Successfully Cancelled '});
+        this.scansApiService.cancelScan(id, scan).subscribe(data => {
+            this.messageService.add({severity: 'success', summary: 'Scan Successfully Cancelled '});
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error cancelling scan', detail: err.statusText});
+        });
      }
 
     getUnicode(code) {

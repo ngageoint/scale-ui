@@ -29,8 +29,8 @@
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <span class="ui-column-title">{{ col.header }}</span>
                 <div *ngSwitchCase="'name'">
-                    <span [pTooltip]="rowData.description">
-                        <a [routerLink]="getScanURL(rowData)">
+                    <span>
+                        <a [pTooltip]="rowData.description" [routerLink]="getScanURL(rowData)">
                             {{ rowData.name }}
                         </a>
                         <div *ngIf="rowData.job.status === 'RUNNING'" class="pull-right">

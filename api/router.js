@@ -399,7 +399,7 @@ module.exports = {
 
         server.route({
             method: 'POST',
-            path: '/mocks/' + apiVersion + '/scans/cancel/${id}',
+            path: '/mocks/' + apiVersion + '/scans/cancel/{id}/',
             handler: scanCancel
         });
 
