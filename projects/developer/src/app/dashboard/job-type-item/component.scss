@@ -44,6 +44,9 @@
             background: var(--grey-85);
             color: var(--black);
         }
+        &.fav {
+            color: var(--nova-blue);
+        }
     }
 }
 

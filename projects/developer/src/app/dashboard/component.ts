@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input, Output } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input, Output, } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -7,7 +7,6 @@ import { JobTypesApiService } from '../configuration/job-types/api.service';
 import { DashboardJobsService } from './jobs.service';
 import { QueueApiService } from '../common/services/queue/api.service';
 import { ColorService } from '../common/services/color.service';
-import * as moment from 'moment';
 
 @Component({
     selector: 'dev-dashboard',
@@ -49,8 +48,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         height: 275,
         sunburstcolorway: [
             ColorService.RUNNING,
-            ColorService.QUEUED,
-            ColorService.PENDING
+            ColorService.PENDING,
+            ColorService.QUEUED
           ]
     };
     dateRangeOptions = [
@@ -152,8 +151,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
          const parents = [];
          const values = [];
          labels.push('Running');
-         labels.push('Queued');
          labels.push('Pending');
+         labels.push('Queued');
          parents.push('');
          parents.push('');
          parents.push('');
@@ -170,16 +169,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                  values.push(1);
              }
          });
-         _.forEach(queuedJobs, job => {
-             const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-             if ( index > 0) {
-                 values[index] = values[index]++;
-             } else {
-                 labels.push(job.job_type.title);
-                 parents.push('Queued');
-                 values.push(1);
-             }
-         });
          _.forEach(pendingJobs, job => {
              const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
              if ( index > 0) {
@@ -190,6 +179,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
                  values.push(1);
              }
          });
+         _.forEach(queuedJobs, job => {
+            const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
+            if ( index > 0) {
+                values[index] = values[index]++;
+            } else {
+                labels.push(job.job_type.title);
+                parents.push('Queued');
+                values.push(1);
+            }
+        });
           const graph = {
             data: [{
                 type: 'sunburst',

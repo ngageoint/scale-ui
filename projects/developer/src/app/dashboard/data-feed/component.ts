@@ -159,7 +159,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                     // this.selectedDataFeed = ingestFeed ? ingestFeed : this.ingestFeeds[0];
                     this.chartData.ingest = ingestFeed ? ingestFeed.value : this.ingestFeeds[0].value;
                 } else {
-                    // this.selectedDataFeed = this.ingestFeeds[0];
+                    this.selectedDataFeed = this.ingestFeeds[0];
                     this.chartData.ingest = this.ingestFeeds[0].value;
                 }
             }
@@ -189,6 +189,10 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
             datasets: []
         };
         this.dataFeeds = [];
+        const storedDataFeed = localStorage.getItem(this.FEED_DATA);
+        if (storedDataFeed) {
+            this.selectedDataFeed =  JSON.parse(storedDataFeed);
+        }
         this.options = {
             scales: {
                 xAxes: [{
@@ -254,10 +258,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 }
             }
         };
-        const storedDataFeed = localStorage.getItem(this.FEED_DATA);
-        if (storedDataFeed) {
-            this.selectedDataFeed =  JSON.parse(storedDataFeed);
-        }
         this.fetchChartData(true);
     }
 

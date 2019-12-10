@@ -12,19 +12,19 @@
             </dev-temporal-filter>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
-                <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <div class="charts" *ngIf="graph && (favoriteJobTypes.length == 0)">
                         <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
                             <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
                         </p-panel>
                     </div>
-                    <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                    <div class="charts-tabbed" *ngIf="graph && favoriteJobTypes.length > 0">
                         <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
                             <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-                                <p-tabPanel [header]="'All Jobs'">
-                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
-                                </p-tabPanel>
                                 <p-tabPanel header="Favorites">
                                     <plotly-plot class="centered" [data]="graphFav.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                                </p-tabPanel>
+                                <p-tabPanel [header]="'All Jobs'">
+                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
                                 </p-tabPanel>
                             </p-tabView>
                         </p-panel>
@@ -65,7 +65,7 @@
                             </p-table>
                         </p-scrollPanel>
                     </p-tabPanel>
-                <p-tabPanel [header]="'Job Types (' + allJobTypes.length + ')'">
+                <p-tabPanel [header]="'All Job Types (' + allJobTypes.length + ')'">
                     <p-scrollPanel>
                         <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
                             <ng-template pTemplate="header" let-columns>
@@ -116,12 +116,13 @@
             <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                 <p-panel header="Job Activity" [style]="{height: '500px'}">
                     <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-                        <p-tabPanel [header]="'All Jobs'">
-                            <dev-job-activity [started]="started" [ended]="ended" ></dev-job-activity>
-                        </p-tabPanel>
                         <p-tabPanel header="Favorites">
                             <dev-job-activity [started]="started" [ended]="ended" [favorites]="favoriteJobTypes"></dev-job-activity>
                         </p-tabPanel>
+                        <p-tabPanel [header]="'All Jobs'">
+                            <dev-job-activity [started]="started" [ended]="ended" ></dev-job-activity>
+                        </p-tabPanel>
+                        
                     </p-tabView>
                 </p-panel>
             </div>
