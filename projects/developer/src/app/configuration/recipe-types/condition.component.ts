@@ -16,7 +16,7 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     @Input() conditions: RecipeTypeCondition[];
     @Output() save: EventEmitter<any> = new EventEmitter<any>();
     @Output() cancel: EventEmitter<any> = new EventEmitter<any>();
-    private condition = RecipeTypeCondition.transformer(this.editCondition);
+    private condition: RecipeTypeCondition;
     private oldCondition: RecipeTypeCondition;
     private subscriptions: Subscription[] = [];
 
@@ -119,6 +119,9 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        // create initial copy of editing condition passed in, data will be merged into this copy
+        this.condition = RecipeTypeCondition.transformer(this.editCondition) as RecipeTypeCondition;
+
         // create a copy of the passed in edit condition, if any
         // will create an empty condition if given null value
         this.oldCondition = RecipeTypeCondition.transformer(this.editCondition) as RecipeTypeCondition;
