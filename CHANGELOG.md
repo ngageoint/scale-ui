@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.12.0](https://github.com/ngageoint/scale-ui/compare/v0.11.1-rc1.0...v0.12.0) (2019-12-10)
+
+
+### Bug Fixes
+
+* **filters:** ensure live range stops updating after setting static value ([2c21925](https://github.com/ngageoint/scale-ui/commit/2c21925))
+* **recipes:** Ensure condition interface is consistent and not lost during edit ([#403](https://github.com/ngageoint/scale-ui/issues/403)) ([1963391](https://github.com/ngageoint/scale-ui/commit/1963391)), closes [#400](https://github.com/ngageoint/scale-ui/issues/400) [#401](https://github.com/ngageoint/scale-ui/issues/401)
+
+
+### Features
+
+* **dashboard:** initial version of new dashboard layout ([#405](https://github.com/ngageoint/scale-ui/issues/405)) ([f7351d1](https://github.com/ngageoint/scale-ui/commit/f7351d1))
+* **filters:** Allow using temporal filter in live range mode only ([#402](https://github.com/ngageoint/scale-ui/issues/402)) ([5dd321e](https://github.com/ngageoint/scale-ui/commit/5dd321e)), closes [#391](https://github.com/ngageoint/scale-ui/issues/391)
+* **scans:** Adding cancel scan button ([#406](https://github.com/ngageoint/scale-ui/issues/406)) ([664dc51](https://github.com/ngageoint/scale-ui/commit/664dc51))
+
+
+
 ### [0.11.1-rc1.0](https://github.com/ngageoint/scale-ui/compare/v0.11.0...v0.11.1-rc1.0) (2019-11-20)
 
 
