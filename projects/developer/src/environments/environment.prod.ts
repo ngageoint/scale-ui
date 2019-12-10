@@ -9,7 +9,6 @@ export const environment = {
     authEnabled: false,
     authSchemeType: '',
     authSchemeUrl: '',
-    authRedirectTimeout: 0,
     dateFormat: '',
     defaultTheme: '',
     documentation: '',

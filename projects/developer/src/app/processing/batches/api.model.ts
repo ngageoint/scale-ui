@@ -142,7 +142,6 @@ export class Batch {
             this.recipes_estimated > 0 ?
                 (this.recipes_total / this.recipes_estimated) * 100 :
                 0;
-        this.creation_progress = Math.round(this.creation_progress * 100) / 100;
         this.creation_progress_tooltip = this.is_creation_done ?
             `Completed: ${this.recipes_completed}, Total: ${this.recipes_total}` :
             `Total: ${this.recipes_total}, Estimated: ${this.recipes_estimated}`;

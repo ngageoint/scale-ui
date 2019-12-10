@@ -61,7 +61,12 @@ export class AppComponent implements OnInit {
                     this.isAuthenticated = true;
                 } else {
                     // attempt to authenticate
-                    if (environment.authSchemeType === 'form') {
+                    if (environment.authSchemeType === 'geoaxis') {
+                        // redirect to geoaxis login
+                        this.header = 'Authentication is Required';
+                        this.message = 'Redirecting to GEOAxIS...';
+                        window.location.href = `${environment.authSchemeUrl}http://127.0.0.1:8080`;
+                    } else if (environment.authSchemeType === 'form') {
                         // show login form
                         this.header = 'Authentication is Required';
                         this.message = 'Enter your username and password to continue.';
@@ -69,16 +74,20 @@ export class AppComponent implements OnInit {
                     } else {
                         // redirect
                         this.header = 'Authentication is Required';
-                        this.message = 'Redirecting...';
+                        this.message = 'Redirecting to login form...';
                         setTimeout(() => {
                             window.location.href = `${environment.authSchemeUrl}?next=${window.location.href}`;
-                        }, environment.authRedirectTimeout);
+                        }, 3000);
                     }
                 }
             }, err => {
                 this.loading = false;
                 console.log(err);
-                if (environment.authSchemeType === 'form') {
+                if (environment.authSchemeType === 'geoaxis') {
+                    this.header = 'Authentication is Required';
+                    this.message = 'Redirecting to GEOAxIS...';
+                    window.location.href = `${environment.authSchemeUrl}${window.location.href}`;
+                } else if (environment.authSchemeType === 'form') {
                     // GET call to retrieve CSRF cookie
                     this.profileService.getLogin().subscribe(data => {
                         console.log(data);
@@ -96,10 +105,10 @@ export class AppComponent implements OnInit {
                 } else {
                     // redirect
                     this.header = 'Authentication is Required';
-                    this.message = 'Redirecting...';
+                    this.message = 'Redirecting to login form...';
                     setTimeout(() => {
                         window.location.href = `${environment.authSchemeUrl}?next=${window.location.href}`;
-                    }, environment.authRedirectTimeout);
+                    }, 3000);
                 }
             });
         } else {

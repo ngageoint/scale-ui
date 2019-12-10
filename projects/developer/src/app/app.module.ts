@@ -5,15 +5,12 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
-import * as PlotlyJS from 'plotly.js/dist/plotly.js';
-import { PlotlyModule } from 'angular-plotly.js';
 
 // vendor
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { SeedImagesModule } from '@ngageoint/seed-images';
 import { UtcDatepickerModule } from 'angular-utc-datepicker';
-
 
 // Prime NG
 import {
@@ -93,8 +90,6 @@ const appInitializer = (appConfig: AppConfigService) => {
             });
     };
 };
-
-PlotlyModule.plotlyjs = PlotlyJS;
 
 @NgModule({
     declarations: [
@@ -183,7 +178,6 @@ PlotlyModule.plotlyjs = PlotlyJS;
         OverlayPanelModule,
         PaginatorModule,
         PanelModule,
-        PlotlyModule,
         ProgressBarModule,
         ProgressSpinnerModule,
         ReactiveFormsModule,

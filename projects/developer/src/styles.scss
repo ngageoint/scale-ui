@@ -542,17 +542,6 @@ $transparent-running: transparentize(#529D39, 0.65);
     color: var(--label-text-warning);
 }
 
-.txt-field-error {
-    .angular-utc-datepicker_input {
-        background-color: pink;
-    }
-}
-
-.txt-field-inactive {
-    .angular-utc-datepicker_input {
-        background-color: lightgrey;
-    }
-}
 
 
 ::ng-deep .ui-dialog {

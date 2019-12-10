@@ -1,10 +1,7 @@
 <h2><i class="fa fa-cubes"></i> Recipes</h2>
 <div class="recipes__header flexed space-between">
-    <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
-                         [loading]="apiLoading"
-                         (dateFilterSelected)="onDateFilterSelected($event)"
-                         (liveRangeSelected)="onLiveRangeSelected($event)"
-                         (updated)="onTemporalFilterUpdate($event)">
+    <dev-temporal-filter [started]="started" [ended]="ended" (dateFilterApply)="onDateFilterApply($event)"
+    (dateRangeSelected)="onDateRangeSelected($event)">
     </dev-temporal-filter>
 </div>
 <p-table [value]="recipes" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"

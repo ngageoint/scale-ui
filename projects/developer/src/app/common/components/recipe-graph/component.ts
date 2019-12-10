@@ -246,8 +246,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
                     id = key || _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
-                    const current_sub_recipe: any = _.find(this.recipeData.sub_recipe_types, {'name' : node.node_type.recipe_type_name});
-                    label = `${current_sub_recipe.title}`;
+                    label = `${node.node_type.recipe_type_name} rev. ${node.node_type.recipe_type_revision}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
                 } else if (node.node_type.node_type === 'condition') {
                     // if there was no name loaded (names aren't saved to the db yet), use the key from the recipe

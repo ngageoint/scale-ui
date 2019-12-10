@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -11,14 +11,12 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobActivityComponent implements OnInit, OnDestroy, OnChanges {
-    @Input() favorites = [];
-    @Input() started;
-    @Input() ended;
+export class JobActivityComponent implements OnInit, OnDestroy {
     chartLoading: boolean;
     jobTypes: any;
     params: any;
     subscription: any;
+    favorites = [];
     allJobs = [];
     constructor(
         private messageService: MessageService,
@@ -27,12 +25,13 @@ export class JobActivityComponent implements OnInit, OnDestroy, OnChanges {
     ) {}
 
     private updateData() {
+        this.favorites = this.jobsService.getFavorites();
         this.allJobs = this.jobsService.getAllJobs();
         // only show active job types in the load chart
         let activeJobTypes = [];
         if (this.favorites.length > 0) {
             activeJobTypes = _.filter(this.favorites, d => {
-                const jobType = _.find(this.jobTypes, { name: d.job_type.name, version: d.job_type.version });
+                const jobType = _.find(this.jobTypes, { name: d.name, version: d.version });
                 return typeof jobType !== 'undefined';
             });
         } else {
@@ -41,11 +40,10 @@ export class JobActivityComponent implements OnInit, OnDestroy, OnChanges {
                 return typeof jobType !== 'undefined';
             });
         }
-        console.log(this.started);
         this.params = {
-            started: this.started,
-            ended: this.ended,
-            job_type_id: _.map(activeJobTypes, 'job_type.id')
+            started: moment.utc().subtract(1, 'd').toISOString(),
+            ended: moment.utc().toISOString(),
+            job_type_id: this.favorites.length > 0 ? _.map(activeJobTypes, 'id') : _.map(activeJobTypes, 'job_type.id')
         };
         this.chartLoading = false;
     }
@@ -77,9 +75,5 @@ export class JobActivityComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnDestroy() {
         this.unsubscribe();
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        this.updateData();
     }
 }

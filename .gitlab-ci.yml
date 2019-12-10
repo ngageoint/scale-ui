@@ -46,7 +46,7 @@ test_ui:
     - npm install
     - npm install -g @angular/cli
   script:
-    - npm run lintdev
+    - npm run testdev:ci
 
 build_docker:
   image: ${DOCKER_IMAGE}

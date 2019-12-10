@@ -104,9 +104,6 @@ export class JobTypesCreateComponent implements OnInit, OnDestroy, ComponentCanD
 
     private validateForm() {
         // only enable 'Validate and Create' when the form is valid
-        this.items[1].disabled = !this.jobType.manifest ||
-            _.keys(this.jobType.manifest).length === 0;
-        this.items[2].disabled = !this.createForm.valid;
         this.items[this.items.length - 1].disabled = !this.createForm.valid ||
             !this.jobType.manifest ||
             _.keys(this.jobType.manifest).length === 0;

@@ -47,7 +47,7 @@ module.exports = function (request) {
                         if (random <= 4) {
                             var value = Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom;
                             returnResult.values.push({
-                                datetime: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
+                                date: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
                                 value: value,
                                 id: parseInt(id)
                             });
@@ -57,7 +57,7 @@ module.exports = function (request) {
                     random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
                     if (random <= 4) {
                         returnResult.values.push({
-                            datetime: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
+                            date: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
                             value: Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom
                         });
                     }

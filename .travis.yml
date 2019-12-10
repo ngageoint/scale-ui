@@ -14,5 +14,5 @@ install:
 - npm install
 - npm install -g @angular/cli
 script:
-- npm run lintdev
+- npm run testdev:ci
 - npm run builddev:prod

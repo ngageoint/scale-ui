@@ -1,3 +1,5 @@
+import * as moment from 'moment';
+
 export class IngestDatatable {
     constructor(
         public first?: number,
@@ -6,7 +8,6 @@ export class IngestDatatable {
         public sortOrder?: number,
         public started?: string,
         public ended?: string,
-        public liveRange?: number,
         public duration?: string,
         public status?: any,
         public scan_id?: any,
@@ -20,6 +21,6 @@ export const initialIngestDatatable: IngestDatatable = {
     rows: 20,
     sortField: 'ingest_started',
     sortOrder: -1,
-    started: null,
-    ended: null
+    started: moment.utc().subtract(1, 'd').startOf('d').toISOString(),
+    ended: moment.utc().endOf('d').toISOString()
 };

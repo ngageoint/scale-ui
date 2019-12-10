@@ -1,41 +1,34 @@
-<div class="temporal-filter flexed" [ngClass]="{'spaced': !liveRangeOnly}">
-    <ng-container *ngIf="!liveRangeOnly">
-        <div class="ui-inputgroup">
-            <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
-            <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true"
-                        panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
-                        dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
-                        showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
-        </div>
-
-        <div class="ui-inputgroup">
-            <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
-            <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true"
-                        panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
-                        dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
-                        showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
-        </div>
-
-        <button pButton class="temporal-filter__date-filter-btn apply-"
-                [ngClass]="{'ui-button-primary': !isLiveMode, 'ui-button-secondary': isLiveMode}" label="Apply filter"
-                (click)="onDateFilterApply()"
-                [disabled]="!startDate || !endDate || !isValid"
-                pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
-    </ng-container>
-
+<div class="temporal-filter flexed">
+    <div class="noWrap">
+        <label>From:</label>
+        <utc-datepicker [date]="started" [button]="true" [format]="dateFormat"
+                        (dateChange)="onStartSelect($event)"></utc-datepicker>
+    </div>
+    <div class="noWrap">
+        <label>To:</label>
+        <utc-datepicker [date]="ended" [button]="true" [format]="dateFormat"
+                        (dateChange)="onEndSelect($event)"></utc-datepicker>
+    </div>
+    <button pButton class="temporal-filter__date-filter-btn" [ngClass]="applyBtnClass" label="Apply"
+            (click)="onDateFilterApply()"></button>
+    <!-- <button pButton type="button" class="ui-button-primary share_btn"  label="Share" icon="fa fa-share" iconPos="right" pTooltip="Share a link to view the selcted timestamp."
+            (click)="shareLink()"></button> -->
+    <div class="temporal-filter__date-filter-ranges" *ngIf="!isMobile">
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 6 Hours"
+                (click)="setDateFilterRange('h', 6)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 12 Hours"
+                (click)="setDateFilterRange('h', 12)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 24 Hours"
+                (click)="setDateFilterRange('h', 24)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 3 Days"
+                (click)="setDateFilterRange('d', 3)"></button>
+        <button pButton class="ui-button-secondary temporal-filter__date-filter-btn" label="Last 7 Days"
+                (click)="setDateFilterRange('d', 7)"></button>
+    </div>
     <div class="temporal-filter__date-filter-dropdown">
-        <div class="ui-inputgroup">
-            <label class="ui-inputgroup-addon" for="date-range-live">
-                <i class="fa live-range-icon"
-                   [ngClass]="liveRangeIconClass"
-                   [pTooltip]="isLiveMode ? 'Refreshing every 10 seconds' : 'No live filter applied'" tooltipPosition="bottom"></i>
-                Live range
-            </label>
-            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="liveRange"
-                        (onChange)="onLiveRangeChange()"
-                        inputId="date-range-live"
-                        [showClear]="!liveRangeOnly">
-            </p-dropdown>
-        </div>
+        <p-dropdown [options]="dateRangeOptions" [(ngModel)]="selectedDateRange"
+                    (onChange)="setDateFilterRange(selectedDateRange.unit, selectedDateRange.range)"
+                    [style]="{'width':'150px'}" placeholder="Select..." [showClear]="false" *ngIf="isMobile">
+        </p-dropdown>
     </div>
 </div>
