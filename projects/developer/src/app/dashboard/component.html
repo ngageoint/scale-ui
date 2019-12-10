@@ -1,100 +1,127 @@
 <div class="dashboard">
     <div class="p-grid">
-        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__favs-container">
-            <p-panel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
-                <p-scrollPanel [style]="{height: '368px'}">
-                    <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
-                             #datatable>
-                        <ng-template pTemplate="header" let-columns>
-                            <!-- <tr *ngIf="favoriteJobTypes.length > 0">
-                                <th *ngFor="let col of columns">
-                                    <input pInputText type="text"
-                                           (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                                           class="column-filter">
-                                </th>
-                            </tr> -->
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr [pSelectableRow]="rowData">
-                                <td>
-                                    <dev-job-type-item [item]="rowData"></dev-job-type-item>
-                                </td>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="emptymessage" let-columns>
-                            <tr>
-                                <td [attr.colspan]="columns.length">
-                                    You haven't saved any favorites yet. Use the star button on an algorithm below to save it to this list
-                                    for quick access.
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-scrollPanel>
-            </p-panel>
+        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3">
+        </div> 
+        <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
+            <dev-temporal-filter
+                class= "aline-charts"
+                localStorageKey="dashboard-filter"
+                [liveRangeOnly]="true"
+                (updated)="onTemporalFilterUpdate($event)">
+            </dev-temporal-filter>
         </div>
-        <div class="p-col-12 p-md-12 p-lg-7 p-xl-7">
+        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
+                <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                        <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
+                            <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                        </p-panel>
+                    </div>
+                    <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                        <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
+                            <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                                <p-tabPanel [header]="'All Jobs'">
+                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                                </p-tabPanel>
+                                <p-tabPanel header="Favorites">
+                                    <plotly-plot class="centered" [data]="graphFav.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                                </p-tabPanel>
+                            </p-tabView>
+                        </p-panel>
+                    </div>
+            </div>
+        <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="dataFeedChartTitle">
-                    <dev-data-feed></dev-data-feed>
+                <p-panel header="Data Feed">
+                    <dev-data-feed [started]="started" [ended]="ended" ></dev-data-feed>
                 </p-panel>
             </div>
-        </div>
-        <div class="p-col-12 p-md-12 p-lg-2 p-xl-2 dashboard__error-charts">
-            <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
-                <div class="dashboard__error-chart" *ngIf="dataFavs">
-                    <h3><span [pTooltip]="favoriteJobTypesTooltip" tooltipPosition="left" appendTo="body">Favorites</span></h3>
-                    <div class="scale-chart-container">
-                        <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                        <p-chart type="pie" [data]="dataFavs" [options]="pieChartOptions"
-                                 *ngIf="favoriteJobTypes.length > 0"></p-chart>
-                    </div>
-                    <span *ngIf="favoriteJobTypes.length === 0">No favorites have been selected.</span>
-                </div>
-                <hr />
-                <div class="dashboard__error-chart">
-                    <h3><span [pTooltip]="allJobTypesTooltip" tooltipPosition="left" appendTo="body">All Job Types</span></h3>
-                    <div class="scale-chart-container">
-                        <dev-loading-indicator [loading]="loadingJobTypes"></dev-loading-indicator>
-                        <p-chart type="pie" [data]="dataAll" [options]="pieChartOptions"
-                                 *ngIf="allJobTypes.length > 0"></p-chart>
-                    </div>
-                    <span *ngIf="allJobTypes.length === 0">No job types found.</span>
-                </div>
-            </p-panel>
         </div>
     </div>
     <div class="p-grid">
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__all-container">
-            <p-panel [header]="'Job Types (' + allJobTypes.length + ')'">
-                <p-scrollPanel>
-                    <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
-                        <ng-template pTemplate="header" let-columns>
-                            <tr>
-                                <th *ngFor="let col of columns">
-                                    <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
-                                           class="column-filter">
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns">
-                            <tr [pSelectableRow]="rowData">
-                                <td>
-                                    <dev-job-type-item [item]="rowData"></dev-job-type-item>
-                                </td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                </p-scrollPanel>
-            </p-panel>
+            <p-tabView>
+                <p-tabPanel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
+                        <p-scrollPanel>
+                            <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
+                                    #datatable>
+                                <ng-template pTemplate="header" let-columns>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr [pSelectableRow]="rowData">
+                                        <td>
+                                            <dev-job-type-item [item]="rowData"></dev-job-type-item>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="columns.length">
+                                            You haven't saved any favorites yet. Use the star button on an algorithm in the next tab to save it to this list
+                                            for quick access.
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-scrollPanel>
+                    </p-tabPanel>
+                <p-tabPanel [header]="'Job Types (' + allJobTypes.length + ')'">
+                    <p-scrollPanel>
+                        <p-table [columns]="columnsAll" [value]="allJobTypes" styleClass="nopadding" [loading]="loadingJobTypes" #datatable>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th *ngFor="let col of columns">
+                                        <input pInputText type="text" (input)="datatable.filter($event.target.value, col.field, col.filterMatchMode)"
+                                            class="column-filter">
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td>
+                                        <dev-job-type-item [item]="rowData"></dev-job-type-item>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-scrollPanel>
+                </p-tabPanel>
+            </p-tabView>
         </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
-            <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel [header]="historyChartTitle" [style]="{height: '444px'}">
-                    <dev-job-history></dev-job-history>
+            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '444px'}">
+                    <div *ngIf="favoriteJobTypes.length == 0">
+                        <dev-job-history [started]="started" [ended]="ended"  ></dev-job-history>
+                    </div>
                 </p-panel>
-                <p-panel [header]="activityChartTitle" [style]="{height: '444px'}">
-                    <dev-job-activity></dev-job-activity>
+            </div>
+            <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
+                    <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                        <p-tabPanel [header]="'All Jobs'">
+                            <dev-job-history [started]="started" [ended]="ended" ></dev-job-history>
+                        </p-tabPanel>
+                        <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
+                            <dev-job-history [started]="started" [ended]="ended"  [favorite]="favJob"></dev-job-history>
+                        </p-tabPanel>
+                    </p-tabView>
+                </p-panel>
+            </div>
+            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <p-panel header="Job Activity" [style]="{height: '444px'}">
+                        <dev-job-activity [started]="started" [ended]="ended" ></dev-job-activity>
+                </p-panel>
+            </div>
+            <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                <p-panel header="Job Activity" [style]="{height: '500px'}">
+                    <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                        <p-tabPanel [header]="'All Jobs'">
+                            <dev-job-activity [started]="started" [ended]="ended" ></dev-job-activity>
+                        </p-tabPanel>
+                        <p-tabPanel header="Favorites">
+                            <dev-job-activity [started]="started" [ended]="ended" [favorites]="favoriteJobTypes"></dev-job-activity>
+                        </p-tabPanel>
+                    </p-tabView>
                 </p-panel>
             </div>
         </div>

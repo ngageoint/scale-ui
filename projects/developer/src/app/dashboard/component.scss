@@ -10,6 +10,14 @@
             height: 388px;
         }
     }
+    .align-charts {
+         
+    }
+    .charts-tabbed {
+        ::ng-deep .ui-panel-content {
+            height: 438px;
+        }
+    }
 
     .dashboard__error-charts {
         ::ng-deep .ui-panel-content {
@@ -43,6 +51,11 @@
             height: 815px;
         }
     }
+}
+.centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .dashboard__item {

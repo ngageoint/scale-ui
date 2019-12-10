@@ -13,7 +13,7 @@
                 "is_published": false,
                 "is_active": true,
                 "is_paused": false,
-                "is_system": false,
+                "is_system": true,
                 "max_scheduled": 1,
                 "revision_num": 1,
                 "docker_image": "10.4.4.10:5000/landsat8-parse_1.0:dev",

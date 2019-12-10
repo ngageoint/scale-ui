@@ -1,6 +1,6 @@
 <div class="data-feed__container">
     <div class="data-feed__dropdown">
-        <p-dropdown [options]="dataFeeds" [(ngModel)]="selectedDataFeed" (onChange)="onDataFeedSelect()"
+        <p-dropdown [options]="dataFeeds" [(ngModel)]="selectedDataFeed" optionLabel="label" (onChange)="onDataFeedSelect()"
                     [style]="{'width':'300px', 'margin':'-10px 0 10px 0'}" placeholder="Select..."
                     [showClear]="false"></p-dropdown>
     </div>

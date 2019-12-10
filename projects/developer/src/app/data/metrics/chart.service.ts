@@ -85,7 +85,7 @@ export class ChartService {
                             // add result values to valueArr
                             _.forEach(dataLabels, (xDate) => {
                                 const valueObj = _.find(queryDates, (qDate) => {
-                                    return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                                    return moment.utc(qDate.datetime, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
                                 });
                                 // push 0 if data for xDate is not present in queryDates
                                 valueArr.push(valueObj ? valueObj.value : 0);
@@ -184,17 +184,21 @@ export class ChartService {
                     // add result values to valueArr
                     _.forEach(dataLabels, (xDate) => {
                         const valueObj = _.find(result.values, (qDate) => {
-                            return moment.utc(qDate.date, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                            return moment.utc(qDate.datetime, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
                         });
                         // push 0 if data for xDate is not present in result.values
                         valueArr.push(valueObj ? valueObj.value : 0);
                     });
 
+                    if (title === '') {
+                        title = 'for all ';
+                    }
+
                     // populate chart dataset
                     datasets.push({
                         yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
                         stack: colIdx.toString(),
-                        label: result.column.title + ' for all ' + title,
+                        label: result.column.title + ' ' + title,
                         icon: null,
                         backgroundColor: bgColor,
                         data: valueArr,

@@ -46,7 +46,7 @@ export class JobTypeHistoryComponent implements OnInit {
         const dataArr = [];
         _.forEach(data, function (result) {
             const filteredResult = _.filter(result, (d) => {
-                const date = moment.utc(d.date, 'YYYY-MM-DD');
+                const date = moment.utc(d.datetime, 'YYYY-MM-DD');
                 if (moment.utc().diff(moment.utc(date), 'd') <= numDays) {
                     return d;
                 }
