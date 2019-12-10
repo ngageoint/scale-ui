@@ -53,6 +53,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ColorService.PENDING
           ]
     };
+    dateRangeOptions = [
+        { label: '---', value: null },
+        { label: 'Last day', value: 24 },
+        { label: 'Last 3 days', value: 24 * 3 },
+        { label: 'Last week', value: 24 * 7 }
+    ];
 
     constructor(
         private messageService: MessageService,
@@ -141,7 +147,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
              return r.status === 'QUEUED';
           });
 
-         this.getQueueData();
+        //  this.getQueueData();
          const labels = [];
          const parents = [];
          const values = [];
@@ -151,9 +157,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
          parents.push('');
          parents.push('');
          parents.push('');
-         values.push(this.running);
-         values.push(this.queued);
-         values.push(this.pending);
+        //  values.push(this.running);
+        //  values.push(this.queued);
+        //  values.push(this.pending);
          _.forEach(runningJobs, job => {
              const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
              if ( index > 0) {
@@ -198,25 +204,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return graph;
     }
 
-    getQueueData() {
-        const params = {
-            started: moment.utc().subtract(1, 'h').toISOString(),
-            ended: moment.utc().toISOString(),
-        };
-        this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
-            this.running = 0;
-            this.queued = 0;
-            this.pending = 0;
+    // getQueueData() {
+    //     const params = {
+    //         started: moment.utc().subtract(1, 'h').toISOString(),
+    //         ended: moment.utc().toISOString(),
+    //     };
+    //     this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
+    //         this.running = 0;
+    //         this.queued = 0;
+    //         this.pending = 0;
 
-            _.forEach(data.results, result => {
-                this.running = result.running_count;
-                this.queued = result.queued_count;
-                this.pending = result.pending_count;
-            });
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
-        });
-    }
+    //         _.forEach(data.results, result => {
+    //             this.running = result.running_count;
+    //             this.queued = result.queued_count;
+    //             this.pending = result.pending_count;
+    //         });
+    //     }, err => {
+    //         this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
+    //     });
+    // }
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
         this.started = data.start;
         this.ended = data.end;

@@ -41,7 +41,6 @@ export class JobActivityComponent implements OnInit, OnDestroy, OnChanges {
                 return typeof jobType !== 'undefined';
             });
         }
-        console.log(this.started);
         this.params = {
             started: this.started,
             ended: this.ended,

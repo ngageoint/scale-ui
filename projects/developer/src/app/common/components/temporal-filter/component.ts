@@ -18,6 +18,18 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     @Input() loading = false;
     @Input() localStorageKey = 'temporal-filter';
     @Input() liveRangeOnly = false;
+    @Input() refreshRate = 10;
+
+    // dropdown options for live range, values in hourss
+    @Input() dateRangeOptions = [
+        { label: '---', value: null },
+        { label: 'Last 1 hour', value: 1 },
+        { label: 'Last 6 hours', value: 6 },
+        { label: 'Last 12 hours', value: 12 },
+        { label: 'Last day', value: 24 },
+        { label: 'Last 3 days', value: 24 * 3 },
+        { label: 'Last week', value: 24 * 7 }
+    ];
 
     // when the start/end dates are applied
     @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
@@ -27,16 +39,6 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     // driven by the timer for the live range update, as well as normal start/end date filter apply
     @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
 
-    // dropdown options for live range, values in hours
-    dateRangeOptions = [
-        { label: '---', value: null },
-        { label: 'Last 1 hour', value: 1 },
-        { label: 'Last 6 hours', value: 6 },
-        { label: 'Last 12 hours', value: 12 },
-        { label: 'Last day', value: 24 },
-        { label: 'Last 3 days', value: 24 * 3 },
-        { label: 'Last week', value: 24 * 7 }
-    ];
     selectedDateRange: any;
     applyBtnClass = 'ui-button-secondary';
     applyStatusClass = 'live-range-inactive';
@@ -169,7 +171,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
 
             // ensure any timers are cancelled, then start a new one
             this.unsubscribe();
-            this.liveRangeSubscription = Observable.timer(0, 10 * 1000)
+            this.liveRangeSubscription = Observable.timer(0, this.refreshRate * 1000)
                 .subscribe(() => {
                     // update using now for the base
                     this.update(moment.utc());

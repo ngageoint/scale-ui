@@ -16,7 +16,7 @@
                         showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
         </div>
 
-        <button pButton class="temporal-filter__date-filter-btn apply-"
+        <button pButton class="temporal-filter__date-filter-btn"
                 [ngClass]="{'ui-button-primary': !isLiveMode, 'ui-button-secondary': isLiveMode}" label="Apply filter"
                 (click)="onDateFilterApply()"
                 [disabled]="!startDate || !endDate || !isValid"

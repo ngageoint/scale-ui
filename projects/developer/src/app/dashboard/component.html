@@ -4,10 +4,11 @@
         </div> 
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <dev-temporal-filter
-                class= "aline-charts"
                 localStorageKey="dashboard-filter"
                 [liveRangeOnly]="true"
-                (updated)="onTemporalFilterUpdate($event)">
+                (updated)="onTemporalFilterUpdate($event)"
+                refreshRate="600"
+                [dateRangeOptions]="dateRangeOptions">
             </dev-temporal-filter>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
