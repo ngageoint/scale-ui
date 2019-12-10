@@ -18,6 +18,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     @Input() loading = false;
     @Input() localStorageKey = 'temporal-filter';
     @Input() liveRangeOnly = false;
+    @Input() refreshRate = 10;
 
     // dropdown options for live range, values in hourss
     @Input() dateRangeOptions = [
