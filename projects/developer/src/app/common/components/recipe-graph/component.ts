@@ -10,6 +10,8 @@ import { BatchesApiService } from '../../../processing/batches/api.service';
 import { Batch } from '../../../processing/batches/api.model';
 import { BatchesDatatable } from '../../../processing/batches/datatable.model';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { RecipeTypeInputFile } from '../../../configuration/recipe-types/api.input.file.model';
+import { RecipeTypeInputJson } from '../../../configuration/recipe-types/api.input.json.model';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -309,9 +311,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             let inputFile;
             _.forEach(fileTypes, (file, key) => {
                 if (file.output === i.output) {
-                inputFile = key;
-                let connection;
-                    if (i.node) {
+                    inputFile = key;
+                    let connection;
+                        if (i.node) {
                             const dependency = this.recipeData.definition.nodes[i.node];
                             if (dependency) {
                                 connection = _.find(this.recipeData.definition.input.files, {name: i.node});
@@ -602,12 +604,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 });
                 // update interface in recipeData and selectedCondition
                 this.recipeData.definition.nodes[this.selectedNode.node_type.name].node_type.interface = {
-                    files: files,
-                    json: json
+                    files: RecipeTypeInputFile.transformer(files),
+                    json: RecipeTypeInputJson.transformer(json)
                 };
                 this.selectedCondition.interface = {
-                    files: files,
-                    json: json
+                    files: RecipeTypeInputFile.transformer(files),
+                    json: RecipeTypeInputJson.transformer(json)
                 };
                 // update input in recipeData and selectedNode
                 this.recipeData.definition.nodes[this.selectedNode.node_type.name].input = input;

@@ -10,11 +10,13 @@
         padding-bottom: 0;
     }
 
-    .temporal-filter__date-filter-ranges, .temporal-filter__date-filter-dropdown {
-        margin-left: 55px;
+    &.spaced {
+        .temporal-filter__date-filter-ranges, .temporal-filter__date-filter-dropdown {
+            margin-left: 55px;
 
-        button {
-            margin-left: 3px;
+            button {
+                margin-left: 3px;
+            }
         }
     }
     .share_btn{
