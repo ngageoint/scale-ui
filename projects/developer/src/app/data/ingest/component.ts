@@ -3,6 +3,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
+import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { environment } from '../../../environments/environment';
@@ -72,6 +75,7 @@ export class IngestComponent implements OnInit, OnDestroy {
     subscription: any;
     isMobile: boolean;
     nameFilterText: string;
+    sub: any;
     onNameFilter = _.debounce((e) => {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0,
@@ -93,6 +97,9 @@ export class IngestComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
+        if (!this.sub) {
+            this.datatableLoading = true;
+        }
         this.unsubscribe();
 
         // don't show loading state when in live mode
@@ -334,6 +341,9 @@ export class IngestComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
         this.unsubscribe();
     }
 }

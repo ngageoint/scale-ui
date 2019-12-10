@@ -20,7 +20,7 @@
             <a [routerLink]="['/configuration/job-types/', item.job_type.name, item.job_type.version]" class="jti__btn">Details</a>
             <a routerLink="/processing/jobs"
                [queryParams]="{job_type_name: item.job_type.name, job_type_version: item.job_type.version}" class="jti__btn">Jobs</a>
-            <div class="jti__btn" (click)="toggleFavorite()"><i [ngClass]="getFavoriteBtnClass()"></i></div>
+            <div class="jti__btn fav" (click)="toggleFavorite()"><i [ngClass]="getFavoriteBtnClass()"></i></div>
         </div>
     </div>
 </div>

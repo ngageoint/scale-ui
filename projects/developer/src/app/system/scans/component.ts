@@ -3,6 +3,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+import { Observable } from 'rxjs';
+import 'rxjs/add/observable/timer';
+import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { DataService } from '../../common/services/data.service';
@@ -35,6 +38,7 @@ export class ScansComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    sub: any;
     liveRange: number;
 
     nameFilterText: string;
@@ -238,6 +242,9 @@ export class ScansComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        if (this.sub) {
+            this.sub.unsubscribe();
+        }
         this.unsubscribe();
     }
 }
