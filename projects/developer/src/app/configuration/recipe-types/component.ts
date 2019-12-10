@@ -536,7 +536,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
 
             // update condition node in recipe details
             // same idea as RecipeType.addCondition(), but update it here as well
-            const cidx = _.findIndex(this.selectedRecipeTypeDetail.conditions);
+            const cidx = _.findIndex(this.selectedRecipeTypeDetail.conditions, {name: event.condition.name});
             this.selectedRecipeTypeDetail.conditions[cidx] = event.condition;
         } else {
             this.conditions.push(event.condition);

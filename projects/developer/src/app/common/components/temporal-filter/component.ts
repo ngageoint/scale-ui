@@ -16,6 +16,8 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     @Input() ended: string;
     @Input() liveRange: number;
     @Input() loading = false;
+    @Input() localStorageKey = 'temporal-filter';
+    @Input() liveRangeOnly = false;
 
     // when the start/end dates are applied
     @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
@@ -71,13 +73,13 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     get isLiveMode(): boolean { return !!this.liveRange; }
 
     // used for saving started value into local storage
-    private startedStorage = new LocalStorageItem('started', 'temporal-filter');
+    private startedStorage: LocalStorageItem;
 
     // used for saving ended value into local storage
-    private endedStorage = new LocalStorageItem('ended', 'temporal-filter');
+    private endedStorage: LocalStorageItem;
 
     // used for saving live range value into local storage
-    private liveRangeStorage = new LocalStorageItem('range', 'temporal-filter');
+    private liveRangeStorage: LocalStorageItem;
 
     // determines if the form inputs are valid
     get isValid(): boolean {
@@ -99,6 +101,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         // normal date filter was applied, turn off live mode
         this.liveRange = null;
         this.liveRangeStorage.remove();
+        this.unsubscribe();
 
         // send out the converted date strings
         this.dateFilterSelected.emit({
@@ -112,12 +115,11 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         this.startedStorage.set(this.utcStartDate.toISOString());
         this.endedStorage.set(this.utcEndDate.toISOString());
 
-        // make call to emit out the update hook
-        this.update();
-
-        if (this.started > this.ended) {
-            // TODO validate
+        if (this.startDate >= this.endDate) {
             this.messageService.add({severity: 'error', summary: 'Error querying range', detail: 'Provided FROM date is before TO date'});
+        } else {
+            // make call to emit out the update hook
+            this.update();
         }
     }
 
@@ -214,34 +216,50 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        // initialize storage with passed in @Input keys
+        this.startedStorage = new LocalStorageItem('started', this.localStorageKey);
+        this.endedStorage = new LocalStorageItem('ended', this.localStorageKey);
+        this.liveRangeStorage = new LocalStorageItem('range', this.localStorageKey);
+
+        // restrict options for in live range only mode
+        if (this.liveRangeOnly) {
+            this.dateRangeOptions = this.dateRangeOptions.filter(d => d.value);
+        }
+
         // prevent expression changed error
         setTimeout(() => {
             if (this.liveRange) {
                 // live range was set from parent (router)
                 this.liveRangeStorage.set(this.liveRange);
                 this.onLiveRangeChange();
-            } else if (this.started && this.ended) {
+            } else if (!this.liveRangeOnly && this.started && this.ended) {
                 // start/end dates were set from parent (router)
                 this.startDate = this.utcDateToLocal(this.started);
                 this.endDate = this.utcDateToLocal(this.ended);
                 this.onDateFilterApply();
-            } else if (this.liveRangeStorage) {
+            } else if (this.liveRangeStorage.get()) {
                 // live range and start/end not provided by parent
                 // live range available in localstorage
                 this.liveRange = this.liveRangeStorage.get();
                 this.onLiveRangeChange();
-            } else if (this.startedStorage && this.endedStorage) {
+            } else if (this.startedStorage.get() && this.endedStorage.get()) {
                 // start/end provided from localstorage
                 this.startDate = this.utcDateToLocal(this.startedStorage.get());
                 this.endDate = this.utcDateToLocal(this.endedStorage.get());
                 this.onDateFilterApply();
             } else {
-                // nothing provided by parent component or found in storage
-                // use date filter on the last day
-                const now = moment();
-                this.endDate = now.toDate();
-                this.startDate = now.clone().subtract(1, 'day').toDate();
-                this.onDateFilterApply();
+                if (this.liveRangeOnly) {
+                    // force using the live range value, provide a default
+                    this.liveRange = this.dateRangeOptions[0].value;
+                    this.onLiveRangeChange();
+                } else {
+                    // nothing provided by parent component or found in storage
+                    // use date filter on the last day
+                    const now = moment();
+                    this.endDate = now.toDate();
+                    this.startDate = now.clone().subtract(1, 'day').toDate();
+                    this.onDateFilterApply();
+                }
             }
         });
     }
