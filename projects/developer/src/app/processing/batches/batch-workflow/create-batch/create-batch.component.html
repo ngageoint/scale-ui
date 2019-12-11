@@ -42,23 +42,6 @@
                             </label>
                         </div>
                         <div formGroupName="definition">
-                            <div class="margin-bottom-md" formGroupName="previous_batch">
-                                <strong>Previous Batch</strong>
-                                <div *ngIf="previousBatchOptions.length === 0">
-                                    Choose a recipe type in order to see relevant batches.
-                                </div>
-                                <div *ngIf="previousBatchOptions.length > 0">
-                                    <p-dropdown id="previousBatch"
-                                        formControlName="root_batch_id"
-                                        [options]="previousBatchOptions"
-                                        placeholder="Select..."
-                                        [style]="{'width': '100%'}"
-                                        [filter]="true"
-                                        filterBy="label,value.name"
-                                    ></p-dropdown>
-                                    <!-- [(ngModel)]="selectedRecipeType" -->
-                                </div>
-                            </div>
                             <div class="margin-bottom-md" formGroupName="previous_batch" *ngIf="batch.recipe_type">
                                 <p-checkbox label="All Nodes" (onChange)="setAllNodes($event)" pTooltip="Reprocess every node">
                                 </p-checkbox>
