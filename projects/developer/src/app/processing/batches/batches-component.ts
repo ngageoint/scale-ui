@@ -16,8 +16,8 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 @Component({
     selector: 'dev-batches',
-    templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    templateUrl: './batches-component.html',
+    styleUrls: ['./batches-component.scss']
 })
 
 export class BatchesComponent implements OnInit, OnDestroy {
@@ -131,6 +131,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.subscription.unsubscribe();
         }
     }
+
     paginate(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: e.first,
@@ -138,6 +139,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
         });
         this.updateOptions();
     }
+
     onLazyLoad(e: LazyLoadEvent) {
         // let ngOnInit handle loading data to ensure query params are respected
         if (this.isInitialized) {
@@ -154,11 +156,13 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.isInitialized = true;
         }
     }
+
     onRecipeTypeChange(e) {
         const id = _.map(e.value, 'id');
         this.datatableOptions.recipe_type_id = id.length > 0 ? id : null;
         this.updateOptions();
     }
+
     onRowSelect(e) {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             first: 0
@@ -262,7 +266,12 @@ export class BatchesComponent implements OnInit, OnDestroy {
             this.getRecipeTypes();
         });
     }
+
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    onFilterClick(event) {
+        console.log('Fliter clicked: ', event);
     }
 }

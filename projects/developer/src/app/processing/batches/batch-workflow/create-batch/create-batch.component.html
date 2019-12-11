@@ -1,0 +1,111 @@
+<div class="create-batch" [formGroup]="form">
+    <div class="p-grid p-justify-end">
+        <div class="p-col-12">
+            <div class="margin-bottom-md">
+                <label>
+                    <span class="required">Title</span>
+                    <input pInputText
+                        id="title"
+                        class="full-width"
+                        formControlName="title"
+                        type="text"/>
+                </label>
+            </div>
+            <div class="margin-bottom-md">
+                <label>
+                    <span >Description</span>
+                    <textarea pInputTextarea
+                    id="description"
+                    type="text"
+                    formControlName="description"
+                    rows="4"
+                    maxLength="500"
+                    pTooltip="Description has a 500 character limit."class="full-width"></textarea>
+                </label>
+            </div>
+            <div class="margin-bottom-md">
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <div class="margin-bottom-md">
+                            <label>
+                                <span class="required">Recipe Type</span>
+                                <p-dropdown
+                                    formControlName="recipe_type"
+                                    [options]="recipeTypeOptions"
+                                    placeholder="Select a Recipe Type"
+                                    [style]="{'width': '100%'}"
+                                    [filter]="true"
+                                    filterBy="label,value.name"
+                                    (onChange)="onRecipeTypeChange($event)"
+                                    ></p-dropdown>
+                                    <!-- [(ngModel)]="selectedRecipeType" -->
+                            </label>
+                        </div>
+                        <div formGroupName="definition">
+                            <div class="margin-bottom-md" formGroupName="previous_batch">
+                                <strong>Previous Batch</strong>
+                                <div *ngIf="previousBatchOptions.length === 0">
+                                    Choose a recipe type in order to see relevant batches.
+                                </div>
+                                <div *ngIf="previousBatchOptions.length > 0">
+                                    <p-dropdown id="previousBatch"
+                                        formControlName="root_batch_id"
+                                        [options]="previousBatchOptions"
+                                        placeholder="Select..."
+                                        [style]="{'width': '100%'}"
+                                        [filter]="true"
+                                        filterBy="label,value.name"
+                                    ></p-dropdown>
+                                    <!-- [(ngModel)]="selectedRecipeType" -->
+                                </div>
+                            </div>
+                            <div class="margin-bottom-md" formGroupName="previous_batch" *ngIf="batch.recipe_type">
+                                <p-checkbox label="All Nodes" (onChange)="setAllNodes($event)" pTooltip="Reprocess every node">
+                                </p-checkbox>
+                            </div>
+                            <div class="margin-bottom-md" formGroupName="previous_batch">
+                                <strong>Forced Nodes</strong>
+                                <div *ngIf="!batch.recipe_type">Choose a recipe type in order to see relevant nodes.</div>
+                                <div formGroupName="forced_nodes" *ngIf="batch.recipe_type">
+                                    <p-multiSelect
+                                        [options]="nodeOptions"
+                                        formControlName="nodes"
+                                        [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                        defaultLabel="Select...">
+                                    </p-multiSelect>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-6">
+                        <div class="margin-bottom-md">
+                            <label>
+                                <span class="required">Select a dataset</span>
+                                <p-dropdown
+                                [options]="datasetOptions"
+                                placeholder="Select a Dataset"
+                                formControlName="dataset"
+                                [style]="{'width': '100%'}"
+                                [filter]="true"
+                                filterBy="label,value.name"
+                                (onChange)="this.onDatasetChangeHandler()"
+                                ></p-dropdown>
+                                <!-- [(ngModel)]="selectedDataset" -->
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12">
+            <button pButton
+                class="ui-button-primary create-batch__controls-btn"
+                label="Save"
+                (click)="onSaveClick()"></button>
+            <button pButton
+                class="ui-button-primary create-batch__controls-btn"
+                label="Run"
+                (click)="onRunClick()"></button>
+        </div>
+    </div>
+</div>

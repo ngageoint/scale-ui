@@ -1,0 +1,100 @@
+<div class="create-dataset p-grid" [formGroup]="form">
+    <div class="p-col-12 margin-bottom-md">
+        <h2>
+            {{ useExistingDataSet ? 'Choose Existing Data Set' : 'Create a New Data Set'}}
+        </h2>
+    </div>
+    <div class="p-col-12">
+        <div class="margin-bottom-md">
+            <label>
+                <span class="required">Title</span>
+                <input pInputText
+                    id="title"
+                    class="full-width"
+                    formControlName="title"
+                    type="text"/>
+            </label>
+        </div>
+        <div class="margin-bottom-md">
+            <label>
+                <span class="required">Description</span>
+                <textarea pInputTextarea
+                    id="description"
+                    type="text"
+                    formControlName="description"
+                    rows="4"
+                    maxLength="500"
+                    pTooltip="Description has a 500 character limit."class="full-width"></textarea>
+            </label>
+        </div>
+    </div>
+    <div class="p-col-6">
+        <p-fieldset>
+            <p-header>
+                <span class="required">Required Fields</span>
+            </p-header>
+            <div class="p-grid">
+                <div class="ui-inputgroup p-col-12">
+                    <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
+                    <p-calendar
+                        inputId="date-range-start"
+                        showButtonBar="true"
+                        panelStyleClass="temporalDateFilter"
+                        formControlName="startDate"
+                        dateFormat="yy/mm/dd"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        showTime="true"
+                        hourFormat="24"
+                        [showSeconds]="true">
+                    </p-calendar>
+                </div>
+                <div class="ui-inputgroup p-col-12">
+                    <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
+                    <p-calendar
+                        inputId="date-range-end"
+                        showButtonBar="true"
+                        panelStyleClass="temporalDateFilter"
+                        formControlName="endDate"
+                        dateFormat="yy/mm/dd"
+                        [monthNavigator]="true"
+                        [yearNavigator]="true"
+                        showTime="true"
+                        hourFormat="24"
+                        [showSeconds]="true">
+                    </p-calendar>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-col-6">
+        <p-fieldset legend="Optional Fields">
+            <div class="margin-bottom-md">
+                <label>
+                    <span>Countries</span>
+                    <p-dropdown id="countryFilter"
+                        [options]="countryOptions"
+                        placeholder="Select a Country to filter results"
+                        [style]="{'width': '100%'}"
+                        [filter]='true'
+                        filterBy="label,value.name"
+                        (onChange)="onCountryFilterChange($event)">
+                    </p-dropdown>
+                </label>
+            </div>
+            <div class="margin-bottom-md">
+
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-col-12 ">
+        <button pButton
+            class="ui-button-primary create-dataset__controls-btn"
+            label="Save"
+            (click)="onSaveClick()"></button>
+        <button pButton
+            class="ui-button-primary create-dataset__controls-btn"
+            label="Get Data Files"
+            (click)="onGetDataFilesClick()"></button>
+    </div>
+</div>

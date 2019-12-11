@@ -4,6 +4,7 @@
 @import '~normalize.css/normalize';
 
 // Defaults
+@import './defaults/mixins';
 @import './defaults/animations';
 @import './defaults/tags';
 @import './defaults/typography';
