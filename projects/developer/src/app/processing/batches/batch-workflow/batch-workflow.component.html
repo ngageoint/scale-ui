@@ -1,0 +1,22 @@
+<div class="flexed space-between">
+    <h2><i class="fa fa-files-o margin-right-md"></i>Create Batch Workflow</h2>
+</div>
+<a routerLink="/processing/batches"><i class="fa fa-caret-left margin-right-md"></i>Batches List</a>
+<div class="batch-workflow">
+    <p-panel class="batch-workflow__panel" [header]=false>
+        <p-header>{{ getStepHeader() }}</p-header>
+        <div class="p-grid batch-workflow__panel-content">
+            <p-steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="false" class="p-col-2 p-md-3 p-sm-4batch-workflow__steps"></p-steps>
+            <div class="p-col-10 p-md-9 p-sm-8">
+                <dev-select-recipe-type *ngIf="activeStepName === 'select-recipe-type'"
+                    (valueChange)="handleRecipeSelection($event)"
+                ></dev-select-recipe-type>
+                <dev-create-dataset *ngIf="activeStepName === 'create-dataset'"></dev-create-dataset>
+                <dev-create-batch *ngIf="activeStepName === 'create-batch'"
+                    (valueChange)="handleDatasetSelection($event)"
+                    [selectedRecipeType]="recipeSelection"
+                ></dev-create-batch>
+            </div>
+        </div>
+    </p-panel>
+</div>

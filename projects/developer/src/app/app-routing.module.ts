@@ -1,5 +1,8 @@
+import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
+import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
+import { SelectRecipeTypeComponent } from './processing/batches/batch-workflow/select-recipe-type/select-recipe-type.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, ChildrenOutletContexts } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/component';
 import { JobsComponent } from './processing/jobs/component';
@@ -15,8 +18,9 @@ import { MetricsComponent } from './data/metrics/component';
 import { TimelineComponent } from './data/timeline/component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
-import { BatchesComponent } from './processing/batches/component';
+import { BatchesComponent } from './processing/batches/batches-component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
+import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batch-workflow.component';
 import { IngestComponent } from './data/ingest/component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
@@ -74,17 +78,16 @@ const routes: Routes = [
         data: {title: 'Batches | Scale'}
     },
     {
+        path: 'processing/batches/create',
+        component: BatchWorkflowComponent,
+        data: {title: 'Create Batch | Scale'}
+    },
+    {
         path: 'processing/batches/:id',
         component: BatchDetailsComponent,
         canDeactivate: [PendingChangesGuard],
         data: {title: 'Batch Details | Scale'}
     },
-    // {
-    //     path: 'processing/batches/create',
-    //     component: BatchDetailsComponent,
-    //   //  canDeactivate: [PendingChangesGuard],
-    //     data: {title: 'Create Batch | Scale'}
-    // },
     {
         path: 'configuration/job-types',
         component: JobTypesComponent,

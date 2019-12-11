@@ -1,0 +1,8 @@
+@import '../../../../../defaults/mixins';
+.create-batch {
+    @include formGrid;
+
+    &__controls-btn:not(:last-child) {
+        margin-right: 6px;
+    }
+}

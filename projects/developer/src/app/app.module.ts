@@ -17,10 +17,10 @@ import { UtcDatepickerModule } from 'angular-utc-datepicker';
 // Prime NG
 import {
     AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, ColorPickerModule, ConfirmationService,
-    DataListModule, DialogModule, DropdownModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule, MenubarModule,
-    MessageModule, MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule,
+    DataListModule, DialogModule, DropdownModule, FieldsetModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule,
+    MenubarModule, MessageModule, MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, ScrollPanelModule,
     SelectButtonModule, SidebarModule, SliderModule, SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule, TooltipModule,
-    TreeTableModule, SlideMenuModule
+    TreeTableModule, SlideMenuModule, Fieldset
 } from 'primeng/primeng';
 import { AccordionModule } from 'primeng/accordion';
 import { CardModule } from 'primeng/card';
@@ -38,7 +38,7 @@ import { AppComponent } from './app.component';
 import { AppConfigService } from './common/services/app-config.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BatchDetailsComponent } from './processing/batches/details.component';
-import { BatchesComponent } from './processing/batches/component';
+import { BatchesComponent } from './processing/batches/batches-component';
 import { CandyBarComponent } from './common/components/candy-bar/component';
 import { DashboardComponent } from './dashboard/component';
 import { DataFeedComponent } from './dashboard/data-feed/component';
@@ -83,6 +83,10 @@ import { TemporalFilterComponent } from './common/components/temporal-filter/com
 import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { TimelineComponent } from './data/timeline/component';
 import { WorkspacesComponent } from './system/workspaces/component';
+import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batch-workflow.component';
+import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
+import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
+import { SelectRecipeTypeComponent } from './processing/batches/batch-workflow/select-recipe-type/select-recipe-type.component';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
@@ -140,7 +144,11 @@ const appInitializer = (appConfig: AppConfigService) => {
         SystemStatusComponent,
         TimelineComponent,
         WorkspacesComponent,
-        TemporalFilterComponent
+        TemporalFilterComponent,
+        BatchWorkflowComponent,
+        CreateDatasetComponent,
+        CreateBatchComponent,
+        SelectRecipeTypeComponent
     ],
     imports: [
         AccordionModule,
@@ -161,6 +169,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         DataViewModule,
         DialogModule,
         DropdownModule,
+        FieldsetModule,
         HttpClientModule,
         HttpClientXsrfModule.withOptions({
             cookieName: 'csrftoken',
