@@ -30,7 +30,6 @@ export class CreateBatchComponent implements OnInit {
         return this._selectedRecipeType.getValue();
     }
 
-    previousBatchOptions: SelectItem[] = [];
     nodeOptions: SelectItem[] = [];
     @Output() valueChange = new EventEmitter();
 
@@ -54,7 +53,6 @@ export class CreateBatchComponent implements OnInit {
             recipe_type: [''],
             definition: this.fb.group({
                 previous_batch: this.fb.group({
-                    root_batch_id: [''],
                     forced_nodes: this.fb.group({
                         all: [false],
                         nodes: [''],
@@ -68,16 +66,6 @@ export class CreateBatchComponent implements OnInit {
         this._selectedRecipeType.subscribe(value => {
             if (value) {
                 this.form.get('recipe_type').patchValue(value);
-
-                this.batchesApiService.getBatches({recipe_type_name: value.name}).subscribe(data => {
-                    const batches = Batch.transformer(data.results);
-                    _.forEach(batches, (b: any) => {
-                        this.previousBatchOptions.push({
-                            label: b.title,
-                            value: b.root_batch.id
-                        });
-                    });
-                });
 
                 // populate node dropdown
                 this.recipeTypesApiService.getRecipeType(value.name).subscribe(data => {
@@ -156,12 +144,9 @@ export class CreateBatchComponent implements OnInit {
 
     setAllNodes(event) {
         if (event) {
-            debugger;
-            this.form.get('nodes').disable();
-            // this.form.controls.definition.controls.previous_batch.controls.forced_nodes.controls.nodes.disable();
+            this.form.get('definition.previous_batch.forced_nodes.nodes').disable();
         } else {
-            this.form.get('nodes').enable();
-            // this.form.controls.definition.controls.previous_batch.controls.forced_nodes.controls.nodes.enable();
+            this.form.get('definition.previous_batch.forced_nodes.nodes').enable();
         }
         this.batch.definition.previous_batch.forced_nodes.all = event;
     }
