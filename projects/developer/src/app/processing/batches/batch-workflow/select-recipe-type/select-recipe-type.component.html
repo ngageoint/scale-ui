@@ -1,0 +1,18 @@
+<div class="select-recipe p-grid">
+    <div class="p-col-6">
+        <div class="margin-bottom-md">
+            <label>
+                <span >Recipe Type</span>
+            </label>
+            <p-dropdown
+                [options]="recipeTypeOptions"
+                [(ngModel)]="selectedRecipeType"
+                placeholder="Select a Recipe Type"
+                [style]="{'width': '100%'}"
+                [filter]="true"
+                filterBy="label,value.name"
+                (onChange)="onSelectedRecipeTypeChange($event)"
+            ></p-dropdown>
+        </div>
+    </div>
+</div>
