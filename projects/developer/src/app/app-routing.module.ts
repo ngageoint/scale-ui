@@ -1,5 +1,8 @@
+import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
+import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
+import { SelectRecipeTypeComponent } from './processing/batches/batch-workflow/select-recipe-type/select-recipe-type.component';
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { RouterModule, Routes, ChildrenOutletContexts } from '@angular/router';
 
 import { DashboardComponent } from './dashboard/component';
 import { JobsComponent } from './processing/jobs/component';
