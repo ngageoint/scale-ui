@@ -34,6 +34,7 @@ var batchValidate = require('./handlers/batchValidate');
 var datasets = require('./handlers/datasets');
 var datasetCreate = require('./handlers/datasetCreate');
 var datasetValidate = require('./handlers/datasetValidate');
+var datasetAddMembers = require('./handlers/datasetAddMembers');
 
 var strikes = require('./handlers/strikes');
 var strikeDetails = require('./handlers/strikeDetails');
@@ -316,6 +317,12 @@ module.exports = {
             method: 'POST',
             path: '/mocks/' + apiVersion + '/datasets/validation',
             handler: datasetValidate
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/datasets/1',
+            handler: datasetAddMembers
         });
 
         server.route({

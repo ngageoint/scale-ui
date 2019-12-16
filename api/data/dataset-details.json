@@ -1,198 +1,28 @@
 {
-    "count": 7,
-    "next": null,
-    "previous": null,
-    "results": [
-        {
-            "id": 1,
-            "title": "Renamer Dataset",
-            "description": "Dataset for the renamer job",
-            "created": "2019-09-16T17:19:27.992166Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [
-                        {
-                            "media_types": [],
-                            "required": true,
-                            "multiple": false,
-                            "name": "INPUT_FILE"
-                        }
-                    ],
-                    "json": []
-                }
-            },
-            "files": 252
+    "id": 1,
+    "title": "Renamer Dataset",
+    "description": "Dataset for the renamer job",
+    "created": "2019-09-16T17:19:27.992166Z",
+    "definition": {
+        "global_data": {
+            "files": {},
+            "json": {}
         },
-        {
-            "id": 2,
-            "title": "Renamer 2 Dataset",
-            "description": "Dataset for the renamer job (again)",
-            "created": "2019-09-17T14:57:32.220522Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [
-                        {
-                            "media_types": [],
-                            "required": true,
-                            "multiple": false,
-                            "name": "INPUT_FILE"
-                        }
-                    ],
-                    "json": []
-                }
-            },
-            "files": 533
+        "global_parameters": {
+            "files": [],
+            "json": []
         },
-        {
-            "id": 3,
-            "title": "Renamer 3 Dataset",
-            "description": "Dataset for the renamer job (again)",
-            "created": "2019-09-17T18:46:14.926728Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [
-                        {
-                            "media_types": [],
-                            "required": true,
-                            "multiple": false,
-                            "name": "INPUT_FILE"
-                        }
-                    ],
-                    "json": []
+        "parameters": {
+            "files": [
+                {
+                    "media_types": [],
+                    "required": true,
+                    "multiple": false,
+                    "name": "INPUT_FILE"
                 }
-            },
-            "files": 1820
-        },
-        {
-            "id": 4,
-            "title": "dfdfdf",
-            "description": "dfdfdf",
-            "created": "2019-11-27T16:01:40.962801Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [],
-                    "json": []
-                }
-            },
-            "files": 0
-        },
-        {
-            "id": 5,
-            "title": "testabc",
-            "description": "asdfasdas",
-            "created": "2019-11-27T16:26:54.280126Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [
-                        {
-                            "media_types": [],
-                            "required": true,
-                            "multiple": false,
-                            "name": "INPUT_FILE"
-                        }
-                    ],
-                    "json": []
-                }
-            },
-            "files": 6
-        },
-        {
-            "id": 6,
-            "title": "testabcd",
-            "description": "asdfasdas",
-            "created": "2019-12-03T16:34:28.048652Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [
-                        {
-                            "media_types": [
-                                "application/octet-stream"
-                            ],
-                            "required": false,
-                            "multiple": true,
-                            "name": "INPUT_FILE"
-                        }
-                    ],
-                    "json": []
-                }
-            },
-            "files": 12476
-        },
-        {
-            "id": 7,
-            "title": "My Datasetas",
-            "description": "My Dataset Descriptionas",
-            "created": "2019-12-04T14:58:56.200342Z",
-            "definition": {
-                "global_data": {
-                    "files": {},
-                    "json": {}
-                },
-                "global_parameters": {
-                    "files": [],
-                    "json": []
-                },
-                "parameters": {
-                    "files": [
-                        {
-                            "media_types": [],
-                            "required": true,
-                            "multiple": false,
-                            "name": "INPUT_FILE"
-                        }
-                    ],
-                    "json": []
-                }
-            },
-            "files": 1
+            ],
+            "json": []
         }
-    ]
+    },
+    "files": 252
 }
