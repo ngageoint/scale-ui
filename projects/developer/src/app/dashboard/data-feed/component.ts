@@ -256,6 +256,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                         }) : [];
                     }
                 }
+            },
+            tooltips: {
+                mode: 'index'
             }
         };
         this.fetchChartData(true);

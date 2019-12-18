@@ -72,7 +72,6 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
             ended: this.ended,
             job_type_id: changes.jobTypeIds.currentValue
         };
-        console.log(params);
         this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
             this.chartLoading = false;
             this.data = {

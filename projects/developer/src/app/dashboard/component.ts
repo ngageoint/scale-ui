@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     activityChartTitle: string;
     options: any;
     totalChartData: any;
+    queueLoadData: any;
     graph: any;
     graphFav: any;
     layout = {
@@ -53,7 +54,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           ]
     };
     dateRangeOptions = [
-        { label: '---', value: null },
         { label: 'Last day', value: 24 },
         { label: 'Last 3 days', value: 24 * 3 },
         { label: 'Last week', value: 24 * 7 }
@@ -203,25 +203,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
         return graph;
     }
 
-    // getQueueData() {
-    //     const params = {
-    //         started: moment.utc().subtract(1, 'h').toISOString(),
-    //         ended: moment.utc().toISOString(),
-    //     };
-    //     this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
-    //         this.running = 0;
-    //         this.queued = 0;
-    //         this.pending = 0;
+    getQueueData() {
+        const params = {
+            started: this.started,
+            ended: this.ended,
+        };
+        this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
+            this.queueLoadData = data;
+            this.running = 0;
+            this.queued = 0;
+            this.pending = 0;
 
-    //         _.forEach(data.results, result => {
-    //             this.running = result.running_count;
-    //             this.queued = result.queued_count;
-    //             this.pending = result.pending_count;
-    //         });
-    //     }, err => {
-    //         this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
-    //     });
-    // }
+            _.forEach(data.results, result => {
+                this.running = result.running_count;
+                this.queued = result.queued_count;
+                this.pending = result.pending_count;
+            });
+        }, err => {
+            this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
+        });
+    }
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
         this.started = data.start;
         this.ended = data.end;
