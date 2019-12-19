@@ -58,38 +58,19 @@ export class CreateDatasetComponent implements OnInit {
                 this.form.addControl('endDate', this.fb.control('', Validators.required));
                 this.form.addControl('optionalFilters', this.fb.group({}));
             }
-            // else {
-            //     this.form.removeControl('title');
-            //     this.form.removeControl('description');
-            //     this.form.removeControl('startDate');
-            //     this.form.removeControl('endDate');
-            //     this.form.removeControl('optionalFilters');
-            // }
         });
     }
 
-    onSaveClick(data) {
-        data = {
-            ...this.form.value,
-            global_data: ['asd', ['asdas']],
-            global_parameters: ['asd', ['asdas']]
-        };
-        this.datasetService.createDataset(data);
-        console.log('Save Dataset.', data);
+    onSaveClick() {
+        console.log('Save Dataset.');
     }
 
     onLocationFilterChange(event) {
         console.log('Change location filter:', event);
     }
 
-    onGetDataFilesClick(data) {
-        data = {
-            ...this.form.value,
-            global_data: ['asd', ['asdas']],
-            global_parameters: ['asd', ['asdas']]
-        };
-        this.datasetService.createDataset(data);
-        console.log('Save Dataset.', data);
+    onGetDataFilesClick() {
+        console.log('Get Data files.');
     }
 
     onDatasetSelectChange(event) {
