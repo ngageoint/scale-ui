@@ -1,13 +1,12 @@
-import { BehaviorSubject } from 'rxjs';
 import { RecipeTypesApiService } from './../../../../configuration/recipe-types/api.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
-import { DatasetsApiService } from './../../../../data/services/dataset.api.service';
+import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { SelectItem, MessageService } from 'primeng/primeng';
-import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { BatchesApiService } from '../../api.service';
 import { Batch } from '../../api.model';
 import * as _ from 'lodash';
 import { RecipeType } from 'projects/developer/src/app/configuration/recipe-types/api.model';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
     selector: 'dev-create-batch',
@@ -16,41 +15,47 @@ import { RecipeType } from 'projects/developer/src/app/configuration/recipe-type
 })
 export class CreateBatchComponent implements OnInit {
     form: FormGroup;
-    datasetOptions: SelectItem[] = [];
-    selectedDataset: any;
     batch: any;
     recipeTypeOptions: SelectItem[] = [];
-    private _selectedRecipeType = new BehaviorSubject<any>(null);
-
-    @Input()
-    set selectedRecipeType(value) {
-        this._selectedRecipeType.next(value);
-    }
-    get selectedRecipeType() {
-        return this._selectedRecipeType.getValue();
-    }
-
+    titleMessage: string;
+    priorityMessage: string;
+    formValidated = false;
+    private validationMessages = {
+        title: {
+            name: 'titleMessage',
+            required: 'Please enter a title for your batch.'
+        },
+        recipeType: {
+            name: 'recipeTypeMessage',
+            required: 'Please select a Recipe Type.'
+        },
+        priority: {
+            name: 'priorityMessage',
+            required: 'Please enter a priority.',
+            min: 'Please enter a value between 0 - 1000000.',
+            max: 'Please enter a value between 0 - 1000000.'
+        }
+    };
     nodeOptions: SelectItem[] = [];
-    @Output() valueChange = new EventEmitter();
 
     constructor(
-        private datasetApiService: DatasetsApiService,
         private fb: FormBuilder,
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
         private batchesApiService: BatchesApiService
-    ) {
-
-    }
+    ) {}
 
     ngOnInit() {
-        this.getDatasets();
         this.getRecipeTypes();
+
         this.form = this.fb.group({
-            title: [''],
+            title: ['', Validators.required],
             description: [''],
-            dataset: [''],
-            recipe_type: [''],
+            recipe_type: ['', Validators.required],
+            configuration: this.fb.group({
+                priority: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(0), Validators.max(1000000)]]
+            }),
+            supersedes: [false],
             definition: this.fb.group({
                 previous_batch: this.fb.group({
                     forced_nodes: this.fb.group({
@@ -61,14 +66,49 @@ export class CreateBatchComponent implements OnInit {
                 })
             })
         });
-        this.getBatchDetail();
 
-        this._selectedRecipeType.subscribe(value => {
-            if (value) {
-                this.form.get('recipe_type').patchValue(value);
+        this.batch = Batch.transformer(null);
+        this.form.patchValue(this.batch);
 
-                // populate node dropdown
-                this.recipeTypesApiService.getRecipeType(value.name).subscribe(data => {
+        const titleControl = this.form.get('title');
+        titleControl.valueChanges
+            .pipe(debounceTime(1000))
+            .subscribe(() => {
+                this.setMessage(titleControl, this.validationMessages.title);
+            });
+
+        const priorityControl = this.form.get('configuration.priority');
+        priorityControl.valueChanges
+            .pipe(debounceTime(1000))
+            .subscribe(() => {
+                this.setMessage(priorityControl, this.validationMessages.priority);
+            });
+
+
+        this.form.get('recipe_type').valueChanges.subscribe(value => {
+            this.handleRecipeTypeChange(value);
+        });
+
+        this.form.valueChanges.pipe(debounceTime(1000)).subscribe(changes => {
+            // need to merge these changes because there are fields in the model that aren't in the form
+            _.merge(this.batch, changes);
+        });
+    }
+
+    validateBatch() {
+        return this.batchesApiService.validateBatch(this.batch)
+            .subscribe(value => {
+                this.formValidated = value.is_valid;
+                this.form.markAsPristine();
+            });
+    }
+
+    handleRecipeTypeChange(value) {
+        this.nodeOptions = [];
+        if (value) {
+            // populate node dropdown
+            this.recipeTypesApiService.getRecipeType(value.name).subscribe(
+                data => {
                     _.forEach(data.job_types, jobType => {
                         const nodeName = _.findKey(data.definition.nodes, {
                             node_type: {
@@ -81,93 +121,68 @@ export class CreateBatchComponent implements OnInit {
                             value: nodeName
                         });
                     });
-                }, err => {
+                },
+                err => {
                     console.log(err);
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving recipe type details', detail: err.statusText});
-                });
-            }
-        });
-    }
-
-    onRunClick() {
-        console.log('Run Batch.');
-    }
-
-    onSaveClick() {
-        console.log('Save Batch.');
-        // debugger;
-        this.batchesApiService.createBatch(this.batch);
-    }
-
-    getDatasets() {
-
-        this.datasetApiService.getDatasets({}).subscribe(data => {
-            data.results.map(dataset => {
-                this.datasetOptions.push({
-                    label: dataset.title,
-                    value: dataset
-                });
-            });
-        });
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Error retrieving recipe type details',
+                        detail: err.statusText
+                    });
+                }
+            );
+        }
     }
 
     getRecipeTypes() {
-        this.recipeTypesApiService.getRecipeTypes({rows: 100000}).subscribe(data => {
-            const recipeTypes = RecipeType.transformer(data.results);
-            _.forEach(recipeTypes, (rt: any) => {
-                this.recipeTypeOptions.push({
-                    label: rt.title,
-                    value: rt
+        this.recipeTypesApiService.getRecipeTypes({ rows: 100000 }).subscribe(
+            data => {
+                const recipeTypes = RecipeType.transformer(data.results);
+                _.forEach(recipeTypes, (rt: any) => {
+                    this.recipeTypeOptions.push({
+                        label: rt.title,
+                        value: rt
+                    });
                 });
-            });
-            this.recipeTypeOptions = _.orderBy(this.recipeTypeOptions, ['title'], ['asc']);
-        }, err => {
-            console.log('Error retrieving recipe types: ' + err);
-        });
+                this.recipeTypeOptions = _.orderBy(
+                    this.recipeTypeOptions,
+                    ['title'],
+                    ['asc']
+                );
+            },
+            err => {
+                console.log('Error retrieving recipe types: ' + err);
+            }
+        );
     }
-
-    onDatasetChangeHandler(event) {
-        // debugger;
-        this.valueChange.emit(this.form.get('dataset').value);
-    }
-
-    onRecipeTypeChange(event) {
-        this.selectedRecipeType = event.value;
-    }
-
-
 
     onNodesChanged(event) {
         this.batch.definition.previous_batch.forced_nodes.nodes = event.value;
-        console.log(this.batch.definition);
+    }
+
+    setMessage(control: AbstractControl, validationMessages: ValidationMessages): void {
+        this[validationMessages.name] = '';
+        if ((control.touched || control.dirty) && control.errors) {
+            this[validationMessages.name] = Object.keys(control.errors)
+                .map(key => validationMessages[key]).join(' ');
+        }
     }
 
     setAllNodes(event) {
         if (event) {
-            this.form.get('definition.previous_batch.forced_nodes.nodes').disable();
+            this.form
+                .get('definition.previous_batch.forced_nodes.nodes')
+                .disable();
         } else {
-            this.form.get('definition.previous_batch.forced_nodes.nodes').enable();
+            this.form
+                .get('definition.previous_batch.forced_nodes.nodes')
+                .enable();
         }
         this.batch.definition.previous_batch.forced_nodes.all = event;
     }
+}
 
-    private getBatchDetail() {
-        this.batch = Batch.transformer(null);
-        this.initBatchForm();
-    }
-
-    private initBatchForm() {
-        if (this.batch) {
-            // add the remaining values from the object
-            this.form.patchValue(this.batch);
-
-            // modify form actions based on status
-        }
-
-        // listen for changes to createForm fields
-        this.form.valueChanges.subscribe(changes => {
-            // need to merge these changes because there are fields in the model that aren't in the form
-            _.merge(this.batch, changes);
-        });
-    }
+export interface ValidationMessages {
+    'name': string;
+    [key: string]: string;
 }

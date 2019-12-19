@@ -1,69 +1,102 @@
 import { SelectItem } from 'primeng/primeng';
 import { IDatasetDefinition } from '../../../../data/services/dataset';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { DatasetsApiService } from '../../../../data/services/dataset.api.service';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'dev-create-dataset',
-  templateUrl: './create-dataset.component.html',
-  styleUrls: ['./create-dataset.component.scss'],
+    selector: 'dev-create-dataset',
+    templateUrl: './create-dataset.component.html',
+    styleUrls: ['./create-dataset.component.scss']
 })
 export class CreateDatasetComponent implements OnInit {
     form: FormGroup;
-    useExistingDataSet = false;
     data: IDatasetDefinition;
-    countryOptions: SelectItem[] = [];
+
+    datasetOptions: SelectItem[] = [];
+    selectedDataset: any;
+
+    locationOptions: SelectItem[] = [];
+    // locationSelected: any;
+
+    mediaTypeOptions: SelectItem[] = [];
+    // mediaTypeSelected: any;
+
+    recipeTypeOptions: SelectItem[] = [];
+    // recipeTypeSelected: any;
+
+    datasetList: any[] = [];
+    datatableLoading: boolean;
 
     constructor(
         private datasetService: DatasetsApiService,
         private fb: FormBuilder
-    ) { }
+    ) {}
 
     ngOnInit() {
         this.form = this.fb.group({
-            title: [''],
-            description: [''],
-            startDate: [''],
-            endDate: ['']
+            datasetSelected: ['', Validators.required]
         });
-        this.countryOptions = [
-            { label: '1', value: '1'},
-            { label: '2', value: '2'},
-            { label: '3', value: '3'},
-            { label: '4', value: '4'},
-            { label: '5', value: '5'},
-            { label: '6', value: '6'}
-        ];
+        this.datasetOptions = [{ label: 'Create New', value: 'CreateNew' }];
+        this.datasetService.getDatasets({}).subscribe(
+            data => {
+                this.datasetOptions.push(
+                    ...data.results.map(dataset => {
+                        return { label: dataset.title, value: dataset };
+                    })
+                );
+            },
+            err => {}
+        );
+
+        this.form.get('datasetSelected').valueChanges.subscribe(value => {
+            this.selectedDataset = value;
+            if (value === 'CreateNew') {
+                this.form.addControl('title',  this.fb.control('', Validators.required));
+                this.form.addControl('description', this.fb.control(''));
+                this.form.addControl('startDate', this.fb.control('', Validators.required));
+                this.form.addControl('endDate', this.fb.control('', Validators.required));
+                this.form.addControl('optionalFilters', this.fb.group({}));
+            }
+            // else {
+            //     this.form.removeControl('title');
+            //     this.form.removeControl('description');
+            //     this.form.removeControl('startDate');
+            //     this.form.removeControl('endDate');
+            //     this.form.removeControl('optionalFilters');
+            // }
+        });
     }
 
     onSaveClick(data) {
         data = {
-            'title': this.form.get('title').value,
-            'startDate': this.form.get('startDate').value,
-            'endDate': this.form.get('endDate').value,
-            'global_data': ['asd', ['asdas']],
-            'global_parameters': ['asd', ['asdas']]
+            ...this.form.value,
+            global_data: ['asd', ['asdas']],
+            global_parameters: ['asd', ['asdas']]
         };
         this.datasetService.createDataset(data);
         console.log('Save Dataset.', data);
     }
 
-    onCountryFilterChange(event) {
-        console.log('Change country filter:', event);
+    onLocationFilterChange(event) {
+        console.log('Change location filter:', event);
     }
 
     onGetDataFilesClick(data) {
         data = {
-            'title': this.form.get('title').value,
-            'startDate': this.form.get('startDate').value,
-            'endDate': this.form.get('endDate').value,
-            'global_data': ['asd', ['asdas']],
-            'global_parameters': ['asd', ['asdas']],
-            'dry_run': true
+            ...this.form.value,
+            global_data: ['asd', ['asdas']],
+            global_parameters: ['asd', ['asdas']]
         };
-        // debugger;
         this.datasetService.createDataset(data);
         console.log('Save Dataset.', data);
     }
+
+    onDatasetSelectChange(event) {
+        console.log('Dataset selected is: ', event);
+    }
+
+    onMediaTypeFilterChange(event) {}
+
+    onRecipeTypeFilterChange(event) {}
 }

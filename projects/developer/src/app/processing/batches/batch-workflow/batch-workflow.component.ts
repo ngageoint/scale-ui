@@ -1,9 +1,9 @@
-import { FormBuilder, FormGroup } from '@angular/forms';
-import {MenuItem, MessageService} from 'primeng/api';
+import { MenuItem, MessageService } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
 import { RecipeType } from '../../../configuration/recipe-types/api.model';
 import { Dataset } from '../../../data/models/dataset.model';
 import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
     providers: [MessageService],
@@ -14,56 +14,47 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class BatchWorkflowComponent implements OnInit {
     items: MenuItem[];
     activeIndex = 0;
-    activeStepName = 'select-recipe-type';
+    activeStepName = 'create-batch';
     recipeSelection: RecipeType;
     datasetSelection: Dataset;
+
+    private stepNameDictionary = {
+        0: 'create-batch',
+        1: 'create-dataset',
+        2: 'run-batch'
+    };
 
     constructor(
         private messageService: MessageService,
         private router: Router,
         private activatedRoute: ActivatedRoute
-        ) { }
+    ) {}
 
     ngOnInit() {
         this.items = [
+            {label: 'Create Batch'},
+            {label: 'Create Dataset'},
             {
-                label: 'Select Recipe Type',
+                label: 'Run Batch',
                 command: (event: any) => {
-                    this.activeIndex = 0;
-                    this.activeStepName = 'select-recipe-type';
-                }
-            },
-            {
-                label: 'Create Dataset',
-                command: (event: any) => {
-                    this.activeIndex = 1;
-                    this.activeStepName = 'create-dataset';
-                }
-            },
-            {
-                label: 'Create Batch',
-                command: (event: any) => {
-                    this.activeIndex = 2;
-                    this.activeStepName = 'create-batch';
+                    console.log('Validate the batch created with the dataset.');
                 }
             }
         ];
+
     }
 
     isOptionalStep() {
         switch (this.activeIndex) {
             case 0:
-                // Select recipe type
+            // Select recipe type
             case 1:
-                // Create dataset
-                return true;
+            // Create dataset
+            case 2:
+            // Create dataset
             default:
                 return false;
         }
-    }
-
-    getStepHeader() {
-        return `${this.items[this.activeIndex].label} ${this.isOptionalStep() ? '(Optional)' : ''}`;
     }
 
     handleRecipeSelection(event) {
@@ -72,5 +63,10 @@ export class BatchWorkflowComponent implements OnInit {
 
     handleDatasetSelection(event) {
         this.datasetSelection = event;
+    }
+
+    handleStepChange(event) {
+        this.activeIndex = event;
+        this.activeStepName = this.stepNameDictionary[event];
     }
 }

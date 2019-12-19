@@ -86,7 +86,7 @@ import { WorkspacesComponent } from './system/workspaces/component';
 import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batch-workflow.component';
 import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
 import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
-import { SelectRecipeTypeComponent } from './processing/batches/batch-workflow/select-recipe-type/select-recipe-type.component';
+import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
@@ -148,7 +148,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         BatchWorkflowComponent,
         CreateDatasetComponent,
         CreateBatchComponent,
-        SelectRecipeTypeComponent
+        RunBatchComponent
     ],
     imports: [
         AccordionModule,

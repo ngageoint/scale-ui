@@ -7,6 +7,7 @@ import { DataService } from './../../common/services/data.service';
 import { IDatasetDefinition } from './dataset';
 import { ApiResults } from '../../common/models/api-results.model';
 import * as _ from 'lodash';
+import { Dataset } from '../models/dataset.model';
 
 @Injectable({
   providedIn: 'root'
@@ -58,9 +59,10 @@ export class DatasetsApiService {
     }
 
     createDataset(options: IDatasetDefinition): Observable<any> {
-        this.http.post(`${this.apiPrefix}/datasets/`, options);
-        // debugger;
-        return of(true);
+        return this.http.post(`${this.apiPrefix}/datasets/`, options).pipe(
+            map(response => Dataset.transformer(response)),
+            catchError(DataService.handleError)
+        );
     }
 }
 
