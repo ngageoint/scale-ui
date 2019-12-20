@@ -1,0 +1,95 @@
+<div class="create-batch" [formGroup]="form">
+    <div class="p-grid p-justify-end">
+        <div class="p-col-12">
+            <div class="margin-bottom-md">
+                <label>
+                    <span class="required">Title</span>
+                    <input pInputText id="title" class="full-width" formControlName="title" type="text" />
+                </label>
+                <span class="error-text">{{ this.titleMessage }}</span>
+            </div>
+
+            <div class="margin-bottom-md">
+                <label>
+                    <span>Description</span>
+                    <textarea pInputTextarea id="description" type="text" formControlName="description" rows="4"
+                        maxLength="500" pTooltip="Description has a 500 character limit." class="full-width"></textarea>
+                </label>
+            </div>
+
+            <div class="margin-bottom-md">
+                <div class="p-grid">
+                    <div class="p-col-6">
+                        <div class="margin-bottom-md">
+                            <label>
+                                <span class="required">Recipe Type</span>
+                                <p-dropdown formControlName="recipe_type" [options]="recipeTypeOptions"
+                                    placeholder="Select a Recipe Type" [style]="{'width': '100%'}" [filter]="true"
+                                    filterBy="label,value.name"></p-dropdown>
+                            </label>
+                        </div>
+                        <div formGroupName="definition">
+                            <div formGroupName="previous_batch">
+                                <div formGroupName="forced_nodes">
+                                    <div class="margin-bottom-md" *ngIf="batch.recipe_type" >
+                                        <p-checkbox
+                                            binary="true"
+                                            formControlName="all"
+                                            label="Rerun All Jobs"
+                                            pTooltip="Reprocess every job"
+                                            (onChange)="setAllNodes($event)"></p-checkbox>
+                                    </div>
+                                    <div class="margin-bottom-md">
+                                        <strong>Rerun Jobs</strong>
+                                        <div *ngIf="!batch.recipe_type">Choose a recipe type in order to see relevant jobs.
+                                        </div>
+                                        <div *ngIf="batch.recipe_type">
+                                            <p-multiSelect
+                                                formControlName="nodes"
+                                                [options]="nodeOptions"
+                                                [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                                defaultLabel="Select..."
+                                                (onChange)="onNodesChanged($event)"></p-multiSelect>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-6">
+                        <div formGroupName="configuration">
+                            <label>
+                                <span class="required">Priority</span>
+                                <input
+                                    type="number"
+                                    pTooltip="0-10 reserved for system jobs.
+                                    11-100 very high priority
+                                    101-200 high priority
+                                    201-500 normal
+                                    501-1000 background"
+                                    pInputText
+                                    [min]="0"
+                                    [max]="1000000"
+                                    formControlName="priority" />
+                            </label>
+                            <span class="error-text">{{ this.priorityMessage }}</span>
+                        </div>
+                        <div class="margin-bottom-md">
+                            <p-checkbox
+                                binary="true"
+                                label="Supersede Recipes"
+                                pTooltip="Supersedes recipes created in this batch"
+                                formControlName="supersedes"
+                                ></p-checkbox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12">
+            <button pButton class="ui-button-primary create-batch__controls-btn" label="Validate" [disabled]="form.invalid"
+                (click)="validateBatch()"></button>
+            <span *ngIf="(!form.dirty && formValidated)">Validated</span>
+        </div>
+    </div>
+</div>

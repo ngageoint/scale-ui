@@ -82,9 +82,7 @@ export class BatchesApiService {
     createBatch(batch: Batch): Observable<any> {
         return this.http.post<Batch>(`${this.apiPrefix}/batches/`, batch.newBatch())
             .pipe(
-                map(response => {
-                    return Batch.transformer(response);
-                }),
+                map(response => Batch.transformer(response)),
                 catchError(DataService.handleError)
             );
     }
@@ -92,6 +90,7 @@ export class BatchesApiService {
     editBatch(batch: Batch): Observable<any> {
         return this.http.patch<Batch>(`${this.apiPrefix}/batches/${batch.id}/`, batch.editBatch())
             .pipe(
+                map(response => response),
                 catchError(DataService.handleError)
             );
     }
