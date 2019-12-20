@@ -77,6 +77,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                     type: 'timeline',
                     bounds: 'ticks',
                     ticks: {
+                        autoSkip: true,
+                        maxRotation: 65,
+                        minRotation: 30,
                         callback: (value, index, values) => {
                             if (!values[index]) {
                                 return;
