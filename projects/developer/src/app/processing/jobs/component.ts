@@ -159,8 +159,9 @@ export class JobsComponent implements OnInit, OnDestroy {
                     value: jobType
                 });
                 if (
-                    _.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
-                    _.indexOf(this.datatableOptions.job_type_version, jobType.version) >= 0
+                    (_.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
+                    _.indexOf(this.datatableOptions.job_type_version, jobType.version) >= 0) &&
+                    !(_.find(this.selectedJobType, jobType))
                 ) {
                     this.selectedJobType.push(jobType);
                 }
