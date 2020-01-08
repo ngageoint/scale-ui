@@ -19,6 +19,11 @@
          [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedJob"
          (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
          [autoLayout]="true" class="jobs__table" #datatable>
+    <ng-template pTemplate="caption">
+        <div class="ui-helper-clearfix" style="text-align: right">
+            <button type="button" pButton icon="fa fa-file-o" iconPos="left" label="CSV" (click)="datatable.exportCSV()" style="margin-right: 0.5em;"></button>
+        </div>
+    </ng-template>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field"
@@ -135,9 +140,18 @@
             </td>
         </tr>
     </ng-template>
+    <!-- <ng-template pTemplate="footer">
+        <div class="ui-helper-clearfix" style="text-align: left">
+            <button type="button" pButton icon="pi pi-file-o" iconPos="left" label="CSV" (click)="dt.exportCSV()" style="margin-right: 0.5em;"></button>
+            <button type="button" pButton icon="pi pi-file-excel" iconPos="left" label="EXCEL" (click)="exportExcel()" style="margin-right: 0.5em;" class="ui-button-success"></button>
+            <button type="button" pButton icon="pi pi-file-pdf" iconPos="left" label="PDF" (click)="exportPdf()" class="ui-button-warning"></button>
+            <button type="button" pButton icon="pi pi-file" iconPos="left" label="CSV - Selection Only" (click)="dt.exportCSV({selectionOnly:true})" style="float:right"></button>
+        </div>
+    </ng-template> -->
 </p-table>
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
              [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
+
 <p-confirmDialog key="jobsConfirm"></p-confirmDialog>
 <div *ngIf="selectedJobExe">
     <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay" (close)="hideExeLog()"></dev-log-viewer>
