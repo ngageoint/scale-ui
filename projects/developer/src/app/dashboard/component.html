@@ -12,35 +12,62 @@
             </dev-temporal-filter>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
-                <div class="charts" *ngIf="graph && (favoriteJobTypes.length == 0)">
-                        <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
-                            <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
+                <div class="charts" *ngIf="favoriteJobTypes.length == 0">
+                        <p-panel class="noWrapPanel dashboard__error-charts" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
+                                You haven't saved any favorites yet. Use the star button on an algorithm in the next tab to save it to this list
+                                for quick access.
                         </p-panel>
                     </div>
-                    <div class="charts-tabbed" *ngIf="graph && favoriteJobTypes.length > 0">
-                        <p-panel class="noWrapPanel" header="Job Status Counts" *ngIf="favoriteJobTypes || allJobTypes">
-                            <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-                                <p-tabPanel header="Favorites">
-                                    <plotly-plot class="centered" [data]="graphFav.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
-                                </p-tabPanel>
-                                <p-tabPanel [header]="'All Jobs'">
-                                    <plotly-plot class="centered" [data]="graph.data" [layout]="layout" [config]="{displayModeBar: false}"></plotly-plot>
-                                </p-tabPanel>
-                            </p-tabView>
+                    <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                        <p-panel class="noWrapPanel dashboard__error-charts-fav" header="Job Status Counts Favorites" *ngIf="favoriteJobTypes.length > 0">
+                            <div *ngIf="running_count > 0">
+                                <p-chart type="doughnut" [data]="running" [options]='options'></p-chart>
+                                <h3>Total Count: {{ running_count }}</h3>
+                                <h4 class='caption'>System: {{ systemCount.running }} User: {{ userCount.running }}</h4>
+                            </div>
+                            <div *ngIf="queued_count > 0">
+                                <p-chart type="doughnut" [data]="queued" [options]='options'></p-chart>
+                                <h3>Total Count: {{ queued_count }}</h3>
+                                <h4>System: {{ systemCount.queued }} User: {{ userCount.queued }}</h4>
+                            </div>
+                            <div *ngIf="pending_count > 0">
+                                <p-chart type="doughnut" [data]="pending" [options]='options'></p-chart>
+                                <h3>Total Count: {{ pending_count }}</h3>
+                                <h4>System: {{ systemCount.pending }} User: {{ userCount.pending }}</h4>
+                            </div>
                         </p-panel>
                     </div>
             </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
             <div class="charts" *ngIf="allJobTypes.length > 0">
-                <p-panel header="Data Feed">
+                <p-panel header="Data Feed"  [style]="{height: '460px'}">
                     <dev-data-feed [started]="started" [ended]="ended" ></dev-data-feed>
+                </p-panel>
+            </div>
+            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '444px'}">
+                    <div *ngIf="favoriteJobTypes.length == 0">
+                        <dev-job-history [started]="started" [ended]="ended"  ></dev-job-history>
+                    </div>
+                </p-panel>
+            </div>
+            <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
+                    <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                        <p-tabPanel [header]="'All Jobs'">
+                            <dev-job-history [started]="started" [ended]="ended" ></dev-job-history>
+                        </p-tabPanel>
+                        <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
+                            <dev-job-history [started]="started" [ended]="ended"  [favorite]="favJob"></dev-job-history>
+                        </p-tabPanel>
+                    </p-tabView>
                 </p-panel>
             </div>
         </div>
     </div>
     <div class="p-grid">
-        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__all-container">
-            <p-tabView>
+        <div class="p-col-12 p-md-12 p-lg-3 p-xl-3">
+            <p-tabView class="dashboard__job-types" ng-class="{'dashboard__job-types-fav': favoriteJobTypes}">
                 <p-tabPanel [header]="'Favorites (' + favoriteJobTypes.length + ')'">
                         <p-scrollPanel>
                             <p-table [columns]="columnsFavs" [value]="favoriteJobTypes" styleClass="nopadding" [loading]="loadingJobTypes"
@@ -89,25 +116,6 @@
             </p-tabView>
         </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
-            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
-                <p-panel header="Completed vs. Failed counts" [style]="{height: '444px'}">
-                    <div *ngIf="favoriteJobTypes.length == 0">
-                        <dev-job-history [started]="started" [ended]="ended"  ></dev-job-history>
-                    </div>
-                </p-panel>
-            </div>
-            <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
-                <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
-                    <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-                        <p-tabPanel [header]="'All Jobs'">
-                            <dev-job-history [started]="started" [ended]="ended" ></dev-job-history>
-                        </p-tabPanel>
-                        <p-tabPanel *ngFor="let favJob of favoriteJobTypes" leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="favJob.job_type.title">
-                            <dev-job-history [started]="started" [ended]="ended"  [favorite]="favJob"></dev-job-history>
-                        </p-tabPanel>
-                    </p-tabView>
-                </p-panel>
-            </div>
             <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
                 <p-panel header="Job Activity" [style]="{height: '444px'}">
                         <dev-job-activity [started]="started" [ended]="ended" ></dev-job-activity>

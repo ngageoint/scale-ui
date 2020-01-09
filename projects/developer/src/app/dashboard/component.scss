@@ -18,21 +18,18 @@
 
     .dashboard__error-charts {
         ::ng-deep .ui-panel-content {
-            height: 388px;
-        }
-
-        .dashboard__error-chart {
-            h3 {
-                margin: 0 0 5px 0;
-                text-align: center;
-            }
-
-            h4 {
-                margin: -10px 0 10px 0;
-                text-align: center;
-            }
+            height: 848px;
         }
     }
+    .dashboard__error-charts-fav {
+        ::ng-deep .ui-panel-content {
+            height: 898px;
+        }
+
+    }
+    #plot {
+        background-color: transparent !important;
+     }
 
     .dashboard__jobs-table {
         display: flex;
@@ -43,9 +40,14 @@
         }
     }
 
-    .dashboard__all-container {
+    .dashboard__job-types {
         ::ng-deep .ui-scrollpanel {
-            height: 815px;
+            height: 388px;
+        }
+    }
+    .dashboard__job-types-fav {
+        ::ng-deep .ui-scrollpanel {
+            height: 420px;
         }
     }
 }
@@ -54,6 +56,9 @@
     justify-content: center;
     align-items: center;
     padding: 10% 0;
+}
+.caption {
+    margin-top: 5px;
 }
 
 .dashboard__item {

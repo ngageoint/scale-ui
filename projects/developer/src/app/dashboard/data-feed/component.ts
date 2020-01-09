@@ -54,7 +54,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
     private updateFeedData() {
         if (this.selectedDataFeed) {
             this.ingestDataset = {
-                label: this.selectedDataFeed.value.strike.title + ' Ingests',
+                label: this.selectedDataFeed.value.strike.title + ' Ingest Time',
                 fill: true,
                 borderColor: ColorService.INGEST,
                 backgroundColor: ColorService.getRgba(ColorService.INGEST, .25),
@@ -70,7 +70,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 });
             });
             this.feedDataset = {
-                label: this.selectedDataFeed.value.strike.title + ' Data',
+                label: this.selectedDataFeed.value.strike.title + ' Data Time',
                 fill: true,
                 borderColor: ColorService.COMPLETED,
                 backgroundColor: ColorService.getRgba(ColorService.COMPLETED, .5),

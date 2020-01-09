@@ -8,6 +8,7 @@ import { DashboardJobsService } from './jobs.service';
 import { QueueApiService } from '../common/services/queue/api.service';
 import { ColorService } from '../common/services/color.service';
 
+
 @Component({
     selector: 'dev-dashboard',
     templateUrl: './component.html',
@@ -16,6 +17,7 @@ import { ColorService } from '../common/services/color.service';
 export class DashboardComponent implements OnInit, OnDestroy {
     started: any;
     ended: any;
+    data: any;
     loadingJobTypes: boolean;
     columnsFavs: any[];
     columnsAll: any[];
@@ -35,12 +37,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
     running: any;
     pending: any;
     queued: any;
+    running_count: any;
+    pending_count: any;
+    queued_count: any;
     dataFeedChartTitle: string;
     historyChartTitle: string;
     activityChartTitle: string;
     options: any;
     totalChartData: any;
     queueLoadData: any;
+    systemCount = {
+        running: 0,
+        pending: 0,
+        queued: 0
+    };
+    userCount = {
+        running: 0,
+        pending: 0,
+        queued: 0
+    };
     graph: any;
     graphFav: any;
     layout = {
@@ -51,7 +66,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ColorService.RUNNING,
             ColorService.PENDING,
             ColorService.QUEUED
-          ]
+          ],
+          xbgcolor: 'rgba(0,0,0,0)',
     };
     dateRangeOptions = [
         { label: 'Last day', value: 24 },
@@ -66,6 +82,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private jobsService: DashboardJobsService,
         private queueApiService: QueueApiService
     ) {
+        this.options = {
+            cutoutPercentage: 0,
+            tooltips: {
+                callbacks: {
+                    label: function (item, data) {
+                        const label = data.datasets[item.datasetIndex].labels[item.index];
+                        const value = data.datasets[item.datasetIndex].data[item.index];
+                        return label + ': ' + value;
+                    }
+                }
+            },
+            legend: {
+                display: true,
+                onClick: {
+
+                 }
+            }
+        };
         this.columnsFavs = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
@@ -81,6 +115,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
+        this.getQueueData();
         this.refreshAllJobTypes();
         this.jobsService.favoritesUpdated.subscribe(() => {
             this.refreshAllJobTypes();
@@ -91,7 +126,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     private refreshAllJobTypes() {
         this.loadingJobTypes = true;
-        this.unsubscribe();
+        // this.unsubscribe();
         const params = {
             is_active: true
         };
@@ -114,7 +149,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 };
                 this.subscription = this.jobsApiService.getJobs(chartParams).subscribe(chartData => {
                     if (this.favoriteJobTypes) {
-                        let favJobs = [];
+                        const favJobs = [];
                         _.forEach(this.favoriteJobTypes, favoriteJob => {
                             _.forEach(chartData.results, job => {
                                 if (favoriteJob.job_type.id === job.job_type.id) {
@@ -122,12 +157,26 @@ export class DashboardComponent implements OnInit, OnDestroy {
                                 }
                             });
                         });
-                        favJobs = _.uniqBy(favJobs, function (e) {
-                            return e.id;
-                          });
-                        this.graphFav = this.createSunburstChart(favJobs);
+
+                        const runningJobs = _.uniqBy(_.filter(favJobs, function (r) {
+                            return r.status === 'RUNNING';
+                        }), function (e) {
+                                return e.id;
+                            });
+                        this.createSunburstChart(runningJobs, 'running');
+                        const pendingJobs = _.uniqBy(_.filter(favJobs, function (r) {
+                            return r.status === 'PENDING';
+                        }), function (e) {
+                                return e.id;
+                            });
+                        this.createSunburstChart(pendingJobs, 'pending');
+                        const queuedJobs = _.uniqBy(_.filter(favJobs, function (r) {
+                            return r.status === 'QUEUED';
+                        }), function (e) {
+                                return e.id;
+                            });
+                        this.createSunburstChart(queuedJobs, 'queued');
                     }
-                    this.graph = this.createSunburstChart(chartData.results);
                 });
         },  err => {
             this.loadingJobTypes = false;
@@ -135,72 +184,86 @@ export class DashboardComponent implements OnInit, OnDestroy {
         });
     }
 
-    createSunburstChart(data) {
-        const runningJobs = _.filter(data, function (r) {
-            return r.status === 'RUNNING';
-         });
-         const pendingJobs = _.filter(data, function (r) {
-             return r.status === 'PENDING';
-          });
-          const queuedJobs = _.filter(data, function (r) {
-             return r.status === 'QUEUED';
-          });
-
-        //  this.getQueueData();
-         const labels = [];
-         const parents = [];
-         const values = [];
-         labels.push('Running');
-         labels.push('Pending');
-         labels.push('Queued');
-         parents.push('');
-         parents.push('');
-         parents.push('');
-        //  values.push(this.running);
-        //  values.push(this.queued);
-        //  values.push(this.pending);
-         _.forEach(runningJobs, job => {
+    createSunburstChart(data, type) {
+        const labels = [];
+        const values = [];
+        let tempSysCount = 0;
+        let tempUserCount = 0;
+         _.forEach(data, job => {
              const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
              if ( index > 0) {
                  values[index] = values[index]++;
              } else {
                  labels.push(job.job_type.title);
-                 parents.push('Running');
                  values.push(1);
              }
-         });
-         _.forEach(pendingJobs, job => {
-             const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-             if ( index > 0) {
-                 values[index] = values[index]++;
+             if ( job.job_type.is_system ) {
+                tempSysCount++;
              } else {
-                 labels.push(job.job_type.title);
-                 parents.push('Pending');
-                 values.push(1);
+                tempUserCount++;
              }
          });
-         _.forEach(queuedJobs, job => {
-            const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-            if ( index > 0) {
-                values[index] = values[index]++;
-            } else {
-                labels.push(job.job_type.title);
-                parents.push('Queued');
-                values.push(1);
-            }
-        });
-          const graph = {
-            data: [{
-                type: 'sunburst',
-                labels: labels,
-                parents: parents,
-                // values: values,
-                outsidetextfont: {size: 20, color: '#377eb8'},
-                leaf: {opacity: 0.5},
-                marker: {line: {width: 2}}
-              }]
+        if (type === 'running') {
+            this.systemCount.running = tempSysCount;
+            this.userCount.running = tempUserCount;
+        this.running = {
+            labels: ['Running'],
+            datasets: [
+                {
+                    data: values,
+                    label: 'Data 2',
+                    labels: labels,
+                    backgroundColor: ColorService.RUNNING
+                },
+                // {
+                //     data: [this.running_count],
+                //     label: 'Data 1',
+                //     labels: ['running'],
+                //     backgroundColor : [ColorService.RUNNING]
+                // }
+            ],
         };
-        return graph;
+        } else if (type === 'pending') {
+            this.systemCount.pending = tempSysCount;
+            this.userCount.pending = tempUserCount;
+            this.pending = {
+                labels: ['Pending'],
+                datasets: [
+                    {
+                        data: values,
+                        label: 'Data 2',
+                        labels: labels,
+                        backgroundColor: ColorService.PENDING
+                    },
+                    // {
+                    //     data: [this.pending_count],
+                    //     label: 'Data 1',
+                    //     labels: ['pending'],
+                    //     backgroundColor: [ColorService.PENDING]
+                    // }
+                ],
+            };
+        } else if (type === 'queued') {
+            this.systemCount.queued = tempSysCount;
+            this.userCount.queued = tempUserCount;
+            this.queued = {
+                labels: ['Queued'],
+                datasets: [
+                    {
+                        data: values,
+                        label: 'Data 2',
+                        labels: labels,
+                        backgroundColor: ColorService.QUEUED
+                    },
+                    // {
+                    //     data: [this.queued_count],
+                    //     label: 'Data 1',
+                    //     labels: ['queued'],
+                    //     backgroundColor : [ColorService.QUEUED]
+                    // }
+                ],
+            };
+        }
     }
 
     getQueueData() {
@@ -209,16 +272,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ended: this.ended,
         };
         this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
-            this.queueLoadData = data;
-            this.running = 0;
-            this.queued = 0;
-            this.pending = 0;
+            this.running_count = 0;
+            this.queued_count = 0;
+            this.pending_count = 0;
+            const lastValue = data.results.length - 1;
+            const lastHour = data.results[lastValue];
 
-            _.forEach(data.results, result => {
-                this.running = result.running_count;
-                this.queued = result.queued_count;
-                this.pending = result.pending_count;
-            });
+            this.running_count = lastHour.running_count;
+            this.queued_count = lastHour.queued_count;
+            this.pending_count = lastHour.pending_count;
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
         });

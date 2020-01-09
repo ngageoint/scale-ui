@@ -31,11 +31,13 @@ export class ChartService {
             queryDates = [];
 
         const datasets = [];
-        const dataLabels = [];
+        let dataLabels = [];
+        // console.log(data);
 
-        const numDays = moment.utc(params.ended, 'YYYY-MM-DD').diff(moment.utc(params.started, 'YYYY-MM-DD'), 'd');
+        const numDays = moment.utc(params.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').diff(moment.utc(params.started,
+            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'd');
         for (let i = 0; i < numDays; i++) {
-            dataLabels.push(moment.utc(params.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
+            dataLabels.push(moment.utc(params.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').add(i, 'h').format('YYYY-MM-DDTHH:mm:ss.SSSZ'));
         }
 
         if (filtersApplied.length > 0) {
@@ -81,15 +83,28 @@ export class ChartService {
                                 filtersApplied[0] :
                                 _.find(filtersApplied, { id: parseInt(d[0], 10) });
                             queryDates = d[1];
-
-                            // add result values to valueArr
-                            _.forEach(dataLabels, (xDate) => {
-                                const valueObj = _.find(queryDates, (qDate) => {
-                                    return moment.utc(qDate.datetime, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                            if (numDays === 1) {
+                                _.forEach(dataLabels, (xDate) => {
+                                    const valueObj = _.find(queryDates, (qDate) => {
+                                        return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
+                                            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'hour');
+                                    });
+                                    // push 0 if data for xDate is not present in queryDates
+                                    valueArr.push(valueObj ? valueObj.value : 0);
                                 });
-                                // push 0 if data for xDate is not present in queryDates
-                                valueArr.push(valueObj ? valueObj.value : 0);
-                            });
+                            } else {
+                                _.forEach(dataLabels, (xDate) => {
+                                    const valueObj = _.find(queryDates, (qDate) => {
+                                        return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
+                                            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'day');
+                                    });
+                                    valueArr.push(valueObj ? valueObj.value : 0);
+                                });
+                                dataLabels = [];
+                                for (let i = 0; i < numDays; i++) {
+                                    dataLabels.push(moment.utc(params.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
+                                }
+                            }
 
                             // prepend valueArr with filter title, and push onto colArr
                             colArr.push({
@@ -128,6 +143,7 @@ export class ChartService {
                             type = secondaryType === 'area' ? 'line' : secondaryType;
                             fill = secondaryType === 'area';
                         }
+                        // console.log(datasets);
                         datasets.push({
                             id: filter.id,
                             name: filter.name,
@@ -182,13 +198,28 @@ export class ChartService {
                     }
                     valueArr = [];
                     // add result values to valueArr
-                    _.forEach(dataLabels, (xDate) => {
-                        const valueObj = _.find(result.values, (qDate) => {
-                            return moment.utc(qDate.datetime, 'YYYY-MM-DD').isSame(moment.utc(xDate, 'YYYY-MM-DD'), 'day');
+                    if (numDays === 1) {
+                        _.forEach(dataLabels, (xDate) => {
+                            const valueObj = _.find(result.values, (qDate) => {
+                                return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
+                                    'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'hour');
+                            });
+                            // push 0 if data for xDate is not present in queryDates
+                            valueArr.push(valueObj ? valueObj.value : 0);
                         });
-                        // push 0 if data for xDate is not present in result.values
-                        valueArr.push(valueObj ? valueObj.value : 0);
-                    });
+                    } else {
+                        _.forEach(dataLabels, (xDate) => {
+                            const valueObj = _.find(result.values, (qDate) => {
+                                return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
+                                    'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'day');
+                            });
+                            valueArr.push(valueObj ? valueObj.value : 0);
+                        });
+                        dataLabels = [];
+                        for (let i = 0; i < numDays; i++) {
+                            dataLabels.push(moment.utc(params.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
+                        }
+                    }
 
                     if (title === '') {
                         title = 'for all ';
