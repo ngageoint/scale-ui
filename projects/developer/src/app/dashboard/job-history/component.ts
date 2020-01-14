@@ -38,6 +38,12 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     private updateChart(favorite?: any) {
         this.chartLoading = true;
         this.allJobs = this.jobsService.getAllJobs();
+        const numDays = moment.utc(this.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').diff(moment.utc(this.started,
+            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'd');
+        if (numDays === 1 ) {
+            this.started = moment.utc(this.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').startOf('days').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+            this.ended = moment.utc(this.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').startOf('days').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        }
         const choiceIds = this.favorite ?
             this.favorite.job_type.id :
             [];

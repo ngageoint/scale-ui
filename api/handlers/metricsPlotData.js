@@ -40,7 +40,7 @@ module.exports = function (request) {
                 values: []
             };
 
-            for (var i = 0; i < numDays; i++) {
+            for (var i = 0; i < (numDays * 24); i++) {
                 if (params.choice_id && params.choice_id.length > 1) {
                     _.forEach(params.choice_id, function (id) {
                         random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;

@@ -36,10 +36,9 @@ export class ChartService {
 
         const numDays = moment.utc(params.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').diff(moment.utc(params.started,
             'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'd');
-        for (let i = 0; i < numDays; i++) {
+        for (let i = 0; i < (numDays * 24); i++) {
             dataLabels.push(moment.utc(params.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').add(i, 'h').format('YYYY-MM-DDTHH:mm:ss.SSSZ'));
         }
-
         if (filtersApplied.length > 0) {
             // filters were applied, so build data source accordingly
             let idx = 0;
@@ -93,6 +92,7 @@ export class ChartService {
                                     valueArr.push(valueObj ? valueObj.value : 0);
                                 });
                             } else {
+                                console.log(queryDates)
                                 _.forEach(dataLabels, (xDate) => {
                                     const valueObj = _.find(queryDates, (qDate) => {
                                         return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
@@ -143,7 +143,6 @@ export class ChartService {
                             type = secondaryType === 'area' ? 'line' : secondaryType;
                             fill = secondaryType === 'area';
                         }
-                        // console.log(datasets);
                         datasets.push({
                             id: filter.id,
                             name: filter.name,
