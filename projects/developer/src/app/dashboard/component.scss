@@ -18,12 +18,12 @@
 
     .dashboard__error-charts {
         ::ng-deep .ui-panel-content {
-            height: 848px;
+            height: 438px;
         }
     }
     .dashboard__error-charts-fav {
         ::ng-deep .ui-panel-content {
-            height: 898px;
+            height: 388px;
         }
 
     }
@@ -36,18 +36,18 @@
         justify-content: space-between;
 
         ::ng-deep .ui-panel-content {
-            height: 388px;
+            height: 898px;
         }
     }
 
     .dashboard__job-types {
         ::ng-deep .ui-scrollpanel {
-            height: 388px;
+            height: 848px;
         }
     }
     .dashboard__job-types-fav {
         ::ng-deep .ui-scrollpanel {
-            height: 420px;
+            height: 898px;
         }
     }
 }

@@ -92,7 +92,6 @@ export class ChartService {
                                     valueArr.push(valueObj ? valueObj.value : 0);
                                 });
                             } else {
-                                console.log(queryDates)
                                 _.forEach(dataLabels, (xDate) => {
                                     const valueObj = _.find(queryDates, (qDate) => {
                                         return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
