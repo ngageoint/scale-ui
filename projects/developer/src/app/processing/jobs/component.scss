@@ -25,7 +25,11 @@ label {
     }
 
     .job__selected {
-        color: #999;
+        color: var(--grey-40);
+        background-color: var(--grey-90);
+        a {
+            color: var(--grey-40);
+        }
     }
 }
 .jobs__selected {
