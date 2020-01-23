@@ -44,8 +44,14 @@ export class Dataset {
             this.description = this.description || null;
             this.created = this.created || null;
             this.created = this.created || null;
-            this.definition = this.definition || { global_data: {}, global_parameters: {}, parameters: {}} ;
-            this.files = this.files || null;
-            this.members = this.members || null;
+            this.definition = this.definition || { global_data: {}, global_parameters: {}, parameters: {}};
+
+            if (this.files) {
+                this.files = this.files;
+            }
+
+            if (this.members) {
+                this.members = this.members;
+            }
         }
 }

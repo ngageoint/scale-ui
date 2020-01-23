@@ -15,7 +15,8 @@ module.exports = function(request) {
     var stop = params.modified_ended
         ? moment.utc(params.modified_ended)
         : moment.utc();
-    var countriesList = [["TCY", "TCT"], ["ABC"], ["BCA", "CBA", "ACB"]];
+
+    var countriesList = [["TCY", "TCT"], ["ABC"]];
     var mediaTypesList = [
         "application/vnd.google-earth.kml+xml",
         "application/vnd.google-earth.kml",
@@ -23,19 +24,31 @@ module.exports = function(request) {
     ];
     for (var i = 0; i < 500; i++) {
         var date = moment
-            .utc(
-                start.valueOf() +
-                    Math.random() * (stop.valueOf() - start.valueOf())
-            )
+            .utc(start.valueOf() + _.random(stop.valueOf() - start.valueOf()))
             .toISOString();
         var id = i + 1;
-        var country = countriesList[Math.floor(3 * Math.random())];
-        var mediaType = mediaTypesList[Math.floor(3 * Math.random())];
-        var data_started = moment
-            .utc()
-            .subtract(Math.max(Math.floor(30 * Math.random()), 2), "d");
+        var randomCountries = _.sampleSize(["BCA", "CBA", "ACB"], [n=_.random(1,3)])
+        var country = _.sample([...countriesList, randomCountries]);
+        var mediaType = _.sample(mediaTypesList);
+        var data_started = moment.utc().subtract(Math.max(_.random(30), 2), "d");
         var data_ended = data_started.add(1, "d");
 
+        var recipe_types = [
+            {
+                id: 6,
+                name: "my-recipe",
+                title: "My Recipe",
+                description: "Processes some data",
+                revision_num: 1
+            },
+            {
+                id: 1,
+                name: "my-other-recipe",
+                title: "My Other Recipe",
+                description: "Processes some other data",
+                revision_num: 123
+            }
+        ];
         data.results.push({
             id: id,
             workspace: {
@@ -88,13 +101,7 @@ module.exports = function(request) {
                 id: 60
             },
             recipe_node: "landsat8",
-            recipe_type: {
-                id: 6,
-                name: "my-recipe",
-                title: "My Recipe",
-                description: "Processes some data",
-                revision_num: 1
-            },
+            recipe_type: _.sample(recipe_types),
             batch: {
                 id: 15,
                 title: "My Batch",

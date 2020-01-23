@@ -1,36 +1,37 @@
-import { MenuItem, MessageService } from 'primeng/api';
-import { Component, OnInit } from '@angular/core';
+import { Batch } from './../api.model';
+import { MenuItem } from 'primeng/api';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { RecipeType } from '../../../configuration/recipe-types/api.model';
 import { Dataset } from '../../../data/models/dataset.model';
-import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
-    providers: [MessageService],
     selector: 'dev-batch-workflow',
     templateUrl: './batch-workflow.component.html',
     styleUrls: ['./batch-workflow.component.scss']
 })
 export class BatchWorkflowComponent implements OnInit {
-    items: MenuItem[];
-    activeIndex = 0;
-    activeStepName = 'create-batch';
-    recipeSelection: RecipeType;
-    datasetSelection: Dataset;
-
+    steps: MenuItem[];
     private stepNameDictionary = {
         0: 'create-batch',
         1: 'create-dataset',
         2: 'run-batch'
     };
+    @Input() currentStep = 0;
+    get currentStepName(): string {
+        return this.stepNameDictionary[this.currentStep];
+    }
+    @Output() activeIndexChange: EventEmitter<any> = new EventEmitter();
+    recipeSelection: RecipeType;
+    datasetSelection: Dataset;
+    datasetFormOptions: any;
+    batchSelection: Batch;
+    batchRecipe: RecipeType;
+    multipleInput: boolean;
 
-    constructor(
-        private messageService: MessageService,
-        private router: Router,
-        private activatedRoute: ActivatedRoute
-    ) {}
+    constructor() {}
 
     ngOnInit() {
-        this.items = [
+        this.steps = [
             {label: 'Create Batch'},
             {label: 'Create Dataset'},
             {
@@ -40,20 +41,6 @@ export class BatchWorkflowComponent implements OnInit {
                 }
             }
         ];
-
-    }
-
-    isOptionalStep() {
-        switch (this.activeIndex) {
-            case 0:
-            // Select recipe type
-            case 1:
-            // Create dataset
-            case 2:
-            // Create dataset
-            default:
-                return false;
-        }
     }
 
     handleRecipeSelection(event) {
@@ -61,11 +48,32 @@ export class BatchWorkflowComponent implements OnInit {
     }
 
     handleDatasetSelection(event) {
-        this.datasetSelection = event;
+        if (event.dataset.datasetSelection) {
+            this.datasetSelection = event.dataset.datasetSelection;
+        } else {
+            this.datasetSelection = event.datasetSelection;
+        }
     }
 
     handleStepChange(event) {
-        this.activeIndex = event;
-        this.activeStepName = this.stepNameDictionary[event];
+        this.currentStep = event;
+    }
+
+    handleBatchChange(event: Batch) {
+    }
+
+    private next(event: {index: number, createBatch?: any, dataset?: any}): void {
+        this.currentStep = this.currentStep + 1;
+        if (event.createBatch) {
+            this.batchSelection = event.createBatch.batch;
+            this.batchRecipe = event.createBatch.batchRecipe;
+            this.multipleInput = event.createBatch.multipleInput;
+        }
+        if (event.dataset) {
+            this.datasetSelection = event.dataset.datasetSelection;
+            this.datasetFormOptions =  event.dataset.datasetFormOptions;
+        }
+
+        this.activeIndexChange.emit(this.currentStep);
     }
 }

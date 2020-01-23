@@ -2,19 +2,20 @@
     <div class="p-col-12 margin-bottom-md">
         <div class="margin-bottom-md">
             <label>
-                <span>Select an existing dataset or 'Create new'</span>
+                <span>Select an existing dataset{{!multipleInputRecipe ?  " or 'Create new'" : ''}}</span>
                 <p-dropdown
-                    formControlName="datasetSelected"
+                    formControlName="datasetSelection"
                     [options]="datasetOptions"
                     placeholder="Select a dataset"
                     [style]="{'width': '100%'}"
                     [filter]='true'
                     filterBy="label,value.name"
-                    (onChange)="onDatasetSelectChange($event)"></p-dropdown>
+                    (onChange)="onDatasetSelectChange($event)">
+                </p-dropdown>
             </label>
         </div>
 
-        <div *ngIf="selectedDataset === 'CreateNew'">
+        <div *ngIf="datasetSelection === 'CreateNew'">
             <div class="margin-bottom-md">
                 <label>
                     <span class="required">Title</span>
@@ -32,13 +33,13 @@
                     <span>Description</span>
                     <textarea pInputTextarea
                         id="description"
-                        type="text"
+                        class="full-width"
                         formControlName="description"
+                        type="text"
                         rows="4"
                         maxLength="500"
-                        pTooltip="Description has a 500 character limit."class="full-width"></textarea>
+                        pTooltip="Description has a 500 character limit."></textarea>
                 </label>
-
             </div>
 
             <div class="p-grid margin-bottom-md">
@@ -87,11 +88,17 @@
                                 <span class="error-text">{{ endDateMessage }}</span>
                             </div>
                         </div>
+                        <button pButton
+                            class="ui-button-primary create-dataset__controls-btn"
+                            label="Query Data Files"
+                            (click)="onQueryDataFilesClick()"
+                            [disabled]="!isCreateNewDataset()">
+                        </button>
                     </p-fieldset>
                 </div>
 
-                <div class="p-col-6">
-                    <p-fieldset legend="Optional Fields" formGroupName="optionalFilters">
+                <div *ngIf="datasetFileList.length" class="p-col-6">
+                    <p-fieldset legend="Filters" formGroupName="optionalFilters">
                         <div class="margin-bottom-md">
                             <label>
                                 <span>Location</span>
@@ -102,6 +109,7 @@
                                     [style]="{'width': '100%'}"
                                     [filter]='true'
                                     filterBy="label,value.name"
+                                    [showClear]='true'
                                     (onChange)="onLocationFilterChange($event)">
                                 </p-dropdown>
                             </label>
@@ -115,6 +123,7 @@
                                     placeholder="Select a Media Types to filter results"
                                     [style]="{'width': '100%'}"
                                     [filter]='true'
+                                    [showClear]='true'
                                     filterBy="label,value.name"
                                     (onChange)="onMediaTypeFilterChange($event)">
                                 </p-dropdown>
@@ -129,6 +138,7 @@
                                     placeholder="Select a Recipe Type to filter results"
                                     [style]="{'width': '100%'}"
                                     [filter]='true'
+                                    [showClear]='true'
                                     filterBy="label,value.name"
                                     (onChange)="onRecipeTypeFilterChange($event)">
                                 </p-dropdown>
@@ -140,34 +150,28 @@
         </div>
     </div>
 
-    <div class="p-col-12 ">
-        <button pButton
-            class="ui-button-primary create-dataset__controls-btn"
-            label="Save"
-            (click)="onSaveClick()"
-            [disabled]="!canSave()"></button>
-        <button pButton
-            class="ui-button-primary create-dataset__controls-btn"
-            label="Get Data Files"
-            (click)="onGetDataFilesClick()"
-            [disabled]="selectedDataset !== 'CreateNew'"></button>
-    </div>
-    <div *ngIf="datasetFileList.length" class="p-col-12">
-        <div>Results: {{datasetFileList.length}}</div>
+    <div *ngIf="filteredDatasetFileList.length" class="p-col-12">
+        <div>Results: {{filteredDatasetFileList.length}}</div>
         <p-table
             [columns]="datasetColumns"
-            [value]="datasetFileList"
+            [value]="filteredDatasetFileList"
             styleClass="nopadding"
             [rowHover]="true"
             [scrollable]="true"
-            scrollHeight="300px"
+            scrollHeight="200px"
+            [resizableColumns]="true"
             [loading]="datatableLoading"
             [sortField]="datatableOptions.sortField"
             [sortOrder]="datatableOptions.sortOrder"
             #datasetDatatable>
+            <ng-template pTemplate="colgroup" let-columns>
+                <colgroup>
+                    <col *ngFor="let col of columns" [style.width]="col.width">
+                </colgroup>
+            </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th *ngFor="let col of columns">
+                    <th *ngFor="let col of columns" pResizableColumn>
                         {{ col.header }}
                     </th>
                 </tr>
@@ -180,5 +184,14 @@
                 </tr>
             </ng-template>
         </p-table>
+    </div>
+
+    <div class="p-col-12 ">
+        <button pButton
+            class="ui-button-primary create-dataset__controls-btn"
+            label="{{ getDatasetButtonLabel() }}"
+            (click)="onDatasetSelectionClick()"
+            [disabled]="!canSave()">
+        </button>
     </div>
 </div>

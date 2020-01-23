@@ -27,30 +27,20 @@
                                     placeholder="Select a Recipe Type" [style]="{'width': '100%'}" [filter]="true"
                                     filterBy="label,value.name"></p-dropdown>
                             </label>
+                            <span class="warning-text">{{ recipeTypeMessage }}</span>
                         </div>
                         <div formGroupName="definition">
                             <div formGroupName="previous_batch">
                                 <div formGroupName="forced_nodes">
-                                    <div class="margin-bottom-md" *ngIf="batch.recipe_type" >
-                                        <p-checkbox
-                                            binary="true"
-                                            formControlName="all"
-                                            label="Rerun All Jobs"
-                                            pTooltip="Reprocess every job"
-                                            (onChange)="setAllNodes($event)"></p-checkbox>
-                                    </div>
-                                    <div class="margin-bottom-md">
-                                        <strong>Rerun Jobs</strong>
-                                        <div *ngIf="!batch.recipe_type">Choose a recipe type in order to see relevant jobs.
-                                        </div>
-                                        <div *ngIf="batch.recipe_type">
-                                            <p-multiSelect
-                                                formControlName="nodes"
-                                                [options]="nodeOptions"
-                                                [style]="{'width':'100%', 'margin-bottom':'10px'}"
-                                                defaultLabel="Select..."
-                                                (onChange)="onNodesChanged($event)"></p-multiSelect>
-                                        </div>
+                                    <div *ngIf="batch.recipe_type" class="margin-bottom-md">
+                                        <strong>Run Batch on the Following:</strong>
+                                        <p-multiSelect
+                                            formControlName="nodes"
+                                            [options]="nodeOptions"
+                                            [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                            defaultLabel="Select..."
+                                            (onChange)="onNodesChanged($event)"
+                                        ></p-multiSelect>
                                     </div>
                                 </div>
                             </div>
@@ -75,20 +65,32 @@
                             <span class="error-text">{{ priorityMessage }}</span>
                         </div>
                         <div class="margin-bottom-md">
-                            <p-checkbox
-                                binary="true"
-                                label="Supersede Recipes"
-                                pTooltip="Supersedes recipes created in this batch"
-                                formControlName="supersedes"
-                                ></p-checkbox>
+                            <div class="margin-bottom-sm">
+                                <p-radioButton
+                                    name="supersedesGroup"
+                                    value="true"
+                                    label="Reprocess recipe (default)"
+                                    formControlName="supersedes"
+                                    inputId="supersedesTrue"
+                                ></p-radioButton>
+                            </div>
+                            <div class="margin-bottom-sm">
+                                <p-radioButton
+                                    name="supersedesGroup"
+                                    value="false"
+                                    label="Create new recipe"
+                                    formControlName="supersedes"
+                                    inputId="supersedesFalse"
+                                ></p-radioButton>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="p-col-12">
-            <button pButton class="ui-button-primary create-batch__controls-btn" label="Validate" [disabled]="form.invalid"
-                (click)="validateBatch()"></button>
+            <button pButton class="ui-button-primary create-batch__controls-btn" label="Next Step" [disabled]="form.invalid"
+                (click)="handleNextStep()"></button>
             <span *ngIf="(!form.dirty && formValidated)">Validated</span>
         </div>
     </div>

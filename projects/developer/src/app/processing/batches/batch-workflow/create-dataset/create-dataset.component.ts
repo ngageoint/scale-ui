@@ -4,7 +4,7 @@ import { DatasetMemberDatatable } from './create-dataset-datable.model';
 import { FilesApiService } from './../../../../common/services/files/api.service';
 import { SelectItem } from 'primeng/primeng';
 import { IDatasetDefinition } from '../../../../data/services/dataset';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DatasetsApiService } from '../../../../data/services/dataset.api.service';
 import {
     FormGroup,
@@ -14,7 +14,8 @@ import {
     AbstractControl
 } from '@angular/forms';
 import { onlyUnique } from '../../../../common/utils/filters';
-import { ValidationMessages } from '../../../../common/utils/ValidationMessages';
+import { ValidationMessages } from '../../../../common/utils/CustomValidation';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'dev-create-dataset',
@@ -24,9 +25,12 @@ import { ValidationMessages } from '../../../../common/utils/ValidationMessages'
 export class CreateDatasetComponent implements OnInit {
     form: FormGroup;
     data: IDatasetDefinition;
+    @Output() valueChange = new EventEmitter();
+    @Output() nextStepEvent = new EventEmitter();
 
     datasetOptions: SelectItem[] = [];
-    selectedDataset: any = null;
+    @Input() datasetSelection: any = {};
+    @Input() datasetFormOptions: any = {};
 
     locationOptions: SelectItem[] = [];
     locationSelected: any = null;
@@ -35,15 +39,19 @@ export class CreateDatasetComponent implements OnInit {
     mediaTypeSelected: any = null;
 
     recipeTypeOptions: SelectItem[] = [];
-    recipeTypeSelected: any = null;
+    @Input() batchRecipe: any = null;
+    @Input() multipleInputRecipe = false;
 
     datasetFileList: FileModel[] = [];
+    filteredDatasetFileList: FileModel[] = [];
+    dataFilesFilter: any = {};
     savedDataset: any;
     datatableOptions: DatasetMemberDatatable;
 
     datatableLoading: boolean;
     datasetColumns: any[];
-    datasetSelectedControl: FormControl;
+
+    datasetSelectionControl: FormControl;
     titleControl: FormControl;
     descriptionControl: FormControl;
     startDateControl: FormControl;
@@ -89,59 +97,96 @@ export class CreateDatasetComponent implements OnInit {
         this.datatableOptions = new DatasetMemberDatatable(0, 20, 'id', -1);
 
         this.datasetColumns = [
-            { field: 'id', header: 'ID' },
-            { field: 'file_name', header: 'File Name' },
-            { field: 'media_type', header: 'Media Type' },
-            { field: 'countries', header: 'Location(s)' }
+            { field: 'id', header: 'ID', width: '10%' },
+            { field: 'file_name', header: 'File Name', width: '30%' },
+            { field: 'media_type', header: 'Media Type' , width: '40%'},
+            { field: 'countries', header: 'Location(s)', width: '20%' }
         ];
 
-        this.datasetSelectedControl = this.fb.control('', Validators.required);
+        if (this.datasetFormOptions) {
+            this.datasetSelectionControl = this.fb.control(this.datasetFormOptions.datasetSelection || '', Validators.required);
 
-        this.titleControl = this.fb.control(
-            { value: '', disabled: !this.datasetSelectedControl.value },
-            Validators.required
-        );
+            this.titleControl = this.fb.control(
+                { value: this.datasetFormOptions.title || '', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
 
-        this.descriptionControl = this.fb.control({
-            value: '',
-            disabled: !this.datasetSelectedControl.value
-        });
+            this.descriptionControl = this.fb.control({
+                value: this.datasetFormOptions.description || '',
+                disabled: !this.datasetSelectionControl.value
+            });
 
-        this.startDateControl = this.fb.control(
-            { value: '', disabled: !this.datasetSelectedControl.value },
-            Validators.required
-        );
+            this.startDateControl = this.fb.control(
+                { value: this.datasetFormOptions.startDate || '', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
 
-        this.endDateControl = this.fb.control(
-            { value: '', disabled: !this.datasetSelectedControl.value },
-            Validators.required
-        );
+            this.endDateControl = this.fb.control(
+                { value: this.datasetFormOptions.endDate || '', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
 
-        this.locationFilterControl = this.fb.control(null);
-        this.mediaTypesFilterControl = this.fb.control(null);
-        this.recipeTypesFilterControl = this.fb.control(null);
+            const locationFilterValue = this.datasetFormOptions.optionalFilters ?
+                this.datasetFormOptions.optionalFilters.locationFilter : null;
+            this.locationFilterControl = this.fb.control({value: locationFilterValue, disabled: true});
 
-        this.optionalFiltersControl = this.fb.group({
-            locationFilter: this.locationFilterControl,
-            mediaTypesFilter: this.mediaTypesFilterControl,
-            recipeTypesFilter: this.recipeTypesFilterControl
-        });
+            const mediaTypesFilterValue = this.datasetFormOptions.optionalFilters ?
+                this.datasetFormOptions.optionalFilters.mediaTypesFilter : null;
+            this.mediaTypesFilterControl = this.fb.control({value: mediaTypesFilterValue, disabled: true});
+
+            const recipeTypesFilterValue = this.datasetFormOptions.optionalFilters ?
+                this.datasetFormOptions.optionalFilters.recipeTypesFilter : null;
+            this.recipeTypesFilterControl = this.fb.control({value: recipeTypesFilterValue, disabled: true});
+        } else {
+            this.datasetSelectionControl = this.fb.control('', Validators.required);
+
+            this.titleControl = this.fb.control(
+                { value: '', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
+
+            this.descriptionControl = this.fb.control({
+                value: '',
+                disabled: !this.datasetSelectionControl.value
+            });
+
+            this.startDateControl = this.fb.control(
+                { value: '', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
+
+            this.endDateControl = this.fb.control(
+                { value: '', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
+
+            this.locationFilterControl = this.fb.control({value:null, disabled: !this.datasetSelectionControl.value});
+            this.mediaTypesFilterControl = this.fb.control({value:null, disabled: !this.datasetSelectionControl.value});
+            this.recipeTypesFilterControl = this.fb.control({value:null, disabled: !this.datasetSelectionControl.value});
+
+            this.optionalFiltersControl = this.fb.group({
+                locationFilter: this.locationFilterControl,
+                mediaTypesFilter: this.mediaTypesFilterControl,
+                recipeTypesFilter: this.recipeTypesFilterControl
+            });
+        }
 
         this.form = this.fb.group({
-            datasetSelected: this.datasetSelectedControl
+            datasetSelection: this.datasetSelectionControl
         });
+        if (!this.multipleInputRecipe) {
+            this.datasetOptions = [{ label: 'Create New', value: 'CreateNew' }];
+        }
 
-        this.datasetOptions = [{ label: 'Create New', value: 'CreateNew' }];
         this.datasetService.getDatasets({}).subscribe(
             data => {
                 this.datasetOptions.push(
-                    ...data.results.map(dataset => {
-                        return { label: dataset.title, value: dataset };
-                    })
+                    ...data.results.map(dataset => ({ label: dataset.title, value: dataset }))
                 );
             },
             err => {}
         );
+
         this.titleControl.valueChanges
             .pipe(debounceTime(1000))
             .subscribe(() => {
@@ -150,6 +195,7 @@ export class CreateDatasetComponent implements OnInit {
                     this.validationMessages.title
                 );
             });
+
         this.startDateControl.valueChanges
             .pipe(debounceTime(1000))
             .subscribe(() => {
@@ -158,6 +204,7 @@ export class CreateDatasetComponent implements OnInit {
                     this.validationMessages.startDate
                 );
             });
+
         this.endDateControl.valueChanges
             .pipe(debounceTime(1000))
             .subscribe(() => {
@@ -166,85 +213,110 @@ export class CreateDatasetComponent implements OnInit {
                     this.validationMessages.endDate
                 );
             });
+
+        if (this.datasetSelection) {
+            this.form.patchValue({datasetSelection: this.datasetSelection});
+        }
+
+        if (this.batchRecipe) {
+            this.recipeTypeOptions = [{
+                label: `${this.batchRecipe.title} v${this.batchRecipe.revision_num}`,
+                value: this.batchRecipe
+            }];
+            this.form.patchValue({recipeTypesFilter: this.batchRecipe});
+            this.recipeTypesFilterControl.disable();
+        }
     }
 
-    onSaveClick() {
-        console.log('Save Dataset.');
-        if (this.form.valid) {
-            const title = this.form.get('title').value || '';
-            const description = this.form.get('description').value || '';
-            this.savedDataset = this.datasetService
-                .createDataset({
-                    title: title,
-                    description: description
-                })
-                .subscribe(savedDataset => {
-                    const fileIds = this.datasetFileList.map(file => file.id);
-                    this.datasetService.addMembers(savedDataset.id, fileIds);
-                });
+    onDatasetSelectionClick() {
+        if (!this.isCreateNewDataset()) {
+            this.valueChange.emit({dataset: {datasetSelection: this.form.get('datasetSelection').value}});
         } else {
-            console.log('Please complete required fields before saving.');
+
+            if (this.form.valid) {
+                const options = {
+                    title: this.form.get('title').value || '',
+                    description: this.form.get('description').value || '',
+                };
+                options['startDate'] = new Date(this.form.get('startDate').value).toISOString();
+                options['endDate'] = new Date(this.form.get('endDate').value).toISOString();
+                options['optionalFilters'] = this.form.get('optionalFilters').value;
+
+                this.datasetService.createDatasetWithDataTemplate(options)
+                    .subscribe(savedDataset => {
+                        this.savedDataset = savedDataset;
+                    });
+            } else {
+                console.log('Please complete required fields before saving.');
+            }
         }
+        this.handleNextStep();
+    }
+
+    handleNextStep(): void {
+        this.nextStepEvent.emit({
+            dataset: {
+                datasetSelection: this.form.get('datasetSelection').value,
+                datasetFormOptions: this.form.value
+            },
+            index: 1
+        });
+    }
+
+    isCreateNewDataset(): boolean {
+        return this.form.get('datasetSelection').value === 'CreateNew';
     }
 
     canSave() {
         return this.form.valid &&
-            (this.selectedDataset !== 'CreateNew' ||
-            (this.selectedDataset === 'CreateNew' && this.datasetFileList.length > 0));
+            (this.datasetSelection !== 'CreateNew' ||
+            (this.datasetSelection === 'CreateNew' && this.datasetFileList.length > 0));
     }
 
-    onLocationFilterChange(event) {
-        console.log('Change location filter:', event);
+    getDatasetButtonLabel(): string {
+        return this.isCreateNewDataset() ? 'Create Dataset' : 'Select Dataset';
     }
 
-    onGetDataFilesClick() {
+    onQueryDataFilesClick() {
         // get list of files
         this.datatableLoading = true;
         if (
             this.form.get('startDate').valid &&
             this.form.get('endDate').valid
         ) {
-            this.fileService
-                .getFiles({
-                    data_started: this.form
-                        .get('startDate')
-                        .value.toISOString(),
-                    data_ended: this.form.get('endDate').value.toISOString()
-                    // locaiton: this.form.get('locationFilter').value,
-                    // media_type: this.form.get('mediaTypesFilter').value,
-                    // recipe_type_id: this.form.get('recipeTypesFilter').value
-                })
-                .subscribe(data => {
-                    this.datasetFileList = data.results;
-                    this.datatableLoading = false;
+            this.fileService.getFiles({
+                data_started: this.form.get('startDate').value.toISOString(),
+                data_ended: this.form.get('endDate').value.toISOString()
+            })
+            .subscribe(data => {
+                this.datasetFileList = data.results;
+                this.filteredDatasetFileList = data.results;
 
-                    this.mediaTypeOptions = this.datasetFileList
-                        .map(file => file.media_type)
-                        .filter(onlyUnique)
-                        .map(mediaType => ({
-                            label: mediaType,
-                            value: mediaType
-                        }));
+                this.mediaTypeOptions = this.datasetFileList
+                    .map(file => file.media_type)
+                    .filter(onlyUnique)
+                    .map(mediaType => ({
+                        label: mediaType,
+                        value: mediaType
+                    }));
 
-                    this.locationOptions = []
-                        .concat(...data.results.map(file => file.countries))
-                        .filter(onlyUnique)
-                        .map(country => ({ label: country, value: country }));
+                this.locationOptions = []
+                    .concat(...data.results.map(file => file.countries))
+                    .filter(onlyUnique)
+                    .map(country => ({ label: country, value: country }));
 
-                    this.recipeTypeOptions = data.results
-                        .map(file => file.recipe_type)
-                        .filter((obj, pos, arr) => {
-                            return (
-                                arr
-                                    .map(mapObj => mapObj['id'])
-                                    .indexOf(obj['id']) === pos
-                            );
-                        })
-                        .map(rt => ({
-                            label: `${rt.title} v${rt.revision_num}`,
-                            value: rt
-                        }));
-                });
+                this.recipeTypeOptions = data.results
+                    .map(file => file.recipe_type)
+                    .filter((obj, pos, arr) => {
+                        return (arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos);
+                    })
+                    .map(rt => ({
+                        label: `${rt.title} v${rt.revision_num}`,
+                        value: rt
+                    }));
+
+                this.datatableLoading = false;
+            });
         } else {
             const values = this.form.value;
             this.form.patchValue(values);
@@ -257,8 +329,8 @@ export class CreateDatasetComponent implements OnInit {
     }
 
     onDatasetSelectChange(event) {
-        this.selectedDataset = event.value;
-        if (event.value === 'CreateNew') {
+        this.datasetSelection = event.value;
+        if (this.isCreateNewDataset()) {
             this.form.addControl('title', this.titleControl);
             this.titleControl.enable();
             this.form.addControl('description', this.descriptionControl);
@@ -281,12 +353,35 @@ export class CreateDatasetComponent implements OnInit {
         }
     }
 
+    filterDataSetFiles(): void {
+        this.filteredDatasetFileList = _.filter(this.datasetFileList, this.dataFilesFilter);
+    }
+
+    onLocationFilterChange(event) {
+        if (!event.value) {
+            delete this.dataFilesFilter.countries;
+        } else {
+            this.dataFilesFilter = {...this.dataFilesFilter, countries: [event.value]};
+        }
+        this.filterDataSetFiles();
+    }
+
     onMediaTypeFilterChange(event) {
-        console.log('Change media type filter:', event);
+        if (!event.value) {
+            delete this.dataFilesFilter.media_type;
+        } else {
+            this.dataFilesFilter = {...this.dataFilesFilter, media_type: event.value};
+        }
+        this.filterDataSetFiles();
     }
 
     onRecipeTypeFilterChange(event) {
-        console.log('Change recipe type filter:', event);
+        if (!event.value) {
+            delete this.dataFilesFilter.recipe_type;
+        } else {
+            this.dataFilesFilter =  {...this.dataFilesFilter, recipe_type: {id: event.value.id}};
+        }
+        this.filterDataSetFiles();
     }
 
     setMessage(

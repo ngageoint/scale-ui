@@ -1,3 +1,35 @@
-<p>
-  run-batch works!
-</p>
+<div class="run-batch p-grid">
+    <div class="p-col-12 margin-bottom-md">
+        <p-panel header="Batch Configuration" [toggleable]="true" [style]="{'margin-bottom':'20px'}">
+            <span *ngIf="!batch">Please Create a Batch.</span>
+            <div *ngIf="batch">
+                <div class="run-batch__panel batch-configuration">
+                    <div *ngFor="let config of batchConfig" class="run_batch__panel-info margin-bottom-sm">
+                        <span class="run-batch__panel-info--heading">{{ config.title + ': ' }}</span>{{ config.value }}
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+
+        <p-panel
+            class="run-batch__panel dataset-configuration"
+            header="{{ getDatasetHeader() }}"
+            [toggleable]="true"
+            [style]="{'margin-bottom':'20px'}">
+            <span *ngIf="!batchDataset">Please Select or Create a Dataset.</span>
+            <div *ngIf="batchDataset">
+                <div class="run-batch__panel batch-configuration">
+                    <div *ngFor="let config of datasetConfig" class="run_batch__panel-info margin-bottom-sm">
+                        <span class="run-batch__panel-info--heading">{{ config.title + ': ' }}</span>{{ config.value }}
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+
+        <button pButton
+            class="ui-button-primary run-dataset__controls-btn"
+            label="Run Batch"
+            (click)="onRunBatchClick()">
+        </button>
+    </div>
+</div>

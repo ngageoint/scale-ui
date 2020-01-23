@@ -79,7 +79,7 @@ export class BatchesApiService {
             );
     }
 
-    createBatch(batch: Batch): Observable<any> {
+    createBatch(batch: any): Observable<any> {
         return this.http.post<Batch>(`${this.apiPrefix}/batches/`, batch.newBatch())
             .pipe(
                 map(response => Batch.transformer(response)),

@@ -11,7 +11,7 @@
     "last_modified": "2016-05-02T02:54:52.820Z",
     "definition": {
         "input": {
-            "files": [{"name": "input_file"}]
+            "files": [{"name": "input_file1"}, {"name": "input_file2"}]
         },
         "nodes": {
             "sam": {
@@ -19,7 +19,11 @@
                 "input": {
                     "input_file": {
                         "type": "recipe",
-                        "input": "input_file"
+                        "input": "input_file1"
+                    },
+                    "input_file2": {
+                        "type": "recipe",
+                        "input": "input_file2"
                     }
                 },
                 "node_type": {

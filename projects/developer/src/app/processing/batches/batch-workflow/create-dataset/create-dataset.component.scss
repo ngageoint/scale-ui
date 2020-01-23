@@ -1,10 +1,17 @@
 @import '../../../../../defaults/mixins';
 
 .create-dataset {
-    @include formGrid
+    @include formGrid;
 
-    &__controls-btn:not(:last-of-type) {
-        margin-right: 6px;
+    &__controls-btn {
+
+        &:disabled {
+            cursor: not-allowed;
+        }
+
+        &:not(:last-of-type) {
+            margin-right: 6px;
+        }
     }
 
     .ui-inputgroup {
