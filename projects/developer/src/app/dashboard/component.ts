@@ -73,7 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private queueApiService: QueueApiService
     ) {
         this.options = {
-            cutoutPercentage: 25,
+            cutoutPercentage: 0,
             borderWidth: 15,
             tooltips: {
                 callbacks: {
@@ -158,63 +158,74 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     createSunburstChart(data, type) {
-        const labels = [];
-        const values = [];
+        const pendingLabels = [];
+        const runningLabels = [];
+        const queuedLabels = [];
+        const pendingValues = [];
+        const runningValues = [];
+        const queuedValues = [];
         const colors = [];
         let tempSysCount = 0;
         let tempUserCount = 0;
 
-        const pendingJobs = _.uniqBy(_.filter(data, function (r) {
+        const pendingJobs = _.filter(data, function (r) {
             return r.status === 'PENDING';
-        }), function (e) {
-                return e.id;
-            });
-        const runningJobs = _.uniqBy(_.filter(data, function (r) {
+        });
+        const runningJobs = _.filter(data, function (r) {
             return r.status === 'RUNNING';
-        }), function (e) {
-                return e.id;
-            });
-        const queuedJobs = _.uniqBy(_.filter(data, function (r) {
-            return r.status === 'RUNNING';
-        }), function (e) {
-                return e.id;
-            });
-        // console.log('Running:');
-        // console.log(runningJobs);
-        // console.log('Pending:');
-        // console.log(pendingJobs);
-        // console.log('Queued:');
-        // console.log(queuedJobs);
+        });
+        const queuedJobs = _.filter(data, function (r) {
+            return r.status === 'QUEUED';
+        });
+
 
         _.forEach(pendingJobs, job => {
-            labels.push(job.job_type.title);
-            values.push(1);
-            colors.push(ColorService.PENDING);
+            const index = _.findIndex(pendingLabels, function(o) { return o === job.job_type.title; });
+            if ( index >= 0) {
+                pendingValues[index] = (pendingValues[index]) + 1;
+            } else {
+                pendingLabels.push(job.job_type.title);
+                pendingValues.push(1);
+                colors.push(ColorService.PENDING);
+            }
         });
         _.forEach(runningJobs, job => {
-            labels.push(job.job_type.title);
-            values.push(1);
-            colors.push(ColorService.RUNNING);
+            // const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
+            const index = _.findIndex(runningLabels, function(o) { return o === job.job_type.title; });
+            if (index >= 0) {
+                runningValues[index] = (runningValues[index]) + 1;
+            } else {
+                runningLabels.push(job.job_type.title);
+                runningValues.push(1);
+                colors.push(ColorService.RUNNING);
+            }
         });
         _.forEach(queuedJobs, job => {
-            labels.push(job.job_type.title);
-            values.push(1);
-            colors.push(ColorService.QUEUED);
+            const queuedIndex = _.findIndex(queuedLabels, function(o) { return o === job.job_type.title; });
+            if ( queuedIndex >= 0) {
+                queuedValues[queuedIndex] = (queuedValues[queuedIndex]) + 1;
+            } else {
+                queuedLabels.push(job.job_type.title);
+                queuedValues.push(1);
+                colors.push(ColorService.QUEUED);
+            }
         });
-
+        const labels = _.concat(pendingLabels, runningLabels, queuedLabels);
+        const values = _.concat(pendingValues, runningValues, queuedValues);
+        // console.log(labels)
         _.forEach(data, job => {
             if ( job.job_type.is_system ) {
-                tempSysCount++;
+            tempSysCount++;
             } else {
-                tempUserCount++;
+            tempUserCount++;
             }
         });
         if (type === 'fav') {
             this.systemCount.running = tempSysCount;
             this.userCount.running = tempUserCount;
         this.running = {
-            labels: ['Running'],
-            borderWidth: 5,
+            labels: ['system', 'user', 'running', 'pending', 'queued'],
+            borderWidth: 30,
             datasets: [
                 {
                     data: values,

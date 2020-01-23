@@ -21,7 +21,7 @@
                     <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                         <p-panel class="noWrapPanel dashboard__error-charts-fav" header="Job Status Counts Favorites" *ngIf="favoriteJobTypes.length > 0">
                             <p-tabView *ngIf="favoriteJobTypes.length > 0" >
-                                <p-tabPanel  leftIcon="getUnicode(favJob.job_type.icon_code)" [header]="'Favorites'">
+                                <p-tabPanel [header]="'Favorites'">
                                     <p-chart type="doughnut" [data]="running" [options]='options'></p-chart>
                                 </p-tabPanel>
                                 <p-tabPanel [header]="'All Jobs'">
