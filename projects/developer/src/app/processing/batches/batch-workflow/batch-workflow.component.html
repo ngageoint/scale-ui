@@ -15,8 +15,7 @@
                 (activeIndexChange)="handleStepChange($event)"
             ></p-steps>
             <div class="p-col-10 p-md-9 p-sm-8">
-                <dev-create-batch *ngIf="activeStepName === 'create-batch'">
-                </dev-create-batch>
+                <dev-create-batch *ngIf="activeStepName === 'create-batch'"></dev-create-batch>
                 <dev-create-dataset *ngIf="activeStepName === 'create-dataset'"></dev-create-dataset>
                 <dev-run-batch *ngIf="activeStepName === 'run-batch'"></dev-run-batch>
             </div>

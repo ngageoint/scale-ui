@@ -13,9 +13,8 @@
                     (onChange)="onDatasetSelectChange($event)"></p-dropdown>
             </label>
         </div>
-    </div>
-    <div *ngIf="selectedDataset === 'Create New'">
-        <div class="p-col-12">
+
+        <div *ngIf="selectedDataset === 'CreateNew'">
             <div class="margin-bottom-md">
                 <label>
                     <span class="required">Title</span>
@@ -25,7 +24,9 @@
                         formControlName="title"
                         type="text"/>
                 </label>
+                <span class="error-text">{{ titleMessage }}</span>
             </div>
+
             <div class="margin-bottom-md">
                 <label>
                     <span>Description</span>
@@ -37,91 +38,105 @@
                         maxLength="500"
                         pTooltip="Description has a 500 character limit."class="full-width"></textarea>
                 </label>
+
             </div>
-        </div>
 
-        <div class="p-col-6">
-            <p-fieldset>
-                <p-header>
-                    <span class="required">Required Fields</span>
-                </p-header>
-                <div class="p-grid">
-                    <div class="ui-inputgroup p-col-12">
-                        <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
-                        <p-calendar
-                            inputId="date-range-start"
-                            showButtonBar="true"
-                            panelStyleClass="temporalDateFilter"
-                            formControlName="startDate"
-                            dateFormat="yy/mm/dd"
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            showTime="true"
-                            hourFormat="24"
-                            [showSeconds]="true">
-                        </p-calendar>
-                    </div>
-                    <div class="ui-inputgroup p-col-12">
-                        <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
-                        <p-calendar
-                            inputId="date-range-end"
-                            showButtonBar="true"
-                            panelStyleClass="temporalDateFilter"
-                            formControlName="endDate"
-                            dateFormat="yy/mm/dd"
-                            [monthNavigator]="true"
-                            [yearNavigator]="true"
-                            showTime="true"
-                            hourFormat="24"
-                            [showSeconds]="true">
-                        </p-calendar>
-                    </div>
+            <div class="p-grid margin-bottom-md">
+                <div class="p-col-6">
+                    <p-fieldset>
+                        <p-header>
+                            <span class="required">Required Fields</span>
+                        </p-header>
+                        <div class="p-grid">
+                            <div class="p-col-12">
+                                <div class="ui-inputgroup">
+                                    <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
+                                    <p-calendar
+                                        inputId="date-range-start"
+                                        showButtonBar="true"
+                                        panelStyleClass="temporalDateFilter"
+                                        formControlName="startDate"
+                                        dateFormat="yy/mm/dd"
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [yearRange]="yearRange"
+                                        showTime="true"
+                                        hourFormat="24"
+                                        [showSeconds]="true">
+                                    </p-calendar>
+                                </div>
+                                <span class="error-text">{{ startDateMessage }}</span>
+                            </div>
+                            <div class="p-col-12">
+                                <div class="ui-inputgroup">
+                                    <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
+                                    <p-calendar
+                                        inputId="date-range-end"
+                                        showButtonBar="true"
+                                        panelStyleClass="temporalDateFilter"
+                                        formControlName="endDate"
+                                        dateFormat="yy/mm/dd"
+                                        [monthNavigator]="true"
+                                        [yearNavigator]="true"
+                                        [yearRange]="yearRange"
+                                        showTime="true"
+                                        hourFormat="24"
+                                        [showSeconds]="true">
+                                    </p-calendar>
+                                </div>
+                                <span class="error-text">{{ endDateMessage }}</span>
+                            </div>
+                        </div>
+                    </p-fieldset>
                 </div>
-            </p-fieldset>
-        </div>
 
-        <div class="p-col-6">
-            <p-fieldset legend="Optional Fields">
-                <div class="margin-bottom-md">
-                    <label>
-                        <span>Location</span>
-                        <p-dropdown id="locationFilter"
-                            [options]="locationOptions"
-                            placeholder="Select a Location to filter results"
-                            [style]="{'width': '100%'}"
-                            [filter]='true'
-                            filterBy="label,value.name"
-                            (onChange)="onLocationFilterChange($event)">
-                        </p-dropdown>
-                    </label>
+                <div class="p-col-6">
+                    <p-fieldset legend="Optional Fields" formGroupName="optionalFilters">
+                        <div class="margin-bottom-md">
+                            <label>
+                                <span>Location</span>
+                                <p-dropdown id="locationFilter"
+                                    formControlName="locationFilter"
+                                    [options]="locationOptions"
+                                    placeholder="Select a Location to filter results"
+                                    [style]="{'width': '100%'}"
+                                    [filter]='true'
+                                    filterBy="label,value.name"
+                                    (onChange)="onLocationFilterChange($event)">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                        <div class="margin-bottom-md">
+                            <label>
+                                <span>Media Types</span>
+                                <p-dropdown id="mediaTypesFilter"
+                                    formControlName="mediaTypesFilter"
+                                    [options]="mediaTypeOptions"
+                                    placeholder="Select a Media Types to filter results"
+                                    [style]="{'width': '100%'}"
+                                    [filter]='true'
+                                    filterBy="label,value.name"
+                                    (onChange)="onMediaTypeFilterChange($event)">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                        <div class="margin-bottom-md">
+                            <label>
+                                <span>Recipe Types</span>
+                                <p-dropdown id="recipeTypeFilter"
+                                    formControlName="recipeTypesFilter"
+                                    [options]="recipeTypeOptions"
+                                    placeholder="Select a Recipe Type to filter results"
+                                    [style]="{'width': '100%'}"
+                                    [filter]='true'
+                                    filterBy="label,value.name"
+                                    (onChange)="onRecipeTypeFilterChange($event)">
+                                </p-dropdown>
+                            </label>
+                        </div>
+                    </p-fieldset>
                 </div>
-                <div class="margin-bottom-md">
-                    <label>
-                        <span>Media Types</span>
-                        <p-dropdown id="mediaTypesFilter"
-                            [options]="mediaTypeOptions"
-                            placeholder="Select a Media Types to filter results"
-                            [style]="{'width': '100%'}"
-                            [filter]='true'
-                            filterBy="label,value.name"
-                            (onChange)="onMediaTypeFilterChange($event)">
-                        </p-dropdown>
-                    </label>
-                </div>
-                <div class="margin-bottom-md">
-                    <label>
-                        <span>Recipe Types</span>
-                        <p-dropdown id="recipeTypeFilter"
-                            [options]="recipeTypeOptions"
-                            placeholder="Select a Recipe Type to filter results"
-                            [style]="{'width': '100%'}"
-                            [filter]='true'
-                            filterBy="label,value.name"
-                            (onChange)="onRecipeTypeFilterChange($event)">
-                        </p-dropdown>
-                    </label>
-                </div>
-            </p-fieldset>
+            </div>
         </div>
     </div>
 
@@ -129,12 +144,41 @@
         <button pButton
             class="ui-button-primary create-dataset__controls-btn"
             label="Save"
-            (click)="onSaveClick()"></button>
+            (click)="onSaveClick()"
+            [disabled]="!canSave()"></button>
         <button pButton
             class="ui-button-primary create-dataset__controls-btn"
             label="Get Data Files"
-            (click)="onGetDataFilesClick()"></button>
+            (click)="onGetDataFilesClick()"
+            [disabled]="selectedDataset !== 'CreateNew'"></button>
     </div>
-    <!-- <p-table [value]="datasetList" [columns]="datasetColumns" [rows]="10" [loading]="datatableLoading" [autoLayout]="true"
-                         [responsive]="true" resizableColumns="false"></p-table> -->
+    <div *ngIf="datasetFileList.length" class="p-col-12">
+        <div>Results: {{datasetFileList.length}}</div>
+        <p-table
+            [columns]="datasetColumns"
+            [value]="datasetFileList"
+            styleClass="nopadding"
+            [rowHover]="true"
+            [scrollable]="true"
+            scrollHeight="300px"
+            [loading]="datatableLoading"
+            [sortField]="datatableOptions.sortField"
+            [sortOrder]="datatableOptions.sortOrder"
+            #datasetDatatable>
+            <ng-template pTemplate="header" let-columns>
+                <tr>
+                    <th *ngFor="let col of columns">
+                        {{ col.header }}
+                    </th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td *ngFor="let col of columns">
+                        {{ rowData[col.field] }}
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
 </div>

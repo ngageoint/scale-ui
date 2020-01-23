@@ -4,6 +4,13 @@ export interface IDatasetDefinition {
     parameters?: IParameters;
 }
 
+export interface IDataset {
+    title?: string;
+    description?: string;
+    definition: IDatasetDefinition;
+    data?: any[];
+}
+
 export interface IGlobalData {
     files?: {
         [fileName: string]: number[];

@@ -7,6 +7,7 @@ import { Batch } from '../../api.model';
 import * as _ from 'lodash';
 import { RecipeType } from 'projects/developer/src/app/configuration/recipe-types/api.model';
 import { debounceTime } from 'rxjs/operators';
+import { ValidationMessages } from '../../../../common/utils/ValidationMessages';
 
 @Component({
     selector: 'dev-create-batch',
@@ -27,7 +28,9 @@ export class CreateBatchComponent implements OnInit {
         },
         recipeType: {
             name: 'recipeTypeMessage',
-            required: 'Please select a Recipe Type.'
+            required: 'Please select a Recipe Type.',
+            multipleInput: `The recipe you have selected requires more than one input file. Any newly created dataset
+                requires only one input file. Only datasets created via the API that allow for more than one input file will apply.`
         },
         priority: {
             name: 'priorityMessage',
@@ -37,6 +40,7 @@ export class CreateBatchComponent implements OnInit {
         }
     };
     nodeOptions: SelectItem[] = [];
+    multipleInputRecipe = false;
 
     constructor(
         private fb: FormBuilder,
@@ -87,6 +91,8 @@ export class CreateBatchComponent implements OnInit {
 
         this.form.get('recipe_type').valueChanges.subscribe(value => {
             this.handleRecipeTypeChange(value);
+
+            // TODO: Check recipetype inputs to warn of multi input recipes.
         });
 
         this.form.valueChanges.pipe(debounceTime(1000)).subscribe(changes => {
@@ -106,10 +112,9 @@ export class CreateBatchComponent implements OnInit {
     handleRecipeTypeChange(value) {
         this.nodeOptions = [];
         if (value) {
-            // populate node dropdown
             this.recipeTypesApiService.getRecipeType(value.name).subscribe(
                 data => {
-                    _.forEach(data.job_types, jobType => {
+                    data.job_types.map(jobType => {
                         const nodeName = _.findKey(data.definition.nodes, {
                             node_type: {
                                 job_type_name: jobType.name,
@@ -121,9 +126,20 @@ export class CreateBatchComponent implements OnInit {
                             value: nodeName
                         });
                     });
+                    data.sub_recipe_types.map(subRecipeType => {
+                        const nodeName = _.findKey(data.definition.nodes, {
+                            node_type: {
+                                recipe_type_name: subRecipeType.name,
+                                recipe_type_revision: subRecipeType.revision_num
+                            }
+                        });
+                        this.nodeOptions.push({
+                            label: `${subRecipeType.title} rev.${subRecipeType.revision_num}`,
+                            value: nodeName
+                        });
+                    });
                 },
                 err => {
-                    console.log(err);
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error retrieving recipe type details',
@@ -182,7 +198,4 @@ export class CreateBatchComponent implements OnInit {
     }
 }
 
-export interface ValidationMessages {
-    'name': string;
-    [key: string]: string;
-}
+

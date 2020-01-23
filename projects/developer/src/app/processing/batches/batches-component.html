@@ -14,11 +14,19 @@
             pTooltip="Create Batch"></a>
     </div>
 </div>
-<p-table [value]="batches" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
-         [sortOrder]="datatableOptions.sortOrder" [lazy]="true" (onLazyLoad)="onLazyLoad($event)"
-         [responsive]="true" resizableColumns="true" selectionMode="single" [(selection)]="selectedBatch"
-         (onRowSelect)="onRowSelect($event)" [loading]="datatableLoading" [style]="{'min-height':'300px'}"
-         [autoLayout]="true" class="batches__table" #datatable>
+<p-table [value]="batches"
+    [columns]="columns"
+    [rows]="datatableOptions.rows"
+    [sortField]="datatableOptions.sortField"
+    [sortOrder]="datatableOptions.sortOrder"
+    [lazy]="true"
+    (onLazyLoad)="onLazyLoad($event)"
+    [responsive]="true"
+    resizableColumns="true"
+    selectionMode="single" [(selection)]="selectedBatch"
+    (onRowSelect)="onRowSelect($event)"
+    [loading]="datatableLoading" [style]="{'min-height':'300px'}"
+    [autoLayout]="true" class="batches__table" #datatable>
     <ng-template pTemplate="header" let-columns>
         <tr>
             <th *ngFor="let col of columns" [ngSwitch]="col.field" [pSortableColumn]="col.field">
