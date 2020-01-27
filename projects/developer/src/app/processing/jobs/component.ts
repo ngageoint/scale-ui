@@ -37,6 +37,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         { field: 'node', header: 'Node' },
         { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
         { field: 'status', header: 'Status' },
+        { field: 'input', header: 'Input' },
         { field: 'error.category', header: 'Error Category' },
         { field: 'error.title', header: 'Error' },
         { field: 'id', header: 'Log', sortableColumnDisabled: true }
@@ -44,6 +45,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     dateFormat = environment.dateFormat;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
+    jobInputs = [];
     selectedJob: Job;
     selectedJobType: any = [];
     selectedJobExe: JobExecution;
@@ -114,6 +116,23 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
+            this.jobInputs = [];
+            const fileNames = [];
+            _.forEach(this.jobs, job => {
+                this.jobsApiService.getJobInputs(job.id)
+                .subscribe(inputData => {
+                    // _.forEach(inputData.results, name => {
+                    //     fileNames.push(name.file_name);
+                    // });
+                    this.jobInputs.push( {
+                        id: job.id,
+                        input: inputData.results
+                    });
+                }, err => {
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+                });
+            });
+            console.log(this.jobInputs);
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;

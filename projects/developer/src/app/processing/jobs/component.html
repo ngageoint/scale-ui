@@ -117,6 +117,16 @@
                     </div>
                     {{ rowData.status }}
                 </div>
+                <div *ngSwitchCase="'input'">
+                    <div *ngFor="let fullInput of jobInputs">
+                        <span *ngIf="fullInput.id == rowData.job_type.id">
+                                <div *ngFor="let input of fullInput.input">
+                                        {{ input.file_name | json }}
+                                </div>
+                            
+                        </span>
+                    </div>
+                </div>
                 <div *ngSwitchCase="'error.category'">
                     <div *ngIf="rowData.error">
                         {{ rowData.error.category }}
