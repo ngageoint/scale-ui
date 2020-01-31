@@ -32,7 +32,6 @@ export class ChartService {
 
         const datasets = [];
         let dataLabels = [];
-        // console.log(data);
 
         const numDays = moment.utc(params.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').diff(moment.utc(params.started,
             'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'd');

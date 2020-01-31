@@ -20,6 +20,7 @@ export class AppConfigService {
             .then((data: any) => {
                 // loop over all keys in the appconfig.json file
                 Object.keys(data).forEach(key => {
+                    console.log('service', key, data[key]);
                     // try to parse the values as json
                     let value = data[key];
                     try {
@@ -31,6 +32,7 @@ export class AppConfigService {
                     // set the camelcased version of the key in environments
                     environment[_.camelCase(key)] = value;
                 });
+                console.log('e', environment);
                 // update themes with values from config
                 const themes = this.themeService.getThemes();
                 _.forEach(themes, theme => {

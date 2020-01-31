@@ -19,12 +19,13 @@
                 </div>
                 <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                     <p-panel class="noWrapPanel dashboard__error-charts" header="Running Jobs" *ngIf="favoriteJobTypes.length > 0">
-                        <p-tabView *ngIf="favoriteJobTypes.length > 0" >
+                        <p-tabView *ngIf="favoriteJobTypes.length > 0" (onChange)='changeTab()' >
                             <p-tabPanel [header]="'Favorites'">
-                                <p-chart type="doughnut" [data]="dataFavs" [options]='options'></p-chart>
+                                <p-chart type="doughnut" [data]="dataFavs" [options]='options' #mychart></p-chart>
+                                <!-- <div> Running </div> <div> Running </div> <div> Running </div> -->
                             </p-tabPanel>
                             <p-tabPanel [header]="'All Jobs'">
-                                <p-chart type="doughnut" [data]="data" [options]='options'></p-chart>
+                                <p-chart type="doughnut" [data]="data" [options]='options' #mychart2></p-chart>
                             </p-tabPanel>
                             
                         </p-tabView>

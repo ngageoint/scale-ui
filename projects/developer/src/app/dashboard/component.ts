@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, Input, Output, } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
@@ -35,10 +35,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private jobsApiService: JobsApiService,
         private jobTypesApiService: JobTypesApiService,
-        private jobsService: DashboardJobsService
+        private jobsService: DashboardJobsService,
     ) {
         this.options = {
-            responsive: false,
+            responsive: true,
+            maintainAspectRatio: false,
+            aspectRatio: 1,
             cutoutPercentage: 0,
             tooltips: {
                 callbacks: {
@@ -51,6 +53,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
             },
             legend: {
                 display: false,
+                
+                labels: {
+                    // fillStyle: [this.colorService.SCALE_PRIMARY, ColorService.SCALE_DARK, ColorService.RUNNING],
+                    // text: ['System', 'User', 'Running'],
+                    // fontColor: 'rgb(255, 99, 132)'
+                },
             },
             rotation: 0.5 * Math.PI, // start from bottom
             elements: {
@@ -78,7 +86,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     align: 'center',
                     anchor: 'center',
                     textAlign: 'center',
-                    color: 'black',
+                    color: 'white',
                 }
             },
         };
@@ -176,7 +184,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         if (type === 'fav') {
         this.dataFavs = {
-            labels: ['system', 'user', 'running'],
+            labels: ['System', 'User', 'Running'],
             borderWidth: 30,
             datasets: [
                 {
@@ -191,7 +199,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     label: 'Inner Ring',
                     labels: ['System', 'User'],
                     icon: null,
-                    backgroundColor: [ColorService.SCALE_BLUE1, ColorService.SCALE_BLUE2]
+                    backgroundColor: ['#074d75', '#4593bf']
                 },
             ],
         };
@@ -211,11 +219,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         label: 'Inner Ring',
                         labels: ['System', 'User'],
                         icon: null,
-                        backgroundColor: [ColorService.SCALE_BLUE1, ColorService.SCALE_BLUE2]
+                        backgroundColor: ['#074d75', '#4593bf']
                     }
                 ],
             };
         }
+    }
+
+    changeTab() {
+        this.refreshAllJobTypes();
     }
 
     onTemporalFilterUpdate(data: {start: string, end: string}): void {

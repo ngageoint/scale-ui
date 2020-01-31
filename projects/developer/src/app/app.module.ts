@@ -35,6 +35,7 @@ import { ToastModule } from 'primeng/toast';
 // app
 import { AppComponent } from './app.component';
 import { AppConfigService } from './common/services/app-config.service';
+import { ColorService } from './common/services/color.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesComponent } from './processing/batches/component';
@@ -207,6 +208,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         PaginatorModule
     ],
     providers: [
+        ColorService,
         ConfirmationService,
         PendingChangesGuard,
         {

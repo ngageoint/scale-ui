@@ -51,7 +51,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
                 choice_id: choiceIds,
                 column: ['completed_count', 'failed_count'],
                 colors: [
-                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
+                    { column: 'completed_count', color: ColorService.COMPLETED },
                     { column: 'failed_count', color: ColorService.ERROR }
                 ],
                 dataType: 'job-types',
@@ -143,15 +143,6 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     ngOnInit() {
-        // if (this.favorite) {
-        //     this.updateChart(this.favorite);
-        // } else {
-        //     this.updateChart();
-        // }
-        // const params = {
-        //     started: this.started,
-        //     ended: this.ended,
-        // };
     }
 
     ngAfterViewInit() {

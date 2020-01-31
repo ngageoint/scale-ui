@@ -15,22 +15,15 @@
             height: 438px;
         }
     }
-
     .dashboard__error-charts {
         ::ng-deep .ui-panel-content {
             height: 388px;
         }
+
         ::ng-deep .ui-tabview-panels {
             height: 328px; 
         }
-        
 
-    }
-    .ui-tabview-panels {
-        height: 328px; 
-    }
-    .chart-size {
-        height: 328px;
     }
     #plot {
         background-color: transparent !important;
