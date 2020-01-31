@@ -18,17 +18,10 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     @Input() loading = false;
     @Input() localStorageKey = 'temporal-filter';
     @Input() liveRangeOnly = false;
+    @Input() refreshRate = 10;
 
-    // when the start/end dates are applied
-    @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
-    // when the live range dropdown value is selected or cleared
-    @Output() liveRangeSelected: EventEmitter<{hours: number}> = new EventEmitter();
-    // when the parent component should make an api call to update the data
-    // driven by the timer for the live range update, as well as normal start/end date filter apply
-    @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
-
-    // dropdown options for live range, values in hours
-    dateRangeOptions = [
+    // dropdown options for live range, values in hourss
+    @Input() dateRangeOptions = [
         { label: '---', value: null },
         { label: 'Last 1 hour', value: 1 },
         { label: 'Last 6 hours', value: 6 },
@@ -38,6 +31,19 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
         { label: 'Last week', value: 24 * 7 }
     ];
 
+    // when the start/end dates are applied
+    @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
+    // when the live range dropdown value is selected or cleared
+    @Output() liveRangeSelected: EventEmitter<{hours: number}> = new EventEmitter();
+    // when the parent component should make an api call to update the data
+    // driven by the timer for the live range update, as well as normal start/end date filter apply
+    @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
+
+    selectedDateRange: any;
+    applyBtnClass = 'ui-button-secondary';
+    applyStatusClass = 'live-range-inactive';
+    applyTxtClass = '';
+    liveRangeTooltip = 'No Live Range Selected';
     // internal dates for this component
     startDate: Date;
     endDate: Date;
@@ -165,7 +171,7 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
 
             // ensure any timers are cancelled, then start a new one
             this.unsubscribe();
-            this.liveRangeSubscription = Observable.timer(0, 10 * 1000)
+            this.liveRangeSubscription = Observable.timer(0, this.refreshRate * 1000)
                 .subscribe(() => {
                     // update using now for the base
                     this.update(moment.utc());

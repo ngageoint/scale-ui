@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, OnChanges, SimpleChanges, AfterViewInit, ViewChild, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
 import * as _ from 'lodash';
@@ -14,7 +14,10 @@ import { UIChart } from 'primeng/primeng';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
+export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+    @Input() favorite: any;
+    @Input() started;
+    @Input() ended;
     @ViewChild('chart') chart: UIChart;
     chartLoading: boolean;
     data: any;
@@ -31,28 +34,27 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         private metricsApiService: MetricsApiService
     ) {}
 
-    private updateChart() {
+    private updateChart(favorite?: any) {
         this.chartLoading = true;
-        this.favorites = this.jobsService.getFavorites();
         this.allJobs = this.jobsService.getAllJobs();
-        const choiceIds = this.favorites.length > 0 ?
-            _.map(this.favorites, 'id') :
+        const choiceIds = this.favorite ?
+            this.favorite.job_type.id :
             [];
+            this.params = {
+                choice_id: choiceIds,
+                column: ['completed_count', 'failed_count'],
+                colors: [
+                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
+                    { column: 'failed_count', color: ColorService.ERROR }
+                ],
+                dataType: 'job-types',
+                started: this.started,
+                ended: this.ended,
+                group: ['overview', 'overview'],
+                page: 1,
+                page_size: null
+            };
 
-        this.params = {
-            choice_id: choiceIds,
-            column: ['completed_count', 'failed_count'],
-            colors: [
-                { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
-                { column: 'failed_count', color: ColorService.ERROR }
-            ],
-            dataType: 'job-types',
-            started: moment.utc().subtract(10, 'd').toISOString(),
-            ended: moment.utc().toISOString(),
-            group: ['overview', 'overview'],
-            page: 1,
-            page_size: null
-        };
         const yAxes = [{
             id: 'yAxis1',
             position: 'left',
@@ -64,10 +66,15 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
         }];
         this.metricsApiService.getPlotData(this.params).subscribe(data => {
             this.chartLoading = false;
-            const filters = this.favorites.length > 0 ?
-                this.favorites :
-                [];
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, '', false);
+            const filters = [];
+            let title = '';
+            if (favorite) {
+                title = 'for ' + favorite.job_type.title;
+                filters[0] = favorite.job_type;
+            } else {
+                title = '';
+            }
+            const chartData = this.chartService.formatPlotResults(data, this.params, filters, title, false);
             chartData.labels = _.map(chartData.labels, label => {
                 return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
             });
@@ -120,10 +127,11 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnInit() {
         this.chartLoading = true;
-        this.updateChart();
-        this.favoritesSubscription = this.jobsService.favoritesUpdated.subscribe(() => {
+        if (this.favorite) {
+            this.updateChart(this.favorite);
+        } else {
             this.updateChart();
-        });
+        }
     }
 
     ngAfterViewInit() {
@@ -134,5 +142,13 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (this.favorite) {
+            this.updateChart(this.favorite);
+        } else {
+            this.updateChart();
+        }
     }
 }

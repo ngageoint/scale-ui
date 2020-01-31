@@ -1,8 +1,9 @@
 const moment = require('moment');
 
 module.exports = function (request) {
-    const numHours = moment.utc().endOf('d').diff(moment.utc().subtract(7, 'd').startOf('d'), 'h');
-    const startTime = moment.utc().subtract(7, 'd').startOf('d');
+    var params = request.query;
+    const numHours = 24;
+    const startTime =  params.ended;
     const data = {
         count: numHours,
         next: null,

@@ -2,7 +2,7 @@
     "name": "scale-ui-api",
     "version": "1.0.0",
     "scripts": {
-        "start": "node ApiServer.js"
+        "start": "nodemon --watch api ApiServer.js"
     },
     "dependencies": {
         "@hapi/boom": "^7.4.2",

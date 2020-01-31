@@ -190,11 +190,15 @@ export class ChartService {
                         valueArr.push(valueObj ? valueObj.value : 0);
                     });
 
+                    if (title === '') {
+                        title = 'for all ';
+                    }
+
                     // populate chart dataset
                     datasets.push({
                         yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
                         stack: colIdx.toString(),
-                        label: result.column.title + ' for all ' + title,
+                        label: result.column.title + ' ' + title,
                         icon: null,
                         backgroundColor: bgColor,
                         data: valueArr,

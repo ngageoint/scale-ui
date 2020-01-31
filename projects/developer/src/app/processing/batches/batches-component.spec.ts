@@ -7,7 +7,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 import { DataService } from '../../common/services/data.service';
 import { BatchesApiService } from './api.service';
-import { BatchesComponent } from './component';
+import { BatchesComponent } from './batches-component';
 import { BatchesDatatableService } from './datatable.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 
