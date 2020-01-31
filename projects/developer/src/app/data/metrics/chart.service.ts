@@ -222,6 +222,10 @@ export class ChartService {
                         title = 'for all ';
                     }
 
+                    if (title === '') {
+                        title = 'for all ';
+                    }
+
                     // populate chart dataset
                     datasets.push({
                         yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',

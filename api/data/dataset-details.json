@@ -1,0 +1,28 @@
+{
+    "id": 1,
+    "title": "Renamer Dataset",
+    "description": "Dataset for the renamer job",
+    "created": "2019-09-16T17:19:27.992166Z",
+    "definition": {
+        "global_data": {
+            "files": {},
+            "json": {}
+        },
+        "global_parameters": {
+            "files": [],
+            "json": []
+        },
+        "parameters": {
+            "files": [
+                {
+                    "media_types": [],
+                    "required": true,
+                    "multiple": false,
+                    "name": "INPUT_FILE"
+                }
+            ],
+            "json": []
+        }
+    },
+    "files": 252
+}

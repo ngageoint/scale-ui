@@ -1,0 +1,23 @@
+@import '../../../../../defaults/mixins';
+
+.create-dataset {
+    @include formGrid
+
+    &__controls-btn:not(:last-of-type) {
+        margin-right: 6px;
+    }
+
+    .ui-inputgroup {
+        &-addon {
+            line-height:  normal;
+        }
+
+        ::ng-deep input,
+        ::ng-deep .ui-dropdown {
+            line-height:  normal;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            flex: 1 1 auto;
+        }
+    }
+}

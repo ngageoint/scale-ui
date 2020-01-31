@@ -22,7 +22,6 @@
                         <p-tabView *ngIf="favoriteJobTypes.length > 0" (onChange)='changeTab()' >
                             <p-tabPanel [header]="'Favorites'">
                                 <p-chart type="doughnut" [data]="dataFavs" [options]='options' #mychart></p-chart>
-                                <!-- <div> Running </div> <div> Running </div> <div> Running </div> -->
                             </p-tabPanel>
                             <p-tabPanel [header]="'All Jobs'">
                                 <p-chart type="doughnut" [data]="data" [options]='options' #mychart2></p-chart>

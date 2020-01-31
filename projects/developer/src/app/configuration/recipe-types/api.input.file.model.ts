@@ -24,9 +24,8 @@ export class RecipeTypeInputFile {
         public media_types: any,
         public multiple: boolean
     ) {
-        // ensure multiple is set to a boolean value to prevent api issues
-        if (this.multiple === null || this.multiple === undefined) {
-            this.multiple = false;
-        }
+        // ensure values are set to a boolean value to prevent api issues
+        this.multiple = Boolean(this.multiple);
+        this.required = Boolean(this.required);
     }
 }

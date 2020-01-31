@@ -1,0 +1,11 @@
+.batch-workflow {
+    &__steps {
+        border-right: 1px solid var(--grey-80);
+    }
+    &__panel {
+        padding: 0.5em 1em;
+    }
+    &__panel-content {
+        margin: -0.5em;
+    }
+}

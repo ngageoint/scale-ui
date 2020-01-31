@@ -4,8 +4,8 @@
 # 1) prepare env vars for nginx
 # ------------------------------------------------------------------------------
 # used for nginx replacements
-: ${SILO_URL:=http://scale-silo.marathon.l4lb.thisdcos.directory:9000/}
-: ${API_URL:=http://scale-webserver.marathon.l4lb.thisdcos.directory:80/}
+SILO_URL=${SILO_URL:-"http://scale-silo.marathon.l4lb.thisdcos.directory:9000/"}
+API_URL=${API_URL:-"http://scale-webserver.marathon.l4lb.thisdcos.directory:80/"}
 
 # Trim trailing slash from backend addresses
 SILO_URL=$(echo ${SILO_URL} | sed 's^/$^^')

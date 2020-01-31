@@ -107,4 +107,12 @@ export class ScansApiService {
                 catchError(DataService.handleError)
             );
     }
+
+    cancelScan(id: number, scan: any): Observable<any> {
+        const cleanScan = Scan.cleanScan(scan);
+        return this.http.post<any>(`${this.apiPrefix}/scans/cancel/${id}/`, cleanScan)
+            .pipe(
+                catchError(DataService.handleError)
+            );
+    }
 }

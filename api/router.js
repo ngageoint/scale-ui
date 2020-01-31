@@ -30,6 +30,12 @@ var batchesCreate = require('./handlers/batchCreate');
 var batchesEdit = require('./handlers/batchEdit');
 var batchDetails = require('./handlers/batchDetails');
 var batchValidate = require('./handlers/batchValidate');
+
+var datasets = require('./handlers/datasets');
+var datasetCreate = require('./handlers/datasetCreate');
+var datasetValidate = require('./handlers/datasetValidate');
+var datasetAddMembers = require('./handlers/datasetAddMembers');
+
 var strikes = require('./handlers/strikes');
 var strikeDetails = require('./handlers/strikeDetails');
 var strikeValidate = require('./handlers/strikeValidate');
@@ -48,6 +54,7 @@ var scanDetails = require('./handlers/scanDetails');
 var scanCreate = require('./handlers/scanCreate');
 var scanEdit = require('./handlers/scanEdit');
 var scanValidate = require('./handlers/scanValidate');
+var scanCancel = require('./handlers/scanCancel');
 var errors = require('./handlers/errors');
 var recipeTypesValidate = require('./handlers/recipeTypesValidate');
 var recipeTypeCreate = require('./handlers/recipeTypeCreate');
@@ -296,6 +303,30 @@ module.exports = {
 
         server.route({
             method: 'GET',
+            path: '/mocks/' + apiVersion + '/datasets/',
+            handler: datasets
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/datasets/',
+            handler: datasetCreate
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/datasets/validation',
+            handler: datasetValidate
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/datasets/1',
+            handler: datasetAddMembers
+        });
+
+        server.route({
+            method: 'GET',
             path: '/mocks/' + apiVersion + '/strikes/',
             handler: strikes
         });
@@ -400,6 +431,12 @@ module.exports = {
             method: 'POST',
             path: '/mocks/' + apiVersion + '/scans/',
             handler: scanCreate
+        });
+
+        server.route({
+            method: 'POST',
+            path: '/mocks/' + apiVersion + '/scans/cancel/{id}/',
+            handler: scanCancel
         });
 
         server.route({
