@@ -53,7 +53,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
             },
             legend: {
                 display: false,
-                
                 labels: {
                     // fillStyle: [this.colorService.SCALE_PRIMARY, ColorService.SCALE_DARK, ColorService.RUNNING],
                     // text: ['System', 'User', 'Running'],
@@ -230,99 +229,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.refreshAllJobTypes();
     }
 
-    onTemporalFilterUpdate(data: {start: string, end: string}): void {
-        this.started = data.start;
-        this.ended = data.end;
-        this.refreshAllJobTypes();
-    }
-
-    createSunburstChart(data) {
-        const runningJobs = _.filter(data, function (r) {
-            return r.status === 'RUNNING';
-         });
-         const pendingJobs = _.filter(data, function (r) {
-             return r.status === 'PENDING';
-          });
-          const queuedJobs = _.filter(data, function (r) {
-             return r.status === 'QUEUED';
-          });
-
-        //  this.getQueueData();
-         const labels = [];
-         const parents = [];
-         const values = [];
-         labels.push('Running');
-         labels.push('Pending');
-         labels.push('Queued');
-         parents.push('');
-         parents.push('');
-         parents.push('');
-        //  values.push(this.running);
-        //  values.push(this.queued);
-        //  values.push(this.pending);
-         _.forEach(runningJobs, job => {
-             const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-             if ( index > 0) {
-                 values[index] = values[index]++;
-             } else {
-                 labels.push(job.job_type.title);
-                 parents.push('Running');
-                 values.push(1);
-             }
-         });
-         _.forEach(pendingJobs, job => {
-             const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-             if ( index > 0) {
-                 values[index] = values[index]++;
-             } else {
-                 labels.push(job.job_type.title);
-                 parents.push('Pending');
-                 values.push(1);
-             }
-         });
-         _.forEach(queuedJobs, job => {
-            const index = _.findIndex(labels, function(o) { return o === job.job_type.title; });
-            if ( index > 0) {
-                values[index] = values[index]++;
-            } else {
-                labels.push(job.job_type.title);
-                parents.push('Queued');
-                values.push(1);
-            }
-        });
-          const graph = {
-            data: [{
-                type: 'sunburst',
-                labels: labels,
-                parents: parents,
-                // values: values,
-                outsidetextfont: {size: 20, color: '#377eb8'},
-                leaf: {opacity: 0.5},
-                marker: {line: {width: 2}}
-              }]
-        };
-        return graph;
-    }
-
-    // getQueueData() {
-    //     const params = {
-    //         started: moment.utc().subtract(1, 'h').toISOString(),
-    //         ended: moment.utc().toISOString(),
-    //     };
-    //     this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
-    //         this.running = 0;
-    //         this.queued = 0;
-    //         this.pending = 0;
-
-    //         _.forEach(data.results, result => {
-    //             this.running = result.running_count;
-    //             this.queued = result.queued_count;
-    //             this.pending = result.pending_count;
-    //         });
-    //     }, err => {
-    //         this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
-    //     });
-    // }
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
         this.started = data.start;
         this.ended = data.end;

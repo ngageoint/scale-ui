@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
-import { PlotlyViaWindowModule } from 'angular-plotly.js';
 
 // vendor
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
@@ -190,7 +189,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         OverlayPanelModule,
         PaginatorModule,
         PanelModule,
-        PlotlyViaWindowModule,
         ProgressBarModule,
         ProgressSpinnerModule,
         ReactiveFormsModule,
