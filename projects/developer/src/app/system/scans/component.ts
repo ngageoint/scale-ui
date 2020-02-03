@@ -253,5 +253,6 @@ export class ScansComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        this.unsubscribe();
     }
 }

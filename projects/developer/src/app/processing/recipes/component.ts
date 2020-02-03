@@ -45,7 +45,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    sub: any;
     liveRange: number;
 
     constructor(
@@ -60,9 +59,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
     ) {}
 
     private updateData() {
-        if (!this.sub) {
-            this.datatableLoading = true;
-        }
         this.unsubscribe();
 
         // don't show loading state when in live mode
@@ -268,9 +264,6 @@ export class RecipesComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
-        if (this.sub) {
-            this.sub.unsubscribe();
-        }
         this.unsubscribe();
     }
 }

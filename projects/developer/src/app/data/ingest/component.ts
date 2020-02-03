@@ -334,5 +334,6 @@ export class IngestComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
+        this.unsubscribe();
     }
 }

@@ -268,6 +268,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
+        this.unsubscribe();
     }
 
     onFilterClick(event) {
