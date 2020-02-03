@@ -45,7 +45,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    sub: any;
     liveRange: number;
 
     constructor(
@@ -269,10 +268,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        if (this.sub) {
-            this.sub.unsubscribe();
-        }
-        this.unsubscribe();
     }
 
     onFilterClick(event) {

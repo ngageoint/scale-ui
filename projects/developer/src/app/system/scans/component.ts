@@ -35,7 +35,6 @@ export class ScansComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    sub: any;
     liveRange: number;
 
     nameFilterText: string;
@@ -254,9 +253,5 @@ export class ScansComponent implements OnInit, OnDestroy {
         });
     }
     ngOnDestroy() {
-        if (this.sub) {
-            this.sub.unsubscribe();
-        }
-        this.unsubscribe();
     }
 }
