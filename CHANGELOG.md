@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.14.0](https://github.com/ngageoint/scale-ui/compare/v0.13.0...v0.14.0) (2020-02-03)
+
+
+### Bug Fixes
+
+* **jobs:** prevent duplicate job types in drop down filter ([#412](https://github.com/ngageoint/scale-ui/issues/412)) ([2299010](https://github.com/ngageoint/scale-ui/commit/2299010)), closes [#398](https://github.com/ngageoint/scale-ui/issues/398)
+* **jobs:** space out labels on job timeline ([#421](https://github.com/ngageoint/scale-ui/issues/421)) ([b80ce70](https://github.com/ngageoint/scale-ui/commit/b80ce70)), closes [#420](https://github.com/ngageoint/scale-ui/issues/420)
+* **recipes:** ensure "required" field is a boolean ([28b05ab](https://github.com/ngageoint/scale-ui/commit/28b05ab))
+
+
+### Features
+
+* **dashboard:** New Pie Charts ([#424](https://github.com/ngageoint/scale-ui/issues/424)) ([ea9d549](https://github.com/ngageoint/scale-ui/commit/ea9d549))
+
+
+
 ## [0.13.0](https://github.com/ngageoint/scale-ui/compare/v0.12.0...v0.13.0) (2019-12-20)
 
 
