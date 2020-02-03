@@ -3,9 +3,6 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Observable } from 'rxjs';
-import 'rxjs/add/observable/timer';
-import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { environment } from '../../../environments/environment';
