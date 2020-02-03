@@ -117,13 +117,9 @@ export class JobsComponent implements OnInit, OnDestroy {
             });
             this.jobs = Job.transformer(data.results);
             this.jobInputs = [];
-            const fileNames = [];
             _.forEach(this.jobs, job => {
                 this.jobsApiService.getJobInputs(job.id)
                 .subscribe(inputData => {
-                    // _.forEach(inputData.results, name => {
-                    //     fileNames.push(name.file_name);
-                    // });
                     this.jobInputs.push( {
                         id: job.id,
                         input: inputData.results
@@ -132,7 +128,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
                 });
             });
-            console.log(this.jobInputs);
+            // console.log(this.jobInputs);
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;

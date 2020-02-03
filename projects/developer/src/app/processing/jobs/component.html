@@ -119,11 +119,21 @@
                 </div>
                 <div *ngSwitchCase="'input'">
                     <div *ngFor="let fullInput of jobInputs">
-                        <span *ngIf="fullInput.id == rowData.job_type.id">
-                                <div *ngFor="let input of fullInput.input">
-                                        {{ input.file_name | json }}
-                                </div>
-                            
+                        <span *ngIf="fullInput.id === rowData.id">
+                                <div *ngFor="let input of fullInput.input;  let i=index">
+                                    <div *ngIf="fullInput.input.length > 1 "> 
+                                            <div *ngIf="i <= 1">
+                                                    {{ input.file_name }},
+                                            </div>
+                                            <div *ngIf="i === 2">
+                                                    ...
+                                            </div>
+                                    </div>
+                                    <div *ngIf="fullInput.input.length === 1 "> 
+                                        {{ input.file_name }}
+                                    </div>
+                                        
+                                </div> 
                         </span>
                     </div>
                 </div>
