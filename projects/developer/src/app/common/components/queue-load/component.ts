@@ -67,52 +67,51 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         this.chartLoading = true;
         this.unsubscribe();
-        const params = {
-            started: this.started,
-            ended: this.ended,
-            job_type_id: changes.jobTypeIds.currentValue
-        };
-        console.log(params);
-        this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
-            this.chartLoading = false;
-            this.data = {
-                datasets: [{
-                    label: 'Running',
-                    backgroundColor: ColorService.RUNNING,
-                    borderColor: '#FFF',
-                    borderWidth: .75,
-                    data: []
-                }, {
-                    label: 'Queued',
-                    backgroundColor: ColorService.QUEUED,
-                    borderColor: '#FFF',
-                    borderWidth: .75,
-                    data: []
-                }, {
-                    label: 'Pending',
-                    backgroundColor: ColorService.PENDING,
-                    borderColor: '#FFF',
-                    borderWidth: .75,
-                    data: []
-                }]
+            const params = {
+                started: this.started,
+                ended: this.ended,
+                job_type_id: changes.jobTypeIds.currentValue
             };
-            _.forEach(this.data.datasets, dataset => {
-                _.forEach(data.results, result => {
-                    dataset.data.push({
-                        x: moment.utc(result.time).toDate(),
-                        y: dataset.label === 'Pending' ?
-                            result.pending_count :
-                            dataset.label === 'Queued' ?
-                                result.queued_count :
-                                result.running_count
+            this.subscription = this.queueApiService.getLoad(params, true).subscribe(data => {
+                this.chartLoading = false;
+                this.data = {
+                    datasets: [{
+                        label: 'Running',
+                        backgroundColor: ColorService.RUNNING,
+                        borderColor: '#FFF',
+                        borderWidth: .75,
+                        data: []
+                    }, {
+                        label: 'Queued',
+                        backgroundColor: ColorService.QUEUED,
+                        borderColor: '#FFF',
+                        borderWidth: .75,
+                        data: []
+                    }, {
+                        label: 'Pending',
+                        backgroundColor: ColorService.PENDING,
+                        borderColor: '#FFF',
+                        borderWidth: .75,
+                        data: []
+                    }]
+                };
+                _.forEach(this.data.datasets, dataset => {
+                    _.forEach(data.results, result => {
+                        dataset.data.push({
+                            x: moment.utc(result.time).toDate(),
+                            y: dataset.label === 'Pending' ?
+                                result.pending_count :
+                                dataset.label === 'Queued' ?
+                                    result.queued_count :
+                                    result.running_count
+                        });
                     });
                 });
+                this.chartLoaded.emit(this.chart);
+            }, err => {
+                this.chartLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
             });
-            this.chartLoaded.emit(this.chart);
-        }, err => {
-            this.chartLoading = false;
-            this.messageService.add({severity: 'error', summary: 'Error retrieving queue load', detail: err.statusText});
-        });
     }
 
     ngOnDestroy() {

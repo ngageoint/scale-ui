@@ -430,7 +430,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         }
         if (!shouldDeselect) {
             this.selectedNode = e;
-            this.selectedNode.options.stroke = ColorService.SCALE_BLUE1;
+            this.selectedNode.options.stroke = ColorService.COMPLETED;
             if (this.selectedNode.node_type) {
                 if (this.selectedNode.node_type.node_type === 'job') {
                     this.selectedRecipeType = null;

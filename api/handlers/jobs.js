@@ -96,11 +96,12 @@ module.exports = function (request) {
             var tempResults = [];
             params.status = Array.isArray(params.status) ? params.status : [params.status];
             _.forEach(params.status, function (status) {
-                tempResults = _.filter(data.results, function (result) {
+                tempResults.push(_.filter(data.results, function (result) {
                     return result.status === status;
-                });
+                }));
             });
-            data.results = _.clone(tempResults);
+           const total = _.flattenDepth(tempResults, [depth=1]);
+            data.results = _.clone(total);
         }
         if (params.error_category) {
             data.results = _.filter(data.results, function (result) {

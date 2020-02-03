@@ -98,7 +98,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                 });
                 const dataset = _.find(this.data.datasets, { id: feed.strike.id });
                 const opacity = parseFloat((1 - (idx / 10) * 2).toFixed(2));
-                const bgColor = ColorService.getRgba(ColorService.SCALE_BLUE2, opacity);
+                const bgColor = ColorService.getRgba(ColorService.COMPLETED, opacity);
                 if (dataset) {
                     dataset.backgroundColor = bgColor;
                     dataset.data = returnArr;
@@ -107,7 +107,7 @@ export class FeedComponent implements OnInit, OnDestroy {
                         borderColor: '#d0eaff',
                         backgroundColor: bgColor,
                         borderWidth: 1,
-                        pointBackgroundColor: ColorService.SCALE_BLUE2,
+                        pointBackgroundColor: ColorService.COMPLETED,
                         pointBorderColor: '#fff',
                         pointRadius: 2,
                         // lineTension: 0,
