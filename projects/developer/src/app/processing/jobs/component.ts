@@ -118,7 +118,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
-            console.log(this.jobs)
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
