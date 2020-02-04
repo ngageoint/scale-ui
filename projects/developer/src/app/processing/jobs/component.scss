@@ -53,6 +53,12 @@ label {
         }
     }
 }
+.max-size {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 150px;
+}
 .label-info {
     padding: .2em .6em .1em .6em;
 }

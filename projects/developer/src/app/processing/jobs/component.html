@@ -118,22 +118,9 @@
                     {{ rowData.status }}
                 </div>
                 <div *ngSwitchCase="'input'">
-                    <div *ngFor="let fullInput of jobInputs">
+                    <div class="max-size" *ngFor="let fullInput of jobInputs">
                         <span *ngIf="fullInput.id === rowData.id">
-                                <div *ngFor="let input of fullInput.input;  let i=index">
-                                    <div *ngIf="fullInput.input.length > 1 "> 
-                                            <div *ngIf="i <= 1">
-                                                    {{ input.file_name }},
-                                            </div>
-                                            <div *ngIf="i === 2">
-                                                    ...
-                                            </div>
-                                    </div>
-                                    <div *ngIf="fullInput.input.length === 1 "> 
-                                        {{ input.file_name }}
-                                    </div>
-                                        
-                                </div> 
+                                {{ fullInput.input }}
                         </span>
                     </div>
                 </div>

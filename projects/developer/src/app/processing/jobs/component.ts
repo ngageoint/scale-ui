@@ -32,12 +32,12 @@ export class JobsComponent implements OnInit, OnDestroy {
     columns = [
         { field: 'job_type', header: 'Job Type' },
         { field: 'recipe', header: 'Recipe' },
+        { field: 'input', header: 'Inputs' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node', header: 'Node' },
         { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
         { field: 'status', header: 'Status' },
-        { field: 'input', header: 'Input' },
         { field: 'error.category', header: 'Error Category' },
         { field: 'error.title', header: 'Error' },
         { field: 'id', header: 'Log', sortableColumnDisabled: true }
@@ -120,15 +120,18 @@ export class JobsComponent implements OnInit, OnDestroy {
             _.forEach(this.jobs, job => {
                 this.jobsApiService.getJobInputs(job.id)
                 .subscribe(inputData => {
+                    const fileName = [];
+                    _.forEach(inputData.results, input => {
+                        fileName.push(input.file_name);
+                    });
                     this.jobInputs.push( {
                         id: job.id,
-                        input: inputData.results
+                        input: fileName.toString()
                     });
                 }, err => {
                     this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
                 });
             });
-            // console.log(this.jobInputs);
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
