@@ -34,7 +34,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         { field: 'recipe', header: 'Recipe' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
-        { field: 'node.hostname', header: 'Node' },
+        { field: 'node', header: 'Node' },
         { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
         { field: 'status', header: 'Status' },
         { field: 'error.category', header: 'Error Category' },
@@ -118,6 +118,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
+            console.log(this.jobs)
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
