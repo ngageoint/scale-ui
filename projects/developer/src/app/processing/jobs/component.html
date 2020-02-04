@@ -90,6 +90,13 @@
                         </a>
                     </div>
                 </div>
+                <div *ngSwitchCase="'input'">
+                    <div class="max-size" *ngFor="let fullInput of jobInputs">
+                        <span *ngIf="fullInput.id === rowData.id">
+                                {{ fullInput.input }}
+                        </span>
+                    </div>
+                </div>
                 <div *ngSwitchCase="'created'">
                     <span [pTooltip]="rowData.createdTooltip">
                         {{ rowData.createdDisplay }}
@@ -116,13 +123,6 @@
                                 *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>
                     </div>
                     {{ rowData.status }}
-                </div>
-                <div *ngSwitchCase="'input'">
-                    <div class="max-size" *ngFor="let fullInput of jobInputs">
-                        <span *ngIf="fullInput.id === rowData.id">
-                                {{ fullInput.input }}
-                        </span>
-                    </div>
                 </div>
                 <div *ngSwitchCase="'error.category'">
                     <div *ngIf="rowData.error">
