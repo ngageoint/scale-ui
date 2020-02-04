@@ -116,22 +116,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
-            this.jobInputs = [];
-            _.forEach(this.jobs, job => {
-                this.jobsApiService.getJobInputs(job.id)
-                .subscribe(inputData => {
-                    const fileName = [];
-                    _.forEach(inputData.results, input => {
-                        fileName.push(input.file_name);
-                    });
-                    this.jobInputs.push( {
-                        id: job.id,
-                        input: fileName.toString()
-                    });
-                }, err => {
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
-                });
-            });
+            console.log(this.jobs)
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
