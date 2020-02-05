@@ -33,21 +33,21 @@ module.exports = function (request) {
             var minRandom = metric === 'total_count' ? 800 : 10;
             var returnResult = {
                 column: { title: _.startCase(metric), name: _.snakeCase(metric) },
-                min_x: moment.utc(params.started).format('YYYY-MM-DD'),
-                max_x: moment.utc(params.ended).format('YYYY-MM-DD'),
+                min_x: moment.utc(params.started).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                max_x: moment.utc(params.ended).format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
                 min_y: 1,
                 max_y: 1000,
                 values: []
             };
 
-            for (var i = 0; i < numDays; i++) {
+            for (var i = 0; i < (numDays * 24); i++) {
                 if (params.choice_id && params.choice_id.length > 1) {
                     _.forEach(params.choice_id, function (id) {
                         random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
                         if (random <= 4) {
                             var value = Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom;
                             returnResult.values.push({
-                                datetime: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
+                                datetime: moment.utc(params.started).add(i, 'h').format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
                                 value: value,
                                 id: parseInt(id)
                             });
@@ -57,7 +57,7 @@ module.exports = function (request) {
                     random = Math.floor(Math.random() * (5 - 1 + 1)) + 1;
                     if (random <= 4) {
                         returnResult.values.push({
-                            datetime: moment.utc(params.started).add(i, 'd').format('YYYY-MM-DD'),
+                            datetime: moment.utc(params.started).add(i, 'h').format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
                             value: Math.floor(Math.random() * (maxRandom - minRandom + 1)) + minRandom
                         });
                     }

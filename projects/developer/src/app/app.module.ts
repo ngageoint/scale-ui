@@ -5,7 +5,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HttpClientXsrfModule } from '@angular/common/http';
-import { PlotlyViaWindowModule } from 'angular-plotly.js';
 
 // vendor
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
@@ -36,6 +35,7 @@ import { ToastModule } from 'primeng/toast';
 // app
 import { AppComponent } from './app.component';
 import { AppConfigService } from './common/services/app-config.service';
+import { ColorService } from './common/services/color.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchesComponent } from './processing/batches/batches-component';
@@ -189,7 +189,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         OverlayPanelModule,
         PaginatorModule,
         PanelModule,
-        PlotlyViaWindowModule,
         ProgressBarModule,
         ProgressSpinnerModule,
         ReactiveFormsModule,
@@ -218,6 +217,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         PaginatorModule
     ],
     providers: [
+        ColorService,
         ConfirmationService,
         PendingChangesGuard,
         {

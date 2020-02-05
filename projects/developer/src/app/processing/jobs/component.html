@@ -95,6 +95,11 @@
                         {{ rowData.lastModifiedDisplay }}
                     </span>
                 </div>
+                <div *ngSwitchCase="'node'">
+                    <span>
+                        {{ rowData.node.hostname }}
+                    </span>
+                </div>
                 <div *ngSwitchCase="'status'">
                     <div class="pull-right">
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
