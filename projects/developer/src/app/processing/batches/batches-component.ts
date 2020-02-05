@@ -115,9 +115,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     label: recipeType.title,
                     value: recipeType
                 });
-                console.log(_.indexOf(this.datatableOptions.recipe_type_id, recipeType.id))
                 if (_.indexOf(this.datatableOptions.recipe_type_id, _.toString(recipeType.id)) >= 0 &&
-                !_.find(this.selectedRecipeType, recipeType))  {
+                        !_.find(this.selectedRecipeType, recipeType))  {
                     this.selectedRecipeType.push(recipeType);
                 }
             });
