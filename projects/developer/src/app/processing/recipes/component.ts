@@ -116,7 +116,8 @@ export class RecipesComponent implements OnInit, OnDestroy {
                     label: `${recipeType.title}`,
                     value: recipeType
                 });
-                if (_.indexOf(this.datatableOptions.recipe_type_name, recipeType.name) >= 0) {
+                if (_.indexOf(this.datatableOptions.recipe_type_name, recipeType.name) >= 0 &&
+                !_.find(this.selectedRecipeType, recipeType))  {
                     this.selectedRecipeType.push(recipeType);
                 }
             });
