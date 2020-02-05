@@ -96,7 +96,7 @@
                     </span>
                 </div>
                 <div *ngSwitchCase="'node'">
-                    <span>
+                    <span *ngIf="rowData.node">
                         {{ rowData.node.hostname }}
                     </span>
                 </div>
