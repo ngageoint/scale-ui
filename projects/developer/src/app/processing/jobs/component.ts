@@ -347,7 +347,7 @@ export class JobsComponent implements OnInit, OnDestroy {
                 status: this.datatableOptions.status === 'RUNNING' || this.datatableOptions.status === 'QUEUED' ?
                     this.datatableOptions.status :
                     null,
-                job_type_names: this.datatableOptions.job_type_name ? [this.datatableOptions.job_type_name] : null
+                job_type_names: this.datatableOptions.job_type_name ? this.datatableOptions.job_type_name : null
             };
             // remove null properties
             jobsParams = _.pickBy(jobsParams);
