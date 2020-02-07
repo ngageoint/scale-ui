@@ -61,7 +61,6 @@ import { LogViewerComponent } from './common/components/log-viewer/component';
 import { MetricsComponent } from './data/metrics/component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NodesComponent } from './system/nodes/component';
-import { ProcessingFormComponent } from './navbar/subnav/processing-form/component';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { QueueLoadComponent } from './common/components/queue-load/component';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
@@ -124,7 +123,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         MetricsComponent,
         NavbarComponent,
         NodesComponent,
-        ProcessingFormComponent,
         QueuedJobsComponent,
         QueueLoadComponent,
         RecipeDetailsComponent,
