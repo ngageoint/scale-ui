@@ -26,7 +26,8 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     favorites = [];
     allJobs = [];
     favoritesSubscription: any;
-
+    subscription: any;
+    chartParams: any;
     constructor(
         private messageService: MessageService,
         private jobsService: DashboardJobsService,
@@ -37,20 +38,36 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     private updateChart(favorite?: any) {
         this.chartLoading = true;
         this.allJobs = this.jobsService.getAllJobs();
+        const numDays = moment.utc(this.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').diff(moment.utc(this.started,
+            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'd');
+        if (numDays === 1 ) {
+            this.started = moment.utc(this.started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').startOf('days').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+            this.ended = moment.utc(this.ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').startOf('days').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+        }
         const choiceIds = this.favorite ?
             this.favorite.job_type.id :
             [];
-            this.params = {
+            this.chartParams = {
                 choice_id: choiceIds,
                 column: ['completed_count', 'failed_count'],
                 colors: [
-                    { column: 'completed_count', color: ColorService.SCALE_BLUE2 },
+                    { column: 'completed_count', color: ColorService.COMPLETED },
                     { column: 'failed_count', color: ColorService.ERROR }
                 ],
                 dataType: 'job-types',
                 started: this.started,
                 ended: this.ended,
                 group: ['overview', 'overview'],
+                page: 1,
+                page_size: null
+            };
+            this.params = {
+                choice_id: choiceIds,
+                column: ['completed_count', 'failed_count'],
+                dataType: 'job-types',
+                started: this.started,
+                ended: this.ended,
+                group: 'overview',
                 page: 1,
                 page_size: null
             };
@@ -74,9 +91,9 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
             } else {
                 title = '';
             }
-            const chartData = this.chartService.formatPlotResults(data, this.params, filters, title, false);
+            const chartData = this.chartService.formatPlotResults(data, this.chartParams, filters, title, false);
             chartData.labels = _.map(chartData.labels, label => {
-                return moment.utc(label, 'YYYY-MM-DD').format('DD MMM');
+                return moment.utc(label, 'YYYY-MM-DDTHH:mm:ss').format('DD MMM HHmm[Z]');
             });
             // initialize chart
             this.data = {
@@ -126,12 +143,6 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     ngOnInit() {
-        this.chartLoading = true;
-        if (this.favorite) {
-            this.updateChart(this.favorite);
-        } else {
-            this.updateChart();
-        }
     }
 
     ngAfterViewInit() {
@@ -145,6 +156,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     ngOnChanges(changes: SimpleChanges) {
+        this.chartLoading = true;
         if (this.favorite) {
             this.updateChart(this.favorite);
         } else {

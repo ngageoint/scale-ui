@@ -122,6 +122,10 @@ export class NodesComponent implements OnInit, OnDestroy {
             }
         }
     };
+    page = 1;
+    total = 0;
+    perPage = 1000;
+
     constructor(
         private router: Router,
         private route: ActivatedRoute,
@@ -188,8 +192,18 @@ export class NodesComponent implements OnInit, OnDestroy {
         this.filterNodes();
     }
 
+    public onPageChange(event: {first: number, rows: number, page: number, pageCount: number}): void {
+        this.page = event.page + 1;
+        this.getNodes();
+    }
+
     private getNodes() {
-        this.nodesApiService.getNodes().subscribe(nodeData => {
+        this.nodesApiService.getNodes({
+            page: this.page,
+            page_size: this.perPage,
+            is_active: this.showActive,
+        }).subscribe(nodeData => {
+            this.total = nodeData.count;
             this.allNodes = nodeData.results;
             this.loading = false;
             this.formatNodes();
