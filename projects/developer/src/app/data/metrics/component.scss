@@ -1,3 +1,11 @@
+::ng-deep .metricsDateFilter {
+    z-index: 10021004 !important;
+
+    table td {
+        padding: 0 !important;
+    }
+}
+
 .metrics__container {
     min-height: 85vh;
 

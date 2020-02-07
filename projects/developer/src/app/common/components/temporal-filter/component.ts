@@ -5,6 +5,7 @@ import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 
 import { LocalStorageItem } from '../../utils/localstorage';
+import { UTCDates } from '../../utils/utcdates';
 
 @Component({
     selector: 'dev-temporal-filter',
@@ -72,8 +73,8 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
     }
 
     // utc versions of internal start and end dates
-    get utcStartDate(): Date { return this.localDateToUTC(this.startDate); }
-    get utcEndDate(): Date { return this.localDateToUTC(this.endDate); }
+    get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
+    get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
 
     // helper for if a live range is selected
     get isLiveMode(): boolean { return !!this.liveRange; }
@@ -184,41 +185,12 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
             const now = moment();
             const start = this.started || this.startedStorage.get() || now.clone().subtract(1, 'day').toDate();
             const end = this.ended || this.endedStorage.get() || now.toDate();
-            this.startDate = this.utcDateToLocal(start);
-            this.endDate = this.utcDateToLocal(end);
+            this.startDate = UTCDates.utcDateToLocal(start);
+            this.endDate = UTCDates.utcDateToLocal(end);
 
             // perform the normal date filter
             this.onDateFilterApply();
         }
-    }
-
-    /**
-     * Converts and strips a date string to local date.
-     * @param  date string or date with timezone component
-     * @return      date object without timezone
-     */
-    private utcDateToLocal(date: string | Date): Date {
-        const v = moment(date).utc();
-        // drop milliseconds since it isn't exposed to the user
-        return new Date(
-            v.year(), v.month(), v.date(),
-            v.hours(), v.minutes(), v.seconds()
-        );
-    }
-
-    /**
-     * Converts and strips the given date to a date for UTC time.
-     * @param  date string or date with timezone component
-     * @return      date converted to UTC
-     */
-    private localDateToUTC(date: Date): Date {
-        const v = moment(date);
-        // drop milliseconds since it isn't exposed to the user
-        const utc = moment.utc([
-            v.year(), v.month(), v.date(),
-            v.hours(), v.minutes(), v.seconds()
-        ]);
-        return utc.toDate();
     }
 
     ngOnInit() {
@@ -240,8 +212,8 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
                 this.onLiveRangeChange();
             } else if (!this.liveRangeOnly && this.started && this.ended) {
                 // start/end dates were set from parent (router)
-                this.startDate = this.utcDateToLocal(this.started);
-                this.endDate = this.utcDateToLocal(this.ended);
+                this.startDate = UTCDates.utcDateToLocal(this.started);
+                this.endDate = UTCDates.utcDateToLocal(this.ended);
                 this.onDateFilterApply();
             } else if (this.liveRangeStorage.get()) {
                 // live range and start/end not provided by parent
@@ -250,8 +222,8 @@ export class TemporalFilterComponent implements OnInit, OnDestroy {
                 this.onLiveRangeChange();
             } else if (this.startedStorage.get() && this.endedStorage.get()) {
                 // start/end provided from localstorage
-                this.startDate = this.utcDateToLocal(this.startedStorage.get());
-                this.endDate = this.utcDateToLocal(this.endedStorage.get());
+                this.startDate = UTCDates.utcDateToLocal(this.startedStorage.get());
+                this.endDate = UTCDates.utcDateToLocal(this.endedStorage.get());
                 this.onDateFilterApply();
             } else {
                 if (this.liveRangeOnly) {
