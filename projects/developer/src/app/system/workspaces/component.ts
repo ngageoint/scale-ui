@@ -17,7 +17,7 @@ import { Observable } from 'rxjs';
     styleUrls: ['./component.scss']
 })
 export class WorkspacesComponent implements OnInit, OnDestroy {
-    @ViewChild('dv') dv: any;
+    @ViewChild('dv', {static: true}) dv: any;
     private routeParams: any;
     loading: boolean;
     isEditing: boolean;

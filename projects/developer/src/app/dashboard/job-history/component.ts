@@ -18,7 +18,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     @Input() favorite: any;
     @Input() started;
     @Input() ended;
-    @ViewChild('chart') chart: UIChart;
+    @ViewChild('chart', {static: true}) chart: UIChart;
     chartLoading: boolean;
     data: any;
     options: any;

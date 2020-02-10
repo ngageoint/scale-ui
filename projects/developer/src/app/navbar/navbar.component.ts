@@ -21,7 +21,7 @@ import { ProfileService } from '../common/services/profile.service';
 export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() isAuthenticated: boolean;
     @Input() theme: string;
-    @ViewChild('systemOp') systemOp: OverlayPanel;
+    @ViewChild('systemOp', {static: true}) systemOp: OverlayPanel;
     statusSubscription: any;
     selectedId = null;
     subscription: any;

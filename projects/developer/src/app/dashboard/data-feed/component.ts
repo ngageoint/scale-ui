@@ -17,7 +17,7 @@ import { ColorService } from '../../common/services/color.service';
 export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     @Input() started;
     @Input() ended;
-    @ViewChild('chart') chart: UIChart;
+    @ViewChild('chart', {static: true}) chart: UIChart;
     chartLoading: boolean;
     feedParams: any;
     plotParams: any;

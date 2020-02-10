@@ -32,10 +32,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() height = '70vh';
     @Output() editCondition: EventEmitter<any> = new EventEmitter<any>();
     @Output() deleteCondition: EventEmitter<any> = new EventEmitter<any>();
-    @ViewChild('dependencyPanel') dependencyPanel: any;
-    @ViewChild('inputFilePanel') inputFilePanel: any;
-    @ViewChild('inputJSONPanel') inputJSONPanel: any;
-    @ViewChild('recipeDialog') recipeDialog: any;
+    @ViewChild('dependencyPanel', {static: true}) dependencyPanel: any;
+    @ViewChild('inputFilePanel', {static: true}) inputFilePanel: any;
+    @ViewChild('inputJSONPanel', {static: true}) inputJSONPanel: any;
+    @ViewChild('recipeDialog', {static: true}) recipeDialog: any;
     datatableOptions: BatchesDatatable;
     columns: any[];
     batchesColumns: any[];

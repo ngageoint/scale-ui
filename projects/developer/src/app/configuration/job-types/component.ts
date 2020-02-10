@@ -17,7 +17,7 @@ import { DashboardJobsService } from '../../dashboard/jobs.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
-    @ViewChild('dv') dv: any;
+    @ViewChild('dv', {static: true}) dv: any;
     private routeParams: any;
     private itemsWithPause: MenuItem[] = [
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },

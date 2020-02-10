@@ -16,9 +16,9 @@ import { ProfileService } from '../common/services/profile.service';
 
 export class FooterComponent implements OnInit, OnChanges {
     @Input() isAuthenticated: boolean;
-    @ViewChild('profileOp') profileOp: OverlayPanel;
-    @ViewChild('profile') profile: any;
-    @ViewChild('user') usernameEl: any;
+    @ViewChild('profileOp', {static: true}) profileOp: OverlayPanel;
+    @ViewChild('profile', {static: true}) profile: any;
+    @ViewChild('user', {static: true}) usernameEl: any;
     env = environment;
     documentation = environment.documentation;
     uiVersion = version;

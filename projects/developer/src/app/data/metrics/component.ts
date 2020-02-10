@@ -19,7 +19,7 @@ import { UTCDates } from '../../common/utils/utcdates';
     styleUrls: ['./component.scss']
 })
 export class MetricsComponent implements OnInit, AfterViewInit {
-    @ViewChild('chart') chart: UIChart;
+    @ViewChild('chart', {static: true}) chart: UIChart;
     chartLoading: boolean;
     showChart: boolean;
     startDate = moment().subtract(1, 'M').startOf('d').toDate();
