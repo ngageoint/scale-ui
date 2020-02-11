@@ -1,6 +1,5 @@
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-import { Subscription } from 'rxjs/Subscription';
 import { Subject } from 'rxjs/Subject';
 import { BatchesApiService, IBatch, IBatchValidationResponse } from './../../api.service';
 import { Batch } from './../../api.model';
