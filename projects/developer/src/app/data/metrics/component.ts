@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -8,7 +8,7 @@ import { MetricsApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { ChartService } from './chart.service';
 import { DataService } from '../../common/services/data.service';
-import { UIChart } from 'primeng/primeng';
+import { UIChart } from 'primeng/chart';
 import { JobType } from '../../configuration/job-types/api.model';
 
 import { UTCDates } from '../../common/utils/utcdates';

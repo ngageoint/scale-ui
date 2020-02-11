@@ -1,4 +1,4 @@
-import { SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/api';
 import { IDatasetDefinition } from '../../../../data/services/dataset';
 import { Component, OnInit, Input } from '@angular/core';
 import { DatasetsApiService } from '../../../../data/services/dataset.api.service';

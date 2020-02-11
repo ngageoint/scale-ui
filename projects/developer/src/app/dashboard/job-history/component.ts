@@ -7,7 +7,7 @@ import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
-import { UIChart } from 'primeng/primeng';
+import { UIChart } from 'primeng/chart';
 
 @Component({
     selector: 'dev-job-history',

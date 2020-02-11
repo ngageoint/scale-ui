@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConfirmationService, SelectItem } from 'primeng/primeng';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, SelectItem, MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';

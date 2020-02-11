@@ -1,6 +1,6 @@
 import { RecipeTypesApiService } from './../../../../configuration/recipe-types/api.service';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { SelectItem, MessageService } from 'primeng/primeng';
+import { SelectItem, MessageService } from 'primeng/api';
 import { Component, OnInit } from '@angular/core';
 import { BatchesApiService } from '../../api.service';
 import { Batch } from '../../api.model';

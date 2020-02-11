@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { OverlayPanel, ConfirmationService } from 'primeng/primeng';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MenuItem } from 'primeng/api';
