@@ -7,6 +7,8 @@ import { Batch } from '../../api.model';
 import * as _ from 'lodash';
 import { RecipeType } from 'projects/developer/src/app/configuration/recipe-types/api.model';
 import { debounceTime } from 'rxjs/operators';
+import { FormControlWarn, ValidationMessages, multipleInputWarning, priorityRange } from '../../../../common/utils/CustomValidation';
+import { onlyUnique } from 'projects/developer/src/app/common/utils/filters';
 
 @Component({
     selector: 'dev-create-batch',
@@ -15,11 +17,25 @@ import { debounceTime } from 'rxjs/operators';
 })
 export class CreateBatchComponent implements OnInit {
     form: FormGroup;
-    batch: any;
+    @Input() batch: any = {};
+    @Input() batchRecipe: any;
+    @Output() nextStepEvent = new EventEmitter();
     recipeTypeOptions: SelectItem[] = [];
+    nodeOptions: SelectItem[] = [];
+
+    _multipleInputRecipe = false;
+    get multipleInputRecipe(): boolean {
+        return this._multipleInputRecipe;
+    }
+    set multipleInputRecipe(value) {
+        this._multipleInputRecipe = value;
+    }
+
     titleMessage: string;
     priorityMessage: string;
+    recipeTypeMessage: string;
     formValidated = false;
+
     private validationMessages = {
         title: {
             name: 'titleMessage',
@@ -27,48 +43,58 @@ export class CreateBatchComponent implements OnInit {
         },
         recipeType: {
             name: 'recipeTypeMessage',
-            required: 'Please select a Recipe Type.'
+            required: 'Please select a Recipe Type.',
+            multipleInput: `The recipe you have selected requires more than one input file. Any newly created dataset
+                requires only one input file. Only datasets created via the API that allow for more than one input file will apply.`
         },
         priority: {
             name: 'priorityMessage',
             required: 'Please enter a priority.',
+            priorityRange: 'Please enter a value between 0 - 1000000.',
             min: 'Please enter a value between 0 - 1000000.',
             max: 'Please enter a value between 0 - 1000000.'
         }
     };
-    nodeOptions: SelectItem[] = [];
 
     constructor(
         private fb: FormBuilder,
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
-        private batchesApiService: BatchesApiService
     ) {}
 
     ngOnInit() {
         this.getRecipeTypes();
 
         this.form = this.fb.group({
-            title: ['', Validators.required],
-            description: [''],
-            recipe_type: ['', Validators.required],
+            title: [this.batch ? this.batch.title : '', Validators.required],
+            description: [this.batch ? this.batch.description : ''],
+            recipe_type: new FormControlWarn(this.batch ? this.batch.recipe_type : '', [
+                Validators.required,
+                multipleInputWarning
+            ]),
             configuration: this.fb.group({
-                priority: ['', [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(0), Validators.max(1000000)]]
+                priority: [
+                    this.batch ? this.batch.configuration.priority : '',
+                    [Validators.required, Validators.pattern('^[0-9]*$'), priorityRange(0, 1000000)]
+                ]
             }),
-            supersedes: [false],
+            supersedes: [this.batch ? this.batch.supersedes : 'true'],
             definition: this.fb.group({
-                previous_batch: this.fb.group({
-                    forced_nodes: this.fb.group({
-                        all: [false],
-                        nodes: [''],
-                        sub_recipes: ['']
-                    })
+                forced_nodes: this.fb.group({
+                    nodes: [this.batch ? this.batch.definition.forced_nodes.nodes : ''],
                 })
             })
         });
 
-        this.batch = Batch.transformer(null);
+        if (!this.batch) {
+            this.batch = Batch.transformer(null);
+        }
+
         this.form.patchValue(this.batch);
+
+        if (this.batchRecipe) {
+            this.populateNodeControl();
+        }
 
         const titleControl = this.form.get('title');
         titleControl.valueChanges
@@ -84,7 +110,6 @@ export class CreateBatchComponent implements OnInit {
                 this.setMessage(priorityControl, this.validationMessages.priority);
             });
 
-
         this.form.get('recipe_type').valueChanges.subscribe(value => {
             this.handleRecipeTypeChange(value);
         });
@@ -95,35 +120,28 @@ export class CreateBatchComponent implements OnInit {
         });
     }
 
-    validateBatch() {
-        return this.batchesApiService.validateBatch(this.batch)
-            .subscribe(value => {
-                this.formValidated = value.is_valid;
-                this.form.markAsPristine();
-            });
+    handleNextStep(): void {
+        this.nextStepEvent.emit({
+            createBatch: {
+                batch: this.batch,
+                batchRecipe: this.batchRecipe,
+                multipleInput: this.isMultiInputRecipe()
+            },
+            index: 1
+        });
     }
 
-    handleRecipeTypeChange(value) {
-        this.nodeOptions = [];
+    handleRecipeTypeChange(value): void {
         if (value) {
-            // populate node dropdown
             this.recipeTypesApiService.getRecipeType(value.name).subscribe(
                 data => {
-                    _.forEach(data.job_types, jobType => {
-                        const nodeName = _.findKey(data.definition.nodes, {
-                            node_type: {
-                                job_type_name: jobType.name,
-                                job_type_version: jobType.version
-                            }
-                        });
-                        this.nodeOptions.push({
-                            label: `${jobType.title} v${jobType.version}`,
-                            value: nodeName
-                        });
-                    });
+                    this.batchRecipe = data;
+                    this.populateNodeControl();
+                    this.setSelectedNodes();
+                    this.multipleInputRecipe = this.isMultiInputRecipe();
+                    this.setMessage(this.form.get('recipe_type'), this.validationMessages.recipeType);
                 },
                 err => {
-                    console.log(err);
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Error retrieving recipe type details',
@@ -134,7 +152,51 @@ export class CreateBatchComponent implements OnInit {
         }
     }
 
-    getRecipeTypes() {
+    isMultiInputRecipe(): boolean {
+        if (!this.batchRecipe) { return false; }
+        return this.batchRecipe.definition.input.files
+            .map(file => file.name)
+            .filter(onlyUnique).length > 1;
+    }
+
+    populateNodeControl(): void {
+        this.nodeOptions = [];
+
+        this.batchRecipe.job_types.map(jobType => {
+            const nodeName = _.findKey(this.batchRecipe.definition.nodes, {
+                node_type: {
+                    job_type_name: jobType.name,
+                    job_type_version: jobType.version
+                }
+            });
+            this.nodeOptions.push({
+                label: `${jobType.title} v${jobType.version}`,
+                value: nodeName
+            });
+        });
+
+        this.batchRecipe.sub_recipe_types.map(subRecipeType => {
+            const nodeName = _.findKey(this.batchRecipe.definition.nodes, {
+                node_type: {
+                    recipe_type_name: subRecipeType.name,
+                    recipe_type_revision: subRecipeType.revision_num
+                }
+            });
+            this.nodeOptions.push({
+                label: `${subRecipeType.title} rev.${subRecipeType.revision_num}`,
+                value: nodeName
+            });
+        });
+    }
+
+    setSelectedNodes(): void {
+        const selected = [...this.nodeOptions.map(option => option.value)];
+        const nodeControl = this.form.get('definition.forced_nodes.nodes');
+        nodeControl.reset();
+        nodeControl.setValue(selected);
+    }
+
+    getRecipeTypes(): void {
         this.recipeTypesApiService.getRecipeTypes({ rows: 100000 }).subscribe(
             data => {
                 const recipeTypes = RecipeType.transformer(data.results);
@@ -157,32 +219,20 @@ export class CreateBatchComponent implements OnInit {
     }
 
     onNodesChanged(event) {
-        this.batch.definition.previous_batch.forced_nodes.nodes = event.value;
+        this.batch.definition.forced_nodes.nodes = event.value;
     }
 
-    setMessage(control: AbstractControl, validationMessages: ValidationMessages): void {
+    setMessage(control: AbstractControl | FormControlWarn, validationMessages: ValidationMessages): void {
         this[validationMessages.name] = '';
         if ((control.touched || control.dirty) && control.errors) {
             this[validationMessages.name] = Object.keys(control.errors)
                 .map(key => validationMessages[key]).join(' ');
         }
-    }
-
-    setAllNodes(event) {
-        if (event) {
-            this.form
-                .get('definition.previous_batch.forced_nodes.nodes')
-                .disable();
-        } else {
-            this.form
-                .get('definition.previous_batch.forced_nodes.nodes')
-                .enable();
+        if (control instanceof FormControlWarn) {
+            if ((control.touched || control.dirty) && this.isMultiInputRecipe() && control.warnings) {
+                this[validationMessages.name] = Object.keys(control.warnings)
+                    .map(key => validationMessages[key]).join(' ');
+            }
         }
-        this.batch.definition.previous_batch.forced_nodes.all = event;
     }
-}
-
-export interface ValidationMessages {
-    'name': string;
-    [key: string]: string;
 }

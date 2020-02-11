@@ -4,7 +4,7 @@ import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from './../../common/services/data.service';
-import { IDatasetDefinition } from './dataset';
+import { IDataset } from './dataset';
 import { ApiResults } from '../../common/models/api-results.model';
 import * as _ from 'lodash';
 import { Dataset } from '../models/dataset.model';
@@ -50,16 +50,49 @@ export class DatasetsApiService {
     getDataset(id: number): Observable<any> {
         this.http.get('')
             .pipe(
-                map(response => {
-                    return response;
-                }),
+                map(response => response),
                 catchError(DataService.handleError)
             );
         return of(true);
     }
 
-    createDataset(options: IDatasetDefinition): Observable<any> {
-        return this.http.post(`${this.apiPrefix}/datasets/`, options).pipe(
+    createDatasetWithDataTemplate(options: any): Observable<any> {
+        const datasetMetaData: IDataset = {
+            title: options.title,
+            description: options.description,
+            definition: {
+                global_data: {files: {}, json: {}},
+                global_parameters: {files: [], json: []},
+                parameters: {files: [{name: 'INPUT_FILE'}], json: []}
+            },
+            data_template: {
+                files: {INPUT_FILE: 'FILE_VALUE'},
+                json: {}
+            }
+        };
+        datasetMetaData['data_started'] = new Date(options.startDate).toISOString();
+        datasetMetaData['data_ended'] = new Date(options.endDate).toISOString();
+        if (options.optionalFilters.location) {
+            datasetMetaData['countries'] = options.optionalFilters.location;
+        }
+        if (options.optionalFilters.media_type) {
+            datasetMetaData['media_type'] = options.optionalFilter.media_type;
+        }
+        if (options.optionalFilters.recipe_type) {
+            datasetMetaData['recipe_type'] = options.optionalFilter.recipe_type;
+        }
+
+        return this.http.post(`${this.apiPrefix}/datasets/`, datasetMetaData).pipe(
+            map(response => Dataset.transformer(response)),
+            catchError(DataService.handleError)
+        );
+    }
+
+    addMembers(id: number, memberIds: number[]): Observable<any> {
+        const options = {
+            data: memberIds.map(memberId => ({'files': {'INPUT_FILE': [memberId]}, 'json': {}}))
+        };
+        return this.http.post(`${this.apiPrefix}/datasets/${id}`, options).pipe(
             map(response => Dataset.transformer(response)),
             catchError(DataService.handleError)
         );

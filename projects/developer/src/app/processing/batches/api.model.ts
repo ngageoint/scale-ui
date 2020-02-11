@@ -60,13 +60,10 @@ export class Batch {
     }
 
     public static transformer(data) {
-        if (data) {
-            if (Array.isArray(data)) {
-                return data.map(item => Batch.build(item));
-            }
-            return Batch.build(data);
+        if (data && Array.isArray(data)) {
+            return data.map(item => Batch.build(item));
         }
-        return Batch.build(null);
+        return Batch.build(data);
     }
 
     public cleanBatch() {
@@ -83,7 +80,8 @@ export class Batch {
             description: this.description,
             recipe_type_id: this.recipe_type.id,
             definition: this.definition,
-            configuration: this.configuration
+            configuration: this.configuration,
+            supersedes: this.supersedes
         };
     }
 
@@ -121,9 +119,10 @@ export class Batch {
         public superseded?: string,
         public last_modified?: string,
         public definition?: any,
-        public configuration?: any,
+        public configuration?: {priority: number},
         public job_metrics?: any,
-        public selected?: boolean
+        public selected?: boolean,
+        public supersedes?: string
     ) {
         if (this.created) {
             this.created_formatted = moment.utc(this.created).format(environment.dateFormat);
@@ -195,5 +194,6 @@ export class Batch {
             jobs_canceled: this.jobs_canceled,
             jobs_completed: this.jobs_completed
         };
+        this.supersedes = this.supersedes || 'true';
     }
 }

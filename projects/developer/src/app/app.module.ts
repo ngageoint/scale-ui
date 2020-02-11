@@ -41,6 +41,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { PanelModule } from 'primeng/panel';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RadioButtonModule } from 'primeng/radiobutton';
 import { ScrollPanelModule } from 'primeng/scrollpanel';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { SidebarModule } from 'primeng/sidebar';
@@ -215,6 +216,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         PanelModule,
         ProgressBarModule,
         ProgressSpinnerModule,
+        RadioButtonModule,
         ReactiveFormsModule,
         ScrollPanelModule,
         SeedImagesModule,
