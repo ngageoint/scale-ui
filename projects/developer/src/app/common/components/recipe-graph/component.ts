@@ -44,7 +44,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     nodes = [];
     links = [];
     showLegend = false;
-    orientation: string; // LR, RL, TB, BT
+    layoutSettings: any;
     curve: any;
     selectedJobType: any;
     selectedRecipeType: any;
@@ -115,7 +115,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
-        this.orientation = 'TB';
+        this.layoutSettings = {
+            orientation: 'TB',
+            marginX: 0,
+            marginY: 0,
+        };
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
 
@@ -123,6 +127,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             { field: 'job_status', header: 'Job Status' },
             { field: 'job_count', header: 'Job Count' }
         ];
+        console.log('this', this);
     }
 
     /**
@@ -425,12 +430,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.showRecipeDialog = !shouldDeselect;
         if (this.selectedNode) {
             this.getTotalConnections();
-            this.selectedNode.options.stroke = '';
+            this.selectedNode.data.stroke = '';
             this.selectedNode = null;
         }
         if (!shouldDeselect) {
             this.selectedNode = e;
-            this.selectedNode.options.stroke = ColorService.COMPLETED;
+            this.selectedNode.data.stroke = ColorService.COMPLETED;
             if (this.selectedNode.node_type) {
                 if (this.selectedNode.node_type.node_type === 'job') {
                     this.selectedRecipeType = null;
@@ -987,7 +992,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.recipeDialogY = recipeDialogDiv ? parseInt(recipeDialogDiv.style.top, 10) : null;
 
         if (this.selectedNode) {
-            this.selectedNode.options.stroke = '';
+            this.selectedNode.data.stroke = '';
             this.selectedNode = null;
         }
     }
