@@ -127,7 +127,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             { field: 'job_status', header: 'Job Status' },
             { field: 'job_count', header: 'Job Count' }
         ];
-        console.log('this', this);
     }
 
     /**
