@@ -1,7 +1,7 @@
 {
     "id": 1,
-    "title": "Renamer Dataset",
-    "description": "Dataset for the renamer job",
+    "title": "Mock Dataset",
+    "description": "Mock Dataset for the renamer job",
     "created": "2019-09-16T17:19:27.992166Z",
     "definition": {
         "global_data": {

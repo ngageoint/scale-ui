@@ -4,21 +4,35 @@
 <a routerLink="/processing/batches"><i class="fa fa-caret-left margin-right-md"></i>Batches List</a>
 <div class="batch-workflow">
     <p-panel class="batch-workflow__panel" [header]=false>
-        <p-header>{{ this.items[activeIndex].label }}</p-header>
+        <p-header>{{ steps[currentStep].label }}</p-header>
         <div class="p-grid batch-workflow__panel-content">
             <p-steps
                 #stepper
                 class="p-col-2 p-md-3 p-sm-4 batch-workflow__steps"
-                [model]="items"
-                [(activeIndex)]="activeIndex"
+                [model]="steps"
+                [(activeIndex)]="currentStep"
                 [readonly]="false"
                 (activeIndexChange)="handleStepChange($event)"
             ></p-steps>
             <div class="p-col-10 p-md-9 p-sm-8">
-                <dev-create-batch *ngIf="activeStepName === 'create-batch'">
+                <dev-create-batch *ngIf="currentStepName === 'create-batch'"
+                    [batch]="batchSelection"
+                    [batchRecipe]="batchRecipe"
+                    (nextStepEvent)="next($event)">
                 </dev-create-batch>
-                <dev-create-dataset *ngIf="activeStepName === 'create-dataset'"></dev-create-dataset>
-                <dev-run-batch *ngIf="activeStepName === 'run-batch'"></dev-run-batch>
+                <dev-create-dataset *ngIf="currentStepName === 'create-dataset'"
+                    [datasetSelection]="datasetSelection"
+                    [datasetFormOptions]="datasetFormOptions"
+                    [batchRecipe]="batchRecipe"
+                    [multipleInputRecipe]="multipleInput"
+                    (valueChange)="handleDatasetSelection($event)"
+                    (nextStepEvent)="next($event)">
+                </dev-create-dataset>
+                <dev-run-batch *ngIf="currentStepName === 'run-batch'"
+                    [batch]="batchSelection"
+                    [batchDataset]="datasetSelection"
+                    [datasetFormOptions]="datasetFormOptions">
+                </dev-run-batch>
             </div>
         </div>
     </p-panel>

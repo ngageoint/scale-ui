@@ -1,7 +1,21 @@
+export interface IDataset {
+    title?: string;
+    description?: string;
+    definition: IDatasetDefinition;
+    data?: any[];
+    data_template?: IDataTemplate;
+    [filter: string]: any;
+}
+
 export interface IDatasetDefinition {
     global_data?: IGlobalData;
     global_parameters?: IParameters;
     parameters?: IParameters;
+}
+
+export interface IDataTemplate {
+    files?: {[key: string]: string};
+    json?: any;
 }
 
 export interface IGlobalData {
