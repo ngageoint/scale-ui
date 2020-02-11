@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import polling from 'rx-polling';
 import * as _ from 'lodash';
 
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { catchError, map } from 'rxjs/internal/operators';
 
 import { DataService } from '../../common/services/data.service';
@@ -16,10 +16,22 @@ import { BatchesDatatable } from './datatable.model';
 })
 export class BatchesApiService {
     apiPrefix: string;
+    private _validation = new BehaviorSubject<IBatchValidationResponse>(null);
+    private _batch = new BehaviorSubject<IBatch>(null);
+    private dataStore: { validation: IBatchValidationResponse, batch: IBatch } = {
+        validation: null,
+        batch: null
+    };
 
-    constructor(
-        private http: HttpClient
-    ) {
+    get validation() {
+        return this._validation.asObservable();
+    }
+
+    get batch() {
+        return this._batch.asObservable();
+    }
+
+    constructor(private http: HttpClient) {
         this.apiPrefix = DataService.getApiPrefix('batches');
     }
 
@@ -72,26 +84,55 @@ export class BatchesApiService {
             );
     }
 
-    validateBatch(batch: Batch): Observable<any> {
-        return this.http.post<any>(`${this.apiPrefix}/batches/validation/`, batch.cleanBatch())
-            .pipe(
-                catchError(DataService.handleError)
-            );
+    validateBatch(batch: IBatch) {
+        this.http.post<any>(`${this.apiPrefix}/batches/validation/`, batch).subscribe(
+           data => {
+                this.dataStore.validation = data;
+                this._validation.next(Object.assign({}, this.dataStore).validation);
+            },
+            DataService.handleError
+        );
     }
 
-    createBatch(batch: any): Observable<any> {
-        return this.http.post<Batch>(`${this.apiPrefix}/batches/`, batch.newBatch())
-            .pipe(
-                map(response => Batch.transformer(response)),
-                catchError(DataService.handleError)
-            );
+    createBatch(batch: IBatch) {
+        this.http.post<IBatch>(`${this.apiPrefix}/batches/`, batch).subscribe(
+            data => {
+                this.dataStore.batch = data;
+                Batch.transformer(data);
+                this._batch.next(Object.assign({}, this.dataStore).batch);
+            },
+            DataService.handleError
+        );
     }
+}
 
-    editBatch(batch: Batch): Observable<any> {
-        return this.http.patch<Batch>(`${this.apiPrefix}/batches/${batch.id}/`, batch.editBatch())
-            .pipe(
-                map(response => response),
-                catchError(DataService.handleError)
-            );
-    }
+export interface IBatch {
+    title: string;
+    description: string;
+    recipe_type_id: number;
+    supersedes: boolean;
+    definition: {
+        forced_nodes: {
+            all: boolean,
+            nodes: string[]
+        }
+        dataset: number
+    };
+    configuration: {
+        priority: number
+    };
+}
+
+export interface IBatchValidationResponse {
+    recipe_type: {
+        id: number,
+        name: string,
+        title: string,
+        description: string,
+        revision_num: number
+    };
+    is_valid: boolean;
+    recipes_estimated: number;
+    errors: {name: string, description: string}[];
+    warnings: {name: string, description: string}[];
 }

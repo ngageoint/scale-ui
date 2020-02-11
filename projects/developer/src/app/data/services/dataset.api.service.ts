@@ -56,13 +56,32 @@ export class DatasetsApiService {
         return of(true);
     }
 
-    createDataset(options: any): Observable<any> {
-        const datasetMetaData: IDataset  = {
+    createDatasetWithDataTemplate(options: any): Observable<any> {
+        const datasetMetaData: IDataset = {
             title: options.title,
             description: options.description,
-            definition: {},
-            data: options.fileIds.map(memberId => ({'files': {'INPUT_FILE': [memberId]}, 'json': {}}))
+            definition: {
+                global_data: {files: {}, json: {}},
+                global_parameters: {files: [], json: []},
+                parameters: {files: [{name: 'INPUT_FILE'}], json: []}
+            },
+            data_template: {
+                files: {INPUT_FILE: 'FILE_VALUE'},
+                json: {}
+            }
         };
+        datasetMetaData['data_started'] = new Date(options.startDate).toISOString();
+        datasetMetaData['data_ended'] = new Date(options.endDate).toISOString();
+        if (options.optionalFilters.location) {
+            datasetMetaData['countries'] = options.optionalFilters.location;
+        }
+        if (options.optionalFilters.media_type) {
+            datasetMetaData['media_type'] = options.optionalFilter.media_type;
+        }
+        if (options.optionalFilters.recipe_type) {
+            datasetMetaData['recipe_type'] = options.optionalFilter.recipe_type;
+        }
+
         return this.http.post(`${this.apiPrefix}/datasets/`, datasetMetaData).pipe(
             map(response => Dataset.transformer(response)),
             catchError(DataService.handleError)

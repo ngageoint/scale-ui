@@ -30,22 +30,21 @@
                             <span class="warning-text">{{ recipeTypeMessage }}</span>
                         </div>
                         <div formGroupName="definition">
-                            <div formGroupName="previous_batch">
-                                <div formGroupName="forced_nodes">
-                                    <div *ngIf="batch.recipe_type" class="margin-bottom-md">
-                                        <strong>Run Batch on the Following:</strong>
-                                        <p-multiSelect
-                                            formControlName="nodes"
-                                            [options]="nodeOptions"
-                                            [style]="{'width':'100%', 'margin-bottom':'10px'}"
-                                            defaultLabel="Select..."
-                                            (onChange)="onNodesChanged($event)"
-                                        ></p-multiSelect>
-                                    </div>
+                            <div formGroupName="forced_nodes">
+                                <div *ngIf="batch.recipe_type" class="margin-bottom-md">
+                                    <strong>Run Batch on the Following:</strong>
+                                    <p-multiSelect
+                                        formControlName="nodes"
+                                        [options]="nodeOptions"
+                                        [style]="{'width':'100%', 'margin-bottom':'10px'}"
+                                        defaultLabel="Select..."
+                                        (onChange)="onNodesChanged($event)"
+                                    ></p-multiSelect>
                                 </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="p-col-6">
                         <div formGroupName="configuration">
                             <label>

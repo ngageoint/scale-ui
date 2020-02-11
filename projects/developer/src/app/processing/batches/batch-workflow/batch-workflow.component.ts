@@ -34,12 +34,7 @@ export class BatchWorkflowComponent implements OnInit {
         this.steps = [
             {label: 'Create Batch'},
             {label: 'Create Dataset'},
-            {
-                label: 'Run Batch',
-                command: (event: any) => {
-                    console.log('Validate the batch created with the dataset.');
-                }
-            }
+            {label: 'Run Batch'}
         ];
     }
 
@@ -57,9 +52,6 @@ export class BatchWorkflowComponent implements OnInit {
 
     handleStepChange(event) {
         this.currentStep = event;
-    }
-
-    handleBatchChange(event: Batch) {
     }
 
     private next(event: {index: number, createBatch?: any, dataset?: any}): void {

@@ -160,9 +160,9 @@ export class CreateDatasetComponent implements OnInit {
                 Validators.required
             );
 
-            this.locationFilterControl = this.fb.control({value:null, disabled: !this.datasetSelectionControl.value});
-            this.mediaTypesFilterControl = this.fb.control({value:null, disabled: !this.datasetSelectionControl.value});
-            this.recipeTypesFilterControl = this.fb.control({value:null, disabled: !this.datasetSelectionControl.value});
+            this.locationFilterControl = this.fb.control({value: null, disabled: !this.datasetSelectionControl.value});
+            this.mediaTypesFilterControl = this.fb.control({value: null, disabled: !this.datasetSelectionControl.value});
+            this.recipeTypesFilterControl = this.fb.control({value: null, disabled: !this.datasetSelectionControl.value});
 
             this.optionalFiltersControl = this.fb.group({
                 locationFilter: this.locationFilterControl,
