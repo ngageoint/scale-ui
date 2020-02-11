@@ -139,7 +139,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
-            description: ['', Validators],
+            description: [''],
             definition: this.fb.group({
                 input: this.fb.group({
                     files: this.fb.array([]),
