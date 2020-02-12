@@ -114,6 +114,10 @@ import { CreateDatasetComponent } from './processing/batches/batch-workflow/crea
 import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
 import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
 
+// import after primeng component to ensure timeline plugin attached to correct chart.js instance
+import 'chartjs-chart-timeline/src/timeline';
+import 'chartjs-plugin-datalabels';
+
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
         return appConfig.loadAppConfig('./assets/appConfig.json')
