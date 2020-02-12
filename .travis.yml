@@ -2,7 +2,7 @@ dist: trusty
 sudo: false
 language: node_js
 node_js:
-- '8'
+- '10'
 addons:
   chrome: stable
 cache:
@@ -15,4 +15,4 @@ install:
 - npm install -g @angular/cli
 script:
 - npm run lintdev
-- npm run builddev:prod
+- travis_wait npm run builddev:prod
