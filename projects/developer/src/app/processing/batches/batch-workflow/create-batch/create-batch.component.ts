@@ -75,7 +75,7 @@ export class CreateBatchComponent implements OnInit {
             configuration: this.fb.group({
                 priority: [
                     this.batch ? this.batch.configuration.priority : '',
-                    [Validators.required, Validators.pattern('^[0-9]*$'), priorityRange(0, 1000000)]
+                    [Validators.pattern('^[0-9]*$'), priorityRange(0, 1000000)]
                 ]
             }),
             supersedes: [this.batch ? this.batch.supersedes : 'true'],
