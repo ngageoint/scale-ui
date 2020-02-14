@@ -12,7 +12,7 @@ import { StatusService } from '../../common/services/status.service';
     styleUrls: ['./component.scss']
 })
 export class NodesComponent implements OnInit, OnDestroy {
-    @ViewChild('menu', {static: true}) menu: any;
+    @ViewChild('menu', {static: false}) menu: any;
 
     subscription: any;
     loading: boolean;
