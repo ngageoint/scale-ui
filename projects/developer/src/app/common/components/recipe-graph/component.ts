@@ -119,6 +119,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             orientation: 'TB',
             marginX: 0,
             marginY: 0,
+            edgePadding: 50,
+            rankPadding: 50
         };
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
