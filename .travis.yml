@@ -13,6 +13,8 @@ before_install:
 install:
 - npm install
 - npm install -g @angular/cli
+before_script:
+- export NODE_OPTIONS=--max_old_space_size=8192
 script:
 - npm run lintdev
 - travis_wait npm run builddev:prod
