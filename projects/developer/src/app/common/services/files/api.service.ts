@@ -15,9 +15,7 @@ import { ApiResults } from '../../models/api-results.model';
 export class FilesApiService {
     apiPrefix: string;
 
-    constructor(
-        private http: HttpClient
-    ) {
+    constructor(private http: HttpClient) {
         this.apiPrefix = DataService.getApiPrefix('files');
     }
 
@@ -29,6 +27,8 @@ export class FilesApiService {
             page_size: params.rows ? params.rows.toString() : null,
             data_started: params.data_started,
             data_ended: params.data_ended,
+            created_started: params.created_started,
+            created_ended: params.created_ended,
             source_started: params.source_started,
             source_ended: params.source_ended,
             source_sensor_class: params.source_sensor_class,
@@ -47,7 +47,7 @@ export class FilesApiService {
             batch_id: params.batch_id ? params.batch_id.toString() : null,
             file_name: params.file_name
         };
-        apiParams = _.pickBy(apiParams, (d) => {
+        apiParams = _.pickBy(apiParams, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
         const queryParams = new HttpParams({
@@ -56,26 +56,21 @@ export class FilesApiService {
         if (poll) {
             const request = this.http.get(`${this.apiPrefix}/files/`, { params: queryParams })
                 .pipe(
-                    map(response => {
-                        return ApiResults.transformer(response);
-                    }),
+                    map(response => ApiResults.transformer(response)),
                     catchError(DataService.handleError)
                 );
             return polling(request, { interval: 600000, attempts: 0 });
         }
         return this.http.get<ApiResults>(`${this.apiPrefix}/files/`, { params: queryParams })
             .pipe(
-                map(response => {
-                    return ApiResults.transformer(response);
-                }),
+                map(response => ApiResults.transformer(response)),
                 catchError(DataService.handleError)
             );
     }
 
     getFile(id: number): Observable<any> {
-        return this.http.get<any>(`${this.apiPrefix}/files/${id}/`)
-            .pipe(
-                catchError(DataService.handleError)
-            );
+        return this.http
+            .get<any>(`${this.apiPrefix}/files/${id}/`)
+            .pipe(catchError(DataService.handleError));
     }
 }

@@ -1,13 +1,16 @@
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { BatchesApiService, IBatch, IBatchValidationResponse } from './../../api.service';
+import {
+    BatchesApiService,
+    IBatch,
+    IBatchValidationResponse
+} from './../../api.service';
 import { Batch } from './../../api.model';
 import { Dataset } from './../../../../data/models/dataset.model';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { skip, takeUntil } from 'rxjs/operators';
-
 
 @Component({
     selector: 'dev-run-batch',
@@ -43,12 +46,12 @@ export class RunBatchComponent implements OnInit, OnDestroy {
 
         if (this.batch) {
             this.batchConfig = [
-                {title: 'Title', value: this.batch.title},
-                {title: 'Description', value: this.batch.description},
-                {title: 'Recipe Type', value: this.batch.recipe_type.title},
-                {title: 'Nodes', value: this.batch.definition.forced_nodes.nodes.join(', ')},
-                {title: 'Priority', value: this.batch.configuration.priority},
-                {title: 'Supersedes', value: this.batch.supersedes}
+                { title: 'Title', value: this.batch.title },
+                { title: 'Description', value: this.batch.description },
+                { title: 'Recipe Type', value: this.batch.recipe_type.title },
+                { title: 'Nodes', value: this.batch.definition.forced_nodes.nodes.join(', ') },
+                { title: 'Priority', value: this.batch.configuration.priority },
+                { title: 'Supersedes', value: this.batch.supersedes }
             ];
         }
 
@@ -65,7 +68,7 @@ export class RunBatchComponent implements OnInit, OnDestroy {
                     },
                     dataset: this.batchDataset.id
                 },
-                configuration: {...this.batch.configuration},
+                configuration: { ...this.batch.configuration }
             };
         }
 
@@ -83,18 +86,24 @@ export class RunBatchComponent implements OnInit, OnDestroy {
 
     createSubscriptions() {
         this.validation$
-            .pipe(
-                takeUntil(this.unsubscribe),
-                skip(1)
-            ).subscribe((res) => {
+            .pipe(takeUntil(this.unsubscribe), skip(1))
+            .subscribe(res => {
                 this.validation = res;
                 if (res) {
                     res.warnings.map(warning => {
-                        this.messageService.add({severity: 'warn', summary: warning.name, detail: warning.description});
+                        this.messageService.add({
+                            severity: 'warn',
+                            summary: warning.name,
+                            detail: warning.description
+                        });
                     });
 
                     res.errors.map(error => {
-                        this.messageService.add({severity: 'error', summary: error.name, detail: error.description});
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: error.name,
+                            detail: error.description
+                        });
                     });
 
                     if (res.is_valid && !this.newBatch) {
@@ -104,14 +113,15 @@ export class RunBatchComponent implements OnInit, OnDestroy {
             });
 
         this.newBatch$
-            .pipe(
-                takeUntil(this.unsubscribe),
-                skip(1)
-            )
+            .pipe(takeUntil(this.unsubscribe), skip(1))
             .subscribe(res => {
                 this.newBatch = res;
                 if (res) {
-                    this.messageService.add({severity: 'success', summary: 'Batch Created', detail: 'Batch created.'});
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Batch Created',
+                        detail: 'Batch created.'
+                    });
                     console.log('Navigate to batches list when complete.');
                     this.router.navigate(['/processing/batches/']);
                 }
@@ -120,7 +130,11 @@ export class RunBatchComponent implements OnInit, OnDestroy {
 
     onRunBatchClick() {
         if (!this.validation) {
-            this.messageService.add({severity: 'success', summary: 'Validating Batch', detail: 'Validating Batch'});
+            this.messageService.add({
+                severity: 'success',
+                summary: 'Validating Batch',
+                detail: 'Validating Batch'
+            });
             this.batchApiService.validateBatch(this.newBatchPayload);
         }
     }
@@ -130,7 +144,7 @@ export class RunBatchComponent implements OnInit, OnDestroy {
     }
 
     getDatasetHeader(): string {
-        return `Dataset Configuration${this.isNewDataset() ? ' (new)' : ' (existing)' }`;
+        return `Dataset Configuration${this.isNewDataset() ? ' (new)' : ' (existing)'}`;
     }
 
     buildDatasetConfig() {
@@ -138,30 +152,40 @@ export class RunBatchComponent implements OnInit, OnDestroy {
 
         if (form.datasetSelection !== 'CreateNew') {
             this.datasetConfig = [
-                {title: 'Title', value: form.datasetSelection.title},
-                {title: 'Description', value: form.datasetSelection.description}
+                { title: 'Title', value: form.datasetSelection.title },
+                { title: 'Description', value: form.datasetSelection.description }
             ];
         }
 
         if (this.isNewDataset()) {
+            const datePrefix = form.searchTime.charAt(0).toUpperCase() + form.searchTime.slice(1);
             this.datasetConfig = [
-                {title: 'Title', value: form.title},
-                {title: 'Description', value: form.description},
-                {title: 'Start Date', value: new Date(form.startDate).toISOString()},
-                {title: 'End Date', value: new Date(form.endDate).toISOString()}
+                { title: 'Title', value: form.title },
+                { title: 'Description', value: form.description },
+                { title: `${datePrefix} Start Date`, value: new Date(form.startDate).toISOString() },
+                { title: `${datePrefix} End Date`, value: new Date(form.endDate).toISOString() }
             ];
 
             if (form.optionalFilters && form.optionalFilters.locationFilter) {
-                this.datasetConfig.push({title: 'Location', value: form.optionalFilters.locationFilter});
+                this.datasetConfig.push({ title: 'Location', value: form.optionalFilters.locationFilter });
             }
 
             if (form.optionalFilters && form.optionalFilters.mediaTypesFilter) {
-                this.datasetConfig.push({title: 'Media Type', value: form.optionalFilters.mediaTypesFilter});
+                this.datasetConfig.push({
+                    title: 'Media Type',
+                    value: form.optionalFilters.mediaTypesFilter
+                });
             }
 
-            if (form.optionalFilters && form.optionalFilters.recipeTypesFilter) {
+            if (
+                form.optionalFilters &&
+                form.optionalFilters.recipeTypesFilter
+            ) {
                 const recipeType = form.optionalFilters.recipeTypesFilter;
-                this.datasetConfig.push({title: 'Recipe Type', value: `${recipeType.title} v${recipeType.revision}`});
+                this.datasetConfig.push({
+                    title: 'Recipe Type',
+                    value: `${recipeType.title}${recipeType.revision ? ' v' + recipeType.revision : ''}`
+                });
             }
         }
     }

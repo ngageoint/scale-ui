@@ -46,8 +46,9 @@ export class CreateDatasetComponent implements OnInit {
     filteredDatasetFileList: FileModel[] = [];
     dataFilesFilter: any = {};
     savedDataset: any;
-    datatableOptions: DatasetMemberDatatable;
+    searchTimeTypes: SelectItem[] = [];
 
+    datatableOptions: DatasetMemberDatatable;
     datatableLoading: boolean;
     datasetColumns: any[];
 
@@ -56,6 +57,7 @@ export class CreateDatasetComponent implements OnInit {
     descriptionControl: FormControl;
     startDateControl: FormControl;
     endDateControl: FormControl;
+    searchTimeControl: FormControl;
     locationFilterControl: FormControl;
     mediaTypesFilterControl: FormControl;
     recipeTypesFilterControl: FormControl;
@@ -91,7 +93,7 @@ export class CreateDatasetComponent implements OnInit {
         private datasetService: DatasetsApiService,
         private fileService: FilesApiService,
         private fb: FormBuilder
-    ) {}
+    ) { }
 
     ngOnInit() {
         this.datatableOptions = new DatasetMemberDatatable(0, 20, 'id', -1);
@@ -99,15 +101,26 @@ export class CreateDatasetComponent implements OnInit {
         this.datasetColumns = [
             { field: 'id', header: 'ID', width: '10%' },
             { field: 'file_name', header: 'File Name', width: '30%' },
-            { field: 'media_type', header: 'Media Type' , width: '40%'},
+            { field: 'media_type', header: 'Media Type', width: '40%' },
             { field: 'countries', header: 'Location(s)', width: '20%' }
         ];
 
+        this.searchTimeTypes = [
+            { label: 'Data Time', value: 'data' },
+            { label: 'Ingest Time', value: 'ingest' }
+        ];
+
         if (this.datasetFormOptions) {
-            this.datasetSelectionControl = this.fb.control(this.datasetFormOptions.datasetSelection || '', Validators.required);
+            this.datasetSelectionControl = this.fb.control(
+                this.datasetFormOptions.datasetSelection || '',
+                Validators.required
+            );
 
             this.titleControl = this.fb.control(
-                { value: this.datasetFormOptions.title || '', disabled: !this.datasetSelectionControl.value },
+                {
+                    value: this.datasetFormOptions.title || '',
+                    disabled: !this.datasetSelectionControl.value
+                },
                 Validators.required
             );
 
@@ -117,28 +130,56 @@ export class CreateDatasetComponent implements OnInit {
             });
 
             this.startDateControl = this.fb.control(
-                { value: this.datasetFormOptions.startDate || '', disabled: !this.datasetSelectionControl.value },
+                {
+                    value: this.datasetFormOptions.startDate || '',
+                    disabled: !this.datasetSelectionControl.value
+                },
                 Validators.required
             );
 
             this.endDateControl = this.fb.control(
-                { value: this.datasetFormOptions.endDate || '', disabled: !this.datasetSelectionControl.value },
+                {
+                    value: this.datasetFormOptions.endDate || '',
+                    disabled: !this.datasetSelectionControl.value
+                },
                 Validators.required
             );
 
-            const locationFilterValue = this.datasetFormOptions.optionalFilters ?
-                this.datasetFormOptions.optionalFilters.locationFilter : null;
-            this.locationFilterControl = this.fb.control({value: locationFilterValue, disabled: true});
+            this.searchTimeControl = this.fb.control({
+                value: this.datasetFormOptions.searchTime || 'data',
+                disabled: !this.datasetSelectionControl.value
+            });
 
-            const mediaTypesFilterValue = this.datasetFormOptions.optionalFilters ?
-                this.datasetFormOptions.optionalFilters.mediaTypesFilter : null;
-            this.mediaTypesFilterControl = this.fb.control({value: mediaTypesFilterValue, disabled: true});
+            const locationFilterValue = this.datasetFormOptions.optionalFilters
+                ? this.datasetFormOptions.optionalFilters.locationFilter
+                : null;
+            this.locationFilterControl = this.fb.control({
+                value: locationFilterValue,
+                disabled: true
+            });
 
-            const recipeTypesFilterValue = this.datasetFormOptions.optionalFilters ?
-                this.datasetFormOptions.optionalFilters.recipeTypesFilter : null;
-            this.recipeTypesFilterControl = this.fb.control({value: recipeTypesFilterValue, disabled: true});
+            const mediaTypesFilterValue = this.datasetFormOptions
+                .optionalFilters
+                ? this.datasetFormOptions.optionalFilters.mediaTypesFilter
+                : null;
+            this.mediaTypesFilterControl = this.fb.control({
+                value: mediaTypesFilterValue,
+                disabled: true
+            });
+
+            const recipeTypesFilterValue = this.datasetFormOptions
+                .optionalFilters
+                ? this.datasetFormOptions.optionalFilters.recipeTypesFilter
+                : null;
+            this.recipeTypesFilterControl = this.fb.control({
+                value: recipeTypesFilterValue,
+                disabled: true
+            });
         } else {
-            this.datasetSelectionControl = this.fb.control('', Validators.required);
+            this.datasetSelectionControl = this.fb.control(
+                '',
+                Validators.required
+            );
 
             this.titleControl = this.fb.control(
                 { value: '', disabled: !this.datasetSelectionControl.value },
@@ -160,9 +201,23 @@ export class CreateDatasetComponent implements OnInit {
                 Validators.required
             );
 
-            this.locationFilterControl = this.fb.control({value: null, disabled: !this.datasetSelectionControl.value});
-            this.mediaTypesFilterControl = this.fb.control({value: null, disabled: !this.datasetSelectionControl.value});
-            this.recipeTypesFilterControl = this.fb.control({value: null, disabled: !this.datasetSelectionControl.value});
+            this.searchTimeControl = this.fb.control(
+                { value: 'data', disabled: !this.datasetSelectionControl.value },
+                Validators.required
+            );
+
+            this.locationFilterControl = this.fb.control({
+                value: null,
+                disabled: !this.datasetSelectionControl.value
+            });
+            this.mediaTypesFilterControl = this.fb.control({
+                value: null,
+                disabled: !this.datasetSelectionControl.value
+            });
+            this.recipeTypesFilterControl = this.fb.control({
+                value: null,
+                disabled: !this.datasetSelectionControl.value
+            });
 
             this.optionalFiltersControl = this.fb.group({
                 locationFilter: this.locationFilterControl,
@@ -181,10 +236,13 @@ export class CreateDatasetComponent implements OnInit {
         this.datasetService.getDatasets({}).subscribe(
             data => {
                 this.datasetOptions.push(
-                    ...data.results.map(dataset => ({ label: dataset.title, value: dataset }))
+                    ...data.results.map(dataset => ({
+                        label: dataset.title,
+                        value: dataset
+                    }))
                 );
             },
-            err => {}
+            err => { }
         );
 
         this.titleControl.valueChanges
@@ -215,24 +273,29 @@ export class CreateDatasetComponent implements OnInit {
             });
 
         if (this.datasetSelection) {
-            this.form.patchValue({datasetSelection: this.datasetSelection});
+            this.form.patchValue({ datasetSelection: this.datasetSelection });
         }
 
         if (this.batchRecipe) {
-            this.recipeTypeOptions = [{
-                label: `${this.batchRecipe.title} v${this.batchRecipe.revision_num}`,
-                value: this.batchRecipe
-            }];
-            this.form.patchValue({recipeTypesFilter: this.batchRecipe});
+            this.recipeTypeOptions = [
+                {
+                    label: `${this.batchRecipe.title} v${this.batchRecipe.revision_num}`,
+                    value: this.batchRecipe
+                }
+            ];
+            this.form.patchValue({ recipeTypesFilter: this.batchRecipe });
             this.recipeTypesFilterControl.disable();
         }
     }
 
     onDatasetSelectionClick() {
         if (!this.isCreateNewDataset()) {
-            this.valueChange.emit({dataset: {datasetSelection: this.form.get('datasetSelection').value}});
+            this.valueChange.emit({
+                dataset: {
+                    datasetSelection: this.form.get('datasetSelection').value
+                }
+            });
         } else {
-
             if (this.form.valid) {
                 const options = {
                     title: this.form.get('title').value || '',
@@ -268,13 +331,32 @@ export class CreateDatasetComponent implements OnInit {
     }
 
     canSave() {
-        return this.form.valid &&
+        return (
+            this.form.valid &&
             (this.datasetSelection !== 'CreateNew' ||
-            (this.datasetSelection === 'CreateNew' && this.datasetFileList.length > 0));
+                (this.datasetSelection === 'CreateNew' &&
+                    this.datasetFileList.length > 0))
+        );
     }
 
     getDatasetButtonLabel(): string {
         return this.isCreateNewDataset() ? 'Create Dataset' : 'Select Dataset';
+    }
+
+    createQueryOptions(): any {
+        let options = {};
+        if (this.form.get('searchTime').value === 'data') {
+            options = {
+                data_started: this.form.get('startDate').value.toISOString(),
+                data_ended: this.form.get('endDate').value.toISOString()
+            };
+        } else {
+            options = {
+                created_started: this.form.get('startDate').value.toISOString(),
+                created_ended: this.form.get('endDate').value.toISOString()
+            };
+        }
+        return options;
     }
 
     onQueryDataFilesClick() {
@@ -284,39 +366,41 @@ export class CreateDatasetComponent implements OnInit {
             this.form.get('startDate').valid &&
             this.form.get('endDate').valid
         ) {
-            this.fileService.getFiles({
-                data_started: this.form.get('startDate').value.toISOString(),
-                data_ended: this.form.get('endDate').value.toISOString()
-            })
-            .subscribe(data => {
-                this.datasetFileList = data.results;
-                this.filteredDatasetFileList = data.results;
+            this.fileService
+                .getFiles(this.createQueryOptions())
+                .subscribe(data => {
+                    this.datasetFileList = data.results;
+                    this.filteredDatasetFileList = data.results;
 
-                this.mediaTypeOptions = this.datasetFileList
-                    .map(file => file.media_type)
-                    .filter(onlyUnique)
-                    .map(mediaType => ({
-                        label: mediaType,
-                        value: mediaType
-                    }));
+                    this.mediaTypeOptions = this.datasetFileList
+                        .map(file => file.media_type)
+                        .filter(onlyUnique)
+                        .map(mediaType => ({
+                            label: mediaType,
+                            value: mediaType
+                        }));
 
-                this.locationOptions = []
-                    .concat(...data.results.map(file => file.countries))
-                    .filter(onlyUnique)
-                    .map(country => ({ label: country, value: country }));
+                    this.locationOptions = []
+                        .concat(...data.results.map(file => file.countries))
+                        .filter(onlyUnique)
+                        .map(country => ({ label: country, value: country }));
 
-                this.recipeTypeOptions = data.results
-                    .map(file => file.recipe_type)
-                    .filter((obj, pos, arr) => {
-                        return (arr.map(mapObj => mapObj['id']).indexOf(obj['id']) === pos);
-                    })
-                    .map(rt => ({
-                        label: `${rt.title} v${rt.revision_num}`,
-                        value: rt
-                    }));
+                    this.recipeTypeOptions = data.results
+                        .map(file => file.recipe_type)
+                        .filter((obj, pos, arr) => {
+                            return (
+                                arr
+                                    .map(mapObj => mapObj['id'])
+                                    .indexOf(obj['id']) === pos
+                            );
+                        })
+                        .map(rt => ({
+                            label: `${rt.title} v${rt.revision_num}`,
+                            value: rt
+                        }));
 
-                this.datatableLoading = false;
-            });
+                    this.datatableLoading = false;
+                });
         } else {
             const values = this.form.value;
             this.form.patchValue(values);
@@ -324,7 +408,8 @@ export class CreateDatasetComponent implements OnInit {
             this.form.get('endDate').markAsTouched();
             this.form.get('startDate').markAsDirty();
             this.form.get('endDate').markAsDirty();
-            this.form.updateValueAndValidity({emitEvent: true});
+            this.form.get('searchTime').markAsDirty();
+            this.form.updateValueAndValidity({ emitEvent: true });
         }
     }
 
@@ -339,6 +424,8 @@ export class CreateDatasetComponent implements OnInit {
             this.startDateControl.enable();
             this.form.addControl('endDate', this.endDateControl);
             this.endDateControl.enable();
+            this.form.addControl('searchTime', this.searchTimeControl);
+            this.searchTimeControl.enable();
             this.form.addControl(
                 'optionalFilters',
                 this.optionalFiltersControl
@@ -349,19 +436,26 @@ export class CreateDatasetComponent implements OnInit {
             this.descriptionControl.disable();
             this.startDateControl.disable();
             this.endDateControl.disable();
+            this.searchTimeControl.disable();
             this.optionalFiltersControl.disable();
         }
     }
 
     filterDataSetFiles(): void {
-        this.filteredDatasetFileList = _.filter(this.datasetFileList, this.dataFilesFilter);
+        this.filteredDatasetFileList = _.filter(
+            this.datasetFileList,
+            this.dataFilesFilter
+        );
     }
 
     onLocationFilterChange(event) {
         if (!event.value) {
             delete this.dataFilesFilter.countries;
         } else {
-            this.dataFilesFilter = {...this.dataFilesFilter, countries: [event.value]};
+            this.dataFilesFilter = {
+                ...this.dataFilesFilter,
+                countries: [event.value]
+            };
         }
         this.filterDataSetFiles();
     }
@@ -370,7 +464,10 @@ export class CreateDatasetComponent implements OnInit {
         if (!event.value) {
             delete this.dataFilesFilter.media_type;
         } else {
-            this.dataFilesFilter = {...this.dataFilesFilter, media_type: event.value};
+            this.dataFilesFilter = {
+                ...this.dataFilesFilter,
+                media_type: event.value
+            };
         }
         this.filterDataSetFiles();
     }
@@ -379,7 +476,10 @@ export class CreateDatasetComponent implements OnInit {
         if (!event.value) {
             delete this.dataFilesFilter.recipe_type;
         } else {
-            this.dataFilesFilter =  {...this.dataFilesFilter, recipe_type: {id: event.value.id}};
+            this.dataFilesFilter = {
+                ...this.dataFilesFilter,
+                recipe_type: { id: event.value.id }
+            };
         }
         this.filterDataSetFiles();
     }
