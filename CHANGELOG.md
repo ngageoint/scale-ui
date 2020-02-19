@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.15.0](https://github.com/ngageoint/scale-ui/compare/v0.14.0...v0.15.0) (2020-02-19)
+
+
+### Bug Fixes
+
+* **dashboard:** Change Pie chart font size ([#427](https://github.com/ngageoint/scale-ui/issues/427)) ([87f134e](https://github.com/ngageoint/scale-ui/commit/87f134e))
+* **jobs:** fix errors on table and details page ([#431](https://github.com/ngageoint/scale-ui/issues/431)) ([5a2b466](https://github.com/ngageoint/scale-ui/commit/5a2b466)), closes [#430](https://github.com/ngageoint/scale-ui/issues/430)
+* **jobs:** only send single array when cancelling all jobs ([ba12f8b](https://github.com/ngageoint/scale-ui/commit/ba12f8b)), closes [#432](https://github.com/ngageoint/scale-ui/issues/432)
+* **recipes:** fix Recipe Type duplication in dropdown ([#429](https://github.com/ngageoint/scale-ui/issues/429)) ([e6f01ec](https://github.com/ngageoint/scale-ui/commit/e6f01ec)), closes [#428](https://github.com/ngageoint/scale-ui/issues/428)
+
+
+### Features
+
+* **batches:** Revised workflow ([#434](https://github.com/ngageoint/scale-ui/issues/434)) ([eca212d](https://github.com/ngageoint/scale-ui/commit/eca212d)), closes [#10](https://github.com/ngageoint/scale-ui/issues/10)
+* **nodes:** add pagination ([4e013a7](https://github.com/ngageoint/scale-ui/commit/4e013a7)), closes [#419](https://github.com/ngageoint/scale-ui/issues/419)
+
+
+
 ## [0.14.0](https://github.com/ngageoint/scale-ui/compare/v0.13.0...v0.14.0) (2020-02-03)
 
 
