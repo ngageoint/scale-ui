@@ -2,7 +2,7 @@ import { debounceTime } from 'rxjs/operators';
 import { FileModel } from './../../../../common/services/files/file.model';
 import { DatasetMemberDatatable } from './create-dataset-datable.model';
 import { FilesApiService } from './../../../../common/services/files/api.service';
-import { SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/api';
 import { IDatasetDefinition } from '../../../../data/services/dataset';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DatasetsApiService } from '../../../../data/services/dataset.api.service';

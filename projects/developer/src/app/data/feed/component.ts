@@ -16,7 +16,7 @@ import { ColorService } from '../../common/services/color.service';
     styleUrls: ['./component.scss']
 })
 export class FeedComponent implements OnInit, OnDestroy {
-    @ViewChild('feedChart') feedChart: any;
+    @ViewChild('feedChart', {static: true}) feedChart: any;
     subscription: any;
     chartLoading: boolean;
     options: any;

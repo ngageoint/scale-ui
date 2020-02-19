@@ -10,27 +10,53 @@ import { HttpClientXsrfModule } from '@angular/common/http';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { NgxGraphModule } from '@swimlane/ngx-graph';
 import { SeedImagesModule } from '@ngageoint/seed-images';
-import { UtcDatepickerModule } from 'angular-utc-datepicker';
-
 
 // Prime NG
-import {
-    AutoCompleteModule, ButtonModule, CalendarModule, ChartModule, CheckboxModule, ChipsModule, ColorPickerModule, ConfirmationService,
-    DataListModule, DialogModule, DropdownModule, FieldsetModule, InputSwitchModule, InputTextModule, InputTextareaModule, ListboxModule,
-    MenubarModule, MessageModule, MessagesModule, MultiSelectModule, OverlayPanelModule, PaginatorModule, PanelModule, RadioButtonModule,
-    ScrollPanelModule, SelectButtonModule, SidebarModule, SliderModule, SpinnerModule, StepsModule, TabViewModule, ToggleButtonModule,
-    TooltipModule, TreeTableModule, SlideMenuModule
-} from 'primeng/primeng';
 import { AccordionModule } from 'primeng/accordion';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ButtonModule } from 'primeng/button';
+import { CalendarModule } from 'primeng/calendar';
 import { CardModule } from 'primeng/card';
+import { ChartModule } from 'primeng/chart';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ChipsModule } from 'primeng/chips';
+import { ColorPickerModule } from 'primeng/colorpicker';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DataListModule } from 'primeng/datalist';
 import { DataViewModule } from 'primeng/dataview';
+import { DialogModule } from 'primeng/dialog';
+import { DropdownModule } from 'primeng/dropdown';
+import { FieldsetModule } from 'primeng/fieldset';
+import { InputSwitchModule } from 'primeng/inputswitch';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ListboxModule } from 'primeng/listbox';
 import { MenuModule } from 'primeng/menu';
-import { PendingChangesGuard } from './pending-changes.guard';
+import { MenubarModule } from 'primeng/menubar';
+import { MessageModule } from 'primeng/message';
+import { MessagesModule } from 'primeng/messages';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { PaginatorModule } from 'primeng/paginator';
+import { PanelModule } from 'primeng/panel';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { ScrollPanelModule } from 'primeng/scrollpanel';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { SidebarModule } from 'primeng/sidebar';
+import { SliderModule } from 'primeng/slider';
+import { SpinnerModule } from 'primeng/spinner';
+import { StepsModule } from 'primeng/steps';
 import { TableModule } from 'primeng/table';
+import { TabViewModule } from 'primeng/tabview';
 import { ToastModule } from 'primeng/toast';
+import { ToggleButtonModule } from 'primeng/togglebutton';
+import { TooltipModule } from 'primeng/tooltip';
+import { TreeTableModule } from 'primeng/treetable';
+import { SlideMenuModule } from 'primeng/slidemenu';
+
+import { ConfirmationService } from 'primeng/api';
 
 // app
 import { AppComponent } from './app.component';
@@ -61,7 +87,7 @@ import { LogViewerComponent } from './common/components/log-viewer/component';
 import { MetricsComponent } from './data/metrics/component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { NodesComponent } from './system/nodes/component';
-import { ProcessingFormComponent } from './navbar/subnav/processing-form/component';
+import { PendingChangesGuard } from './pending-changes.guard';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { QueueLoadComponent } from './common/components/queue-load/component';
 import { RecipeDetailsComponent } from './processing/recipes/details.component';
@@ -87,6 +113,10 @@ import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batc
 import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
 import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
 import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
+
+// import after primeng component to ensure timeline plugin attached to correct chart.js instance
+import 'chartjs-chart-timeline/src/timeline';
+import 'chartjs-plugin-datalabels';
 
 const appInitializer = (appConfig: AppConfigService) => {
     return () => {
@@ -124,7 +154,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         MetricsComponent,
         NavbarComponent,
         NodesComponent,
-        ProcessingFormComponent,
         QueuedJobsComponent,
         QueueLoadComponent,
         RecipeDetailsComponent,
@@ -211,7 +240,6 @@ const appInitializer = (appConfig: AppConfigService) => {
         ToggleButtonModule,
         TooltipModule,
         TreeTableModule,
-        UtcDatepickerModule
     ],
     exports: [
         DropdownModule,

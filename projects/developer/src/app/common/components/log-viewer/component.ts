@@ -15,7 +15,7 @@ export class LogViewerComponent implements OnInit, OnChanges, OnDestroy, AfterVi
     @Input() execution: JobExecution;
     @Input() visible: boolean;
     @Output() close: EventEmitter<any> = new EventEmitter<any>();
-    @ViewChild('codemirror') codemirror: any;
+    @ViewChild('codemirror', {static: true}) codemirror: any;
     loading: boolean;
     subscription: any;
     scrollToLine = null;

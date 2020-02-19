@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { SelectItem } from 'primeng/primeng';
+import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 import * as moment from 'moment';
@@ -8,8 +8,10 @@ import { MetricsApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { ChartService } from './chart.service';
 import { DataService } from '../../common/services/data.service';
-import { UIChart } from 'primeng/primeng';
+import { UIChart } from 'primeng/chart';
 import { JobType } from '../../configuration/job-types/api.model';
+
+import { UTCDates } from '../../common/utils/utcdates';
 
 @Component({
     selector: 'dev-metrics',
@@ -17,11 +19,11 @@ import { JobType } from '../../configuration/job-types/api.model';
     styleUrls: ['./component.scss']
 })
 export class MetricsComponent implements OnInit, AfterViewInit {
-    @ViewChild('chart') chart: UIChart;
+    @ViewChild('chart', {static: true}) chart: UIChart;
     chartLoading: boolean;
     showChart: boolean;
-    started = moment.utc().subtract(1, 'M').startOf('d').format('YYYY-MM-DD');
-    ended = moment.utc().startOf('d').format('YYYY-MM-DD');
+    startDate = moment().subtract(1, 'M').startOf('d').toDate();
+    endDate = moment().startOf('d').toDate();
     availableDataTypes: SelectItem[] = [];
     dataTypesLoading: boolean;
     selectedDataType: any;
@@ -70,6 +72,18 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         this.selectedChartType1 = 'bar';
         this.selectedChartType2 = 'line';
     }
+
+    // year range to show in the calendar dropdown
+    get yearRange(): string {
+        const now = moment();
+        const start = now.clone().subtract(20, 'y').year();
+        const end = now.clone().add(5, 'y').year();
+        return `${start}:${end}`;
+    }
+
+    // utc versions of internal start and end dates
+    get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
+    get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
 
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
@@ -178,12 +192,6 @@ export class MetricsComponent implements OnInit, AfterViewInit {
             this.messageService.add({severity: 'error', summary: 'Error retrieving data type options', detail: err.statusText});
         });
     }
-    onStartSelect(e) {
-        this.started = e;
-    }
-    onEndSelect(e) {
-        this.ended = e;
-    }
     changeDataTypeSelection() {
         // reset options
         this.filtersApplied = [];
@@ -263,8 +271,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         const params = {
             page: 1,
             page_size: null,
-            started: moment.utc(this.started).toISOString(),
-            ended: moment.utc(this.ended).toISOString(),
+            started: this.utcStartDate.toISOString(),
+            ended: this.utcEndDate.toISOString(),
             choice_id: _.map(this.filtersApplied, 'id'),
             column: this.selectedMetric2 ? [this.selectedMetric1.name, this.selectedMetric2.name] : this.selectedMetric1.name,
             group: this.selectedMetric2 ? [this.selectedMetric1.group, this.selectedMetric2.group] : this.selectedMetric1.group,
@@ -296,8 +304,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 
             // set chart title
             const formattedTotal = this.formatYValues(this.yUnits1, primaryTotal, true),
-                formattedStart = moment.utc(this.started, 'YYYY-MM-DD').format('DD MMMM YYYY'),
-                formattedEnd = moment.utc(this.ended, 'YYYY-MM-DD').format('DD MMMM YYYY'),
+                formattedStart = moment.utc(this.startDate, 'YYYY-MM-DD').format('DD MMMM YYYY'),
+                formattedEnd = moment.utc(this.endDate, 'YYYY-MM-DD').format('DD MMMM YYYY'),
                 chartTitle: String[] = [];
             chartTitle.push(`${formattedStart} - ${formattedEnd}`);
             chartTitle.push(`${this.selectedMetric1.title}: ${formattedTotal.toLocaleString()}`);

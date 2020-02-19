@@ -1,12 +1,12 @@
-import { RecipeTypesApiService } from './../../../../configuration/recipe-types/api.service';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { SelectItem, MessageService } from 'primeng/primeng';
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { BatchesApiService } from '../../api.service';
-import { Batch } from '../../api.model';
+import { SelectItem, MessageService } from 'primeng/api';
 import * as _ from 'lodash';
-import { RecipeType } from 'projects/developer/src/app/configuration/recipe-types/api.model';
 import { debounceTime } from 'rxjs/operators';
+
+import { RecipeTypesApiService } from './../../../../configuration/recipe-types/api.service';
+import { Batch } from '../../api.model';
+import { RecipeType } from 'projects/developer/src/app/configuration/recipe-types/api.model';
 import { FormControlWarn, ValidationMessages, multipleInputWarning, priorityRange } from '../../../../common/utils/CustomValidation';
 import { onlyUnique } from 'projects/developer/src/app/common/utils/filters';
 

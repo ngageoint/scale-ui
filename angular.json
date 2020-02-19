@@ -159,10 +159,6 @@
                             "projects/developer/src/styles.scss"
                         ],
                         "scripts": [
-                            "node_modules/moment/moment.js",
-                            "node_modules/chart.js/dist/Chart.js",
-                            "node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js",
-                            "node_modules/chartjs-chart-timeline/timeline.js"
                         ]
                     },
                     "configurations": {

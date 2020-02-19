@@ -13,7 +13,7 @@ import { QueueApiService } from '../../services/queue/api.service';
     styleUrls: ['./component.scss']
 })
 export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
-    @ViewChild('chart') chart: UIChart;
+    @ViewChild('chart', {static: true}) chart: UIChart;
     @Input() started: string;
     @Input() ended: string;
     @Input() jobTypeIds: any;

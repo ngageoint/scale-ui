@@ -32,10 +32,10 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() height = '70vh';
     @Output() editCondition: EventEmitter<any> = new EventEmitter<any>();
     @Output() deleteCondition: EventEmitter<any> = new EventEmitter<any>();
-    @ViewChild('dependencyPanel') dependencyPanel: any;
-    @ViewChild('inputFilePanel') inputFilePanel: any;
-    @ViewChild('inputJSONPanel') inputJSONPanel: any;
-    @ViewChild('recipeDialog') recipeDialog: any;
+    @ViewChild('dependencyPanel', {static: true}) dependencyPanel: any;
+    @ViewChild('inputFilePanel', {static: true}) inputFilePanel: any;
+    @ViewChild('inputJSONPanel', {static: true}) inputJSONPanel: any;
+    @ViewChild('recipeDialog', {static: true}) recipeDialog: any;
     datatableOptions: BatchesDatatable;
     columns: any[];
     batchesColumns: any[];
@@ -44,7 +44,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     nodes = [];
     links = [];
     showLegend = false;
-    orientation: string; // LR, RL, TB, BT
+    layoutSettings: any;
     curve: any;
     selectedJobType: any;
     selectedRecipeType: any;
@@ -115,7 +115,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
         ];
-        this.orientation = 'TB';
+        this.layoutSettings = {
+            orientation: 'TB',
+            marginX: 0,
+            marginY: 0,
+            edgePadding: 50,
+            rankPadding: 50
+        };
         this.curve = shape.curveBundle.beta(1);
         this.showLegend = false;
 
@@ -425,12 +431,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.showRecipeDialog = !shouldDeselect;
         if (this.selectedNode) {
             this.getTotalConnections();
-            this.selectedNode.options.stroke = '';
+            this.selectedNode.data.stroke = '';
             this.selectedNode = null;
         }
         if (!shouldDeselect) {
             this.selectedNode = e;
-            this.selectedNode.options.stroke = ColorService.COMPLETED;
+            this.selectedNode.data.stroke = ColorService.COMPLETED;
             if (this.selectedNode.node_type) {
                 if (this.selectedNode.node_type.node_type === 'job') {
                     this.selectedRecipeType = null;
@@ -987,7 +993,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         this.recipeDialogY = recipeDialogDiv ? parseInt(recipeDialogDiv.style.top, 10) : null;
 
         if (this.selectedNode) {
-            this.selectedNode.options.stroke = '';
+            this.selectedNode.data.stroke = '';
             this.selectedNode = null;
         }
     }

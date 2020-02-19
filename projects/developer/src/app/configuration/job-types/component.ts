@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ConfirmationService, SelectItem } from 'primeng/primeng';
-import { MenuItem } from 'primeng/api';
+import { ConfirmationService, SelectItem, MenuItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
 import * as _ from 'lodash';
@@ -17,7 +16,7 @@ import { DashboardJobsService } from '../../dashboard/jobs.service';
 })
 
 export class JobTypesComponent implements OnInit, OnDestroy {
-    @ViewChild('dv') dv: any;
+    @ViewChild('dv', {static: true}) dv: any;
     private routeParams: any;
     private itemsWithPause: MenuItem[] = [
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },

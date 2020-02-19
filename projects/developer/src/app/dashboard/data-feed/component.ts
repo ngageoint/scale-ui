@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { UIChart } from 'primeng/primeng';
+import { UIChart } from 'primeng/chart';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -17,7 +17,7 @@ import { ColorService } from '../../common/services/color.service';
 export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     @Input() started;
     @Input() ended;
-    @ViewChild('chart') chart: UIChart;
+    @ViewChild('chart', {static: true}) chart: UIChart;
     chartLoading: boolean;
     feedParams: any;
     plotParams: any;

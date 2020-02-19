@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/primeng';
+import { LazyLoadEvent, SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import * as _ from 'lodash';

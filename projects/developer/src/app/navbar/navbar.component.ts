@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { OverlayPanel, ConfirmationService } from 'primeng/primeng';
+import { OverlayPanel } from 'primeng/overlaypanel';
+import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { MenuItem } from 'primeng/api';
@@ -21,7 +22,7 @@ import { ProfileService } from '../common/services/profile.service';
 export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() isAuthenticated: boolean;
     @Input() theme: string;
-    @ViewChild('systemOp') systemOp: OverlayPanel;
+    @ViewChild('systemOp', {static: true}) systemOp: OverlayPanel;
     statusSubscription: any;
     selectedId = null;
     subscription: any;

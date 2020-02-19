@@ -22,8 +22,8 @@ import { Observable } from 'rxjs';
 })
 
 export class RecipeTypesComponent implements OnInit, OnDestroy {
-    @ViewChild('dv') dv: any;
-    @ViewChild('addRemoveDialog') addRemoveDialog: Dialog;
+    @ViewChild('dv', {static: true}) dv: any;
+    @ViewChild('addRemoveDialog', {static: true}) addRemoveDialog: Dialog;
     private routeParams: any;
     private _isEditing = false;
     isSaving = false;
@@ -139,7 +139,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
-            description: ['', Validators],
+            description: [''],
             definition: this.fb.group({
                 input: this.fb.group({
                     files: this.fb.array([]),

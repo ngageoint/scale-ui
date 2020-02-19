@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { OverlayPanel } from 'primeng/primeng';
+import { OverlayPanel } from 'primeng/overlaypanel';
 import { version } from '../../../../../package.json';
 import { MessageService } from 'primeng/components/common/messageservice';
 
@@ -16,9 +16,9 @@ import { ProfileService } from '../common/services/profile.service';
 
 export class FooterComponent implements OnInit, OnChanges {
     @Input() isAuthenticated: boolean;
-    @ViewChild('profileOp') profileOp: OverlayPanel;
-    @ViewChild('profile') profile: any;
-    @ViewChild('user') usernameEl: any;
+    @ViewChild('profileOp', {static: true}) profileOp: OverlayPanel;
+    @ViewChild('profile', {static: true}) profile: any;
+    @ViewChild('user', {static: true}) usernameEl: any;
     env = environment;
     documentation = environment.documentation;
     uiVersion = version;

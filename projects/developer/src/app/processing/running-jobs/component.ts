@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { LazyLoadEvent } from 'primeng/primeng';
+import { LazyLoadEvent } from 'primeng/api';
 import * as _ from 'lodash';
 
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
