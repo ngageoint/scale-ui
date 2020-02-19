@@ -65,7 +65,6 @@
                 <ng-template #nodeTemplate let-node>
                     <ng-container *ngIf="node">
                         <svg:g class="node" *ngIf="!node.node_type || node.node_type.node_type === 'job'">
-                        {{ node | json }}
                             <svg:rect [attr.width]="node.dimension.width" [attr.height]="node.dimension.height"
                                       [attr.fill]="node.fillColor" [attr.stroke]="node.data.stroke || null"
                                       [attr.stroke-width]="3"  [ngClass]="node.class"/>
