@@ -66,6 +66,14 @@ export class RecipeTypeConditionComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Event callback when an accordion tab is opened for condition filters.
+     * @param  e event from primeng accordion component
+     */
+    onAccordionOpen(e: any): void {
+        this.accordionIndex = e.index;
+    }
+
+    /**
      * Removes the filter group at the given position.
      * @param idx index of the filter to remove
      */

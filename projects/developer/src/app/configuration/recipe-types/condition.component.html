@@ -21,8 +21,8 @@
     </label>
 
     <div formGroupName="data_filter">
-        <p-accordion formArrayName="filters" [activeIndex]="accordionIndex">
-            <p-accordionTab *ngFor="let filter of filters.controls; let i = index">
+        <p-accordion formArrayName="filters" (onOpen)="onAccordionOpen($event)">
+            <p-accordionTab *ngFor="let filter of filters.controls; let i = index" [selected]="accordionIndex === i">
                 <p-header>
                     <i *ngIf="!filter.valid" class="fa fa-warning" style="color: var(--red)"
                         pTooltip="This filter is invalid" tooltipPosition="bottom"></i>
