@@ -54,10 +54,16 @@ label {
     }
 }
 .max-size {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 150px;
+    background-color: #106cc8;
+    color: green;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
+}
+.ui-tooltip-text {
+    background-color: #106cc8;
+    color: green;
+    white-space: pre-wrap !important;
+    overflow-wrap: break-word !important;
 }
 .label-info {
     padding: .2em .6em .1em .6em;

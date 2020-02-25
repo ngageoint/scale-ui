@@ -91,10 +91,12 @@
                     </div>
                 </div>
                 <div *ngSwitchCase="'input'">
-                    <div class="max-size" *ngFor="let fullInput of jobInputs">
-                        <span *ngIf="fullInput.id === rowData.id">
-                                {{ fullInput.input }}
-                        </span>
+                    <div *ngIf="jobInputs.length > 0">
+                    <div *ngFor="let fullInput of jobInputs">
+                            <span *ngIf="fullInput.id === rowData.id" [tooltipStyleClass]="max-size" [pTooltip]="makeTooltip()">
+                                    {{ fullInput.input | slice:0:35 }}...
+                            </span>
+                        </div>
                     </div>
                 </div>
                 <div *ngSwitchCase="'created'">

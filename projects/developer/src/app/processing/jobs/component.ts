@@ -46,6 +46,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     jobTypes: any;
     jobTypeOptions: SelectItem[];
     jobInputs = [];
+    fileName = [];
     selectedJob: Job;
     selectedJobType: any = [];
     selectedJobExe: JobExecution;
@@ -116,6 +117,23 @@ export class JobsComponent implements OnInit, OnDestroy {
                 result.selected =  !!job;
             });
             this.jobs = Job.transformer(data.results);
+            this.jobInputs = [];
+            _.forEach(this.jobs, job => {
+                this.jobsApiService.getJobInputs(job.id)
+                .subscribe(inputData => {
+                    this.fileName = [];
+                    _.forEach(inputData.results, input => {
+                        this.fileName.push(input.file_name);
+                    });
+                    this.jobInputs.push( {
+                        id: job.id,
+                        input: this.fileName.toString()
+                    });
+                    console.log(this.jobInputs.length);
+                }, err => {
+                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+                });
+            });
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
@@ -167,6 +185,15 @@ export class JobsComponent implements OnInit, OnDestroy {
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
+    }
+
+    makeTooltip() {
+    let temp = ``;
+        _.forEach(this.fileName, name  => {
+            temp += `${name}, `;
+        });
+
+      return temp;
     }
 
     getUnicode(code) {
