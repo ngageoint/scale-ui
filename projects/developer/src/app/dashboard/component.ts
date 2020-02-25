@@ -69,7 +69,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 datalabels: {
                     font: {
                         family: 'FontAwesome',
-                        weight: 'bold',
                         size: 18,
                     },
                     formatter: function(value, ctx) {
