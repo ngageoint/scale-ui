@@ -27,12 +27,18 @@ module.exports = function(request) {
             .utc(start.valueOf() + _.random(stop.valueOf() - start.valueOf()))
             .toISOString();
         var id = i + 1;
-        var randomCountries = _.sampleSize(["BCA", "CBA", "ACB"], [n=_.random(1,3)])
+        var randomCountries = _.sampleSize(
+            ["BCA", "CBA", "ACB"],
+            [(n = _.random(1, 3))]
+        );
         var country = _.sample([...countriesList, randomCountries]);
         var mediaType = _.sample(mediaTypesList);
-        var data_started = moment.utc().subtract(Math.max(_.random(30), 2), "d");
-        var data_ended = data_started.add(1, "d");
+        var data_started = moment
+            .utc()
+            .subtract(Math.max(_.random(30), 2), "d");
+        var data_ended = data_started.add(10, "h");
 
+        var createdDate = data_ended.add(1, "d").toISOString();
         var recipe_types = [
             {
                 id: 6,
@@ -60,7 +66,7 @@ module.exports = function(request) {
             file_size: 100,
             is_deleted: false,
             url: "http://host.com/file/path/my_file.kml",
-            created: date,
+            created: createdDate,
             deleted: null,
             data_started: data_started,
             data_ended: data_ended,
@@ -123,6 +129,19 @@ module.exports = function(request) {
                     moment
                         .utc(result.data_ended)
                         .isSameOrBefore(moment.utc(params.data_ended))
+                );
+            });
+        }
+
+        if (params.created_started && params.created_ended) {
+            data.results = data.results.filter(result => {
+                return (
+                    moment
+                        .utc(result.created)
+                        .isSameOrAfter(moment.utc(params.created_started)) &&
+                    moment
+                        .utc(result.created)
+                        .isSameOrBefore(moment.utc(params.created_ended))
                 );
             });
         }

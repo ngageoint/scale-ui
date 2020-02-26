@@ -49,7 +49,7 @@
                             <span class="required">Required Fields</span>
                         </p-header>
                         <div class="p-grid">
-                            <div class="p-col-12">
+                            <div class="p-col-6">
                                 <div class="ui-inputgroup">
                                     <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
                                     <p-calendar
@@ -67,8 +67,7 @@
                                     </p-calendar>
                                 </div>
                                 <span class="error-text">{{ startDateMessage }}</span>
-                            </div>
-                            <div class="p-col-12">
+
                                 <div class="ui-inputgroup">
                                     <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
                                     <p-calendar
@@ -86,6 +85,9 @@
                                     </p-calendar>
                                 </div>
                                 <span class="error-text">{{ endDateMessage }}</span>
+                            </div>
+                            <div class="p-col-6">
+                                <p-selectButton [options]="searchTimeTypes" formControlName="searchTime"></p-selectButton>
                             </div>
                         </div>
                         <button pButton
