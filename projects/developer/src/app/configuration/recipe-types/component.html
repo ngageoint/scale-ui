@@ -78,12 +78,18 @@
                             <span class="required">Title</span>
                             <input pInputText type="text" formControlName="title"/>
                         </label>
+                        <p-checkbox
+                            [formControl]="createForm.controls['is_active']"
+                            [binary]="true"
+                            label="Active"
+                        ></p-checkbox>
+
                         <label style="margin-bottom: 0">
                             <span>Description</span>
                             <textarea pInputTextarea formControlName="description" rows="5"
                                 maxLength="500" pTooltip="Description has a 500 character limit."></textarea>
                         </label>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class="p-grid">

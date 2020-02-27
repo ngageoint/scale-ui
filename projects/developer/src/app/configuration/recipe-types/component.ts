@@ -139,6 +139,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     private initFormGroups() {
         this.createForm = this.fb.group({
             title: ['', Validators.required],
+            is_active: [true],
             description: [''],
             definition: this.fb.group({
                 input: this.fb.group({
@@ -159,6 +160,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.createFormSubscription = this.createForm.valueChanges.subscribe(changes => {
             // need to merge these changes because there are fields in the model that aren't in the form
             this.selectedRecipeTypeDetail.title = changes.title;
+            this.selectedRecipeTypeDetail.is_active = changes.is_active;
             this.selectedRecipeTypeDetail.description = changes.description;
         });
     }
