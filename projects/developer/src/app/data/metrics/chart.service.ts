@@ -91,17 +91,17 @@ export class ChartService {
                                     valueArr.push(valueObj ? valueObj.value : 0);
                                 });
                             } else {
-                                _.forEach(dataLabels, (xDate) => {
-                                    const valueObj = _.find(queryDates, (qDate) => {
-                                        return moment.utc(qDate.datetime, 'YYYY-MM-DDTHH:mm:ss.SSSZ').isSame(moment.utc(xDate,
-                                            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'day');
-                                    });
-                                    valueArr.push(valueObj ? valueObj.value : 0);
-                                });
                                 dataLabels = [];
                                 for (let i = 0; i < numDays; i++) {
                                     dataLabels.push(moment.utc(params.started, 'YYYY-MM-DD').add(i, 'd').format('YYYY-MM-DD'));
                                 }
+                                _.forEach(dataLabels, (xDate) => {
+                                    const valueObj = _.find(queryDates, (qDate) => {
+                                        return moment.utc(qDate.datetime, 'YYYY-MM-DDZ').isSame(moment.utc(xDate,
+                                            'YYYY-MM-DD'), 'day');
+                                    });
+                                    valueArr.push(valueObj ? valueObj.value : 0);
+                                });
                             }
 
                             // prepend valueArr with filter title, and push onto colArr
@@ -111,7 +111,6 @@ export class ChartService {
                             });
                         });
                     }
-
                     // populate chart dataset
                     _.forEach(filtersApplied, (filter) => {
                         const filterData = _.find(colArr, { id: filter.id });
