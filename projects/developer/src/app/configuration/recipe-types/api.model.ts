@@ -94,7 +94,6 @@ export class RecipeType {
     public static cleanRecipeTypeForSave(recipeType) {
         return {
             title: recipeType.title,
-            is_active: recipeType.is_active,
             description: recipeType.description,
             definition: this.cleanDefinition(recipeType.definition)
         };
