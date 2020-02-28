@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ended: any;
     data: any;
     showFavorites = false;
+    showAllJobs = false;
     loadingJobTypes: boolean;
     columnsFavs: any[];
     columnsAll: any[];
@@ -181,11 +182,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 tempUserCount++;
             }
         });
-        if (values.length > 0 ) {
-            this.showFavorites = true;
-        }
 
         if (type === 'fav') {
+            if (values.length > 0 ) {
+                this.showFavorites = true;
+            }
         this.dataFavs = {
             labels: ['System', 'User', 'Running'],
             borderWidth: 30,
@@ -207,6 +208,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
             ],
         };
         } else if (type === 'all') {
+            if (values.length > 0 ) {
+                this.showAllJobs = true;
+            }
             this.data = {
                 labels: ['system', 'user', 'running'],
                 datasets: [

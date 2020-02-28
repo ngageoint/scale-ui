@@ -20,14 +20,21 @@
                 <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                     <p-panel class="noWrapPanel dashboard__error-charts" header="Running Jobs" *ngIf="favoriteJobTypes.length > 0">
                         <p-tabView *ngIf="favoriteJobTypes.length > 0" (onChange)='changeTab()' >
-                            <p-tabPanel [header]="'Favorites'" *ngIf="showFavorites">
-                                <p-chart type="doughnut" [data]="dataFavs" [options]='options' #mychart></p-chart>
-                            </p-tabPanel>
-                            <p-tabPanel [header]="'No Favorites'" *ngIf="showFavorites == false">
-                                No favorites are currently running.
+                            <p-tabPanel [header]="'Favorites'" >
+                                <div *ngIf="showFavorites">
+                                    <p-chart type="doughnut" [data]="dataFavs" [options]='options' #mychart></p-chart>
+                                </div>
+                                <div *ngIf="!showFavorites">
+                                        <span>No favorites are currently running.</span>
+                                </div>
                             </p-tabPanel>
                             <p-tabPanel [header]="'All Jobs'">
-                                <p-chart type="doughnut" [data]="data" [options]='options' #mychart2></p-chart>
+                                <div *ngIf="showAllJobs">
+                                     <p-chart type="doughnut" [data]="data" [options]='options' #mychart2></p-chart>
+                                </div>
+                               <div *ngIf="!showAllJobs">
+                                    <span>No Jobs are currently running.</span>
+                               </div>
                             </p-tabPanel>
                             
                         </p-tabView>
@@ -62,7 +69,7 @@
                                     <tr>
                                         <td [attr.colspan]="columns.length">
                                             You haven't saved any favorites yet. Use the star button on an algorithm in the next tab to save it to this list
-                                            for quick access.
+                                            for quick access and to configure the charts to show favorites.
                                         </td>
                                     </tr>
                                 </ng-template>
