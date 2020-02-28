@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     started: any;
     ended: any;
     data: any;
+    showFavorites = false;
     loadingJobTypes: boolean;
     columnsFavs: any[];
     columnsAll: any[];
@@ -180,6 +181,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 tempUserCount++;
             }
         });
+        if (values.length > 0 ) {
+            this.showFavorites = true;
+        }
 
         if (type === 'fav') {
         this.dataFavs = {
