@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.16.0](https://github.com/ngageoint/scale-ui/compare/v0.15.0...v0.16.0) (2020-03-03)
+
+
+### Bug Fixes
+
+* **batches:** adjust validators and expose additional filters ([#436](https://github.com/ngageoint/scale-ui/issues/436)) ([260271f](https://github.com/ngageoint/scale-ui/commit/260271f))
+* **jobs:** additional highlight colors for rows that have been visited ([#439](https://github.com/ngageoint/scale-ui/issues/439)) ([03ddc99](https://github.com/ngageoint/scale-ui/commit/03ddc99))
+* **metrics:** changed order of filtering to prevent incorrect values ([#446](https://github.com/ngageoint/scale-ui/issues/446)) ([757e83c](https://github.com/ngageoint/scale-ui/commit/757e83c))
+* **recipe types:** Ensure uniform navigation when editing ([#455](https://github.com/ngageoint/scale-ui/issues/455)) ([275b51c](https://github.com/ngageoint/scale-ui/commit/275b51c)), closes [#441](https://github.com/ngageoint/scale-ui/issues/441)
+
+
+### Features
+
+* **dashboard:** Pie chart Label for favorites ([#448](https://github.com/ngageoint/scale-ui/issues/448)) ([d95519a](https://github.com/ngageoint/scale-ui/commit/d95519a))
+* **recipe types:** added deprecate dropdown to recipe types ([04ef4b4](https://github.com/ngageoint/scale-ui/commit/04ef4b4)), closes [#383](https://github.com/ngageoint/scale-ui/issues/383)
+
+
+
 ## [0.15.0](https://github.com/ngageoint/scale-ui/compare/v0.14.0...v0.15.0) (2020-02-19)
 
 
