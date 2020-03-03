@@ -15,6 +15,8 @@ import { environment } from '../../../environments/environment';
     styleUrls: ['./component.scss']
 })
 export class TimelineComponent implements OnInit {
+    startDate = moment().subtract(1, 'M').startOf('d').toDate();
+    endDate = moment().startOf('d').toDate();
     chartTitle: string[] = [];
     data: any;
     dataTypesLoading: boolean;
@@ -28,6 +30,7 @@ export class TimelineComponent implements OnInit {
     ];
     selectedDataTypeOption: string;
     filterOptions = [];
+    revisionOptions = [];
     selectedFilters = [];
     showChart: boolean;
 
@@ -38,7 +41,19 @@ export class TimelineComponent implements OnInit {
     ) {}
 
     // init chart data
-    private createTimeline(data) {
+    private createTimeline(filterSelected) {
+        console.log(filterSelected);
+        const params = {
+            start: this.startDate,
+            end: this.endDate
+        };
+        this.jobTypesApiService.getJobTypes(params).subscribe(data => {
+            
+        }, err => {
+            console.log(err);
+            this.dataTypesLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+        });
         this.showChart = true;
         this.showFilters = false;
         this.data = {
@@ -67,9 +82,10 @@ export class TimelineComponent implements OnInit {
         _.forEach(data, d => {
             // if type has not been deprecated, use the current date
             const deprecated = d.deprecated ? d.deprecated : moment.utc().toISOString();
+            console.log(d.created)
             this.data.datasets.push({
                 data: [
-                    [d.created, deprecated, DataService.calculateDuration(d.created, deprecated, true)]
+                    [d.created, deprecated]
                 ]
             });
         });
@@ -103,14 +119,18 @@ export class TimelineComponent implements OnInit {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
         } else if (this.selectedDataTypeOption === 'Recipe Types') {
-            this.recipeTypesApiService.getRecipeTypes({ is_active: null }).subscribe(data => {
+            this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
                 this.dataTypesLoading = false;
                 this.recipeTypes = data.results;
                 _.forEach(this.recipeTypes, recipeType => {
                     this.filterOptions.push({
-                        label: `${recipeType.title} rev ${recipeType.revision_num}`,
+                        label: `${recipeType.title}`,
                         value: recipeType
                     });
+                });
+                this.revisionOptions.push({
+                    label: ['Landsat rev 1', 'Landsat rev 2', 'Landsat rev 3'],
+                    data: [1, 2, 3]
                 });
                 this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
             }, err => {
@@ -152,7 +172,7 @@ export class TimelineComponent implements OnInit {
                             return moment.utc(values[index]['value']).format(environment.dateFormat);
                         },
                         maxRotation: 90,
-                        minRotation: 45,
+                        minRotation: 50,
                         autoSkip: true
                     }
                 }]

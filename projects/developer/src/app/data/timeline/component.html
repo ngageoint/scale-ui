@@ -8,6 +8,18 @@ Visualize the created/deprecated history of job types or recipe types.
         (click)="showFilters = !showFilters"></button>
 <p-sidebar [(visible)]="showFilters" position="left" [style]="{'width':'25vw'}" [blockScroll]="true" baseZIndex="1002">
     <h2>Timeline</h2>
+    <label for="date-start">From</label>
+    <p-calendar [(ngModel)]="startDate" inputId="date-start" showButtonBar="true"
+                panelStyleClass="timelineDateFilter" appendTo="body" [showIcon]="true"
+                dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange">
+    </p-calendar>
+
+
+    <label for="date-end">To</label>
+    <p-calendar [(ngModel)]="endDate" inputId="date-end" showButtonBar="true"
+                panelStyleClass="timelineDateFilter" appendTo="body" [showIcon]="true"
+                dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange">
+    </p-calendar>
     <label>Data Source</label>
     <div class="timeline__filter-loading" *ngIf="dataTypesLoading">
         <i class="fa fa-circle-o-notch fa-spin"></i>
@@ -19,7 +31,11 @@ Visualize the created/deprecated history of job types or recipe types.
         <label>Types to compare: </label>
         <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" maxSelectedLabels="2"
                        [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect>
-         Select up to five types to compare.
+    </div>
+    <div *ngIf="selectedDataTypeOption">
+        <label>Revisions: </label>
+        <p-multiSelect [options]="revisionOptions" [(ngModel)]="selectedFilters" maxSelectedLabels="2"
+                       [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect>
     </div>
     <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
             (click)="onUpdateChartClick()" [disabled]="selectedFilters.length === 0"></button>
