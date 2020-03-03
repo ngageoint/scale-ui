@@ -502,6 +502,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.showJsonInputs = false;
                 this.showConditions = false;
                 this.selectedRecipeTypeDetail = RecipeType.transformer(result);
+                this.recipeTypeName = this.selectedRecipeTypeDetail.name;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${result.title} successfully created` });
                 // modify url without reloading view
                 window.history.pushState({}, '', `/configuration/recipe-types/${result.name}`);
