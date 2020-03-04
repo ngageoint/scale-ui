@@ -86,7 +86,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    liveRange: number;
 
     constructor(
         private dataService: DataService,
@@ -102,11 +101,7 @@ export class JobsComponent implements OnInit, OnDestroy {
 
     private updateData() {
         this.unsubscribe();
-
-        // don't show loading state when in live mode
-        if (!this.liveRange) {
-            this.datatableLoading = true;
-        }
+        this.datatableLoading = true;
 
         this.apiLoading = true;
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
@@ -133,15 +128,8 @@ export class JobsComponent implements OnInit, OnDestroy {
 
         // update router params
         const params = this.datatableOptions as Params;
-        if (params.liveRange) {
-            // if live range was set on the table options, remove started/ended
-            delete params.started;
-            delete params.ended;
-        } else {
-            // live range not provided, default back to started/ended set on table options
-            params.started = params.started || this.started;
-            params.ended = params.ended || this.ended;
-        }
+        params.started = params.started || this.started;
+        params.ended = params.ended || this.ended;
 
         this.router.navigate(['/processing/jobs'], {
             queryParams: params,
@@ -252,21 +240,6 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.datatableOptions = Object.assign(this.datatableOptions, {
             started: data.start,
             ended: data.end
-        });
-        // update router
-        this.updateOptions();
-    }
-
-    /**
-     * Callback for temporal filter updating the live range selection.
-     * @param data hours that should be used, or null to clear
-     */
-    onLiveRangeSelected(data: {hours: number}): void {
-        // keep model in sync
-        this.liveRange = data.hours;
-        // patch in the values for datatable
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            liveRange: data.hours
         });
         // update router
         this.updateOptions();
@@ -445,7 +418,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started || this.datatableOptions.started,
                     ended: params.ended || this.datatableOptions.ended,
-                    liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     status: params.status ?
                         Array.isArray(params.status) ?
                             params.status :
@@ -484,7 +456,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = this.datatableOptions.started;
             this.ended = this.datatableOptions.ended;
-            this.liveRange = this.datatableOptions.liveRange;
 
             this.getJobTypes();
         });

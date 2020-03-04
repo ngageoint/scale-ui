@@ -35,7 +35,6 @@ export class ScansComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    liveRange: number;
 
     nameFilterText: string;
     onNameFilter = _.debounce((e) => {
@@ -60,11 +59,7 @@ export class ScansComponent implements OnInit, OnDestroy {
 
     private updateData() {
         this.unsubscribe();
-
-        // don't show loading state when in live mode
-        if (!this.liveRange) {
-            this.datatableLoading = true;
-        }
+        this.datatableLoading = true;
 
         this.apiLoading = true;
         this.subscription = this.scansApiService.getScans(this.datatableOptions, true).subscribe(data => {
@@ -91,15 +86,8 @@ export class ScansComponent implements OnInit, OnDestroy {
 
         // update router params
         const params = this.datatableOptions as Params;
-        if (params.liveRange) {
-            // if live range was set on the table options, remove started/ended
-            delete params.started;
-            delete params.ended;
-        } else {
-            // live range not provided, default back to started/ended set on table options
-            params.started = params.started || this.started;
-            params.ended = params.ended || this.ended;
-        }
+        params.started = params.started || this.started;
+        params.ended = params.ended || this.ended;
 
         this.router.navigate(['/system/scans'], {
             queryParams: params,
@@ -166,21 +154,6 @@ export class ScansComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for temporal filter updating the live range selection.
-     * @param data hours that should be used, or null to clear
-     */
-    onLiveRangeSelected(data: {hours: number}): void {
-        // keep model in sync
-        this.liveRange = data.hours;
-        // patch in the values for datatable
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            liveRange: data.hours
-        });
-        // update router
-        this.updateOptions();
-    }
-
-    /**
      * Callback for when temporal filter tells this component to update visible date range. This is
      * the signal that either a date range or a live range is being triggered.
      * @param data start and end iso strings for what dates should be filtered
@@ -240,14 +213,12 @@ export class ScansComponent implements OnInit, OnDestroy {
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
                     started: params.started || this.datatableOptions.started,
                     ended: params.ended || this.datatableOptions.ended,
-                    liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
                     duration: params.duration ? params.duration : null,
                     name: params.name || null
                 };
             }
             this.started = this.datatableOptions.started;
             this.ended = this.datatableOptions.ended;
-            this.liveRange = this.datatableOptions.liveRange;
             this.nameFilterText = this.datatableOptions.name;
             this.updateData();
         });
