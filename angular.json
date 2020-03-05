@@ -22,10 +22,7 @@
                         "main": "src/main.ts",
                         "polyfills": "src/polyfills.ts",
                         "tsConfig": "src/tsconfig.app.json",
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ],
+                        "assets": ["src/assets"],
                         "styles": [
                             "src/styles.scss"
                         ],
@@ -79,10 +76,7 @@
                             "src/styles.scss"
                         ],
                         "scripts": [],
-                        "assets": [
-                            "src/favicon.ico",
-                            "src/assets"
-                        ]
+                        "assets": ["src/assets"]
                     }
                 },
                 "lint": {
@@ -146,7 +140,6 @@
                         "polyfills": "projects/developer/src/polyfills.ts",
                         "tsConfig": "projects/developer/tsconfig.app.json",
                         "assets": [
-                            "projects/developer/src/favicon.ico",
                             "projects/developer/src/assets",
                             "projects/developer/src/404.html"
                         ],
@@ -211,7 +204,6 @@
                         ],
                         "scripts": [],
                         "assets": [
-                            "projects/developer/src/favicon.ico",
                             "projects/developer/src/assets"
                         ]
                     }
