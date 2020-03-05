@@ -115,25 +115,28 @@ export class JobsComponent implements OnInit, OnDestroy {
             _.forEach(data.results, result => {
                 const job = _.find(this.selectedRows, { data: { id: result.id } });
                 result.selected =  !!job;
+                console.log(result);
+                if (result.input_files) {
+                    this.fileName = [];
+                    _.forEach(result.input_files, input => {
+                        this.fileName.push(input);
+                        this.jobInputs.push( {
+                            id: result.id,
+                            input: this.fileName.toString()
+                        });
+                    });
+                }
             });
             this.jobs = Job.transformer(data.results);
             this.jobInputs = [];
-            _.forEach(this.jobs, job => {
-                this.jobsApiService.getJobInputs(job.id)
-                .subscribe(inputData => {
-                    this.fileName = [];
-                    _.forEach(inputData.results, input => {
-                        this.fileName.push(input.file_name);
-                    });
-                    this.jobInputs.push( {
-                        id: job.id,
-                        input: this.fileName.toString()
-                    });
-                    console.log(this.jobInputs.length);
-                }, err => {
-                    this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
-                });
-            });
+            // _.forEach(this.jobs, job => {
+            //     this.jobsApiService.getJobInputs(job.id)
+            //     .subscribe(inputData => {
+
+            //     }, err => {
+            //         this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
+            //     });
+            // });
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
