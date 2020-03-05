@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
+import { isNil } from 'lodash';
 
 import { UTCDates } from '../../utils/utcdates';
 
@@ -26,12 +27,9 @@ export class TemporalFilterComponent implements OnInit {
         { label: 'Last week', value: 24 * 7 }
     ];
 
-    // when the start/end dates are applied
-    @Output() dateFilterSelected: EventEmitter<{start: string, end: string}> = new EventEmitter();
     // when the parent component should make an api call to update the data
     @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
 
-    selectedDateRange: any;
     // internal dates for this component
     startDate: Date;
     endDate: Date;
@@ -45,8 +43,12 @@ export class TemporalFilterComponent implements OnInit {
     }
 
     // utc versions of internal start and end dates
-    get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
-    get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
+    get utcStartDate(): Date {
+        return this.startDate ? UTCDates.localDateToUTC(this.startDate) : null;
+    }
+    get utcEndDate(): Date {
+        return this.endDate ? UTCDates.localDateToUTC(this.endDate) : null;
+    }
 
     // determines if the form inputs are valid
     get isValid(): boolean {
@@ -62,50 +64,42 @@ export class TemporalFilterComponent implements OnInit {
     }
 
     /**
-     * Callback for when a normal start/end value is applied
+     * Callback for when a start/end value is applied.
      */
     onDateFilterApply(): void {
-        // send out the converted date strings
-        this.dateFilterSelected.emit({
-            start: this.utcStartDate.toISOString(),
-            end: this.utcEndDate.toISOString()
-        });
-
-        if (this.startDate >= this.endDate) {
+        // ensure a valid start/end range
+        if (this.startDate && this.endDate && this.startDate >= this.endDate) {
             this.messageService.add({severity: 'error', summary: 'Error querying range', detail: 'Provided FROM date is before TO date'});
         } else {
             // make call to emit out the update hook
-            this.update();
+            this.updated.emit({
+                start: this.utcStartDate ? this.utcStartDate.toISOString() : '',
+                end: this.utcEndDate ? this.utcEndDate.toISOString() : '',
+            });
         }
-    }
-
-    /**
-     * Update hook to emit out the start/end dates the parent component should filter on.
-     */
-    private update(): void {
-        this.updated.emit({
-            start: this.utcStartDate.toISOString(),
-            end: this.utcEndDate.toISOString()
-        });
     }
 
     ngOnInit() {
         // prevent expression changed error
         setTimeout(() => {
-            if (this.started && this.ended) {
-                // start/end dates were set from parent (router)
-                this.startDate = UTCDates.utcDateToLocal(this.started);
-                this.endDate = UTCDates.utcDateToLocal(this.ended);
-                this.onDateFilterApply();
-            } else {
-                // nothing provided by parent component or found in storage
-                // use date filter on the last day
-                const now = moment();
-                this.endDate = now.toDate();
+            const now = moment();
+
+            if (isNil(this.started)) {
+                // started is null or undefined, provide a default
                 this.startDate = now.clone().subtract(1, 'day').toDate();
-                this.onDateFilterApply();
+            } else if (this.started) {
+                // started is probably a date, convert
+                this.startDate = UTCDates.utcDateToLocal(this.started);
             }
+            // else, started is an empty string, keep as null
+
+            if (isNil(this.ended)) {
+                this.endDate = now.toDate();
+            } else if (this.ended) {
+                this.endDate = UTCDates.utcDateToLocal(this.ended);
+            }
+
+            this.onDateFilterApply();
         });
     }
-
 }
