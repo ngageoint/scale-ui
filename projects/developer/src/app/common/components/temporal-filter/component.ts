@@ -107,7 +107,7 @@ export class TemporalFilterComponent implements OnInit {
 
             if (isNil(this.started)) {
                 // started is null or undefined, provide a default
-                this.startDate = now.clone().subtract(1, 'day').toDate();
+                this.startDate = UTCDates.utcDateToLocal(now.clone().subtract(1, 'day').toDate());
             } else if (this.started) {
                 // started is probably a date, convert
                 this.startDate = UTCDates.utcDateToLocal(this.started);
@@ -115,7 +115,7 @@ export class TemporalFilterComponent implements OnInit {
             // else, started is an empty string, keep as null
 
             if (isNil(this.ended)) {
-                this.endDate = now.toDate();
+                this.endDate = UTCDates.utcDateToLocal(now.toDate());
             } else if (this.ended) {
                 this.endDate = UTCDates.utcDateToLocal(this.ended);
             }
