@@ -238,6 +238,9 @@ export class JobsComponent implements OnInit, OnDestroy {
      * @param data start and end iso strings for what dates should be filtered
      */
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
+        // determine if values have changed
+        const isSame = this.started === data.start && this.ended === data.end;
+
         // keep local model in sync
         this.started = data.start;
         this.ended = data.end;
@@ -248,6 +251,12 @@ export class JobsComponent implements OnInit, OnDestroy {
                 ended: data.end
             });
         this.updateOptions();
+
+        // updateOptions will only cause a data refresh if the route params are different
+        // force a data update only when the params haven't changed
+        if (isSame) {
+            this.updateData();
+        }
     }
 
     requeueJobs(jobsParams?) {
