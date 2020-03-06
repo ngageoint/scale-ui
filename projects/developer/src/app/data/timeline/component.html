@@ -30,7 +30,7 @@ Visualize the created/deprecated history of job types or recipe types.
     <div *ngIf="selectedDataTypeOption">
         <label>Types to compare: </label>
         <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" maxSelectedLabels="2"
-                       [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect>
+                       [style]="{'width':'100%'}" selectionLimit="5" (onChange)="onTypesClick()"></p-multiSelect>
     </div>
     <div *ngIf="selectedDataTypeOption">
         <label>Revisions: </label>

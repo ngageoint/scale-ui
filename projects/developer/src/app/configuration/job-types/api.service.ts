@@ -128,6 +128,16 @@ export class JobTypesApiService {
             );
     }
 
+    getTimelineDetails(params?: any): Observable<any> {
+        return this.http.get<JobType>(`${this.apiPrefix}/job-types/timeline/`, { params: params })
+            .pipe(
+                map(response => {
+                    return JobType.transformer(response);
+                }),
+                catchError(DataService.handleError)
+            );
+    }
+
     validateJobType(jobType: JobType): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/job-types/validation/`, JobType.cleanJobType(jobType))
             .pipe(
