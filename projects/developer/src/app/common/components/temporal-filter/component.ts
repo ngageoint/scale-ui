@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
+import { MenuItem } from 'primeng/api';
 import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 import { isNil } from 'lodash';
@@ -16,19 +17,11 @@ export class TemporalFilterComponent implements OnInit {
     @Input() ended: string;
     @Input() loading = false;
 
-    // dropdown options for live range, values in hourss
-    @Input() dateRangeOptions = [
-        { label: '---', value: null },
-        { label: 'Last 1 hour', value: 1 },
-        { label: 'Last 6 hours', value: 6 },
-        { label: 'Last 12 hours', value: 12 },
-        { label: 'Last day', value: 24 },
-        { label: 'Last 3 days', value: 24 * 3 },
-        { label: 'Last week', value: 24 * 7 }
-    ];
-
     // when the parent component should make an api call to update the data
     @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
+
+    // options for date range selection
+    dateRangeOptions: MenuItem[];
 
     // internal dates for this component
     startDate: Date;
@@ -79,7 +72,29 @@ export class TemporalFilterComponent implements OnInit {
         }
     }
 
+    /**
+     * Sets a range using now for the end date and offsetting by the number of hours.
+     * @param hours number of hours prior to now for the start date
+     */
+    private selectRange(hours: number): void {
+        const now = moment.utc();
+        this.startDate = UTCDates.localDateToUTC(now.clone().subtract(hours, 'hour').toDate());
+        this.endDate = UTCDates.localDateToUTC(this.endDate = now.toDate());
+        this.onDateFilterApply();
+    }
+
     ngOnInit() {
+        // setup date range options
+        this.dateRangeOptions = [
+            { label: 'Last hour', command: () => { this.selectRange(1); } },
+            { label: 'Last 6 hours', command: () => { this.selectRange(6); } },
+            { label: 'Last 12 hours', command: () => { this.selectRange(12); } },
+            { label: 'Last day', command: () => { this.selectRange(24); } },
+            { label: 'Last 3 days', command: () => { this.selectRange(24 * 3); } },
+            { label: 'Last 7 days', command: () => { this.selectRange(24 * 7); } },
+            { label: 'Last 30 days', command: () => { this.selectRange(24 * 30); } },
+        ];
+
         // prevent expression changed error
         setTimeout(() => {
             const now = moment();

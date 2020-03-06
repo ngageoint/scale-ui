@@ -17,9 +17,19 @@
         <span class="ui-inputgroup-addon">Z</span>
     </div>
 
-    <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
-            label="Apply"
-            (click)="onDateFilterApply()"
-            [disabled]="!isValid || loading"
-            pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
+    <div class="ui-inputgroup">
+        <p-menu #dateRangeMenu [popup]="true" [model]="dateRangeOptions"></p-menu>
+
+        <button type="button"
+                pButton
+                icon="fa fa-calendar"
+                class="ui-button-secondary"
+                (click)="dateRangeMenu.toggle($event)"></button>
+
+        <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
+                icon="fa fa-refresh"
+                (click)="onDateFilterApply()"
+                [disabled]="!isValid || loading"
+                pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
+    </div>
 </div>
