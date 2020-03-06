@@ -6,10 +6,17 @@
     </dev-temporal-filter>
 
     <div class="jobs__controls">
-        <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
-                (click)="requeueAllConfirm()"></button>
-        <button pButton type="button" class="ui-button-primary" icon="fa fa-ban" pTooltip="Cancel All Jobs"
-                (click)="cancelAllConfirm()"></button>
+
+        <p-menu #actionsMenu
+                [popup]="true"
+                [model]="actionItems"></p-menu>
+        <button type="button"
+                pButton
+                label="Actions"
+                icon="fa fa-caret-down"
+                iconPos="right"
+                class="ui-button-secondary"
+                (click)="actionsMenu.toggle($event)"></button>
     </div>
 </div>
 <p-table [value]="jobs" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"

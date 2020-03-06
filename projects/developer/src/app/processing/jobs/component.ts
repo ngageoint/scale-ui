@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/api';
+import { LazyLoadEvent, SelectItem, MenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -86,6 +86,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    actionItems: MenuItem[];
 
     constructor(
         private dataService: DataService,
@@ -395,6 +396,11 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.onJobTypeChange({ value: this.selectedJobType });
     }
     ngOnInit() {
+        this.actionItems = [
+            { label: 'Requeue all', icon: 'fa fa-repeat', command: () => { this.requeueAllConfirm(); } },
+            { label: 'Cancel all', icon: 'fa fa-ban', command: () => { this.cancelAllConfirm(); } },
+        ];
+
         this.selectedRows = this.dataService.getSelectedJobRows();
 
         this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
