@@ -23,6 +23,9 @@ export class TemporalFilterComponent implements OnInit {
     // options for date range selection
     dateRangeOptions: MenuItem[];
 
+    // initial date to show in the calendar
+    defaultDate: Date;
+
     // internal dates for this component
     startDate: Date;
     endDate: Date;
@@ -94,6 +97,9 @@ export class TemporalFilterComponent implements OnInit {
             { label: 'Last 7 days', command: () => { this.selectRange(24 * 7); } },
             { label: 'Last 30 days', command: () => { this.selectRange(24 * 30); } },
         ];
+
+        // set the default date in utc
+        this.defaultDate = UTCDates.localDateToUTC(moment().toDate());
 
         // prevent expression changed error
         setTimeout(() => {

@@ -1,19 +1,37 @@
 <div class="temporal-filter flexed spaced">
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
-        <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true"
-                    panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
-                    dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
-                    showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
+        <p-calendar [(ngModel)]="startDate"
+                    [defaultDate]="defaultDate"
+                    inputId="date-range-start"
+                    showButtonBar="true"
+                    panelStyleClass="temporalDateFilter"
+                    [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
+                    dateFormat="yy/mm/dd"
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    [yearRange]="yearRange"
+                    showTime="true"
+                    hourFormat="24"
+                    [showSeconds]="true"></p-calendar>
         <span class="ui-inputgroup-addon">Z</span>
     </div>
 
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
-        <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true"
-                    panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
-                    dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
-                    showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
+        <p-calendar [(ngModel)]="endDate"
+                    [defaultDate]="defaultDate"
+                    inputId="date-range-end"
+                    showButtonBar="true"
+                    panelStyleClass="temporalDateFilter"
+                    [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
+                    dateFormat="yy/mm/dd"
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    [yearRange]="yearRange"
+                    showTime="true"
+                    hourFormat="24"
+                    [showSeconds]="true"></p-calendar>
         <span class="ui-inputgroup-addon">Z</span>
     </div>
 
