@@ -2,7 +2,6 @@
 <div class="scans__header flexed space-between">
     <dev-temporal-filter [started]="started" [ended]="ended"
                          [loading]="apiLoading"
-                         (dateFilterSelected)="onDateFilterSelected($event)"
                          (updated)="onTemporalFilterUpdate($event)">
     </dev-temporal-filter>
     <div class="scans__controls">

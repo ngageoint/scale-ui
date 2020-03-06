@@ -78,7 +78,11 @@ export class BatchesComponent implements OnInit, OnDestroy {
         });
     }
     private updateOptions() {
-        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
+        this.datatableOptions = _.pickBy(this.datatableOptions, (d, idx) => {
+            if (idx === 'started' || idx === 'ended') {
+                // allow started and ended to be empty
+                return d;
+            }
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
         this.batchesDatatableService.setBatchesDatatableOptions(this.datatableOptions);
@@ -167,35 +171,19 @@ export class BatchesComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for temporal filter updating the start/end range filter.
-     * @param data start and end strings of iso formatted datetimes
-     */
-    onDateFilterSelected(data: {start: string, end: string}): void {
-        // keep local model in sync
-        this.started = data.start;
-        this.ended = data.end;
-        // patch in the values to the datatable
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            started: data.start,
-            ended: data.end
-        });
-        // update router
-        this.updateOptions();
-    }
-
-    /**
-     * Callback for when temporal filter tells this component to update visible date range. This is
-     * the signal that either a date range or a live range is being triggered.
+     * Callback for when temporal filter tells this component to update visible date range.
      * @param data start and end iso strings for what dates should be filtered
      */
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
+        // keep local model in sync
+        this.started = data.start;
+        this.ended = data.end;
         // update the datatable options then call the api
         this.datatableOptions = Object.assign(this.datatableOptions, {
-                first: 0,
                 started: data.start,
                 ended: data.end
             });
-        this.updateData();
+        this.updateOptions();
     }
 
     ngOnInit() {
@@ -207,9 +195,6 @@ export class BatchesComponent implements OnInit, OnDestroy {
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.batchesDatatableService.getBatchesDatatableOptions();
-            // let temporal filter set the start/end
-            this.datatableOptions.started = null;
-            this.datatableOptions.ended = null;
         }
 
         this.batches = [];
@@ -220,8 +205,8 @@ export class BatchesComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started || this.datatableOptions.started,
-                    ended: params.ended || this.datatableOptions.ended,
+                    started: this.datatableOptions.started || params.started,
+                    ended: this.datatableOptions.ended || params.ended,
                     duration: params.duration ? params.duration : null,
                     recipe_type_id: params.recipe_type_id ?
                         Array.isArray(params.recipe_type_id) ?
