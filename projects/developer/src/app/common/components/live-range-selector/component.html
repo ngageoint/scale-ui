@@ -4,13 +4,12 @@
             <label class="ui-inputgroup-addon" for="date-range-live">
                 <i class="fa live-range-icon"
                    [ngClass]="liveRangeIconClass"
-                   [pTooltip]="isLiveMode ? 'Refreshing every 10 seconds' : 'No live filter applied'" tooltipPosition="bottom"></i>
+                   pTooltip="Refreshing every 10 seconds" tooltipPosition="bottom"></i>
                 Live range
             </label>
             <p-dropdown [options]="dateRangeOptions" [(ngModel)]="liveRange"
                         (onChange)="onLiveRangeChange()"
-                        inputId="date-range-live"
-                        [showClear]="!liveRangeOnly">
+                        inputId="date-range-live">
             </p-dropdown>
         </div>
     </div>
