@@ -80,9 +80,9 @@ export class TemporalFilterComponent implements OnInit {
      * @param hours number of hours prior to now for the start date
      */
     private selectRange(hours: number): void {
-        const now = moment.utc();
-        this.startDate = UTCDates.localDateToUTC(now.clone().subtract(hours, 'hour').toDate());
-        this.endDate = UTCDates.localDateToUTC(this.endDate = now.toDate());
+        const now = moment();
+        this.startDate = UTCDates.utcDateToLocal(now.clone().subtract(hours, 'hour').toDate());
+        this.endDate = UTCDates.utcDateToLocal(now.toDate());
         this.onDateFilterApply();
     }
 
