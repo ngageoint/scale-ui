@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { MenuItem } from 'primeng/api';
-import 'rxjs/add/observable/timer';
 import * as moment from 'moment';
 import { isNil } from 'lodash';
 
