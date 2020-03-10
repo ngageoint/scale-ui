@@ -42,10 +42,6 @@
     .live-range-active {
         animation:greenBlinking 1.5s infinite;
     }
-
-    .live-range-error {
-        animation:redBlinking 1.5s infinite;
-    }
 }
 
 @media screen and (max-width: 858px) {
@@ -58,12 +54,6 @@
         margin-top: 5px !important;
         margin-right: 5px !important;
     }
-}
-
-@keyframes redBlinking{
-    0%{     color: #777;    }
-    50%{    color: var(--red); }
-    100%{   color: #777;    }
 }
 
 @keyframes greenBlinking{
