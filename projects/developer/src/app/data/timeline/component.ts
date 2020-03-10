@@ -44,6 +44,13 @@ export class TimelineComponent implements OnInit {
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
     get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
 
+     get yearRange(): string {
+        const now = moment();
+        const start = now.clone().subtract(20, 'y').year();
+        const end = now.clone().add(5, 'y').year();
+        return `${start}:${end}`;
+    }
+
     constructor(
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
@@ -176,12 +183,36 @@ export class TimelineComponent implements OnInit {
     onTypesClick() {
         this.revisionOptions = [];
         _.forEach(this.selectedFilters, recipe => {
-            this.revisionOptions.push({
-                label: `${recipe.title} rev ${recipe.revision_num}`,
-                value: recipe
-            });
+            this.recipeTypesApiService.getRecipeTypeRev(recipe.name).subscribe(data => {
+                console.log(data);
+                _.forEach(data.results, filter => {
+                    this.revisionOptions.push({
+                        label: `${recipe.title} rev ${recipe.revision_num}`,
+                        value: recipe
+                    });
+                });
+            //     this.dataTypesLoading = false;
+            //     this.recipeTypes = data.results;
+            //     _.forEach(this.recipeTypes, recipeType => {
+            //         this.filterOptions.push({
+            //             label: `${recipeType.title}`,
+            //             value: recipeType
+            //         });
+            //     });
+            //     // this.revisionOptions.push({
+            //     //     label: ['Landsat rev 1', 'Landsat rev 2', 'Landsat rev 3'],
+            //     //     data: [1, 2, 3]
+            //     // });
+            //     this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
+            // if (_.find(, recipe)) {
+            //     this.revisionOptions.push({
+            //         label: `${recipe.title} rev ${recipe.revision_num}`,
+            //         value: recipe
+            //     });
+            // }
         });
         this.enableButton();
+        });
     }
     onUpdateChartClick()  {
         this.createTimeline(this.selectedFilters, this.selectedDataTypeOption);

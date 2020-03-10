@@ -1,0 +1,172 @@
+{
+    "count": 14,
+    "next": null,
+    "previous": null,
+    "results":[
+        {
+            "job_type_id": 1, 
+            "name": "landsat8-parse", 
+            "title": "Landsat 8 Parse",
+            "version": "1.0.0", 
+            "results": [
+               {"date": "2020-01-01", "count": 124},
+               {"date": "2020-01-03", "count": 3},
+               {"date": "2020-01-04", "count": 32},
+               {"date": "2020-01-05", "count": 234},
+               {"date": "2020-01-07", "count": 35}
+            ]
+        },{
+            "job_type_id": 2, 
+            "name": "sam", 
+            "title": "Spectral Angle Mapper",
+            "version": "1.0.0", 
+            "results": [
+               {"date": "2020-01-01", "count": 13},
+               {"date": "2020-01-03", "count": 5},
+               {"date": "2020-01-04", "count": 56},
+               {"date": "2020-01-05", "count": 23},
+               {"date": "2020-01-07", "count": 34}
+            ]
+        },{
+            "job_type_id": 3, 
+            "name": "scm", 
+            "title": "Spectral Correlation Mapper",
+            "version": "1.0", 
+            "results": [
+               {"date": "2020-01-04", "count": 56},
+               {"date": "2020-01-05", "count": 23},
+               {"date": "2020-01-07", "count": 34},
+               {"date": "2020-01-08", "count": 13},
+               {"date": "2020-01-09", "count": 5}
+            ]
+        },{
+            "job_type_id": 4, 
+            "name": "cem", 
+            "title": "Constrained Energy Minimization",
+            "version": "1.0", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7}
+            ]
+        },{
+            "job_type_id": 5, 
+            "name": "wv2-parse", 
+            "title": "WorldView-2 Parse",
+            "version": "1.0.1", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7}
+            ]
+        },{
+            "job_type_id": 6, 
+            "name": "wv2-atmosphere-corr", 
+            "title": "WorldView-2 Atmospheric Correction",
+            "version": "1.0.1", 
+            "results": [
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 7, 
+            "name": "landsat8-atmos-corr", 
+            "title": "Landsat 8 Atmospheric Correction",
+            "version": "2.1.9", 
+            "results": [
+                {"date": "2020-01-07", "count": 7},
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 8, 
+            "name": "landsat8-ortho", 
+            "title": "Landsat 8 Ortho (OSSIM)",
+            "version": "2.0", 
+            "results": [
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 9, 
+            "name": "wv2-ortho", 
+            "title": "WorldView-2 Rigorous Orthorectification",
+            "version": "2.0", 
+            "results": [
+                {"date": "2020-01-07", "count": 7},
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 10, 
+            "name": "export-shp", 
+            "title": "Export Shapefile",
+            "version": "2.0", 
+            "results": [
+                {"date": "2020-01-07", "count": 7},
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 11, 
+            "name": "export-kml", 
+            "title": "Export KML",
+            "version": "1.5", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-07", "count": 7},
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 12, 
+            "name": "caffe-aircraft-detection", 
+            "title": "Caffe Aircraft Detection",
+            "version": "1.0", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 13, 
+            "name": "no-input", 
+            "title": "No Interface",
+            "version": "1.0.0", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 14, 
+            "name": "optional-json", 
+            "title": "Optonal JSON Input",
+            "version": "1.0.0", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        },{
+            "job_type_id": 15, 
+            "name": "output-json", 
+            "title": "Output JSON",
+            "version": "1.0.0", 
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-09", "count": 7},
+                {"date": "2020-01-10", "count": 7}
+            ]
+        }
+    ]
+}

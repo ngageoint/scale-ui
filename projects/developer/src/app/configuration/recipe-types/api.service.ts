@@ -92,6 +92,13 @@ export class RecipeTypesApiService {
             );
     }
 
+    getRecipeTypeRev(name: string): Observable<any> {
+        return this.http.get<RecipeType>(`${this.apiPrefix}/recipe-types/${name}/revisions`)
+            .pipe(
+                catchError(DataService.handleError)
+            );
+    }
+
     editRecipeType(name: string, recipeType: any): Observable<any> {
         return this.http.patch<any>(`${this.apiPrefix}/recipe-types/${name}/`, recipeType)
             .pipe(
