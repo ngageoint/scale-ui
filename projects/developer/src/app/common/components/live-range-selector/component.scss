@@ -40,7 +40,7 @@
     }
 
     .live-range-active {
-        animation:greenBlinking 1.5s infinite;
+        animation:greenBlinking 0.75s alternate ease-in-out infinite;
     }
 }
 
@@ -57,7 +57,6 @@
 }
 
 @keyframes greenBlinking{
-    0%{     color: #777;    }
-    50%{    color: var(--green); }
-    100%{   color: #777;    }
+    from { color: #777; }
+    to {   color: var(--green); }
 }
