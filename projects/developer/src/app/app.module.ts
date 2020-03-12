@@ -105,6 +105,7 @@ import { StatusComponent } from './navbar/status/component';
 import { StrikesComponent } from './system/strikes/component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { SystemStatusComponent } from './system/status/component';
+import { LiveRangeSelectorComponent } from './common/components/live-range-selector/component';
 import { TemporalFilterComponent } from './common/components/temporal-filter/component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { TimelineComponent } from './data/timeline/component';
@@ -173,6 +174,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         SystemStatusComponent,
         TimelineComponent,
         WorkspacesComponent,
+        LiveRangeSelectorComponent,
         TemporalFilterComponent,
         BatchWorkflowComponent,
         CreateDatasetComponent,

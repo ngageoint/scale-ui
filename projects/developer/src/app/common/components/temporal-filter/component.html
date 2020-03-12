@@ -1,41 +1,57 @@
-<div class="temporal-filter flexed" [ngClass]="{'spaced': !liveRangeOnly}">
-    <ng-container *ngIf="!liveRangeOnly">
-        <div class="ui-inputgroup">
-            <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
-            <p-calendar [(ngModel)]="startDate" inputId="date-range-start" showButtonBar="true"
-                        panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
-                        dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
-                        showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
-        </div>
-
-        <div class="ui-inputgroup">
-            <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
-            <p-calendar [(ngModel)]="endDate" inputId="date-range-end" showButtonBar="true"
-                        panelStyleClass="temporalDateFilter" [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
-                        dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange"
-                        showTime="true" hourFormat="24" [showSeconds]="true"></p-calendar>
-        </div>
-
-        <button pButton class="temporal-filter__date-filter-btn apply-"
-                [ngClass]="{'ui-button-primary': !isLiveMode, 'ui-button-secondary': isLiveMode}" label="Apply filter"
-                (click)="onDateFilterApply()"
-                [disabled]="!startDate || !endDate || !isValid"
-                pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
-    </ng-container>
-
-    <div class="temporal-filter__date-filter-dropdown">
-        <div class="ui-inputgroup">
-            <label class="ui-inputgroup-addon" for="date-range-live">
-                <i class="fa live-range-icon"
-                   [ngClass]="liveRangeIconClass"
-                   [pTooltip]="isLiveMode ? 'Refreshing every 10 seconds' : 'No live filter applied'" tooltipPosition="bottom"></i>
-                Live range
-            </label>
-            <p-dropdown [options]="dateRangeOptions" [(ngModel)]="liveRange"
-                        (onChange)="onLiveRangeChange()"
-                        inputId="date-range-live"
-                        [showClear]="!liveRangeOnly">
-            </p-dropdown>
-        </div>
+<div class="temporal-filter flexed spaced">
+    <div class="ui-inputgroup" [ngClass]="{'highlight': showHighlight}">
+        <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
+        <p-calendar [(ngModel)]="startDate"
+                    (ngModelChange)="onStartChange($event)"
+                    [defaultDate]="defaultDate"
+                    inputId="date-range-start"
+                    showButtonBar="true"
+                    panelStyleClass="temporalDateFilter"
+                    [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
+                    dateFormat="yy/mm/dd"
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    [yearRange]="yearRange"
+                    showTime="true"
+                    hourFormat="24"
+                    [showSeconds]="true"></p-calendar>
+        <span class="ui-inputgroup-addon">Z</span>
     </div>
+
+    <div class="ui-inputgroup" [ngClass]="{'highlight': showHighlight}">
+        <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
+        <p-calendar [(ngModel)]="endDate"
+                    (ngModelChange)="onEndChange($event)"
+                    [defaultDate]="defaultDate"
+                    inputId="date-range-end"
+                    showButtonBar="true"
+                    panelStyleClass="temporalDateFilter"
+                    [inputStyleClass]="isValid ? '' : 'ng-dirty ng-invalid'"
+                    dateFormat="yy/mm/dd"
+                    [monthNavigator]="true"
+                    [yearNavigator]="true"
+                    [yearRange]="yearRange"
+                    showTime="true"
+                    hourFormat="24"
+                    [showSeconds]="true"></p-calendar>
+        <span class="ui-inputgroup-addon">Z</span>
+    </div>
+
+    <div class="ui-inputgroup"
+         pTooltip="Apply date range" showDelay="300" tooltipPosition="bottom"
+    >
+        <button type="button"
+                pButton
+                *ngFor="let dateRangeOption of dateRangeOptions"
+                [label]="dateRangeOption.label"
+                class="ui-button-secondary"
+                [disabled]="loading"
+                (click)="selectRange(dateRangeOption.value)"></button>
+    </div>
+
+    <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
+            icon="fa fa-refresh"
+            (click)="onDateFilterApply()"
+            [disabled]="!isValid || loading"
+            pTooltip="Reload with selected filters" showDelay="300" tooltipPosition="bottom"></button>
 </div>

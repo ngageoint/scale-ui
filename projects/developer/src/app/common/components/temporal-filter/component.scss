@@ -11,6 +11,12 @@
     }
 
     .ui-inputgroup {
+        transition: box-shadow ease-in-out 200ms;
+
+        &.highlight {
+            box-shadow: 0 0 5px var(--scale-primary);
+        }
+
         .ui-inputgroup-addon {
             line-height:  normal;
         }
@@ -18,9 +24,12 @@
         ::ng-deep input,
         ::ng-deep .ui-dropdown {
             line-height:  normal;
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
+            border-radius: 0;
             flex: 1 1 auto;
+        }
+
+        > button:not(:last-child) {
+            border-right: 1px solid var(--navbar-light) !important;
         }
     }
 
@@ -38,26 +47,6 @@
             }
         }
     }
-    .share_btn{
-        margin-left: 10px;
-    }
-
-    .live-range-icon {
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-
-    .live-range-inactive {
-        color:grey
-    }
-
-    .live-range-active {
-        animation:greenBlinking 1.5s infinite;
-    }
-
-    .live-range-error {
-        animation:redBlinking 1.5s infinite;
-    }
 }
 
 @media screen and (max-width: 858px) {
@@ -70,16 +59,4 @@
         margin-top: 5px !important;
         margin-right: 5px !important;
     }
-}
-
-@keyframes redBlinking{
-    0%{     color: #777;    }
-    50%{    color: var(--red); }
-    100%{   color: #777;    }
-}
-
-@keyframes greenBlinking{
-    0%{     color: #777;    }
-    50%{    color: var(--green); }
-    100%{   color: #777;    }
 }
