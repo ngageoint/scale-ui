@@ -2,6 +2,7 @@
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
         <p-calendar [(ngModel)]="startDate"
+                    (ngModelChange)="onStartChange($event)"
                     [defaultDate]="defaultDate"
                     inputId="date-range-start"
                     showButtonBar="true"
@@ -20,6 +21,7 @@
     <div class="ui-inputgroup">
         <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
         <p-calendar [(ngModel)]="endDate"
+                    (ngModelChange)="onEndChange($event)"
                     [defaultDate]="defaultDate"
                     inputId="date-range-end"
                     showButtonBar="true"

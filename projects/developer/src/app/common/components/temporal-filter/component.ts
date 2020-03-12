@@ -3,6 +3,8 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { MenuItem } from 'primeng/api';
 import * as moment from 'moment';
 import { isNil } from 'lodash';
+import { Subject } from 'rxjs/Subject';
+import { debounceTime, distinctUntilChanged } from 'rxjs/internal/operators';
 
 import { UTCDates } from '../../utils/utcdates';
 
@@ -28,6 +30,10 @@ export class TemporalFilterComponent implements OnInit {
     // internal dates for this component
     startDate: Date;
     endDate: Date;
+
+    // subjects for watching when start/end input fields change
+    private startChanged: Subject<Date> = new Subject();
+    private endChanged: Subject<Date> = new Subject();
 
     // year range to show in the calendar dropdown
     get yearRange(): string {
@@ -56,6 +62,31 @@ export class TemporalFilterComponent implements OnInit {
     constructor(
         private messageService: MessageService
     ) {
+        // debounceTime - prevent sending updates too quickly
+        // distinctUntilChanged - only send updates when value has changed
+        const waitTime = 750;
+        this.startChanged
+            .pipe(debounceTime(waitTime), distinctUntilChanged())
+            .subscribe(() => this.onDateFilterApply());
+        this.endChanged
+            .pipe(debounceTime(waitTime), distinctUntilChanged())
+            .subscribe(() => this.onDateFilterApply());
+    }
+
+    /**
+     * Callback for when start calendar/input field is changed.
+     * @param date [description]
+     */
+    onStartChange(date: Date): void {
+        this.startChanged.next(date);
+    }
+
+    /**
+     * Callback for when end calendar/input field is changed.
+     * @param date [description]
+     */
+    onEndChange(date: Date): void {
+        this.startChanged.next(date);
     }
 
     /**
