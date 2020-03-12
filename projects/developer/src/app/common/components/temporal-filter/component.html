@@ -37,7 +37,9 @@
         <span class="ui-inputgroup-addon">Z</span>
     </div>
 
-    <div class="ui-inputgroup">
+    <div class="ui-inputgroup"
+         pTooltip="Apply date range" showDelay="300" tooltipPosition="bottom"
+    >
         <button type="button"
                 pButton
                 *ngFor="let dateRangeOption of dateRangeOptions"
@@ -51,5 +53,5 @@
             icon="fa fa-refresh"
             (click)="onDateFilterApply()"
             [disabled]="!isValid || loading"
-            pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
+            pTooltip="Reload with selected filters" showDelay="300" tooltipPosition="bottom"></button>
 </div>
