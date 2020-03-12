@@ -27,6 +27,10 @@
             border-radius: 0;
             flex: 1 1 auto;
         }
+
+        > button:not(:last-child) {
+            border-right: 1px solid var(--navbar-light) !important;
+        }
     }
 
     .temporal-filter__date-filter-btn, .temporal-filter__date-filter-dropdown {
