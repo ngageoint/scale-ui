@@ -1,5 +1,5 @@
 <div class="temporal-filter flexed spaced">
-    <div class="ui-inputgroup">
+    <div class="ui-inputgroup" [ngClass]="{'highlight': showHighlight}">
         <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
         <p-calendar [(ngModel)]="startDate"
                     (ngModelChange)="onStartChange($event)"
@@ -18,7 +18,7 @@
         <span class="ui-inputgroup-addon">Z</span>
     </div>
 
-    <div class="ui-inputgroup">
+    <div class="ui-inputgroup" [ngClass]="{'highlight': showHighlight}">
         <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
         <p-calendar [(ngModel)]="endDate"
                     (ngModelChange)="onEndChange($event)"
@@ -38,18 +38,18 @@
     </div>
 
     <div class="ui-inputgroup">
-        <p-menu #dateRangeMenu [popup]="true" [model]="dateRangeOptions"></p-menu>
-
         <button type="button"
                 pButton
-                icon="fa fa-calendar"
+                *ngFor="let dateRangeOption of dateRangeOptions"
+                [label]="dateRangeOption.label"
                 class="ui-button-secondary"
-                (click)="dateRangeMenu.toggle($event)"></button>
-
-        <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
-                icon="fa fa-refresh"
-                (click)="onDateFilterApply()"
-                [disabled]="!isValid || loading"
-                pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
+                [disabled]="loading"
+                (click)="selectRange(dateRangeOption.value)"></button>
     </div>
+
+    <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
+            icon="fa fa-refresh"
+            (click)="onDateFilterApply()"
+            [disabled]="!isValid || loading"
+            pTooltip="Start date must be before end date" [tooltipDisabled]="isValid"></button>
 </div>

@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
-import { MenuItem } from 'primeng/api';
 import * as moment from 'moment';
 import { isNil } from 'lodash';
 import { Subject } from 'rxjs/Subject';
@@ -22,7 +21,7 @@ export class TemporalFilterComponent implements OnInit {
     @Output() updated: EventEmitter<{start: string, end: string}> = new EventEmitter();
 
     // options for date range selection
-    dateRangeOptions: MenuItem[];
+    dateRangeOptions: any;
 
     // initial date to show in the calendar
     defaultDate: Date;
@@ -34,6 +33,8 @@ export class TemporalFilterComponent implements OnInit {
     // subjects for watching when start/end input fields change
     private startChanged: Subject<Date> = new Subject();
     private endChanged: Subject<Date> = new Subject();
+
+    showHighlight = false;
 
     // year range to show in the calendar dropdown
     get yearRange(): string {
@@ -109,23 +110,25 @@ export class TemporalFilterComponent implements OnInit {
      * Sets a range using now for the end date and offsetting by the number of hours.
      * @param hours number of hours prior to now for the start date
      */
-    private selectRange(hours: number): void {
+    selectRange(hours: number): void {
         const now = moment();
         this.startDate = UTCDates.utcDateToLocal(now.clone().subtract(hours, 'hour').toDate());
         this.endDate = UTCDates.utcDateToLocal(now.toDate());
         this.onDateFilterApply();
+
+        // highlight the start/end inputs
+        this.showHighlight = true;
+        setTimeout(() => {
+            this.showHighlight = false;
+        }, 400);
     }
 
     ngOnInit() {
         // setup date range options
         this.dateRangeOptions = [
-            { label: 'Last hour', command: () => { this.selectRange(1); } },
-            { label: 'Last 6 hours', command: () => { this.selectRange(6); } },
-            { label: 'Last 12 hours', command: () => { this.selectRange(12); } },
-            { label: 'Last day', command: () => { this.selectRange(24); } },
-            { label: 'Last 3 days', command: () => { this.selectRange(24 * 3); } },
-            { label: 'Last 7 days', command: () => { this.selectRange(24 * 7); } },
-            { label: 'Last 30 days', command: () => { this.selectRange(24 * 30); } },
+            { label: '1 hour', value: 1 },
+            { label: '12 hours', value: 12 },
+            { label: '24 hours', value: 24 },
         ];
 
         // set the default date in utc

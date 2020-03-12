@@ -11,6 +11,12 @@
     }
 
     .ui-inputgroup {
+        transition: box-shadow ease-in-out 200ms;
+
+        &.highlight {
+            box-shadow: 0 0 5px var(--scale-primary);
+        }
+
         .ui-inputgroup-addon {
             line-height:  normal;
         }
