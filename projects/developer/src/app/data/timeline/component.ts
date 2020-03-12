@@ -9,6 +9,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { RecipesApiService } from '../../processing/recipes/api.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
+import { TimelineApiService } from './api.service';
 import { RecipesDatatable } from '../../processing/recipes/datatable.model';
 import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
@@ -38,6 +39,7 @@ export class TimelineComponent implements OnInit {
     filterOptions = [];
     revisionOptions = [];
     selectedFilters = [];
+    selectedRevs = [];
     showChart: boolean;
 
     // utc versions of internal start and end dates
@@ -55,44 +57,13 @@ export class TimelineComponent implements OnInit {
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
         private jobTypesApiService: JobTypesApiService,
-        private recipesApiService: RecipesApiService,
-        private jobsApiService: JobsApiService
+        private timelineApiService: TimelineApiService,
     ) {}
 
     // init chart data
-    private createTimeline(filterSelected, type) {
+    private createTimeline(type) {
         const idList = [];
-        _.forEach(filterSelected, id => {
-            idList.push(id.id);
-        });
-        console.log(idList);
-        const params = {
-            started: this.utcStartDate.toISOString(),
-            ended: this.utcEndDate.toISOString()
-        };
-        if (type === 'Recipe Types') {
-            this.recipesApiService.getRecipes(this.datatableOptions).subscribe(data => {
-                console.log(data);
-            }, err => {
-                console.log(err);
-                this.dataTypesLoading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-            });
-        } else if (type === 'Job Types') {
-            this.jobsApiService.getJobs(params).subscribe(data => {
-                console.log(data);
-            }, err => {
-                console.log(err);
-                this.dataTypesLoading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-            });
-        }
-        // this.datatableOptions = Object.assign(this.datatableOptions, {
-        //     started: this.startDate,
-        //     ended: this.endDate,
-        //     id: idList
-        // });
-
+        const revList = [];
         this.showChart = true;
         this.showFilters = false;
         this.data = {
@@ -100,11 +71,68 @@ export class TimelineComponent implements OnInit {
             datasets: []
         };
 
+        _.forEach(this.selectedFilters, id => {
+            idList.push(id.id);
+        });
+
+        console.log(idList);
+        if (type === 'Recipe Types') {
+            _.forEach(this.selectedRevs, rev => {
+                revList.push(rev.revision_num);
+            });
+            const params = {
+                started: this.utcStartDate.toISOString(),
+                ended: this.utcEndDate.toISOString(),
+                recipe_type_id: idList,
+                rev: revList
+            };
+            this.timelineApiService.getRecipeTypeDetails(params).subscribe(data => {
+                console.log(data);
+                _.forEach(data.results, dates => {
+
+                });
+
+            }, err => {
+                console.log(err);
+                this.dataTypesLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+            this.data.datasets.push({
+                data: [
+                    ['2020-01-01', '2020-01-02'],
+                    ['2020-01-04', '2020-01-05']
+                ]
+            });
+            this.data.datasets.push({
+                data: [
+                    ['2020-01-01', '2020-01-05'],
+                    ['2020-01-07', '2020-01-08']
+                ]
+            });
+        } else if (type === 'Job Types') {
+            _.forEach(this.selectedRevs, rev => {
+                revList.push(rev.version);
+            });
+            const params = {
+                started: this.utcStartDate.toISOString(),
+                ended: this.utcEndDate.toISOString(),
+                job_type_id: idList,
+                rev: revList
+            };
+            this.timelineApiService.getJobTypeDetails(params).subscribe(data => {
+                console.log(data);
+            }, err => {
+                console.log(err);
+                this.dataTypesLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+        }
+
         // create y-axis labels
-        _.forEach(this.selectedFilters, filter => {
+        _.forEach(this.selectedRevs, filter => {
             const label = this.selectedDataTypeOption === 'Job Types' ?
                 `${filter.title} v${filter.version}` :
-                `${filter.title} rev ${filter.revision_num}`;
+                `${filter.recipe_type.title} rev ${filter.revision_num}`;
             this.data.labels.push(label);
         });
 
@@ -167,10 +195,6 @@ export class TimelineComponent implements OnInit {
                         value: recipeType
                     });
                 });
-                // this.revisionOptions.push({
-                //     label: ['Landsat rev 1', 'Landsat rev 2', 'Landsat rev 3'],
-                //     data: [1, 2, 3]
-                // });
                 this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
             }, err => {
                 console.log(err);
@@ -182,40 +206,36 @@ export class TimelineComponent implements OnInit {
 
     onTypesClick() {
         this.revisionOptions = [];
-        _.forEach(this.selectedFilters, recipe => {
-            this.recipeTypesApiService.getRecipeTypeRev(recipe.name).subscribe(data => {
-                console.log(data);
-                _.forEach(data.results, filter => {
-                    this.revisionOptions.push({
-                        label: `${recipe.title} rev ${recipe.revision_num}`,
-                        value: recipe
+        if (this.selectedDataTypeOption === 'Recipe Types') {
+            _.forEach(this.selectedFilters, recipe => {
+                this.recipeTypesApiService.getRecipeTypeRev(recipe.name).subscribe(data => {
+                    console.log(data);
+                    _.forEach(data.results, result => {
+                        this.revisionOptions.push({
+                            label: `${result.recipe_type.title} rev ${result.revision_num}`,
+                            value: result
+                        });
                     });
-                });
-            //     this.dataTypesLoading = false;
-            //     this.recipeTypes = data.results;
-            //     _.forEach(this.recipeTypes, recipeType => {
-            //         this.filterOptions.push({
-            //             label: `${recipeType.title}`,
-            //             value: recipeType
-            //         });
-            //     });
-            //     // this.revisionOptions.push({
-            //     //     label: ['Landsat rev 1', 'Landsat rev 2', 'Landsat rev 3'],
-            //     //     data: [1, 2, 3]
-            //     // });
-            //     this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
-            // if (_.find(, recipe)) {
-            //     this.revisionOptions.push({
-            //         label: `${recipe.title} rev ${recipe.revision_num}`,
-            //         value: recipe
-            //     });
-            // }
+                    this.selectedRevs = this.revisionOptions;
+            });
+         });
+        } else if (this.selectedDataTypeOption === 'Job Types' ) {
+            _.forEach(this.selectedFilters, job => {
+                this.jobTypesApiService.getJobTypeVersions(job.name).subscribe(data => {
+                    _.forEach(data.results, result => {
+                        this.revisionOptions.push({
+                            label: `${result.title} rev ${result.version}`,
+                            value: result
+                        });
+                    });
+                    this.selectedRevs = this.revisionOptions;
+            });
         });
+        }
         this.enableButton();
-        });
     }
     onUpdateChartClick()  {
-        this.createTimeline(this.selectedFilters, this.selectedDataTypeOption);
+        this.createTimeline(this.selectedDataTypeOption);
     }
 
     ngOnInit() {

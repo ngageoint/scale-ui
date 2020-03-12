@@ -1,0 +1,73 @@
+{
+    "count": 6,
+    "next": null,
+    "previous": null,
+    "results":[
+        {
+            "recipe_type_id": 1, 
+            "name": "landsat8", 
+            "title": "Landsat8",
+            "revision_num": 1,
+            "results": [
+               {"date": "2020-01-01", "count": 124},
+               {"date": "2020-01-03", "count": 3}
+            ]
+        },{
+            "recipe_type_id": 2, 
+            "name": "spectral", 
+            "title": "Spectral Analysis",
+            "revision_num": 1,
+            "results": [
+               {"date": "2020-01-01", "count": 13},
+               {"date": "2020-01-03", "count": 5},
+               {"date": "2020-01-04", "count": 56},
+               {"date": "2020-01-05", "count": 23},
+               {"date": "2020-01-07", "count": 34}
+            ]
+        },{
+            "recipe_type_id": 3, 
+            "name": "worldview", 
+            "title": "Worldview",
+            "revision_num": 1,
+            "results": [
+               {"date": "2020-01-04", "count": 56},
+               {"date": "2020-01-05", "count": 23},
+               {"date": "2020-01-07", "count": 34},
+               {"date": "2020-01-08", "count": 13},
+               {"date": "2020-01-09", "count": 5}
+            ]
+        },{
+            "recipe_type_id": 4, 
+            "name": "oil-detection", 
+            "title": "Oil Detection",
+            "revision_num": 1,
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7}
+            ]
+        },{
+            "recipe_type_id": 5, 
+            "name": "caffe-aircraft-detection", 
+            "title": "Caffe Aircraft Detection",
+            "revision_num": 1,
+            "results": [
+                {"date": "2020-01-01", "count": 5},
+                {"date": "2020-01-02", "count": 7},
+                {"date": "2020-01-08", "count": 7},
+                {"date": "2020-01-09", "count": 7}
+            ]
+        }{
+            "recipe_type_id": 6, 
+            "name": "landsat8", 
+            "title": "Landsat8",
+            "revision_num": 2,
+            "results": [
+               {"date": "2020-01-04", "count": 32},
+               {"date": "2020-01-05", "count": 234},
+               {"date": "2020-01-07", "count": 35},
+               {"date": "2020-01-08", "count": 7},
+               {"date": "2020-01-09", "count": 7}
+            ]
+        }
+    ]
+}

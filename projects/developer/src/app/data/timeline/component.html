@@ -13,8 +13,6 @@ Visualize the created/deprecated history of job types or recipe types.
                 panelStyleClass="timelineDateFilter" appendTo="body" [showIcon]="true"
                 dateFormat="yy/mm/dd" [monthNavigator]="true" [yearNavigator]="true" [yearRange]="yearRange">
     </p-calendar>
-
-
     <label for="date-end">To</label>
     <p-calendar [(ngModel)]="endDate" inputId="date-end" showButtonBar="true"
                 panelStyleClass="timelineDateFilter" appendTo="body" [showIcon]="true"
@@ -29,13 +27,13 @@ Visualize the created/deprecated history of job types or recipe types.
     </p-dropdown>
     <div *ngIf="selectedDataTypeOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" maxSelectedLabels="2"
-                       [style]="{'width':'100%'}" selectionLimit="5" (onChange)="onTypesClick()"></p-multiSelect>
+        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" 
+                       [style]="{'width':'100%'}" (onChange)="onTypesClick()"></p-multiSelect>
     </div>
     <div *ngIf="selectedDataTypeOption">
         <label>Revisions: </label>
-        <p-multiSelect [options]="revisionOptions" [(ngModel)]="selectedFilters" maxSelectedLabels="2"
-                       [style]="{'width':'100%'}" selectionLimit="5" (onChange)="enableButton()"></p-multiSelect>
+        <p-multiSelect [options]="revisionOptions" [(ngModel)]="selectedRevs"
+                       [style]="{'width':'100%'}" (onChange)="enableButton()"></p-multiSelect>
     </div>
     <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
             (click)="onUpdateChartClick()" [disabled]="selectedFilters.length === 0"></button>

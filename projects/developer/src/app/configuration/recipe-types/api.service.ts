@@ -68,16 +68,6 @@ export class RecipeTypesApiService {
             );
     }
 
-    getTimelineDetails(params?: any): Observable<any> {
-        return this.http.get<RecipeType>(`${this.apiPrefix}/recipe-types/timeline/`, { params: params })
-            .pipe(
-                map(response => {
-                    return RecipeType.transformer(response);
-                }),
-                catchError(DataService.handleError)
-            );
-    }
-
     validateRecipeType(recipeType: any): Observable<any> {
         return this.http.post<any>(`${this.apiPrefix}/recipe-types/validation/`, recipeType)
             .pipe(
