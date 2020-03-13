@@ -16,6 +16,7 @@ import {
 import { onlyUnique } from '../../../../common/utils/filters';
 import { ValidationMessages } from '../../../../common/utils/CustomValidation';
 import * as _ from 'lodash';
+import { ApiResults } from 'projects/developer/src/app/common/models/api-results.model';
 
 @Component({
     selector: 'dev-create-dataset',
@@ -44,6 +45,7 @@ export class CreateDatasetComponent implements OnInit {
 
     datasetFileList: FileModel[] = [];
     filteredDatasetFileList: FileModel[] = [];
+    datasetFilesData: ApiResults;
     dataFilesFilter: any = {};
     savedDataset: any;
     searchTimeTypes: SelectItem[] = [];
@@ -362,45 +364,43 @@ export class CreateDatasetComponent implements OnInit {
     onQueryDataFilesClick() {
         // get list of files
         this.datatableLoading = true;
-        if (
-            this.form.get('startDate').valid &&
-            this.form.get('endDate').valid
-        ) {
+        if (this.form.get('startDate').valid && this.form.get('endDate').valid) {
             this.fileService
-                .getFiles(this.createQueryOptions())
-                .subscribe(data => {
-                    this.datasetFileList = data.results;
-                    this.filteredDatasetFileList = data.results;
+            .getFiles(this.createQueryOptions())
+            .subscribe(data => {
+                this.datasetFilesData = data;
+                this.datasetFileList = data.results;
+                this.filteredDatasetFileList = data.results;
 
-                    this.mediaTypeOptions = this.datasetFileList
-                        .map(file => file.media_type)
-                        .filter(onlyUnique)
-                        .map(mediaType => ({
-                            label: mediaType,
-                            value: mediaType
-                        }));
+                this.mediaTypeOptions = this.datasetFileList
+                    .map(file => file.media_type)
+                    .filter(onlyUnique)
+                    .map(mediaType => ({
+                        label: mediaType,
+                        value: mediaType
+                    }));
 
-                    this.locationOptions = []
-                        .concat(...data.results.map(file => file.countries))
-                        .filter(onlyUnique)
-                        .map(country => ({ label: country, value: country }));
+                this.locationOptions = []
+                    .concat(...data.results.map(file => file.countries))
+                    .filter(onlyUnique)
+                    .map(country => ({ label: country, value: country }));
 
-                    this.recipeTypeOptions = data.results
-                        .map(file => file.recipe_type)
-                        .filter((obj, pos, arr) => {
-                            return (
-                                arr
-                                    .map(mapObj => mapObj['id'])
-                                    .indexOf(obj['id']) === pos
-                            );
-                        })
-                        .map(rt => ({
-                            label: `${rt.title} v${rt.revision_num}`,
-                            value: rt
-                        }));
+                this.recipeTypeOptions = data.results
+                    .map(file => file.recipe_type)
+                    .filter((obj, pos, arr) => {
+                        return (
+                            arr
+                                .map(mapObj => mapObj['id'])
+                                .indexOf(obj['id']) === pos
+                        );
+                    })
+                    .map(rt => ({
+                        label: `${rt.title} v${rt.revision_num}`,
+                        value: rt
+                    }));
 
-                    this.datatableLoading = false;
-                });
+                this.datatableLoading = false;
+            });
         } else {
             const values = this.form.value;
             this.form.patchValue(values);
@@ -409,7 +409,7 @@ export class CreateDatasetComponent implements OnInit {
             this.form.get('startDate').markAsDirty();
             this.form.get('endDate').markAsDirty();
             this.form.get('searchTime').markAsDirty();
-            this.form.updateValueAndValidity({ emitEvent: true });
+            this.form.updateValueAndValidity();
         }
     }
 
