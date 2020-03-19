@@ -45,8 +45,9 @@
                                 </ul>
                             </div>
                         </p-header>
-                        <ng-template let-jobType p-template="item">
-                            {{ jobType.label }}
+                        <ng-template let-jobType pTemplate="item">
+                            <span *ngIf="jobType.icon" [class]="jobType.icon"></span>
+                            {{ jobType.label  + 'hh' }}
                         </ng-template>
                     </p-multiSelect>
                 </div>

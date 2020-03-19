@@ -14,6 +14,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
+import { DashboardJobsService } from '../../dashboard/jobs.service';
 
 
 @Component({
@@ -97,7 +98,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
         public breakpointObserver: BreakpointObserver,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private dashboardJobsService: DashboardJobsService
     ) {}
 
     private updateData() {
@@ -147,10 +149,18 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.jobTypes = data.results;
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
+                // check if the job type is saved in the favorites
+                const isFavorite = _.findIndex(
+                    this.dashboardJobsService.favorites,
+                    { name: jobType.name, version: jobType.version }
+                ) !== -1;
+
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.version,
-                    value: jobType
+                    value: jobType,
+                    icon: isFavorite ? 'fa fa-star' : ''
                 });
+
                 if (
                     (_.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
                     _.indexOf(this.datatableOptions.job_type_version, jobType.version) >= 0) &&
