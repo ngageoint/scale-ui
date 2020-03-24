@@ -114,6 +114,7 @@ import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batc
 import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
 import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
 import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
+import { TruncatePipe } from './common/pipes/truncate.pipe';
 
 // import after primeng component to ensure timeline plugin attached to correct chart.js instance
 import 'chartjs-chart-timeline/src/timeline';
@@ -179,7 +180,8 @@ const appInitializer = (appConfig: AppConfigService) => {
         BatchWorkflowComponent,
         CreateDatasetComponent,
         CreateBatchComponent,
-        RunBatchComponent
+        RunBatchComponent,
+        TruncatePipe
     ],
     imports: [
         AccordionModule,
