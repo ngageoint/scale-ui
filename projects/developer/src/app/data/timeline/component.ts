@@ -66,30 +66,48 @@ export class TimelineComponent implements OnInit {
         const revList = [];
         this.showChart = true;
         this.showFilters = false;
+        const duration = this.calculateDays(this.startDate, this.endDate);
+
         this.data = {
             labels: [],
-            datasets: []
+            datasets: {}
         };
 
         _.forEach(this.selectedFilters, id => {
             idList.push(id.id);
         });
+        _.forEach(this.selectedRevs, rev => {
+            revList.push(rev.revision_num);
+        });
+        const params = {
+            started: this.utcStartDate.toISOString(),
+            ended: this.utcEndDate.toISOString(),
+            id: idList,
+            rev: revList
+        };
 
-        console.log(idList);
         if (type === 'Recipe Types') {
-            _.forEach(this.selectedRevs, rev => {
-                revList.push(rev.revision_num);
-            });
-            const params = {
-                started: this.utcStartDate.toISOString(),
-                ended: this.utcEndDate.toISOString(),
-                recipe_type_id: idList,
-                rev: revList
-            };
             this.timelineApiService.getRecipeTypeDetails(params).subscribe(data => {
                 console.log(data);
                 _.forEach(data.results, dates => {
-
+                    let comparedDate = this.startDate;
+                    const tempDates = [];
+                    _.forEach(dates.results, date => {
+                        this.data.datasets.push({
+                            data: []
+                        });
+                        for (let i = 0; i <= duration; i++) {
+                            const comparedString = comparedDate.toISOString().substr(0, 10);
+                            if (date.date === comparedString ) {
+                                tempDates.push(date.date);
+                                comparedDate = this.addDays(comparedDate, 1);
+                                console.log(tempDates);
+                            } else {
+                                comparedDate = this.addDays(comparedDate, 1);
+                            }
+                            this.data.datasets.data.push(tempDates);
+                        }
+                    });
                 });
 
             }, err => {
@@ -97,28 +115,7 @@ export class TimelineComponent implements OnInit {
                 this.dataTypesLoading = false;
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
-            this.data.datasets.push({
-                data: [
-                    ['2020-01-01', '2020-01-02'],
-                    ['2020-01-04', '2020-01-05']
-                ]
-            });
-            this.data.datasets.push({
-                data: [
-                    ['2020-01-01', '2020-01-05'],
-                    ['2020-01-07', '2020-01-08']
-                ]
-            });
         } else if (type === 'Job Types') {
-            _.forEach(this.selectedRevs, rev => {
-                revList.push(rev.version);
-            });
-            const params = {
-                started: this.utcStartDate.toISOString(),
-                ended: this.utcEndDate.toISOString(),
-                job_type_id: idList,
-                rev: revList
-            };
             this.timelineApiService.getJobTypeDetails(params).subscribe(data => {
                 console.log(data);
             }, err => {
@@ -129,6 +126,7 @@ export class TimelineComponent implements OnInit {
         }
 
         // create y-axis labels
+        this.selectedRevs = this.selectedRevs.reverse();
         _.forEach(this.selectedRevs, filter => {
             const label = this.selectedDataTypeOption === 'Job Types' ?
                 `${filter.title} v${filter.version}` :
@@ -144,18 +142,6 @@ export class TimelineComponent implements OnInit {
             text: chartTitle,
             fontSize: 16
         };
-
-        // calculate duration between created date and deprecated date for each recipe type or job type selected
-        // _.forEach(data, d => {
-        //     // if type has not been deprecated, use the current date
-        //     const deprecated = d.deprecated ? d.deprecated : moment.utc().toISOString();
-        //     console.log(d.created)
-        //     this.data.datasets.push({
-        //         data: [
-        //             [d.created, deprecated]
-        //         ]
-        //     });
-        // });
     }
 
     // enable or disable button based on selected type(s)
@@ -216,7 +202,6 @@ export class TimelineComponent implements OnInit {
                             value: result
                         });
                     });
-                    this.selectedRevs = this.revisionOptions;
             });
          });
         } else if (this.selectedDataTypeOption === 'Job Types' ) {
@@ -228,7 +213,6 @@ export class TimelineComponent implements OnInit {
                             value: result
                         });
                     });
-                    this.selectedRevs = this.revisionOptions;
             });
         });
         }
@@ -289,6 +273,17 @@ export class TimelineComponent implements OnInit {
             responsive: true,
             maintainAspectRatio: false
         };
+    }
+
+    addDays(date, days) {
+        const result = new Date(date);
+        result.setDate(result.getDate() + days);
+        return result;
+    }
+
+    calculateDays(start, end) {
+        const Difference_In_Days = (end.getTime() - start.getTime()) / (1000 * 3600 * 24);
+        return Difference_In_Days;
     }
 
 }
