@@ -14,6 +14,8 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
+import { onlyUnique } from 'projects/developer/src/app/common/utils/filters';
+import { flatDeep } from '../../common/utils/ArrayUtilities';
 
 
 @Component({
@@ -32,7 +34,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     columns = [
         { field: 'job_type', header: 'Job Type' },
         { field: 'recipe', header: 'Recipe' },
-        { field: 'input', header: 'Inputs' },
+        { field: 'inputs', header: 'Inputs' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node', header: 'Node' },
@@ -45,7 +47,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     dateFormat = environment.dateFormat;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
-    jobInputs = [];
     fileName = [];
     selectedJob: Job;
     selectedJobType: any = [];
@@ -112,37 +113,26 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.datatableLoading = false;
             this.apiLoading = false;
             this.count = data.count;
-            _.forEach(data.results, result => {
-                const job = _.find(this.selectedRows, { data: { id: result.id } });
-                result.selected =  !!job;
-                console.log(result);
-                if (result.input_files) {
-                    this.fileName = [];
-                    _.forEach(result.input_files, input => {
-                        this.fileName.push(input);
-                        this.jobInputs.push( {
-                            id: result.id,
-                            input: this.fileName.toString()
-                        });
-                    });
-                }
-            });
+                data.results.forEach(result => {
+                    const job = _.find(this.selectedRows, { data: { id: result.id } });
+                    result.selected = !!job;
+                    if (result.input_files) {
+                        result.input_files = this.flattenInputFiles(result.input_files).join(', ');
+                    }
+                });
             this.jobs = Job.transformer(data.results);
-            this.jobInputs = [];
-            // _.forEach(this.jobs, job => {
-            //     this.jobsApiService.getJobInputs(job.id)
-            //     .subscribe(inputData => {
-
-            //     }, err => {
-            //         this.messageService.add({severity: 'error', summary: 'Error retrieving job outputs', detail: err.statusText});
-            //     });
-            // });
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
         });
     }
+
+    flattenInputFiles(inputFiles) {
+        const files = [].concat(Object.keys(inputFiles).map(key => inputFiles[key]));
+        return flatDeep(files, Infinity).sort().filter(onlyUnique);
+    }
+
     private updateOptions() {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d, idx) => {
             if (idx === 'started' || idx === 'ended') {
@@ -190,13 +180,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
     }
 
-    makeTooltip() {
-    let temp = ``;
-        _.forEach(this.fileName, name  => {
-            temp += `${name}, `;
-        });
-
-      return temp;
+    makeTooltip(fileNames: string) {
+        return fileNames.split(', ').join('\n');
     }
 
     getUnicode(code) {
