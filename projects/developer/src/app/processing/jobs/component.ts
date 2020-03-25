@@ -14,9 +14,6 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
-import { onlyUnique } from 'projects/developer/src/app/common/utils/filters';
-import { flatDeep } from '../../common/utils/ArrayUtilities';
-
 
 @Component({
     selector: 'dev-jobs',
@@ -130,7 +127,7 @@ export class JobsComponent implements OnInit, OnDestroy {
 
     flattenInputFiles(inputFiles) {
         const files = [].concat(Object.keys(inputFiles).map(key => inputFiles[key]));
-        return flatDeep(files, Infinity).sort().filter(onlyUnique);
+        return _(files).flatMapDeep().sortedUniq();
     }
 
     private updateOptions() {

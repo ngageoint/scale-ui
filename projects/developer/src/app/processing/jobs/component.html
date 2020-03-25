@@ -92,8 +92,8 @@
                 </div>
                 <div *ngSwitchCase="'inputs'">
                     <div *ngIf="rowData.input_files">
-                        <span [tooltipStyleClass]="'max-size'" [pTooltip]="makeTooltip(rowData.input_files)">
-                            {{ rowData.input_files | truncate : 35 }}
+                        <span tooltipStyleClass="max-size" [pTooltip]="makeTooltip(rowData.input_files)">
+                            {{ rowData.input_files | truncate : 35 : true }}
                         </span>
                     </div>
                 </div>
