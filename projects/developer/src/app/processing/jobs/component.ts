@@ -16,7 +16,6 @@ import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
 import { DashboardJobsService } from '../../dashboard/jobs.service';
 
-
 @Component({
     selector: 'dev-jobs',
     templateUrl: './component.html',
@@ -33,6 +32,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     columns = [
         { field: 'job_type', header: 'Job Type' },
         { field: 'recipe', header: 'Recipe' },
+        { field: 'inputs', header: 'Inputs' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node', header: 'Node' },
@@ -45,6 +45,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     dateFormat = environment.dateFormat;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
+    fileName = [];
     selectedJob: Job;
     selectedJobType: any = [];
     selectedJobExe: JobExecution;
@@ -111,10 +112,13 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.datatableLoading = false;
             this.apiLoading = false;
             this.count = data.count;
-            _.forEach(data.results, result => {
-                const job = _.find(this.selectedRows, { data: { id: result.id } });
-                result.selected =  !!job;
-            });
+                data.results.forEach(result => {
+                    const job = _.find(this.selectedRows, { data: { id: result.id } });
+                    result.selected = !!job;
+                    if (result.input_files) {
+                        result.input_files = this.flattenInputFiles(result.input_files).join(', ');
+                    }
+                });
             this.jobs = Job.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -122,6 +126,12 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
         });
     }
+
+    flattenInputFiles(inputFiles) {
+        const files = [].concat(Object.keys(inputFiles).map(key => inputFiles[key]));
+        return _(files).flatMapDeep().sortedUniq();
+    }
+
     private updateOptions() {
         this.datatableOptions = _.pickBy(this.datatableOptions, (d, idx) => {
             if (idx === 'started' || idx === 'ended') {
@@ -175,6 +185,10 @@ export class JobsComponent implements OnInit, OnDestroy {
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
+    }
+
+    makeTooltip(fileNames: string) {
+        return fileNames.split(', ').join('\n');
     }
 
     getUnicode(code) {
