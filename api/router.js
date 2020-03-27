@@ -126,8 +126,8 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/' + apiVersion + '/recipe-types/{name}/revisions/',
-            handler: recipeTypeRev
+            path: '/mocks/' + apiVersion + '/recipe-types/{name}/revisions',
+            handler: recipeTypeRev,
         });
 
         server.route({
