@@ -70,7 +70,7 @@ export class TimelineComponent implements OnInit {
 
         this.data = {
             labels: [],
-            datasets: {}
+            datasets: []
         };
 
         _.forEach(this.selectedFilters, id => {
@@ -96,6 +96,7 @@ export class TimelineComponent implements OnInit {
                         this.data.datasets.push({
                             data: []
                         });
+                        console.log(this.data.datasets.data);
                         for (let i = 0; i <= duration; i++) {
                             const comparedString = comparedDate.toISOString().substr(0, 10);
                             if (date.date === comparedString ) {

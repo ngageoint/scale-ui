@@ -30,7 +30,7 @@ export class TimelineApiService {
     }
 
     getJobTypeDetails(params: any): Observable<ApiResults> {
-        return this.http.get<ApiResults>(`${this.apiPrefix}/timeline/recipe-types/`, { params: params })
+        return this.http.get<ApiResults>(`${this.apiPrefix}/timeline/job-types/`, { params: params })
             .pipe(
                 map(response => {
                     return ApiResults.transformer(response);

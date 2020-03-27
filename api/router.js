@@ -1,6 +1,8 @@
 var recipes = require('./handlers/recipes');
 var recipeTypes = require('./handlers/recipeTypes');
 var recipeDetails = require('./handlers/recipeDetails');
+var recipeTypeRev = require('./handlers/recipeTypeRev');
+var recipeTypeTimeline = require('./handlers/recipeTypeTimeline');
 var jobs = require('./handlers/jobs');
 var runningJobs = require('./handlers/runningJobs');
 var jobTypes = require('./handlers/jobTypes');
@@ -8,6 +10,7 @@ var jobTypesValidate = require('./handlers/jobTypesValidate');
 var jobTypesStatus = require('./handlers/jobTypesStatus');
 var jobDetails = require('./handlers/jobDetails');
 var jobTypeDetails = require('./handlers/jobTypeDetails');
+var jobTypeTimeline = require('./handlers/jobTypeTimeline');
 var jobTypeUpdate = require('./handlers/jobTypeUpdate');
 var recipeTypeDetails = require('./handlers/recipeTypeDetails');
 var workspaces = require('./handlers/workspaces');
@@ -119,6 +122,12 @@ module.exports = {
             method: 'PATCH',
             path: '/mocks/' + apiVersion + '/recipe-types/{name}/',
             handler: recipeTypeEdit
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/recipe-types/{name}/revisions/',
+            handler: recipeTypeRev
         });
 
         server.route({
@@ -485,6 +494,18 @@ module.exports = {
             method: 'PATCH',
             path: '/mocks/' + apiVersion + '/scheduler/',
             handler: schedulerUpdate
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/timeline/recipe-types',
+            handler: recipeTypeTimeline
+        });
+
+        server.route({
+            method: 'GET',
+            path: '/mocks/' + apiVersion + '/timeline/job-types',
+            handler: jobTypeTimeline
         });
     }
 };

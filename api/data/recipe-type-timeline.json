@@ -13,6 +13,18 @@
                {"date": "2020-01-03", "count": 3}
             ]
         },{
+            "recipe_type_id": 1, 
+            "name": "landsat8", 
+            "title": "Landsat8",
+            "revision_num": 2,
+            "results": [
+               {"date": "2020-01-04", "count": 32},
+               {"date": "2020-01-05", "count": 234},
+               {"date": "2020-01-07", "count": 35},
+               {"date": "2020-01-08", "count": 7},
+               {"date": "2020-01-09", "count": 7}
+            ]
+        },{
             "recipe_type_id": 2, 
             "name": "spectral", 
             "title": "Spectral Analysis",
@@ -55,18 +67,6 @@
                 {"date": "2020-01-02", "count": 7},
                 {"date": "2020-01-08", "count": 7},
                 {"date": "2020-01-09", "count": 7}
-            ]
-        }{
-            "recipe_type_id": 6, 
-            "name": "landsat8", 
-            "title": "Landsat8",
-            "revision_num": 2,
-            "results": [
-               {"date": "2020-01-04", "count": 32},
-               {"date": "2020-01-05", "count": 234},
-               {"date": "2020-01-07", "count": 35},
-               {"date": "2020-01-08", "count": 7},
-               {"date": "2020-01-09", "count": 7}
             ]
         }
     ]
