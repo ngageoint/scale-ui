@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { LazyLoadEvent, SelectItem } from 'primeng/api';
+import { LazyLoadEvent, SelectItem, MenuItem } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
@@ -14,7 +14,7 @@ import { JobsDatatable } from './datatable.model';
 import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
-
+import { DashboardJobsService } from '../../dashboard/jobs.service';
 
 @Component({
     selector: 'dev-jobs',
@@ -32,6 +32,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     columns = [
         { field: 'job_type', header: 'Job Type' },
         { field: 'recipe', header: 'Recipe' },
+        { field: 'inputs', header: 'Inputs' },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node', header: 'Node' },
@@ -44,6 +45,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     dateFormat = environment.dateFormat;
     jobTypes: any;
     jobTypeOptions: SelectItem[];
+    fileName = [];
     selectedJob: Job;
     selectedJobType: any = [];
     selectedJobExe: JobExecution;
@@ -86,7 +88,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
-    liveRange: number;
+    actionItems: MenuItem[];
 
     constructor(
         private dataService: DataService,
@@ -97,26 +99,26 @@ export class JobsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private confirmationService: ConfirmationService,
         public breakpointObserver: BreakpointObserver,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private dashboardJobsService: DashboardJobsService
     ) {}
 
     private updateData() {
         this.unsubscribe();
-
-        // don't show loading state when in live mode
-        if (!this.liveRange) {
-            this.datatableLoading = true;
-        }
+        this.datatableLoading = true;
 
         this.apiLoading = true;
         this.subscription = this.jobsApiService.getJobs(this.datatableOptions, true).subscribe(data => {
             this.datatableLoading = false;
             this.apiLoading = false;
             this.count = data.count;
-            _.forEach(data.results, result => {
-                const job = _.find(this.selectedRows, { data: { id: result.id } });
-                result.selected =  !!job;
-            });
+                data.results.forEach(result => {
+                    const job = _.find(this.selectedRows, { data: { id: result.id } });
+                    result.selected = !!job;
+                    if (result.input_files) {
+                        result.input_files = this.flattenInputFiles(result.input_files).join(', ');
+                    }
+                });
             this.jobs = Job.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
@@ -124,8 +126,18 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
         });
     }
+
+    flattenInputFiles(inputFiles) {
+        const files = [].concat(Object.keys(inputFiles).map(key => inputFiles[key]));
+        return _(files).flatMapDeep().sortedUniq();
+    }
+
     private updateOptions() {
-        this.datatableOptions = _.pickBy(this.datatableOptions, (d) => {
+        this.datatableOptions = _.pickBy(this.datatableOptions, (d, idx) => {
+            if (idx === 'started' || idx === 'ended') {
+                // allow started and ended to be empty
+                return d;
+            }
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
 
@@ -133,15 +145,8 @@ export class JobsComponent implements OnInit, OnDestroy {
 
         // update router params
         const params = this.datatableOptions as Params;
-        if (params.liveRange) {
-            // if live range was set on the table options, remove started/ended
-            delete params.started;
-            delete params.ended;
-        } else {
-            // live range not provided, default back to started/ended set on table options
-            params.started = params.started || this.started;
-            params.ended = params.ended || this.ended;
-        }
+        params.started = params.started || this.started;
+        params.ended = params.ended || this.ended;
 
         this.router.navigate(['/processing/jobs'], {
             queryParams: params,
@@ -154,10 +159,18 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.jobTypes = data.results;
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
+                // check if the job type is saved in the favorites
+                const isFavorite = _.findIndex(
+                    this.dashboardJobsService.favorites,
+                    { name: jobType.name, version: jobType.version }
+                ) !== -1;
+
                 selectItems.push({
                     label: jobType.title + ' ' + jobType.version,
-                    value: jobType
+                    value: jobType,
+                    icon: isFavorite ? 'fa fa-star' : ''
                 });
+
                 if (
                     (_.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
                     _.indexOf(this.datatableOptions.job_type_version, jobType.version) >= 0) &&
@@ -172,6 +185,10 @@ export class JobsComponent implements OnInit, OnDestroy {
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
+    }
+
+    makeTooltip(fileNames: string) {
+        return fileNames.split(', ').join('\n');
     }
 
     getUnicode(code) {
@@ -241,50 +258,30 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Callback for temporal filter updating the start/end range filter.
-     * @param data start and end strings of iso formatted datetimes
-     */
-    onDateFilterSelected(data: {start: string, end: string}): void {
-        // keep local model in sync
-        this.started = data.start;
-        this.ended = data.end;
-        // patch in the values to the datatable
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            started: data.start,
-            ended: data.end
-        });
-        // update router
-        this.updateOptions();
-    }
-
-    /**
-     * Callback for temporal filter updating the live range selection.
-     * @param data hours that should be used, or null to clear
-     */
-    onLiveRangeSelected(data: {hours: number}): void {
-        // keep model in sync
-        this.liveRange = data.hours;
-        // patch in the values for datatable
-        this.datatableOptions = Object.assign(this.datatableOptions, {
-            liveRange: data.hours
-        });
-        // update router
-        this.updateOptions();
-    }
-
-    /**
      * Callback for when temporal filter tells this component to update visible date range. This is
      * the signal that either a date range or a live range is being triggered.
      * @param data start and end iso strings for what dates should be filtered
      */
     onTemporalFilterUpdate(data: {start: string, end: string}): void {
+        // determine if values have changed
+        const isSame = this.started === data.start && this.ended === data.end;
+
+        // keep local model in sync
+        this.started = data.start;
+        this.ended = data.end;
+
         // update the datatable options then call the api
         this.datatableOptions = Object.assign(this.datatableOptions, {
-                first: 0,
                 started: data.start,
                 ended: data.end
             });
-        this.updateData();
+        this.updateOptions();
+
+        // updateOptions will only cause a data refresh if the route params are different
+        // force a data update only when the params haven't changed
+        if (isSame) {
+            this.updateData();
+        }
     }
 
     requeueJobs(jobsParams?) {
@@ -423,6 +420,11 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.onJobTypeChange({ value: this.selectedJobType });
     }
     ngOnInit() {
+        this.actionItems = [
+            { label: 'Requeue all', icon: 'fa fa-repeat', command: () => { this.requeueAllConfirm(); } },
+            { label: 'Cancel all', icon: 'fa fa-ban', command: () => { this.cancelAllConfirm(); } },
+        ];
+
         this.selectedRows = this.dataService.getSelectedJobRows();
 
         this.breakpointObserver.observe(['(min-width: 1275px)']).subscribe((state: BreakpointState) => {
@@ -431,10 +433,8 @@ export class JobsComponent implements OnInit, OnDestroy {
 
         if (!this.datatableOptions) {
             this.datatableOptions = this.jobsDatatableService.getJobsDatatableOptions();
-            // let temporal filter set the start/end
-            this.datatableOptions.started = null;
-            this.datatableOptions.ended = null;
         }
+
         this.jobs = [];
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
@@ -443,9 +443,8 @@ export class JobsComponent implements OnInit, OnDestroy {
                     rows: params.rows ? parseInt(params.rows, 10) : 10,
                     sortField: params.sortField ? params.sortField : 'last_modified',
                     sortOrder: params.sortOrder ? parseInt(params.sortOrder, 10) : -1,
-                    started: params.started || this.datatableOptions.started,
-                    ended: params.ended || this.datatableOptions.ended,
-                    liveRange: params.liveRange ? parseInt(params.liveRange, 10) : null,
+                    started: this.datatableOptions.started || params.started,
+                    ended: this.datatableOptions.ended || params.ended,
                     status: params.status ?
                         Array.isArray(params.status) ?
                             params.status :
@@ -484,7 +483,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                 : null;
             this.started = this.datatableOptions.started;
             this.ended = this.datatableOptions.ended;
-            this.liveRange = this.datatableOptions.liveRange;
 
             this.getJobTypes();
         });

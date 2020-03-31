@@ -1,9 +1,7 @@
 <h2><i class="fa fa-files-o"></i> Batches <span *ngIf="count">({{ count }})</span></h2>
 <div class="batches__header flexed space-between">
-    <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
+    <dev-temporal-filter [started]="started" [ended]="ended"
                          [loading]="apiLoading"
-                         (dateFilterSelected)="onDateFilterSelected($event)"
-                         (liveRangeSelected)="onLiveRangeSelected($event)"
                          (updated)="onTemporalFilterUpdate($event)">
     </dev-temporal-filter>
     <div class="batches__controls">

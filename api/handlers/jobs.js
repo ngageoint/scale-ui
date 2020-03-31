@@ -16,11 +16,26 @@ module.exports = function (request) {
     var statusValues = ['CANCELED', 'COMPLETED', 'FAILED', 'PENDING', 'QUEUED', 'RUNNING'];
     var start = params.started ? moment.utc(params.started) : moment.utc().subtract(1, 'd');
     var stop = params.ended ? moment.utc(params.ended) : moment.utc();
+    var fileNames = [
+        '1my-file.file',
+        '2my-other-file.file',
+        '3my-other-file-final.file',
+        '4my-file-final-final.file',
+    ];
+    var fileInputNames = ['INPUT_FILE', 'FILE_INPUTS', 'test_inputs'];
+
     for (var i = 0; i < 500; i++) {
         var jobTypeIdx = Math.floor(Math.random() * (jobTypeData.results.length));
         var recipeIdx = Math.floor(Math.random() * (recipeData.results.length));
         var date = moment.utc(start.valueOf() + Math.random() * (stop.valueOf() - start.valueOf())).toISOString();
         var statusValue = statusValues[Math.floor(Math.random() * (statusValues.length))];
+        var randomFileInputNames = _.sampleSize(fileInputNames, _.random(1, 3));
+        var randomInputFiles = randomFileInputNames.reduce((acc, curr) => {
+            var randomFileNames = _.sampleSize(fileNames, _.random(1, 3));
+            acc[curr] = randomFileNames;
+            return acc;
+        }, {});
+
         data.results.push({
             id: jobTypeIdx + 1,
             job_type: jobTypeData.results[jobTypeIdx],
@@ -58,6 +73,7 @@ module.exports = function (request) {
             max_tries: 3,
             num_exes: Math.floor(Math.random() * (10 - 1 + 1) + 1),
             input_file_size: 79.8,
+            input_files: randomInputFiles,
             source_started: '2015-08-28T17:55:41.005Z',
             source_ended: '2015-08-28T17:56:41.005Z',
             source_sensor_class: 'classA',

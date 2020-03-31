@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, Validators } from '@angular/forms';
-import { MenuItem, SelectItem } from 'primeng/api';
+import { MenuItem } from 'primeng/api';
 import { Dialog } from 'primeng/dialog';
 import { MessageService } from 'primeng/components/common/messageservice';
 import webkitLineClamp from 'webkit-line-clamp';
@@ -24,6 +24,8 @@ import { Observable } from 'rxjs';
 export class RecipeTypesComponent implements OnInit, OnDestroy {
     @ViewChild('dv', {static: true}) dv: any;
     @ViewChild('addRemoveDialog', {static: true}) addRemoveDialog: Dialog;
+    @ViewChild('menu', {static: false}) menu: any;
+
     private routeParams: any;
     private _isEditing = false;
     isSaving = false;
@@ -47,7 +49,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     selectedJobTypes = [];
     recipeTypes: any; // used for adding/removing recipe nodes from recipe
     selectedRecipeTypes = []; // used for adding/removing recipe nodes from recipe
-    recipeTypeOptions: SelectItem[]; // used for main recipe types dataview
+    recipeTypeOptions: any[]; // used for main recipe types dataview
     selectedRecipeTypeDetail: any;
     selectedJobTypeDetail: any;
     addedRecipeNode: any;
@@ -212,7 +214,15 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 _.forEach(data.results, result => {
                     this.recipeTypeOptions.push({
                         label: result.title,
-                        value: result
+                        value: result,
+                        menuItems: [{
+                            label: result.deprecated ? 'Activate' : 'Deprecate',
+                            icon: result.deprecated ? 'fa fa-toggle-off' : 'fa fa-toggle-on',
+                            value: result,
+                            command: (event: any) => {
+                                this.onDeprecateClick(event.item.value);
+                            }
+                        }]
                     });
                 });
                 this.recipeTypeOptions = _.orderBy(this.recipeTypeOptions, ['value.title'], ['asc']);
@@ -248,6 +258,26 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         }, err => {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
+    }
+
+    /**
+     * Action when deprecating/activating a recipe type.
+     * @param recipeType the recipe type that was clicked
+     */
+    private onDeprecateClick(recipeType: any): void {
+        this.recipeTypesApiService
+            .editRecipeType(recipeType.name, {is_active: !recipeType.is_active})
+            .subscribe(() => {
+                this.getRecipeTypes();
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: `${recipeType.title} successfully edited`
+                });
+            }, err => {
+                console.log(err);
+                this.messageService.add({ severity: 'error', summary: 'Error editing recipe type', detail: err.statusText });
+            });
     }
 
     private unsubscribeFromForms() {
@@ -472,6 +502,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.showJsonInputs = false;
                 this.showConditions = false;
                 this.selectedRecipeTypeDetail = RecipeType.transformer(result);
+                this.recipeTypeName = this.selectedRecipeTypeDetail.name;
                 this.messageService.add({ severity: 'success', summary: 'Success', detail: `${result.title} successfully created` });
                 // modify url without reloading view
                 window.history.pushState({}, '', `/configuration/recipe-types/${result.name}`);
@@ -587,14 +618,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.clampText();
     }
 
-    onRecipeTypeClick(e, recipeType) {
-        if (e.ctrlKey || e.metaKey) {
-            window.open(this.getRecipeTypeURL(recipeType.value));
-        } else {
-            this.router.navigate([this.getRecipeTypeURL(recipeType.value)]);
-        }
-    }
-
     /**
      * Get the router link to the recipe type URL.
      * @param  recipeType the recipe type data with a name field
@@ -602,6 +625,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
      */
     getRecipeTypeURL(recipeType: any): string {
         return `/configuration/recipe-types/${recipeType.name}`;
+    }
+
+    /**
+     * Menu click even for dropdown in each entry of the recipe types list.
+     * @param event      primeng click event
+     * @param recipeType recipe type this menu was clicked for
+     */
+    onMenuClick(event: any, recipeType: any): void {
+        this.menu.model = recipeType.menuItems;
+        this.menu.toggle(event);
+        event.stopPropagation();
     }
 
     ngOnInit() {

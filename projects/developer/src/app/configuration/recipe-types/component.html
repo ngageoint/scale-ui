@@ -19,14 +19,23 @@
             </div>
         </p-header>
         <ng-template let-recipeType pTemplate="gridItem">
-            <div class="p-col-12 p-md-3 recipe-type__container" (click)="onRecipeTypeClick($event, recipeType)">
+            <div class="p-col-12 p-md-3 recipe-type__container">
                 <p-panel>
                     <p-header>
-                        <strong>
-                            <a [routerLink]="getRecipeTypeURL(recipeType.value)">
-                                {{ recipeType.label }}
-                            </a>
-                        </strong>
+                        <div class="flexed space-between">
+                            <div class="flexed">
+                                <strong>
+                                    <a [routerLink]="getRecipeTypeURL(recipeType.value)">
+                                        {{ recipeType.label }}
+                                    </a>
+                                </strong>
+                            </div>
+                            <div>
+                                <p-menu #menu [popup]="true" [model]="recipeType.menuItems" appendTo="body"></p-menu>
+                                <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
+                                        (click)="onMenuClick($event, recipeType)"></button>
+                            </div>
+                        </div>
                     </p-header>
                     <div class="clamp">
                         {{ recipeType.value.description }}
@@ -83,7 +92,7 @@
                             <textarea pInputTextarea formControlName="description" rows="5"
                                 maxLength="500" pTooltip="Description has a 500 character limit."></textarea>
                         </label>
-                    </div>                   
+                    </div>
                 </div>
             </div>
             <div class="p-grid">

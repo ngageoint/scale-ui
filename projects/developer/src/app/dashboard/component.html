@@ -1,15 +1,14 @@
 <div class="dashboard">
     <div class="p-grid">
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3">
-        </div> 
+        </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
-            <dev-temporal-filter
+            <dev-live-range-selector
                 localStorageKey="dashboard-filter"
-                [liveRangeOnly]="true"
                 (updated)="onTemporalFilterUpdate($event)"
-                refreshRate="600"
+                [refreshRate]="600"
                 [dateRangeOptions]="dateRangeOptions">
-            </dev-temporal-filter>
+            </dev-live-range-selector>
         </div>
         <div class="p-col-12 p-md-12 p-lg-3 p-xl-3 dashboard__error-charts">
                 <div class="charts" *ngIf="favoriteJobTypes.length == 0">
@@ -20,13 +19,23 @@
                 <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                     <p-panel class="noWrapPanel dashboard__error-charts" header="Running Jobs" *ngIf="favoriteJobTypes.length > 0">
                         <p-tabView *ngIf="favoriteJobTypes.length > 0" (onChange)='changeTab()' >
-                            <p-tabPanel [header]="'Favorites'">
-                                <p-chart type="doughnut" [data]="dataFavs" [options]='options' #mychart></p-chart>
+                            <p-tabPanel [header]="'Favorites'" >
+                                <div *ngIf="showFavorites">
+                                    <p-chart type="doughnut" [data]="dataFavs" [options]='options' #mychart></p-chart>
+                                </div>
+                                <div *ngIf="!showFavorites">
+                                        <span>No favorites are currently running.</span>
+                                </div>
                             </p-tabPanel>
                             <p-tabPanel [header]="'All Jobs'">
-                                <p-chart type="doughnut" [data]="data" [options]='options' #mychart2></p-chart>
+                                <div *ngIf="showAllJobs">
+                                     <p-chart type="doughnut" [data]="data" [options]='options' #mychart2></p-chart>
+                                </div>
+                               <div *ngIf="!showAllJobs">
+                                    <span>No Jobs are currently running.</span>
+                               </div>
                             </p-tabPanel>
-                            
+
                         </p-tabView>
                     </p-panel>
                 </div>
@@ -59,7 +68,7 @@
                                     <tr>
                                         <td [attr.colspan]="columns.length">
                                             You haven't saved any favorites yet. Use the star button on an algorithm in the next tab to save it to this list
-                                            for quick access.
+                                            for quick access and to configure the charts to show favorites.
                                         </td>
                                     </tr>
                                 </ng-template>
@@ -121,7 +130,7 @@
                         <p-tabPanel [header]="'All Jobs'">
                             <dev-job-activity [started]="started" [ended]="ended" ></dev-job-activity>
                         </p-tabPanel>
-                        
+
                     </p-tabView>
                 </p-panel>
             </div>

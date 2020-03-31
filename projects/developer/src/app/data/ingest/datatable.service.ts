@@ -23,6 +23,10 @@ export class IngestDatatableService {
 
     setIngestDatatableOptions(params: IngestDatatable): void {
         this.ingestDatatable = params;
+
+        // don't let started/ended params persist in local storage
+        delete params.started;
+        delete params.ended;
         this.storage.set(params);
     }
 }

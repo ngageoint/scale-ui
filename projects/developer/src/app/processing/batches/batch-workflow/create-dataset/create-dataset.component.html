@@ -49,7 +49,7 @@
                             <span class="required">Required Fields</span>
                         </p-header>
                         <div class="p-grid">
-                            <div class="p-col-12">
+                            <div class="p-col-6">
                                 <div class="ui-inputgroup">
                                     <label class="ui-inputgroup-addon" for="date-range-start">Start</label>
                                     <p-calendar
@@ -67,8 +67,7 @@
                                     </p-calendar>
                                 </div>
                                 <span class="error-text">{{ startDateMessage }}</span>
-                            </div>
-                            <div class="p-col-12">
+
                                 <div class="ui-inputgroup">
                                     <label class="ui-inputgroup-addon" for="date-range-end">Stop</label>
                                     <p-calendar
@@ -86,6 +85,9 @@
                                     </p-calendar>
                                 </div>
                                 <span class="error-text">{{ endDateMessage }}</span>
+                            </div>
+                            <div class="p-col-6">
+                                <p-selectButton [options]="searchTimeTypes" formControlName="searchTime"></p-selectButton>
                             </div>
                         </div>
                         <button pButton
@@ -150,10 +152,11 @@
         </div>
     </div>
 
-    <div *ngIf="filteredDatasetFileList.length" class="p-col-12">
-        <div>Results: {{filteredDatasetFileList.length}}</div>
-        <p-table
-            [columns]="datasetColumns"
+    <div *ngIf="datasetFilesData" class="p-col-12">
+        <label>
+            <span>Total number of files to add to the dataset: {{filteredDatasetFileList.length}}</span>
+        </label>
+        <p-table [columns]="datasetColumns"
             [value]="filteredDatasetFileList"
             styleClass="nopadding"
             [rowHover]="true"
@@ -180,6 +183,13 @@
                 <tr [pSelectableRow]="rowData">
                     <td *ngFor="let col of columns">
                         {{ rowData[col.field] }}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="columns.length">
+                        No records found
                     </td>
                 </tr>
             </ng-template>

@@ -105,6 +105,7 @@ import { StatusComponent } from './navbar/status/component';
 import { StrikesComponent } from './system/strikes/component';
 import { SubnavComponent } from './navbar/subnav/subnav.component';
 import { SystemStatusComponent } from './system/status/component';
+import { LiveRangeSelectorComponent } from './common/components/live-range-selector/component';
 import { TemporalFilterComponent } from './common/components/temporal-filter/component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
 import { TimelineComponent } from './data/timeline/component';
@@ -113,6 +114,7 @@ import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batc
 import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';
 import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
 import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
+import { TruncatePipe } from './common/pipes/truncate.pipe';
 
 // import after primeng component to ensure timeline plugin attached to correct chart.js instance
 import 'chartjs-chart-timeline/src/timeline';
@@ -173,11 +175,13 @@ const appInitializer = (appConfig: AppConfigService) => {
         SystemStatusComponent,
         TimelineComponent,
         WorkspacesComponent,
+        LiveRangeSelectorComponent,
         TemporalFilterComponent,
         BatchWorkflowComponent,
         CreateDatasetComponent,
         CreateBatchComponent,
-        RunBatchComponent
+        RunBatchComponent,
+        TruncatePipe
     ],
     imports: [
         AccordionModule,
