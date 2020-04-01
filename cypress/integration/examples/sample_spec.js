@@ -69,7 +69,7 @@ describe('My First Test', function(){
         cy.get('button').click()
         cy.get('.footer > ul.ng-star-inserted > .ng-star-inserted').should('contain', 'Admin')
         
-
+        //workspace testing
         cy.visit('https://scale.alpha.aisohio.net/system/workspaces')
         cy.get('.margin-left-md > .ui-button > .ui-button-icon-left').click()
         cy.get(':nth-child(1) > :nth-child(1) > label > .ui-inputtext').clear()
@@ -86,6 +86,8 @@ describe('My First Test', function(){
         // cy.get('.logo').click()
         // cy.get('.ui-button-icon-left', {timeout: 10000}).click() 
 
+
+        //strike testing
         cy.visit('https://scale.alpha.aisohio.net/system/strikes/create')
         // cy.visit('https://scale.alpha.aisohio.net/system/nodes')
         cy.get(':nth-child(1) > :nth-child(1) > :nth-child(1) > :nth-child(1) > label > .ui-inputtext').clear()
@@ -93,6 +95,8 @@ describe('My First Test', function(){
         cy.get(':nth-child(1) > :nth-child(2) > label > .ui-inputtext').type("Automated strike description")
         cy.get('.ui-dropdown-label-container > .ng-tns-c14-11').click()
         cy.get(':nth-child(21) > .ui-dropdown-item').click()
+
+        // cy.get('.ui-panel-content > :nth-child(1) > :nth-child(1) > label > .ui-inputtext').type
 
     }
     )
