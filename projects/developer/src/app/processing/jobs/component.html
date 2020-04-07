@@ -105,7 +105,7 @@
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
                         <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
                                 (click)="cancelJobs({job_ids: [rowData.id]})" pTooltip="Cancel Job"
-                                *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
+                                *ngIf="!rowData.is_ed && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
                         <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
                                 (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
                                 *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>

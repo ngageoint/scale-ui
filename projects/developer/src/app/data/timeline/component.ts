@@ -7,8 +7,6 @@ import * as Color from 'chartjs-color';
 
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { RecipesApiService } from '../../processing/recipes/api.service';
-import { JobsApiService } from '../../processing/jobs/api.service';
 import { TimelineApiService } from './api.service';
 import { RecipesDatatable } from '../../processing/recipes/datatable.model';
 import { DataService } from '../../common/services/data.service';
@@ -106,7 +104,7 @@ export class TimelineComponent implements OnInit {
                             } else {
                                 comparedDate = this.addDays(comparedDate, 1);
                             }
-                            this.data.datasets.data.push(tempDates);
+                            // this.data.datasets.data.push(tempDates);
                         }
                     });
                 });

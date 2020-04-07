@@ -498,13 +498,13 @@ module.exports = {
 
         server.route({
             method: 'GET',
-            path: '/mocks/' + apiVersion + '/timeline/recipe-types',
+            path: '/mocks/' + apiVersion + '/timeline/recipe-types/',
             handler: recipeTypeTimeline
         });
 
         server.route({
             method: 'GET',
-            path: '/mocks/' + apiVersion + '/timeline/job-types',
+            path: '/mocks/' + apiVersion + '/timeline/job-types/',
             handler: jobTypeTimeline
         });
     }
