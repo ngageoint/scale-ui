@@ -19,12 +19,14 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     @ViewChild('dv', {static: true}) dv: any;
     private routeParams: any;
     private itemsWithPause: MenuItem[] = [
+        { label: 'View jobs', icon: 'fa fa-eye', command: () => { this.onJobsViewClick(); } },
         { label: 'Pause', icon: 'fa fa-pause', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
         { label: 'Deprecate', icon: 'fa fa-circle-o', command: () => { this.onDeprecateClick(); } }
     ];
     private itemsWithResume: MenuItem[] = [
+        { label: 'View jobs', icon: 'fa fa-eye', command: () => { this.onJobsViewClick(); } },
         { label: 'Resume', icon: 'fa fa-play', command: () => { this.onPauseClick(); } },
         { label: 'Edit', icon: 'fa fa-edit', command: () => { this.onEditClick(); } },
         { label: 'Favorite', icon: 'fa fa-star-o', command: ($event) => { this.toggleFavorite($event.originalEvent); } },
@@ -167,6 +169,19 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     getJobTypeURL(jobType: any): string {
         return `/configuration/job-types/${jobType.name}/${jobType.version}`;
     }
+
+    /**
+     * Click handler in action dropdown of details view for navigating to filtered jobs table.
+     */
+    onJobsViewClick(): void {
+        this.router.navigate(['/processing/jobs'], {
+            queryParams: {
+                job_type_name: this.selectedJobTypeDetail.name,
+                job_type_version: this.selectedJobTypeDetail.version
+            }
+        });
+    }
+
     onPauseClick() {
         const action = this.selectedJobTypeDetail.is_paused ? 'Resume' : 'Pause';
         let message = `${action} ${this.selectedJobTypeDetail.title} v${this.selectedJobTypeDetail.version}?`;

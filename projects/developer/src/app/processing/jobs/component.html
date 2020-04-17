@@ -1,17 +1,22 @@
 <h2><i class="fa fa-cube"></i> Jobs <span *ngIf="count">({{ count }})</span></h2>
 <div class="jobs__header flexed space-between">
-    <dev-temporal-filter [started]="started" [ended]="ended" [liveRange]="liveRange"
+    <dev-temporal-filter [started]="started" [ended]="ended"
                          [loading]="apiLoading"
-                         (dateFilterSelected)="onDateFilterSelected($event)"
-                         (liveRangeSelected)="onLiveRangeSelected($event)"
                          (updated)="onTemporalFilterUpdate($event)">
     </dev-temporal-filter>
 
     <div class="jobs__controls">
-        <button pButton type="button" class="ui-button-primary" icon="fa fa-repeat" pTooltip="Requeue All Jobs"
-                (click)="requeueAllConfirm()"></button>
-        <button pButton type="button" class="ui-button-primary" icon="fa fa-ban" pTooltip="Cancel All Jobs"
-                (click)="cancelAllConfirm()"></button>
+
+        <p-menu #actionsMenu
+                [popup]="true"
+                [model]="actionItems"></p-menu>
+        <button type="button"
+                pButton
+                label="Actions"
+                icon="fa fa-caret-down"
+                iconPos="right"
+                class="ui-button-secondary"
+                (click)="actionsMenu.toggle($event)"></button>
     </div>
 </div>
 <p-table [value]="jobs" [columns]="columns" [rows]="datatableOptions.rows" [sortField]="datatableOptions.sortField"
@@ -27,8 +32,8 @@
                 <p-sortIcon *ngIf="!col.sortableColumnDisabled" [field]="col.field"></p-sortIcon>
                 <div *ngSwitchCase="'job_type'">
                     <p-multiSelect [options]="jobTypeOptions" [(ngModel)]="selectedJobType"
-                                (onChange)="onJobTypeChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
-                                (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
+                        (onChange)="onJobTypeChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
+                        (click)="onFilterClick($event)" [filter]="true" filterBy="value.title" appendTo="body">
                         <p-header>
                             <div class="jobs__selected">
                                 <ul>
@@ -40,15 +45,16 @@
                                 </ul>
                             </div>
                         </p-header>
-                        <ng-template let-jobType p-template="item">
+                        <ng-template let-jobType pTemplate="item">
+                            <span *ngIf="jobType.icon" [class]="jobType.icon"></span>
                             {{ jobType.label }}
                         </ng-template>
                     </p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'status'">
                     <p-multiSelect [options]="statusValues" [(ngModel)]="selectedStatus"
-                                (onChange)="onStatusChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
-                                (click)="onFilterClick($event)" appendTo="body"></p-multiSelect>
+                        (onChange)="onStatusChange($event)" styleClass="column-filter" [maxSelectedLabels]="1"
+                        (click)="onFilterClick($event)" appendTo="body"></p-multiSelect>
                 </div>
                 <div *ngSwitchCase="'error.category'">
                     <p-multiSelect [options]="errorCategoryValues" [(ngModel)]="selectedErrorCategory"
@@ -63,10 +69,10 @@
         <tr [pSelectableRow]="rowData" [ngClass]="rowData.selected ? 'job__selected' : null">
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <span class="ui-column-title">{{ col.header }}</span>
-                <div class="flexed space-between" *ngSwitchCase="'job_type'">
+                <div *ngSwitchCase="'job_type'" class="flexed space-between">
                     <div>
                         <i class="fa fa-fw" [ngClass]="rowData.status === 'RUNNING' ? 'throb-text' : null"
-                           [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
+                            [innerHtml]="getUnicode(rowData.job_type.icon_code)"></i>
                         <a routerLink="/processing/jobs/{{ rowData.id }}">
                             {{ rowData.job_type.title }} {{ rowData.job_type.version }}
                         </a>
@@ -83,6 +89,13 @@
                         <a routerLink="/processing/recipes/{{ rowData.recipe.id }}">
                             {{ rowData.recipe.recipe_type.title }}
                         </a>
+                    </div>
+                </div>
+                <div *ngSwitchCase="'inputs'">
+                    <div *ngIf="rowData.input_files">
+                        <span tooltipStyleClass="max-size" [pTooltip]="makeTooltip(rowData.input_files)">
+                            {{ rowData.input_files | truncate : 35 : true }}
+                        </span>
                     </div>
                 </div>
                 <div *ngSwitchCase="'created'">
@@ -104,11 +117,11 @@
                     <div class="pull-right">
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
                         <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
-                                (click)="cancelJobs({job_ids: [rowData.id]})" pTooltip="Cancel Job"
-                                *ngIf="!rowData.is_ed && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
+                            (click)="cancelJobs({job_ids: [rowData.id]})" pTooltip="Cancel Job"
+                            *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
                         <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
-                                (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
-                                *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>
+                            (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
+                            *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>
                     </div>
                     {{ rowData.status }}
                 </div>
@@ -119,13 +132,13 @@
                 </div>
                 <div *ngSwitchCase="'error.title'">
                     <div *ngIf="rowData.error" pTooltip="{{ rowData.error.description }}" tooltipPosition="left"
-                         appendTo="body" tooltipStyleClass="jobs__error-tooltip">
+                        appendTo="body" tooltipStyleClass="jobs__error-tooltip">
                         {{ rowData.error.title }}
                     </div>
                 </div>
                 <div class="text-center" *ngSwitchCase="'id'">
                     <button #logBtn type="button" pButton class="ui-button-secondary" (click)="showExeLog(rowData.id)"
-                            icon="fa fa-file-text"></button>
+                        icon="fa fa-file-text"></button>
                 </div>
                 <div *ngSwitchDefault>
                     {{ rowData[col.field] }}
@@ -142,7 +155,7 @@
     </ng-template>
 </p-table>
 <p-paginator [rows]="datatableOptions.rows" [first]="datatableOptions.first" [totalRecords]="count"
-             [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
+    [rowsPerPageOptions]="[10,20,50,100]" (onPageChange)="paginate($event)"></p-paginator>
 <p-confirmDialog key="jobsConfirm"></p-confirmDialog>
 <div *ngIf="selectedJobExe">
     <dev-log-viewer [execution]="selectedJobExe" [visible]="logDisplay" (close)="hideExeLog()"></dev-log-viewer>

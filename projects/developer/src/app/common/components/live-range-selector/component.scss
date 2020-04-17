@@ -1,0 +1,62 @@
+.live-range-selector {
+    align-items: flex-end;
+
+    div {
+        margin-right: 20px;
+    }
+
+    .ui-inputgroup {
+        .ui-inputgroup-addon {
+            line-height:  normal;
+        }
+
+        ::ng-deep input,
+        ::ng-deep .ui-dropdown {
+            line-height:  normal;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+            flex: 1 1 auto;
+        }
+    }
+
+    .live-range-selector__date-filter-btn, .live-range-selector__date-filter-dropdown {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    &.spaced {
+        .live-range-selector__date-filter-ranges, .live-range-selector__date-filter-dropdown {
+            margin-left: 55px;
+
+            button {
+                margin-left: 3px;
+            }
+        }
+    }
+
+    .live-range-icon {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .live-range-active {
+        animation:greenBlinking 0.75s alternate ease-in-out infinite;
+    }
+}
+
+@media screen and (max-width: 858px) {
+    .live-range-selector__date-filter-btn, .live-range-selector__date-filter-dropdown, .live-range-selector__date-filter-ranges {
+        margin-left: 0 !important;
+        padding: 0 !important;
+    }
+
+    .live-range-selector__date-filter-dropdown, .live-range-selector__date-filter-btn {
+        margin-top: 5px !important;
+        margin-right: 5px !important;
+    }
+}
+
+@keyframes greenBlinking{
+    from { color: #777; }
+    to {   color: var(--green); }
+}
