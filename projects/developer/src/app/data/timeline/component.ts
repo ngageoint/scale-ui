@@ -63,11 +63,7 @@ export class TimelineComponent implements OnInit {
         this.showChart = true;
         this.showFilters = false;
 
-        const newData = {
-            type: 'timeline',
-            labels: [],
-            datasets: []
-        };
+
 
         const params = {
             started: this.utcStartDate.toISOString(),
@@ -78,62 +74,15 @@ export class TimelineComponent implements OnInit {
 
         if (type === 'Recipe Types') {
             this.timelineApiService.getRecipeTypeDetails(params).subscribe(data => {
-                _.forEach(data.results, result => {
-                    // start by sorting the results by the date
-                    result.results.sort((a: any, b: any) => {
-                        const dateA = moment(a.date);
-                        const dateB = moment(b.date);
-                        return dateA.isAfter(dateB);
-                    });
+                const chartData = this.generateChartData(data.results);
 
-                    // the new dataset to be created
-                    const newDataset = [];
-
-                    // used to hold on to contiguous blocks of time
-                    let previousStart = null;
-
-                    for (let i = 0; i < result.results.length; i++) {
-                        const item = result.results[i];
-                        const nextItem = result.results[i + 1];
-
-                        // use blocks of time based on the day
-                        const start = moment(item.date);
-                        const end = moment(item.date).add(1, 'days');
-
-                        if (!nextItem) {
-                            // no next item, at the end of the array
-                            // save just the start and end
-                            newDataset.push([previousStart ? previousStart : start, end, '']);
-                        } else {
-                            if (moment(nextItem.date).isSame(end)) {
-                                // starting a continguous block of time
-                                if (!previousStart) {
-                                    // only save the start if not already in a continguous block
-                                    previousStart = start;
-                                }
-                            } else {
-                                // the next item in the array is not the same as this ending period's day
-                                if (previousStart) {
-                                    // a previous start was available from another block
-                                    newDataset.push([previousStart, end, '']);
-                                    previousStart = null;
-                                } else {
-                                    // no previous start was available, use this time block
-                                    newDataset.push([start, end, '']);
-                                }
-                            }
-                        }
-                    }
-
-                    // add to the new data that will be assigned
-                    newData.datasets.push({
-                        data: newDataset
-                    });
-                    newData.labels.push(`${result.title} rev ${result.revision_num}`);
+                // add the labels
+                data.results.forEach(result => {
+                    chartData.labels.push(`${result.title} rev ${result.revision_num}`);
                 });
 
                 // assign new data at once to trigger a change detection
-                this.data = newData;
+                this.data = chartData;
             }, err => {
                 console.log(err);
                 this.dataTypesLoading = false;
@@ -141,7 +90,15 @@ export class TimelineComponent implements OnInit {
             });
         } else if (type === 'Job Types') {
             this.timelineApiService.getJobTypeDetails(params).subscribe(data => {
-                console.log(data);
+                const chartData = this.generateChartData(data.results);
+
+                // add the labels
+                data.results.forEach(result => {
+                    chartData.labels.push(`${result.title} v${result.version}`);
+                });
+
+                // assign new data at once to trigger a change detection
+                this.data = chartData;
             }, err => {
                 console.log(err);
                 this.dataTypesLoading = false;
@@ -157,6 +114,74 @@ export class TimelineComponent implements OnInit {
             text: chartTitle,
             fontSize: 16
         };
+    }
+
+    /**
+     * Creates chart data by grouping the results into contiguous blocks of time.
+     * @param  apiData recipe or job data returned from the api
+     * @return         object with properties needed for chartjs data assignment
+     */
+    private generateChartData(apiData: any): any {
+        const chartData = {
+            type: 'timeline',
+            labels: [],
+            datasets: []
+        };
+
+        _.forEach(apiData, result => {
+            // start by sorting the results by the date
+            result.results.sort((a: any, b: any) => {
+                const dateA = moment(a.date);
+                const dateB = moment(b.date);
+                return dateA.isAfter(dateB);
+            });
+
+            // the new dataset to be created
+            const newDataset = [];
+
+            // used to hold on to contiguous blocks of time
+            let previousStart = null;
+
+            for (let i = 0; i < result.results.length; i++) {
+                const item = result.results[i];
+                const nextItem = result.results[i + 1];
+
+                // use blocks of time based on the day
+                const start = moment(item.date);
+                const end = moment(item.date).add(1, 'days');
+
+                if (!nextItem) {
+                    // no next item, at the end of the array
+                    // save just the start and end
+                    newDataset.push([previousStart ? previousStart : start, end, '']);
+                } else {
+                    if (moment(nextItem.date).isSame(end)) {
+                        // starting a continguous block of time
+                        if (!previousStart) {
+                            // only save the start if not already in a continguous block
+                            previousStart = start;
+                        }
+                    } else {
+                        // the next item in the array is not the same as this ending period's day
+                        if (previousStart) {
+                            // a previous start was available from another block
+                            newDataset.push([previousStart, end, '']);
+                            previousStart = null;
+                        } else {
+                            // no previous start was available, use this time block
+                            newDataset.push([start, end, '']);
+                        }
+                    }
+                }
+            }
+
+            // add to the new data that will be assigned
+            chartData.datasets.push({
+                data: newDataset
+            });
+        });
+
+        return chartData;
     }
 
     // enable or disable button based on selected type(s)
