@@ -316,15 +316,4 @@ export class TimelineComponent implements OnInit {
         };
     }
 
-    addDays(date, days) {
-        const result = new Date(date);
-        result.setDate(result.getDate() + days);
-        return result;
-    }
-
-    calculateDays(start, end) {
-        const Difference_In_Days = (end.getTime() - start.getTime()) / (1000 * 3600 * 24);
-        return Difference_In_Days;
-    }
-
 }
