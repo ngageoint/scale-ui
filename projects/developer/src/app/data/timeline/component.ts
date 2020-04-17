@@ -60,55 +60,80 @@ export class TimelineComponent implements OnInit {
 
     // init chart data
     private createTimeline(type) {
-        const idList = [];
-        const revList = [];
         this.showChart = true;
         this.showFilters = false;
-        const duration = this.calculateDays(this.startDate, this.endDate);
 
-        this.data = {
+        const newData = {
+            type: 'timeline',
             labels: [],
             datasets: []
         };
 
-        _.forEach(this.selectedFilters, id => {
-            idList.push(id.id);
-        });
-        _.forEach(this.selectedRevs, rev => {
-            revList.push(rev.revision_num);
-        });
         const params = {
             started: this.utcStartDate.toISOString(),
             ended: this.utcEndDate.toISOString(),
-            id: idList,
-            rev: revList
+            id: this.selectedFilters.map(f => f.id),
+            rev: this.selectedRevs.map(r => r.revision_num)
         };
 
         if (type === 'Recipe Types') {
             this.timelineApiService.getRecipeTypeDetails(params).subscribe(data => {
-                console.log(data);
-                _.forEach(data.results, dates => {
-                    let comparedDate = this.startDate;
-                    const tempDates = [];
-                    _.forEach(dates.results, date => {
-                        this.data.datasets.push({
-                            data: []
-                        });
-                        console.log(this.data.datasets.data);
-                        for (let i = 0; i <= duration; i++) {
-                            const comparedString = comparedDate.toISOString().substr(0, 10);
-                            if (date.date === comparedString ) {
-                                tempDates.push(date.date);
-                                comparedDate = this.addDays(comparedDate, 1);
-                                console.log(tempDates);
-                            } else {
-                                comparedDate = this.addDays(comparedDate, 1);
-                            }
-                            // this.data.datasets.data.push(tempDates);
-                        }
+                _.forEach(data.results, result => {
+                    // start by sorting the results by the date
+                    result.results.sort((a: any, b: any) => {
+                        const dateA = moment(a.date);
+                        const dateB = moment(b.date);
+                        return dateA.isAfter(dateB);
                     });
+
+                    // the new dataset to be created
+                    const newDataset = [];
+
+                    // used to hold on to contiguous blocks of time
+                    let previousStart = null;
+
+                    for (let i = 0; i < result.results.length; i++) {
+                        const item = result.results[i];
+                        const nextItem = result.results[i + 1];
+
+                        // use blocks of time based on the day
+                        const start = moment(item.date);
+                        const end = moment(item.date).add(1, 'days');
+
+                        if (!nextItem) {
+                            // no next item, at the end of the array
+                            // save just the start and end
+                            newDataset.push([previousStart ? previousStart : start, end, '']);
+                        } else {
+                            if (moment(nextItem.date).isSame(end)) {
+                                // starting a continguous block of time
+                                if (!previousStart) {
+                                    // only save the start if not already in a continguous block
+                                    previousStart = start;
+                                }
+                            } else {
+                                // the next item in the array is not the same as this ending period's day
+                                if (previousStart) {
+                                    // a previous start was available from another block
+                                    newDataset.push([previousStart, end, '']);
+                                    previousStart = null;
+                                } else {
+                                    // no previous start was available, use this time block
+                                    newDataset.push([start, end, '']);
+                                }
+                            }
+                        }
+                    }
+
+                    // add to the new data that will be assigned
+                    newData.datasets.push({
+                        data: newDataset
+                    });
+                    newData.labels.push(`${result.title} rev ${result.revision_num}`);
                 });
 
+                // assign new data at once to trigger a change detection
+                this.data = newData;
             }, err => {
                 console.log(err);
                 this.dataTypesLoading = false;
@@ -123,15 +148,6 @@ export class TimelineComponent implements OnInit {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
         }
-
-        // create y-axis labels
-        this.selectedRevs = this.selectedRevs.reverse();
-        _.forEach(this.selectedRevs, filter => {
-            const label = this.selectedDataTypeOption === 'Job Types' ?
-                `${filter.title} v${filter.version}` :
-                `${filter.recipe_type.title} rev ${filter.revision_num}`;
-            this.data.labels.push(label);
-        });
 
         // set chart title
         const chartTitle: string[] = [];
@@ -240,13 +256,10 @@ export class TimelineComponent implements OnInit {
                 xAxes: [{
                     type: 'timeline',
                     bounds: 'ticks',
+                    time: {
+                        unit: 'day'
+                    },
                     ticks: {
-                        callback: (value, index, values) => {
-                            if (!values[index]) {
-                                return;
-                            }
-                            return moment.utc(values[index]['value']).format(environment.dateFormat);
-                        },
                         maxRotation: 90,
                         minRotation: 50,
                         autoSkip: true
@@ -257,10 +270,14 @@ export class TimelineComponent implements OnInit {
                 callbacks: {
                     label: (tooltipItem, chartData) => {
                         const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        const start = moment.utc(d[0]);
+                        const end = moment.utc(d[1]);
+                        const duration = moment.duration(end.diff(start));
+
                         return [
-                            'Total Time: ' + d[2],
-                            'Created: ' + moment.utc(d[0]).format(environment.dateFormat),
-                            'Deprecated: ' + moment.utc(d[1]).format(environment.dateFormat)
+                            `Total Time: ${duration.humanize()}`,
+                            `Created: ${start.format('YYYY-MM-DD')}`,
+                            `Deprecated: ${end.format('YYYY-MM-DD')}`
                         ];
                     }
                 }
