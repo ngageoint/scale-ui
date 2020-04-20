@@ -7,14 +7,21 @@ import * as Color from 'chartjs-color';
 
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
+import { TimelineApiService } from './api.service';
+import { RecipesDatatable } from '../../processing/recipes/datatable.model';
 import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
+
+import { UTCDates } from '../../common/utils/utcdates';
 
 @Component({
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
 export class TimelineComponent implements OnInit {
+    datatableOptions: RecipesDatatable;
+    startDate = moment().subtract(1, 'M').startOf('d').toDate();
+    endDate = moment().startOf('d').toDate();
     chartTitle: string[] = [];
     data: any;
     dataTypesLoading: boolean;
@@ -28,31 +35,76 @@ export class TimelineComponent implements OnInit {
     ];
     selectedDataTypeOption: string;
     filterOptions = [];
+    revisionOptions = [];
     selectedFilters = [];
+    selectedRevs = [];
     showChart: boolean;
+
+    // utc versions of internal start and end dates
+    get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
+    get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
+
+     get yearRange(): string {
+        const now = moment();
+        const start = now.clone().subtract(20, 'y').year();
+        const end = now.clone().add(5, 'y').year();
+        return `${start}:${end}`;
+    }
 
     constructor(
         private messageService: MessageService,
         private recipeTypesApiService: RecipeTypesApiService,
-        private jobTypesApiService: JobTypesApiService
+        private jobTypesApiService: JobTypesApiService,
+        private timelineApiService: TimelineApiService,
     ) {}
 
     // init chart data
-    private createTimeline(data) {
+    private createTimeline(type) {
         this.showChart = true;
         this.showFilters = false;
-        this.data = {
-            labels: [],
-            datasets: []
+
+
+
+        const params = {
+            started: this.utcStartDate.toISOString(),
+            ended: this.utcEndDate.toISOString(),
+            id: this.selectedFilters.map(f => f.id),
+            rev: this.selectedRevs.map(r => r.revision_num)
         };
 
-        // create y-axis labels
-        _.forEach(this.selectedFilters, filter => {
-            const label = this.selectedDataTypeOption === 'Job Types' ?
-                `${filter.title} v${filter.version}` :
-                `${filter.title} rev ${filter.revision_num}`;
-            this.data.labels.push(label);
-        });
+        if (type === 'Recipe Types') {
+            this.timelineApiService.getRecipeTypeDetails(params).subscribe(data => {
+                const chartData = this.generateChartData(data.results);
+
+                // add the labels
+                data.results.forEach(result => {
+                    chartData.labels.push(`${result.title} rev ${result.revision_num}`);
+                });
+
+                // assign new data at once to trigger a change detection
+                this.data = chartData;
+            }, err => {
+                console.log(err);
+                this.dataTypesLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+        } else if (type === 'Job Types') {
+            this.timelineApiService.getJobTypeDetails(params).subscribe(data => {
+                const chartData = this.generateChartData(data.results);
+
+                // add the labels
+                data.results.forEach(result => {
+                    chartData.labels.push(`${result.title} v${result.version}`);
+                });
+
+                // assign new data at once to trigger a change detection
+                this.data = chartData;
+            }, err => {
+                console.log(err);
+                this.dataTypesLoading = false;
+                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+            });
+        }
 
         // set chart title
         const chartTitle: string[] = [];
@@ -62,17 +114,74 @@ export class TimelineComponent implements OnInit {
             text: chartTitle,
             fontSize: 16
         };
+    }
 
-        // calculate duration between created date and deprecated date for each recipe type or job type selected
-        _.forEach(data, d => {
-            // if type has not been deprecated, use the current date
-            const deprecated = d.deprecated ? d.deprecated : moment.utc().toISOString();
-            this.data.datasets.push({
-                data: [
-                    [d.created, deprecated, DataService.calculateDuration(d.created, deprecated, true)]
-                ]
+    /**
+     * Creates chart data by grouping the results into contiguous blocks of time.
+     * @param  apiData recipe or job data returned from the api
+     * @return         object with properties needed for chartjs data assignment
+     */
+    private generateChartData(apiData: any): any {
+        const chartData = {
+            type: 'timeline',
+            labels: [],
+            datasets: []
+        };
+
+        _.forEach(apiData, result => {
+            // start by sorting the results by the date
+            result.results.sort((a: any, b: any) => {
+                const dateA = moment(a.date);
+                const dateB = moment(b.date);
+                return dateA.isAfter(dateB);
+            });
+
+            // the new dataset to be created
+            const newDataset = [];
+
+            // used to hold on to contiguous blocks of time
+            let previousStart = null;
+
+            for (let i = 0; i < result.results.length; i++) {
+                const item = result.results[i];
+                const nextItem = result.results[i + 1];
+
+                // use blocks of time based on the day
+                const start = moment(item.date);
+                const end = moment(item.date).add(1, 'days');
+
+                if (!nextItem) {
+                    // no next item, at the end of the array
+                    // save just the start and end
+                    newDataset.push([previousStart ? previousStart : start, end, '']);
+                } else {
+                    if (moment(nextItem.date).isSame(end)) {
+                        // starting a continguous block of time
+                        if (!previousStart) {
+                            // only save the start if not already in a continguous block
+                            previousStart = start;
+                        }
+                    } else {
+                        // the next item in the array is not the same as this ending period's day
+                        if (previousStart) {
+                            // a previous start was available from another block
+                            newDataset.push([previousStart, end, '']);
+                            previousStart = null;
+                        } else {
+                            // no previous start was available, use this time block
+                            newDataset.push([start, end, '']);
+                        }
+                    }
+                }
+            }
+
+            // add to the new data that will be assigned
+            chartData.datasets.push({
+                data: newDataset
             });
         });
+
+        return chartData;
     }
 
     // enable or disable button based on selected type(s)
@@ -103,12 +212,12 @@ export class TimelineComponent implements OnInit {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
         } else if (this.selectedDataTypeOption === 'Recipe Types') {
-            this.recipeTypesApiService.getRecipeTypes({ is_active: null }).subscribe(data => {
+            this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
                 this.dataTypesLoading = false;
                 this.recipeTypes = data.results;
                 _.forEach(this.recipeTypes, recipeType => {
                     this.filterOptions.push({
-                        label: `${recipeType.title} rev ${recipeType.revision_num}`,
+                        label: `${recipeType.title}`,
                         value: recipeType
                     });
                 });
@@ -121,8 +230,36 @@ export class TimelineComponent implements OnInit {
         }
     }
 
-    onUpdateChartClick() {
-        this.createTimeline(this.selectedFilters);
+    onTypesClick() {
+        this.revisionOptions = [];
+        if (this.selectedDataTypeOption === 'Recipe Types') {
+            _.forEach(this.selectedFilters, recipe => {
+                this.recipeTypesApiService.getRecipeTypeRev(recipe.name).subscribe(data => {
+                    console.log(data);
+                    _.forEach(data.results, result => {
+                        this.revisionOptions.push({
+                            label: `${result.recipe_type.title} rev ${result.revision_num}`,
+                            value: result
+                        });
+                    });
+            });
+         });
+        } else if (this.selectedDataTypeOption === 'Job Types' ) {
+            _.forEach(this.selectedFilters, job => {
+                this.jobTypesApiService.getJobTypeVersions(job.name).subscribe(data => {
+                    _.forEach(data.results, result => {
+                        this.revisionOptions.push({
+                            label: `${result.title} rev ${result.version}`,
+                            value: result
+                        });
+                    });
+            });
+        });
+        }
+        this.enableButton();
+    }
+    onUpdateChartClick()  {
+        this.createTimeline(this.selectedDataTypeOption);
     }
 
     ngOnInit() {
@@ -144,30 +281,18 @@ export class TimelineComponent implements OnInit {
                 xAxes: [{
                     type: 'timeline',
                     bounds: 'ticks',
+                    time: {
+                        unit: 'day'
+                    },
                     ticks: {
-                        callback: (value, index, values) => {
-                            if (!values[index]) {
-                                return;
-                            }
-                            return moment.utc(values[index]['value']).format(environment.dateFormat);
-                        },
                         maxRotation: 90,
-                        minRotation: 45,
+                        minRotation: 50,
                         autoSkip: true
                     }
                 }]
             },
             tooltips: {
-                callbacks: {
-                    label: (tooltipItem, chartData) => {
-                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                        return [
-                            'Total Time: ' + d[2],
-                            'Created: ' + moment.utc(d[0]).format(environment.dateFormat),
-                            'Deprecated: ' + moment.utc(d[1]).format(environment.dateFormat)
-                        ];
-                    }
-                }
+                enabled: false
             },
             plugins: {
                 datalabels: false,
