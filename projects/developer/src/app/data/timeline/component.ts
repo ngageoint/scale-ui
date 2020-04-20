@@ -292,20 +292,7 @@ export class TimelineComponent implements OnInit {
                 }]
             },
             tooltips: {
-                callbacks: {
-                    label: (tooltipItem, chartData) => {
-                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                        const start = moment.utc(d[0]);
-                        const end = moment.utc(d[1]);
-                        const duration = moment.duration(end.diff(start));
-
-                        return [
-                            `Total Time: ${duration.humanize()}`,
-                            `Created: ${start.format('YYYY-MM-DD')}`,
-                            `Deprecated: ${end.format('YYYY-MM-DD')}`
-                        ];
-                    }
-                }
+                enabled: false
             },
             plugins: {
                 datalabels: false,
