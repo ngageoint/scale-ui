@@ -371,35 +371,8 @@ export class CreateDatasetComponent implements OnInit {
                 this.datasetFilesData = data;
                 this.datasetFileList = data.results;
                 this.filteredDatasetFileList = data.results;
-
-                this.mediaTypeOptions = this.datasetFileList
-                    .map(file => file.media_type)
-                    .filter(onlyUnique)
-                    .map(mediaType => ({
-                        label: mediaType,
-                        value: mediaType
-                    }));
-
-                this.locationOptions = []
-                    .concat(...data.results.map(file => file.countries))
-                    .filter(onlyUnique)
-                    .map(country => ({ label: country, value: country }));
-
-                this.recipeTypeOptions = data.results
-                    .map(file => file.recipe_type)
-                    .filter((obj, pos, arr) => {
-                        return (
-                            arr
-                                .map(mapObj => mapObj['id'])
-                                .indexOf(obj['id']) === pos
-                        );
-                    })
-                    .map(rt => ({
-                        label: `${rt.title} v${rt.revision_num}`,
-                        value: rt
-                    }));
-
                 this.datatableLoading = false;
+                this.buildOptionalFilters(data);
             });
         } else {
             const values = this.form.value;
@@ -411,6 +384,36 @@ export class CreateDatasetComponent implements OnInit {
             this.form.get('searchTime').markAsDirty();
             this.form.updateValueAndValidity();
         }
+    }
+
+    buildOptionalFilters(data: ApiResults) {
+        this.mediaTypeOptions = data.results
+            .map((file) => file.media_type)
+            .filter(onlyUnique)
+            .map((mediaType) => ({
+                label: mediaType,
+                value: mediaType,
+            }));
+
+        this.locationOptions = []
+            .concat(...data.results.map((file) => file.countries))
+            .filter(onlyUnique)
+            .map((country) => ({ label: country, value: country }));
+
+        this.recipeTypeOptions = data.results
+            .reduce((results, file) => {
+                if (file.recipe_type) {
+                    results.push(file.recipe_type);
+                }
+                return results;
+            }, [])
+            .filter((obj, pos, arr) => {
+                return arr.map((mapObj) => mapObj['id']).indexOf(obj['id']) === pos;
+            })
+            .map((rt) => ({
+                label: `${rt.title} v${rt.revision_num}`,
+                value: rt,
+            }));
     }
 
     onDatasetSelectChange(event) {
