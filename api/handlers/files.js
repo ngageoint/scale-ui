@@ -53,7 +53,8 @@ module.exports = function(request) {
                 title: "My Other Recipe",
                 description: "Processes some other data",
                 revision_num: 123
-            }
+            },
+            null
         ];
         data.results.push({
             id: id,

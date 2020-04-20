@@ -1,25 +1,24 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DatasetComponent } from './create-dataset.component';
+import { CreateDatasetComponent } from './create-dataset.component';
 
-describe('DatasetComponent', () => {
-  let component: DatasetComponent;
-  let fixture: ComponentFixture<DatasetComponent>;
+describe('CreateDatasetComponent', () => {
+    let component: CreateDatasetComponent;
+    let fixture: ComponentFixture<CreateDatasetComponent>;
 
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [ DatasetComponent ]
-    })
-    .compileComponents();
-  }));
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [CreateDatasetComponent],
+        }).compileComponents();
+    }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(DatasetComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(CreateDatasetComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

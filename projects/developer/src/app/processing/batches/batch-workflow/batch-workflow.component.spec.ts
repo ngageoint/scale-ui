@@ -22,28 +22,4 @@ describe('BatchWorkflowComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-  describe('#getStepHeader', () => {
-
-    it('should return the name of the current step', () => {
-        component.items = [
-            {label: 'Step 1'},
-            {label: 'Step 2'}
-        ];
-        component.activeIndex = 1;
-        expect(component.getStepHeader()).toBe('Step 2');
-    });
-
-    describe('when the step is optional', () => {
-        // Step 1 is optional
-
-        it('should return "(Optional)" in the header',  () => {
-            component.items = [
-                {label: 'Step 1'},
-                {label: 'Step 2'}
-            ];
-            component.activeIndex = 0;
-            expect(component.getStepHeader()).toBe('Step 1 (Optional)');
-        });
-    });
-  });
 });
