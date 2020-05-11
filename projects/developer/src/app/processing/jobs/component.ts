@@ -32,7 +32,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     columns = [
         { field: 'job_type', header: 'Job Type' },
         { field: 'recipe', header: 'Recipe' },
-        { field: 'inputs', header: 'Inputs' },
+        { field: 'inputs', header: 'Inputs', sortableColumnDisabled: true  },
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node', header: 'Node' },
