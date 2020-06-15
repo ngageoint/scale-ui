@@ -53,7 +53,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         this.profileService.isAuthenticated.subscribe(value => {
             this.myComponentsIsAuthenticatedFlag = value;
         });
-        setInterval(() => { this.today = Date.now() }, 1);
+        setInterval(() => { this.today = Date.now(); }, 1);
     }
 
     selectNavItem(event, itemId) {
