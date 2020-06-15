@@ -53,17 +53,11 @@ label {
         }
     }
 }
-.max-size {
-    background-color: #106cc8;
-    color: green;
-    white-space: pre-wrap !important;
-    overflow-wrap: break-word !important;
-}
-.ui-tooltip-text {
-    background-color: #106cc8;
-    color: green;
-    white-space: pre-wrap !important;
-    overflow-wrap: break-word !important;
+::ng-deep {
+    .max-size {
+        white-space: pre-wrap !important;
+        overflow-wrap: break-word !important;
+    }
 }
 .label-info {
     padding: .2em .6em .1em .6em;
@@ -74,6 +68,13 @@ label {
 ::ng-deep .ui-multiselect-close {
     display: none !important;
 }
+
+::ng-deep .ui-table tr td:nth-child(3) {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
 
 @media screen and (max-width: 858px) {
     .jobs__controls {
