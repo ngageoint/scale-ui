@@ -1,10 +1,9 @@
-@import '../../defaults/animations';
+@import "../../defaults/animations";
 
 $navbar-height: 72px;
 $navshadow: 0 0 0.5em var(--black);
 $navbar-status-width: 250px;
 $navbar-item-width: 150px;
-
 
 .navbar-ctr {
     height: $navbar-height;
@@ -74,7 +73,7 @@ $navbar-item-width: 150px;
 
 .navbar__logo {
     color: var(--white);
-    margin-right: 1.0em;
+    margin-right: 1em;
     padding: 0.8em 1.25em 0.5em 1.25em;
     text-align: center;
 
@@ -97,6 +96,22 @@ $navbar-item-width: 150px;
     }
 }
 
+.navbar__system-time {
+    border-style: double;
+    border-color: var(--white);
+    border-width: 2px;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}
+
+@media screen and (max-width: 1350px) {
+    .navbar__system-time {
+        display: none;
+    }
+}
+
 .navbar__status {
     width: $navbar-status-width;
 }
@@ -106,7 +121,9 @@ $navbar-item-width: 150px;
 }
 
 .navbar__settings {
-    .navbar__scheduler, .navbar__system, .navbar__theme {
+    .navbar__scheduler,
+    .navbar__system,
+    .navbar__theme {
         margin: 0 0 0 1px;
         color: var(--white);
         font-size: 25px;
@@ -140,10 +157,10 @@ $navbar-item-width: 150px;
     }
 
     .navbar__scheduler-pause {
-        animation:redBlinkingText 1.5s infinite;
+        animation: redBlinkingText 1.5s infinite;
     }
     .navbar__scheduler-updating {
-        animation:yellowBlinkingText 1.5s infinite;
+        animation: yellowBlinkingText 1.5s infinite;
     }
 }
 
@@ -175,7 +192,7 @@ $navbar-item-width: 150px;
     border: none;
     height: $navbar-height;
     font-size: 30px;
-    padding: .5em;
+    padding: 0.5em;
 }
 
 .navbar__system-overlaypanel {
@@ -188,14 +205,26 @@ $navbar-item-width: 150px;
     }
 }
 
-@keyframes redBlinkingText{
-    0%{     color: #777;    }
-    50%{    color: var(--red); }
-    100%{   color: #777;    }
+@keyframes redBlinkingText {
+    0% {
+        color: #777;
+    }
+    50% {
+        color: var(--red);
+    }
+    100% {
+        color: #777;
+    }
 }
 
-@keyframes yellowBlinkingText{
-    0%{     color: #777;    }
-    50%{    color: var(--yellow); }
-    100%{   color: #777;    }
+@keyframes yellowBlinkingText {
+    0% {
+        color: #777;
+    }
+    50% {
+        color: var(--yellow);
+    }
+    100% {
+        color: #777;
+    }
 }

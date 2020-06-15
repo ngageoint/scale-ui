@@ -19,6 +19,9 @@
                 <a (click)="selectNavItem($event, 'system')"><i class="fa fa-television"></i> System</a>
             </div>
         </div>
+        <div class="navbar__system-time">
+            {{today | date:'h:mm:ss a'}}
+        </div>
         <div class="flexed mobile" *ngIf="isMobile">
             <div class="navbar__logo-mobile">
                 <a routerLink="/">
@@ -27,7 +30,7 @@
             </div>
             <p-slideMenu #menu [model]="itemsMobile" [popup]="true" [viewportHeight]="340"></p-slideMenu>
             <button pButton type="button" class="navbar__mobile-nav-button" icon="fa fa-bars"
-                    (click)="menu.toggle($event)"></button>
+                (click)="menu.toggle($event)"></button>
         </div>
         <div class="flexed navbar__settings" style="height: 100%">
             <div class="navbar__status" *ngIf="isAuthenticated">
@@ -37,7 +40,7 @@
                 <span [ngClass]="themeIcon"></span>
             </div>
             <div class="navbar__system" *ngIf="isAuthenticated && scheduler" pTooltip="System Status"
-                 tooltipPosition="bottom" (click)="onSystemClick($event)">
+                tooltipPosition="bottom" (click)="onSystemClick($event)">
                 <div class="navbar__icon">
                     <span class="fa fa-bell"></span>
                     <span class="label label-danger" *ngIf="scheduler.warnings && scheduler.warnings.length > 0">
@@ -46,7 +49,7 @@
                 </div>
             </div>
             <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler" [ngClass]="schedulerClass"
-                 (click)="onSchedulerClick()" pTooltip="Scheduler" tooltipPosition="bottom">
+                (click)="onSchedulerClick()" pTooltip="Scheduler" tooltipPosition="bottom">
                 <span class="fa fa-power-off"></span>
             </div>
         </div>
@@ -64,8 +67,8 @@
         </div>
         <ul *ngFor="let warning of scheduler.warnings">
             <li>
-                <strong>{{ warning.title }}</strong><br/>
-                <span *ngIf="warning.description">{{ warning.description }}<br/></span>
+                <strong>{{ warning.title }}</strong><br />
+                <span *ngIf="warning.description">{{ warning.description }}<br /></span>
                 <span class="small-text">{{ warning.last_updated }}</span>
             </li>
         </ul>
@@ -77,19 +80,19 @@
                 </span>
                 {{ dependency.description }}
             </div>
-                <ul *ngFor="let error of dependency.errors">
-                        <li>
-                            <strong>{{ error.errorType }}</strong><br/>
-                            <span *ngIf="error.errorMessage">{{ error.errorMessage}}<br/></span>
-                        </li>
-                    </ul>
+            <ul *ngFor="let error of dependency.errors">
+                <li>
+                    <strong>{{ error.errorType }}</strong><br />
+                    <span *ngIf="error.errorMessage">{{ error.errorMessage}}<br /></span>
+                </li>
+            </ul>
 
         </div>
     </div>
     <div class="navbar__link">
-        <a routerLink="/system/status" > View All Statuses</a>
+        <a routerLink="/system/status"> View All Statuses</a>
     </div>
 </p-overlayPanel>
 <p-confirmDialog key="schedulerConfirm" header="Scheduler" icon="pi pi-exclamation-triangle"
-                 acceptButtonStyleClass="ui-button-accept" rejectButtonStyleClass="ui-button-reject">
+    acceptButtonStyleClass="ui-button-accept" rejectButtonStyleClass="ui-button-reject">
 </p-confirmDialog>

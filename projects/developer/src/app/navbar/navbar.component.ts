@@ -22,7 +22,7 @@ import { ProfileService } from '../common/services/profile.service';
 export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     @Input() isAuthenticated: boolean;
     @Input() theme: string;
-    @ViewChild('systemOp', {static: true}) systemOp: OverlayPanel;
+    @ViewChild('systemOp', { static: true }) systemOp: OverlayPanel;
     statusSubscription: any;
     selectedId = null;
     subscription: any;
@@ -37,6 +37,8 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     is_paused: any;
     myComponentsIsAuthenticatedFlag: any;
     dependencyErrors: any;
+    today: number = Date.now();
+
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -51,6 +53,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         this.profileService.isAuthenticated.subscribe(value => {
             this.myComponentsIsAuthenticatedFlag = value;
         });
+        setInterval(() => { this.today = Date.now() }, 1);
     }
 
     selectNavItem(event, itemId) {
@@ -77,7 +80,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
 
     changeTheme() {
         const active = this.themeService.getActiveTheme();
-        const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
+        const themeLink: HTMLLinkElement = <HTMLLinkElement>document.getElementById('theme-css');
         if (active.name === 'light') {
             themeLink.href = 'assets/themes/dark.css';
             this.themeTooltip = 'Switch to Light Theme';
@@ -129,7 +132,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                         icon: 'fa fa-fw fa-files-o',
                         url: '/processing/batches'
                     },
-                    {separator: true},
+                    { separator: true },
                     {
                         label: 'Close',
                         icon: 'fa fa-fw fa-times'
@@ -160,7 +163,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                         icon: 'fa fa-fw fa-calendar',
                         url: '/data/timeline'
                     },
-                    {separator: true},
+                    { separator: true },
                     {
                         label: 'Close',
                         icon: 'fa fa-fw fa-times'
@@ -181,7 +184,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                         icon: 'fa fa-fw fa-cubes',
                         url: '/configuration/recipe-types'
                     },
-                    {separator: true},
+                    { separator: true },
                     {
                         label: 'Close',
                         icon: 'fa fa-fw fa-times'
@@ -212,14 +215,14 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                         icon: 'fa fa-fw fa-database',
                         url: '/system/workspaces'
                     },
-                    {separator: true},
+                    { separator: true },
                     {
                         label: 'Quit',
                         icon: 'fa fa-fw fa-times'
                     }
                 ]
             },
-            {separator: true},
+            { separator: true },
             {
                 label: 'Close',
                 icon: 'fa fa-fw fa-times'
@@ -250,10 +253,10 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                 };
                 this.schedulerApiService.updateScheduler(params).subscribe(() => {
                     this.schedulerClass = this.is_paused ? 'navbar__scheduler-pause' : 'navbar__scheduler-resume';
-                    this.messageService.add({severity: 'success', summary: 'Scheduler successfully updated'});
+                    this.messageService.add({ severity: 'success', summary: 'Scheduler successfully updated' });
                 }, err => {
                     console.log(err);
-                    this.messageService.add({severity: 'error', summary: 'Error updating scheduler', detail: err.statusText});
+                    this.messageService.add({ severity: 'error', summary: 'Error updating scheduler', detail: err.statusText });
                 });
 
             }
@@ -265,23 +268,23 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
             this.isMobile = !state.matches;
         });
         if (this.myComponentsIsAuthenticatedFlag) {
-             this.subscription = this.schedulerApiService.getScheduler(true).subscribe(schedulerData => {
-            this.is_paused = schedulerData.is_paused;
-            this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
-                if (data) {
-                    this.scheduler = data.scheduler;
-                    this.dependencyErrors = [];
-                    _.forEach(data.dependencies, (dependent, key) => {
-                        const errorTypes = [];
-                        _.forEach(dependent.errors, (error) => {
-                            _.forEach(error, (message, type) => {
-                                errorTypes.push({
-                                    errorType: type,
-                                    errorMessage: message
+            this.subscription = this.schedulerApiService.getScheduler(true).subscribe(schedulerData => {
+                this.is_paused = schedulerData.is_paused;
+                this.statusSubscription = this.statusService.statusUpdated.subscribe(data => {
+                    if (data) {
+                        this.scheduler = data.scheduler;
+                        this.dependencyErrors = [];
+                        _.forEach(data.dependencies, (dependent, key) => {
+                            const errorTypes = [];
+                            _.forEach(dependent.errors, (error) => {
+                                _.forEach(error, (message, type) => {
+                                    errorTypes.push({
+                                        errorType: type,
+                                        errorMessage: message
+                                    });
                                 });
                             });
-                        });
-                        if (errorTypes.length > 0) {
+                            if (errorTypes.length > 0) {
                                 this.dependencyErrors.push({
                                     title: key,
                                     errors: errorTypes,
@@ -291,36 +294,36 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                                     styleClass: 'system-status__unhealthy',
                                     icon: 'fa fa-warning'
                                 });
-                        }
-                    });
-                    this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
-                    if (this.scheduler.state.name === 'READY') {
-                        this.schedulerStatusClass = 'label label-success';
-                        this.schedulerStatusIcon = 'fa fa-check-circle';
-                        if (this.is_paused === true) {
-                            this.schedulerClass = 'navbar__scheduler-updating';
+                            }
+                        });
+                        this.scheduler.warnings = _.orderBy(this.scheduler.warnings, ['last_updated'], ['desc']);
+                        if (this.scheduler.state.name === 'READY') {
+                            this.schedulerStatusClass = 'label label-success';
+                            this.schedulerStatusIcon = 'fa fa-check-circle';
+                            if (this.is_paused === true) {
+                                this.schedulerClass = 'navbar__scheduler-updating';
+                            } else {
+                                this.schedulerClass = 'navbar__scheduler-resume';
+                                this.is_paused = false;
+                            }
+                        } else if (this.scheduler.state.name === 'PAUSED') {
+                            this.schedulerStatusClass = 'label label-paused';
+                            this.schedulerStatusIcon = 'fa fa-pause';
+                            if (this.is_paused === false) {
+                                this.schedulerClass = 'navbar__scheduler-updating';
+                            } else {
+                                this.schedulerClass = 'navbar__scheduler-pause';
+                                this.is_paused = true;
+                            }
                         } else {
-                            this.schedulerClass = 'navbar__scheduler-resume';
-                            this.is_paused = false;
+                            this.schedulerStatusClass = 'label label-default';
+                            this.schedulerStatusIcon = 'fa fa-circle';
                         }
-                    } else if (this.scheduler.state.name === 'PAUSED') {
-                        this.schedulerStatusClass = 'label label-paused';
-                        this.schedulerStatusIcon = 'fa fa-pause';
-                        if (this.is_paused === false) {
-                            this.schedulerClass = 'navbar__scheduler-updating';
-                        } else {
-                            this.schedulerClass = 'navbar__scheduler-pause';
-                            this.is_paused = true;
-                        }
-                    } else {
-                        this.schedulerStatusClass = 'label label-default';
-                        this.schedulerStatusIcon = 'fa fa-circle';
                     }
-                }
+                });
+            }, err => {
+                this.messageService.add({ severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText });
             });
-        }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText});
-        });
         }
 
 
@@ -331,7 +334,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         if (changes.theme && changes.theme.currentValue) {
             this.themeTooltip = changes.theme.currentValue === 'light' ? 'Switch to Dark Theme' : 'Switch to Light Theme';
             this.themeIcon = changes.theme.currentValue === 'light' ? 'fa fa-moon-o' : 'fa fa-sun-o';
-            const themeLink: HTMLLinkElement = <HTMLLinkElement> document.getElementById('theme-css');
+            const themeLink: HTMLLinkElement = <HTMLLinkElement>document.getElementById('theme-css');
             if (themeLink) {
                 themeLink.href = `assets/themes/${changes.theme.currentValue}.css`;
             }
