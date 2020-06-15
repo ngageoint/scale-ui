@@ -19,8 +19,8 @@ module.exports = function (request) {
     var fileNames = [
         '1my-file.file',
         '2my-other-file.file',
-        '3my-other-file-final.file',
-        '4my-file-final-final.file',
+        '202001hbhbhbcxvghwfqejmajnfQR4GU2BY3RBJFNQEWIUFN3I4U2r23r2rwf34twee09.102117.jpg',
+        '20200109.102117.jpg',
     ];
     var fileInputNames = ['INPUT_FILE', 'FILE_INPUTS', 'test_inputs'];
 
