@@ -106,10 +106,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
     ngOnInit() {
-        this.refreshAllJobTypes();
-        this.jobsService.favoritesUpdated.subscribe(() => {
+        if (this.favoriteJobTypes) {
+            this.jobsService.favoritesUpdated.subscribe(() => {
+                this.refreshAllJobTypes();
+            });
+        } else {
             this.refreshAllJobTypes();
-        });
+        }
     }
     ngOnDestroy() {
         this.unsubscribe();
