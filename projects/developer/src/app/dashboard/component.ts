@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     loadingJobTypes: boolean;
     columnsFavs: any[];
     columnsAll: any[];
-    subscription: any;
+    subscriptions = [];
     allJobTypes: any;
     favoriteJobTypes: any[];
     dataFavs: any;
@@ -101,15 +101,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.favoriteJobTypes = [];
     }
     unsubscribe() {
-        if (this.subscription) {
-            this.subscription.unsubscribe();
+        if (this.subscriptions) {
+            this.subscriptions.forEach(subscription => subscription.unsubscribe());
+            this.subscriptions = [];
         }
     }
     ngOnInit() {
-        this.refreshAllJobTypes();
-        this.jobsService.favoritesUpdated.subscribe(() => {
+        if (this.favoriteJobTypes) {
+            this.subscriptions.push(this.jobsService.favoritesUpdated.subscribe(() => {
+                this.refreshAllJobTypes();
+            }));
+        } else {
             this.refreshAllJobTypes();
-        });
+        }
     }
     ngOnDestroy() {
         this.unsubscribe();
@@ -119,7 +123,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         const params = {
             is_active: true
         };
-        this.subscription = this.jobTypesApiService.getJobTypeStatus(true, params).subscribe(data => {
+        this.subscriptions.push(this.jobTypesApiService.getJobTypeStatus(true, params).subscribe(data => {
             this.allJobTypes = _.orderBy(data.results, ['job_type.title', 'job_type.version'], ['asc', 'asc']);
             this.jobsService.setAllJobs(this.allJobTypes);
 
@@ -136,7 +140,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     is_active: true,
                     status: ['RUNNING']
                 };
-                this.subscription = this.jobsApiService.getJobs(chartParams).subscribe(chartData => {
+                this.subscriptions.push( this.jobsApiService.getJobs(chartParams).subscribe(chartData => {
                     if (this.favoriteJobTypes) {
                         const favJobs = [];
                         _.forEach(this.favoriteJobTypes, favoriteJob => {
@@ -149,11 +153,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
                         this.createSunburstChart(favJobs, 'fav');
                     }
                     this.createSunburstChart(chartData.results, 'all');
-                });
+                }));
         },  err => {
             this.loadingJobTypes = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job type status', detail: err.statusText});
-        });
+        }));
     }
 
     createSunburstChart(data, type) {
