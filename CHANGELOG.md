@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.17.0](https://github.com/ngageoint/scale-ui/compare/v0.16.0...v0.17.0) (2020-06-24)
+
+
+### Bug Fixes
+
+* **batches:** Data Files table loading spinner persists ([#477](https://github.com/ngageoint/scale-ui/issues/477)) ([b2a57d7](https://github.com/ngageoint/scale-ui/commit/b2a57d7)), closes [#464](https://github.com/ngageoint/scale-ui/issues/464)
+* **batches:** display data files table when no results returned ([#466](https://github.com/ngageoint/scale-ui/issues/466)) ([d6c68cf](https://github.com/ngageoint/scale-ui/commit/d6c68cf)), closes [#463](https://github.com/ngageoint/scale-ui/issues/463)
+* **dashboard:** prevent multiple refreshes on charts when changing window focus ([#492](https://github.com/ngageoint/scale-ui/issues/492)) ([eb1656c](https://github.com/ngageoint/scale-ui/commit/eb1656c)), closes [#484](https://github.com/ngageoint/scale-ui/issues/484)
+* **jobs:** make inputs column unsortable ([#483](https://github.com/ngageoint/scale-ui/issues/483)) ([fa122ab](https://github.com/ngageoint/scale-ui/commit/fa122ab)), closes [#480](https://github.com/ngageoint/scale-ui/issues/480)
+* **jobs:** wrap tooltip text for file column ([#489](https://github.com/ngageoint/scale-ui/issues/489)) ([2a9b6c0](https://github.com/ngageoint/scale-ui/commit/2a9b6c0)), closes [#479](https://github.com/ngageoint/scale-ui/issues/479)
+* **metrics:** calendars not opening properly ([#486](https://github.com/ngageoint/scale-ui/issues/486)) ([17fd479](https://github.com/ngageoint/scale-ui/commit/17fd479)), closes [#462](https://github.com/ngageoint/scale-ui/issues/462)
+
+
+### Features
+
+* Add scale favicon ([#459](https://github.com/ngageoint/scale-ui/issues/459)) ([1faa940](https://github.com/ngageoint/scale-ui/commit/1faa940))
+* **job types:** Add link to filtered jobs data table from job types detail view ([#469](https://github.com/ngageoint/scale-ui/issues/469)) ([40c01a1](https://github.com/ngageoint/scale-ui/commit/40c01a1)), closes [#287](https://github.com/ngageoint/scale-ui/issues/287)
+* **jobs:** Add File Inputs to Jobs Table ([#471](https://github.com/ngageoint/scale-ui/issues/471)) ([15a25b1](https://github.com/ngageoint/scale-ui/commit/15a25b1)), closes [#414](https://github.com/ngageoint/scale-ui/issues/414)
+* **jobs:** Display star icon next to job type in datatable if it's a favorite ([#468](https://github.com/ngageoint/scale-ui/issues/468)) ([bfd6287](https://github.com/ngageoint/scale-ui/commit/bfd6287))
+* **timeline:** simply chart display for viewing recipes and jobs on timeline ([#476](https://github.com/ngageoint/scale-ui/issues/476)) ([773c30e](https://github.com/ngageoint/scale-ui/commit/773c30e)), closes [#126](https://github.com/ngageoint/scale-ui/issues/126) [#459](https://github.com/ngageoint/scale-ui/issues/459)
+
+
+
 ## [0.16.0](https://github.com/ngageoint/scale-ui/compare/v0.15.0...v0.16.0) (2020-03-03)
 
 
