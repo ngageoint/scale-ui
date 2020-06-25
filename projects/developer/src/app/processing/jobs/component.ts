@@ -186,11 +186,6 @@ export class JobsComponent implements OnInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
         });
     }
-
-    makeTooltip(fileNames: string) {
-        return fileNames.split(', ').join('\n');
-    }
-
     getUnicode(code) {
         return `&#x${code};`;
     }
