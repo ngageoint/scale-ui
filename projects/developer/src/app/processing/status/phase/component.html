@@ -1,0 +1,20 @@
+<p-overlayPanel #panelold>
+    <ng-container *ngIf="jobs && jobs.length">
+        <div *ngFor="let job of jobs">
+            {{ job.job_type.title }}
+        </div>
+    </ng-container>
+</p-overlayPanel>
+
+<p-menu #panel [popup]="true" [model]="menuItems"></p-menu>
+
+<button class="ui-button-raised ui-button-rounded ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only {{ color }}"
+        (click)="(jobs && jobs.length) ? panel.toggle($event) : null"
+        pTooltip="{{ label }}"
+        tooltipPosition="top">
+    <span class="ui-button-text ui-clickable">
+        <i class="fa fa-fw {{ icon }}"></i>
+        <i class="fa fa-caret-down fa-fw"
+           *ngIf="jobs && jobs.length"></i>
+    </span>
+</button>

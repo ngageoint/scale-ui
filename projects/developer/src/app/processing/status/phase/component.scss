@@ -1,0 +1,12 @@
+
+::ng-deep {
+    .status-running .ui-menuitem-icon {
+        color: var(--status-running) !important;
+    }
+    .status-failed .ui-menuitem-icon {
+        color: var(--status-failed) !important;
+    }
+    .status-complete .ui-menuitem-icon {
+        color: var(--status-completed) !important;
+    }
+}

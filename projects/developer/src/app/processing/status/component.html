@@ -1,0 +1,8 @@
+<h2>
+    <i class="fa fa-dashboard"></i>
+    Processing Status
+</h2>
+
+<p-card *ngFor="let recipe of recipes; trackBy: recipeTrackBy">
+    <dev-processing-status-recipe [recipe]="recipe"></dev-processing-status-recipe>
+</p-card>

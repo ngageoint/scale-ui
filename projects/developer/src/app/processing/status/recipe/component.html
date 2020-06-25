@@ -1,0 +1,42 @@
+<div class="p-grid">
+    <div class="p-col">
+        <a [routerLink]="['/processing/recipes', recipe.id]">
+            <strong>{{ recipe.recipe_type.title }}</strong> rev. {{ recipe.recipe_type_rev.revision_num }}
+        </a><br>
+        <small>{{ recipe.recipe_type.description }}</small>
+    </div>
+    <div class="p-col">
+        {{ status }}
+    </div>
+    <div class="p-col">
+        <div class="text-center" *ngIf="isLoading">
+            <i class="fa fa-spinner fa-pulse fa-2x fa-fw"></i>
+        </div>
+
+        <ng-container *ngIf="!isLoading">
+            <dev-processing-status-phase label="Ingest"></dev-processing-status-phase>
+            <dev-processing-status-phase label="Parse"
+                                         *ngIf="parseJobs.length"
+                                         [jobs]="parseJobs">
+            </dev-processing-status-phase>
+            <dev-processing-status-phase label="Publish"
+                                         *ngIf="publishJobs.length"
+                                         [jobs]="publishJobs">
+            </dev-processing-status-phase>
+            <dev-processing-status-phase label="Process"
+                                         *ngIf="processingJobs.length"
+                                         [jobs]="processingJobs">
+            </dev-processing-status-phase>
+        </ng-container>
+    </div>
+    <div class="p-col">
+        <ng-container *ngIf="duration">
+            <small>{{ durationLabel }}</small><br>
+            <i class="fa fa-clock-o"></i> {{ duration }}
+        </ng-container>
+    </div>
+    <div class="p-col">
+        <dev-processing-status-products [recipe]="recipe">
+        </dev-processing-status-products>
+    </div>
+</div>
