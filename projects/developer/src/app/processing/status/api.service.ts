@@ -29,20 +29,48 @@ export class ProcessingStatusApiService {
     }
 
     /**
-     * Get recipe objects.
+     * Get recipe types.
      * @param  filters any additional filters to merge into defaults
-     * @return         observable with a page of recipes
+     * @return         observable with a page of recipe types
      */
-    public getRecipes(filters: any = {}): Observable<ApiResults> {
+    public getRecipeTypes(filters: any = {}): Observable<ApiResults> {
         const params = _.merge({
-            order: '-last_modified',
+            order: 'name',
             page: 1,
-            page_size: 15,
-            // recipe_type_id
+            page_size: 1000
         }, filters);
 
         const queryParams = new HttpParams({
             fromObject: params
+        });
+
+        return this.http.get<ApiResults>(`${this.apiPrefix}/recipe-types/`, { params: queryParams })
+            .pipe(
+                map(response => ApiResults.transformer(response)),
+                catchError(DataService.handleError)
+            );
+    }
+
+    /**
+     * Get recipe objects.
+     * @param  filters       any additional filters to merge into defaults
+     * @param  recipeTypeIds multiple recipe type IDs to filter by
+     * @return               observable with a page of recipes
+     */
+    public getRecipes(recipeTypeIds: number[], filters: any = {}): Observable<ApiResults> {
+        const params = _.merge({
+            order: '-last_modified',
+            page: 1,
+            page_size: 15,
+        }, filters);
+
+        let queryParams = new HttpParams({
+            fromObject: params
+        });
+
+        // add multiple filters for recipe type id
+        recipeTypeIds.forEach(id => {
+            queryParams = queryParams.append('recipe_type_id', id.toString());
         });
 
         return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })

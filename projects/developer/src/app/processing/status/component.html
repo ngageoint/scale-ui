@@ -1,8 +1,35 @@
-<h2>
-    <i class="fa fa-dashboard"></i>
-    Processing Status
-</h2>
+<div class="flexed space-between">
+    <h2>
+        <i class="fa fa-dashboard"></i>
+        Processing Status
+    </h2>
+
+    <p-multiSelect [options]="recipeTypes"
+                   [(ngModel)]="selectedRecipeTypes"
+                   [virtualScroll]="true"
+                   defaultLabel="Choose recipe types"
+                   selectedItemsLabel="{0} recipe types selected"
+                   itemSize="32"
+                   appendTo="body"
+                   (onPanelHide)="onRecipeTypeHide()">
+    </p-multiSelect>
+</div>
+
 
 <p-card *ngFor="let recipe of recipes; trackBy: recipeTrackBy">
     <dev-processing-status-recipe [recipe]="recipe"></dev-processing-status-recipe>
+</p-card>
+
+<p-card *ngIf="selectedRecipeTypesStorage.length && !recipes.length"
+        class="text-center">
+    <em style="color: var(--status-unknown)">
+        No recipes found matching the selected recipe types
+    </em>
+</p-card>
+
+<p-card *ngIf="!selectedRecipeTypesStorage.length"
+        class="text-center">
+    <em style="color: var(--status-unknown)">
+        Select one or more recipe types
+    </em>
 </p-card>
