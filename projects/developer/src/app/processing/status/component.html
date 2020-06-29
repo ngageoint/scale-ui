@@ -17,7 +17,7 @@
 
 
 <p-card *ngFor="let recipe of recipes; trackBy: recipeTrackBy">
-    <dev-processing-status-recipe [recipe]="recipe"></dev-processing-status-recipe>
+    <dev-processing-status-recipe [recipe]="recipe" [updateJobs]="timer"></dev-processing-status-recipe>
 </p-card>
 
 <p-card *ngIf="selectedRecipeTypesStorage.length && !recipes.length"

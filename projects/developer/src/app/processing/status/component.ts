@@ -18,6 +18,7 @@ export class ProcessingStatusComponent implements OnInit, OnDestroy {
     // how often the component should refresh data
     private static REFRESH_TIME = 10;
 
+    public timer: Observable<number>;
     // filtered recipes from the api
     public recipes = [];
     // recipe types to show in the select dropdown
@@ -65,9 +66,10 @@ export class ProcessingStatusComponent implements OnInit, OnDestroy {
         );
 
         // create timer to periodically refresh recipe data
-        const timer = Observable.timer(0, ProcessingStatusComponent.REFRESH_TIME * 1500);
+        // this will be shared with child recipe component to also update job data
+        this.timer = Observable.timer(0, ProcessingStatusComponent.REFRESH_TIME * 1500);
         this.subscriptions.push(
-            timer.subscribe(() => {
+            this.timer.subscribe(() => {
                 this.fetch();
             })
         );

@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit, OnChanges, Input } from '@angular/core';
+import { Observable } from 'rxjs';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -20,6 +21,7 @@ enum STATUS {
 })
 export class ProcessingStatusRecipeComponent implements OnInit, OnDestroy, OnChanges {
     @Input() recipe: Recipe;
+    @Input() updateJobs: Observable<number>;
 
     // loading status when fetching jobs
     public isLoading = false;
@@ -46,7 +48,18 @@ export class ProcessingStatusRecipeComponent implements OnInit, OnDestroy, OnCha
     }
 
     ngOnInit(): void {
+        // initial call to fetch job status
         this.fetchJobs();
+
+        this.subscriptions.push(
+            // listen for timer update event from parent and refresh job status
+            this.updateJobs.subscribe(() => {
+                if (!this.recipe.is_completed) {
+                    // no need for future refreshes if the recipe has completed
+                    this.fetchJobs();
+                }
+            })
+        );
     }
 
     ngOnDestroy(): void {
