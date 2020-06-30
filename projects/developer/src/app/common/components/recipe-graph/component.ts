@@ -369,16 +369,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                     if (connectionTemp) {
                                         if (!_.isEmpty(this.selectedNode.input[inputFile])
                                         && (inputKey === inputFile)) {
-                                            if (!_.find(this.selectedNodeConnections, {name: connectionTemp.name})) {
-                                                this.selectedNodeConnections.push({
-                                                    name: connectionTemp.name,
-                                                    type: 'recipe',
-                                                    input_name: inputFile
-                                                });
-                                            }
+                                            this.selectedNodeConnections.push({
+                                                name: connectionTemp.name,
+                                                type: 'recipe',
+                                                input_name: inputFile
+                                            });
+                                        }
                                     }
-                                    }
-
                                 });
                             }
                         });
