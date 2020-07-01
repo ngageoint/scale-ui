@@ -1,9 +1,9 @@
 <div class="p-grid">
     <div class="p-col">
         <a [routerLink]="['/processing/recipes', recipe.id]">
-            <strong>{{ recipe.recipe_type.title }}</strong> rev. {{ recipe.recipe_type_rev.revision_num }}
+            <strong>{{ recipe.recipe_type['title'] }}</strong> rev. {{ recipe.recipe_type_rev['revision_num'] }}
         </a><br>
-        <small>{{ recipe.recipe_type.description }}</small>
+        <small>{{ recipe.recipe_type['description'] }}</small>
     </div>
     <div class="p-col">
         {{ status }}
