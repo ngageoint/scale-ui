@@ -31,6 +31,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         { field: 'file_size', header: 'File Size' },
         { field: 'strike.id', header: 'Strike Process' },
         { field: 'status', header: 'Status' },
+        { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'transfer_started', header: 'Transfer Started (Z)' },
         { field: 'transfer_ended', header: 'Transfer Ended (Z)' },
         { field: 'ingest_started', header: 'Ingest Started (Z)' },
@@ -89,7 +90,7 @@ export class IngestComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private breakpointObserver: BreakpointObserver
-    ) {}
+    ) { }
 
     private updateData() {
         this.unsubscribe();
@@ -102,13 +103,13 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.count = data.count;
             _.forEach(data.results, result => {
                 const ingest = _.find(this.selectedRows, { data: { id: result.id } });
-                result.selected =  !!ingest;
+                result.selected = !!ingest;
             });
             this.ingests = Ingest.transformer(data.results);
         }, err => {
             this.datatableLoading = false;
             this.apiLoading = false;
-            this.messageService.add({severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText});
+            this.messageService.add({ severity: 'error', summary: 'Error retrieving ingests', detail: err.statusText });
         });
     }
     private updateOptions() {
@@ -147,7 +148,7 @@ export class IngestComponent implements OnInit, OnDestroy {
             this.strikeValues = _.orderBy(selectItems, ['title'], ['asc']);
             this.updateData();
         }, err => {
-            this.messageService.add({severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText});
+            this.messageService.add({ severity: 'error', summary: 'Error retrieving strikes', detail: err.statusText });
         });
     }
 
@@ -208,7 +209,7 @@ export class IngestComponent implements OnInit, OnDestroy {
                 this.router.navigate([`/processing/jobs/${e.data.job.id}`]);
             }
         } else {
-            this.messageService.add({severity: 'error', summary: 'Job not found', detail: 'There is no job associated with this ingest'});
+            this.messageService.add({ severity: 'error', summary: 'Job not found', detail: 'There is no job associated with this ingest' });
             setTimeout(() => {
                 this.selectedIngest = null;
             });
@@ -225,7 +226,7 @@ export class IngestComponent implements OnInit, OnDestroy {
      * Callback for when temporal filter tells this component to update visible date range.
      * @param data start and end iso strings for what dates should be filtered
      */
-    onTemporalFilterUpdate(data: {start: string, end: string}): void {
+    onTemporalFilterUpdate(data: { start: string, end: string }): void {
         // determine if values have changed
         const isSame = this.started === data.start && this.ended === data.end;
 
@@ -234,9 +235,9 @@ export class IngestComponent implements OnInit, OnDestroy {
         this.ended = data.end;
         // update the datatable options then call the api
         this.datatableOptions = Object.assign(this.datatableOptions, {
-                started: data.start,
-                ended: data.end
-            });
+            started: data.start,
+            ended: data.end
+        });
         this.updateOptions();
 
         // updateOptions will only cause a data refresh if the route params are different
