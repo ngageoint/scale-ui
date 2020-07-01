@@ -106,6 +106,31 @@ export class ProcessingStatusApiService {
     }
 
     /**
+     * Get child/sub recipes for a single parent recipe.
+     * @param  recipe_id the recipe to filter on
+     * @param  filters   any additional filters to merge into defaults
+     * @return           observable with a page of recipes
+     */
+    public getChildRecipesForRecipe(recipe_id: number, filters: any = {}): Observable<ApiResults> {
+        const params = _.merge({
+            order: '-last_modified',
+            page: 1,
+            page_size: 1000,
+            root_recipe_id: recipe_id
+        }, filters);
+
+        const queryParams = new HttpParams({
+            fromObject: params
+        });
+
+        return this.http.get<ApiResults>(`${this.apiPrefix}/recipes/`, { params: queryParams })
+            .pipe(
+                map(response => ApiResults.transformer(response)),
+                catchError(DataService.handleError)
+            );
+    }
+
+    /**
      * Get products/files for a recipe.
      * @param  recipe_id the recipe to filter on
      * @param  filters   any additional filters to merge into defaults

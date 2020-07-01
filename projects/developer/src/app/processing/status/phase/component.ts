@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import { MenuItem } from 'primeng/api';
 
 import { Job } from '../../jobs/api.model';
+import { Recipe } from '../../recipes/api.model';
 import { PHASE_STATUS } from '../api.service';
 
 enum ICONS {
@@ -19,7 +20,9 @@ enum ICONS {
 })
 export class ProcessingStatusPhaseComponent implements OnInit, OnDestroy {
     @Input() label: string;
+    // provide either jobs or recipes
     @Input() jobs: Job[];
+    @Input() recipes: Recipe[];
 
     public menuItems: MenuItem[] = [];
     private subscriptions = [];
@@ -56,6 +59,18 @@ export class ProcessingStatusPhaseComponent implements OnInit, OnDestroy {
                 };
             });
         }
+
+        if (this.recipes && this.recipes.length) {
+            // set menu items in the dropdown based on the sub recipes
+            this.menuItems = this.recipes.map(r => {
+                return {
+                    label: `${r.recipe_type['title']} rev. ${r.recipe_type['revision_num']}`,
+                    icon: `fa ${r.is_completed ? ICONS.Complete : ICONS.InProgress}`,
+                    styleClass: r.is_completed ? 'status-complete' : 'status-unknown',
+                    routerLink: `/processing/recipes/${r.id}`
+                };
+            });
+        }
     }
 
     ngOnDestroy() {
@@ -68,6 +83,7 @@ export class ProcessingStatusPhaseComponent implements OnInit, OnDestroy {
      */
     get status(): PHASE_STATUS {
         // complete if no jobs
+        // also complete if recipes are provided, since we don't know their status
         if (!this.jobs || !this.jobs.length) {
             return PHASE_STATUS.Complete;
         }

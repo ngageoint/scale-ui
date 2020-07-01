@@ -27,6 +27,10 @@
                                          *ngIf="processingJobs.length"
                                          [jobs]="processingJobs">
             </dev-processing-status-phase>
+            <dev-processing-status-phase label="Recipes"
+                                         *ngIf="subRecipes.length"
+                                         [recipes]="subRecipes">
+            </dev-processing-status-phase>
         </ng-container>
     </div>
     <div class="p-col">

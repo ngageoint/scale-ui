@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, OnChanges, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin } from 'rxjs';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -33,6 +33,8 @@ export class ProcessingStatusRecipeComponent implements OnInit, OnDestroy, OnCha
     public durationLabel = '';
     // all jobs
     public jobs: Job[] = [];
+    // all recipes
+    public subRecipes: Recipe[] = [];
     // jobs in the "parse" category
     public parseJobs: Job[] = [];
     // jobs in the "publish" category
@@ -49,14 +51,14 @@ export class ProcessingStatusRecipeComponent implements OnInit, OnDestroy, OnCha
 
     ngOnInit(): void {
         // initial call to fetch job status
-        this.fetchJobs();
+        this.fetchData();
 
         this.subscriptions.push(
             // listen for timer update event from parent and refresh job status
             this.updateJobs.subscribe(() => {
                 if (!this.recipe.is_completed) {
                     // no need for future refreshes if the recipe has completed
-                    this.fetchJobs();
+                    this.fetchData();
                 }
             })
         );
@@ -70,22 +72,29 @@ export class ProcessingStatusRecipeComponent implements OnInit, OnDestroy, OnCha
         // refetch jobs whenever changes are detected
         // completed recipes do not need to be updated
         if (!this.recipe.is_completed) {
-            this.fetchJobs();
+            this.fetchData();
         }
     }
 
     /**
      * Fetch jobs for the recipe.
      */
-    private fetchJobs(): void {
+    private fetchData(): void {
         this.isLoading = true;
 
+        const jobsRequest = this.api.getJobsForRecipe(this.recipe.id);
+        const recipesRequest = this.api.getChildRecipesForRecipe(this.recipe.id);
+
         this.subscriptions.push(
-            this.api.getJobsForRecipe(this.recipe.id).subscribe(jobs => {
-                this.isLoading = false;
+            forkJoin([jobsRequest, recipesRequest]).subscribe(data => {
+                const [jobs, recipes] = data;
+
                 this.jobs = jobs.results;
+                this.subRecipes = recipes.results;
+
                 this.partitionJobs();
                 this.createJobFields();
+                this.isLoading = false;
             })
         );
     }
