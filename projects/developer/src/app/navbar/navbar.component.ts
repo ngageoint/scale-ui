@@ -100,9 +100,9 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                 icon: 'fa fa-fw fa-gears',
                 items: [
                     {
-                        label: 'Status',
+                        label: 'Recipe Status',
                         icon: 'fa fa-fw fa-dashboard',
-                        url: '/processing/status'
+                        url: '/processing/recipe-status'
                     },
                     {
                         label: 'Jobs',
