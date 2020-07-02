@@ -16,7 +16,7 @@ import { RecipeType } from '../../configuration/recipe-types/api.model';
 
 export class ProcessingStatusComponent implements OnInit, OnDestroy {
     // how often the component should refresh data
-    private static REFRESH_TIME = 10;
+    private static REFRESH_TIME = 30;
 
     public timer: Observable<number>;
     // filtered recipes from the api
