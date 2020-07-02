@@ -1,32 +1,122 @@
-{
-    "count": 1,
-    "next": null,
-    "previous": null,
-    "results": [
-  {
-    "id": 1,
-    "recipe_type": {
-      "id": 1,
-      "name": "landsat8",
-      "title": "Landsat8",
-      "description": "Process Landsat 8 sensor data",
-      "revision_num": 1
+[
+    {
+        "id": 1,
+        "recipe_type": {
+            "id": 1,
+            "name": "landsat8",
+            "title": "Landsat8",
+            "description": "Process Landsat 8 sensor data",
+            "revision_num": 1
+        },
+        "revision_num": 1,
+        "created": "2019-06-02T19:03:26.346Z"
     },
-    "revision_num": 1,
-    "created": "2019-06-02T19:03:26.346Z"
-  },
-  {
-    "id": 2,
-    "recipe_type": {
-      "id": 1,
-      "name": "landsat8",
-      "title": "Landsat8",
-      "description": "Process Landsat 8 sensor data",
-      "revision_num": 2
+    {
+        "id": 2,
+        "recipe_type": {
+            "id": 1,
+            "name": "landsat8",
+            "title": "Landsat8",
+            "description": "Process Landsat 8 sensor data",
+            "revision_num": 2
+        },
+        "revision_num": 2,
+        "created": "2019-06-03T09:03:26.346Z"
     },
-    "revision_num": 2,
-    "created": "2019-06-03T09:03:26.346Z"
-  }
+    {
+        "id": 3,
+        "recipe_type": {
+            "id": 2,
+            "name": "spectral",
+            "title": "Spectral Analysis",
+            "description": "Perform spectral analysis on a NITF",
+            "revision_num": 1
+        },
+        "revision_num": 1,
+        "created": "2019-06-02T19:03:26.346Z"
+    },
+    {
+        "id": 4,
+        "recipe_type": {
+            "id": 2,
+            "name": "spectral",
+            "title": "Spectral Analysis",
+            "description": "Perform spectral analysis on a NITF",
+            "revision_num": 2
+        },
+        "revision_num": 2,
+        "created": "2019-06-03T09:03:26.346Z"
+    },
+    {
+        "id": 5,
+        "recipe_type": {
+            "id": 3,
+            "name": "worldview",
+            "title": "WorldView",
+            "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
+            "revision_num": 1
+        },
+        "revision_num": 1,
+        "created": "2019-06-02T19:03:26.346Z"
+    },
+    {
+        "id": 6,
+        "recipe_type": {
+            "id": 3,
+            "name": "worldview",
+            "title": "WorldView",
+            "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
+            "revision_num": 2
+        },
+        "revision_num": 2,
+        "created": "2019-06-03T09:03:26.346Z"
+    },
+    {
+        "id": 7,
+        "recipe_type": {
+            "id": 4,
+            "name": "oil-detection",
+            "title": "Oil Detection",
+            "description": "Detect oil on the surface of water",
+            "revision_num": 1
+        },
+        "revision_num": 1,
+        "created": "2019-06-02T19:03:26.346Z"
+    },
+    {
+        "id": 8,
+        "recipe_type": {
+            "id": 4,
+            "name": "oil-detection",
+            "title": "Oil Detection",
+            "description": "Detect oil on the surface of water",
+            "revision_num": 2
+        },
+        "revision_num": 2,
+        "created": "2019-06-03T09:03:26.346Z"
+    },
+    {
+        "id": 9,
+        "recipe_type": {
+            "id": 5,
+            "name": "caffe-aircraft-detection",
+            "title": "Caffe Aircraft Detection",
+            "description": "Detect aircraft using BVL Caffe deep learning algorithms",
+            "revision_num": 1
+        },
+        "revision_num": 1,
+        "created": "2019-06-02T19:03:26.346Z"
+    },
+    {
+        "id": 10,
+        "recipe_type": {
+            "id": 5,
+            "name": "caffe-aircraft-detection",
+            "title": "Caffe Aircraft Detection",
+            "description": "Detect aircraft using BVL Caffe deep learning algorithms",
+            "revision_num": 2
+        },
+        "revision_num": 2,
+        "created": "2019-06-03T09:03:26.346Z"
+    }
 ]
-}
-

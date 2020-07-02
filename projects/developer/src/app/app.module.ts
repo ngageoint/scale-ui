@@ -108,7 +108,7 @@ import { SystemStatusComponent } from './system/status/component';
 import { LiveRangeSelectorComponent } from './common/components/live-range-selector/component';
 import { TemporalFilterComponent } from './common/components/temporal-filter/component';
 import { ThemeModule, lightTheme, darkTheme } from './theme';
-import { TimelineComponent } from './data/timeline/component';
+import { TimelineComponent } from './data/timeline/timeline.component';
 import { WorkspacesComponent } from './system/workspaces/component';
 import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batch-workflow.component';
 import { CreateDatasetComponent } from './processing/batches/batch-workflow/create-dataset/create-dataset.component';

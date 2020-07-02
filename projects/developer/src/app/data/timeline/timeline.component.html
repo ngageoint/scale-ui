@@ -27,13 +27,12 @@ Visualize the created/deprecated history of job types or recipe types.
     </p-dropdown>
     <div *ngIf="selectedDataTypeOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" 
+        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters"
                        [style]="{'width':'100%'}" (onChange)="onTypesClick()"></p-multiSelect>
     </div>
     <div *ngIf="selectedDataTypeOption">
-        <label>Revisions: </label>
-        <p-multiSelect [options]="revisionOptions" [(ngModel)]="selectedRevs"
-                       [style]="{'width':'100%'}" (onChange)="enableButton()"></p-multiSelect>
+        <label>{{selectedDataTypeOption === "Job Types" ? "Versions" : "Revisions"}}: {{ revisionAll ? "All" : "Latest" }}</label>
+        <p-inputSwitch [(ngModel)]="revisionAll" (onChange)="enableButton()"></p-inputSwitch>
     </div>
     <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
             (click)="onUpdateChartClick()" [disabled]="selectedFilters.length === 0"></button>

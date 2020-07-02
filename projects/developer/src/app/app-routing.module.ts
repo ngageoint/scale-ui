@@ -12,7 +12,7 @@ import { RecipeTypesComponent } from './configuration/recipe-types/component';
 import { JobTypeHistoryComponent } from './processing/job-type-history/component';
 import { JobTypeHistoryDetailsComponent } from './processing/job-type-history/details.component';
 import { MetricsComponent } from './data/metrics/component';
-import { TimelineComponent } from './data/timeline/component';
+import { TimelineComponent } from './data/timeline/timeline.component';
 import { RunningJobsComponent } from './processing/running-jobs/component';
 import { QueuedJobsComponent } from './processing/queued-jobs/component';
 import { BatchesComponent } from './processing/batches/batches-component';

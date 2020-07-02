@@ -9,7 +9,7 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { DataService } from '../../common/services/data.service';
 import { RecipesApiService } from '../../processing/recipes/api.service';
 import { JobsApiService } from '../../processing/jobs/api.service';
-import { TimelineComponent } from './component';
+import { TimelineComponent } from './timeline.component';
 
 
 describe('JobsComponent', () => {

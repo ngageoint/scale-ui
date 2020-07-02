@@ -7,7 +7,7 @@ import * as Color from 'chartjs-color';
 
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
-import { TimelineApiService } from './api.service';
+import { TimelineApiService } from './timeline.api.service';
 import { RecipesDatatable } from '../../processing/recipes/datatable.model';
 import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
@@ -15,8 +15,8 @@ import { environment } from '../../../environments/environment';
 import { UTCDates } from '../../common/utils/utcdates';
 
 @Component({
-    templateUrl: './component.html',
-    styleUrls: ['./component.scss']
+    templateUrl: './timeline.component.html',
+    styleUrls: ['./timeline.component.scss']
 })
 export class TimelineComponent implements OnInit {
     datatableOptions: RecipesDatatable;
@@ -36,6 +36,7 @@ export class TimelineComponent implements OnInit {
     selectedDataTypeOption: string;
     filterOptions = [];
     revisionOptions = [];
+    revisionAll: false;
     selectedFilters = [];
     selectedRevs = [];
     showChart: boolean;
@@ -189,6 +190,42 @@ export class TimelineComponent implements OnInit {
         return this.selectedFilters.length > 0;
     }
 
+    getJobTypes() {
+        this.jobTypesApiService.getJobTypes().subscribe(data => {
+            this.dataTypesLoading = false;
+            this.jobTypes = data.results;
+            _.forEach(this.jobTypes, jobType => {
+                this.filterOptions.push({
+                    label: `${jobType.title} v${jobType.version}`,
+                    value: jobType
+                });
+            });
+            this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
+        }, err => {
+            console.log(err);
+            this.dataTypesLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+        });
+    }
+
+    getRecipeTypes() {
+        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.dataTypesLoading = false;
+            this.recipeTypes = data.results;
+            _.forEach(this.recipeTypes, recipeType => {
+                this.filterOptions.push({
+                    label: `${recipeType.title}`,
+                    value: recipeType
+                });
+            });
+            this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
+        }, err => {
+            console.log(err);
+            this.dataTypesLoading = false;
+            this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+        });
+    }
+
     // retrieve job types or recipe types and populate filter dropdown options
     getFilterOptions() {
         this.dataTypesLoading = true;
@@ -196,37 +233,9 @@ export class TimelineComponent implements OnInit {
         this.selectedFilters = [];
         this.enableButton();
         if (this.selectedDataTypeOption === 'Job Types') {
-            this.jobTypesApiService.getJobTypes().subscribe(data => {
-                this.dataTypesLoading = false;
-                this.jobTypes = data.results;
-                _.forEach(this.jobTypes, jobType => {
-                    this.filterOptions.push({
-                        label: `${jobType.title} v${jobType.version}`,
-                        value: jobType
-                    });
-                });
-                this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
-            }, err => {
-                console.log(err);
-                this.dataTypesLoading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-            });
+            this.getJobTypes();
         } else if (this.selectedDataTypeOption === 'Recipe Types') {
-            this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
-                this.dataTypesLoading = false;
-                this.recipeTypes = data.results;
-                _.forEach(this.recipeTypes, recipeType => {
-                    this.filterOptions.push({
-                        label: `${recipeType.title}`,
-                        value: recipeType
-                    });
-                });
-                this.filterOptions = _.orderBy(this.filterOptions, 'label', 'asc');
-            }, err => {
-                console.log(err);
-                this.dataTypesLoading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
-            });
+            this.getRecipeTypes();
         }
     }
 
@@ -258,6 +267,7 @@ export class TimelineComponent implements OnInit {
         }
         this.enableButton();
     }
+
     onUpdateChartClick()  {
         this.createTimeline(this.selectedDataTypeOption);
     }
