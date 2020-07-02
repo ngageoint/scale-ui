@@ -369,16 +369,13 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                     if (connectionTemp) {
                                         if (!_.isEmpty(this.selectedNode.input[inputFile])
                                         && (inputKey === inputFile)) {
-                                            if (!_.find(this.selectedNodeConnections, {name: connectionTemp.name})) {
-                                                this.selectedNodeConnections.push({
-                                                    name: connectionTemp.name,
-                                                    type: 'recipe',
-                                                    input_name: inputFile
-                                                });
-                                            }
+                                            this.selectedNodeConnections.push({
+                                                name: connectionTemp.name,
+                                                type: 'recipe',
+                                                input_name: inputFile
+                                            });
+                                        }
                                     }
-                                    }
-
                                 });
                             }
                         });
@@ -969,8 +966,8 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                 }
                 if (currInput) {
                     // remove input
-                    _.remove(this.selectedNodeConnections, { name: conn.name });
-                    this.selectedNode.input[currInput] = {};
+                    _.remove(this.selectedNodeConnections, { input_name: conn.input_name });
+                    this.selectedNode.input[conn.input_name] = {};
                 } else {
                     console.log('input not found');
                 }
