@@ -379,6 +379,29 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                                 });
                             }
                         });
+                    } else if (this.selectedNode.node_type.recipe_type_name) {
+                        _.forEach(this.recipeData.sub_recipe_types, s => {
+                            if ((this.selectedNode.node_type.recipe_type_name === s.name)) {
+                                _.forEach(s.definition.input, (fileInput, typeKey) => {
+                                    let connectionTemp;
+                                    if (typeKey === 'files') {
+                                        connectionTemp = _.find(this.recipeData.definition.input.files, {name: i.input});
+                                    } else if (typeKey === 'json') {
+                                        connectionTemp = _.find(this.recipeData.definition.input.json, {name: i.input});
+                                    }
+                                    if (connectionTemp) {
+                                        if (!_.isEmpty(this.selectedNode.input[inputFile])
+                                        && (inputKey === inputFile)) {
+                                            this.selectedNodeConnections.push({
+                                                name: connectionTemp.name,
+                                                type: 'recipe',
+                                                input_name: inputFile
+                                            });
+                                        }
+                                    }
+                                });
+                            }
+                        });
                     } else {
                             if (connection) {
                                 this.selectedNodeConnections.push({
