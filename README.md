@@ -63,6 +63,8 @@ These are the keys in `appConfig.json` / their environment variable equivalents 
 - `secondaryDarkColor`/`SCALEUI_SECONDARY_DARK_COLOR` (`"#24567f"`)
 - `logoImageCss`/`SCALEUI_LOGO_IMAGE_CSS` (`""`) - any styles applied directly to the logo element
 - `logoImage`/`SCALEUI_LOGO_IMAGE` (`""`) - any URL or data URL for the logo at the top, defaults to the standard Scale logo
+- `bannerMessage`/`SCALEUI_BANNER_MESSAGE` (`""`) - informational banner to show at launch
+- `bannerType`/`SCALEUI_BANNER_TYPE` (`"info"`) - type of banner message; select from `info`(default), `success`, `warning`, or `danger`
 
 #### Customizing the logo
 

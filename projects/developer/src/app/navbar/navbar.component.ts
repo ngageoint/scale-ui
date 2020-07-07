@@ -37,6 +37,9 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     is_paused: any;
     myComponentsIsAuthenticatedFlag: any;
     dependencyErrors: any;
+    bannerMessage = environment.bannerMessage;
+    bannerType = environment.bannerType;
+    showMessage = true;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -51,6 +54,10 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         this.profileService.isAuthenticated.subscribe(value => {
             this.myComponentsIsAuthenticatedFlag = value;
         });
+    }
+
+    noBanner() {
+        this.showMessage = false;
     }
 
     selectNavItem(event, itemId) {

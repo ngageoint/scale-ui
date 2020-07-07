@@ -1,4 +1,20 @@
-<div class="navbar-ctr">
+<div class="navbar-banner navbar-banner-{{ bannerType }}" *ngIf="bannerMessage && showMessage">
+    <div *ngIf="bannerType == 'info'">
+        <i class="fa fa-info-circle banner-icon banner-icon-{{ bannerType }}"></i>
+    </div>
+    <div *ngIf="bannerType == 'success'">
+        <i class="fa fa-check-circle banner-icon banner-icon-{{ bannerType }}"></i>
+    </div>
+    <div *ngIf="bannerType == 'warning'">
+        <i class="fa fa-exclamation-triangle banner-icon banner-icon-{{ bannerType }}"></i>
+    </div>
+    <div *ngIf="bannerType == 'error'">
+        <i class="fa fa-exclamation-circle banner-icon banner-icon-{{ bannerType }}"></i>
+    </div>
+    <div class="banner-message">{{ bannerMessage }}</div>
+    <button pButton class="banner-close banner-close-{{ bannerType }}" icon="fa fa-times" (click)="noBanner()"></button>
+</div>
+<div class="navbar-ctr"  [ngClass]="{'navbar-ctr--with-banner' : bannerMessage && showMessage}">
     <div class="navbar" (click)="selectNavItem($event, null)">
         <div class="flexed desktop" *ngIf="!isMobile">
             <div class="navbar__logo">

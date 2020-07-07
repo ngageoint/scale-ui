@@ -92,6 +92,19 @@ export const lightTheme: Theme = {
         '--pre-border': '#ccc',
         '--pre-on': '#333',
         '--panel-header-hover': '#eee',
-        '--panel-content-hover': '#f9f9f9'
+        '--panel-content-hover': '#f9f9f9',
+        '--info-main': 'hsl(203,100%,90%)',
+        '--success-main': 'hsl(115,100%,93%)',
+        '--warning-main': 'hsl(27,100%,90%)',
+        '--error-main': 'hsl(348,100%,91%)',
+        '--info-second': 'hsl(203,100%,46%)',
+        '--success-second': 'hsl(115,100%,34%)',
+        '--warning-second': 'hsl(27,100%,47%)',
+        '--error-second': 'hsl(348,100%,55%)',
+        '--on-error-main': 'hsl(348,100%,38%)',
+        '--on-info-main': 'hsl(203,100%,34%)',
+        '--on-success-main': 'hsl(115,100%,25%)',
+        '--on-warning-main': 'hsl(27,100%,33%)',
+        '--on-second': 'hsl(0,0%,100%)'
     }
 };

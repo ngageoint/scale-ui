@@ -94,6 +94,19 @@ export const darkTheme: Theme = {
         '--pre-border': '#777',
         '--pre-on': '#f5f5f5',
         '--panel-header-hover': '#333',
-        '--panel-content-hover': '#3d4952'
+        '--panel-content-hover': '#3d4952',
+        '--info-main': 'hsl(194,66%,61%)',
+        '--success-main': 'hsl(141,53%,53%)',
+        '--warning-main': 'hsl(42,98%,70%)',
+        '--error-main': 'hsl(348,86%,70%)',
+        '--info-second': 'hsl(194,66%,67%)',
+        '--success-second': 'hsl(141,53%,63%)',
+        '--warning-second': 'hsl(42,98%,77%)',
+        '--error-second': 'hsl(348,86%,74%)',
+        '--on-error-main': 'hsl(0,0%,9%)',
+        '--on-info-main': 'hsl(0,0%,9%)',
+        '--on-success-main': 'hsl(0,0%,9%)',
+        '--on-warning-main': 'hsl(0,0%,9%)',
+        '--on-second': 'hsl(0,0%,9%)'
     }
 };
