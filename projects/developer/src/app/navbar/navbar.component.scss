@@ -61,51 +61,52 @@ $navbar-item-width: 150px;
 .navbar-banner-success {
     background: var(--success-main);
     color: var(--on-success-main);
-}
 
-.banner-icon-success {
-    background: var(--success-second);
-}
+    .banner-icon {
+        background: var(--success-second);
+    }
 
-.banner-close-success {
-    background: var(--success-main);
-    color: var(--on-success-main);
-    &:hover {
-        background: var(--success-second) !important;
+    .banner-close {
+        background: var(--success-main);
+        color: var(--on-success-main);
+        &:hover {
+            background: var(--success-second) !important;
+        }
     }
 }
+
 
 .navbar-banner-warning {
     background: var(--warning-main);
     color: var(--on-warning-main);
-}
 
-.banner-icon-warning {
-    background: var(--warning-second);
-}
+    .banner-icon {
+        background: var(--warning-second);
+    }
 
-.banner-close-warning {
-    background: var(--warning-main);
-    color: var(--on-warning-main);
-    &:hover {
-        background-color: var(--warning-second) !important;
+    .banner-close {
+       background: var(--warning-main);
+        color: var(--on-warning-main);
+        &:hover {
+            background-color: var(--warning-second) !important;
+        } 
     }
 }
 
 .navbar-banner-error {
     background: var(--error-main);
     color: var(--on-error-main);
-}
 
-.banner-icon-error {
-    background: var(--error-second);
-}
+    .banner-icon {
+        background: var(--error-second);
+    }
 
-.banner-close-error {
-    background: var(--error-main);
-    color: var(--on-error-main);
-    &:hover {
-        background-color: var(--error-second) !important;
+    .banner-close {
+       background: var(--error-main);
+        color: var(--on-error-main);
+        &:hover {
+            background-color: var(--error-second) !important;
+        } 
     }
 }
 

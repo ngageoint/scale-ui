@@ -15,6 +15,6 @@
     "secondaryDarkColor": "#24567f",
     "logoImageCss": "",
     "logoImage": "",
-    "bannerMessage": "We are experiencing a temporary outage. ",
-    "bannerType": "error"
+    "bannerMessage": "",
+    "bannerType": "info"
 }

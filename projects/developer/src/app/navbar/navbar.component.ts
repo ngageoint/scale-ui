@@ -56,7 +56,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    noBanner() {
+    closeBanner() {
         this.showMessage = false;
     }
 
