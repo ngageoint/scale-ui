@@ -23,7 +23,9 @@ export const environment = {
     secondaryLightColor: '',
     secondaryDarkColor: '',
     logoImage: '',
-    logoImageCss: ''
+    logoImageCss: '',
+    bannerMessage: '',
+    bannerType: ''
 };
 
 /*

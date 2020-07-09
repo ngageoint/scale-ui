@@ -14,5 +14,7 @@
     "secondaryLightColor": "#5c97bf",
     "secondaryDarkColor": "#24567f",
     "logoImageCss": "",
-    "logoImage": ""
+    "logoImage": "",
+    "bannerMessage": "",
+    "bannerType": "info"
 }

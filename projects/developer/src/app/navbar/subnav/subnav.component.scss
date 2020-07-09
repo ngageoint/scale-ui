@@ -167,8 +167,7 @@ $subnav-bg-color: var(--subnav-light);
     left: 0;
     position: absolute;
     right: 0;
-    top: $navbar-height - 1px;
-    transition: all 0.35s ease-out;
+
     z-index: 100;
 }
 

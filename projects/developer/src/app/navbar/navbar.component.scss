@@ -8,6 +8,106 @@ $navbar-item-width: 150px;
 
 .navbar-ctr {
     height: $navbar-height;
+    position: relative;
+}
+
+.navbar-ctr--with-banner {
+    margin-top: $navbar-height;
+}
+
+.navbar-banner {
+    position: fixed;
+    height: $navbar-height;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    background: var(--info-main);
+    color: var(--on-info-main);
+    z-index: 10000;
+}
+
+.banner-message {
+    flex-grow: 1;
+    padding-left: 1.5rem;
+    font-weight: 400;
+    font-size: 1rem;
+}
+
+.banner-icon {
+    font-size: 2.3rem;
+    padding-top: 1.1rem;
+    background: var(--info-second);
+    color: var(--on-second);
+    width: 5rem;
+    height: $navbar-height;
+    text-align: center;
+}
+
+.banner-close {
+    font-size: 1.2rem;
+    padding: 1.2rem;
+    background: var(--info-main);
+    color: var(--on-info-main);
+    width: 5rem !important;
+    height: $navbar-height;
+    border: 0;
+    &:hover {
+         background-color: var(--info-second) !important;
+         color: var(--on-second) !important;
+    }
+}
+
+.navbar-banner-success {
+    background: var(--success-main);
+    color: var(--on-success-main);
+
+    .banner-icon {
+        background: var(--success-second);
+    }
+
+    .banner-close {
+        background: var(--success-main);
+        color: var(--on-success-main);
+        &:hover {
+            background: var(--success-second) !important;
+        }
+    }
+}
+
+
+.navbar-banner-warning {
+    background: var(--warning-main);
+    color: var(--on-warning-main);
+
+    .banner-icon {
+        background: var(--warning-second);
+    }
+
+    .banner-close {
+       background: var(--warning-main);
+        color: var(--on-warning-main);
+        &:hover {
+            background-color: var(--warning-second) !important;
+        } 
+    }
+}
+
+.navbar-banner-error {
+    background: var(--error-main);
+    color: var(--on-error-main);
+
+    .banner-icon {
+        background: var(--error-second);
+    }
+
+    .banner-close {
+       background: var(--error-main);
+        color: var(--on-error-main);
+        &:hover {
+            background-color: var(--error-second) !important;
+        } 
+    }
 }
 
 .navbar {

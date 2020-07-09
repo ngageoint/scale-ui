@@ -92,6 +92,19 @@ export const lightTheme: Theme = {
         '--pre-border': '#ccc',
         '--pre-on': '#333',
         '--panel-header-hover': '#eee',
-        '--panel-content-hover': '#f9f9f9'
+        '--panel-content-hover': '#f9f9f9',
+        '--info-main': '#ccebff',
+        '--success-main': '#deffdb',
+        '--warning-main': '#ffe3cc',
+        '--error-main': '#ffd1da',
+        '--info-second': '#0091eb',
+        '--success-second': '#0ead00',
+        '--warning-second': '#f06c00',
+        '--error-second': '#ff1a47',
+        '--on-error-main': '#c20027',
+        '--on-info-main': '#006bad',
+        '--on-success-main': '#0b8000',
+        '--on-warning-main': '#a84c00',
+        '--on-second': '#fff'
     }
 };
