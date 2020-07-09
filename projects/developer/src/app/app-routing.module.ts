@@ -27,6 +27,7 @@ import { ScanDetailsComponent } from './system/scans/details.component';
 import { SystemStatusComponent } from './system/status/component';
 import { WorkspacesComponent } from './system/workspaces/component';
 import { PendingChangesGuard } from './pending-changes.guard';
+import { ProcessingStatusComponent } from './processing/status/component';
 
 const routes: Routes = [
     {
@@ -38,6 +39,11 @@ const routes: Routes = [
     {
         path: 'dashboard',
         redirectTo: ''
+    },
+    {
+        path: 'processing/status',
+        component: ProcessingStatusComponent,
+        data: {title: 'Processing Status | Scale'}
     },
     {
         path: 'processing/jobs',
