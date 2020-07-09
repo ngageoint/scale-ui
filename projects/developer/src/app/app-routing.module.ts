@@ -41,7 +41,7 @@ const routes: Routes = [
         redirectTo: ''
     },
     {
-        path: 'processing/status',
+        path: 'processing/recipe-status',
         component: ProcessingStatusComponent,
         data: {title: 'Processing Status | Scale'}
     },
