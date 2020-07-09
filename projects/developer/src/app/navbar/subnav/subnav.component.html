@@ -2,6 +2,7 @@
     <!-- Processing -->
     <div [ngClass]="getSectionStyles('processing')">
         <ul>
+            <li><a routerLink="/processing/recipe-status" (click)="navigate()"><i class="fa fa-dashboard"></i> Recipe Status</a></li>
             <li><a routerLink="/processing/jobs" (click)="navigate()"><i class="fa fa-cube"></i> Jobs</a></li>
             <li><a routerLink="/processing/recipes" (click)="navigate()"><i class="fa fa-cubes"></i> Recipes</a></li>
             <li><a routerLink="/processing/running-jobs" (click)="navigate()"><i class="fa fa-arrow-circle-right"></i> Running Jobs</a></li>

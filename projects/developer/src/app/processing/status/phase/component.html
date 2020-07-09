@@ -1,0 +1,25 @@
+<p-menu #panel [popup]="true" [model]="menuItems"></p-menu>
+
+<button class="ui-button-raised ui-button-rounded ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only {{ color }}"
+        (click)="(jobs && jobs.length) ? panel.toggle($event) : null"
+        pTooltip="{{ label }}"
+        tooltipPosition="top"
+        *ngIf="jobs">
+    <span class="ui-button-text ui-clickable">
+        <i class="fa fa-fw {{ icon }}"></i>
+        <i class="fa fa-caret-down fa-fw"
+           *ngIf="jobs && jobs.length"></i>
+    </span>
+</button>
+
+<button class="ui-button-raised ui-button-rounded ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only {{ color }}"
+        (click)="(recipes && recipes.length) ? panel.toggle($event) : null"
+        pTooltip="{{ label }}"
+        tooltipPosition="top"
+        *ngIf="recipes">
+    <span class="ui-button-text ui-clickable">
+        <i class="fa fa-fw {{ icon }}"></i>
+        <i class="fa fa-caret-down fa-fw"
+           *ngIf="recipes && recipes.length"></i>
+    </span>
+</button>
