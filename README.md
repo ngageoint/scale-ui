@@ -26,6 +26,16 @@ Run `ng build developer` to build the project. The build artifacts will be store
 
 ### Deployment
 
+#### Tagging releases
+
+Deployments to a user environment should be tagged with a version number. To prepare a tagged release:
+
+1. Ensure the `master` branch is checked out by running `git checkout master`. 
+2. Ensure the `master` branch is updated to the latest commit and there are no pending changes by running `git pull`.
+3. Run `npm run relsease` to automatically bump the version and commit tag. It will print the next command you need to run.
+4. Run the `git push` command outputted by `npm run release`.
+5. Verify the new tag exists in GitHub.
+
 #### App config
 
 A dynamic config file is loaded when the web app first starts, using values in [`assets/appConfig.json`](projects/developer/src/assets/appConfig.json). Each key in this file will be camel-cased and injected into the Angular `environments`. JSON decoding is attempted for each value, allowing `true`/`false` or numerical values.
