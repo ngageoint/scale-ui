@@ -80,7 +80,7 @@ Run `ng test developer` to execute the unit tests via [Karma](https://karma-runn
 
 ## Building and deployment
 
-Run `ng build developer` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `npm run builddev:prod` to build the project. The build artifacts will be stored in the `dist/` directory. The build artifacts are needed prior to creating a Docker image.
 
 
 ## Further help
