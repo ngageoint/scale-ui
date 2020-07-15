@@ -9,6 +9,7 @@ import { Job } from './api.model';
 import { JobExecution } from './execution.model';
 import { JobsApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-job-details',
@@ -35,12 +36,16 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     logDisplay: boolean;
     inputClass = 'p-col-12';
     outputClass = 'p-col-12';
+    globals: Globals;
 
     constructor(
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private jobsApiService: JobsApiService
-    ) {}
+        private jobsApiService: JobsApiService,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
     private initJobDetail(data) {
         this.job = data;

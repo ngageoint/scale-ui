@@ -15,6 +15,7 @@ import { JobsDatatableService } from './datatable.service';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import { JobExecution } from './execution.model';
 import { DashboardJobsService } from '../../dashboard/jobs.service';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-jobs',
@@ -89,6 +90,7 @@ export class JobsComponent implements OnInit, OnDestroy {
     subscription: any;
     isMobile: boolean;
     actionItems: MenuItem[];
+    globals: Globals;
 
     constructor(
         private dataService: DataService,
@@ -100,8 +102,11 @@ export class JobsComponent implements OnInit, OnDestroy {
         private confirmationService: ConfirmationService,
         public breakpointObserver: BreakpointObserver,
         private messageService: MessageService,
-        private dashboardJobsService: DashboardJobsService
-    ) {}
+        private dashboardJobsService: DashboardJobsService,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
     private updateData() {
         this.unsubscribe();

@@ -12,6 +12,7 @@ import { BatchesDatatable } from '../../../processing/batches/datatable.model';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { RecipeTypeInputFile } from '../../../configuration/recipe-types/api.input.file.model';
 import { RecipeTypeInputJson } from '../../../configuration/recipe-types/api.input.json.model';
+import { Globals } from '../../../globals';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -64,6 +65,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     zoomToFit: Subject<boolean> = new Subject();
     center: Subject<boolean> = new Subject();
     update: Subject<boolean> = new Subject();
+    globals: Globals;
     chartOptions: any = {
         legend: {
             display: false
@@ -111,6 +113,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         private jobsApiService: JobsApiService,
         private batchesApiService: BatchesApiService,
         private messageService: MessageService,
+        globals: Globals
     ) {
         this.columns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -129,6 +132,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             { field: 'job_status', header: 'Job Status' },
             { field: 'job_count', header: 'Job Count' }
         ];
+        this.globals = globals;
     }
 
     /**

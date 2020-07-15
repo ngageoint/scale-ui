@@ -2,7 +2,7 @@
     <div class="flexed space-between margin-bottom-sm">
         <div class="flexed">
             <h2><i class="fa fa-bolt"></i> Strikes ({{ totalRecords }})</h2>
-            <div class="margin-left-md">
+            <div class="margin-left-md" *ngIf="!isEditing && globals.is_staff">
                 <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"
                         pTooltip="Create Strike"></button>
             </div>
@@ -40,7 +40,7 @@
             <div>
                 <strong>{{ selectedStrikeDetail.title }}</strong>
             </div>
-            <div *ngIf="!isEditing" class="strikes__menu">
+            <div *ngIf="!isEditing && globals.is_staff" class="strikes__menu">
                     <button pButton class="ui-button-primary strikes__controls-btn" icon='fa fa-edit' label="Edit"
                     (click)="onEditClick()"></button>
                 </div>
@@ -61,12 +61,14 @@
                         <i class="fa" [innerHtml]="strikeJobIcon"></i>
                         View Job Details ({{ selectedStrikeDetail.job.status }})
                     </a>
-                    <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
+                    <div *ngIf="globals.is_staff">
+                        <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
                             (click)="cancelJob(selectedStrikeDetail.job.id)" pTooltip="Cancel Job"
                             *ngIf="!selectedStrikeDetail.job.is_superseded && selectedStrikeDetail.job.status !== 'COMPLETED' && selectedStrikeDetail.job.status !== 'CANCELED'"></button>
-                    <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
+                        <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
                             (click)="requeueJob(selectedStrikeDetail.job.id)" pTooltip="Requeue Job"
                             *ngIf="!selectedStrikeDetail.job.is_superseded && (selectedStrikeDetail.job.status === 'FAILED' || selectedStrikeDetail.job.status === 'CANCELED')"></button>
+                    </div>
                 </dd>
                 <dt>Created:</dt>
                 <dd>

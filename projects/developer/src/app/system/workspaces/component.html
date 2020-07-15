@@ -4,7 +4,7 @@
             <h2><i class="fa fa-database"></i> Workspaces ({{ totalRecords }})</h2>
             <div class="margin-left-md">
                 <button pButton type="button" icon="fa fa-plus" (click)="onCreateClick($event)"
-                        pTooltip="Create Workspace"></button>
+                        pTooltip="Create Workspace" *ngIf="globals.is_staff"></button>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
             <div>
                 <strong>{{ selectedWorkspaceDetail.title }}</strong>
             </div>
-            <div *ngIf="!isEditing" class="workspaces__menu">
+            <div *ngIf="!isEditing && globals.is_staff" class="workspaces__menu">
                     <button pButton class="ui-button-primary workspaces__controls-btn" icon='fa fa-edit' label="Edit"
                     (click)="onEditClick()"></button>
                 </div>

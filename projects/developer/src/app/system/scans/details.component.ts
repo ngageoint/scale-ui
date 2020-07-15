@@ -12,6 +12,7 @@ import { RecipeTypesApiService } from '../../configuration/recipe-types/api.serv
 import { Scan } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
 import { Observable } from 'rxjs';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-scan-details',
@@ -36,6 +37,7 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
     ingestFilePanelClass = 'ui-panel-primary';
     recipes: any;
     recipeOptions: SelectItem[] = [];
+    globals: Globals;
 
     constructor(
         private fb: FormBuilder,
@@ -44,8 +46,11 @@ export class ScanDetailsComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private workspacesApiService: WorkspacesApiService,
         private scansApiService: ScansApiService,
-        private recipeTypesApiService: RecipeTypesApiService
-    ) {}
+        private recipeTypesApiService: RecipeTypesApiService,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
