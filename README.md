@@ -4,9 +4,19 @@
 
 Scale UI provides a graphical interface to interact with the Scale framework via its REST API. This project was generated with the Angular CLI and has been set up as an Angular workspace to allow for future expansion. The base UI project is named "developer".  
 
-## Development server
+## Development
+
+### Development server
 
 Run `npm run dev` to start a development server for the developer project. Navigate to `http://localhost:8080/`. The app will automatically reload if you change any of the source files.
+
+### Code scaffolding
+
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+
+### Contributing, issue reporting, and code workflow
+
+The [contributing guide](CONTRIBUTING.md) has detailed instructions for how to submit PR's, merging, tagging releases, and issue reporting.
 
 ### Using real API servers
 
@@ -16,33 +26,15 @@ Change `"apiPrefix"` in `src/assets/appConfig.json` to point to one of these pro
 - `/local`: a locally installed Scale server
 - `/alpha` and `/omega`: the live test clusters
 
-## Code scaffolding
+## Configuration
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build developer` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-### Deployment
-
-#### Tagging releases
-
-Deployments to a user environment should be tagged with a version number. To prepare a tagged release:
-
-1. Ensure the `master` branch is checked out by running `git checkout master`. 
-2. Ensure the `master` branch is updated to the latest commit and there are no pending changes by running `git pull`.
-3. Run `npm run relsease` to automatically bump the version and commit tag. It will print the next command you need to run.
-4. Run the `git push` command outputted by `npm run release`.
-5. Verify the new tag exists in GitHub.
-
-#### App config
+### App config
 
 A dynamic config file is loaded when the web app first starts, using values in [`assets/appConfig.json`](projects/developer/src/assets/appConfig.json). Each key in this file will be camel-cased and injected into the Angular `environments`. JSON decoding is attempted for each value, allowing `true`/`false` or numerical values.
 
 The defaults provided in this file are used for local development. Override them during deployment (mainly the API and auth sections).
 
-#### Using environment variables
+### Using environment variables
 
 When using the Docker image, any environment variable prefixed with `SCALEUI_` is injected into the `appConfig.json` file. Environment variables are stripped of the prefix and lowercased, then injected into `appConfig.json`.
 
@@ -53,7 +45,7 @@ For example:
 4. A component or service then uses `environment.myConfigValue`
 
 
-#### Available config options
+### Available config options
 
 These are the keys in `appConfig.json` / their environment variable equivalents (the default values) - and a description:
 
@@ -76,7 +68,7 @@ These are the keys in `appConfig.json` / their environment variable equivalents 
 - `bannerMessage`/`SCALEUI_BANNER_MESSAGE` (`""`) - informational banner to show at launch
 - `bannerType`/`SCALEUI_BANNER_TYPE` (`"info"`) - type of banner message; select from `info`(default), `success`, `warning`, or `danger`
 
-#### Customizing the logo
+### Customizing the logo
 
 Any URL to a direct image can be used, as well as any [data URL](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URIs). Using a data URL allows the entire logo to reside in an environment variable or the `appConfig.json`, without having to host it externally. An image should be base64-encoded, and [SVG images](https://css-tricks.com/lodge/svg/09-svg-data-uris/) can be used directly, as long as they are properly escaped.
 
@@ -84,6 +76,12 @@ Any URL to a direct image can be used, as well as any [data URL](https://develop
 ## Running unit tests
 
 Run `ng test developer` to execute the unit tests via [Karma](https://karma-runner.github.io).
+
+
+## Building and deployment
+
+Run `npm run builddev:prod` to build the project. The build artifacts will be stored in the `dist/` directory. The build artifacts are needed prior to creating a Docker image.
+
 
 ## Further help
 
