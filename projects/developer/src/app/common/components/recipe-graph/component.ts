@@ -1181,16 +1181,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         }, 0);
     }
 
-    public hasConnection(filename, connections) {
-        const file_name = filename;
-        const connection_array = connections;
-        let has_connection = false;
-        connection_array.forEach(function(value) {
-            if (value.input_name === file_name) {
-                has_connection = true;
+    /* This function checks if a specific job input is already connected to a file */
+    public hasConnection(filename: string, connections: any[]) {
+        for (let i = 0; i < connections.length; i++) {
+            if (connections[i].input_name === filename) {
+                return true;
             }
-        });
-        return has_connection;
+        }
+        return false;
     }
 
 }
