@@ -1180,4 +1180,15 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             this.update.next(true);
         }, 0);
     }
+
+    /* This function checks if a specific job input is already connected to a file */
+    public hasConnection(filename: string, connections: any[]) {
+        for (let i = 0; i < connections.length; i++) {
+            if (connections[i].input_name === filename) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
