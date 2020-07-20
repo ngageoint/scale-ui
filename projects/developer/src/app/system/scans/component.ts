@@ -9,6 +9,7 @@ import { DataService } from '../../common/services/data.service';
 import { ScansApiService } from './api.service';
 import { ScansDatatable } from './datatable.model';
 import { ScansDatatableService } from './datatable.service';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-scans',
@@ -35,6 +36,7 @@ export class ScansComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    globals: Globals;
 
     nameFilterText: string;
     onNameFilter = _.debounce((e) => {
@@ -52,8 +54,11 @@ export class ScansComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
-        public breakpointObserver: BreakpointObserver
-    ) {}
+        public breakpointObserver: BreakpointObserver,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
 
 

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { RecipesApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-recipe-details',
@@ -24,13 +25,17 @@ export class RecipeDetailsComponent implements OnInit, OnDestroy {
     subscriptions: Subscription[] = [];
     showReprocess = false;
     loading = false;
+    globals: Globals;
 
     constructor(
         private messageService: MessageService,
         private route: ActivatedRoute,
         private recipesApiService: RecipesApiService,
-        private recipeTypesApiService: RecipeTypesApiService
-    ) {}
+        private recipeTypesApiService: RecipeTypesApiService,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
     reprocess() {
         this.loading = true;

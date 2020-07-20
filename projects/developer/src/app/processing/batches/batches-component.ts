@@ -13,6 +13,7 @@ import { BatchesDatatable } from './datatable.model';
 import { BatchesDatatableService } from './datatable.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { RecipeType } from '../../configuration/recipe-types/api.model';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-batches',
@@ -45,6 +46,7 @@ export class BatchesComponent implements OnInit, OnDestroy {
     isInitialized = false;
     subscription: any;
     isMobile: boolean;
+    globals: Globals;
 
     constructor(
         private dataService: DataService,
@@ -54,8 +56,11 @@ export class BatchesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
-        public breakpointObserver: BreakpointObserver
-    ) {}
+        public breakpointObserver: BreakpointObserver,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
     private updateData() {
         this.unsubscribe();
