@@ -37,7 +37,7 @@ export class JobsComponent implements OnInit, OnDestroy {
         { field: 'created', header: 'Created (Z)' },
         { field: 'last_modified', header: 'Last Modified (Z)' },
         { field: 'node', header: 'Node' },
-        { field: 'duration', header: 'Duration', sortableColumnDisabled: true },
+        { field: 'duration', header: 'Duration' },
         { field: 'status', header: 'Status' },
         { field: 'error.category', header: 'Error Category' },
         { field: 'error.title', header: 'Error' },
