@@ -110,7 +110,7 @@ export class AppComponent implements OnInit {
             });
         } else {
             this.isAuthenticated = true;
-            this.globals.is_staff = false;
+            this.globals.is_staff = true;
         }
     }
 }
