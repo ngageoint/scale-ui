@@ -83,7 +83,7 @@ export class RecipeTypesApiService {
     }
 
     getRecipeTypeRev(name: string): Observable<any> {
-        return this.http.get<RecipeType>(`${this.apiPrefix}/recipe-types/${name}/revisions`)
+        return this.http.get<RecipeType>(`${this.apiPrefix}/recipe-types/${name}/revisions/`)
         .pipe(
             map(response => {
                 return ApiResults.transformer(response);

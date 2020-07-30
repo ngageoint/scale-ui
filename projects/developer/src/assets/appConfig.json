@@ -1,6 +1,6 @@
 {
     "apiDefaultVersion": "v6",
-    "apiPrefix": "/oarfish",
+    "apiPrefix": "/mocks",
     "apiVersions": [],
     "authEnabled": false,
     "authSchemeType": "external",
