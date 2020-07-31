@@ -35,6 +35,7 @@ export class TimelineComponent implements OnInit {
     ];
     selectedDataTypeOption: string;
     filterOptions = [];
+    includeRevisions = false;
     revisionOptions = [];
     selectedFilters = [];
     selectedRevs = [];
@@ -62,14 +63,11 @@ export class TimelineComponent implements OnInit {
     private createTimeline(type) {
         this.showChart = true;
         this.showFilters = false;
-
-
-
         const params = {
             started: this.utcStartDate.toISOString(),
             ended: this.utcEndDate.toISOString(),
             id: this.selectedFilters.map(f => f.id),
-            rev: this.selectedRevs.map(r => r.revision_num)
+            rev: this.selectedRevs.map(r => r.value.revision_num)
         };
 
         if (type === 'Recipe Types') {
@@ -86,7 +84,7 @@ export class TimelineComponent implements OnInit {
             }, err => {
                 console.log(err);
                 this.dataTypesLoading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
             });
         } else if (type === 'Job Types') {
             this.timelineApiService.getJobTypeDetails(params).subscribe(data => {
@@ -242,8 +240,8 @@ export class TimelineComponent implements OnInit {
                             value: result
                         });
                     });
+                });
             });
-         });
         } else if (this.selectedDataTypeOption === 'Job Types' ) {
             _.forEach(this.selectedFilters, job => {
                 this.jobTypesApiService.getJobTypeVersions(job.name).subscribe(data => {
@@ -258,7 +256,11 @@ export class TimelineComponent implements OnInit {
         }
         this.enableButton();
     }
-    onUpdateChartClick()  {
+    onUpdateChartClick() {
+        if (this.includeRevisions) {
+           // Include all revisions
+           this.selectedRevs = this.revisionOptions;
+        }
         this.createTimeline(this.selectedDataTypeOption);
     }
 

@@ -24,7 +24,7 @@ Change `"apiPrefix"` in `src/assets/appConfig.json` to point to one of these pro
 
 - `/mocks`: built-in development server above with mock data
 - `/local`: a locally installed Scale server
-- `/alpha` and `/omega`: the live test clusters
+- `/alpha` and `/oarfish`: the live test clusters
 
 ## Configuration
 
