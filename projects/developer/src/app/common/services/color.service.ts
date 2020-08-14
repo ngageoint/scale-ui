@@ -21,6 +21,8 @@ export class ColorService {
     public static SCALE_BLUE3 = '#24567F';
     public static RECIPE_NODE = '#777';
     public static WARNING = '#fdb813';
+    public static FONT_DARK_THEME = '#d9d9d9';
+    public static FONT_LIGHT_THEME = '#333333';
 
     constructor() { }
 

@@ -56,23 +56,29 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
 
     private updateText() {
         const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = 'black'; // default
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
         switch (initialTheme) {
             case 'dark':
-                initialTextColor = 'white';
+                initialTextColor = ColorService.FONT_DARK_THEME;
                 break;
         }
         this.options.legend.labels.fontColor = initialTextColor;
+        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.options.scales.yAxes[0].scaleLabel.fontColor = initialTextColor;
+        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
 
         this.unsubscribe();
         this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = 'black'; // default
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
                 switch (theme.name) {
                     case 'dark':
-                        textColor = 'white';
+                        textColor = ColorService.FONT_DARK_THEME;
                         break;
                 }
                 this.options.legend.labels.fontColor = textColor;
+                this.options.scales.yAxes[0].ticks.fontColor = textColor;
+                this.options.scales.yAxes[0].scaleLabel.fontColor = textColor;
+                this.options.scales.xAxes[0].ticks.fontColor = textColor;
                 setTimeout(() => {
                     this.chart.reinit();
                 }, 100);
