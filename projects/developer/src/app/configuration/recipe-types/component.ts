@@ -487,7 +487,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
             });
             _.forEach(result.errors, error => {
-                this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                if (error.name.endsWith('JSON')) {
+                    const errors = JSON.parse(error.description);
+                    // Remove the _JSON in the name.
+                    const name = error.name.substring(0, error.name.length - 5);
+
+                    for (const detail of errors) {
+                        this.messageService.add({ severity: 'error', summary: name, detail, sticky: true });
+                    }
+                } else {
+                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                }
             });
         }, err => {
             console.log(err);
