@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SelectItem } from 'primeng/api';
+import { UIChart } from 'primeng/chart';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -9,6 +10,7 @@ import { IngestApiService } from '../ingest/api.service';
 import { StrikesApiService } from '../../system/strikes/api.service';
 import { DataService } from '../../common/services/data.service';
 import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
 
 @Component({
     selector: 'dev-feed',
@@ -16,7 +18,7 @@ import { ColorService } from '../../common/services/color.service';
     styleUrls: ['./component.scss']
 })
 export class FeedComponent implements OnInit, OnDestroy {
-    @ViewChild('feedChart', {static: true}) feedChart: any;
+    @ViewChild('feedChart', {static: true}) feedChart: UIChart;
     subscription: any;
     chartLoading: boolean;
     options: any;
@@ -36,12 +38,41 @@ export class FeedComponent implements OnInit, OnDestroy {
         value: 'ingest'
     }];
     selectedTimeValue: string;
+    themeSubscription: any;
     constructor(
         private ingestApiService: IngestApiService,
         private strikesApiService: StrikesApiService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private themeService: ThemeService
     ) {}
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.options.scales.yAxes[0].ticks.fontColor = textColor;
+                this.options.scales.xAxes[0].ticks.fontColor = textColor;
+                setTimeout(() => {
+                    this.feedChart.reinit();
+                }, 100);
+            }
+        );
+    }
 
     private getStrikes() {
         this.strikesApiService.getStrikes().subscribe(data => {
@@ -182,6 +213,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             scales: {
                 xAxes: [{
                     type: 'time',
+                    ticks: {},
                     time: {
                         displayFormats: {
                             'millisecond': 'DD MMM HHmm[Z]',
@@ -227,9 +259,13 @@ export class FeedComponent implements OnInit, OnDestroy {
             this.selectedTimeValue = params.use_ingest_time === 'true' ? 'ingest' : 'data';
         });
         this.getStrikes();
+        this.updateText();
     }
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { SelectItem } from 'primeng/api';
 import * as moment from 'moment';
@@ -13,12 +13,17 @@ import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
 
 import { UTCDates } from '../../common/utils/utcdates';
+import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
+import { UIChart } from 'primeng/chart';
 
 @Component({
+    selector: 'dev-timeline',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class TimelineComponent implements OnInit {
+export class TimelineComponent implements OnInit, OnDestroy {
+    @ViewChild('chartTimeline', {static: false}) chart: UIChart;
     datatableOptions: RecipesDatatable;
     startDate = moment().subtract(1, 'M').startOf('d').toDate();
     endDate = moment().startOf('d').toDate();
@@ -40,6 +45,7 @@ export class TimelineComponent implements OnInit {
     selectedFilters = [];
     selectedRevs = [];
     showChart: boolean;
+    themeSubscription: any;
 
     // utc versions of internal start and end dates
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
@@ -57,7 +63,37 @@ export class TimelineComponent implements OnInit {
         private recipeTypesApiService: RecipeTypesApiService,
         private jobTypesApiService: JobTypesApiService,
         private timelineApiService: TimelineApiService,
+        private themeService: ThemeService
     ) {}
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.options.title.fontColor = initialTextColor;
+        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.options.title.fontColor = textColor;
+                this.options.scales.yAxes[0].ticks.fontColor = textColor;
+                this.options.scales.xAxes[0].ticks.fontColor = textColor;
+                setTimeout(() => {
+                    this.chart.reinit();
+                }, 100);
+            }
+        );
+    }
 
     // init chart data
     private createTimeline(type) {
@@ -178,7 +214,6 @@ export class TimelineComponent implements OnInit {
                 data: newDataset
             });
         });
-
         return chartData;
     }
 
@@ -262,6 +297,7 @@ export class TimelineComponent implements OnInit {
            this.selectedRevs = this.revisionOptions;
         }
         this.createTimeline(this.selectedDataTypeOption);
+        this.updateText();
     }
 
     ngOnInit() {
@@ -291,6 +327,9 @@ export class TimelineComponent implements OnInit {
                         minRotation: 50,
                         autoSkip: true
                     }
+                }],
+                yAxes: [{
+                    ticks: {}
                 }]
             },
             tooltips: {
@@ -305,4 +344,9 @@ export class TimelineComponent implements OnInit {
         };
     }
 
+    ngOnDestroy() {
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
+    }
 }

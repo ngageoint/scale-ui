@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -7,6 +7,8 @@ import * as moment from 'moment';
 import { MetricsApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { ChartService } from './chart.service';
+import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/chart';
 import { JobType } from '../../configuration/job-types/api.model';
@@ -18,7 +20,7 @@ import { UTCDates } from '../../common/utils/utcdates';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class MetricsComponent implements OnInit, AfterViewInit {
+export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
     @ViewChild('chart', {static: true}) chart: UIChart;
     chartLoading: boolean;
     showChart: boolean;
@@ -49,11 +51,13 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     data: any;
     options: any;
     showFilters = true;
+    themeSubscription: any;
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
         private recipeTypesApiService: RecipeTypesApiService,
-        private chartService: ChartService
+        private chartService: ChartService,
+        private themeService: ThemeService
     ) {
         this.chartTypes = [
             {
@@ -84,6 +88,42 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     // utc versions of internal start and end dates
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
     get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.options.title.fontColor = initialTextColor;
+        this.options.legend.labels.fontColor = initialTextColor;
+        this.options.scales.yAxes.forEach( (element) => {
+            element.ticks.fontColor = initialTextColor;
+            element.scaleLabel.fontColor = initialTextColor;
+        });
+        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.options.title.fontColor = textColor;
+                this.options.legend.labels.fontColor = textColor;
+                this.options.scales.yAxes.forEach( (element) => {
+                    element.ticks.fontColor = textColor;
+                    element.scaleLabel.fontColor = textColor;
+                });
+                this.options.scales.xAxes[0].ticks.fontColor = textColor;
+                setTimeout(() => {
+                    this.chart.reinit();
+                }, 100);
+            }
+        );
+    }
 
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
@@ -327,7 +367,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 },
                 legend: {
                     position: 'right',
-                    display: this.filtersApplied.length > 1 || this.selectedMetric2
+                    labels: {}
                 },
                 plugins: {
                     datalabels: {
@@ -337,7 +377,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 responsive: true,
                 scales: {
                     xAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {}
                     }],
                     yAxes: yAxes
                 },
@@ -357,6 +398,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     }
                 }
             };
+            this.updateText();
             this.chartLoading = false;
         }, err => {
             this.chartLoading = false;
@@ -367,6 +409,12 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.getDataTypes();
         this.getRecipeTypes();
+    }
+
+    ngOnDestroy() {
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 
     ngAfterViewInit() {

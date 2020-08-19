@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
-import {UIChart} from 'primeng/chart';
+import { UIChart } from 'primeng/chart';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { ThemeService } from '../../../theme/theme.service';
 import { QueueApiService } from '../../services/queue/api.service';
 
 @Component({
@@ -19,10 +20,16 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     @Input() jobTypeIds: any;
     @Input() maintainAspectRatio: boolean;
     @Output() chartLoaded: EventEmitter<UIChart> = new EventEmitter<UIChart>();
+    themeSubscription: any;
     subscription: any;
     chartLoading = false;
     data: any;
     options = {
+        legend: {
+            labels: {
+                fontColor: ColorService.FONT_LIGHT_THEME
+            }
+        },
         scales: {
             xAxes: [{
                 type: 'time',
@@ -37,11 +44,15 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
                             return;
                         }
                         return moment.utc(values[index]['value']).format('DD MMM HHmm[Z]');
-                    }
+                    },
+                    fontColor: ColorService.FONT_LIGHT_THEME
                 }
             }],
             yAxes: [{
-                stacked: true
+                stacked: true,
+                ticks: {
+                    fontColor: ColorService.FONT_LIGHT_THEME
+                }
             }]
         },
         plugins: {
@@ -51,8 +62,38 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     };
     constructor(
         private messageService: MessageService,
-        private queueApiService: QueueApiService
+        private queueApiService: QueueApiService,
+        private themeService: ThemeService
     ) {
+    }
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.options.legend.labels.fontColor = initialTextColor;
+        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.options.legend.labels.fontColor = textColor;
+                this.options.scales.yAxes[0].ticks.fontColor = textColor;
+                this.options.scales.xAxes[0].ticks.fontColor = textColor;
+                setTimeout(() => {
+                    this.chart.reinit();
+                }, 100);
+            }
+        );
     }
 
     private unsubscribe() {
@@ -62,6 +103,7 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnInit() {
+        this.updateText();
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -116,5 +158,8 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

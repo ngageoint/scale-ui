@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
@@ -11,12 +11,18 @@ import { JobsApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
 import { Globals } from '../../globals';
 
+import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
+import { UIChart } from 'primeng/chart';
+
 @Component({
     selector: 'dev-job-details',
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss']
 })
 export class JobDetailsComponent implements OnInit, OnDestroy {
+    @ViewChild('chartDetails', {static: false}) chart: UIChart;
+    themeSubscription: any;
     subscription: any;
     job: Job;
     loading: boolean;
@@ -42,9 +48,37 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private jobsApiService: JobsApiService,
+        private themeService: ThemeService,
         globals: Globals
     ) {
         this.globals = globals;
+    }
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.options.scales.yAxes[0].ticks.fontColor = textColor;
+                this.options.scales.xAxes[0].ticks.fontColor = textColor;
+                setTimeout(() => {
+                    this.chart.reinit();
+                }, 100);
+            }
+        );
     }
 
     private initJobDetail(data) {
@@ -92,6 +126,9 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
                             return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
                         }
                     }
+                }],
+                yAxes: [{
+                    ticks: {}
                 }]
             },
             tooltips: {
@@ -135,6 +172,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.subscription = this.jobsApiService.getJob(id, true).subscribe(data => {
             this.loading = false;
             this.initJobDetail(data);
+            this.updateText();
 
             // get job inputs
             this.loadingInputs = true;
@@ -281,5 +319,8 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

@@ -39,5 +39,5 @@ Visualize the created/deprecated history of job types or recipe types.
     </div>
 </p-sidebar>
 <div class="timeline__chart">
-    <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="500" ></p-chart>
+    <p-chart #chartTimeline type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="500"></p-chart>
 </div>

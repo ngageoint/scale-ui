@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewChildren, AfterViewInit, QueryList } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -7,14 +7,21 @@ import { NodesApiService } from './api.service';
 import { StatusService } from '../../common/services/status.service';
 import { Globals } from '../../globals';
 
+import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
+import { UIChart } from 'primeng/chart';
+
 @Component({
     selector: 'dev-nodes',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class NodesComponent implements OnInit, OnDestroy {
+export class NodesComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('menu', {static: false}) menu: any;
+    @ViewChildren('chartJobExe') chartsJobExe: QueryList<UIChart>;
+    @ViewChildren('chartJobRunning') chartsJobRunning: QueryList<UIChart>;
 
+    themeSubscription: any;
     subscription: any;
     loading: boolean;
     collapsed = true;
@@ -77,17 +84,19 @@ export class NodesComponent implements OnInit, OnDestroy {
         },
         title: {
             display: true,
-            text: 'Job Executions'
+            text: 'Job Executions',
+            fontColor: ColorService.FONT_LIGHT_THEME
         },
         scales: {
             xAxes: [{
                 ticks: {
-                    display: false
+                    display: false,
                 }
             }],
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    fontColor: ColorService.FONT_LIGHT_THEME
                 }
             }]
         },
@@ -116,7 +125,8 @@ export class NodesComponent implements OnInit, OnDestroy {
         },
         title: {
             display: true,
-            text: 'Running Jobs'
+            text: 'Running Jobs',
+            fontColor: ColorService.FONT_LIGHT_THEME
         },
         plugins: {
             datalabels: {
@@ -134,9 +144,41 @@ export class NodesComponent implements OnInit, OnDestroy {
         private messageService: MessageService,
         private nodesApiService: NodesApiService,
         private statusService: StatusService,
+        private themeService: ThemeService,
         globals: Globals
     ) {
         this.globals = globals;
+    }
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.jobExeOptions.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.jobExeOptions.title.fontColor = initialTextColor;
+        this.runningJobOptions.title.fontColor = initialTextColor;
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.jobExeOptions.scales.yAxes[0].ticks.fontColor = textColor;
+                this.jobExeOptions.title.fontColor = textColor;
+                this.runningJobOptions.title.fontColor = textColor;
+
+                setTimeout(() => {
+                    this.chartsJobExe.forEach(chart => chart.reinit());
+                    this.chartsJobRunning.forEach(chart => chart.reinit());
+                }, 100);
+            }
+        );
     }
 
     private filterNodes() {
@@ -406,7 +448,14 @@ export class NodesComponent implements OnInit, OnDestroy {
         });
     }
 
+    ngAfterViewInit() {
+        this.updateText();
+    }
+
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

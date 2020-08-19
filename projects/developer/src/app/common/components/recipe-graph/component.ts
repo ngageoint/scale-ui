@@ -1,10 +1,11 @@
-import { Component, Input, Output, OnChanges, OnInit, AfterViewInit, ViewChild, HostListener, EventEmitter } from '@angular/core';
+import { Component, Input, Output, OnChanges, OnInit, AfterViewInit, OnDestroy, ViewChild, HostListener, EventEmitter } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import * as shape from 'd3-shape';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { ThemeService } from '../../../theme/theme.service';
 import { JobsApiService } from '../../../processing/jobs/api.service';
 import { BatchesApiService } from '../../../processing/batches/api.service';
 import { Batch } from '../../../processing/batches/api.model';
@@ -13,13 +14,15 @@ import { MessageService } from 'primeng/components/common/messageservice';
 import { RecipeTypeInputFile } from '../../../configuration/recipe-types/api.input.file.model';
 import { RecipeTypeInputJson } from '../../../configuration/recipe-types/api.input.json.model';
 import { Globals } from '../../../globals';
+import { UIChart } from 'primeng/chart';
 
 @Component({
     selector: 'dev-recipe-graph',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
+export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    @ViewChild('chartNodeJobs', {static: false}) chartNodeJobs: UIChart;
     readonly minZoomLevel = 0.5;
     readonly maxZoomLevel = 2.0;
     readonly zoomStep = 0.1;
@@ -102,6 +105,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         },
     ];
     subscription: any;
+    themeSubscription: any;
     datatableLoading: boolean;
     selectedRows;
     batches: any;
@@ -113,6 +117,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         private jobsApiService: JobsApiService,
         private batchesApiService: BatchesApiService,
         private messageService: MessageService,
+        private themeService: ThemeService,
         globals: Globals
     ) {
         this.columns = [
@@ -181,6 +186,35 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
     zoomIn(): void {
         this.zoomLevel = Math.min(this.maxZoomLevel, this.zoomLevel + this.zoomStep);
         this.update.next(true);
+    }
+
+    private updateText() {
+        const initialTheme = this.themeService.getActiveTheme().name;
+        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
+        switch (initialTheme) {
+            case 'dark':
+                initialTextColor = ColorService.FONT_DARK_THEME;
+                break;
+        }
+        this.chartOptions.title.fontColor = initialTextColor;
+        this.chartOptions.scales.yAxes[0].ticks.fontColor = initialTextColor;
+        this.chartOptions.scales.xAxes[0].ticks.fontColor = initialTextColor;
+        
+        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
+                let textColor = ColorService.FONT_LIGHT_THEME; // default
+                switch (theme.name) {
+                    case 'dark':
+                        textColor = ColorService.FONT_DARK_THEME;
+                        break;
+                }
+                this.chartOptions.title.fontColor = textColor;
+                this.chartOptions.scales.yAxes[0].ticks.fontColor = textColor;
+                this.chartOptions.scales.xAxes[0].ticks.fontColor = textColor;
+                setTimeout(() => {
+                    this.chartNodeJobs.reinit();
+                }, 100);
+            }
+        );
     }
 
     private verifyNode(node) {
@@ -1174,6 +1208,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
         if (location.includes('batches')) {
             this.isBatches = true;
         }
+        this.updateText();
     }
 
     ngAfterViewInit() {
@@ -1183,6 +1218,12 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
             this.center.next(true);
             this.update.next(true);
         }, 0);
+    }
+
+    ngOnDestroy() {
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 
     /* This function checks if a specific job input is already connected to a file */

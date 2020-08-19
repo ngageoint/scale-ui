@@ -67,7 +67,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
         this.options.scales.yAxes[0].scaleLabel.fontColor = initialTextColor;
         this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
 
-        this.unsubscribe();
         this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
                 let textColor = ColorService.FONT_LIGHT_THEME; // default
                 switch (theme.name) {
