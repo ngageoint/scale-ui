@@ -1,4 +1,6 @@
-import { Component, Input, Output, OnChanges, OnInit, AfterViewInit, OnDestroy, ViewChild, HostListener, EventEmitter } from '@angular/core';
+import {
+    Component, Input, Output, OnChanges, OnInit, AfterViewInit, OnDestroy, ViewChild, HostListener, EventEmitter
+} from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { Subject } from 'rxjs';
 import * as shape from 'd3-shape';
@@ -199,7 +201,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
         this.chartOptions.title.fontColor = initialTextColor;
         this.chartOptions.scales.yAxes[0].ticks.fontColor = initialTextColor;
         this.chartOptions.scales.xAxes[0].ticks.fontColor = initialTextColor;
-        
+
         this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
                 let textColor = ColorService.FONT_LIGHT_THEME; // default
                 switch (theme.name) {
