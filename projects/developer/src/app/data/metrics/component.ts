@@ -367,6 +367,7 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
                 },
                 legend: {
                     position: 'right',
+                    display: this.filtersApplied.length > 1 || this.selectedMetric2,
                     labels: {}
                 },
                 plugins: {
