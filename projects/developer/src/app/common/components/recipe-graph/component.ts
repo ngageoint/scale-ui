@@ -293,7 +293,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit {
                             node: node,
                             visible: true
                         });
-                    } else if (!this.selectedNode) {
+                    } else {
                         this.verifyNode(node);
                     }
                 }
