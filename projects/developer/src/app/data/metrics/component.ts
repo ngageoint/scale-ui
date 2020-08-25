@@ -7,7 +7,6 @@ import * as moment from 'moment';
 import { MetricsApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { ChartService } from './chart.service';
-import { ColorService } from '../../common/services/color.service';
 import { ThemeService } from '../../theme/theme.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/chart';
@@ -21,7 +20,7 @@ import { UTCDates } from '../../common/utils/utcdates';
     styleUrls: ['./component.scss']
 })
 export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
-    @ViewChild('chart', {static: true}) chart: UIChart;
+    @ViewChild('chart', {static: false}) chart: UIChart;
     chartLoading: boolean;
     showChart: boolean;
     startDate = moment().subtract(1, 'M').startOf('d').toDate();
@@ -89,40 +88,18 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
     get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.options.title.fontColor = initialTextColor;
-        this.options.legend.labels.fontColor = initialTextColor;
+    private updateChartColors() {
+        const colorText = this.themeService.getProperty('--main-text');
+        this.options.title.fontColor = colorText;
+        this.options.legend.labels.fontColor = colorText;
+        this.options.scales.xAxes[0].ticks.fontColor = colorText;
         this.options.scales.yAxes.forEach( (element) => {
-            element.ticks.fontColor = initialTextColor;
-            element.scaleLabel.fontColor = initialTextColor;
+            element.ticks.fontColor = colorText;
+            element.scaleLabel.fontColor = colorText;
         });
-        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.options.title.fontColor = textColor;
-                this.options.legend.labels.fontColor = textColor;
-                this.options.scales.yAxes.forEach( (element) => {
-                    element.ticks.fontColor = textColor;
-                    element.scaleLabel.fontColor = textColor;
-                });
-                this.options.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.chart.reinit();
-                }, 100);
-            }
-        );
+        setTimeout(() => {
+            this.chart.reinit();
+        });
     }
 
     private formatYValues(units, data, noPadding?) {
@@ -399,7 +376,7 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
                     }
                 }
             };
-            this.updateText();
+            this.updateChartColors();
             this.chartLoading = false;
         }, err => {
             this.chartLoading = false;
@@ -410,6 +387,10 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
     ngOnInit() {
         this.getDataTypes();
         this.getRecipeTypes();
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            this.updateChartColors();
+        });
     }
 
     ngOnDestroy() {

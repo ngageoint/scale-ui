@@ -47,33 +47,6 @@ export class FeedComponent implements OnInit, OnDestroy {
         private themeService: ThemeService
     ) {}
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
-        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
-
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.options.scales.yAxes[0].ticks.fontColor = textColor;
-                this.options.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.feedChart.reinit();
-                }, 100);
-            }
-        );
-    }
-
     private getStrikes() {
         this.strikesApiService.getStrikes().subscribe(data => {
             _.forEach(data.results, strike => {
@@ -250,6 +223,19 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.started = moment.utc().add(-7, 'd').startOf('d').format(environment.dateFormat);
         this.ended = moment.utc().format(environment.dateFormat);
 
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+            setTimeout(() => {
+                this.feedChart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
+
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 if (params.strike_id) {
@@ -259,7 +245,6 @@ export class FeedComponent implements OnInit, OnDestroy {
             this.selectedTimeValue = params.use_ingest_time === 'true' ? 'ingest' : 'data';
         });
         this.getStrikes();
-        this.updateText();
     }
 
     ngOnDestroy() {

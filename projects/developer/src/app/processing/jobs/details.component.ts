@@ -11,7 +11,6 @@ import { JobsApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
 import { Globals } from '../../globals';
 
-import { ColorService } from '../../common/services/color.service';
 import { ThemeService } from '../../theme/theme.service';
 import { UIChart } from 'primeng/chart';
 
@@ -54,33 +53,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.globals = globals;
     }
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
-        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
-
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.options.scales.yAxes[0].ticks.fontColor = textColor;
-                this.options.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.chart.reinit();
-                }, 100);
-            }
-        );
-    }
-
     private initJobDetail(data) {
         this.job = data;
         if (this.selectedJobExe && this.job.execution.id === this.selectedJobExe.id) {
@@ -104,51 +76,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.job.execution && this.job.execution.status ?
                 `${_.toLower(this.job.execution.status)}` :
                 'status unavailable';
-        this.options = {
-            elements: {
-                font: 'Roboto',
-                colorFunction: () => {
-                    return Color('#017cce');
-                }
-            },
-            scales: {
-                xAxes: [{
-                    type: 'timeline',
-                    bounds: 'ticks',
-                    ticks: {
-                        autoSkip: true,
-                        maxRotation: 65,
-                        minRotation: 50,
-                        callback: (value, index, values) => {
-                            if (!values[index]) {
-                                return;
-                            }
-                            return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
-                        }
-                    }
-                }],
-                yAxes: [{
-                    ticks: {}
-                }]
-            },
-            tooltips: {
-                callbacks: {
-                    label: (tooltipItem, chartData) => {
-                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                        return [
-                            d[2],
-                            moment.utc(d[0]).format('YYYY-MM-DD HH:mm:ss[Z]'),
-                            moment.utc(d[1]).format('YYYY-MM-DD HH:mm:ss[Z]')
-                        ];
-                    }
-                }
-            },
-            plugins: {
-                datalabels: false,
-                timeline: true
-            },
-            maintainAspectRatio: false
-        };
+
         this.data = {
             labels: ['Created', 'Queued', 'Executed'],
             datasets: [{
@@ -172,7 +100,6 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         this.subscription = this.jobsApiService.getJob(id, true).subscribe(data => {
             this.loading = false;
             this.initJobDetail(data);
-            this.updateText();
 
             // get job inputs
             this.loadingInputs = true;
@@ -311,10 +238,69 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.options = {
+            elements: {
+                font: 'Roboto',
+                colorFunction: () => {
+                    return Color('#017cce');
+                }
+            },
+            scales: {
+                xAxes: [{
+                    type: 'timeline',
+                    bounds: 'ticks',
+                    ticks: {
+                        autoSkip: true,
+                        maxRotation: 65,
+                        minRotation: 50,
+                        callback: (value, index, values) => {
+                            if (!values[index]) {
+                                return;
+                            }
+                            return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
+                        }
+                    }
+                }],
+                yAxes: [{
+                    ticks: {}
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: (tooltipItem, chartData) => {
+                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return [
+                            d[2],
+                            moment.utc(d[0]).format('YYYY-MM-DD HH:mm:ss[Z]'),
+                            moment.utc(d[1]).format('YYYY-MM-DD HH:mm:ss[Z]')
+                        ];
+                    }
+                }
+            },
+            plugins: {
+                datalabels: false,
+                timeline: true
+            },
+            maintainAspectRatio: false
+        };
+
         if (this.route.snapshot) {
             const id = +this.route.snapshot.paramMap.get('id');
             this.getJobDetail(id);
         }
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+        };
+
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        });
     }
 
     ngOnDestroy() {

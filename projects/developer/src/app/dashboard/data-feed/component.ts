@@ -54,37 +54,6 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
         };
     }
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.options.legend.labels.fontColor = initialTextColor;
-        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
-        this.options.scales.yAxes[0].scaleLabel.fontColor = initialTextColor;
-        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
-
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.options.legend.labels.fontColor = textColor;
-                this.options.scales.yAxes[0].ticks.fontColor = textColor;
-                this.options.scales.yAxes[0].scaleLabel.fontColor = textColor;
-                this.options.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.chart.reinit();
-                }, 100);
-            }
-        );
-    }
-
     private updateFeedData() {
         if (this.selectedDataFeed) {
             this.ingestDataset = {
@@ -295,7 +264,23 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 mode: 'index'
             }
         };
-        this.updateText();
+
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.legend.labels.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.yAxes[0].scaleLabel.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
+
         this.fetchChartData(true);
     }
 

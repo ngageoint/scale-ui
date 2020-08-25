@@ -19,7 +19,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     @Input() favorite: any;
     @Input() started;
     @Input() ended;
-    @ViewChild('chart', {static: true}) chart: UIChart;
+    @ViewChild('chart', {static: false}) chart: UIChart;
     chartLoading: boolean;
     data: any;
     options: any;
@@ -38,33 +38,14 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
         private themeService: ThemeService
     ) {}
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
-        this.options.scales.yAxes[0].scaleLabel.fontColor = initialTextColor;
-        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
-
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.options.scales.yAxes[0].ticks.fontColor = textColor;
-                this.options.scales.yAxes[0].scaleLabel.fontColor = textColor;
-                this.options.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.chart.reinit();
-                }, 100);
-            }
-        );
+    private updateChartColors() {
+        const colorText = this.themeService.getProperty('--main-text');
+        this.options.scales.yAxes[0].ticks.fontColor = colorText;
+        this.options.scales.yAxes[0].scaleLabel.fontColor = colorText;
+        this.options.scales.xAxes[0].ticks.fontColor = colorText;
+        setTimeout(() => {
+            this.chart.reinit();
+        });
     }
 
     private updateChart(favorite?: any) {
@@ -164,7 +145,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
                 },
                 maintainAspectRatio: false
             };
-            this.updateText();
+            this.updateChartColors();
         }, err => {
             this.chartLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job history', detail: err.statusText});
@@ -178,6 +159,9 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     ngOnInit() {
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            this.updateChartColors();
+        });
     }
 
     ngAfterViewInit() {

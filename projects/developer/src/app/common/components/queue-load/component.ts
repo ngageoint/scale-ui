@@ -27,7 +27,7 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     options = {
         legend: {
             labels: {
-                fontColor: ColorService.FONT_LIGHT_THEME
+                fontColor: null
             }
         },
         scales: {
@@ -45,13 +45,13 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
                         }
                         return moment.utc(values[index]['value']).format('DD MMM HHmm[Z]');
                     },
-                    fontColor: ColorService.FONT_LIGHT_THEME
+                    fontColor: null
                 }
             }],
             yAxes: [{
                 stacked: true,
                 ticks: {
-                    fontColor: ColorService.FONT_LIGHT_THEME
+                    fontColor: null
                 }
             }]
         },
@@ -67,35 +67,6 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     ) {
     }
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.options.legend.labels.fontColor = initialTextColor;
-        this.options.scales.yAxes[0].ticks.fontColor = initialTextColor;
-        this.options.scales.xAxes[0].ticks.fontColor = initialTextColor;
-
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.options.legend.labels.fontColor = textColor;
-                this.options.scales.yAxes[0].ticks.fontColor = textColor;
-                this.options.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.chart.reinit();
-                }, 100);
-            }
-        );
-    }
-
     private unsubscribe() {
         if (this.subscription) {
             this.subscription.unsubscribe();
@@ -103,7 +74,19 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnInit() {
-        this.updateText();
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.legend.labels.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {

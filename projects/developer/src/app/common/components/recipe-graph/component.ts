@@ -190,35 +190,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
         this.update.next(true);
     }
 
-    private updateText() {
-        const initialTheme = this.themeService.getActiveTheme().name;
-        let initialTextColor = ColorService.FONT_LIGHT_THEME; // default
-        switch (initialTheme) {
-            case 'dark':
-                initialTextColor = ColorService.FONT_DARK_THEME;
-                break;
-        }
-        this.chartOptions.title.fontColor = initialTextColor;
-        this.chartOptions.scales.yAxes[0].ticks.fontColor = initialTextColor;
-        this.chartOptions.scales.xAxes[0].ticks.fontColor = initialTextColor;
-
-        this.themeSubscription = this.themeService.themeChange.subscribe(theme => {
-                let textColor = ColorService.FONT_LIGHT_THEME; // default
-                switch (theme.name) {
-                    case 'dark':
-                        textColor = ColorService.FONT_DARK_THEME;
-                        break;
-                }
-                this.chartOptions.title.fontColor = textColor;
-                this.chartOptions.scales.yAxes[0].ticks.fontColor = textColor;
-                this.chartOptions.scales.xAxes[0].ticks.fontColor = textColor;
-                setTimeout(() => {
-                    this.chartNodeJobs.reinit();
-                }, 100);
-            }
-        );
-    }
-
     private verifyNode(node) {
         // add link for dependency, if it exists
         _.forEach(node.dependencies, dependency => {
@@ -1210,7 +1181,19 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
         if (location.includes('batches')) {
             this.isBatches = true;
         }
-        this.updateText();
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.chartOptions.title.fontColor = colorText;
+            this.chartOptions.scales.yAxes[0].ticks.fontColor = colorText;
+            this.chartOptions.scales.xAxes[0].ticks.fontColor = colorText;
+            setTimeout(() => {
+                this.chartNodeJobs.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
     }
 
     ngAfterViewInit() {
