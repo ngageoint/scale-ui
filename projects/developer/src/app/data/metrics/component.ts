@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
@@ -7,6 +7,7 @@ import * as moment from 'moment';
 import { MetricsApiService } from './api.service';
 import { RecipeTypesApiService } from '../../configuration/recipe-types/api.service';
 import { ChartService } from './chart.service';
+import { ThemeService } from '../../theme/theme.service';
 import { DataService } from '../../common/services/data.service';
 import { UIChart } from 'primeng/chart';
 import { JobType } from '../../configuration/job-types/api.model';
@@ -18,8 +19,8 @@ import { UTCDates } from '../../common/utils/utcdates';
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class MetricsComponent implements OnInit, AfterViewInit {
-    @ViewChild('chart', {static: true}) chart: UIChart;
+export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
+    @ViewChild('chart', {static: false}) chart: UIChart;
     chartLoading: boolean;
     showChart: boolean;
     startDate = moment().subtract(1, 'M').startOf('d').toDate();
@@ -49,11 +50,13 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     data: any;
     options: any;
     showFilters = true;
+    themeSubscription: any;
     constructor(
         private messageService: MessageService,
         private metricsApiService: MetricsApiService,
         private recipeTypesApiService: RecipeTypesApiService,
-        private chartService: ChartService
+        private chartService: ChartService,
+        private themeService: ThemeService
     ) {
         this.chartTypes = [
             {
@@ -84,6 +87,20 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     // utc versions of internal start and end dates
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
     get utcEndDate(): Date { return UTCDates.localDateToUTC(this.endDate); }
+
+    private updateChartColors() {
+        const colorText = this.themeService.getProperty('--main-text');
+        this.options.title.fontColor = colorText;
+        this.options.legend.labels.fontColor = colorText;
+        this.options.scales.xAxes[0].ticks.fontColor = colorText;
+        this.options.scales.yAxes.forEach( (element) => {
+            element.ticks.fontColor = colorText;
+            element.scaleLabel.fontColor = colorText;
+        });
+        setTimeout(() => {
+            this.chart.reinit();
+        });
+    }
 
     private formatYValues(units, data, noPadding?) {
         noPadding = noPadding || false;
@@ -327,7 +344,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 },
                 legend: {
                     position: 'right',
-                    display: this.filtersApplied.length > 1 || this.selectedMetric2
+                    display: this.filtersApplied.length > 1 || this.selectedMetric2,
+                    labels: {}
                 },
                 plugins: {
                     datalabels: {
@@ -337,7 +355,8 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                 responsive: true,
                 scales: {
                     xAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {}
                     }],
                     yAxes: yAxes
                 },
@@ -357,6 +376,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     }
                 }
             };
+            this.updateChartColors();
             this.chartLoading = false;
         }, err => {
             this.chartLoading = false;
@@ -367,6 +387,16 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     ngOnInit() {
         this.getDataTypes();
         this.getRecipeTypes();
+
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            this.updateChartColors();
+        });
+    }
+
+    ngOnDestroy() {
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 
     ngAfterViewInit() {

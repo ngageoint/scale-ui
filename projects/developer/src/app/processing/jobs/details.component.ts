@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as moment from 'moment';
@@ -11,12 +11,17 @@ import { JobsApiService } from './api.service';
 import { DataService } from '../../common/services/data.service';
 import { Globals } from '../../globals';
 
+import { ThemeService } from '../../theme/theme.service';
+import { UIChart } from 'primeng/chart';
+
 @Component({
     selector: 'dev-job-details',
     templateUrl: './details.component.html',
     styleUrls: ['./details.component.scss']
 })
 export class JobDetailsComponent implements OnInit, OnDestroy {
+    @ViewChild('chartDetails', {static: false}) chart: UIChart;
+    themeSubscription: any;
     subscription: any;
     job: Job;
     loading: boolean;
@@ -42,6 +47,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private jobsApiService: JobsApiService,
+        private themeService: ThemeService,
         globals: Globals
     ) {
         this.globals = globals;
@@ -70,48 +76,7 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
             this.job.execution && this.job.execution.status ?
                 `${_.toLower(this.job.execution.status)}` :
                 'status unavailable';
-        this.options = {
-            elements: {
-                font: 'Roboto',
-                colorFunction: () => {
-                    return Color('#017cce');
-                }
-            },
-            scales: {
-                xAxes: [{
-                    type: 'timeline',
-                    bounds: 'ticks',
-                    ticks: {
-                        autoSkip: true,
-                        maxRotation: 65,
-                        minRotation: 50,
-                        callback: (value, index, values) => {
-                            if (!values[index]) {
-                                return;
-                            }
-                            return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
-                        }
-                    }
-                }]
-            },
-            tooltips: {
-                callbacks: {
-                    label: (tooltipItem, chartData) => {
-                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                        return [
-                            d[2],
-                            moment.utc(d[0]).format('YYYY-MM-DD HH:mm:ss[Z]'),
-                            moment.utc(d[1]).format('YYYY-MM-DD HH:mm:ss[Z]')
-                        ];
-                    }
-                }
-            },
-            plugins: {
-                datalabels: false,
-                timeline: true
-            },
-            maintainAspectRatio: false
-        };
+
         this.data = {
             labels: ['Created', 'Queued', 'Executed'],
             datasets: [{
@@ -273,13 +238,75 @@ export class JobDetailsComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
+        this.options = {
+            elements: {
+                font: 'Roboto',
+                colorFunction: () => {
+                    return Color('#017cce');
+                }
+            },
+            scales: {
+                xAxes: [{
+                    type: 'timeline',
+                    bounds: 'ticks',
+                    ticks: {
+                        autoSkip: true,
+                        maxRotation: 65,
+                        minRotation: 50,
+                        callback: (value, index, values) => {
+                            if (!values[index]) {
+                                return;
+                            }
+                            return moment.utc(values[index]['value']).format('HH:mm:ss[Z]');
+                        }
+                    }
+                }],
+                yAxes: [{
+                    ticks: {}
+                }]
+            },
+            tooltips: {
+                callbacks: {
+                    label: (tooltipItem, chartData) => {
+                        const d = chartData.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
+                        return [
+                            d[2],
+                            moment.utc(d[0]).format('YYYY-MM-DD HH:mm:ss[Z]'),
+                            moment.utc(d[1]).format('YYYY-MM-DD HH:mm:ss[Z]')
+                        ];
+                    }
+                }
+            },
+            plugins: {
+                datalabels: false,
+                timeline: true
+            },
+            maintainAspectRatio: false
+        };
+
         if (this.route.snapshot) {
             const id = +this.route.snapshot.paramMap.get('id');
             this.getJobDetail(id);
         }
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+        };
+
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        });
     }
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { SelectItem } from 'primeng/api';
+import { UIChart } from 'primeng/chart';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
@@ -9,6 +10,7 @@ import { IngestApiService } from '../ingest/api.service';
 import { StrikesApiService } from '../../system/strikes/api.service';
 import { DataService } from '../../common/services/data.service';
 import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
 
 @Component({
     selector: 'dev-feed',
@@ -16,7 +18,7 @@ import { ColorService } from '../../common/services/color.service';
     styleUrls: ['./component.scss']
 })
 export class FeedComponent implements OnInit, OnDestroy {
-    @ViewChild('feedChart', {static: true}) feedChart: any;
+    @ViewChild('feedChart', {static: true}) feedChart: UIChart;
     subscription: any;
     chartLoading: boolean;
     options: any;
@@ -36,11 +38,13 @@ export class FeedComponent implements OnInit, OnDestroy {
         value: 'ingest'
     }];
     selectedTimeValue: string;
+    themeSubscription: any;
     constructor(
         private ingestApiService: IngestApiService,
         private strikesApiService: StrikesApiService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private themeService: ThemeService
     ) {}
 
     private getStrikes() {
@@ -182,6 +186,7 @@ export class FeedComponent implements OnInit, OnDestroy {
             scales: {
                 xAxes: [{
                     type: 'time',
+                    ticks: {},
                     time: {
                         displayFormats: {
                             'millisecond': 'DD MMM HHmm[Z]',
@@ -218,6 +223,19 @@ export class FeedComponent implements OnInit, OnDestroy {
         this.started = moment.utc().add(-7, 'd').startOf('d').format(environment.dateFormat);
         this.ended = moment.utc().format(environment.dateFormat);
 
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+            setTimeout(() => {
+                this.feedChart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
+
         this.route.queryParams.subscribe(params => {
             if (Object.keys(params).length > 0) {
                 if (params.strike_id) {
@@ -231,5 +249,8 @@ export class FeedComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }
