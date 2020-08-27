@@ -61,7 +61,7 @@
                     </span>
                 </div>
             </div>
-            <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler && globals.is_staff" [ngClass]="schedulerClass"
+            <div class="navbar__scheduler" *ngIf="isAuthenticated && scheduler" [ngClass]="schedulerClass"
                  (click)="onSchedulerClick()" pTooltip="Scheduler" tooltipPosition="bottom">
                 <span class="fa fa-power-off"></span>
             </div>

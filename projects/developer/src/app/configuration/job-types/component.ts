@@ -8,7 +8,6 @@ import * as _ from 'lodash';
 import { JobTypesApiService } from './api.service';
 import { ColorService } from '../../common/services/color.service';
 import { DashboardJobsService } from '../../dashboard/jobs.service';
-import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-job-types',
@@ -53,7 +52,6 @@ export class JobTypesComponent implements OnInit, OnDestroy {
     favoritesBtnLabel = 'Favorites';
     favoritesBtnClass = 'ui-button-secondary';
     activeLabel = 'Active Job Types';
-    globals: Globals;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -62,11 +60,8 @@ export class JobTypesComponent implements OnInit, OnDestroy {
         private colorService: ColorService,
         private dashboardJobsService: DashboardJobsService,
         private router: Router,
-        private route: ActivatedRoute,
-        globals: Globals
-    ) {
-        this.globals = globals;
-    }
+        private route: ActivatedRoute
+    ) {}
 
     private clampText() {
         setTimeout(() => {

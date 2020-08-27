@@ -14,7 +14,6 @@ import { JobsApiService } from '../../processing/jobs/api.service';
 import { Strike } from './api.model';
 import { IngestFile } from '../../common/models/api.ingest-file.model';
 import { Observable } from 'rxjs';
-import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-strikes',
@@ -44,7 +43,6 @@ export class StrikesComponent implements OnInit, OnDestroy {
     ingestFileForm: any;
     ingestFileFormSubscription: any;
     ingestFilePanelClass = 'ui-panel-primary';
-    globals: Globals;
 
     constructor(
         private fb: FormBuilder,
@@ -54,11 +52,8 @@ export class StrikesComponent implements OnInit, OnDestroy {
         private recipeTypesApiService: RecipeTypesApiService,
         private workspacesApiService: WorkspacesApiService,
         private strikesApiService: StrikesApiService,
-        private jobsApiService: JobsApiService,
-        globals: Globals
-    ) {
-        this.globals = globals;
-    }
+        private jobsApiService: JobsApiService
+    ) {}
 
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')

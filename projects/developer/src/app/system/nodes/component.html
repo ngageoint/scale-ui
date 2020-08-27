@@ -78,7 +78,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div *ngIf="globals.is_staff">
+                        <div>
                             <p-menu #menu [popup]="true" [model]="node.menuItems" appendTo="body"></p-menu>
                             <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
                                     (click)="onMenuClick($event, node)"></button>

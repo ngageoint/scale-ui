@@ -7,7 +7,7 @@
                 <div>
                     {{ scan.title }}
                 </div>
-                <div *ngIf="!isEditing && globals.is_staff" class="scans__menu">
+                <div *ngIf="!isEditing" class="scans__menu">
                     <span *ngIf="scan.job.status === 'RUNNING'" class="margin-right-md">
                         <button  pButton icon="fa fa-ban" pTooltip="Cancel Scan" (click)="cancelScan(scan.id, scan)"></button>
                     </span>

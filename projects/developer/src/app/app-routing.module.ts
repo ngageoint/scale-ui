@@ -27,7 +27,6 @@ import { ScanDetailsComponent } from './system/scans/details.component';
 import { SystemStatusComponent } from './system/status/component';
 import { WorkspacesComponent } from './system/workspaces/component';
 import { PendingChangesGuard } from './pending-changes.guard';
-import { AuthGuard } from './auth.guard';
 import { ProcessingStatusComponent } from './processing/status/component';
 
 const routes: Routes = [
@@ -84,7 +83,6 @@ const routes: Routes = [
     {
         path: 'processing/batches/create',
         component: BatchWorkflowComponent,
-        canActivate: [AuthGuard],
         data: {title: 'Create Batch | Scale'}
     },
     {
@@ -106,14 +104,12 @@ const routes: Routes = [
     {
         path: 'configuration/job-types/edit/:name/:version',
         component: JobTypesCreateComponent,
-        canActivate: [AuthGuard],
         data: {title: 'Edit Job Types | Scale'}
     },
     {
         path: 'configuration/job-types/create',
         component: JobTypesCreateComponent,
         canDeactivate: [PendingChangesGuard],
-        canActivate: [AuthGuard],
         data: {title: 'Create Job Types | Scale'}
     },
     {
@@ -187,7 +183,6 @@ const routes: Routes = [
     {
         path: 'system/status',
         component: SystemStatusComponent,
-        canActivate: [AuthGuard],
         data: {title: 'System Status | Scale'}
     },
     {

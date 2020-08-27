@@ -14,7 +14,6 @@ import { RecipeType } from './api.model';
 import { RecipeTypeInput } from './api.input.model';
 import { RecipeTypeCondition } from './api.condition.model';
 import { Observable } from 'rxjs';
-import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-job-types',
@@ -63,7 +62,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
-    globals: Globals;
     menuBarItems: MenuItem[] = [
         { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
@@ -99,8 +97,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         private jobTypesApiService: JobTypesApiService,
         private dataService: DataService,
         private router: Router,
-        private route: ActivatedRoute,
-        globals: Globals
+        private route: ActivatedRoute
     ) {
         this.jobTypeColumns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -111,7 +108,6 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.conditionColumns = [
             { field: 'name', header: 'Name', filterMatchMode: 'contains' }
         ];
-        this.globals = globals;
     }
 
     @HostListener('window:beforeunload')

@@ -3,7 +3,7 @@
         <h2><i class="fa fa-cubes"></i> Recipe Types ({{ totalRecords }})</h2>
         <div class="margin-left-md">
             <button pButton type="button" icon="fa fa-plus" (click)="createNewRecipe()"
-                    pTooltip="Create Recipe Type" *ngIf="globals.is_staff"></button>
+                    pTooltip="Create Recipe Type"></button>
         </div>
     </div>
     <p-dataView class="recipe-types__dataview" [value]="recipeTypeOptions" filterBy="value.title" layout="grid" [loading]="loadingRecipeTypes" #dv>
@@ -30,7 +30,7 @@
                                     </a>
                                 </strong>
                             </div>
-                            <div *ngIf="globals.is_staff">
+                            <div>
                                 <p-menu #menu [popup]="true" [model]="recipeType.menuItems" appendTo="body"></p-menu>
                                 <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
                                         (click)="onMenuClick($event, recipeType)"></button>
@@ -66,7 +66,7 @@
                 <div>
                     <strong>{{ selectedRecipeTypeDetail.title }}</strong>
                 </div>
-                <div *ngIf="!isEditing && globals.is_staff" class="recipe-type__menu">
+                <div *ngIf="!isEditing" class="recipe-type__menu">
                     <button pButton class="ui-button-primary recipe-type__controls-btn" icon='fa fa-edit' label="Edit"
                     (click)="onEditClick()"></button>
                 </div>

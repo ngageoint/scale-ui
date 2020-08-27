@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 
 import { NodesApiService } from './api.service';
 import { StatusService } from '../../common/services/status.service';
-import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-nodes',
@@ -70,7 +69,6 @@ export class NodesComponent implements OnInit, OnDestroy {
     nodeErrors: any;
     warningDisplay = false;
     nodeWarnings: any;
-    globals: Globals;
     jobExeOptions = {
         legend: {
             display: false
@@ -133,11 +131,8 @@ export class NodesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private nodesApiService: NodesApiService,
-        private statusService: StatusService,
-        globals: Globals
-    ) {
-        this.globals = globals;
-    }
+        private statusService: StatusService
+    ) {}
 
     private filterNodes() {
         if (this.showActive) {

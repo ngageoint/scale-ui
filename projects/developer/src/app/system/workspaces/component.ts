@@ -10,7 +10,6 @@ import * as _ from 'lodash';
 import { WorkspacesApiService } from './api.service';
 import { Workspace } from './api.model';
 import { Observable } from 'rxjs';
-import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-workspaces',
@@ -31,7 +30,6 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
     createFormSubscription: any;
     showActive = true;
     activeLabel = 'Active Workspaces';
-    globals: Globals;
     typeOptions: SelectItem[] = [
         {
             label: 'Host',
@@ -48,11 +46,8 @@ export class WorkspacesComponent implements OnInit, OnDestroy {
         private router: Router,
         private route: ActivatedRoute,
         private messageService: MessageService,
-        private workspacesApiService: WorkspacesApiService,
-        globals: Globals
-    ) {
-        this.globals = globals;
-    }
+        private workspacesApiService: WorkspacesApiService
+    ) {}
 
     @HostListener('window:beforeunload')
     @HostListener('window:popstate')
