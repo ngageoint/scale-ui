@@ -120,6 +120,7 @@ import { CreateBatchComponent } from './processing/batches/batch-workflow/create
 import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
 import { TruncatePipe } from './common/pipes/truncate.pipe';
 import { Globals } from './globals';
+import { AuthGuard } from './auth.guard';
 
 // import after primeng component to ensure timeline plugin attached to correct chart.js instance
 import 'chartjs-chart-timeline/src/timeline';
@@ -259,6 +260,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         PaginatorModule
     ],
     providers: [
+        AuthGuard,
         ColorService,
         ConfirmationService,
         Globals,
