@@ -4,9 +4,8 @@ import { Globals } from './globals';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
-  globals: Globals;
   constructor(
-    globals: Globals,
+    private globals: Globals,
     private router: Router,
   ) {
   }
