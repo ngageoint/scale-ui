@@ -1,10 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
-import {UIChart} from 'primeng/chart';
+import { UIChart } from 'primeng/chart';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 
 import { ColorService } from '../../services/color.service';
+import { ThemeService } from '../../../theme/theme.service';
 import { QueueApiService } from '../../services/queue/api.service';
 
 @Component({
@@ -19,10 +20,16 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     @Input() jobTypeIds: any;
     @Input() maintainAspectRatio: boolean;
     @Output() chartLoaded: EventEmitter<UIChart> = new EventEmitter<UIChart>();
+    themeSubscription: any;
     subscription: any;
     chartLoading = false;
     data: any;
     options = {
+        legend: {
+            labels: {
+                fontColor: null
+            }
+        },
         scales: {
             xAxes: [{
                 type: 'time',
@@ -37,11 +44,15 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
                             return;
                         }
                         return moment.utc(values[index]['value']).format('DD MMM HHmm[Z]');
-                    }
+                    },
+                    fontColor: null
                 }
             }],
             yAxes: [{
-                stacked: true
+                stacked: true,
+                ticks: {
+                    fontColor: null
+                }
             }]
         },
         plugins: {
@@ -51,7 +62,8 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     };
     constructor(
         private messageService: MessageService,
-        private queueApiService: QueueApiService
+        private queueApiService: QueueApiService,
+        private themeService: ThemeService
     ) {
     }
 
@@ -62,6 +74,19 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     ngOnInit() {
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.legend.labels.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
     }
 
     ngOnChanges(changes: SimpleChanges) {
@@ -116,5 +141,8 @@ export class QueueLoadComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

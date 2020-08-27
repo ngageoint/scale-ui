@@ -167,7 +167,7 @@
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">
-            <p-chart type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
+            <p-chart #chartNodeJobs type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
         </div>
     </div>
     <!-- Job node information -->
