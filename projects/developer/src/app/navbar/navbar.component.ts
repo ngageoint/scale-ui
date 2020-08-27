@@ -12,6 +12,7 @@ import { ThemeService } from '../theme';
 import { StatusService } from '../common/services/status.service';
 import { SchedulerApiService } from '../common/services/scheduler/api.service';
 import { ProfileService } from '../common/services/profile.service';
+import { Globals } from '../globals';
 
 @Component({
     selector: 'dev-navbar',
@@ -40,6 +41,7 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
     bannerMessage = environment.bannerMessage;
     bannerType = environment.bannerType;
     showMessage = true;
+    globals: Globals;
 
     constructor(
         private confirmationService: ConfirmationService,
@@ -49,11 +51,13 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
         private statusService: StatusService,
         private schedulerApiService: SchedulerApiService,
         public breakpointObserver: BreakpointObserver,
-        private profileService: ProfileService
+        private profileService: ProfileService,
+        globals: Globals
     ) {
         this.profileService.isAuthenticated.subscribe(value => {
             this.myComponentsIsAuthenticatedFlag = value;
         });
+        this.globals = globals;
     }
 
     closeBanner() {

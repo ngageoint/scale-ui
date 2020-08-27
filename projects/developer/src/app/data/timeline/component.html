@@ -27,17 +27,17 @@ Visualize the created/deprecated history of job types or recipe types.
     </p-dropdown>
     <div *ngIf="selectedDataTypeOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" 
+        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters"
                        [style]="{'width':'100%'}" (onChange)="onTypesClick()"></p-multiSelect>
     </div>
-    <div *ngIf="selectedDataTypeOption">
-        <label>Revisions: </label>
-        <p-multiSelect [options]="revisionOptions" [(ngModel)]="selectedRevs"
-                       [style]="{'width':'100%'}" (onChange)="enableButton()"></p-multiSelect>
-    </div>
-    <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
+        <p-checkbox [(ngModel)]="includeRevisions"
+        [binary]="true" class="revisions"></p-checkbox>
+        <label class="revisions">&nbsp;&nbsp;Include revisions</label>
+    <div>
+        <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
             (click)="onUpdateChartClick()" [disabled]="selectedFilters.length === 0"></button>
+    </div>
 </p-sidebar>
 <div class="timeline__chart">
-    <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="500" ></p-chart>
+    <p-chart #chartTimeline type="timeline" [options]="options" [data]="data" *ngIf="data" [height]="500"></p-chart>
 </div>

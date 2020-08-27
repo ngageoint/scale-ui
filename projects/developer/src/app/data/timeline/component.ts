@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { MessageService } from 'primeng/components/common/messageservice';
 import { SelectItem } from 'primeng/api';
 import * as moment from 'moment';
@@ -13,12 +13,16 @@ import { DataService } from '../../common/services/data.service';
 import { environment } from '../../../environments/environment';
 
 import { UTCDates } from '../../common/utils/utcdates';
+import { ThemeService } from '../../theme/theme.service';
+import { UIChart } from 'primeng/chart';
 
 @Component({
+    selector: 'dev-timeline',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class TimelineComponent implements OnInit {
+export class TimelineComponent implements OnInit, OnDestroy {
+    @ViewChild('chartTimeline', {static: false}) chart: UIChart;
     datatableOptions: RecipesDatatable;
     startDate = moment().subtract(1, 'M').startOf('d').toDate();
     endDate = moment().startOf('d').toDate();
@@ -35,10 +39,12 @@ export class TimelineComponent implements OnInit {
     ];
     selectedDataTypeOption: string;
     filterOptions = [];
+    includeRevisions = false;
     revisionOptions = [];
     selectedFilters = [];
     selectedRevs = [];
     showChart: boolean;
+    themeSubscription: any;
 
     // utc versions of internal start and end dates
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
@@ -56,20 +62,18 @@ export class TimelineComponent implements OnInit {
         private recipeTypesApiService: RecipeTypesApiService,
         private jobTypesApiService: JobTypesApiService,
         private timelineApiService: TimelineApiService,
+        private themeService: ThemeService
     ) {}
 
     // init chart data
     private createTimeline(type) {
         this.showChart = true;
         this.showFilters = false;
-
-
-
         const params = {
             started: this.utcStartDate.toISOString(),
             ended: this.utcEndDate.toISOString(),
             id: this.selectedFilters.map(f => f.id),
-            rev: this.selectedRevs.map(r => r.revision_num)
+            rev: this.selectedRevs.map(r => r.value.revision_num)
         };
 
         if (type === 'Recipe Types') {
@@ -86,7 +90,7 @@ export class TimelineComponent implements OnInit {
             }, err => {
                 console.log(err);
                 this.dataTypesLoading = false;
-                this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
+                this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
             });
         } else if (type === 'Job Types') {
             this.timelineApiService.getJobTypeDetails(params).subscribe(data => {
@@ -180,7 +184,6 @@ export class TimelineComponent implements OnInit {
                 data: newDataset
             });
         });
-
         return chartData;
     }
 
@@ -242,8 +245,8 @@ export class TimelineComponent implements OnInit {
                             value: result
                         });
                     });
+                });
             });
-         });
         } else if (this.selectedDataTypeOption === 'Job Types' ) {
             _.forEach(this.selectedFilters, job => {
                 this.jobTypesApiService.getJobTypeVersions(job.name).subscribe(data => {
@@ -258,7 +261,11 @@ export class TimelineComponent implements OnInit {
         }
         this.enableButton();
     }
-    onUpdateChartClick()  {
+    onUpdateChartClick() {
+        if (this.includeRevisions) {
+           // Include all revisions
+           this.selectedRevs = this.revisionOptions;
+        }
         this.createTimeline(this.selectedDataTypeOption);
     }
 
@@ -289,6 +296,9 @@ export class TimelineComponent implements OnInit {
                         minRotation: 50,
                         autoSkip: true
                     }
+                }],
+                yAxes: [{
+                    ticks: {}
                 }]
             },
             tooltips: {
@@ -301,6 +311,25 @@ export class TimelineComponent implements OnInit {
             responsive: true,
             maintainAspectRatio: false
         };
+
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.title.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
     }
 
+    ngOnDestroy() {
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
+    }
 }

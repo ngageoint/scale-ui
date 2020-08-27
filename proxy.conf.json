@@ -21,13 +21,13 @@
             "^/alpha": ""
         }
     },
-    "/omega": {
-        "target": "https://scale.omega.aisohio.net/api",
-        "secure": true,
+    "/oarfish": {
+        "target": "https://scale.oarfish.aisohio.net/api",
+        "secure": false,
         "logLevel": "debug",
         "changeOrigin": true,
         "pathRewrite": {
-            "^/omega": ""
+            "^/oarfish": ""
         }
     }
 }

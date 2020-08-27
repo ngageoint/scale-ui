@@ -14,6 +14,7 @@ import { RecipeType } from './api.model';
 import { RecipeTypeInput } from './api.input.model';
 import { RecipeTypeCondition } from './api.condition.model';
 import { Observable } from 'rxjs';
+import { Globals } from '../../globals';
 
 @Component({
     selector: 'dev-job-types',
@@ -62,6 +63,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     conditionColumns: any[];
     showAddRemoveDisplay: boolean;
     addRemoveDisplayType = 'job';
+    globals: Globals;
     menuBarItems: MenuItem[] = [
         { label: 'Job Type Nodes', icon: 'fa fa-cube',
             command: () => {
@@ -97,7 +99,8 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         private jobTypesApiService: JobTypesApiService,
         private dataService: DataService,
         private router: Router,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        globals: Globals
     ) {
         this.jobTypeColumns = [
             { field: 'title', header: 'Title', filterMatchMode: 'contains' }
@@ -108,6 +111,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.conditionColumns = [
             { field: 'name', header: 'Name', filterMatchMode: 'contains' }
         ];
+        this.globals = globals;
     }
 
     @HostListener('window:beforeunload')
@@ -483,7 +487,17 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                 this.messageService.add({ severity: 'warn', summary: warning.name, detail: warning.description, sticky: true });
             });
             _.forEach(result.errors, error => {
-                this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                if (error.name.endsWith('JSON')) {
+                    const errors = JSON.parse(error.description);
+                    // Remove the _JSON in the name.
+                    const name = error.name.substring(0, error.name.length - 5);
+
+                    for (const detail of errors) {
+                        this.messageService.add({ severity: 'error', summary: name, detail, sticky: true });
+                    }
+                } else {
+                    this.messageService.add({ severity: 'error', summary: error.name, detail: error.description, sticky: true });
+                }
             });
         }, err => {
             console.log(err);

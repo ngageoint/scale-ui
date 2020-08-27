@@ -1,10 +1,14 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService } from 'primeng/components/common/messageservice';
 import * as _ from 'lodash';
 
 import { NodesApiService } from './api.service';
 import { StatusService } from '../../common/services/status.service';
+import { Globals } from '../../globals';
+
+import { ThemeService } from '../../theme/theme.service';
+import { UIChart } from 'primeng/chart';
 
 @Component({
     selector: 'dev-nodes',
@@ -13,7 +17,10 @@ import { StatusService } from '../../common/services/status.service';
 })
 export class NodesComponent implements OnInit, OnDestroy {
     @ViewChild('menu', {static: false}) menu: any;
+    @ViewChildren('chartJobExe') chartsJobExe: QueryList<UIChart>;
+    @ViewChildren('chartJobRunning') chartsJobRunning: QueryList<UIChart>;
 
+    themeSubscription: any;
     subscription: any;
     loading: boolean;
     collapsed = true;
@@ -69,23 +76,26 @@ export class NodesComponent implements OnInit, OnDestroy {
     nodeErrors: any;
     warningDisplay = false;
     nodeWarnings: any;
+    globals: Globals;
     jobExeOptions = {
         legend: {
             display: false
         },
         title: {
             display: true,
-            text: 'Job Executions'
+            text: 'Job Executions',
+            fontColor: null
         },
         scales: {
             xAxes: [{
                 ticks: {
-                    display: false
+                    display: false,
                 }
             }],
             yAxes: [{
                 ticks: {
-                    beginAtZero: true
+                    beginAtZero: true,
+                    fontColor: null
                 }
             }]
         },
@@ -114,7 +124,8 @@ export class NodesComponent implements OnInit, OnDestroy {
         },
         title: {
             display: true,
-            text: 'Running Jobs'
+            text: 'Running Jobs',
+            fontColor: null
         },
         plugins: {
             datalabels: {
@@ -131,8 +142,12 @@ export class NodesComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private messageService: MessageService,
         private nodesApiService: NodesApiService,
-        private statusService: StatusService
-    ) {}
+        private statusService: StatusService,
+        private themeService: ThemeService,
+        globals: Globals
+    ) {
+        this.globals = globals;
+    }
 
     private filterNodes() {
         if (this.showActive) {
@@ -399,9 +414,27 @@ export class NodesComponent implements OnInit, OnDestroy {
                 this.updateQueryParams();
             }
         });
+
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.jobExeOptions.scales.yAxes[0].ticks.fontColor = colorText;
+            this.jobExeOptions.title.fontColor = colorText;
+            this.runningJobOptions.title.fontColor = colorText;
+            setTimeout(() => {
+                this.chartsJobExe.forEach(chart => chart.reinit());
+                this.chartsJobRunning.forEach(chart => chart.reinit());
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
     }
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 }

@@ -9,6 +9,7 @@ import { environment } from '../environments/environment';
 import { ThemeService } from './theme';
 import { ProfileService } from './common/services/profile.service';
 import { DataService } from './common/services/data.service';
+import { Globals } from './globals';
 
 @Component({
     selector: 'dev-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
     header: string;
     message: string;
     detail: string;
+    private is_staff: boolean;
 
     constructor(
         private themeService: ThemeService,
@@ -30,8 +32,11 @@ export class AppComponent implements OnInit {
         private dataService: DataService,
         private titleService: Title,
         private activatedRoute: ActivatedRoute,
-        private router: Router
-    ) {}
+        private router: Router,
+        private globals: Globals
+    ) {
+        this.is_staff = this.globals.is_staff;
+    }
 
     ngOnInit() {
         this.router.events
@@ -59,6 +64,7 @@ export class AppComponent implements OnInit {
                     // set user data and continue to app
                     this.dataService.setUserProfile(data);
                     this.isAuthenticated = true;
+                    this.globals.is_staff = this.dataService.profile.is_staff;
                 } else {
                     // attempt to authenticate
                     if (environment.authSchemeType === 'form') {
@@ -104,6 +110,7 @@ export class AppComponent implements OnInit {
             });
         } else {
             this.isAuthenticated = true;
+            this.globals.is_staff = true;
         }
     }
 }

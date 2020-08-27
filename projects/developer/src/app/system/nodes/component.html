@@ -78,7 +78,7 @@
                                 </span>
                             </div>
                         </div>
-                        <div>
+                        <div *ngIf="globals.is_staff">
                             <p-menu #menu [popup]="true" [model]="node.menuItems" appendTo="body"></p-menu>
                             <button pButton type="button" class="ui-button-secondary" icon="fa fa-bars"
                                     (click)="onMenuClick($event, node)"></button>
@@ -91,13 +91,13 @@
                 </div>
                 <div class="p-grid" *ngIf="node.status">
                     <div class="p-col-6" *ngIf="node.status.jobExeData">
-                        <p-chart type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
+                        <p-chart #chartJobExe type="bar" [data]="node.status.jobExeData" [options]="jobExeOptions"></p-chart>
                     </div>
                     <div class="p-col-6 node__empty-data" *ngIf="!node.status.jobExeData">
                         No job executions during the past 3 hours
                     </div>
                     <div class="p-col-6" *ngIf="node.status.runningJobData.datasets[0].data.length > 0">
-                        <p-chart type="doughnut" [data]="node.status.runningJobData"
+                        <p-chart #chartJobRunning type="doughnut" [data]="node.status.runningJobData"
                                  [options]="runningJobOptions"></p-chart>
                     </div>
                     <div class="p-col-6 node__empty-data" *ngIf="node.status.job_executions.running.total === 0">

@@ -61,6 +61,7 @@ import { ConfirmationService } from 'primeng/api';
 // app
 import { AppComponent } from './app.component';
 import { AppConfigService } from './common/services/app-config.service';
+import { AuthGuard } from './auth.guard';
 import { ColorService } from './common/services/color.service';
 import { AppRoutingModule } from './app-routing.module';
 import { BatchDetailsComponent } from './processing/batches/details.component';
@@ -119,6 +120,7 @@ import { CreateDatasetComponent } from './processing/batches/batch-workflow/crea
 import { CreateBatchComponent } from './processing/batches/batch-workflow/create-batch/create-batch.component';
 import { RunBatchComponent } from './processing/batches/batch-workflow/run-batch/run-batch.component';
 import { TruncatePipe } from './common/pipes/truncate.pipe';
+import { Globals } from './globals';
 
 // import after primeng component to ensure timeline plugin attached to correct chart.js instance
 import 'chartjs-chart-timeline/src/timeline';
@@ -258,8 +260,10 @@ const appInitializer = (appConfig: AppConfigService) => {
         PaginatorModule
     ],
     providers: [
+        AuthGuard,
         ColorService,
         ConfirmationService,
+        Globals,
         PendingChangesGuard,
         {
             provide: APP_INITIALIZER,

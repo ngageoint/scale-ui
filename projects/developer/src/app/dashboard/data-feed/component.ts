@@ -7,6 +7,7 @@ import * as _ from 'lodash';
 
 import { IngestApiService } from '../../data/ingest/api.service';
 import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
 
 
 @Component({
@@ -33,6 +34,7 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
     allJobs = [];
     feedSubscription: any;
     jobSubscription: any;
+    themeSubscription: any;
     jobParams: any;
     chartData: any;
 
@@ -40,7 +42,8 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
 
     constructor(
         private messageService: MessageService,
-        private ingestApiService: IngestApiService
+        private ingestApiService: IngestApiService,
+        private themeService: ThemeService
     ) {
         this.feedDataset = {
             data: []
@@ -261,6 +264,23 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
                 mode: 'index'
             }
         };
+
+        const updateChartColors = () => {
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.legend.labels.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.yAxes[0].scaleLabel.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        };
+        updateChartColors();
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        });
+
         this.fetchChartData(true);
     }
 
@@ -272,6 +292,9 @@ export class DataFeedComponent implements OnInit, AfterViewInit, OnDestroy, OnCh
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {

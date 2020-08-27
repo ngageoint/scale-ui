@@ -5,7 +5,7 @@
                          (updated)="onTemporalFilterUpdate($event)">
     </dev-temporal-filter>
 
-    <div class="jobs__controls">
+    <div class="jobs__controls" *ngIf="globals.is_staff">
 
         <p-menu #actionsMenu
                 [popup]="true"
@@ -116,12 +116,16 @@
                 <div *ngSwitchCase="'status'">
                     <div class="pull-right">
                         <span class="label label-info" *ngIf="rowData.is_superseded" pTooltip="Superseded">S</span>
-                        <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
-                            (click)="cancelJobs({job_ids: [rowData.id]})" pTooltip="Cancel Job"
-                            *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'"></button>
-                        <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
-                            (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
-                            *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')"></button>
+                        <div *ngIf="globals.is_staff">
+                            <button pButton type="button" icon="fa fa-ban" class="ui-button-secondary"
+                                (click)="cancelJobs({job_ids: [rowData.id]})" pTooltip="Cancel Job"
+                                *ngIf="!rowData.is_superseded && rowData.status !== 'COMPLETED' && rowData.status !== 'CANCELED'">
+                            </button>
+                            <button pButton type="button" icon="fa fa-repeat" class="ui-button-secondary"
+                                (click)="requeueJobs({job_ids: [rowData.id]})" pTooltip="Requeue Job"
+                                *ngIf="!rowData.is_superseded && (rowData.status === 'FAILED' || rowData.status === 'CANCELED')">
+                            </button>
+                        </div>
                     </div>
                     {{ rowData.status }}
                 </div>

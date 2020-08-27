@@ -4,7 +4,7 @@
                          [loading]="apiLoading"
                          (updated)="onTemporalFilterUpdate($event)">
     </dev-temporal-filter>
-    <div class="scans__controls">
+    <div class="scans__controls" *ngIf="globals.is_staff">
         <button pButton icon="fa fa-plus" pTooltip="Create Scan" (click)="onCreateClick($event)"></button>
     </div>
 </div>
@@ -34,7 +34,7 @@
                         <a [pTooltip]="rowData.description" [routerLink]="getScanURL(rowData)">
                             {{ rowData.name }}
                         </a>
-                        <div *ngIf="rowData.job.status === 'RUNNING'" class="pull-right">
+                        <div *ngIf="rowData.job.status === 'RUNNING' && globals.is_staff" class="pull-right">
                             <button pButton icon="fa fa-ban" pTooltip="Cancel Scan" (click)="cancelScan(rowData.id, rowData)"></button>
                         </div>
                     </span>

@@ -167,7 +167,7 @@
     </p-header>
     <div *ngIf="jobMetrics && metricTotal > 0">
         <div class="dialog-content">
-            <p-chart type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
+            <p-chart #chartNodeJobs type="bar" [data]="metricData" [options]="chartOptions"></p-chart>
         </div>
     </div>
     <!-- Job node information -->
@@ -217,27 +217,27 @@
                                     <ul class="list-unstyled media-type-list" *ngIf="file.mediaTypes">
                                         <li *ngFor="let mediaType of file.mediaTypes">{{ mediaType }}</li>
                                     </ul>
-                                    <div class="connections"
-                                         *ngIf="selectedNodeConnections && selectedNodeConnections.length > 0">
-                                        <h5>Connections</h5>
-
-                                        <ul class="list-unstyled">
-                                            <li *ngFor="let connection of selectedNodeConnections" class="connection">
-                                                <div *ngIf="file.name == connection.input_name">
-                                                    <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
+                                    <ul class="list-unstyled">
+                                        <li *ngFor="let connection of selectedNodeConnections">
+                                            <div *ngIf="file.name === connection.input_name">
+                                                <div class="connections">
+                                                    <h5>Connection</h5>
+                                                    <div class="connection">
+                                                        <button pButton class="ui-button-danger margin-right-sm" icon="fa fa-remove"
                                                             (click)="removeInputConnection(connection)" *ngIf="isEditing">
-                                                </button>
-                                                <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
+                                                        </button>
+                                                        <strong>{{ connection.type }}</strong>.<em>{{ connection.name }}</em>
+                                                    </div>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="p-col-2 p-col-nopad text-right">
                                     <button pButton class="ui-button-info margin-top-md" icon="fa fa-plus"
                                             (click)="showInputConnections($event, file)"
                                             pTooltip="Add Input Connection"
-                                            *ngIf="isEditing && totalInputs > selectedNodeConnections.length"></button>
+                                            *ngIf="isEditing && !hasConnection(file.name, selectedNodeConnections)"></button>
                                 </div>
                             </div>
                         </div>
@@ -448,7 +448,7 @@
             </div>
         </div>
     </div>
-    <p-footer *ngIf="selectedNode && selectedNode.node_type.job_id">
+    <p-footer *ngIf="selectedNode && selectedNode.node_type.job_id && globals.is_staff">
         <button pButton label="Requeue Job" type="button" class="ui-button-primary" icon="fa fa-repeat"
                 (click)="requeueJob()"></button>
         <button pButton label="Cancel Job" type="button" class="ui-button-primary" icon="fa fa-ban"

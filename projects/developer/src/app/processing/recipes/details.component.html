@@ -11,7 +11,7 @@
             <a routerLink="/processing/recipes"><i class="fa fa-caret-left"></i> Recipes List</a>
         </div>
         <p-button type="button" icon="fa fa-repeat" pTooltip="Reprocess Recipe" (click)="reprocess()"
-                  *ngIf="!recipe.is_superseded"></p-button>
+                  *ngIf="!recipe.is_superseded && globals.is_staff"></p-button>
     </div>
     <p-table [value]="[recipe]">
         <ng-template pTemplate="header">

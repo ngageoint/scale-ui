@@ -7,6 +7,7 @@ import { DashboardJobsService } from '../jobs.service';
 import { ChartService } from '../../data/metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
 import { ColorService } from '../../common/services/color.service';
+import { ThemeService } from '../../theme/theme.service';
 import { UIChart } from 'primeng/chart';
 
 @Component({
@@ -18,7 +19,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     @Input() favorite: any;
     @Input() started;
     @Input() ended;
-    @ViewChild('chart', {static: true}) chart: UIChart;
+    @ViewChild('chart', {static: false}) chart: UIChart;
     chartLoading: boolean;
     data: any;
     options: any;
@@ -26,14 +27,26 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     favorites = [];
     allJobs = [];
     favoritesSubscription: any;
+    themeSubscription: any;
     subscription: any;
     chartParams: any;
     constructor(
         private messageService: MessageService,
         private jobsService: DashboardJobsService,
         private chartService: ChartService,
-        private metricsApiService: MetricsApiService
+        private metricsApiService: MetricsApiService,
+        private themeService: ThemeService
     ) {}
+
+    private updateChartColors() {
+        const colorText = this.themeService.getProperty('--main-text');
+        this.options.scales.yAxes[0].ticks.fontColor = colorText;
+        this.options.scales.yAxes[0].scaleLabel.fontColor = colorText;
+        this.options.scales.xAxes[0].ticks.fontColor = colorText;
+        setTimeout(() => {
+            this.chart.reinit();
+        });
+    }
 
     private updateChart(favorite?: any) {
         this.chartLoading = true;
@@ -76,6 +89,7 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
             id: 'yAxis1',
             position: 'left',
             stacked: true,
+            ticks: {},
             scaleLabel: {
                 display: true,
                 labelString: 'Job Count'
@@ -124,12 +138,14 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
                 responsive: true,
                 scales: {
                     xAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {}
                     }],
                     yAxes: yAxes
                 },
                 maintainAspectRatio: false
             };
+            this.updateChartColors();
         }, err => {
             this.chartLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job history', detail: err.statusText});
@@ -143,6 +159,9 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     ngOnInit() {
+        this.themeSubscription = this.themeService.themeChange.subscribe(() => {
+            this.updateChartColors();
+        });
     }
 
     ngAfterViewInit() {
@@ -153,6 +172,9 @@ export class JobHistoryComponent implements OnInit, AfterViewInit, OnDestroy, On
 
     ngOnDestroy() {
         this.unsubscribe();
+        if (this.themeSubscription) {
+            this.themeSubscription.unsubscribe();
+        }
     }
 
     ngOnChanges(changes: SimpleChanges) {
