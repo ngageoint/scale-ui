@@ -264,7 +264,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         ColorService,
         ConfirmationService,
         Globals,
-        PendingChangesGuard
+        PendingChangesGuard,
         {
             provide: APP_INITIALIZER,
             useFactory: appInitializer,
