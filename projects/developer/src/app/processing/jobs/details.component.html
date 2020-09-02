@@ -82,7 +82,7 @@
         <div class="p-col-12 p-md-12 p-lg-5 p-xl-5 ">
             <p-panel header="Timeline">
                 <p-scrollPanel>
-                    <p-chart type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
+                    <p-chart #chartDetails type="timeline" [options]="options" [data]="data" *ngIf="data"></p-chart>
                     <div class="text-center margin-top-lg job__latest-exe">
                         <strong>
                             <span class="fa fa-fw fa-square" [ngClass]="job.exeStatusClass"></span>
