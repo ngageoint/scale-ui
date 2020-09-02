@@ -15,6 +15,10 @@
         margin: 15px 0 0 0;
     }
 
+    .p-field-checkbox {
+        margin: 5px 0 15px 0;
+    }
+
     button {
         margin: 15px 0;
     }
@@ -48,5 +52,17 @@
         .ui-panel-content {
             padding: 3px;
         }
+    }
+
+    ::ng-deep .ui-chkbox-label {
+        font-weight: normal;
+        font-size: 12px;
+    }
+
+    ::ng-deep .ui-chkbox-box.ui-state-focus {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        border-color: #a6a6a6;
     }
 }
