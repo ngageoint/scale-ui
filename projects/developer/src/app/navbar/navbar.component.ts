@@ -176,6 +176,11 @@ export class NavbarComponent implements OnInit, OnChanges, OnDestroy {
                         icon: 'fa fa-fw fa-calendar',
                         url: '/data/timeline'
                     },
+                    {
+                        label: 'Latency',
+                        icon: 'fa fa-fw fa-tachometer',
+                        url: '/data/latency'
+                    },
                     {separator: true},
                     {
                         label: 'Close',

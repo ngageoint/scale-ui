@@ -99,11 +99,11 @@
             </p-tabView>
         </div>
         <div class="p-col-12 p-md-12 p-lg-9 p-xl-9">
-                <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
-                    <p-panel header="Completed vs. Failed counts" [style]="{height: '444px'}">
-                            <dev-job-history [started]="started" [ended]="ended" ></dev-job-history>
-                    </p-panel>
-                </div>
+            <div class="charts" *ngIf="(allJobTypes.length > 0) && (favoriteJobTypes.length == 0)">
+                <p-panel header="Completed vs. Failed counts" [style]="{height: '444px'}">
+                        <dev-job-history [started]="started" [ended]="ended" ></dev-job-history>
+                </p-panel>
+            </div>
             <div class="charts-tabbed" *ngIf="favoriteJobTypes.length > 0">
                 <p-panel header="Completed vs. Failed counts" [style]="{height: '500px'}">
                     <p-tabView *ngIf="favoriteJobTypes.length > 0" >

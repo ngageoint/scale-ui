@@ -140,12 +140,13 @@ export class ChartService {
                             type = secondaryType === 'area' ? 'line' : secondaryType;
                             fill = secondaryType === 'area';
                         }
+                        console.log('nostack', filter.nostack);
                         datasets.push({
                             id: filter.id,
                             name: filter.name,
                             version: filter.version,
                             yAxisID: multiAxis ? `yAxis${colIdx + 1}` : 'yAxis1',
-                            stack: `stack${idx.toString()}`,
+                            stack: filter.nostack ? undefined : `stack${idx.toString()}`,
                             label: label,
                             icon: String.fromCharCode(parseInt(filter.icon_code, 16)),
                             backgroundColor: bgColor,

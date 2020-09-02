@@ -19,6 +19,7 @@ import { BatchesComponent } from './processing/batches/batches-component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batch-workflow.component';
 import { IngestComponent } from './data/ingest/component';
+import { JobLatencyComponent } from './data/latency/component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { StrikesComponent } from './system/strikes/component';
@@ -156,6 +157,11 @@ const routes: Routes = [
         path: 'data/timeline',
         component: TimelineComponent,
         data: {title: 'Timeline | Scale'}
+    },
+    {
+        path: 'data/latency',
+        component: JobLatencyComponent,
+        data: {title: 'Data Latency | Scale'}
     },
     {
         path: 'system/nodes',

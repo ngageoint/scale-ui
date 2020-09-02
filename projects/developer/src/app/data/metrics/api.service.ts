@@ -45,4 +45,24 @@ export class MetricsApiService {
                 catchError(DataService.handleError)
             );
     }
+
+    getAvgRuntimeData(params: any): Observable<ApiResults> {
+        return this.http.get<ApiResults>(`${this.apiPrefix}/metrics/${params.dataType}/avg-runtime/`, { params: params })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(DataService.handleError)
+            );
+    }
+
+    getDurationData(params: any): Observable<ApiResults> {
+        return this.http.get<ApiResults>(`${this.apiPrefix}/metrics/${params.dataType}/ingest-time/`, { params: params })
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(DataService.handleError)
+            );
+    }
 }

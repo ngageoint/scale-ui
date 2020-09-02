@@ -76,6 +76,7 @@ import { LoadingIndicatorComponent } from './common/components/loading-indicator
 import { JobActivityComponent } from './dashboard/job-activity/component';
 import { JobDetailsComponent } from './processing/jobs/details.component';
 import { JobHistoryComponent } from './dashboard/job-history/component';
+import { JobLatencyComponent } from './data/latency/component';
 import { JobsComponent } from './processing/jobs/component';
 import { JobTypeHistoryComponent } from './processing/job-type-history/component';
 import { JobTypeHistoryDetailsComponent } from './processing/job-type-history/details.component';
@@ -149,6 +150,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         JobActivityComponent,
         JobDetailsComponent,
         JobHistoryComponent,
+        JobLatencyComponent,
         JobsComponent,
         JobTypeHistoryComponent,
         JobTypeHistoryDetailsComponent,
