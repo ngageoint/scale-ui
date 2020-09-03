@@ -162,7 +162,6 @@ export class JobsComponent implements OnInit, OnDestroy {
     }
     private getJobTypes() {
         const params = { page_size: 1000, is_active: (this.showDeprecated === true) ? null : true };
-        console.log(this.selectedJobType);
         this.selectedJobType = this.selectedJobType.filter(selected => {
             return (selected.is_active === true);
         });
