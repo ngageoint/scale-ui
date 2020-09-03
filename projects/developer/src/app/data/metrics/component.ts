@@ -27,11 +27,9 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     availableDataTypes: SelectItem[] = [];
     dataTypesLoading: boolean;
     selectedDataType: any;
-
     checked = false;
-    subscriptions: any[] = [];
-    sub: any;
-
+    recipeSubscription: any;
+    filterSubscription: any;
     filtersApplied = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
@@ -103,9 +101,11 @@ export class MetricsComponent implements OnInit, AfterViewInit {
 
     private getRecipeTypes() {
         const params = { is_active: (this.checked === true) ? null : true };
-        this.subscriptions.forEach(s => s.unsubscribe());
-        this.subscriptions.push(this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
-            // unselect depreciated recipes
+        if (this.recipeSubscription != null) {
+            this.recipeSubscription.unsubscribe();
+        }
+        this.recipeSubscription = this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
+            // unselect deprecated recipes
             if (this.selectedRecipeTypes != null) {
                 this.selectedRecipeTypes = this.selectedRecipeTypes.filter(selected => {
                     return (selected.is_active === true);
@@ -124,7 +124,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
         }, err => {
             console.log(err);
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
-        }));
+        });
     }
 
     colorGenerator(e) {
@@ -169,10 +169,10 @@ export class MetricsComponent implements OnInit, AfterViewInit {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
-        if (this.sub != null) {
-            this.sub.unsubscribe();
+        if (this.filterSubscription != null) {
+            this.filterSubscription.unsubscribe();
         }
-        this.sub = this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
+        this.filterSubscription = this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
 
@@ -191,7 +191,7 @@ export class MetricsComponent implements OnInit, AfterViewInit {
                     this.dataTypeFilterText + ', ' + _.capitalize(filter.param);
             });
 
-            // unselect depreciated recipes
+            // unselect deprecated recipes
             if (this.filtersApplied != null) {
                 this.filtersApplied = this.filtersApplied.filter(filter => {
                     return (filter.is_active === true);

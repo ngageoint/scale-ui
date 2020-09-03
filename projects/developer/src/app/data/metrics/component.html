@@ -42,7 +42,7 @@
         </div>
         <div *ngIf="selectedDataType && selectedDataType.name === 'job-types'">
             <div class="p-field-checkbox">
-                <p-checkbox [(ngModel)]="checked" binary="true" (onChange)="onCheck()" label="Display Depricated Job/Recipe Types"></p-checkbox>
+                <p-checkbox [(ngModel)]="checked" binary="true" (onChange)="onCheck()" label="Display Deprecated Job/Recipe Types"></p-checkbox>
             </div>
             <label>Recipe Types</label>
             <p-multiSelect [options]="recipeTypeOptions" [(ngModel)]="selectedRecipeTypes" [dataKey]="'id'"

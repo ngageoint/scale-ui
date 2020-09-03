@@ -38,7 +38,7 @@ export class TimelineComponent implements OnInit {
     typeSubscription: any;
     filterOptions = [];
     includeRevisions = false;
-    showDepricated = false;
+    showDeprecated = false;
     revisionOptions = [];
     selectedFilters = [];
     selectedRevs = [];
@@ -195,7 +195,7 @@ export class TimelineComponent implements OnInit {
         this.dataTypesLoading = true;
         this.filterOptions = [];
         this.enableButton();
-        const params = { page_size: 1000, is_active: (this.showDepricated === true) ? null : true };
+        const params = { page_size: 1000, is_active: (this.showDeprecated === true) ? null : true };
         if (this.previousSelectedDataOption === this.selectedDataTypeOption) {
             this.selectedFilters = this.selectedFilters.filter(selected => {
                 return (selected.is_active === true);
@@ -277,7 +277,7 @@ export class TimelineComponent implements OnInit {
         this.createTimeline(this.selectedDataTypeOption);
     }
 
-    onShowDepricated() {
+    onShowDeprecated() {
         if (this.selectedDataTypeOption) {
             this.getFilterOptions();
         }

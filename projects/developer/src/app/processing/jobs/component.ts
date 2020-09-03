@@ -430,7 +430,6 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.selectedJobType.forEach(selected => {
             this.datatableOptions.job_type_name.push(selected.name);
             this.datatableOptions.job_type_name.push(selected.version);
-            selected=selected;
         });
         this.updateOptions();
     }
