@@ -83,6 +83,9 @@
                     <div class="warning-text" *ngIf="rowData.notRetriedTooltip">
                         <span class="fa fa-warning" [pTooltip]="rowData.notRetriedTooltip"></span>
                     </div>
+                    <div class="warning-text" *ngIf="!(rowData.job_type.is_active)">
+                        <span class="fa fa-warning" [pTooltip]="'Job Deprecated'"></span>
+                    </div>
                 </div>
                 <div *ngSwitchCase="'recipe'">
                     <div *ngIf="rowData.recipe">

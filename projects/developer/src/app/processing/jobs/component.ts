@@ -88,8 +88,10 @@ export class JobsComponent implements OnInit, OnDestroy {
     ended: string;
     isInitialized = false;
     subscription: any;
+    jobSubscription: any;
     isMobile: boolean;
     actionItems: MenuItem[];
+    showDeprecated = false;
     globals: Globals;
 
     constructor(
@@ -159,8 +161,15 @@ export class JobsComponent implements OnInit, OnDestroy {
         });
     }
     private getJobTypes() {
-        this.selectedJobType = [];
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
+        const params = { page_size: 1000, is_active: (this.showDeprecated === true) ? null : true };
+        this.selectedJobType = this.selectedJobType.filter(selected => {
+            return (selected.is_active === true);
+        });
+
+        if (this.jobSubscription) {
+            this.jobSubscription.unsubscribe();
+        }
+        this.jobSubscription = this.jobTypesApiService.getJobTypes(params).subscribe(data => {
             this.jobTypes = data.results;
             const selectItems = [];
             _.forEach(this.jobTypes, jobType => {
@@ -175,7 +184,6 @@ export class JobsComponent implements OnInit, OnDestroy {
                     value: jobType,
                     icon: isFavorite ? 'fa fa-star' : ''
                 });
-
                 if (
                     (_.indexOf(this.datatableOptions.job_type_name, jobType.name) >= 0 &&
                     _.indexOf(this.datatableOptions.job_type_version, jobType.version) >= 0) &&
@@ -415,6 +423,25 @@ export class JobsComponent implements OnInit, OnDestroy {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving jobs', detail: err.statusText});
             });
     }
+    matchSelectedData() {
+        this.datatableOptions.job_type_name = [];
+        this.datatableOptions.job_type_version = [];
+        this.selectedJobType.forEach(selected => {
+            this.datatableOptions.job_type_name.push(selected.name);
+            this.datatableOptions.job_type_name.push(selected.version);
+        });
+        this.updateOptions();
+    }
+    onShowDeprecated() {
+        this.showDeprecated = !this.showDeprecated;
+        this.actionItems.forEach(action => {
+            if (action.label === 'Show Deprecated Jobs' || action.label === 'Hide Deprecated Jobs') {
+                action.visible = !action.visible;
+            }
+        });
+        this.getJobTypes();
+        this.matchSelectedData();
+    }
     onSelectedJobTypeClick(jobType) {
         _.remove(this.selectedJobType, jobType);
         this.onJobTypeChange({ value: this.selectedJobType });
@@ -423,6 +450,8 @@ export class JobsComponent implements OnInit, OnDestroy {
         this.actionItems = [
             { label: 'Requeue all', icon: 'fa fa-repeat', command: () => { this.requeueAllConfirm(); } },
             { label: 'Cancel all', icon: 'fa fa-ban', command: () => { this.cancelAllConfirm(); } },
+            { label: 'Show Deprecated Jobs', icon: 'fa fa-eye', visible: true, command: () => { this.onShowDeprecated(); } },
+            { label: 'Hide Deprecated Jobs', icon: 'fa fa-eye-slash', visible: false, command: () => { this.onShowDeprecated(); } }
         ];
 
         this.selectedRows = this.dataService.getSelectedJobRows();
