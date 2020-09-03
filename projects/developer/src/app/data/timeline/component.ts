@@ -34,8 +34,11 @@ export class TimelineComponent implements OnInit {
         { label: 'Job Types', value: 'Job Types' }
     ];
     selectedDataTypeOption: string;
+    previousSelectedDataOption: string;
+    typeSubscription: any;
     filterOptions = [];
     includeRevisions = false;
+    showDepricated = false;
     revisionOptions = [];
     selectedFilters = [];
     selectedRevs = [];
@@ -191,10 +194,20 @@ export class TimelineComponent implements OnInit {
     getFilterOptions() {
         this.dataTypesLoading = true;
         this.filterOptions = [];
-        this.selectedFilters = [];
         this.enableButton();
+        const params = { page_size: 1000, is_active: (this.showDepricated === true) ? null : true };
+        if (this.previousSelectedDataOption === this.selectedDataTypeOption) {
+            this.selectedFilters = this.selectedFilters.filter(selected => {
+                return (selected.is_active === true);
+            });
+        } else {
+            this.selectedFilters = [];
+        }
+        if (this.typeSubscription) {
+            this.typeSubscription.unsubscribe();
+        }
         if (this.selectedDataTypeOption === 'Job Types') {
-            this.jobTypesApiService.getJobTypes().subscribe(data => {
+            this.typeSubscription = this.jobTypesApiService.getJobTypes(params).subscribe(data => {
                 this.dataTypesLoading = false;
                 this.jobTypes = data.results;
                 _.forEach(this.jobTypes, jobType => {
@@ -210,7 +223,7 @@ export class TimelineComponent implements OnInit {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
         } else if (this.selectedDataTypeOption === 'Recipe Types') {
-            this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+            this.typeSubscription = this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
                 this.dataTypesLoading = false;
                 this.recipeTypes = data.results;
                 _.forEach(this.recipeTypes, recipeType => {
@@ -226,6 +239,7 @@ export class TimelineComponent implements OnInit {
                 this.messageService.add({severity: 'error', summary: 'Error retrieving job types', detail: err.statusText});
             });
         }
+        this.previousSelectedDataOption = this.selectedDataTypeOption;
     }
 
     onTypesClick() {
@@ -233,7 +247,6 @@ export class TimelineComponent implements OnInit {
         if (this.selectedDataTypeOption === 'Recipe Types') {
             _.forEach(this.selectedFilters, recipe => {
                 this.recipeTypesApiService.getRecipeTypeRev(recipe.name).subscribe(data => {
-                    console.log(data);
                     _.forEach(data.results, result => {
                         this.revisionOptions.push({
                             label: `${result.recipe_type.title} rev ${result.revision_num}`,
@@ -262,6 +275,12 @@ export class TimelineComponent implements OnInit {
            this.selectedRevs = this.revisionOptions;
         }
         this.createTimeline(this.selectedDataTypeOption);
+    }
+
+    onShowDepricated() {
+        if (this.selectedDataTypeOption) {
+            this.getFilterOptions();
+        }
     }
 
     ngOnInit() {
