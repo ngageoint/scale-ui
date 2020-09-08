@@ -28,14 +28,17 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
     availableDataTypes: SelectItem[] = [];
     dataTypesLoading: boolean;
     selectedDataType: any;
-    filtersApplied: any[] = [];
+    checked = false;
+    recipeSubscription: any;
+    filterSubscription: any;
+    filtersApplied = [];
     selectedDataTypeOptions: any = [];
     dataTypeFilterText = '';
     recipeTypeOptions: SelectItem[] = [];
     selectedRecipeTypes = [];
     recipeTypes: any[] = [];
     filteredChoices: any[] = [];
-    filteredChoicesOptions: any[] = [];
+    filteredChoicesOptions: SelectItem[] = [];
     filteredChoicesLoading: boolean;
     columns: any[] = [];
     metricOptions: SelectItem[] = [];
@@ -112,9 +115,23 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         return data;
     }
+
     private getRecipeTypes() {
-        this.recipeTypesApiService.getRecipeTypes().subscribe(data => {
+        const params = { is_active: (this.checked === true) ? null : true };
+        if (this.recipeSubscription != null) {
+            this.recipeSubscription.unsubscribe();
+        }
+        this.recipeSubscription = this.recipeTypesApiService.getRecipeTypes(params).subscribe(data => {
+            // unselect deprecated recipes
+            if (this.selectedRecipeTypes != null) {
+                this.selectedRecipeTypes = this.selectedRecipeTypes.filter(selected => {
+                    return (selected.is_active === true);
+                });
+            }
+
+            // add recipe options
             this.recipeTypes = data.results;
+            this.recipeTypeOptions = [];
             _.forEach(this.recipeTypes, recipeType => {
                 this.recipeTypeOptions.push({
                     label: `${recipeType.title} rev. ${recipeType.revision_num}`,
@@ -126,6 +143,7 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.messageService.add({severity: 'error', summary: 'Error retrieving recipe types', detail: err.statusText});
         });
     }
+
     colorGenerator(e) {
         if (e.itemValue) {
             // multiselect option was chosen
@@ -168,30 +186,45 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     getDataTypeOptions() {
         this.filteredChoicesLoading = true;
-        this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
+        if (this.filterSubscription != null) {
+            this.filterSubscription.unsubscribe();
+        }
+        this.filterSubscription = this.metricsApiService.getDataTypeOptions(this.selectedDataType.name).subscribe(result => {
             this.filteredChoicesLoading = false;
             this.selectedDataTypeOptions = result;
-            if (this.selectedDataType.name === 'job-types') {
-                // filter out inactive job types from result set
+
+            // filter out inactive job types from result set if unchecked
+            if (this.selectedDataType.name === 'job-types' && this.checked === false) {
                 this.selectedDataTypeOptions.choices = _.filter(result.choices, choice => {
                     return choice.is_active === true;
                 });
             }
+
+            // filter title
+            this.dataTypeFilterText = '';
             _.forEach(result.filters, (filter) => {
                 this.dataTypeFilterText = this.dataTypeFilterText.length === 0 ?
                     _.capitalize(filter.param) :
                     this.dataTypeFilterText + ', ' + _.capitalize(filter.param);
             });
-            this.filteredChoices = _.orderBy(result.choices, ['title', 'version'], ['asc', 'asc']);
-            // format filteredChoices for use with multiselect directive
-            const filteredChoicesOptions = [];
-            _.forEach(this.filteredChoices, (choice) => {
-                filteredChoicesOptions.push({
+
+            // unselect deprecated recipes
+            if (this.filtersApplied != null) {
+                this.filtersApplied = this.filtersApplied.filter(filter => {
+                    return (filter.is_active === true);
+                });
+            }
+
+            this.filteredChoicesOptions = [];
+            this.filteredChoices = _.orderBy(this.selectedDataTypeOptions.choices, ['title', 'version'], ['asc', 'asc']);
+            _.forEach(this.filteredChoices, choice => {
+                this.filteredChoicesOptions.push({
                     label: choice.version ? `${choice.title} ${choice.version}` : choice.title,
                     value: choice
                 });
             });
-            this.filteredChoicesOptions = filteredChoicesOptions;
+
+            this.metricOptions = [];
             this.columns = _.orderBy(result.columns, ['title'], ['asc']);
             _.forEach(this.columns, (column) => {
                 const option = {
@@ -211,7 +244,7 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     changeDataTypeSelection() {
         // reset options
-        this.filtersApplied = [];
+        this.filtersApplied = null;
         this.selectedDataTypeOptions = [];
         this.dataTypeFilterText = '';
         this.selectedMetric1 = null;
@@ -227,6 +260,7 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.getDataTypeOptions();
         }
     }
+
     getRecipeJobTypes() {
         this.filtersApplied = [];
         // populate filtersApplied with selected recipe type job types
@@ -382,6 +416,11 @@ export class MetricsComponent implements OnInit, AfterViewInit, OnDestroy {
             this.chartLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving plot data', detail: err.statusText});
         });
+    }
+
+    onCheck() {
+        this.getDataTypeOptions();
+        this.getRecipeTypes();
     }
 
     ngOnInit() {

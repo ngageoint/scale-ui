@@ -27,13 +27,23 @@ Visualize the created/deprecated history of job types or recipe types.
     </p-dropdown>
     <div *ngIf="selectedDataTypeOption">
         <label>Types to compare: </label>
-        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters"
-                       [style]="{'width':'100%'}" (onChange)="onTypesClick()"></p-multiSelect>
+        <div class="timeline__filter-loading" *ngIf="dataTypesLoading">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
+        <p-multiSelect [options]="filterOptions" [(ngModel)]="selectedFilters" [dataKey]="'id'"
+                       [style]="{'width':'100%'}" (onChange)="onTypesClick()" *ngIf="!dataTypesLoading"></p-multiSelect>
     </div>
+    <div class="p-field-checkbox">
         <p-checkbox [(ngModel)]="includeRevisions"
-        [binary]="true" class="revisions"></p-checkbox>
-        <label class="revisions">&nbsp;&nbsp;Include revisions</label>
+        [binary]="true" class="checkbox"
+        label="Include Revisions"></p-checkbox>
+        <!--<label class="revisions">&nbsp;&nbsp;Include revisions</label>-->
+        <p-checkbox [(ngModel)]="showDeprecated" 
+        [binary]="true" (onChange)="onShowDeprecated()" class="checkbox"
+        label="Display Deprecated Job/Recipe Types"></p-checkbox>
+    </div>
     <div>
+    
         <button pButton type="button" icon="fa fa-refresh" class="timeline__date-filter-btn" label="Update Chart"
             (click)="onUpdateChartClick()" [disabled]="selectedFilters.length === 0"></button>
     </div>
