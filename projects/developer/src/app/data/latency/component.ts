@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import * as _ from 'lodash';
 import { JobTypesApiService } from '../../configuration/job-types/api.service';
 import * as moment from 'moment';
@@ -7,36 +7,22 @@ import { MessageService } from 'primeng/components/common/messageservice';
 
 import { ChartService } from '../metrics/chart.service';
 import { MetricsApiService } from '../../data/metrics/api.service';
+import { ThemeService } from '../../theme/theme.service';
 import { ColorService } from '../../common/services/color.service';
 import { UIChart } from 'primeng/chart';
 import { UTCDates } from '../../common/utils/utcdates';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'dev-job-latency',
     templateUrl: './component.html',
     styleUrls: ['./component.scss']
 })
-export class JobLatencyComponent implements OnInit, AfterViewInit {
+export class JobLatencyComponent implements OnInit, AfterViewInit, OnDestroy {
 
     @ViewChild('chart', {static: true}) chart: UIChart;
     startDate: any = moment().subtract(1, 'M').startOf('d').toDate();
     endDate: any = moment().startOf('d').toDate();
-    chartParams1 = {
-        ingest: {
-            sub: 'getDurationData',
-            columns: ['duration'],
-            label: 'Ingest Time (Avg)'
-        },
-        runTime: {
-            sub: 'getAvgRuntimeData',
-            columns1: ['job_time_avg', 'other_time_avg'],
-            columns2: ['duration'],
-            label: 'Run Time (Avg)'
-        }
-    };
-    params1: any = {};
-    params2: any = {};
-    chartParams: any = {};
 
     showChart = false;
     showFilters = true;
@@ -46,7 +32,13 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
     selectedMetrics = false;
     chartLoading = true;
     data: any = {};
-    options: any = {};
+    options: any;
+    subscriptions: Subscription[] = [];
+    titleLookup = {
+        'Job Task Time (Avg)': 'Job Time (ms)',
+        'other_time_avg': 'Overhead Time (ms)',
+        'duration': 'Ingest Time (ms)'
+    };
 
     // utc versions of internal start and end dates
     get utcStartDate(): Date { return UTCDates.localDateToUTC(this.startDate); }
@@ -56,37 +48,21 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
         private jobTypesApiService: JobTypesApiService,
         private chartService: ChartService,
         private messageService: MessageService,
-        private metricsApiService: MetricsApiService) {
-        this.jobTypesApiService.getJobTypes().subscribe(data => {
-            _.forEach(data.results, (result) => {
-                result.label = result.title;
-                result.value = result.id;
-            });
-            this.jobTypes = data.results;
-            this.dataTypesLoading = false;
-        });
-    }
+        private themeService: ThemeService,
+        private metricsApiService: MetricsApiService) {}
 
     private updateChart(favorite?: any) {
         this.chartLoading = true;
         this.showChart = true;
 
-        let started = this.utcStartDate.toISOString();
-        let ended = this.utcEndDate.toISOString();
-
-        const numDays = moment.utc(ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').diff(moment.utc(started,
-            'YYYY-MM-DDTHH:mm:ss.SSSZ'), 'd');
-        if (numDays === 1 ) {
-            started = moment.utc(started, 'YYYY-MM-DDTHH:mm:ss.SSSZ').startOf('days').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-            ended = moment.utc(ended, 'YYYY-MM-DDTHH:mm:ss.SSSZ').startOf('days').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-        }
-
-        const jobType = this.jobTypes.find(jt => jt.id === this.selectedJobTypeId);
+        const started = this.utcStartDate.toISOString();
+        const ended = this.utcEndDate.toISOString();
+        const jobType = this.jobTypes.find(jt => jt.value === this.selectedJobTypeId);
 
         if (jobType === undefined) { return; }
 
-        this.chartParams = {
-            choice_id: jobType.id, // choiceIds
+        const chartParams = {
+            choice_id: jobType.value, // choiceIds
             column: ['duration', 'job_time_avg', 'other_time_avg'],
             colors: [
                 { column: 'job_time_avg', color: ColorService.COMPLETED },
@@ -100,8 +76,8 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
             page: 1,
             page_size: null
         };
-        this.params1 = {
-            choice_id: jobType.id, // choiceIds
+        const avgRuntimeParams = {
+            choice_id: jobType.value, // choiceIds
             column: ['job_time_avg', 'other_time_avg'],
             dataType: 'job-types',
             started,
@@ -111,8 +87,8 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
             page_size: null
         };
 
-        this.params2 = {
-            choice_id: jobType.id, // choiceIds
+        const durationParams = {
+            choice_id: jobType.value, // choiceIds
             column: ['duration'],
             dataType: 'job-types',
             started,
@@ -121,34 +97,41 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
             page: 1,
             page_size: null
         };
-
         const yAxes = [{
             id: 'yAxis1',
             position: 'left',
             stacked: true,
+            ticks: {
+                fontColor: null
+            },
             scaleLabel: {
                 display: true,
                 labelString: 'Avg Run Time (ms)'
             }
         }];
-        const ms1 = this.metricsApiService.getAvgRuntimeData(this.params1);
-        const ms2 = this.metricsApiService.getDurationData(this.params2);
-        forkJoin([ms1, ms2]).subscribe((pre_data: any) => {
-            const data = pre_data[0];
-            data.results = data.results.concat(pre_data[1].results);
-            data.count += pre_data[1].count;
+
+        const avgRuntimeSub = this.metricsApiService.getAvgRuntimeData(avgRuntimeParams);
+        const durationSub = this.metricsApiService.getDurationData(durationParams);
+
+        this.subscriptions.push(forkJoin([avgRuntimeSub, durationSub]).subscribe((all_data: any) => {
+            const data = all_data[0];
+
+            // We don't care about any of the other information in the data dictionary.
+            data.results = data.results.concat(all_data[1].results);
+            data.count += all_data[1].count;
+
+            _.forEach(data.results, (result) => {
+                if (this.titleLookup[result.column.title]) {
+                    result.column.title = this.titleLookup[result.column.title];
+                }
+            });
+
             this.chartLoading = false;
-            jobType.nostack = true;
-            const filters = [jobType];
-            let title = '';
-            if (favorite) {
-                title = 'for ' + 'something';
-            } else {
-                title = '';
-            }
-            const chartData = this.chartService.formatPlotResults(data, this.chartParams, filters, title, false);
+            jobType.vstack = true;
+
+            const chartData = this.chartService.formatPlotResults(data, chartParams, [jobType], jobType.label, false);
             chartData.labels = _.map(chartData.labels, label => {
-                return moment.utc(label, 'YYYY-MM-DDTHH:mm:ss').format('DD MMM HHmm[Z]');
+                return label;
             });
             // initialize chart
             this.data = {
@@ -157,7 +140,10 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
             };
             this.options = {
                 legend: {
-                    display: false
+                    display: false,
+                    labels: {
+                        fontColor: null
+                    }
                 },
                 plugins: {
                     datalabels: {
@@ -179,17 +165,38 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
                 responsive: true,
                 scales: {
                     xAxes: [{
-                        stacked: true
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                                hour: 'DD MMM HHmm[Z]'
+                            }
+                        },
+                        ticks: {
+                            callback: (value, index, values) => {
+                                if (!values[index]) {
+                                    return;
+                                }
+                                return moment.utc(values[index]['value']).format('DD MMM HHmm[Z]');
+                            }
+                        },
+                        stacked: true,
+                        fontColor: null
                     }],
                     yAxes: yAxes
                 },
                 maintainAspectRatio: false
             };
+
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.legend.labels.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+
             this.chartLoading = false;
         }, err => {
             this.chartLoading = false;
             this.messageService.add({severity: 'error', summary: 'Error retrieving job history', detail: err.statusText});
-        });
+        }));
     }
 
     changeJobTypeSelection() {
@@ -202,6 +209,43 @@ export class JobLatencyComponent implements OnInit, AfterViewInit {
         }
     }
 
+    ngOnDestroy() {
+        this.subscriptions.forEach(s => s.unsubscribe());
+    }
+
     ngOnInit() {
+        const updateChartColors = () => {
+            if (this.options === undefined) {
+                return;
+            }
+
+            const colorText = this.themeService.getProperty('--main-text');
+            this.options.legend.labels.fontColor = colorText;
+            this.options.scales.yAxes[0].ticks.fontColor = colorText;
+            this.options.scales.xAxes[0].ticks.fontColor = colorText;
+
+            setTimeout(() => {
+                this.chart.reinit();
+            });
+        };
+
+        this.subscriptions.push(this.themeService.themeChange.subscribe(() => {
+            updateChartColors();
+        }));
+
+        this.subscriptions.push(this.jobTypesApiService.getJobTypes().subscribe(data => {
+            this.jobTypes = [];
+
+            _.forEach(data.results, (result) => {
+                this.jobTypes.push({
+                    title: result.title,
+                    name: result.title,
+                    version: result.version,
+                    label: result.title,
+                    value: result.id
+                });
+            });
+            this.dataTypesLoading = false;
+        }));
     }
 }
