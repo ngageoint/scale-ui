@@ -17,6 +17,7 @@ import { RecipeTypeInputFile } from '../../../configuration/recipe-types/api.inp
 import { RecipeTypeInputJson } from '../../../configuration/recipe-types/api.input.json.model';
 import { Globals } from '../../../globals';
 import { UIChart } from 'primeng/chart';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
     selector: 'dev-recipe-graph',
@@ -193,6 +194,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
     private verifyNode(node) {
         // add link for dependency, if it exists
         _.forEach(node.dependencies, dependency => {
+            console.log(node);
             if (this.recipeData.definition.nodes[dependency.name]) {
                 let source = '';
                 const sourceNode = this.recipeData.definition.nodes[dependency.name];
@@ -210,6 +212,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
                     visible: true,
                     label: dependency.type === 'condition' ? dependency.acceptance.toString() : null
                 });
+                console.log(this.links);
             } else {
                 // dependency node was removed, so remove it from dependencies
                 _.remove(node.dependencies, dependency);
@@ -247,24 +250,25 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
             this.links = [];
 
             _.forEach(this.recipeData.definition.nodes, (node, key) => {
-                let id = '';
+                let id = uuidv4();
                 let label = '';
                 let icon = '';
                 let publisher = false;
-
+                console.log(node);
+                console.log(key);
                 if (node.node_type.node_type === 'job') {
                     const jobType: any = _.find(this.recipeData.job_types, {
                         name: node.node_type.job_type_name,
                         version: node.node_type.job_type_version
                     });
-                    id = _.camelCase(node.node_type.job_type_name); // id can't have dashes or anything
+                    id = _.camelCase(node.node_type.name) || _.camelCase(key);
                     label = jobType ?
                         `${jobType.title} v${jobType.version}` :
                         `${node.node_type.job_type_name} v${node.node_type.job_type_version}`;
                     icon = jobType ? String.fromCharCode(parseInt(jobType.icon_code, 16)) : String.fromCharCode(parseInt('f1b2', 16));
                     publisher = jobType ? jobType.is_published : false;
                 } else if (node.node_type.node_type === 'recipe') {
-                    id = key || _.camelCase(node.node_type.recipe_type_name); // id can't have dashes or anything
+                    id = key || _.camelCase(key); // id can't have dashes or anything
                     const current_sub_recipe: any = _.find(this.recipeData.sub_recipe_types, {'name' : node.node_type.recipe_type_name});
                     label = `${current_sub_recipe.title}`;
                     icon = String.fromCharCode(parseInt('f1b3', 16)); // recipe type icon
@@ -329,9 +333,11 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
                     let connection;
                         if (i.node) {
                             const dependency = this.recipeData.definition.nodes[i.node];
+                            console.log(dependency);
                             if (dependency) {
                                 connection = _.find(this.recipeData.definition.input.files, {name: i.node});
                                 if (dependency.node_type.node_type === 'job') {
+                                    console.log(dependency.node_type);
                                     const dependencyJobType: any = _.find(this.recipeData.job_types, {
                                         name: dependency.node_type.job_type_name,
                                         version: dependency.node_type.job_type_version
@@ -582,6 +588,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
             let dependencyName: any = '';
             if (dependency.manifest) {
                 // retrieve the key of the job node to ensure correct mapping
+                console.log(this.recipeData);
                 dependencyName = _.findKey(this.recipeData.definition.nodes, {
                     node_type: {
                         job_type_name: dependency.name,
@@ -668,6 +675,7 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
         if (this.selectedNode) {
             if (this.selectedNode.node_type.node_type === 'condition') {
                 // remove the dependency's interface from the condition's interface
+                console.log(this.recipeData);
                 const jobType: any = _.find(this.recipeData.job_types, {
                     name: dependency.name
                 });
@@ -1026,11 +1034,14 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
     }
 
     getJobTypeFromNodeKey(key) {
+        console.log(key);
+        console.log(this.recipeData);
         const node = this.recipeData.definition.nodes[key];
         const jobType: any = _.find(this.recipeData.job_types, {
             name: node.node_type.job_type_name,
             version: node.node_type.job_type_version
         });
+        console.log(jobType)
         return jobType;
     }
 
@@ -1179,7 +1190,9 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
         }
         const updateChartColors = () => {
             const colorText = this.themeService.getProperty('--main-text');
-            this.chartOptions.title.fontColor = colorText;
+            if (this.chartOptions.title) {
+                this.chartOptions.title.fontColor = colorText;
+            }
             this.chartOptions.scales.yAxes[0].ticks.fontColor = colorText;
             this.chartOptions.scales.xAxes[0].ticks.fontColor = colorText;
             setTimeout(() => {

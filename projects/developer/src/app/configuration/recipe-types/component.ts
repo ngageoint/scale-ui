@@ -34,6 +34,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
     activeLabel = 'Active Recipe Types';
     loadingRecipeTypes: boolean;
     validated: boolean;
+    quanity = {};
     totalRecords: number;
     addRemoveDialogX: number;
     addRemoveDialogY: number;
@@ -308,8 +309,26 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         this.addRemoveDialogY = addRemoveDialogDiv ? parseInt(addRemoveDialogDiv.style.top, 10) : null;
     }
 
-    addJobTypeNode(event) {
-        this.addedJobNode = event.data;
+    onQuanityChange(quantity, data, type ) {
+        console.log(quantity);
+        if (type === 'job') {
+            for (let i = 1; i <= quantity; i++) {
+                const key  = (data.name + '-' + i);
+                console.log(key);
+                this.addJobTypeNode(data, key);
+            }
+        } else if (type === 'recipe') {
+            for (let i = 1; i <= quantity; i++) {
+                const key  = (data.name + '-' + i);
+                console.log(key);
+                this.addRecipeTypeNode(data, key);
+            }
+        }
+     }
+
+    addJobTypeNode(event, key) {
+        console.log(event);
+        this.addedJobNode = event;
         // get job type detail in order to obtain the interface
         this.jobTypesApiService.getJobType(this.addedJobNode.name, this.addedJobNode.version).subscribe(data => {
             if (data && data.manifest.seedVersion) {
@@ -325,7 +344,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                         });
                     });
                 }
-                recipeData.definition.nodes[data.manifest.job.name] = {
+                recipeData.definition.nodes[key] = {
                     dependencies: [],
                     input: input,
                     node_type: {
@@ -335,6 +354,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                         job_type_revision: data.revision_num
                     }
                 };
+                console.log(recipeData);
                 recipeData.job_types.push(data);
                 this.selectedRecipeTypeDetail = recipeData;
             } else {
@@ -354,7 +374,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
         });
     }
 
-    addRecipeTypeNode(event) {
+    addRecipeTypeNode(event, key) {
         this.addedRecipeNode = event.data;
         // get recipe type detail in order to obtain the input
         this.recipeTypesApiService.getRecipeType(event.data.name).subscribe(data => {
@@ -370,7 +390,7 @@ export class RecipeTypesComponent implements OnInit, OnDestroy {
                     }
                 });
             });
-            recipeData.definition.nodes[event.data.name] = {
+            recipeData.definition.nodes[key] = {
                 dependencies: [],
                 input: input,
                 node_type: {

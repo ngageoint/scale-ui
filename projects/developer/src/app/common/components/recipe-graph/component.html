@@ -30,8 +30,8 @@
                 </button>
             </div>
         </p-menubar>
-
-        <div class="recipe-container" [style.height]="height">
+        
+        <div class="recipe-container" [style.height]="height"> 
             <ngx-graph
                 class="chart-container"
                 [legend]="showLegend"
@@ -93,6 +93,7 @@
                                 <svg:tspan class="node__icon">{{ node.icon }}</svg:tspan>
                             </svg:text>
                         </svg:g>
+                        
                         <svg:g class="node" *ngIf="node.node_type && node.node_type.node_type === 'recipe'">
                             <svg:rect [attr.x]="-12" [attr.y]="0" [attr.width]="10" [attr.height]="node.dimension.height"
                                       [attr.fill]="node.fillColor" [attr.stroke]="node.data.stroke || null"
