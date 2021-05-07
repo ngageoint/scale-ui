@@ -45,7 +45,7 @@
     "d3": "^5.15.0",
     "font-awesome": "^4.7.0",
     "js-beautify": "^1.10.0",
-    "lodash": "^4.17.19",
+    "lodash": "^4.17.21",
     "moment": "^2.24.0",
     "normalize.css": "^8.0.1",
     "primeflex": "^1.0.0",
