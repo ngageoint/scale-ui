@@ -1041,7 +1041,6 @@ export class RecipeGraphComponent implements OnInit, OnChanges, AfterViewInit, O
             name: node.node_type.job_type_name,
             version: node.node_type.job_type_version
         });
-        console.log(jobType)
         return jobType;
     }
 

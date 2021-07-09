@@ -39,8 +39,7 @@ export class CreateDatasetComponent implements OnInit {
     mediaTypeOptions: SelectItem[] = [];
     mediaTypeSelected: any = null;
 
-    recipeTypeOptions: SelectItem[] = [];
-    @Input() batchRecipe: any = null;
+    fileTypeOptions: SelectItem[] = [];
     @Input() multipleInputRecipe = false;
 
     datasetFileList: FileModel[] = [];
@@ -62,7 +61,7 @@ export class CreateDatasetComponent implements OnInit {
     searchTimeControl: FormControl;
     locationFilterControl: FormControl;
     mediaTypesFilterControl: FormControl;
-    recipeTypesFilterControl: FormControl;
+    fileTypesFilterControl: FormControl;
     optionalFiltersControl: FormGroup;
 
     titleMessage: string;
@@ -102,8 +101,9 @@ export class CreateDatasetComponent implements OnInit {
 
         this.datasetColumns = [
             { field: 'id', header: 'ID', width: '10%' },
-            { field: 'file_name', header: 'File Name', width: '30%' },
-            { field: 'media_type', header: 'Media Type', width: '40%' },
+            { field: 'file_name', header: 'File Name', width: '20%' },
+            { field: 'file_type', header: 'File Type', width: '20%' },
+            { field: 'media_type', header: 'Media Type', width: '30%' },
             { field: 'countries', header: 'Location(s)', width: '20%' }
         ];
 
@@ -169,12 +169,12 @@ export class CreateDatasetComponent implements OnInit {
                 disabled: true
             });
 
-            const recipeTypesFilterValue = this.datasetFormOptions
+            const fileTypesFilterValue = this.datasetFormOptions
                 .optionalFilters
-                ? this.datasetFormOptions.optionalFilters.recipeTypesFilter
+                ? this.datasetFormOptions.optionalFilters.fileTypesFilter
                 : null;
-            this.recipeTypesFilterControl = this.fb.control({
-                value: recipeTypesFilterValue,
+            this.fileTypesFilterControl = this.fb.control({
+                value: fileTypesFilterValue,
                 disabled: true
             });
         } else {
@@ -216,7 +216,7 @@ export class CreateDatasetComponent implements OnInit {
                 value: null,
                 disabled: !this.datasetSelectionControl.value
             });
-            this.recipeTypesFilterControl = this.fb.control({
+            this.fileTypesFilterControl = this.fb.control({
                 value: null,
                 disabled: !this.datasetSelectionControl.value
             });
@@ -224,7 +224,7 @@ export class CreateDatasetComponent implements OnInit {
             this.optionalFiltersControl = this.fb.group({
                 locationFilter: this.locationFilterControl,
                 mediaTypesFilter: this.mediaTypesFilterControl,
-                recipeTypesFilter: this.recipeTypesFilterControl
+                fileTypesFilter: this.fileTypesFilterControl
             });
         }
 
@@ -278,16 +278,6 @@ export class CreateDatasetComponent implements OnInit {
             this.form.patchValue({ datasetSelection: this.datasetSelection });
         }
 
-        if (this.batchRecipe) {
-            this.recipeTypeOptions = [
-                {
-                    label: `${this.batchRecipe.title} v${this.batchRecipe.revision_num}`,
-                    value: this.batchRecipe
-                }
-            ];
-            this.form.patchValue({ recipeTypesFilter: this.batchRecipe });
-            this.recipeTypesFilterControl.disable();
-        }
     }
 
     onDatasetSelectionClick() {
@@ -373,6 +363,7 @@ export class CreateDatasetComponent implements OnInit {
                 this.filteredDatasetFileList = data.results;
                 this.datatableLoading = false;
                 this.buildOptionalFilters(data);
+                console.log(data);
             });
         } else {
             const values = this.form.value;
@@ -400,20 +391,8 @@ export class CreateDatasetComponent implements OnInit {
             .filter(onlyUnique)
             .map((country) => ({ label: country, value: country }));
 
-        this.recipeTypeOptions = data.results
-            .reduce((results, file) => {
-                if (file.recipe_type) {
-                    results.push(file.recipe_type);
-                }
-                return results;
-            }, [])
-            .filter((obj, pos, arr) => {
-                return arr.map((mapObj) => mapObj['id']).indexOf(obj['id']) === pos;
-            })
-            .map((rt) => ({
-                label: `${rt.title} v${rt.revision_num}`,
-                value: rt,
-            }));
+        this.fileTypeOptions = [{ label: 'Product', value: 'PRODUCT' },
+        { label: 'Source', value: 'SOURCE' }];
     }
 
     onDatasetSelectChange(event) {
@@ -475,13 +454,13 @@ export class CreateDatasetComponent implements OnInit {
         this.filterDataSetFiles();
     }
 
-    onRecipeTypeFilterChange(event) {
+    onFileTypeFilterChange(event) {
         if (!event.value) {
-            delete this.dataFilesFilter.recipe_type;
+            delete this.dataFilesFilter.file_type;
         } else {
             this.dataFilesFilter = {
                 ...this.dataFilesFilter,
-                recipe_type: { id: event.value.id }
+                file_type : event.value 
             };
         }
         this.filterDataSetFiles();
