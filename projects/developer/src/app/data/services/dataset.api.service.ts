@@ -72,14 +72,14 @@ export class DatasetsApiService {
         };
         datasetMetaData['data_started'] = new Date(options.startDate).toISOString();
         datasetMetaData['data_ended'] = new Date(options.endDate).toISOString();
-        if (options.optionalFilters.location) {
-            datasetMetaData['countries'] = options.optionalFilters.location;
+        if (options.optionalFilters.locationFilter) {
+            datasetMetaData['countries'] = options.optionalFilters.locationFilter;
         }
-        if (options.optionalFilters.media_type) {
-            datasetMetaData['media_type'] = options.optionalFilter.media_type;
+        if (options.optionalFilters.mediaTypesFilter) {
+            datasetMetaData['media_type'] = options.optionalFilters.mediaTypesFilter;
         }
-        if (options.optionalFilters.recipe_type) {
-            datasetMetaData['recipe_type'] = options.optionalFilter.recipe_type;
+        if (options.optionalFilters.fileTypesFilter) {
+            datasetMetaData['file_type'] = options.optionalFilters.fileTypesFilter;
         }
 
         return this.http.post(`${this.apiPrefix}/datasets/`, datasetMetaData).pipe(
