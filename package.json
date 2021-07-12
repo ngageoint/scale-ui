@@ -55,7 +55,6 @@
     "rxjs": "^6.5.4",
     "rxjs-compat": "^6.5.2",
     "shim-keyboard-event-key": "^1.0.3",
-    "uuid": "^3.3.2",
     "webkit-line-clamp": "^1.2.0",
     "zone.js": "~0.9.1"
   },

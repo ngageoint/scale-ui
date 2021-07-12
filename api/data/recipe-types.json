@@ -170,43 +170,6 @@
             "created": "2019-06-03T09:03:26.346Z",
             "last_modified": "2019-06-03T09:03:26.346Z",
             "deprecated": null
-        },
-        {
-            "id": 6,
-            "name": "double-job",
-            "title": "Double Job",
-            "description": "Processes WorldView sensor data - correcting for atmospheric conditions and performing rigorous orthorectification",
-            "is_active": true,
-            "is_system": null,
-            "revision_num": 1,
-            "job_types": [
-                {
-                    "name": "wv2-parse-1",
-                    "version": "1.0.1"
-                },
-                {
-                    "name": "wv2-parse-2",
-                    "version": "1.0.1"
-                },
-                {
-                    "name": "wv2-atmosphere-corr",
-                    "version": "1.0.1"
-                },
-                {
-                    "name": "wv2-ortho",
-                    "version": "2.0"
-                },
-                {
-                    "name": "export-shp",
-                    "version": "2.0"
-                }
-            ],
-            "sub_recipe_types": [
-                "oil-detection"
-            ],
-            "created": "2016-04-30T19:03:26.346Z",
-            "last_modified": "2016-04-30T19:03:26.346Z",
-            "deprecated": null
         }
     ]
 }
