@@ -295,6 +295,7 @@ export class CreateDatasetComponent implements OnInit {
                 };
                 options['startDate'] = new Date(this.form.get('startDate').value).toISOString();
                 options['endDate'] = new Date(this.form.get('endDate').value).toISOString();
+                options['type'] = this.form.get('searchTime').value
                 options['optionalFilters'] = this.form.get('optionalFilters').value;
 
                 this.datasetService.createDatasetWithDataTemplate(options)
@@ -340,12 +341,14 @@ export class CreateDatasetComponent implements OnInit {
         if (this.form.get('searchTime').value === 'data') {
             options = {
                 data_started: this.form.get('startDate').value.toISOString(),
-                data_ended: this.form.get('endDate').value.toISOString()
+                data_ended: this.form.get('endDate').value.toISOString(),
+                type: 'data'
             };
         } else {
             options = {
                 created_started: this.form.get('startDate').value.toISOString(),
-                created_ended: this.form.get('endDate').value.toISOString()
+                created_ended: this.form.get('endDate').value.toISOString(),
+                type: 'ingest'
             };
         }
         return options;
@@ -363,7 +366,6 @@ export class CreateDatasetComponent implements OnInit {
                 this.filteredDatasetFileList = data.results;
                 this.datatableLoading = false;
                 this.buildOptionalFilters(data);
-                console.log(data);
             });
         } else {
             const values = this.form.value;

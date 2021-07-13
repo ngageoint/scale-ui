@@ -70,8 +70,14 @@ export class DatasetsApiService {
                 json: {}
             }
         };
+        if (options.type === 'data') {
         datasetMetaData['data_started'] = new Date(options.startDate).toISOString();
         datasetMetaData['data_ended'] = new Date(options.endDate).toISOString();
+        }
+        else if (options.type === 'ingest') {
+            datasetMetaData['created_started'] = new Date(options.startDate).toISOString();
+            datasetMetaData['created_ended'] = new Date(options.endDate).toISOString();
+        }
         if (options.optionalFilters.locationFilter) {
             datasetMetaData['countries'] = options.optionalFilters.locationFilter;
         }
