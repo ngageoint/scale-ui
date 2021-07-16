@@ -32,6 +32,7 @@ export class CreateDatasetComponent implements OnInit {
     datasetOptions: SelectItem[] = [];
     @Input() datasetSelection: any = {};
     @Input() datasetFormOptions: any = {};
+    @Input() batchRecipe: any = {};
 
     locationOptions: SelectItem[] = [];
     locationSelected: any = null;
@@ -67,6 +68,7 @@ export class CreateDatasetComponent implements OnInit {
     titleMessage: string;
     startDateMessage: string;
     endDateMessage: string;
+    totalFiles: number;
 
     private validationMessages = {
         title: {
@@ -97,6 +99,7 @@ export class CreateDatasetComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        console.log(this.batchRecipe)
         this.datatableOptions = new DatasetMemberDatatable(0, 20, 'id', -1);
 
         this.datasetColumns = [
@@ -295,8 +298,10 @@ export class CreateDatasetComponent implements OnInit {
                 };
                 options['startDate'] = new Date(this.form.get('startDate').value).toISOString();
                 options['endDate'] = new Date(this.form.get('endDate').value).toISOString();
-                options['type'] = this.form.get('searchTime').value
+                options['type'] = this.form.get('searchTime').value;
                 options['optionalFilters'] = this.form.get('optionalFilters').value;
+                options['recipeFile'] = this.batchRecipe.definition.input.files[0];
+                options['recipeJson'] = this.batchRecipe.definition.input.json[0];
 
                 this.datasetService.createDatasetWithDataTemplate(options)
                     .subscribe(savedDataset => {
@@ -361,11 +366,13 @@ export class CreateDatasetComponent implements OnInit {
             this.fileService
             .getFiles(this.createQueryOptions())
             .subscribe(data => {
+                this.totalFiles = data.count
                 this.datasetFilesData = data;
                 this.datasetFileList = data.results;
                 this.filteredDatasetFileList = data.results;
                 this.datatableLoading = false;
                 this.buildOptionalFilters(data);
+                console.log(this.totalFiles)
             });
         } else {
             const values = this.form.value;
@@ -462,7 +469,7 @@ export class CreateDatasetComponent implements OnInit {
         } else {
             this.dataFilesFilter = {
                 ...this.dataFilesFilter,
-                file_type : event.value 
+                file_type : event.value
             };
         }
         this.filterDataSetFiles();

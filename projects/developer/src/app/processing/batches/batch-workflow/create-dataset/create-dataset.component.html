@@ -154,7 +154,7 @@
 
     <div *ngIf="datasetFilesData" class="p-col-12">
         <label>
-            <span *ngIf="filteredDatasetFileList.length > 100">Previewing the first 100 files out of {{filteredDatasetFileList.length}} total files to add to the dataset</span>
+            <span *ngIf="filteredDatasetFileList.length > 100">Previewing the first 100 files out of {{ totalFiles }} total files to add to the dataset</span>
             <span *ngIf="filteredDatasetFileList.length < 100 || filteredDatasetFileList.length === 100">Showing all {{ filteredDatasetFileList.length }} files to add to the dataset</span>
         </label>
         <p-table [columns]="datasetColumns"

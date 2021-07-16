@@ -88,7 +88,7 @@
             </div>
         </div>
         <div class="p-col-12">
-            <button pButton class="ui-button-primary create-batch__controls-btn" label="Next Step" [disabled]="form.invalid"
+            <button pButton class="ui-button-primary create-batch__controls-btn" label="Next Step" [disabled]="form.invalid && !batchRecipe"
                 (click)="handleNextStep()"></button>
             <span *ngIf="(!form.dirty && formValidated)">Validated</span>
         </div>
