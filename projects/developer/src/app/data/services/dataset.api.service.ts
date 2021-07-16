@@ -37,7 +37,6 @@ export class DatasetsApiService {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
         const queryParams = new HttpParams({fromObject: apiParams});
-
         return this.http.get<ApiResults>(`${this.apiPrefix}/datasets/`, { params: queryParams })
             .pipe(
                 map(response => {
@@ -57,29 +56,47 @@ export class DatasetsApiService {
     }
 
     createDatasetWithDataTemplate(options: any): Observable<any> {
+        let recipeFileInput;
+        let recipeJsonInput;
+       
+        if(options.recipeFile) {
+            recipeFileInput = options.recipeFile.name
+        }
+        if(options.recipeJson) {
+            recipeJsonInput = options.recipeJson.name
+        }
+
+
+        // TODO: in the data template the INPUT_FILE needs to be the recipeFileInput and then FILE_VALUE should be changed to a list of all the file IDs to submit 
+    
         const datasetMetaData: IDataset = {
             title: options.title,
             description: options.description,
             definition: {
                 global_data: {files: {}, json: {}},
                 global_parameters: {files: [], json: []},
-                parameters: {files: [{name: 'INPUT_FILE'}], json: []}
+                parameters: {files: [{name: recipeFileInput}], json: [{name: recipeJsonInput}]}
             },
             data_template: {
                 files: {INPUT_FILE: 'FILE_VALUE'},
                 json: {}
             }
         };
+        if (options.type === 'data') {
         datasetMetaData['data_started'] = new Date(options.startDate).toISOString();
         datasetMetaData['data_ended'] = new Date(options.endDate).toISOString();
-        if (options.optionalFilters.location) {
-            datasetMetaData['countries'] = options.optionalFilters.location;
+        } else if (options.type === 'ingest') {
+            datasetMetaData['created_started'] = new Date(options.startDate).toISOString();
+            datasetMetaData['created_ended'] = new Date(options.endDate).toISOString();
         }
-        if (options.optionalFilters.media_type) {
-            datasetMetaData['media_type'] = options.optionalFilter.media_type;
+        if (options.optionalFilters.locationFilter) {
+            datasetMetaData['countries'] = options.optionalFilters.locationFilter;
         }
-        if (options.optionalFilters.recipe_type) {
-            datasetMetaData['recipe_type'] = options.optionalFilter.recipe_type;
+        if (options.optionalFilters.mediaTypesFilter) {
+            datasetMetaData['media_type'] = options.optionalFilters.mediaTypesFilter;
+        }
+        if (options.optionalFilters.fileTypesFilter) {
+            datasetMetaData['file_type'] = options.optionalFilters.fileTypesFilter;
         }
 
         return this.http.post(`${this.apiPrefix}/datasets/`, datasetMetaData).pipe(
