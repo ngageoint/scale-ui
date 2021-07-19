@@ -65,10 +65,6 @@ export class DatasetsApiService {
         if(options.recipeJson) {
             recipeJsonInput = options.recipeJson.name
         }
-
-
-        // TODO: in the data template the INPUT_FILE needs to be the recipeFileInput and then FILE_VALUE should be changed to a list of all the file IDs to submit 
-    
         const datasetMetaData: IDataset = {
             title: options.title,
             description: options.description,
@@ -78,8 +74,8 @@ export class DatasetsApiService {
                 parameters: {files: [{name: recipeFileInput}], json: [{name: recipeJsonInput}]}
             },
             data_template: {
-                files: {INPUT_FILE: 'FILE_VALUE'},
-                json: {}
+                files: {[recipeFileInput]: 'FILE_VALUE'},
+                json: {[recipeJsonInput]: 'JSON_VALUE'}
             }
         };
         if (options.type === 'data') {
