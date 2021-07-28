@@ -99,7 +99,6 @@ export class CreateDatasetComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        console.log(this.batchRecipe)
         this.datatableOptions = new DatasetMemberDatatable(0, 20, 'id', -1);
 
         this.datasetColumns = [
@@ -366,13 +365,12 @@ export class CreateDatasetComponent implements OnInit {
             this.fileService
             .getFiles(this.createQueryOptions())
             .subscribe(data => {
-                this.totalFiles = data.count
+                this.totalFiles = data.count;
                 this.datasetFilesData = data;
                 this.datasetFileList = data.results;
                 this.filteredDatasetFileList = data.results;
                 this.datatableLoading = false;
                 this.buildOptionalFilters(data);
-                console.log(this.totalFiles)
             });
         } else {
             const values = this.form.value;

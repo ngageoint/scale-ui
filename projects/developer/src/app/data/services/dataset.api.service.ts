@@ -58,12 +58,12 @@ export class DatasetsApiService {
     createDatasetWithDataTemplate(options: any): Observable<any> {
         let recipeFileInput;
         let recipeJsonInput;
-       
-        if(options.recipeFile) {
-            recipeFileInput = options.recipeFile.name
+
+        if (options.recipeFile) {
+            recipeFileInput = options.recipeFile.name;
         }
-        if(options.recipeJson) {
-            recipeJsonInput = options.recipeJson.name
+        if (options.recipeJson) {
+            recipeJsonInput = options.recipeJson.name;
         }
         const datasetMetaData: IDataset = {
             title: options.title,
