@@ -57,13 +57,21 @@ export class DatasetsApiService {
 
     createDatasetWithDataTemplate(options: any): Observable<any> {
         let recipeFileInput;
+        let recipeFileInputParams = [];
+        let recipeFileInputDataTemplate = {};
         let recipeJsonInput;
+        let recipeJsonInputParams = [];
+        let recipeJsonInputDataTemplate = {};
 
         if (options.recipeFile) {
             recipeFileInput = options.recipeFile.name;
+            recipeFileInputParams =  [{name: recipeFileInput}];
+            recipeFileInputDataTemplate = {[recipeFileInput]: 'FILE_VALUE'};
         }
         if (options.recipeJson) {
             recipeJsonInput = options.recipeJson.name;
+            recipeJsonInputParams = [{name: recipeJsonInput}];
+            recipeJsonInputDataTemplate = {[recipeJsonInput]: 'JSON_VALUE'};
         }
         const datasetMetaData: IDataset = {
             title: options.title,
@@ -71,11 +79,11 @@ export class DatasetsApiService {
             definition: {
                 global_data: {files: {}, json: {}},
                 global_parameters: {files: [], json: []},
-                parameters: {files: [{name: recipeFileInput}], json: [{name: recipeJsonInput}]}
+                parameters: {files: recipeFileInputParams, json: recipeJsonInputParams}
             },
             data_template: {
-                files: {[recipeFileInput]: 'FILE_VALUE'},
-                json: {[recipeJsonInput]: 'JSON_VALUE'}
+                files: recipeFileInputDataTemplate,
+                json: recipeJsonInputDataTemplate
             }
         };
         if (options.type === 'data') {
