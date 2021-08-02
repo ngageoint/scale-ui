@@ -133,16 +133,16 @@
                         </div>
                         <div class="margin-bottom-md">
                             <label>
-                                <span>Recipe Types</span>
-                                <p-dropdown id="recipeTypeFilter"
-                                    formControlName="recipeTypesFilter"
-                                    [options]="recipeTypeOptions"
-                                    placeholder="Select a Recipe Type to filter results"
+                                <span>File Types</span>
+                                <p-dropdown id="fileTypeFilter"
+                                    formControlName="fileTypesFilter"
+                                    [options]="fileTypeOptions"
+                                    placeholder="Select a File Type to filter results"
                                     [style]="{'width': '100%'}"
                                     [filter]='true'
                                     [showClear]='true'
                                     filterBy="label,value.name"
-                                    (onChange)="onRecipeTypeFilterChange($event)">
+                                    (onChange)="onFileTypeFilterChange($event)">
                                 </p-dropdown>
                             </label>
                         </div>
@@ -154,7 +154,8 @@
 
     <div *ngIf="datasetFilesData" class="p-col-12">
         <label>
-            <span>Total number of files to add to the dataset: {{filteredDatasetFileList.length}}</span>
+            <span *ngIf="filteredDatasetFileList.length > 100">Previewing the first 100 files out of {{ totalFiles }} total files to add to the dataset</span>
+            <span *ngIf="filteredDatasetFileList.length < 100 || filteredDatasetFileList.length === 100">Showing all {{ filteredDatasetFileList.length }} files to add to the dataset</span>
         </label>
         <p-table [columns]="datasetColumns"
             [value]="filteredDatasetFileList"

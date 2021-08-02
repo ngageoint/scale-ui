@@ -37,7 +37,6 @@ export class DatasetsApiService {
             return d !== null && typeof d !== 'undefined' && d !== '';
         });
         const queryParams = new HttpParams({fromObject: apiParams});
-
         return this.http.get<ApiResults>(`${this.apiPrefix}/datasets/`, { params: queryParams })
             .pipe(
                 map(response => {
@@ -57,29 +56,51 @@ export class DatasetsApiService {
     }
 
     createDatasetWithDataTemplate(options: any): Observable<any> {
+        let recipeFileInput;
+        let recipeFileInputParams = [];
+        let recipeFileInputDataTemplate = {};
+        let recipeJsonInput;
+        let recipeJsonInputParams = [];
+        let recipeJsonInputDataTemplate = {};
+
+        if (options.recipeFile) {
+            recipeFileInput = options.recipeFile.name;
+            recipeFileInputParams =  [{name: recipeFileInput}];
+            recipeFileInputDataTemplate = {[recipeFileInput]: 'FILE_VALUE'};
+        }
+        if (options.recipeJson) {
+            recipeJsonInput = options.recipeJson.name;
+            recipeJsonInputParams = [{name: recipeJsonInput}];
+            recipeJsonInputDataTemplate = {[recipeJsonInput]: 'JSON_VALUE'};
+        }
         const datasetMetaData: IDataset = {
             title: options.title,
             description: options.description,
             definition: {
                 global_data: {files: {}, json: {}},
                 global_parameters: {files: [], json: []},
-                parameters: {files: [{name: 'INPUT_FILE'}], json: []}
+                parameters: {files: recipeFileInputParams, json: recipeJsonInputParams}
             },
             data_template: {
-                files: {INPUT_FILE: 'FILE_VALUE'},
-                json: {}
+                files: recipeFileInputDataTemplate,
+                json: recipeJsonInputDataTemplate
             }
         };
+        if (options.type === 'data') {
         datasetMetaData['data_started'] = new Date(options.startDate).toISOString();
         datasetMetaData['data_ended'] = new Date(options.endDate).toISOString();
-        if (options.optionalFilters.location) {
-            datasetMetaData['countries'] = options.optionalFilters.location;
+        } else if (options.type === 'ingest') {
+            datasetMetaData['created_started'] = new Date(options.startDate).toISOString();
+            datasetMetaData['created_ended'] = new Date(options.endDate).toISOString();
         }
-        if (options.optionalFilters.media_type) {
-            datasetMetaData['media_type'] = options.optionalFilter.media_type;
+        if (options.optionalFilters.locationFilter) {
+            datasetMetaData['countries'] = options.optionalFilters.locationFilter;
         }
-        if (options.optionalFilters.recipe_type) {
-            datasetMetaData['recipe_type'] = options.optionalFilter.recipe_type;
+        if (options.optionalFilters.mediaTypesFilter) {
+            datasetMetaData['media_type'] = options.optionalFilters.mediaTypesFilter;
+        }
+        if (options.optionalFilters.fileTypesFilter) {
+            datasetMetaData['file_type'] = options.optionalFilters.fileTypesFilter;
         }
 
         return this.http.post(`${this.apiPrefix}/datasets/`, datasetMetaData).pipe(

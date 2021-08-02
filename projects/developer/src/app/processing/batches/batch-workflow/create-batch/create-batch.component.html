@@ -48,7 +48,7 @@
                     <div class="p-col-6">
                         <div formGroupName="configuration">
                             <label>
-                                <span>Priority</span>
+                                <span class="required">Priority</span>
                                 <input
                                     type="number"
                                     pTooltip="0-10 reserved for system jobs.
@@ -74,13 +74,6 @@
                                 ></p-radioButton>
                             </div>
                             <div class="margin-bottom-sm">
-                                <p-radioButton
-                                    name="supersedesGroup"
-                                    value="false"
-                                    label="Create new recipe"
-                                    formControlName="supersedes"
-                                    inputId="supersedesFalse"
-                                ></p-radioButton>
                             </div>
                         </div>
                     </div>
@@ -88,7 +81,7 @@
             </div>
         </div>
         <div class="p-col-12">
-            <button pButton class="ui-button-primary create-batch__controls-btn" label="Next Step" [disabled]="form.invalid"
+            <button pButton class="ui-button-primary create-batch__controls-btn" label="Next Step" [disabled]="form.invalid && !batchRecipe"
                 (click)="handleNextStep()"></button>
             <span *ngIf="(!form.dirty && formValidated)">Validated</span>
         </div>

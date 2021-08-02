@@ -23,8 +23,8 @@
                 <dev-create-dataset *ngIf="currentStepName === 'create-dataset'"
                     [datasetSelection]="datasetSelection"
                     [datasetFormOptions]="datasetFormOptions"
-                    [batchRecipe]="batchRecipe"
                     [multipleInputRecipe]="multipleInput"
+                    [batchRecipe]="batchRecipe"
                     (valueChange)="handleDatasetSelection($event)"
                     (nextStepEvent)="next($event)">
                 </dev-create-dataset>
