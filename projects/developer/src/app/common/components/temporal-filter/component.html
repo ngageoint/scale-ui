@@ -50,6 +50,13 @@
     </div>
 
     <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
+            style="margin-right: 5px"
+            icon="fa fa-arrows-alt"
+            (click)="onDatePadApply()"
+            [disabled]="loading"
+            pTooltip="Pad time to start/end of selected date range" showDelay="300" tooltipPosition="bottom"></button>
+
+    <button pButton class="temporal-filter__date-filter-btn ui-button-primary"
             icon="fa fa-refresh"
             (click)="onDateFilterApply()"
             [disabled]="!isValid || loading"

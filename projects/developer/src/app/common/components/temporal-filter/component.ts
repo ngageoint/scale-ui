@@ -90,6 +90,12 @@ export class TemporalFilterComponent implements OnInit {
         this.startChanged.next(date);
     }
 
+    onDatePadApply(): void {
+        this.startDate = moment(this.startDate).startOf('day').toDate();
+        this.endDate = moment(this.endDate).endOf('day').toDate();
+        this.onDateFilterApply();
+    }
+
     /**
      * Callback for when a start/end value is applied.
      */
@@ -150,7 +156,7 @@ export class TemporalFilterComponent implements OnInit {
 
             if (isNil(this.ended)) {
                 // default to the end of today, 23:59:59
-                this.endDate = UTCDates.utcDateToLocal(now.clone().endOf('day').toDate());
+                this.endDate = now.clone().endOf('day').toDate(); //UTCDates.utcDateToLocal(now.clone().endOf('day').toDate());
             } else if (this.ended) {
                 this.endDate = UTCDates.utcDateToLocal(this.ended);
             }
