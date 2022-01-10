@@ -156,7 +156,7 @@ export class TemporalFilterComponent implements OnInit {
 
             if (isNil(this.ended)) {
                 // default to the end of today, 23:59:59
-                this.endDate = now.clone().endOf('day').toDate(); //UTCDates.utcDateToLocal(now.clone().endOf('day').toDate());
+                this.endDate = UTCDates.utcDateToLocal(now.clone().endOf('day').toDate());
             } else if (this.ended) {
                 this.endDate = UTCDates.utcDateToLocal(this.ended);
             }

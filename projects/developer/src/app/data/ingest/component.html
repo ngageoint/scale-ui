@@ -37,7 +37,7 @@
             <td *ngFor="let col of columns" [ngSwitch]="col.field">
                 <span class="ui-column-title">{{ col.header }}</span>
                 <div *ngSwitchCase="'file_name'">
-                    <a *ngIf="rowData.job" [routerLink]="getJobURL(rowData.job)">
+                    <a *ngIf="rowData.job" [routerLink]="getDetailsURL(rowData)">
                         {{ rowData.file_name }}
                     </a>
                     <span *ngIf="!rowData.job">

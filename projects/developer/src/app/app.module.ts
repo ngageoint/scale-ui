@@ -73,6 +73,7 @@ import { FeedComponent } from './data/feed/component';
 import { FooterComponent } from './footer/footer.component';
 import { HealthbarComponent } from './navbar/status/healthbar/healthbar.component';
 import { IngestComponent } from './data/ingest/component';
+import { IngestDetailsComponent } from './data/ingest/details.component';
 import { LoadingIndicatorComponent } from './common/components/loading-indicator/component';
 import { JobActivityComponent } from './dashboard/job-activity/component';
 import { JobDetailsComponent } from './processing/jobs/details.component';
@@ -147,6 +148,7 @@ const appInitializer = (appConfig: AppConfigService) => {
         FooterComponent,
         HealthbarComponent,
         IngestComponent,
+        IngestDetailsComponent,
         JobActivityComponent,
         JobDetailsComponent,
         JobHistoryComponent,

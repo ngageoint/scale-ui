@@ -19,6 +19,7 @@ import { BatchesComponent } from './processing/batches/batches-component';
 import { BatchDetailsComponent } from './processing/batches/details.component';
 import { BatchWorkflowComponent } from './processing/batches/batch-workflow/batch-workflow.component';
 import { IngestComponent } from './data/ingest/component';
+import { IngestDetailsComponent } from './data/ingest/details.component';
 import { FeedComponent } from './data/feed/component';
 import { NodesComponent } from './system/nodes/component';
 import { StrikesComponent } from './system/strikes/component';
@@ -146,6 +147,11 @@ const routes: Routes = [
         path: 'data/ingest',
         component: IngestComponent,
         data: {title: 'Ingest Records | Scale'}
+    },
+    {
+        path: 'data/ingest/:id',
+        component: IngestDetailsComponent,
+        data: {title: 'Ingest Details | Scale'}
     },
     {
         path: 'data/metrics',

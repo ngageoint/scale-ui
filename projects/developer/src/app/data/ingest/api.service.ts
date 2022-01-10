@@ -91,4 +91,14 @@ export class IngestApiService {
                 catchError(DataService.handleError)
             );
     }
+
+    getIngestJobs(id: number): Observable<any> {
+        return this.http.get<any>(`${this.apiPrefix}/ingests/${id}/jobs`)
+            .pipe(
+                map(response => {
+                    return ApiResults.transformer(response);
+                }),
+                catchError(DataService.handleError)
+            );
+    }
 }

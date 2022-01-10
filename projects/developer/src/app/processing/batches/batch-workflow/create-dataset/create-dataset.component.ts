@@ -14,6 +14,7 @@ import {
     AbstractControl
 } from '@angular/forms';
 import { onlyUnique } from '../../../../common/utils/filters';
+import { UTCDates } from '../../../../common/utils/utcdates';
 import { ValidationMessages } from '../../../../common/utils/CustomValidation';
 import * as _ from 'lodash';
 import { ApiResults } from 'projects/developer/src/app/common/models/api-results.model';
@@ -103,9 +104,10 @@ export class CreateDatasetComponent implements OnInit {
 
         this.datasetColumns = [
             { field: 'id', header: 'ID', width: '10%' },
+            { field: 'created', header: 'Ingested', width: '15%' },
             { field: 'file_name', header: 'File Name', width: '20%' },
-            { field: 'file_type', header: 'File Type', width: '20%' },
-            { field: 'media_type', header: 'Media Type', width: '30%' },
+            { field: 'file_type', header: 'File Type', width: '15%' },
+            { field: 'media_type', header: 'Media Type', width: '20%' },
             { field: 'countries', header: 'Location(s)', width: '20%' }
         ];
 
@@ -341,20 +343,18 @@ export class CreateDatasetComponent implements OnInit {
     }
 
     createQueryOptions(): any {
-        let options = {};
+        let type = 'ingest'
         if (this.form.get('searchTime').value === 'data') {
-            options = {
-                data_started: this.form.get('startDate').value.toISOString(),
-                data_ended: this.form.get('endDate').value.toISOString(),
-                type: 'data'
-            };
-        } else {
-            options = {
-                created_started: this.form.get('startDate').value.toISOString(),
-                created_ended: this.form.get('endDate').value.toISOString(),
-                type: 'ingest'
-            };
+            type = 'data';
         }
+        let options = {
+            type: type,
+            created_started: UTCDates.localDateToUTC(this.form.get('startDate').value).toISOString(),
+            created_ended: UTCDates.localDateToUTC(this.form.get('endDate').value).toISOString(),
+            file_type: this.dataFilesFilter.file_type,
+            media_type: this.dataFilesFilter.media_type,
+            countries: this.dataFilesFilter.countries
+        };
         return options;
     }
 
@@ -447,6 +447,7 @@ export class CreateDatasetComponent implements OnInit {
             };
         }
         this.filterDataSetFiles();
+        this.onQueryDataFilesClick();
     }
 
     onMediaTypeFilterChange(event) {
@@ -459,6 +460,7 @@ export class CreateDatasetComponent implements OnInit {
             };
         }
         this.filterDataSetFiles();
+        this.onQueryDataFilesClick();
     }
 
     onFileTypeFilterChange(event) {
@@ -471,6 +473,7 @@ export class CreateDatasetComponent implements OnInit {
             };
         }
         this.filterDataSetFiles();
+        this.onQueryDataFilesClick();
     }
 
     setMessage(

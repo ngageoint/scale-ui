@@ -45,7 +45,9 @@ export class FilesApiService {
             recipe_node: params.recipe_node,
             recipe_type_id: params.recipe_type_id ? params.recipe_type_id.toString() : null,
             batch_id: params.batch_id ? params.batch_id.toString() : null,
-            file_name: params.file_name
+            file_name: params.file_name,
+            file_type: params.file_type,
+            media_type: params.media_type
         };
         apiParams = _.pickBy(apiParams, d => {
             return d !== null && typeof d !== 'undefined' && d !== '';
