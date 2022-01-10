@@ -1,0 +1,65 @@
+<div class="ingest__details" *ngIf="ingest">
+    <h2>
+       {{ ingest.file_path }}
+    </h2>
+    <a routerLink="/data/ingest"><i class="fa fa-caret-left"></i> Ingests List</a>
+    <div class="p-grid">
+        <div class="p-col-12 p-md-12 p-lg-4 p-xl-4 ">
+            <p-panel header="Overview">
+                <p-scrollPanel>
+                    <table class="table table-striped">
+                        <tbody>
+                        <tr>
+                            <td>File Name:</td>
+                            <td>
+                                {{ ingest.file_name }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Workspace:</td>
+                            <td>
+                                {{ ingest.workspace.title }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Ingest Time:</td>
+                            <td>
+                                {{ ingest.ingest_started }}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </p-scrollPanel>
+            </p-panel>
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-8 p-xl-8 ">
+            <p-panel header="Job Executions">
+                <p-scrollPanel>
+                    <dev-loading-indicator [loading]="loadingExecutions"></dev-loading-indicator>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Job</th>
+                            <th>Started</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let job of jobs">
+                                <td>
+                                    <a href="/processing/jobs/{{ job.id }}"> {{ job.job_type.title }} {{ job.job_type.version }} </a>
+                                </td>
+                                <td>
+                                    {{ job.started }}
+                                </td>
+                                <td>
+                                    {{ job.status }}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </p-scrollPanel>
+            </p-panel>
+        </div>
+    </div>
+</div>

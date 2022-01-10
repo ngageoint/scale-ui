@@ -1,0 +1,52 @@
+.ingest__details {
+    th {
+        font-size: 0.9em;
+    }
+
+    .ingest__io {
+        th, td {
+            font-size: 0.9em;
+        }
+
+        td {
+            border-radius: 5px;
+        }
+    }
+
+    .ingest__latest-exe {
+        button {
+            font-size: 0.8em;
+            padding: 1px;
+            border-radius: 5px;
+        }
+    }
+
+    .ingest__exe {
+        button {
+            font-size: 0.9em;
+            padding: 1px;
+        }
+
+        &:hover {
+            background: var(--main-hover);
+            cursor: pointer;
+
+            td {
+                border-radius: 5px;
+            }
+        }
+    }
+
+    .ingest-details__control-btn {
+        margin-right: 6px;
+    }
+
+    pre {
+        overflow-y: auto;
+    }
+
+    ::ng-deep .ui-scrollpanel {
+        width: 100%;
+        height: 50vh;
+    }
+}
