@@ -60,7 +60,7 @@ export class IngestDetailsComponent implements OnInit, OnDestroy {
             this.ingestApiService.getIngestJobs(id)
                 .subscribe(jobsData => {
                     this.loadingExecutions = false;
-                    this.jobs = jobsData.results //Job.transformer(jobsData.results);
+                    this.jobs = jobsData.results;
                     // Order the job-exes by created so index [0] will be the latest.
                     this.jobs.sort(function(a, b) {
                         return ('' + a.created).localeCompare(b.created);

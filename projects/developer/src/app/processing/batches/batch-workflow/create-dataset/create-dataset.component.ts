@@ -343,11 +343,11 @@ export class CreateDatasetComponent implements OnInit {
     }
 
     createQueryOptions(): any {
-        let type = 'ingest'
+        let type = 'ingest';
         if (this.form.get('searchTime').value === 'data') {
             type = 'data';
         }
-        let options = {
+        const options = {
             type: type,
             created_started: UTCDates.localDateToUTC(this.form.get('startDate').value).toISOString(),
             created_ended: UTCDates.localDateToUTC(this.form.get('endDate').value).toISOString(),
