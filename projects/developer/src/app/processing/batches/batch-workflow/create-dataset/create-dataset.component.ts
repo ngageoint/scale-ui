@@ -71,8 +71,8 @@ export class CreateDatasetComponent implements OnInit {
     endDateMessage: string;
     totalFiles: number;
 
-    createExecuting: boolean = false;
-    createFinished: boolean = false;
+    createExecuting = false;
+    createFinished = false;
 
     private validationMessages = {
         title: {
@@ -319,7 +319,7 @@ export class CreateDatasetComponent implements OnInit {
                         this.savedDataset = savedDataset;
                         this.valueChange.emit({
                             dataset: {
-                                datasetSelection: this.savedDataset 
+                                datasetSelection: this.savedDataset
                             }
                         });
                         this.createFinished = true;
@@ -355,22 +355,24 @@ export class CreateDatasetComponent implements OnInit {
     }
 
     canSave() {
-        if(this.createFinished)
+        if (this.createFinished) {
             return true;
-        else
+        } else {
             return (
                 this.form.valid &&
                 (this.datasetSelection !== 'CreateNew' ||
                     (this.datasetSelection === 'CreateNew' &&
                         this.datasetFileList.length > 0))
             );
+        }
     }
 
     getDatasetButtonLabel(): string {
-        if(this.createFinished)
-            return 'Next'
-        else
+        if (this.createFinished) {
+            return 'Next';
+        } else {
             return this.isCreateNewDataset() ? 'Create Dataset' : 'Select Dataset';
+        }
     }
 
     createQueryOptions(): any {
