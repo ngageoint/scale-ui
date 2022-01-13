@@ -1,5 +1,5 @@
 <div class="create-dataset p-grid" [formGroup]="form">
-    <div class="p-col-12 margin-bottom-md">
+    <div *ngIf="!isCreating()" class="p-col-12 margin-bottom-md">
         <div class="margin-bottom-md">
             <label>
                 <span>Select an existing dataset{{!multipleInputRecipe ?  " or 'Create new'" : ''}}</span>
@@ -152,7 +152,7 @@
         </div>
     </div>
 
-    <div *ngIf="datasetFilesData" class="p-col-12">
+    <div *ngIf="datasetFilesData && !isCreating()" class="p-col-12">
         <label>
             <span *ngIf="totalFiles > 100">Previewing the first 100 files out of {{ totalFiles }} total files to add to the dataset</span>
             <span *ngIf="totalFiles <= 100">Showing all {{ filteredDatasetFileList.length }} files to add to the dataset</span>
@@ -195,6 +195,14 @@
                 </tr>
             </ng-template>
         </p-table>
+    </div>
+
+    <div *ngIf="isCreating() && !isCreated()" class="p-col-12 ">
+        <span>Waiting for DataSet cerate to finish</span>
+    </div>
+
+    <div *ngIf="isCreated()" class="p-col-12 ">
+        <span>New DataSet: {{datasetSelection.id}}</span>
     </div>
 
     <div class="p-col-12 ">

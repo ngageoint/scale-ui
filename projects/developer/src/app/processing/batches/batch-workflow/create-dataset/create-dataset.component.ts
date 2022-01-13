@@ -71,6 +71,9 @@ export class CreateDatasetComponent implements OnInit {
     endDateMessage: string;
     totalFiles: number;
 
+    createExecuting: boolean = false;
+    createFinished: boolean = false;
+
     private validationMessages = {
         title: {
             name: 'titleMessage',
@@ -233,7 +236,9 @@ export class CreateDatasetComponent implements OnInit {
         }
 
         this.form = this.fb.group({
-            datasetSelection: this.datasetSelectionControl
+            datasetSelection: this.datasetSelectionControl,
+            createExecuting: this.createFinished,
+            createFinished: this.createFinished
         });
         if (!this.multipleInputRecipe) {
             this.datasetOptions = [{ label: 'Create New', value: 'CreateNew' }];
@@ -285,12 +290,16 @@ export class CreateDatasetComponent implements OnInit {
     }
 
     onDatasetSelectionClick() {
-        if (!this.isCreateNewDataset()) {
+        if (this.createFinished) {
+            this.handleNextStep();
+        } else if (!this.isCreateNewDataset()) {
+            this.savedDataset = this.form.get('datasetSelection').value;
             this.valueChange.emit({
                 dataset: {
-                    datasetSelection: this.form.get('datasetSelection').value
+                    datasetSelection: this.savedDataset
                 }
             });
+            this.handleNextStep();
         } else {
             if (this.form.valid) {
                 const options = {
@@ -304,21 +313,29 @@ export class CreateDatasetComponent implements OnInit {
                 options['recipeFile'] = this.batchRecipe.definition.input.files[0];
                 options['recipeJson'] = this.batchRecipe.definition.input.json[0];
 
+                this.createExecuting = true;
                 this.datasetService.createDatasetWithDataTemplate(options)
                     .subscribe(savedDataset => {
                         this.savedDataset = savedDataset;
+                        this.valueChange.emit({
+                            dataset: {
+                                datasetSelection: this.savedDataset 
+                            }
+                        });
+                        this.createFinished = true;
+                        this.form.patchValue({ createFinished: this.createFinished });
                     });
+                this.form.patchValue({ createExecuting: this.createExecuting });
             } else {
                 console.log('Please complete required fields before saving.');
             }
         }
-        this.handleNextStep();
     }
 
     handleNextStep(): void {
         this.nextStepEvent.emit({
             dataset: {
-                datasetSelection: this.form.get('datasetSelection').value,
+                datasetSelection: this.savedDataset,
                 datasetFormOptions: this.form.value
             },
             index: 1
@@ -329,17 +346,31 @@ export class CreateDatasetComponent implements OnInit {
         return this.form.get('datasetSelection').value === 'CreateNew';
     }
 
+    isCreating() {
+        return this.createExecuting || this.createFinished;
+    }
+
+    isCreated() {
+        return this.createFinished;
+    }
+
     canSave() {
-        return (
-            this.form.valid &&
-            (this.datasetSelection !== 'CreateNew' ||
-                (this.datasetSelection === 'CreateNew' &&
-                    this.datasetFileList.length > 0))
-        );
+        if(this.createFinished)
+            return true;
+        else
+            return (
+                this.form.valid &&
+                (this.datasetSelection !== 'CreateNew' ||
+                    (this.datasetSelection === 'CreateNew' &&
+                        this.datasetFileList.length > 0))
+            );
     }
 
     getDatasetButtonLabel(): string {
-        return this.isCreateNewDataset() ? 'Create Dataset' : 'Select Dataset';
+        if(this.createFinished)
+            return 'Next'
+        else
+            return this.isCreateNewDataset() ? 'Create Dataset' : 'Select Dataset';
     }
 
     createQueryOptions(): any {
