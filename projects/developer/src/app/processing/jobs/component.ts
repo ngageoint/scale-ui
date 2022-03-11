@@ -280,6 +280,7 @@ export class JobsComponent implements OnInit, OnDestroy {
 
         // update the datatable options then call the api
         this.datatableOptions = Object.assign(this.datatableOptions, {
+                first: 0,
                 started: data.start,
                 ended: data.end
             });
