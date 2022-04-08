@@ -100,11 +100,12 @@ export class ChartService {
                                         return moment.utc(qDate.datetime, 'YYYY-MM-DDZ').isSame(moment.utc(xDate,
                                             'YYYY-MM-DD'), 'day');
                                     });
-                                    // the find returned the first entry for the given date, find and sum all hourly entries for the given date
-                                    let dailyTotal=0;
-                                    if(valueObj){
+                                    // find returned the first entry only, find and sum all hourly entries for the given date
+                                    let dailyTotal = 0;
+                                    if (valueObj) {
                                         _.forEach(queryDates, (qDate) => {
-                                            if(qDate && moment.utc(qDate.datetime, 'YYYY-MM-DDZ').isSame(moment.utc(xDate,'YYYY-MM-DD'), 'day')) {
+                                            if (qDate && moment.utc(qDate.datetime, 'YYYY-MM-DDZ').isSame(moment.utc(xDate, 'YYYY-MM-DD'),
+                                                'day')) {
                                                 dailyTotal += qDate.value;
                                             }
                                         });
